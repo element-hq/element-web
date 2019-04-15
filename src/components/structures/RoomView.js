@@ -1496,16 +1496,21 @@ module.exports = React.createClass({
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
-        const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const RoomUpgradeWarningBar = sdk.getComponent("rooms.RoomUpgradeWarningBar");
         const RoomRecoveryReminder = sdk.getComponent("rooms.RoomRecoveryReminder");
 
         if (!this.state.room) {
-            if (this.state.roomLoading || this.state.peekLoading) {
+            const loading = this.state.roomLoading || this.state.peekLoading;
+            if (loading) {
                 return (
                     <div className="mx_RoomView">
-                        <Loader />
+                        <RoomPreviewBar
+                            canPreview={false}
+                            error={this.state.roomLoadError}
+                            loading={loading}
+                            joining={this.state.joining}
+                        />
                     </div>
                 );
             } else {
@@ -1528,8 +1533,7 @@ module.exports = React.createClass({
                             onRejectClick={this.onRejectThreepidInviteButtonClicked}
                             canPreview={false} error={this.state.roomLoadError}
                             roomAlias={roomAlias}
-                            spinner={this.state.joining}
-                            spinnerState="joining"
+                            joining={this.state.joining}
                             inviterName={inviterName}
                             invitedEmail={invitedEmail}
                             room={this.state.room}
@@ -1543,9 +1547,12 @@ module.exports = React.createClass({
         if (myMembership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 return (
-                    <div className="mx_RoomView">
-                        <Loader />
-                    </div>
+                    <RoomPreviewBar
+                            canPreview={false}
+                            error={this.state.roomLoadError}
+                            joining={this.state.joining}
+                            rejecting={this.state.rejecting}
+                        />
                 );
             } else {
                 const myUserId = MatrixClientPeg.get().credentials.userId;
@@ -1565,8 +1572,7 @@ module.exports = React.createClass({
                             onRejectClick={this.onRejectButtonClicked}
                             inviterName={inviterName}
                             canPreview={false}
-                            spinner={this.state.joining}
-                            spinnerState="joining"
+                            joining={this.state.joining}
                             room={this.state.room}
                         />
                     </div>
@@ -1656,8 +1662,7 @@ module.exports = React.createClass({
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                spinner={this.state.joining}
-                                spinnerState="joining"
+                                joining={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}

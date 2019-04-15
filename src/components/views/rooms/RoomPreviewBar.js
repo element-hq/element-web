@@ -28,7 +28,8 @@ import { _t } from '../../../languageHandler';
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
     Joining: "Joining",
-    Busy: "Busy",
+    Loading: "Loading",
+    Rejecting: "Rejecting",
     Kicked: "Kicked",
     Banned: "Banned",
     OtherThreePIDError: "OtherThreePIDError",
@@ -105,12 +106,12 @@ module.exports = React.createClass({
     },
 
     _getMessageCase() {
-        if (this.props.spinner || this.state.busy) {
-            if (this.props.spinnerState === "joining") {
-                return MessageCase.Joining;
-            } else {
-                return MessageCase.Busy;
-            }
+        if (this.props.joining) {
+            return MessageCase.Joining;
+        } else if (this.props.rejecting) {
+            return MessageCase.Rejecting;
+        } else if (this.props.loading) {
+            return MessageCase.Loading;
         }
         const isGuest = MatrixClientPeg.get().isGuest();
         const myMember = !isGuest && this.props.room ?
@@ -193,12 +194,17 @@ module.exports = React.createClass({
 
         switch (this._getMessageCase()) {
             case MessageCase.Joining: {
-                title = _t("Joining room...");
+                title = _t("Joining room …");
                 showSpinner = true;
                 break;
             }
-            case MessageCase.Busy: {
-                title = _t("In progress ...");
+            case MessageCase.Loading: {
+                title = _t("Loading …");
+                showSpinner = true;
+                break;
+            }
+            case MessageCase.Rejecting: {
+                title = _t("Rejecting invite …");
                 showSpinner = true;
                 break;
             }
