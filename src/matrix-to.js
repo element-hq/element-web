@@ -77,6 +77,7 @@ export class RoomPermalinkCreator {
         this._bannedHostsRegexps = null;
         this._allowedHostsRegexps = null;
         this._serverCandidates = null;
+        this._started = false;
 
         this.onMembership = this.onMembership.bind(this);
         this.onRoomState = this.onRoomState.bind(this);
@@ -101,11 +102,17 @@ export class RoomPermalinkCreator {
         this.load();
         this._room.on("RoomMember.membership", this.onMembership);
         this._room.on("RoomState.events", this.onRoomState);
+        this._started = true;
     }
 
     stop() {
         this._room.removeListener("RoomMember.membership", this.onMembership);
         this._room.removeListener("RoomState.events", this.onRoomState);
+        this._started = false;
+    }
+
+    isStarted() {
+        return this._started;
     }
 
     forEvent(eventId) {
