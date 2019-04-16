@@ -25,8 +25,9 @@ program
     .option('--no-logs', "don't output logs, document html on error", false)
     .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
     .option('--windowed', "dont run tests headless", false)
-    .option('--slow-mo', "run tests slower to follow whats going on", false)
+    .option('--slow-mo', "type at a human speed", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
+    .option('--throttle-cpu [factor]', "factor to slow down the cpu with", parseFloat, 1.0)
     .option('--no-sandbox', "same as puppeteer arg", false)
     .option('--log-directory <dir>', 'a directory to dump html and network logs in when the tests fail')
     .parse(process.argv);
@@ -57,7 +58,7 @@ async function runTests() {
     );
 
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl);
+        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl, program.throttleCpu);
         sessions.push(session);
         return session;
     }

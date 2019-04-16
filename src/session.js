@@ -35,13 +35,18 @@ module.exports = class RiotSession {
         this.log = new Logger(this.username);
     }
 
-    static async create(username, puppeteerOptions, riotserver, hsUrl) {
+    static async create(username, puppeteerOptions, riotserver, hsUrl, throttleCpuFactor = 1) {
         const browser = await puppeteer.launch(puppeteerOptions);
         const page = await browser.newPage();
         await page.setViewport({
             width: 1280,
             height: 800
         });
+        if (throttleCpuFactor !== 1) {
+            const client = await page.target().createCDPSession();
+            console.log("throttling cpu by a factor of", throttleCpuFactor);
+            await client.send('Emulation.setCPUThrottlingRate', { rate: throttleCpuFactor });
+        }
         return new RiotSession(browser, page, username, riotserver, hsUrl);
     }
 
