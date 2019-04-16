@@ -127,7 +127,7 @@ module.exports = React.createClass({
             return MessageCase.Joining;
         } else if (this.props.rejecting) {
             return MessageCase.Rejecting;
-        } else if (this.props.loading) {
+        } else if (this.props.loading || this.state.busy) {
             return MessageCase.Loading;
         }
 
