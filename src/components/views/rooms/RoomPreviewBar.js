@@ -228,10 +228,16 @@ module.exports = React.createClass({
                 const {memberName, reason} = this._getKickOrBanInfo();
                 title = _t("You were kicked from this room by %(memberName)s", {memberName});
                 subTitle = _t("Reason: %(reason)s", {reason});
-                primaryActionLabel = _t("Re-join");
-                primaryActionHandler = this.props.onJoinClick;
-                secondaryActionLabel = _t("Forget this room");
-                secondaryActionHandler = this.props.onForgetClick;
+
+                if (this._joinRule() === "invite") {
+                    primaryActionLabel = _t("Forget this room");
+                    primaryActionHandler = this.props.onForgetClick;
+                } else {
+                    primaryActionLabel = _t("Re-join");
+                    primaryActionHandler = this.props.onJoinClick;
+                    secondaryActionLabel = _t("Forget this room");
+                    secondaryActionHandler = this.props.onForgetClick;
+                }
                 break;
             }
             case MessageCase.Banned: {
