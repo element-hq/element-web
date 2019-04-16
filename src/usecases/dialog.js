@@ -17,7 +17,7 @@ limitations under the License.
 const assert = require('assert');
 
 async function assertDialog(session, expectedTitle) {
-    const titleElement = await session.waitAndQuery(".mx_Dialog .mx_Dialog_title");
+    const titleElement = await session.query(".mx_Dialog .mx_Dialog_title");
     const dialogHeader = await session.innerText(titleElement);
     assert(dialogHeader, expectedTitle);
 }
@@ -32,7 +32,7 @@ async function acceptDialog(session, expectedTitle) {
 async function acceptDialogMaybe(session, expectedTitle) {
     let primaryButton = null;
     try {
-        primaryButton = await session.waitAndQuery(".mx_Dialog .mx_Dialog_primary", 100);
+        primaryButton = await session.query(".mx_Dialog .mx_Dialog_primary");
     } catch(err) {
         return false;
     }

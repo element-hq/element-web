@@ -21,17 +21,17 @@ module.exports = async function signup(session, username, password, homeserver) 
     await session.goto(session.url('/#/register'));
     // change the homeserver by clicking the "Change" link.
     if (homeserver) {
-        const changeServerDetailsLink = await session.waitAndQuery('.mx_AuthBody_editServerDetails');
+        const changeServerDetailsLink = await session.query('.mx_AuthBody_editServerDetails');
         await changeServerDetailsLink.click();
-        const hsInputField = await session.waitAndQuery('#mx_ServerConfig_hsUrl');
+        const hsInputField = await session.query('#mx_ServerConfig_hsUrl');
         await session.replaceInputText(hsInputField, homeserver);
-        const nextButton = await session.waitAndQuery('.mx_Login_submit');
+        const nextButton = await session.query('.mx_Login_submit');
         await nextButton.click();
     }
     //fill out form
-    const usernameField = await session.waitAndQuery("#mx_RegistrationForm_username");
-    const passwordField = await session.waitAndQuery("#mx_RegistrationForm_password");
-    const passwordRepeatField = await session.waitAndQuery("#mx_RegistrationForm_passwordConfirm");
+    const usernameField = await session.query("#mx_RegistrationForm_username");
+    const passwordField = await session.query("#mx_RegistrationForm_password");
+    const passwordRepeatField = await session.query("#mx_RegistrationForm_passwordConfirm");
     await session.replaceInputText(usernameField, username);
     await session.replaceInputText(passwordField, password);
     await session.replaceInputText(passwordRepeatField, password);
@@ -41,7 +41,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     await session.delay(300);
     /// focus on the button to make sure error validation
     /// has happened before checking the form is good to go
-    const registerButton = await session.waitAndQuery('.mx_Login_submit');
+    const registerButton = await session.query('.mx_Login_submit');
     await registerButton.focus();
     //check no errors
     const error_text = await session.tryGetInnertext('.mx_Login_error');
@@ -51,15 +51,15 @@ module.exports = async function signup(session, username, password, homeserver) 
     await registerButton.click();
 
     //confirm dialog saying you cant log back in without e-mail
-    const continueButton = await session.waitAndQuery('.mx_QuestionDialog button.mx_Dialog_primary');
+    const continueButton = await session.query('.mx_QuestionDialog button.mx_Dialog_primary');
     await continueButton.click();
 
     //find the privacy policy checkbox and check it
-    const policyCheckbox = await session.waitAndQuery('.mx_InteractiveAuthEntryComponents_termsPolicy input');
+    const policyCheckbox = await session.query('.mx_InteractiveAuthEntryComponents_termsPolicy input');
     await policyCheckbox.click();
 
     //now click the 'Accept' button to agree to the privacy policy
-    const acceptButton = await session.waitAndQuery('.mx_InteractiveAuthEntryComponents_termsSubmit');
+    const acceptButton = await session.query('.mx_InteractiveAuthEntryComponents_termsSubmit');
     await acceptButton.click();
 
     //wait for registration to finish so the hash gets set

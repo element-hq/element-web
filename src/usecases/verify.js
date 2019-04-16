@@ -19,19 +19,19 @@ const {openMemberInfo} = require("./memberlist");
 const {assertDialog, acceptDialog} = require("./dialog");
 
 async function assertVerified(session) {
-    const dialogSubTitle = await session.innerText(await session.waitAndQuery(".mx_Dialog h2"));
+    const dialogSubTitle = await session.innerText(await session.query(".mx_Dialog h2"));
     assert(dialogSubTitle, "Verified!");
 }
 
 async function startVerification(session, name) {
     await openMemberInfo(session, name);
     // click verify in member info
-    const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
+    const firstVerifyButton = await session.query(".mx_MemberDeviceInfo_verify");
     await firstVerifyButton.click();
 }
 
 async function getSasCodes(session) {
-    const sasLabelElements = await session.waitAndQueryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
+    const sasLabelElements = await session.queryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     return sasLabels;
 }
@@ -53,7 +53,7 @@ module.exports.startSasVerifcation = async function(session, name) {
 
 module.exports.acceptSasVerification = async function(session, name) {
     await assertDialog(session, "Incoming Verification Request");
-    const opponentLabelElement = await session.waitAndQuery(".mx_IncomingSasDialog_opponentProfile h2");
+    const opponentLabelElement = await session.query(".mx_IncomingSasDialog_opponentProfile h2");
     const opponentLabel = await session.innerText(opponentLabelElement);
     assert(opponentLabel, name);
     // click "Continue" button

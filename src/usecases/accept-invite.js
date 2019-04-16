@@ -20,7 +20,7 @@ const {acceptDialogMaybe} = require('./dialog');
 module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
     //TODO: brittle selector
-    const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite');
+    const invitesHandles = await session.queryAll('.mx_RoomTile_name.mx_RoomTile_invite');
     const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
         const text = await session.innerText(inviteHandle);
         return {inviteHandle, text};
@@ -31,7 +31,7 @@ module.exports = async function acceptInvite(session, name) {
 
     await inviteHandle.click();
 
-    const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
+    const acceptInvitationLink = await session.query(".mx_RoomPreviewBar_join_text a:first-child");
     await acceptInvitationLink.click();
 
     session.log.done();

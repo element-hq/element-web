@@ -20,15 +20,15 @@ const {openRoomDirectory} = require('./create-room');
 module.exports = async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);
     await openRoomDirectory(session);
-    const roomInput = await session.waitAndQuery('.mx_DirectorySearchBox input');
+    const roomInput = await session.query('.mx_DirectorySearchBox input');
     await session.replaceInputText(roomInput, roomName);
 
-    const firstRoomLabel = await session.waitAndQuery('.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child', 1000);
+    const firstRoomLabel = await session.query('.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child');
     await firstRoomLabel.click();
 
-    const joinLink = await session.waitAndQuery('.mx_RoomPreviewBar_join_text a');
+    const joinLink = await session.query('.mx_RoomPreviewBar_join_text a');
     await joinLink.click();
 
-    await session.waitAndQuery('.mx_MessageComposer');
+    await session.query('.mx_MessageComposer');
     session.log.done();
 }

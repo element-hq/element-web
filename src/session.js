@@ -19,6 +19,8 @@ const Logger = require('./logger');
 const LogBuffer = require('./logbuffer');
 const {delay} = require('./util');
 
+const DEFAULT_TIMEOUT = 20000;
+
 module.exports = class RiotSession {
     constructor(browser, page, username, riotserver, hsUrl) {
         this.browser = browser;
@@ -113,23 +115,18 @@ module.exports = class RiotSession {
     }
 
     query(selector) {
-        return this.page.$(selector);
-    }
-
-    waitAndQuery(selector, timeout = 5000) {
+        const timeout = DEFAULT_TIMEOUT;
         return this.page.waitForSelector(selector, {visible: true, timeout});
     }
 
-    queryAll(selector) {
-        return this.page.$$(selector);
+    async queryAll(selector) {
+        const timeout = DEFAULT_TIMEOUT;
+        await this.query(selector, timeout);
+        return await this.page.$$(selector);
     }
 
-    async waitAndQueryAll(selector, timeout = 5000) {
-        await this.waitAndQuery(selector, timeout);
-        return await this.queryAll(selector);
-    }
-
-    waitForReload(timeout = 10000) {
+    waitForReload() {
+        const timeout = DEFAULT_TIMEOUT;
         return new Promise((resolve, reject) => {
             const timeoutHandle = setTimeout(() => {
                 this.browser.removeEventListener('domcontentloaded', callback);
@@ -145,7 +142,8 @@ module.exports = class RiotSession {
         });
     }
 
-    waitForNewPage(timeout = 5000) {
+    waitForNewPage() {
+        const timeout = DEFAULT_TIMEOUT;
         return new Promise((resolve, reject) => {
             const timeoutHandle = setTimeout(() => {
                 this.browser.removeListener('targetcreated', callback);

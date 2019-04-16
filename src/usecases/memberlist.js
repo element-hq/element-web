@@ -34,20 +34,20 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     }).map((m) => m.label)[0];
     await matchingLabel.click();
     // click verify in member info
-    const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
+    const firstVerifyButton = await session.query(".mx_MemberDeviceInfo_verify");
     await firstVerifyButton.click();
     // expect "Verify device" dialog and click "Begin Verification"
-    const dialogHeader = await session.innerText(await session.waitAndQuery(".mx_Dialog .mx_Dialog_title"));
+    const dialogHeader = await session.innerText(await session.query(".mx_Dialog .mx_Dialog_title"));
     assert(dialogHeader, "Verify device");
-    const beginVerificationButton = await session.waitAndQuery(".mx_Dialog .mx_Dialog_primary")
+    const beginVerificationButton = await session.query(".mx_Dialog .mx_Dialog_primary")
     await beginVerificationButton.click();
     // get emoji SAS labels
-    const sasLabelElements = await session.waitAndQueryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
+    const sasLabelElements = await session.queryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     console.log("my sas labels", sasLabels);
 
 
-    const dialogCodeFields = await session.waitAndQueryAll(".mx_QuestionDialog code");
+    const dialogCodeFields = await session.queryAll(".mx_QuestionDialog code");
     assert.equal(dialogCodeFields.length, 2);
     const deviceId = await session.innerText(dialogCodeFields[0]);
     const deviceKey = await session.innerText(dialogCodeFields[1]);
@@ -61,7 +61,7 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
 }
 
 async function getMembersInMemberlist(session) {
-    const memberNameElements = await session.waitAndQueryAll(".mx_MemberList .mx_EntityTile_name");
+    const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
     return Promise.all(memberNameElements.map(async (el) => {
         return {label: el, displayName: await session.innerText(el)};
     }));

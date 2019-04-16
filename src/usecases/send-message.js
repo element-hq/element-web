@@ -20,7 +20,7 @@ module.exports = async function sendMessage(session, message) {
     session.log.step(`writes "${message}" in room`);
     // this selector needs to be the element that has contenteditable=true,
     // not any if its parents, otherwise it behaves flaky at best.
-    const composer = await session.waitAndQuery('.mx_MessageComposer_editor');
+    const composer = await session.query('.mx_MessageComposer_editor');
     // sometimes the focus that type() does internally doesn't seem to work
     // and calling click before seems to fix it 🤷
     await composer.click();
@@ -29,6 +29,6 @@ module.exports = async function sendMessage(session, message) {
     assert.equal(text.trim(), message.trim());
     await composer.press("Enter");
     // wait for the message to appear sent
-    await session.waitAndQuery(".mx_EventTile_last:not(.mx_EventTile_sending)");
+    await session.query(".mx_EventTile_last:not(.mx_EventTile_sending)");
     session.log.done();
 }

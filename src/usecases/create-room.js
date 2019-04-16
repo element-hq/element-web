@@ -31,16 +31,16 @@ async function openRoomDirectory(session) {
 async function createRoom(session, roomName) {
     session.log.step(`creates room "${roomName}"`);
     await openRoomDirectory(session);
-    const createRoomButton = await session.waitAndQuery('.mx_RoomDirectory_createRoom');
+    const createRoomButton = await session.query('.mx_RoomDirectory_createRoom');
     await createRoomButton.click();
 
-    const roomNameInput = await session.waitAndQuery('.mx_CreateRoomDialog_input');
+    const roomNameInput = await session.query('.mx_CreateRoomDialog_input');
     await session.replaceInputText(roomNameInput, roomName);
 
-    const createButton = await session.waitAndQuery('.mx_Dialog_primary');
+    const createButton = await session.query('.mx_Dialog_primary');
     await createButton.click();
 
-    await session.waitAndQuery('.mx_MessageComposer');
+    await session.query('.mx_MessageComposer');
     session.log.done();
 }
 

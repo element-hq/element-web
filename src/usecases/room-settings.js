@@ -37,11 +37,11 @@ module.exports = async function changeRoomSettings(session, settings) {
     const settingsButton = await session.query(".mx_RoomHeader .mx_AccessibleButton[title=Settings]");
     await settingsButton.click();
     //find tabs
-    const tabButtons = await session.waitAndQueryAll(".mx_RoomSettingsDialog .mx_TabbedView_tabLabel");
+    const tabButtons = await session.queryAll(".mx_RoomSettingsDialog .mx_TabbedView_tabLabel");
     const tabLabels = await Promise.all(tabButtons.map(t => session.innerText(t)));
     const securityTabButton = tabButtons[tabLabels.findIndex(l => l.toLowerCase().includes("security"))];
 
-    const generalSwitches = await session.waitAndQueryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
+    const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
     const isDirectory = generalSwitches[0];
 
     if (typeof settings.directory === "boolean") {
@@ -51,9 +51,9 @@ module.exports = async function changeRoomSettings(session, settings) {
 
     if (settings.alias) {
         session.log.step(`sets alias to ${settings.alias}`);
-        const aliasField = await session.waitAndQuery(".mx_RoomSettingsDialog .mx_AliasSettings input[type=text]");
+        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings input[type=text]");
         await session.replaceInputText(aliasField, settings.alias);
-        const addButton = await session.waitAndQuery(".mx_RoomSettingsDialog .mx_AliasSettings .mx_AccessibleButton");
+        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings .mx_AccessibleButton");
         await addButton.click();
         session.log.done();
     }
@@ -74,7 +74,7 @@ module.exports = async function changeRoomSettings(session, settings) {
 
     if (settings.visibility) {
         session.log.step(`sets visibility to ${settings.visibility}`);
-        const radios = await session.waitAndQueryAll(".mx_RoomSettingsDialog input[type=radio]");
+        const radios = await session.queryAll(".mx_RoomSettingsDialog input[type=radio]");
         assert.equal(radios.length, 7);
         const inviteOnly = radios[0];
         const publicNoGuests = radios[1];
