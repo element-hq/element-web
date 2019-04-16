@@ -97,7 +97,7 @@ export default function withValidation({ description, rules }) {
         }
 
         const feedback = <div className="mx_Validation">
-            <div>{description}</div>
+            <div className="mx_Validation_description">{description}</div>
             {details}
         </div>;
 
