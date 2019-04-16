@@ -45,6 +45,8 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+import {_t, _td} from 'matrix-react-sdk/lib/languageHandler';
+import {AutoDiscovery} from "matrix-js-sdk/lib/autodiscovery";
 
 import url from 'url';
 
@@ -341,22 +343,37 @@ async function loadApp() {
         const platform = PlatformPeg.get();
         platform.startUpdater();
 
-        const MatrixChat = sdk.getComponent('structures.MatrixChat');
-        window.matrixChat = ReactDOM.render(
-            <MatrixChat
-                onNewScreen={onNewScreen}
-                makeRegistrationUrl={makeRegistrationUrl}
-                ConferenceHandler={VectorConferenceHandler}
-                config={configJson}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragparts.params}
-                enableGuest={!configJson.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-            />,
-            document.getElementById('matrixchat'),
-        );
+        // Don't bother loading the app until the config is verified
+        verifyServerConfig().then((newConfig) => {
+            const MatrixChat = sdk.getComponent('structures.MatrixChat');
+            window.matrixChat = ReactDOM.render(
+                <MatrixChat
+                    onNewScreen={onNewScreen}
+                    makeRegistrationUrl={makeRegistrationUrl}
+                    ConferenceHandler={VectorConferenceHandler}
+                    config={newConfig}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragparts.params}
+                    enableGuest={!configJson.disable_guests}
+                    onTokenLoginCompleted={onTokenLoginCompleted}
+                    initialScreenAfterLogin={getScreenFromLocation(window.location)}
+                    defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+                />,
+                document.getElementById('matrixchat'),
+            );
+        }).catch(err => {
+            console.error(err);
+
+            const errorMessage = err.translatedMessage
+                || _t("Unexpected error preparing the app. See console for details.");
+
+            // Like the compatibility page, AWOOOOOGA at the user
+            const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+            window.matrixChat = ReactDOM.render(
+                <GenericErrorPage message={errorMessage} />,
+                document.getElementById('matrixchat'),
+            );
+        });
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
@@ -426,6 +443,143 @@ async function loadLanguage() {
     } catch (e) {
         console.error("Unable to set language", e);
     }
+}
+
+async function verifyServerConfig() {
+    console.log("Verifying homeserver configuration");
+
+    // Errors which can be returned by .well-known lookups. If autodiscovery fails for unexpected reasons,
+    // the last thing we want is "missing-translation|en:Your error here". The actual strings are also defined
+    // in the react-sdk, so we don't need them here.
+    const discoveryErrors = [
+        "Invalid homeserver discovery response",
+        "Failed to get autodiscovery configuration from server",
+        "Invalid base_url for m.homeserver",
+        "Homeserver URL does not appear to be a valid Matrix homeserver",
+        "Invalid identity server discovery response",
+        "Invalid base_url for m.identity_server",
+        "Identity server URL does not appear to be a valid identity server",
+        "General failure",
+    ];
+
+    const config = SdkConfig.get();
+    let wkConfig = config['default_server_config']; // overwritten later under some conditions
+    const serverName = config['default_server_name'];
+    const hsUrl = config['default_hs_url'];
+    const isUrl = config['default_is_url'];
+
+    const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
+    if (incompatibleOptions.length > 1) {
+        throw newTranslatableError(_td(
+            "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+            "or default_hs_url.",
+        ));
+    }
+
+    if (hsUrl) {
+        console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
+
+        wkConfig = {
+            "m.homeserver": {
+                "base_url": hsUrl,
+            },
+        };
+        if (isUrl) {
+            wkConfig["m.identity_server"] = {
+                "base_url": isUrl,
+            };
+        }
+    }
+
+    let result = null;
+
+    if (wkConfig) {
+        console.log("Config uses a default_server_config - validating object");
+        result = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
+    }
+
+    if (serverName) {
+        console.log("Config uses a default_server_name - doing .well-known lookup");
+        result = await AutoDiscovery.findClientConfig(serverName);
+    }
+
+    if (!result || !result["m.homeserver"]) {
+        // This shouldn't happen without major misconfiguration, so we'll log a bit of information
+        // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
+        console.error("Ended up in a state of not knowing which homeserver to connect to.");
+        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+    }
+
+    const hsResult = result['m.homeserver'];
+    if (hsResult.state !== AutoDiscovery.SUCCESS) {
+        if (discoveryErrors.indexOf(hsResult.error) !== -1) {
+            throw newTranslatableError(hsResult.error);
+        }
+        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+    }
+
+    const isResult = result['m.identity_server'];
+    let preferredIdentityUrl = "https://vector.im";
+    if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
+        preferredIdentityUrl = isResult["base_url"];
+    } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
+        console.error("Error determining preferred identity server URL:", isResult);
+        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+    }
+
+    const preferredHomeserverUrl = hsResult["base_url"];
+    let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
+
+    const url = new URL(preferredHomeserverUrl);
+    if (!preferredHomeserverName) preferredHomeserverName = url.hostname;
+
+    // It should have been set by now, so check it
+    if (!preferredHomeserverName) {
+        console.error("Failed to parse homeserver name from homeserver URL");
+        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+    }
+
+    const isServerNameDifferentFromUrl = url.hostname !== preferredHomeserverName;
+
+    console.log("Using homeserver config:", {
+        isServerNameDifferentFromUrl,
+        preferredHomeserverName,
+        preferredHomeserverUrl,
+        preferredIdentityUrl,
+    });
+
+    // Build our own discovery result for distribution within the app
+    const configResult = {
+        "m.homeserver": {
+            "base_url": preferredHomeserverUrl,
+            "server_name": preferredHomeserverName,
+            "server_name_different": isServerNameDifferentFromUrl,
+        },
+        "m.identity_server": {
+            "base_url": preferredIdentityUrl,
+            "enabled": !SdkConfig.get()['disable_identity_server'],
+        },
+    };
+
+    // Copy over any other keys that may be of interest
+    for (const key of Object.keys(result)) {
+        if (key === "m.homeserver" || key === "m.identity_server") continue;
+        configResult[key] = JSON.parse(JSON.stringify(result[key])); // deep clone
+    }
+
+    // Add the newly built config to the actual config for use by the app
+    console.log("Updating SdkConfig with validated discovery information");
+    SdkConfig.add({"validated_discovery_config": configResult});
+
+    return SdkConfig.get();
+}
+
+// Helper function to provide English errors in logs, but present translated
+// errors to users.
+function newTranslatableError(message) {
+    const error = new Error(message);
+    error.translatedMessage = _t(message);
+    return error;
 }
 
 loadApp();
