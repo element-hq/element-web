@@ -53,19 +53,52 @@ export default class Field extends React.PureComponent {
         };
     }
 
-    onChange = (ev) => {
-        if (this.props.onValidate) {
-            const result = this.props.onValidate(ev.target.value);
-            this.setState({
-                valid: result.valid,
-                feedback: result.feedback,
-            });
+    onFocus = (ev) => {
+        this.validate({
+            value: ev.target.value,
+            focused: true,
+        });
+        // Parent component may have supplied its own `onFocus` as well
+        if (this.props.onFocus) {
+            this.props.onFocus(ev);
         }
+    };
+
+    onChange = (ev) => {
+        this.validate({
+            value: ev.target.value,
+            focused: true,
+        });
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
             this.props.onChange(ev);
         }
     };
+
+    onBlur = (ev) => {
+        this.validate({
+            value: ev.target.value,
+            focused: false,
+        });
+        // Parent component may have supplied its own `onBlur` as well
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
+        }
+    };
+
+    validate({ value, focused }) {
+        if (!this.props.onValidate) {
+            return;
+        }
+        const { valid, feedback } = this.props.onValidate({
+            value,
+            focused,
+        });
+        this.setState({
+            valid,
+            feedback,
+        });
+    }
 
     render() {
         const { element, prefix, onValidate, children, ...inputProps } = this.props;
@@ -76,7 +109,9 @@ export default class Field extends React.PureComponent {
         inputProps.type = inputProps.type || "text";
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
+        inputProps.onFocus = this.onFocus;
         inputProps.onChange = this.onChange;
+        inputProps.onBlur = this.onBlur;
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
 

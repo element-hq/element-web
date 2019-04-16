@@ -34,8 +34,7 @@ import classNames from 'classnames';
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation({ description, rules }) {
-    return function onValidate(value) {
-        // TODO: Hide on blur
+    return function onValidate({ value, focused }) {
         // TODO: Re-run only after ~200ms of inactivity
         if (!value) {
             return {
@@ -71,6 +70,14 @@ export default function withValidation({ description, rules }) {
                     });
                 }
             }
+        }
+
+        // Hide feedback when not focused
+        if (!focused) {
+            return {
+                valid,
+                feedback: null,
+            };
         }
 
         let details;
