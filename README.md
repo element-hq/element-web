@@ -25,7 +25,7 @@ released version of Riot:
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
-at https://packages.riot.im/debian/riot.im-archive-keyring.asc .
+at https://packages.riot.im/riot-release-key.asc.
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -39,9 +39,9 @@ over https.
   - As a separate entry in sources.list.d:
 `echo "deb https://packages.riot.im/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
 2. Download and add the gpg signing key used to authenticate the packages from the riot repository to your system's list of trusted keys:
-`curl -s https://packages.riot.im/debian/riot.im-archive-keyring.asc | sudo apt-key add -`
+`curl -s https://packages.riot.im/debian/riot-im-archive-keyring.asc | sudo apt-key add -`
 - Optional: if you had the old Riot.im signing key in your apt keyring, delete it, as it is no longer considered trusted:
-`sudo apt-key del 48E8F4A1`
+`sudo apt-key del 0x48E8F4A1`
 3. Update your package lists:
 `sudo apt update`
 4. Install Riot:
