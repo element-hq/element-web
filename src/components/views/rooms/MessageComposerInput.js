@@ -1041,7 +1041,8 @@ export default class MessageComposerInput extends React.Component {
     };
 
     handleReturn = (ev, change) => {
-        if (ev.shiftKey) {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        if (ev.shiftKey || (isMac && ev.altKey)) {
             return change.insertText('\n');
         }
 
