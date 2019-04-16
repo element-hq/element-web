@@ -1322,6 +1322,8 @@
     "Change": "Change",
     "Sign in with": "Sign in with",
     "If you don't specify an email address, you won't be able to reset your password. Are you sure?": "If you don't specify an email address, you won't be able to reset your password. Are you sure?",
+    "Use letters, numbers, dashes and underscores only": "Use letters, numbers, dashes and underscores only",
+    "Some characters not allowed": "Some characters not allowed",
     "Create your Matrix account": "Create your Matrix account",
     "Create your Matrix account on %(serverName)s": "Create your Matrix account on %(serverName)s",
     "Email (optional)": "Email (optional)",

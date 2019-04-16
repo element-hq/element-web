@@ -25,6 +25,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
+import withValidation from '../elements/Validation';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -86,6 +87,7 @@ module.exports = React.createClass({
         // is the one from the first invalid field.
         // It's not super ideal that this just calls
         // onValidationChange once for each invalid field.
+        // TODO: Change this to trigger new-style validation for an invalid fields.
         this.validateField(FIELD_PHONE_NUMBER, ev.type);
         this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
@@ -152,6 +154,8 @@ module.exports = React.createClass({
         const pwd2 = this.state.passwordConfirm.trim();
         const allowEmpty = eventType === "blur";
 
+        // TODO: Remove rules here as they are converted to new-style validation
+
         switch (fieldID) {
             case FIELD_EMAIL: {
                 const email = this.state.email;
@@ -173,12 +177,6 @@ module.exports = React.createClass({
                 const username = this.state.username;
                 if (allowEmpty && username === '') {
                     this.markFieldValid(fieldID, true);
-                } else if (!SAFE_LOCALPART_REGEX.test(username)) {
-                    this.markFieldValid(
-                        fieldID,
-                        false,
-                        "RegistrationForm.ERR_USERNAME_INVALID",
-                    );
                 } else if (username == '') {
                     this.markFieldValid(
                         fieldID,
@@ -232,11 +230,14 @@ module.exports = React.createClass({
         this.setState({
             fieldErrors,
         });
+        // TODO: Remove outer validation handling once all fields converted to new-style
+        // validation in the form.
         this.props.onValidationChange(fieldErrors);
     },
 
     _classForField: function(fieldID, ...baseClasses) {
         let cls = baseClasses.join(' ');
+        // TODO: Remove this from fields as they are converted to new-style validation.
         if (this.state.fieldErrors[fieldID]) {
             if (cls) cls += ' ';
             cls += 'error';
@@ -291,10 +292,6 @@ module.exports = React.createClass({
         });
     },
 
-    onUsernameBlur(ev) {
-        this.validateField(FIELD_USERNAME, ev.type);
-    },
-
     onUsernameChange(ev) {
         this.setState({
             username: ev.target.value,
@@ -323,6 +320,33 @@ module.exports = React.createClass({
         return this.props.flows.some((flow) => {
             return flow.stages.includes(step);
         });
+    },
+
+    renderUsername() {
+        const Field = sdk.getComponent('elements.Field');
+
+        const onValidate = withValidation({
+            description: _t("Use letters, numbers, dashes and underscores only"),
+            rules: [
+                {
+                    key: "safeLocalpart",
+                    regex: SAFE_LOCALPART_REGEX,
+                    invalid: _t("Some characters not allowed"),
+                },
+            ],
+        });
+
+        return <Field
+            className={this._classForField(FIELD_USERNAME)}
+            id="mx_RegistrationForm_username"
+            type="text"
+            autoFocus={true}
+            label={_t("Username")}
+            defaultValue={this.props.defaultUsername}
+            value={this.state.username}
+            onChange={this.onUsernameChange}
+            onValidate={onValidate}
+        />;
     },
 
     render: function() {
@@ -412,17 +436,7 @@ module.exports = React.createClass({
                 </h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
-                        <Field
-                            className={this._classForField(FIELD_USERNAME)}
-                            id="mx_RegistrationForm_username"
-                            type="text"
-                            autoFocus={true}
-                            label={_t("Username")}
-                            defaultValue={this.props.defaultUsername}
-                            value={this.state.username}
-                            onBlur={this.onUsernameBlur}
-                            onChange={this.onUsernameChange}
-                        />
+                        {this.renderUsername()}
                     </div>
                     <div className="mx_AuthBody_fieldRow">
                         <Field

@@ -94,11 +94,11 @@ export default class Field extends React.PureComponent {
             mx_Field_invalid: onValidate && this.state.valid === false,
         });
 
-        // handle displaying feedback on validity
+        // Handle displaying feedback on validity
         const Tooltip = sdk.getComponent("elements.Tooltip");
-        let feedback;
+        let tooltip;
         if (this.state.feedback) {
-            feedback = <Tooltip
+            tooltip = <Tooltip
                 tooltipClassName="mx_Field_tooltip"
                 label={this.state.feedback}
             />;
@@ -108,7 +108,7 @@ export default class Field extends React.PureComponent {
             {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
-            {feedback}
+            {tooltip}
         </div>;
     }
 }
