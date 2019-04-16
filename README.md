@@ -38,7 +38,7 @@ over https.
 `echo "deb https://packages.riot.im/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
   - As a separate entry in sources.list.d:
 `echo "deb https://packages.riot.im/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
-2. Download and add the gpg signing key used to authentify the packages from the riot repository to your system's list of trusted keys:
+2. Download and add the gpg signing key used to authenticate the packages from the riot repository to your system's list of trusted keys:
 `curl -s https://packages.riot.im/debian/repo-key.asc | sudo apt-key add -`
 - Optional: if you had the old Riot.im signing key in your apt keyring, delete it, as it is no longer considered trusted:
 `sudo apt-key del 48E8F4A1`
