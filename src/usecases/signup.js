@@ -23,9 +23,9 @@ module.exports = async function signup(session, username, password, homeserver) 
     if (homeserver) {
         const changeServerDetailsLink = await session.waitAndQuery('.mx_AuthBody_editServerDetails');
         await changeServerDetailsLink.click();
-        const hsInputField = await session.query('#mx_ServerConfig_hsUrl');
+        const hsInputField = await session.waitAndQuery('#mx_ServerConfig_hsUrl');
         await session.replaceInputText(hsInputField, homeserver);
-        const nextButton = await session.query('.mx_Login_submit');
+        const nextButton = await session.waitAndQuery('.mx_Login_submit');
         await nextButton.click();
     }
     //fill out form
@@ -41,7 +41,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     await session.delay(300);
     /// focus on the button to make sure error validation
     /// has happened before checking the form is good to go
-    const registerButton = await session.query('.mx_Login_submit');
+    const registerButton = await session.waitAndQuery('.mx_Login_submit');
     await registerButton.focus();
     //check no errors
     const error_text = await session.tryGetInnertext('.mx_Login_error');
