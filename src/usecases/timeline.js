@@ -87,7 +87,12 @@ module.exports.checkTimelineContains = async function (session, expectedMessages
             return message.sender === expectedMessage.sender &&
                    message.body === expectedMessage.body;
         });
-        assertMessage(foundMessage, expectedMessage);
+        try {
+            assertMessage(foundMessage, expectedMessage);
+        } catch(err) {
+            console.log("timelineMessages", timelineMessages);
+            throw err;
+        }
     });
 
     session.log.done();
