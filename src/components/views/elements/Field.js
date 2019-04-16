@@ -74,7 +74,6 @@ export default class Field extends React.PureComponent {
 
         // Set some defaults for the <input> element
         inputProps.type = inputProps.type || "text";
-        inputProps.ref = "fieldInput";
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
         inputProps.onChange = this.onChange;
