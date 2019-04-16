@@ -177,8 +177,15 @@ module.exports = React.createClass({
         }
     },
 
-    _roomName: function() {
-        return this.props.room ? this.props.room.name : (this.props.room_alias || _t("This room"));
+    _roomName: function(atStart = false) {
+        const name = this.props.room ? this.props.room.name : this.props.room_alias;
+        if (name) {
+            return name;
+        } else if (atStart) {
+            return _t("This room");
+        } else {
+            return _t("this room");
+        }
     },
 
     onLoginClick: function() {
@@ -226,7 +233,8 @@ module.exports = React.createClass({
             }
             case MessageCase.Kicked: {
                 const {memberName, reason} = this._getKickOrBanInfo();
-                title = _t("You were kicked from this room by %(memberName)s", {memberName});
+                title = _t("You were kicked from %(roomName)s by %(memberName)s",
+                    {memberName, roomName: this._roomName()});
                 subTitle = _t("Reason: %(reason)s", {reason});
 
                 if (this._joinRule() === "invite") {
@@ -242,7 +250,8 @@ module.exports = React.createClass({
             }
             case MessageCase.Banned: {
                 const {memberName, reason} = this._getKickOrBanInfo();
-                title = _t("You were banned from this room by %(memberName)s", {memberName});
+                title = _t("You were banned from %(roomName)s by %(memberName)s",
+                    {memberName, roomName: this._roomName()});
                 subTitle = _t("Reason: %(reason)s", {reason});
                 primaryActionLabel = _t("Forget this room");
                 primaryActionHandler = this.props.onForgetClick;
@@ -307,19 +316,20 @@ module.exports = React.createClass({
                 if (this.props.canPreview) {
                     title = _t("You're previewing this room. Want to join it?");
                 } else {
-                    title = _t("This room can't be previewed. Do you want to join it?");
+                    title = _t("%(roomName)s can't be previewed. Do you want to join it?",
+                        {roomName: this._roomName(true)});
                 }
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.RoomNotFound: {
-                title = _t("%(roomName)s does not exist.", {roomName: this._roomName()});
+                title = _t("%(roomName)s does not exist.", {roomName: this._roomName(true)});
                 subTitle = _t("This room doesn't exist. Are you sure you're at the right place?");
                 break;
             }
             case MessageCase.OtherError: {
-                title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName()});
+                title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName(true)});
                 subTitle = [
                     _t("Try again later, or ask a room admin to check if you have access."),
                     _t("%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
