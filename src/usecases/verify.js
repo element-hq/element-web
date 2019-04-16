@@ -53,7 +53,7 @@ module.exports.startSasVerifcation = async function(session, name) {
 
 module.exports.acceptSasVerification = async function(session, name) {
     await assertDialog(session, "Incoming Verification Request");
-    const opponentLabelElement = await session.query(".mx_IncomingSasDialog_opponentProfile h2");
+    const opponentLabelElement = await session.waitAndQuery(".mx_IncomingSasDialog_opponentProfile h2");
     const opponentLabel = await session.innerText(opponentLabelElement);
     assert(opponentLabel, name);
     // click "Continue" button
