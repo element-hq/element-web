@@ -68,7 +68,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     const foundHomeUrl = await session.poll(async () => {
         const url = session.page.url();
         return url === session.url('/#/home');
-    }, 5000);
+    });
     assert(foundHomeUrl);
     session.log.done();
 }

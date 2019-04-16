@@ -205,7 +205,8 @@ module.exports = class RiotSession {
         return this.browser.close();
     }
 
-    async poll(callback, timeout, interval = 100) {
+    async poll(callback, interval = 100) {
+        const timeout = DEFAULT_TIMEOUT;
         let waited = 0;
         while(waited < timeout) {
             await this.delay(interval);

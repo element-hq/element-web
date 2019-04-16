@@ -63,7 +63,7 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
         return lastMessage &&
             lastMessage.body === expectedMessage.body &&
             lastMessage.sender === expectedMessage.sender;
-    }, 5000, 200);
+    });
     assertMessage(lastMessage, expectedMessage);
     session.log.done();
 }
