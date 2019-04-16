@@ -202,13 +202,12 @@ module.exports = class RiotSession {
         return this.browser.close();
     }
 
-    async poll(callback, timeout) {
-        const INTERVAL = 100;
+    async poll(callback, timeout, interval = 100) {
         let waited = 0;
         while(waited < timeout) {
-            await this.delay(INTERVAL);
-            waited += INTERVAL;
-            if (callback()) {
+            await this.delay(interval);
+            waited += interval;
+            if (await callback()) {
                 return true;
             }
         }

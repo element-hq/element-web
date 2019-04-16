@@ -52,22 +52,18 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
         return getMessageFromEventTile(lastTile);
     }
 
-    let lastMessage = null;
-    let isExpectedMessage = false;
-    let totalTime = 0;
-    while (!isExpectedMessage) {
+    let lastMessage;
+    await session.poll(async () => {
         try {
             lastMessage = await getLastMessage();
-            isExpectedMessage = lastMessage &&
-                lastMessage.body === expectedMessage.body &&
-                lastMessage.sender === expectedMessage.sender
-        } catch(err) {}
-        if (totalTime > 5000) {
-            throw new Error("timed out after 5000ms");
+        } catch(err) {
+            return false;
         }
-        totalTime += 200;
-        await session.delay(200);
-    }
+        // stop polling when found the expected message
+        return lastMessage &&
+            lastMessage.body === expectedMessage.body &&
+            lastMessage.sender === expectedMessage.sender;
+    }, 5000, 200);
     assertMessage(lastMessage, expectedMessage);
     session.log.done();
 }

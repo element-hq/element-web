@@ -65,7 +65,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     //wait for registration to finish so the hash gets set
     //onhashchange better?
 
-    const foundHomeUrl = await session.poll(() => {
+    const foundHomeUrl = await session.poll(async () => {
         const url = session.page.url();
         return url === session.url('/#/home');
     }, 5000);
