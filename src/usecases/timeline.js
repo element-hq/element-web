@@ -81,7 +81,16 @@ module.exports.checkTimelineContains = async function (session, expectedMessages
         return getMessageFromEventTile(eventTile);
     }));
     //filter out tiles that were not messages
-    timelineMessages = timelineMessages .filter((m) => !!m);
+    timelineMessages = timelineMessages.filter((m) => !!m);
+    timelineMessages.reduce((prevSender, m) => {
+        if (m.continuation) {
+            m.sender = prevSender;
+            return prevSender;
+        } else {
+            return m.sender;
+        }
+    });
+
     expectedMessages.forEach((expectedMessage) => {
         const foundMessage = timelineMessages.find((message) => {
             return message.sender === expectedMessage.sender &&
@@ -132,6 +141,7 @@ async function getMessageFromEventTile(eventTile) {
     return {
         sender,
         body,
-        encrypted: classNames.includes("mx_EventTile_verified")
+        encrypted: classNames.includes("mx_EventTile_verified"),
+        continuation: classNames.includes("mx_EventTile_continuation"),
     };
 }
