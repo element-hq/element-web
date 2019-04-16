@@ -32,7 +32,7 @@ async function acceptDialog(session, expectedTitle) {
 async function acceptDialogMaybe(session, expectedTitle) {
     let primaryButton = null;
     try {
-        primaryButton = await session.waitAndQuery(".mx_Dialog .mx_Dialog_primary", 50);
+        primaryButton = await session.waitAndQuery(".mx_Dialog .mx_Dialog_primary", 100);
     } catch(err) {
         return false;
     }
