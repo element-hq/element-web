@@ -448,20 +448,6 @@ async function loadLanguage() {
 async function verifyServerConfig() {
     console.log("Verifying homeserver configuration");
 
-    // Errors which can be returned by .well-known lookups. If autodiscovery fails for unexpected reasons,
-    // the last thing we want is "missing-translation|en:Your error here". The actual strings are also defined
-    // in the react-sdk, so we don't need them here.
-    const discoveryErrors = [
-        "Invalid homeserver discovery response",
-        "Failed to get autodiscovery configuration from server",
-        "Invalid base_url for m.homeserver",
-        "Homeserver URL does not appear to be a valid Matrix homeserver",
-        "Invalid identity server discovery response",
-        "Invalid base_url for m.identity_server",
-        "Identity server URL does not appear to be a valid identity server",
-        "General failure",
-    ];
-
     const config = SdkConfig.get();
     let wkConfig = config['default_server_config']; // overwritten later under some conditions
     const serverName = config['default_server_name'];
@@ -512,7 +498,7 @@ async function verifyServerConfig() {
 
     const hsResult = result['m.homeserver'];
     if (hsResult.state !== AutoDiscovery.SUCCESS) {
-        if (discoveryErrors.indexOf(hsResult.error) !== -1) {
+        if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
             throw newTranslatableError(hsResult.error);
         }
         throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
