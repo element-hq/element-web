@@ -135,7 +135,7 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     return MessageCase.OtherThreePIDError;
-                } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
+                } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().getUserId()) {
                     return MessageCase.InvitedEmailMismatch;
                 }
             }
@@ -186,6 +186,20 @@ module.exports = React.createClass({
         } else {
             return _t("this room");
         }
+    },
+
+    _getInviteMember: function() {
+        const {room} = this.props;
+        if (!room) {
+            return;
+        }
+        const myUserId = MatrixClientPeg.get().getUserId();
+        const inviteEvent = room.currentState.getMember(myUserId);
+        if (!inviteEvent) {
+            return;
+        }
+        const inviterUserId = inviteEvent.events.member.getSender();
+        return room.currentState.getMember(inviterUserId);
     },
 
     onLoginClick: function() {
@@ -300,12 +314,24 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.Invite: {
+                const inviteMember = this._getInviteMember();
+                let avatar;
+                let memberName;
+                if (inviteMember) {
+                    const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+                    avatar = (<MemberAvatar member={inviteMember} />);
+                    memberName = inviteMember.name;
+                } else {
+                    memberName = this.props.inviterName;
+                }
+
                 if (this.props.canPreview) {
-                    title = _t("%(memberName)s invited you to this room", {memberName: this.props.inviterName});
+                    title = <span>{avatar}{_t("<userName/> invited you to this room", {}, {userName: name => <strong>{memberName}</strong>})}</span>;
                 } else {
                     title = _t("Do you want to join this room?");
-                    subTitle = _t("%(memberName)s invited you", {memberName: this.props.inviterName});
+                    subTitle = <span>{avatar}{_t("<userName/> invited you", {}, {userName: name => <strong>{memberName}</strong>})}</span>;
                 }
+
                 primaryActionLabel = _t("Accept");
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
