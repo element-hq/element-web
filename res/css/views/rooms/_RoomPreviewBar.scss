@@ -16,7 +16,6 @@ limitations under the License.
 
 .mx_RoomPreviewBar {
     flex: 0 0 auto;
-    text-align: center;
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -38,6 +37,7 @@ limitations under the License.
         width: auto;
         height: auto;
         margin: 10px 10px 10px 0;
+        flex: 0 0 auto;
     }
 }
 
@@ -52,6 +52,11 @@ limitations under the License.
 
 .mx_RoomPreviewBar_message {
     display: flex;
+    align-items: stretch;
+
+    p {
+        overflow-wrap: break-word;
+    }
 }
 
 .mx_RoomPreviewBar_panel {
@@ -75,7 +80,6 @@ limitations under the License.
         min-width: 0;
         display: flex;
         flex-direction: column;
-        align-items: start;
 
         &>* {
             margin: 4px;
@@ -90,6 +94,7 @@ limitations under the License.
     border-radius: 4px;
     flex-direction: column;
     padding: 20px;
+    text-align: center;
 
     .mx_RoomPreviewBar_message {
         flex-direction: column;
