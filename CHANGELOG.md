@@ -1,3 +1,10 @@
+Changes in [1.0.8](https://github.com/vector-im/riot-web/releases/tag/v1.0.8) (2019-04-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.7...v1.0.8)
+
+ * No changes in this release. This is the same code as v1.0.7 from our new clean-room
+   packaging and signing infrastructure.
+
 Changes in [1.0.7](https://github.com/vector-im/riot-web/releases/tag/v1.0.7) (2019-04-08)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.6...v1.0.7)
