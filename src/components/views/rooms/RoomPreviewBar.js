@@ -106,6 +106,23 @@ module.exports = React.createClass({
     },
 
     _getMessageCase() {
+        const isGuest = MatrixClientPeg.get().isGuest();
+
+        if (isGuest) {
+            return MessageCase.NotLoggedIn;
+        }
+
+        const myMember = this.props.room &&
+            this.props.room.getMember(MatrixClientPeg.get().getUserId());
+
+        if (myMember) {
+            if (myMember.isKicked()) {
+                return MessageCase.Kicked;
+            } else if (myMember.membership === "ban") {
+                return MessageCase.Banned;
+            }
+        }
+
         if (this.props.joining) {
             return MessageCase.Joining;
         } else if (this.props.rejecting) {
@@ -113,14 +130,8 @@ module.exports = React.createClass({
         } else if (this.props.loading) {
             return MessageCase.Loading;
         }
-        const isGuest = MatrixClientPeg.get().isGuest();
-        const myMember = !isGuest && this.props.room ?
-            this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
-            null;
 
-        if (isGuest) {
-            return MessageCase.NotLoggedIn;
-        } else if (this.props.inviterName) {
+        if (this.props.inviterName) {
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     return MessageCase.OtherThreePIDError;
@@ -129,10 +140,6 @@ module.exports = React.createClass({
                 }
             }
             return MessageCase.Invite;
-        } else if (myMember && myMember.isKicked()) {
-            return MessageCase.Kicked;
-        } else if (myMember && myMember && myMember.membership == 'ban') {
-            return MessageCase.Banned;
         } else if (this.props.error) {
             if (this.props.error.errcode == 'M_NOT_FOUND') {
                 return MessageCase.RoomNotFound;
