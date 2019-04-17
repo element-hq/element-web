@@ -24,6 +24,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -316,21 +317,21 @@ module.exports = React.createClass({
             case MessageCase.Invite: {
                 const inviteMember = this._getInviteMember();
                 let avatar;
-                let memberName;
+                let inviterElement;
                 if (inviteMember) {
                     const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-                    avatar = (<MemberAvatar member={inviteMember} />);
-                    memberName = inviteMember.name;
+                    avatar = (<MemberAvatar member={inviteMember} viewUserOnClick={true} />);
+                    const colorClass = getUserNameColorClass(inviteMember.userId);
+                    inviterElement = (<span className={`mx_RoomPreviewBar_inviter ${colorClass}`}>{inviteMember.name}</span>);
                 } else {
-                    memberName = this.props.inviterName;
+                    inviterElement = this.props.inviterName;
                 }
 
-                if (this.props.canPreview) {
-                    title = <span>{avatar}{_t("<userName/> invited you to this room", {}, {userName: name => <strong>{memberName}</strong>})}</span>;
-                } else {
-                    title = _t("Do you want to join this room?");
-                    subTitle = <span>{avatar}{_t("<userName/> invited you", {}, {userName: name => <strong>{memberName}</strong>})}</span>;
-                }
+                title = _t("Do you want to join this room?");
+                subTitle = [
+                    avatar,
+                    _t("<userName/> invited you", {}, {userName: () => inviterElement}),
+                ];
 
                 primaryActionLabel = _t("Accept");
                 primaryActionHandler = this.props.onJoinClick;
