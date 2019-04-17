@@ -72,3 +72,7 @@ limitations under the License.
     // give them more visual distinction between the sections.
     margin-top: 30px;
 }
+
+.mx_SettingsTab a {
+    color: $accent-color-alt;
+}

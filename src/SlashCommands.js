@@ -155,7 +155,7 @@ export const CommandMap = {
                             <p>
                                 {_t(
                                     "Please confirm that you'd like to go forward with upgrading this room " +
-                                    "from <oldVersion /> to <newVersion />",
+                                    "from <oldVersion /> to <newVersion />.",
                                     {},
                                     {
                                         oldVersion: () => <code>{room ? room.getVersion() : "1"}</code>,

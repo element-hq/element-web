@@ -40,12 +40,34 @@ export default class HeaderButtons extends React.Component {
         dis.unregister(this.dispatcherRef);
     }
 
+    componentDidUpdate(prevProps) {
+        if (!prevProps.collapsedRhs && this.props.collapsedRhs) {
+            this.setState({
+                phase: null,
+            });
+        }
+    }
+
     setPhase(phase, extras) {
-        // TODO: delay?
+        if (this.props.collapsedRhs) {
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
+        }
         dis.dispatch(Object.assign({
             action: 'view_right_panel_phase',
             phase: phase,
         }, extras));
+    }
+
+    togglePhase(phase, validPhases = [phase]) {
+        if (validPhases.includes(this.state.phase)) {
+            dis.dispatch({
+                action: 'hide_right_panel',
+            });
+        } else {
+            this.setPhase(phase);
+        }
     }
 
     isPhase(phases) {
@@ -61,28 +83,9 @@ export default class HeaderButtons extends React.Component {
 
     onAction(payload) {
         if (payload.action === "view_right_panel_phase") {
-            // only actions coming from header buttons should collapse the right panel
-            if (this.state.phase === payload.phase && payload.fromHeader) {
-                dis.dispatch({
-                    action: 'hide_right_panel',
-                });
-                this.setState({
-                    phase: null,
-                });
-            } else {
-                if (this.props.collapsedRhs && payload.fromHeader) {
-                    dis.dispatch({
-                        action: 'show_right_panel',
-                    });
-                    // emit payload again as the RightPanel didn't exist up
-                    // till show_right_panel, just without the fromHeader flag
-                    // as that would hide the right panel again
-                    dis.dispatch(Object.assign({}, payload, {fromHeader: false}));
-                }
-                this.setState({
-                    phase: payload.phase,
-                });
-            }
+            this.setState({
+                phase: payload.phase,
+            });
         }
     }
 

@@ -492,6 +492,9 @@ export default class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
 
+        // Focus the composer view
+        dis.dispatch({action: 'focus_composer'});
+
         let error;
 
         function onProgress(ev) {

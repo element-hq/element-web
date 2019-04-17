@@ -41,6 +41,12 @@ class SdkConfig {
     static unset() {
         global.mxReactSdkConfig = undefined;
     }
+
+    static add(cfg) {
+        const liveConfig = SdkConfig.get();
+        const newConfig = Object.assign({}, liveConfig, cfg);
+        SdkConfig.put(newConfig);
+    }
 }
 
 module.exports = SdkConfig;

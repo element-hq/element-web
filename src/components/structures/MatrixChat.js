@@ -565,23 +565,6 @@ export default React.createClass({
                     },
                 });
                 break;
-            case 'view_user':
-                // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapsedRhs) {
-                    setTimeout(()=>{
-                        dis.dispatch({
-                            action: 'show_right_panel',
-                        });
-                        dis.dispatch({
-                            action: 'view_user',
-                            member: payload.member,
-                        });
-                    }, 0);
-                }
-                break;
-            // different from view_user,
-            // this show the user panel outside of the context
-            // of a room, like a /user/<id> url
             case 'view_user_info':
                 this._viewUser(payload.userId);
                 break;
@@ -1820,7 +1803,7 @@ export default React.createClass({
     },
 
     _setPageSubtitle: function(subtitle='') {
-        document.title = `Riot ${subtitle}`;
+        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
     },
 
     updateStatusIndicator: function(state, prevState) {

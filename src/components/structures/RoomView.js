@@ -272,6 +272,28 @@ module.exports = React.createClass({
         return this.state.room ? this.state.room.roomId : this.state.roomId;
     },
 
+    _getPermalinkCreatorForRoom: function(room) {
+        if (!this._permalinkCreators) this._permalinkCreators = {};
+        if (this._permalinkCreators[room.roomId]) return this._permalinkCreators[room.roomId];
+
+        this._permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
+        if (this.state.room && room.roomId === this.state.room.roomId) {
+            // We want to watch for changes in the creator for the primary room in the view, but
+            // don't need to do so for search results.
+            this._permalinkCreators[room.roomId].start();
+        } else {
+            this._permalinkCreators[room.roomId].load();
+        }
+        return this._permalinkCreators[room.roomId];
+    },
+
+    _stopAllPermalinkCreators: function() {
+        if (!this._permalinkCreators) return;
+        for (const roomId of Object.keys(this._permalinkCreators)) {
+            this._permalinkCreators[roomId].stop();
+        }
+    },
+
     _onWidgetEchoStoreUpdate: function() {
         this.setState({
             showApps: this._shouldShowApps(this.state.room),
@@ -436,9 +458,7 @@ module.exports = React.createClass({
         }
 
         // stop tracking room changes to format permalinks
-        if (this.state.permalinkCreator) {
-            this.state.permalinkCreator.stop();
-        }
+        this._stopAllPermalinkCreators();
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -651,11 +671,6 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
-        if (!this.state.permalinkCreator) {
-            const permalinkCreator = new RoomPermalinkCreator(room);
-            permalinkCreator.start();
-            this.setState({permalinkCreator});
-        }
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -1169,6 +1184,7 @@ module.exports = React.createClass({
 
             const mxEv = result.context.getEvent();
             const roomId = mxEv.getRoomId();
+            const room = cli.getRoom(roomId);
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -1178,7 +1194,6 @@ module.exports = React.createClass({
 
             if (this.state.searchScope === 'All') {
                 if (roomId != lastRoomId) {
-                    const room = cli.getRoom(roomId);
 
                     // XXX: if we've left the room, we might not know about
                     // it. We should tell the js sdk to go and find out about
@@ -1199,7 +1214,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     permalinkCreator={this.state.permalinkCreator}
+                     permalinkCreator={this._getPermalinkCreatorForRoom(room)}
                      onHeightChanged={onHeightChanged} />);
         }
         return ret;
@@ -1715,7 +1730,7 @@ module.exports = React.createClass({
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
-                    permalinkCreator={this.state.permalinkCreator}
+                    permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 />;
         }
 
@@ -1812,7 +1827,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
-                permalinkCreator={this.state.permalinkCreator}
+                permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
             />);
 
