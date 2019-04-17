@@ -166,7 +166,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--include", nargs='*', default='./config*.json', help=(
+        "--include", nargs='*', default=['./config*.json'], help=(
             "Symlink these files into the root of the deployed tarball. \
              Useful for config files and home pages. Supports glob syntax. \
              (Default: '%(default)s')"
