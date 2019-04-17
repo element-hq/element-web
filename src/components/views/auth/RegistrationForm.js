@@ -68,7 +68,9 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             // Field error codes by field ID
+            // TODO: Remove `fieldErrors` once converted to new-style validation
             fieldErrors: {},
+            fieldValid: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
             username: "",
@@ -140,9 +142,16 @@ module.exports = React.createClass({
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
     allFieldsValid: function() {
-        const keys = Object.keys(this.state.fieldErrors);
+        // TODO: Remove `fieldErrors` here when all fields converted
+        let keys = Object.keys(this.state.fieldErrors);
         for (let i = 0; i < keys.length; ++i) {
             if (this.state.fieldErrors[keys[i]]) {
+                return false;
+            }
+        }
+        keys = Object.keys(this.state.fieldValid);
+        for (let i = 0; i < keys.length; ++i) {
+            if (!this.state.fieldValid[keys[i]]) {
                 return false;
             }
         }
@@ -161,57 +170,57 @@ module.exports = React.createClass({
                 const email = this.state.email;
                 const emailValid = email === '' || Email.looksValid(email);
                 if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
-                    this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
-                } else this.markFieldValid(fieldID, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                    this.markFieldError(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
+                } else this.markFieldError(fieldID, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             }
             case FIELD_PHONE_NUMBER: {
                 const phoneNumber = this.state.phoneNumber;
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
                 if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
-                    this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
-                } else this.markFieldValid(fieldID, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
+                    this.markFieldError(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
+                } else this.markFieldError(fieldID, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             }
             case FIELD_USERNAME: {
                 const username = this.state.username;
                 if (allowEmpty && username === '') {
-                    this.markFieldValid(fieldID, true);
+                    this.markFieldError(fieldID, true);
                 } else if (username == '') {
-                    this.markFieldValid(
+                    this.markFieldError(
                         fieldID,
                         false,
                         "RegistrationForm.ERR_USERNAME_BLANK",
                     );
                 } else {
-                    this.markFieldValid(fieldID, true);
+                    this.markFieldError(fieldID, true);
                 }
                 break;
             }
             case FIELD_PASSWORD:
                 if (allowEmpty && pwd1 === "") {
-                    this.markFieldValid(fieldID, true);
+                    this.markFieldError(fieldID, true);
                 } else if (pwd1 == '') {
-                    this.markFieldValid(
+                    this.markFieldError(
                         fieldID,
                         false,
                         "RegistrationForm.ERR_PASSWORD_MISSING",
                     );
                 } else if (pwd1.length < this.props.minPasswordLength) {
-                    this.markFieldValid(
+                    this.markFieldError(
                         fieldID,
                         false,
                         "RegistrationForm.ERR_PASSWORD_LENGTH",
                     );
                 } else {
-                    this.markFieldValid(fieldID, true);
+                    this.markFieldError(fieldID, true);
                 }
                 break;
             case FIELD_PASSWORD_CONFIRM:
                 if (allowEmpty && pwd2 === "") {
-                    this.markFieldValid(fieldID, true);
+                    this.markFieldError(fieldID, true);
                 } else {
-                    this.markFieldValid(
+                    this.markFieldError(
                         fieldID, pwd1 == pwd2,
                         "RegistrationForm.ERR_PASSWORD_MISMATCH",
                     );
@@ -220,7 +229,8 @@ module.exports = React.createClass({
         }
     },
 
-    markFieldValid: function(fieldID, valid, errorCode) {
+    markFieldError: function(fieldID, valid, errorCode) {
+        // TODO: Remove this function once all fields converted to new-style validation.
         const { fieldErrors } = this.state;
         if (valid) {
             fieldErrors[fieldID] = null;
@@ -233,6 +243,14 @@ module.exports = React.createClass({
         // TODO: Remove outer validation handling once all fields converted to new-style
         // validation in the form.
         this.props.onValidationChange(fieldErrors);
+    },
+
+    markFieldValid: function(fieldID, valid) {
+        const { fieldValid } = this.state;
+        fieldValid[fieldID] = valid;
+        this.setState({
+            fieldValid,
+        });
     },
 
     _classForField: function(fieldID, ...baseClasses) {
@@ -298,6 +316,23 @@ module.exports = React.createClass({
         });
     },
 
+    onUsernameValidate(fieldState) {
+        const result = this.validateUsernameRules(fieldState);
+        this.markFieldValid(FIELD_USERNAME, result.valid);
+        return result;
+    },
+
+    validateUsernameRules: withValidation({
+        description: () => _t("Use letters, numbers, dashes and underscores only"),
+        rules: [
+            {
+                key: "safeLocalpart",
+                regex: SAFE_LOCALPART_REGEX,
+                invalid: () => _t("Some characters not allowed"),
+            },
+        ],
+    }),
+
     /**
      * A step is required if all flows include that step.
      *
@@ -324,18 +359,6 @@ module.exports = React.createClass({
 
     renderUsername() {
         const Field = sdk.getComponent('elements.Field');
-
-        const onValidate = withValidation({
-            description: _t("Use letters, numbers, dashes and underscores only"),
-            rules: [
-                {
-                    key: "safeLocalpart",
-                    regex: SAFE_LOCALPART_REGEX,
-                    invalid: _t("Some characters not allowed"),
-                },
-            ],
-        });
-
         return <Field
             className={this._classForField(FIELD_USERNAME)}
             id="mx_RegistrationForm_username"
@@ -345,7 +368,7 @@ module.exports = React.createClass({
             defaultValue={this.props.defaultUsername}
             value={this.state.username}
             onChange={this.onUsernameChange}
-            onValidate={onValidate}
+            onValidate={this.onUsernameValidate}
         />;
     },
 

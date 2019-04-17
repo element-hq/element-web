@@ -19,16 +19,16 @@ import classNames from 'classnames';
 /**
  * Creates a validation function from a set of rules describing what to validate.
  *
- * @param {String} description
- *     Summary of the kind of value that will meet the validation rules. Shown at
- *     the top of the validation feedback.
+ * @param {Function} description
+ *     Function that returns a string summary of the kind of value that will
+ *     meet the validation rules. Shown at the top of the validation feedback.
  * @param {Object} rules
  *     An array of rules describing how to check to input value. Each rule in an object
  *     and may have the following properties:
  *     - `key`: A unique ID for the rule. Required.
  *     - `regex`: A regex used to determine the rule's current validity. Required.
- *     - `valid`: Text to show when the rule is valid. Only shown if set.
- *     - `invalid`: Text to show when the rule is invalid. Only shown if set.
+ *     - `valid`: Function returning text to show when the rule is valid. Only shown if set.
+ *     - `invalid`: Function returning text to show when the rule is invalid. Only shown if set.
  * @returns {Function}
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
@@ -58,7 +58,7 @@ export default function withValidation({ description, rules }) {
                     results.push({
                         key: rule.key,
                         valid: true,
-                        text: rule.valid,
+                        text: rule.valid(),
                     });
                 } else if (!ruleValid && rule.invalid) {
                     // If the rule's result is invalid and has text to show for
@@ -66,7 +66,7 @@ export default function withValidation({ description, rules }) {
                     results.push({
                         key: rule.key,
                         valid: false,
-                        text: rule.invalid,
+                        text: rule.invalid(),
                     });
                 }
             }
@@ -96,8 +96,13 @@ export default function withValidation({ description, rules }) {
             </ul>;
         }
 
+        let summary;
+        if (description) {
+            summary = <div className="mx_Validation_description">{description()}</div>;
+        }
+
         const feedback = <div className="mx_Validation">
-            <div className="mx_Validation_description">{description}</div>
+            {summary}
             {details}
         </div>;
 
