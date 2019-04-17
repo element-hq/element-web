@@ -106,6 +106,12 @@ module.exports = React.createClass({
         }
     },
 
+    _onInviterClick(evt) {
+        evt.preventDefault();
+        const member = this._getInviteMember();
+        dis.dispatch({action: 'view_user_info', userId: member.userId});
+    },
+
     _getMessageCase() {
         const isGuest = MatrixClientPeg.get().isGuest();
 
@@ -320,9 +326,16 @@ module.exports = React.createClass({
                 let inviterElement;
                 if (inviteMember) {
                     const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-                    avatar = (<MemberAvatar member={inviteMember} viewUserOnClick={true} />);
-                    const colorClass = getUserNameColorClass(inviteMember.userId);
-                    inviterElement = (<span className={`mx_RoomPreviewBar_inviter ${colorClass}`}>{inviteMember.name}</span>);
+                    avatar = (<MemberAvatar member={inviteMember} onClick={this._onInviterClick} />);
+                    const inviterClasses = [
+                        "mx_RoomPreviewBar_inviter",
+                        getUserNameColorClass(inviteMember.userId),
+                    ].join(" ");
+                    inviterElement = (
+                        <a onClick={this._onInviterClick} className={inviterClasses}>
+                            {inviteMember.name}
+                        </a>
+                    );
                 } else {
                     inviterElement = this.props.inviterName;
                 }
