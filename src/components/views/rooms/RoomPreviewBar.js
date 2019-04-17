@@ -48,9 +48,6 @@ module.exports = React.createClass({
         onJoinClick: PropTypes.func,
         onRejectClick: PropTypes.func,
         onForgetClick: PropTypes.func,
-        onSignInClick: PropTypes.func,
-        onSignUpClick: PropTypes.func,
-
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
         inviterName: PropTypes.string,
@@ -69,7 +66,9 @@ module.exports = React.createClass({
         // purpose of the spinner.
         spinner: PropTypes.bool,
         spinnerState: PropTypes.oneOf(["joining"]),
-
+        loading: PropTypes.bool,
+        joining: PropTypes.bool,
+        rejecting: PropTypes.bool,
         // The alias that was used to access this room, if appropriate
         // If given, this will be how the room is referred to (eg.
         // in error messages).
@@ -185,7 +184,7 @@ module.exports = React.createClass({
     },
 
     _roomName: function(atStart = false) {
-        const name = this.props.room ? this.props.room.name : this.props.room_alias;
+        const name = this.props.room ? this.props.room.name : this.props.roomAlias;
         if (name) {
             return name;
         } else if (atStart) {
