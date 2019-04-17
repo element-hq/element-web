@@ -1647,6 +1647,7 @@ module.exports = React.createClass({
         let aux = null;
         let previewBar;
         let hideCancel = false;
+        let hideRightPanel = false;
         if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
@@ -1690,6 +1691,8 @@ module.exports = React.createClass({
                         { previewBar }
                     </div>
                 );
+            } else {
+                hideRightPanel = true;
             }
         } else if (hiddenHighlightCount > 0) {
             aux = (
@@ -1861,14 +1864,16 @@ module.exports = React.createClass({
             },
         );
 
-        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} /> : undefined;
+        const rightPanel = !hideRightPanel && this.state.room &&
+            <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
+        const collapsedRhs = hideRightPanel || this.props.collapsedRhs;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     inRoom={myMembership === 'join'}
-                    collapsedRhs={this.props.collapsedRhs}
+                    collapsedRhs={collapsedRhs}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onPinnedClick={this.onPinnedClick}
@@ -1879,7 +1884,7 @@ module.exports = React.createClass({
                 />
                 <MainSplit
                     panel={rightPanel}
-                    collapsedRhs={this.props.collapsedRhs}
+                    collapsedRhs={collapsedRhs}
                     resizeNotifier={this.props.resizeNotifier}
                 >
                     <div className={fadableSectionClasses}>
