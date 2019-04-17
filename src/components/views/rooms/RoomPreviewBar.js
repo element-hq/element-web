@@ -337,7 +337,7 @@ module.exports = React.createClass({
                         </a>
                     );
                 } else {
-                    inviterElement = this.props.inviterName;
+                    inviterElement = (<span className="mx_RoomPreviewBar_inviter">{this.props.inviterName}</span>);
                 }
 
                 title = _t("Do you want to join this room?");
