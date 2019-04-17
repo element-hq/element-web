@@ -227,7 +227,8 @@ module.exports = React.createClass({
         let secondaryActionHandler;
         let secondaryActionLabel;
 
-        switch (this._getMessageCase()) {
+        const messageCase = this._getMessageCase();
+        switch (messageCase) {
             case MessageCase.Joining: {
                 title = _t("Joining room …");
                 showSpinner = true;
@@ -418,7 +419,7 @@ module.exports = React.createClass({
             );
         }
 
-        const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
+        const classes = classNames("mx_RoomPreviewBar", "dark-panel", `mx_RoomPreviewBar_${messageCase}`, {
             "mx_RoomPreviewBar_panel": this.props.canPreview,
             "mx_RoomPreviewBar_dialog": !this.props.canPreview,
             "mx_RoomPreviewBar_dark": darkStyle,
