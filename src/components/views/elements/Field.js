@@ -86,6 +86,10 @@ export default class Field extends React.PureComponent {
         }
     };
 
+    focus() {
+        this.input.focus();
+    }
+
     validate({ value, focused }) {
         if (!this.props.onValidate) {
             return;
@@ -107,6 +111,7 @@ export default class Field extends React.PureComponent {
 
         // Set some defaults for the <input> element
         inputProps.type = inputProps.type || "text";
+        inputProps.ref = input => this.input = input;
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
         inputProps.onFocus = this.onFocus;

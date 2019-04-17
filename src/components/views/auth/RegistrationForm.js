@@ -89,34 +89,37 @@ module.exports = React.createClass({
         // is the one from the first invalid field.
         // It's not super ideal that this just calls
         // onValidationChange once for each invalid field.
-        // TODO: Change this to trigger new-style validation for an invalid fields.
+        // TODO: Remove these calls once converted to new-style validation.
         this.validateField(FIELD_PHONE_NUMBER, ev.type);
         this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
         this.validateField(FIELD_USERNAME, ev.type);
 
+        const allFieldsValid = this.verifyFieldsBeforeSubmit();
+        if (!allFieldsValid) {
+            return;
+        }
+
         const self = this;
-        if (this.allFieldsValid()) {
-            if (this.state.email == '') {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("If you don't specify an email address, you won't be able to reset your password. " +
-                                "Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                    onFinished: function(confirmed) {
-                        if (confirmed) {
-                            self._doSubmit(ev);
-                        }
-                    },
-                });
-            } else {
-                self._doSubmit(ev);
-            }
+        if (this.state.email == '') {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("If you don't specify an email address, you won't be able to reset your password. " +
+                            "Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: function(confirmed) {
+                    if (confirmed) {
+                        self._doSubmit(ev);
+                    }
+                },
+            });
+        } else {
+            self._doSubmit(ev);
         }
     },
 
@@ -138,6 +141,27 @@ module.exports = React.createClass({
         }
     },
 
+    verifyFieldsBeforeSubmit() {
+        if (this.allFieldsValid()) {
+            return true;
+        }
+
+        const invalidField = this.findFirstInvalidField([
+            FIELD_USERNAME,
+            FIELD_PASSWORD,
+            FIELD_PASSWORD_CONFIRM,
+            FIELD_EMAIL,
+            FIELD_PHONE_NUMBER,
+        ]);
+
+        if (!invalidField) {
+            return true;
+        }
+
+        invalidField.focus();
+        return false;
+    },
+
     /**
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
@@ -156,6 +180,15 @@ module.exports = React.createClass({
             }
         }
         return true;
+    },
+
+    findFirstInvalidField(fieldIDs) {
+        for (const fieldID of fieldIDs) {
+            if (!this.state.fieldValid[fieldID] && this[fieldID]) {
+                return this[fieldID];
+            }
+        }
+        return null;
     },
 
     validateField: function(fieldID, eventType) {
@@ -362,6 +395,7 @@ module.exports = React.createClass({
         return <Field
             className={this._classForField(FIELD_USERNAME)}
             id="mx_RegistrationForm_username"
+            ref={field => this[FIELD_USERNAME] = field}
             type="text"
             autoFocus={true}
             label={_t("Username")}
