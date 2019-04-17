@@ -925,9 +925,9 @@ export default React.createClass({
     _viewUser: function(userId, action) {
         // Wait for the first sync so that `getRoom` gives us a room object if it's
         // in the sync response
-        const waitFor = this.firstSyncPromise ?
+        const waitForSync = this.firstSyncPromise ?
             this.firstSyncPromise.promise : Promise.resolve();
-        waitFor.then(() => {
+        waitForSync.then(() => {
             if (action === 'chat') {
                 this._chatCreateOrReuse(userId);
                 return;
