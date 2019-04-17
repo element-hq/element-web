@@ -58,3 +58,8 @@ export function hashCode(str) {
     }
     return Math.abs(hash);
 }
+
+export function getUserNameColorClass(userId) {
+    const colorNumber = (hashCode(userId) % 8) + 1;
+    return `mx_Username_color${colorNumber}`;
+}
