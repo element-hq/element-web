@@ -308,40 +308,6 @@ module.exports = React.createClass({
         });
     },
 
-    onFormValidationChange: function(fieldErrors) {
-        // `fieldErrors` is an object mapping field IDs to error codes when there is an
-        // error or `null` for no error, so the values array will be something like:
-        // `[ null, "RegistrationForm.ERR_PASSWORD_MISSING", null]`
-        // Find the first non-null error code and show that.
-        const errCode = Object.values(fieldErrors).find(value => !!value);
-        if (!errCode) {
-            this.setState({
-                errorText: null,
-            });
-            return;
-        }
-
-        let errMsg;
-        switch (errCode) {
-            case "RegistrationForm.ERR_PASSWORD_MISSING":
-                errMsg = _t('Missing password.');
-                break;
-            case "RegistrationForm.ERR_PASSWORD_MISMATCH":
-                errMsg = _t('Passwords don\'t match.');
-                break;
-            case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH});
-                break;
-            default:
-                console.error("Unknown error code: %s", errCode);
-                errMsg = _t('An unknown error occurred.');
-                break;
-        }
-        this.setState({
-            errorText: errMsg,
-        });
-    },
-
     onLoginClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -517,7 +483,6 @@ module.exports = React.createClass({
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
                 minPasswordLength={MIN_PASSWORD_LENGTH}
-                onValidationChange={this.onFormValidationChange}
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}

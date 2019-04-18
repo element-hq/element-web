@@ -47,7 +47,6 @@ module.exports = React.createClass({
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
         minPasswordLength: PropTypes.number,
-        onValidationChange: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -68,8 +67,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             // Field error codes by field ID
-            // TODO: Remove `fieldErrors` once converted to new-style validation
-            fieldErrors: {},
             fieldValid: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
@@ -83,15 +80,6 @@ module.exports = React.createClass({
 
     onSubmit: function(ev) {
         ev.preventDefault();
-
-        // validate everything, in reverse order so
-        // the error that ends up being displayed
-        // is the one from the first invalid field.
-        // It's not super ideal that this just calls
-        // onValidationChange once for each invalid field.
-        // TODO: Remove these calls once converted to new-style validation.
-        this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
-        this.validateField(FIELD_PASSWORD, ev.type);
 
         const allFieldsValid = this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
@@ -178,14 +166,7 @@ module.exports = React.createClass({
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
     allFieldsValid: function() {
-        // TODO: Remove `fieldErrors` here when all fields converted
-        let keys = Object.keys(this.state.fieldErrors);
-        for (let i = 0; i < keys.length; ++i) {
-            if (this.state.fieldErrors[keys[i]]) {
-                return false;
-            }
-        }
-        keys = Object.keys(this.state.fieldValid);
+        const keys = Object.keys(this.state.fieldValid);
         for (let i = 0; i < keys.length; ++i) {
             if (!this.state.fieldValid[keys[i]]) {
                 return false;
@@ -203,78 +184,12 @@ module.exports = React.createClass({
         return null;
     },
 
-    validateField: function(fieldID, eventType) {
-        const pwd1 = this.state.password.trim();
-        const pwd2 = this.state.passwordConfirm.trim();
-        const allowEmpty = eventType === "blur";
-
-        // TODO: Remove rules here as they are converted to new-style validation
-
-        switch (fieldID) {
-            case FIELD_PASSWORD:
-                if (allowEmpty && pwd1 === "") {
-                    this.markFieldError(fieldID, true);
-                } else if (pwd1 == '') {
-                    this.markFieldError(
-                        fieldID,
-                        false,
-                        "RegistrationForm.ERR_PASSWORD_MISSING",
-                    );
-                } else if (pwd1.length < this.props.minPasswordLength) {
-                    this.markFieldError(
-                        fieldID,
-                        false,
-                        "RegistrationForm.ERR_PASSWORD_LENGTH",
-                    );
-                } else {
-                    this.markFieldError(fieldID, true);
-                }
-                break;
-            case FIELD_PASSWORD_CONFIRM:
-                if (allowEmpty && pwd2 === "") {
-                    this.markFieldError(fieldID, true);
-                } else {
-                    this.markFieldError(
-                        fieldID, pwd1 == pwd2,
-                        "RegistrationForm.ERR_PASSWORD_MISMATCH",
-                    );
-                }
-                break;
-        }
-    },
-
-    markFieldError: function(fieldID, valid, errorCode) {
-        // TODO: Remove this function once all fields converted to new-style validation.
-        const { fieldErrors } = this.state;
-        if (valid) {
-            fieldErrors[fieldID] = null;
-        } else {
-            fieldErrors[fieldID] = errorCode;
-        }
-        this.setState({
-            fieldErrors,
-        });
-        // TODO: Remove outer validation handling once all fields converted to new-style
-        // validation in the form.
-        this.props.onValidationChange(fieldErrors);
-    },
-
     markFieldValid: function(fieldID, valid) {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
             fieldValid,
         });
-    },
-
-    _classForField: function(fieldID, ...baseClasses) {
-        let cls = baseClasses.join(' ');
-        // TODO: Remove this from fields as they are converted to new-style validation.
-        if (this.state.fieldErrors[fieldID]) {
-            if (cls) cls += ' ';
-            cls += 'error';
-        }
-        return cls;
     },
 
     onEmailChange(ev) {
@@ -307,25 +222,65 @@ module.exports = React.createClass({
         ],
     }),
 
-    onPasswordBlur(ev) {
-        this.validateField(FIELD_PASSWORD, ev.type);
-    },
-
     onPasswordChange(ev) {
         this.setState({
             password: ev.target.value,
         });
     },
 
-    onPasswordConfirmBlur(ev) {
-        this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
+    onPasswordValidate(fieldState) {
+        const result = this.validatePasswordRules(fieldState);
+        this.markFieldValid(FIELD_PASSWORD, result.valid);
+        return result;
     },
+
+    validatePasswordRules: withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Enter password"),
+            },
+            {
+                key: "minLength",
+                test: function({ value }) {
+                    return !value || value.length >= this.props.minPasswordLength;
+                },
+                invalid: function() {
+                    return _t("Too short (min %(length)s)", { length: this.props.minPasswordLength });
+                },
+            },
+        ],
+    }),
 
     onPasswordConfirmChange(ev) {
         this.setState({
             passwordConfirm: ev.target.value,
         });
     },
+
+    onPasswordConfirmValidate(fieldState) {
+        const result = this.validatePasswordConfirmRules(fieldState);
+        this.markFieldValid(FIELD_PASSWORD_CONFIRM, result.valid);
+        return result;
+    },
+
+    validatePasswordConfirmRules: withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Confirm password"),
+            },
+            {
+                key: "match",
+                test: function({ value }) {
+                    return !value || value === this.state.password;
+                },
+                invalid: () => _t("Passwords don't match"),
+            },
+         ],
+    }),
 
     onPhoneCountryChange(newVal) {
         this.setState({
@@ -436,6 +391,34 @@ module.exports = React.createClass({
         />;
     },
 
+    renderPassword() {
+        const Field = sdk.getComponent('elements.Field');
+        return <Field
+            id="mx_RegistrationForm_password"
+            ref={field => this[FIELD_PASSWORD] = field}
+            type="password"
+            label={_t("Password")}
+            defaultValue={this.props.defaultPassword}
+            value={this.state.password}
+            onChange={this.onPasswordChange}
+            onValidate={this.onPasswordValidate}
+        />;
+    },
+
+    renderPasswordConfirm() {
+        const Field = sdk.getComponent('elements.Field');
+        return <Field
+            id="mx_RegistrationForm_passwordConfirm"
+            ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
+            type="password"
+            label={_t("Confirm")}
+            defaultValue={this.props.defaultPassword}
+            value={this.state.passwordConfirm}
+            onChange={this.onPasswordConfirmChange}
+            onValidate={this.onPasswordConfirmValidate}
+        />;
+    },
+
     renderPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         if (!threePidLogin || !this._authStepIsUsed('m.login.msisdn')) {
@@ -481,8 +464,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const Field = sdk.getComponent('elements.Field');
-
         let yourMatrixAccountText = _t('Create your Matrix account');
         if (this.props.hsName) {
             yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
@@ -523,26 +504,8 @@ module.exports = React.createClass({
                         {this.renderUsername()}
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        <Field
-                            className={this._classForField(FIELD_PASSWORD)}
-                            id="mx_RegistrationForm_password"
-                            type="password"
-                            label={_t("Password")}
-                            defaultValue={this.props.defaultPassword}
-                            value={this.state.password}
-                            onBlur={this.onPasswordBlur}
-                            onChange={this.onPasswordChange}
-                        />
-                        <Field
-                            className={this._classForField(FIELD_PASSWORD_CONFIRM)}
-                            id="mx_RegistrationForm_passwordConfirm"
-                            type="password"
-                            label={_t("Confirm")}
-                            defaultValue={this.props.defaultPassword}
-                            value={this.state.passwordConfirm}
-                            onBlur={this.onPasswordConfirmBlur}
-                            onChange={this.onPasswordConfirmChange}
-                        />
+                        {this.renderPassword()}
+                        {this.renderPasswordConfirm()}
                     </div>
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderEmail()}

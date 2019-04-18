@@ -52,7 +52,7 @@ export default function withValidation({ description, rules }) {
                 }
                 // We're setting `this` to whichever component hold the validation
                 // function. That allows rules to access the state of the component.
-                // eslint-disable-next-line babel/no-invalid-this
+                /* eslint-disable babel/no-invalid-this */
                 const ruleValid = rule.test.call(this, { value, allowEmpty });
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
@@ -61,7 +61,7 @@ export default function withValidation({ description, rules }) {
                     results.push({
                         key: rule.key,
                         valid: true,
-                        text: rule.valid(),
+                        text: rule.valid.call(this),
                     });
                 } else if (!ruleValid && rule.invalid) {
                     // If the rule's result is invalid and has text to show for
@@ -69,9 +69,10 @@ export default function withValidation({ description, rules }) {
                     results.push({
                         key: rule.key,
                         valid: false,
-                        text: rule.invalid(),
+                        text: rule.invalid.call(this),
                     });
                 }
+                /* eslint-enable babel/no-invalid-this */
             }
         }
 
