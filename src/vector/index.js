@@ -45,7 +45,8 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
-import {_t, _td} from 'matrix-react-sdk/lib/languageHandler';
+import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
+import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/lib/autodiscovery";
 
 import url from 'url';
@@ -492,61 +493,19 @@ async function verifyServerConfig() {
         result = await AutoDiscovery.findClientConfig(serverName);
     }
 
-    if (!result || !result["m.homeserver"]) {
-        // This shouldn't happen without major misconfiguration, so we'll log a bit of information
-        // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
-        console.error("Ended up in a state of not knowing which homeserver to connect to.");
-        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
-    }
-
-    const hsResult = result['m.homeserver'];
-    if (hsResult.state !== AutoDiscovery.SUCCESS) {
-        if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
-            throw newTranslatableError(hsResult.error);
-        }
-        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
-    }
-
-    const isResult = result['m.identity_server'];
-    let preferredIdentityUrl = "https://vector.im";
-    if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
-        preferredIdentityUrl = isResult["base_url"];
-    } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
-        console.error("Error determining preferred identity server URL:", isResult);
-        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
-    }
-
-    const preferredHomeserverUrl = hsResult["base_url"];
-    let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
-
-    const url = new URL(preferredHomeserverUrl);
-    if (!preferredHomeserverName) preferredHomeserverName = url.hostname;
-
-    // It should have been set by now, so check it
-    if (!preferredHomeserverName) {
-        console.error("Failed to parse homeserver name from homeserver URL");
-        throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
-    }
-
-    const isServerNameDifferentFromUrl = url.hostname !== preferredHomeserverName;
-
-    console.log("Using homeserver config:", {
-        isServerNameDifferentFromUrl,
-        preferredHomeserverName,
-        preferredHomeserverUrl,
-        preferredIdentityUrl,
-    });
+    const validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
+    console.log("Using homeserver config:", validatedConfig);
 
     // Build our own discovery result for distribution within the app
     const configResult = {
         "m.homeserver": {
-            "base_url": preferredHomeserverUrl,
-            "server_name": preferredHomeserverName,
-            "server_name_different": isServerNameDifferentFromUrl,
+            "base_url": validatedConfig.hsUrl,
+            "server_name": validatedConfig.hsName,
+            "server_name_different": validatedConfig.hsNameIsDifferent,
         },
         "m.identity_server": {
-            "base_url": preferredIdentityUrl,
-            "enabled": !SdkConfig.get()['disable_identity_server'],
+            "base_url": validatedConfig.isUrl,
+            "enabled": validatedConfig.identityEnabled,
         },
     };
 
@@ -561,14 +520,6 @@ async function verifyServerConfig() {
     SdkConfig.add({"validated_discovery_config": configResult});
 
     return SdkConfig.get();
-}
-
-// Helper function to provide English errors in logs, but present translated
-// errors to users.
-function newTranslatableError(message) {
-    const error = new Error(message);
-    error.translatedMessage = _t(message);
-    return error;
 }
 
 loadApp();
