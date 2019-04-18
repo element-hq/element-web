@@ -26,7 +26,7 @@ module.exports = async function join(session, roomName) {
     const firstRoomLabel = await session.query('.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child');
     await firstRoomLabel.click();
 
-    const joinLink = await session.query('.mx_RoomPreviewBar_join_text a');
+    const joinLink = await session.query('.mx_RoomPreviewBar_ViewingRoom .mx_AccessibleButton_kind_primary');
     await joinLink.click();
 
     await session.query('.mx_MessageComposer');
