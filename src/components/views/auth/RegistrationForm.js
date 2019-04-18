@@ -94,7 +94,6 @@ module.exports = React.createClass({
         this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
-        this.validateField(FIELD_USERNAME, ev.type);
 
         const allFieldsValid = this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
@@ -142,23 +141,38 @@ module.exports = React.createClass({
     },
 
     verifyFieldsBeforeSubmit() {
-        if (this.allFieldsValid()) {
-            return true;
-        }
-
-        const invalidField = this.findFirstInvalidField([
+        const fieldIDsInDisplayOrder = [
             FIELD_USERNAME,
             FIELD_PASSWORD,
             FIELD_PASSWORD_CONFIRM,
             FIELD_EMAIL,
             FIELD_PHONE_NUMBER,
-        ]);
+        ];
+
+        // Run all fields with stricter validation that no longer allows empty
+        // values for required fields.
+        for (const fieldID of fieldIDsInDisplayOrder) {
+            const field = this[fieldID];
+            if (!field) {
+                continue;
+            }
+            field.validate({ allowEmpty: false });
+        }
+
+        if (this.allFieldsValid()) {
+            return true;
+        }
+
+        const invalidField = this.findFirstInvalidField(fieldIDsInDisplayOrder);
 
         if (!invalidField) {
             return true;
         }
 
+        // Focus the first invalid field and show feedback in the stricter mode
+        // that no longer allows empty values for required fields.
         invalidField.focus();
+        invalidField.validate({ allowEmpty: false, focused: true });
         return false;
     },
 
@@ -213,21 +227,6 @@ module.exports = React.createClass({
                 if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
                     this.markFieldError(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
                 } else this.markFieldError(fieldID, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
-                break;
-            }
-            case FIELD_USERNAME: {
-                const username = this.state.username;
-                if (allowEmpty && username === '') {
-                    this.markFieldError(fieldID, true);
-                } else if (username == '') {
-                    this.markFieldError(
-                        fieldID,
-                        false,
-                        "RegistrationForm.ERR_USERNAME_BLANK",
-                    );
-                } else {
-                    this.markFieldError(fieldID, true);
-                }
                 break;
             }
             case FIELD_PASSWORD:
@@ -359,8 +358,13 @@ module.exports = React.createClass({
         description: () => _t("Use letters, numbers, dashes and underscores only"),
         rules: [
             {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Enter username"),
+            },
+            {
                 key: "safeLocalpart",
-                regex: SAFE_LOCALPART_REGEX,
+                test: ({ value }) => !value || SAFE_LOCALPART_REGEX.test(value),
                 invalid: () => _t("Some characters not allowed"),
             },
         ],
@@ -393,7 +397,6 @@ module.exports = React.createClass({
     renderUsername() {
         const Field = sdk.getComponent('elements.Field');
         return <Field
-            className={this._classForField(FIELD_USERNAME)}
             id="mx_RegistrationForm_username"
             ref={field => this[FIELD_USERNAME] = field}
             type="text"

@@ -26,7 +26,7 @@ import classNames from 'classnames';
  *     An array of rules describing how to check to input value. Each rule in an object
  *     and may have the following properties:
  *     - `key`: A unique ID for the rule. Required.
- *     - `regex`: A regex used to determine the rule's current validity. Required.
+ *     - `test`: A function used to determine the rule's current validity. Required.
  *     - `valid`: Function returning text to show when the rule is valid. Only shown if set.
  *     - `invalid`: Function returning text to show when the rule is invalid. Only shown if set.
  * @returns {Function}
@@ -34,9 +34,9 @@ import classNames from 'classnames';
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation({ description, rules }) {
-    return function onValidate({ value, focused }) {
+    return function onValidate({ value, focused, allowEmpty = true }) {
         // TODO: Re-run only after ~200ms of inactivity
-        if (!value) {
+        if (!value && allowEmpty) {
             return {
                 valid: null,
                 feedback: null,
@@ -47,10 +47,10 @@ export default function withValidation({ description, rules }) {
         let valid = true;
         if (rules && rules.length) {
             for (const rule of rules) {
-                if (!rule.key || !rule.regex) {
+                if (!rule.key || !rule.test) {
                     continue;
                 }
-                const ruleValid = rule.regex.test(value);
+                const ruleValid = rule.test({ value, allowEmpty });
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
                     // If the rule's result is valid and has text to show for

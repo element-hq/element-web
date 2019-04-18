@@ -344,12 +344,6 @@ module.exports = React.createClass({
             case "RegistrationForm.ERR_MISSING_PHONE_NUMBER":
                 errMsg = _t('A phone number is required to register on this homeserver.');
                 break;
-            case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = _t("A username can only contain lower case letters, numbers and '=_-./'");
-                break;
-            case "RegistrationForm.ERR_USERNAME_BLANK":
-                errMsg = _t('You need to enter a username.');
-                break;
             default:
                 console.error("Unknown error code: %s", errCode);
                 errMsg = _t('An unknown error occurred.');
