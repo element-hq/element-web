@@ -1511,16 +1511,21 @@ module.exports = React.createClass({
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
-        const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const RoomUpgradeWarningBar = sdk.getComponent("rooms.RoomUpgradeWarningBar");
         const RoomRecoveryReminder = sdk.getComponent("rooms.RoomRecoveryReminder");
 
         if (!this.state.room) {
-            if (this.state.roomLoading || this.state.peekLoading) {
+            const loading = this.state.roomLoading || this.state.peekLoading;
+            if (loading) {
                 return (
                     <div className="mx_RoomView">
-                        <Loader />
+                        <RoomPreviewBar
+                            canPreview={false}
+                            error={this.state.roomLoadError}
+                            loading={loading}
+                            joining={this.state.joining}
+                        />
                     </div>
                 );
             } else {
@@ -1538,28 +1543,16 @@ module.exports = React.createClass({
                 const roomAlias = this.state.roomAlias;
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader ref="header"
+                        <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                            onForgetClick={this.onForgetClick}
+                            onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                            canPreview={false} error={this.state.roomLoadError}
+                            roomAlias={roomAlias}
+                            joining={this.state.joining}
+                            inviterName={inviterName}
+                            invitedEmail={invitedEmail}
                             room={this.state.room}
-                            oobData={this.props.oobData}
-                            collapsedRhs={this.props.collapsedRhs}
-                            e2eStatus={this.state.e2eStatus}
                         />
-                        <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                                onForgetClick={this.onForgetClick}
-                                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                                canPreview={false} error={this.state.roomLoadError}
-                                                roomAlias={roomAlias}
-                                                spinner={this.state.joining}
-                                                spinnerState="joining"
-                                                inviterName={inviterName}
-                                                invitedEmail={invitedEmail}
-                                                room={this.state.room}
-                                />
-                            </div>
-                        </div>
-                        <div className="mx_RoomView_messagePanel"></div>
                     </div>
                 );
             }
@@ -1569,9 +1562,12 @@ module.exports = React.createClass({
         if (myMembership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 return (
-                    <div className="mx_RoomView">
-                        <Loader />
-                    </div>
+                    <RoomPreviewBar
+                            canPreview={false}
+                            error={this.state.roomLoadError}
+                            joining={this.state.joining}
+                            rejecting={this.state.rejecting}
+                        />
                 );
             } else {
                 const myUserId = MatrixClientPeg.get().credentials.userId;
@@ -1586,26 +1582,14 @@ module.exports = React.createClass({
                 // We have a regular invite for this room.
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader
-                            ref="header"
+                        <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                            onForgetClick={this.onForgetClick}
+                            onRejectClick={this.onRejectButtonClicked}
+                            inviterName={inviterName}
+                            canPreview={false}
+                            joining={this.state.joining}
                             room={this.state.room}
-                            collapsedRhs={this.props.collapsedRhs}
-                            e2eStatus={this.state.e2eStatus}
                         />
-                        <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                                onForgetClick={this.onForgetClick}
-                                                onRejectClick={this.onRejectButtonClicked}
-                                                inviterName={inviterName}
-                                                canPreview={false}
-                                                spinner={this.state.joining}
-                                                spinnerState="joining"
-                                                room={this.state.room}
-                                />
-                            </div>
-                        </div>
-                        <div className="mx_RoomView_messagePanel"></div>
                     </div>
                 );
             }
@@ -1661,7 +1645,9 @@ module.exports = React.createClass({
         const hiddenHighlightCount = this._getHiddenHighlightCount();
 
         let aux = null;
+        let previewBar;
         let hideCancel = false;
+        let hideRightPanel = false;
         if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
@@ -1688,18 +1674,26 @@ module.exports = React.createClass({
                 invitedEmail = this.props.thirdPartyInvite.invitedEmail;
             }
             hideCancel = true;
-            aux = (
+            previewBar = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                spinner={this.state.joining}
-                                spinnerState="joining"
+                                joining={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
                                 room={this.state.room}
                 />
             );
+            if (!this.state.canPeek) {
+                return (
+                    <div className="mx_RoomView">
+                        { previewBar }
+                    </div>
+                );
+            } else {
+                hideRightPanel = true;
+            }
         } else if (hiddenHighlightCount > 0) {
             aux = (
                 <AccessibleButton element="div" className="mx_RoomView_auxPanel_hiddenHighlights"
@@ -1741,11 +1735,6 @@ module.exports = React.createClass({
                     e2eStatus={this.state.e2eStatus}
                     permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 />;
-        }
-
-        if (MatrixClientPeg.get().isGuest()) {
-            const AuthButtons = sdk.getComponent('views.auth.AuthButtons');
-            messageComposer = <AuthButtons />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1875,14 +1864,16 @@ module.exports = React.createClass({
             },
         );
 
-        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} /> : undefined;
+        const rightPanel = !hideRightPanel && this.state.room &&
+            <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
+        const collapsedRhs = hideRightPanel || this.props.collapsedRhs;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     inRoom={myMembership === 'join'}
-                    collapsedRhs={this.props.collapsedRhs}
+                    collapsedRhs={collapsedRhs}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onPinnedClick={this.onPinnedClick}
@@ -1893,7 +1884,7 @@ module.exports = React.createClass({
                 />
                 <MainSplit
                     panel={rightPanel}
-                    collapsedRhs={this.props.collapsedRhs}
+                    collapsedRhs={collapsedRhs}
                     resizeNotifier={this.props.resizeNotifier}
                 >
                     <div className={fadableSectionClasses}>
@@ -1910,6 +1901,7 @@ module.exports = React.createClass({
                                 { statusBar }
                             </div>
                         </div>
+                        { previewBar }
                         { messageComposer }
                     </div>
                 </MainSplit>

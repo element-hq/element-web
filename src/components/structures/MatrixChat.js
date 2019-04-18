@@ -565,6 +565,9 @@ export default React.createClass({
                     },
                 });
                 break;
+            case 'view_user_info':
+                this._viewUser(payload.userId, payload.subAction);
+                break;
             case 'view_room':
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
@@ -917,6 +920,22 @@ export default React.createClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
+    },
+
+    _viewUser: function(userId, subAction) {
+        // Wait for the first sync so that `getRoom` gives us a room object if it's
+        // in the sync response
+        const waitForSync = this.firstSyncPromise ?
+            this.firstSyncPromise.promise : Promise.resolve();
+        waitForSync.then(() => {
+            if (subAction === 'chat') {
+                this._chatCreateOrReuse(userId);
+                return;
+            }
+            this.notifyNewScreen('user/' + userId);
+            this.setState({currentUserId: userId});
+            this._setPage(PageTypes.UserView);
+        });
     },
 
     _setMxId: function(payload) {
@@ -1612,19 +1631,10 @@ export default React.createClass({
             dis.dispatch(payload);
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
-
-            // Wait for the first sync so that `getRoom` gives us a room object if it's
-            // in the sync response
-            const waitFor = this.firstSyncPromise ?
-                this.firstSyncPromise.promise : Promise.resolve();
-            waitFor.then(() => {
-                if (params.action === 'chat') {
-                    this._chatCreateOrReuse(userId);
-                    return;
-                }
-                this.notifyNewScreen('user/' + userId);
-                this.setState({currentUserId: userId});
-                this._setPage(PageTypes.UserView);
+            dis.dispatch({
+                action: 'view_user_info',
+                userId: userId,
+                subAction: params.action,
             });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);

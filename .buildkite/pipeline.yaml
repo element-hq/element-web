@@ -24,6 +24,7 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
+          propagate-environment: true
 
   - label: ":karma: Tests"
     agents:
