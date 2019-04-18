@@ -55,7 +55,6 @@ export default class Field extends React.PureComponent {
 
     onFocus = (ev) => {
         this.validate({
-            value: ev.target.value,
             focused: true,
         });
         // Parent component may have supplied its own `onFocus` as well
@@ -66,7 +65,6 @@ export default class Field extends React.PureComponent {
 
     onChange = (ev) => {
         this.validate({
-            value: ev.target.value,
             focused: true,
         });
         // Parent component may have supplied its own `onChange` as well
@@ -77,7 +75,6 @@ export default class Field extends React.PureComponent {
 
     onBlur = (ev) => {
         this.validate({
-            value: ev.target.value,
             focused: false,
         });
         // Parent component may have supplied its own `onBlur` as well
@@ -90,10 +87,11 @@ export default class Field extends React.PureComponent {
         this.input.focus();
     }
 
-    validate({ value, focused }) {
+    validate({ focused }) {
         if (!this.props.onValidate) {
             return;
         }
+        const { value } = this.input;
         const { valid, feedback } = this.props.onValidate({
             value,
             focused,
