@@ -90,7 +90,6 @@ module.exports = React.createClass({
         // It's not super ideal that this just calls
         // onValidationChange once for each invalid field.
         // TODO: Remove these calls once converted to new-style validation.
-        this.validateField(FIELD_PHONE_NUMBER, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
 
@@ -212,14 +211,6 @@ module.exports = React.createClass({
         // TODO: Remove rules here as they are converted to new-style validation
 
         switch (fieldID) {
-            case FIELD_PHONE_NUMBER: {
-                const phoneNumber = this.state.phoneNumber;
-                const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
-                if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
-                    this.markFieldError(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
-                } else this.markFieldError(fieldID, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
-                break;
-            }
             case FIELD_PASSWORD:
                 if (allowEmpty && pwd1 === "") {
                     this.markFieldError(fieldID, true);
@@ -343,15 +334,35 @@ module.exports = React.createClass({
         });
     },
 
-    onPhoneNumberBlur(ev) {
-        this.validateField(FIELD_PHONE_NUMBER, ev.type);
-    },
-
     onPhoneNumberChange(ev) {
         this.setState({
             phoneNumber: ev.target.value,
         });
     },
+
+    onPhoneNumberValidate(fieldState) {
+        const result = this.validatePhoneNumberRules(fieldState);
+        this.markFieldValid(FIELD_PHONE_NUMBER, result.valid);
+        return result;
+    },
+
+    validatePhoneNumberRules: withValidation({
+        description: () => _t("Other users can invite you to rooms using your contact details"),
+        rules: [
+            {
+                key: "required",
+                test: function({ value, allowEmpty }) {
+                    return allowEmpty || !this._authStepIsRequired('m.login.msisdn') || !!value;
+                },
+                invalid: () => _t("Enter phone number (required on this homeserver)"),
+            },
+            {
+                key: "email",
+                test: ({ value }) => !value || phoneNumberLooksValid(value),
+                invalid: () => _t("Doesn't look like a valid phone number"),
+            },
+        ],
+    }),
 
     onUsernameChange(ev) {
         this.setState({
@@ -425,6 +436,35 @@ module.exports = React.createClass({
         />;
     },
 
+    renderPhoneNumber() {
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        if (!threePidLogin || !this._authStepIsUsed('m.login.msisdn')) {
+            return null;
+        }
+        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
+        const Field = sdk.getComponent('elements.Field');
+        const phoneLabel = this._authStepIsRequired('m.login.msisdn') ?
+            _t("Phone") :
+            _t("Phone (optional)");
+        const phoneCountry = <CountryDropdown
+            value={this.state.phoneCountry}
+            isSmall={true}
+            showPrefix={true}
+            onOptionChange={this.onPhoneCountryChange}
+        />;
+        return <Field
+            id="mx_RegistrationForm_phoneNumber"
+            ref={field => this[FIELD_PHONE_NUMBER] = field}
+            type="text"
+            label={phoneLabel}
+            defaultValue={this.props.defaultPhoneNumber}
+            value={this.state.phoneNumber}
+            prefix={phoneCountry}
+            onChange={this.onPhoneNumberChange}
+            onValidate={this.onPhoneNumberValidate}
+        />;
+    },
+
     renderUsername() {
         const Field = sdk.getComponent('elements.Field');
         return <Field
@@ -468,33 +508,6 @@ module.exports = React.createClass({
             </a>;
         }
 
-        const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
-        let phoneSection;
-        if (threePidLogin && this._authStepIsUsed('m.login.msisdn')) {
-            const phoneLabel = this._authStepIsRequired('m.login.msisdn') ?
-                _t("Phone") :
-                _t("Phone (optional)");
-            const phoneCountry = <CountryDropdown
-                value={this.state.phoneCountry}
-                isSmall={true}
-                showPrefix={true}
-                onOptionChange={this.onPhoneCountryChange}
-            />;
-
-            phoneSection = <Field
-                className={this._classForField(FIELD_PHONE_NUMBER)}
-                id="mx_RegistrationForm_phoneNumber"
-                type="text"
-                label={phoneLabel}
-                defaultValue={this.props.defaultPhoneNumber}
-                value={this.state.phoneNumber}
-                prefix={phoneCountry}
-                onBlur={this.onPhoneNumberBlur}
-                onChange={this.onPhoneNumberChange}
-            />;
-        }
-
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
@@ -533,7 +546,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderEmail()}
-                        { phoneSection }
+                        {this.renderPhoneNumber()}
                     </div>
                     {_t("Use an email address to recover your account.") + " "}
                     {_t("Other users can invite you to rooms using your contact details.")}
