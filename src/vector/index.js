@@ -494,30 +494,13 @@ async function verifyServerConfig() {
     }
 
     const validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
+
+    // Just in case we ever have to debug this
     console.log("Using homeserver config:", validatedConfig);
-
-    // Build our own discovery result for distribution within the app
-    const configResult = {
-        "m.homeserver": {
-            "base_url": validatedConfig.hsUrl,
-            "server_name": validatedConfig.hsName,
-            "server_name_different": validatedConfig.hsNameIsDifferent,
-        },
-        "m.identity_server": {
-            "base_url": validatedConfig.isUrl,
-            "enabled": validatedConfig.identityEnabled,
-        },
-    };
-
-    // Copy over any other keys that may be of interest
-    for (const key of Object.keys(result)) {
-        if (key === "m.homeserver" || key === "m.identity_server") continue;
-        configResult[key] = JSON.parse(JSON.stringify(result[key])); // deep clone
-    }
 
     // Add the newly built config to the actual config for use by the app
     console.log("Updating SdkConfig with validated discovery information");
-    SdkConfig.add({"validated_discovery_config": configResult});
+    SdkConfig.add({"validated_discovery_config": validatedConfig});
 
     return SdkConfig.get();
 }
