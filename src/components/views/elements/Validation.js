@@ -50,7 +50,10 @@ export default function withValidation({ description, rules }) {
                 if (!rule.key || !rule.test) {
                     continue;
                 }
-                const ruleValid = rule.test({ value, allowEmpty });
+                // We're setting `this` to whichever component hold the validation
+                // function. That allows rules to access the state of the component.
+                // eslint-disable-next-line babel/no-invalid-this
+                const ruleValid = rule.test.call(this, { value, allowEmpty });
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
                     // If the rule's result is valid and has text to show for
@@ -101,10 +104,13 @@ export default function withValidation({ description, rules }) {
             summary = <div className="mx_Validation_description">{description()}</div>;
         }
 
-        const feedback = <div className="mx_Validation">
-            {summary}
-            {details}
-        </div>;
+        let feedback;
+        if (summary || details) {
+            feedback = <div className="mx_Validation">
+                {summary}
+                {details}
+            </div>;
+        }
 
         return {
             valid,

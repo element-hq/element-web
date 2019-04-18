@@ -91,7 +91,6 @@ module.exports = React.createClass({
         // onValidationChange once for each invalid field.
         // TODO: Remove these calls once converted to new-style validation.
         this.validateField(FIELD_PHONE_NUMBER, ev.type);
-        this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
 
@@ -213,14 +212,6 @@ module.exports = React.createClass({
         // TODO: Remove rules here as they are converted to new-style validation
 
         switch (fieldID) {
-            case FIELD_EMAIL: {
-                const email = this.state.email;
-                const emailValid = email === '' || Email.looksValid(email);
-                if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
-                    this.markFieldError(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
-                } else this.markFieldError(fieldID, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
-                break;
-            }
             case FIELD_PHONE_NUMBER: {
                 const phoneNumber = this.state.phoneNumber;
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
@@ -295,15 +286,35 @@ module.exports = React.createClass({
         return cls;
     },
 
-    onEmailBlur(ev) {
-        this.validateField(FIELD_EMAIL, ev.type);
-    },
-
     onEmailChange(ev) {
         this.setState({
             email: ev.target.value,
         });
     },
+
+    onEmailValidate(fieldState) {
+        const result = this.validateEmailRules(fieldState);
+        this.markFieldValid(FIELD_EMAIL, result.valid);
+        return result;
+    },
+
+    validateEmailRules: withValidation({
+        description: () => _t("Use an email address to recover your account"),
+        rules: [
+            {
+                key: "required",
+                test: function({ value, allowEmpty }) {
+                    return allowEmpty || !this._authStepIsRequired('m.login.email.identity') || !!value;
+                },
+                invalid: () => _t("Enter email address (required on this homeserver)"),
+            },
+            {
+                key: "email",
+                test: ({ value }) => !value || Email.looksValid(value),
+                invalid: () => _t("Doesn't look like a valid email address"),
+            },
+        ],
+    }),
 
     onPasswordBlur(ev) {
         this.validateField(FIELD_PASSWORD, ev.type);
@@ -394,6 +405,26 @@ module.exports = React.createClass({
         });
     },
 
+    renderEmail() {
+        if (!this._authStepIsUsed('m.login.email.identity')) {
+            return null;
+        }
+        const Field = sdk.getComponent('elements.Field');
+        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
+            _t("Email") :
+            _t("Email (optional)");
+        return <Field
+            id="mx_RegistrationForm_email"
+            ref={field => this[FIELD_EMAIL] = field}
+            type="text"
+            label={emailPlaceholder}
+            defaultValue={this.props.defaultEmail}
+            value={this.state.email}
+            onChange={this.onEmailChange}
+            onValidate={this.onEmailValidate}
+        />;
+    },
+
     renderUsername() {
         const Field = sdk.getComponent('elements.Field');
         return <Field
@@ -435,26 +466,6 @@ module.exports = React.createClass({
             >
                 {_t('Change')}
             </a>;
-        }
-
-        let emailSection;
-        if (this._authStepIsUsed('m.login.email.identity')) {
-            const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
-                _t("Email") :
-                _t("Email (optional)");
-
-            emailSection = (
-                <Field
-                    className={this._classForField(FIELD_EMAIL)}
-                    id="mx_RegistrationForm_email"
-                    type="text"
-                    label={emailPlaceholder}
-                    defaultValue={this.props.defaultEmail}
-                    value={this.state.email}
-                    onBlur={this.onEmailBlur}
-                    onChange={this.onEmailChange}
-                />
-            );
         }
 
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
@@ -521,13 +532,11 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        { emailSection }
+                        {this.renderEmail()}
                         { phoneSection }
                     </div>
-                    {_t(
-                        "Use an email address to recover your account. Other users " +
-                        "can invite you to rooms using your contact details.",
-                    )}
+                    {_t("Use an email address to recover your account.") + " "}
+                    {_t("Other users can invite you to rooms using your contact details.")}
                     { registerButton }
                 </form>
             </div>
