@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Validation_description {
-    margin-bottom: 1em;
-}
-
 .mx_Validation_details {
     padding-left: 20px;
     margin: 0;
+}
+
+.mx_Validation_description + .mx_Validation_details {
+    margin: 1em 0 0;
 }
 
 .mx_Validation_detail {
@@ -28,6 +28,10 @@ limitations under the License.
     font-weight: normal;
     list-style: none;
     margin-bottom: 0.5em;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 
     &::before {
         content: "";
