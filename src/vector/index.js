@@ -500,7 +500,7 @@ async function verifyServerConfig() {
 
     // Add the newly built config to the actual config for use by the app
     console.log("Updating SdkConfig with validated discovery information");
-    SdkConfig.add({"validated_discovery_config": validatedConfig});
+    SdkConfig.add({"validated_server_config": validatedConfig});
 
     return SdkConfig.get();
 }
