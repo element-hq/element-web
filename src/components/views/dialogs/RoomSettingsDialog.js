@@ -23,7 +23,7 @@ import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
-import sdk from "../../../index";RolesRoomSettingsTab
+import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class RoomSettingsDialog extends React.Component {
@@ -54,7 +54,7 @@ export default class RoomSettingsDialog extends React.Component {
             _td("Notifications"),
             "mx_RoomSettingsDialog_rolesIcon",
             <NotificationSettingsTab roomId={this.props.roomId} />,
-        ))
+        ));
         tabs.push(new Tab(
             _td("Advanced"),
             "mx_RoomSettingsDialog_warningIcon",

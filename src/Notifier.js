@@ -120,7 +120,7 @@ const Notifier = {
             console.warn(`${room.roomId} has custom notification sound event, but no url key`);
             return null;
         }
-        
+
         return {
             url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
             name: content.name,
@@ -138,7 +138,7 @@ const Notifier = {
             let audioElement = selector;
             if (!selector) {
                 if (!sound) {
-                    console.error("Tried to play alert sound but missing #messageAudio")
+                    console.error("Tried to play alert sound but missing #messageAudio");
                     return;
                 }
                 audioElement = new Audio(sound.url);
@@ -150,7 +150,7 @@ const Notifier = {
             audioElement.play();
         }).catch((ex) => {
             console.warn("Caught error when trying to fetch room notification sound:", ex);
-        })
+        });
     },
 
     start: function() {

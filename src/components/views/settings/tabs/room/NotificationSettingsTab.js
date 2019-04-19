@@ -18,10 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import Modal from "../../../../../Modal";
-import dis from "../../../../../dispatcher";
 import Notifier from "../../../../../Notifier";
 
 export default class NotificationsSettingsTab extends React.Component {
@@ -45,8 +42,8 @@ export default class NotificationsSettingsTab extends React.Component {
             if (!soundData) {
                 return;
             }
-            this.setState({currentSound: soundData.name || soundData.url})
-        })
+            this.setState({currentSound: soundData.name || soundData.url});
+        });
     }
 
     _onSoundUploadChanged(e) {
@@ -63,7 +60,7 @@ export default class NotificationsSettingsTab extends React.Component {
         });
     }
 
-    async _saveSound (e) {
+    async _saveSound(e) {
         e.stopPropagation();
         e.preventDefault();
         if (!this.state.uploadedFile) {
@@ -98,10 +95,10 @@ export default class NotificationsSettingsTab extends React.Component {
         });
     }
 
-    _clearSound (e) {
+    _clearSound(e) {
         e.stopPropagation();
         e.preventDefault();
-        const room = client.getRoom(this.props.roomId);
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         Notifier.clearRoomSound(room);
 
         this.setState({
@@ -110,8 +107,6 @@ export default class NotificationsSettingsTab extends React.Component {
     }
 
     render() {
-        const client = MatrixClientPeg.get();
-
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
