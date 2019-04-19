@@ -96,11 +96,46 @@ const Notifier = {
         }
     },
 
-    _playAudioNotification: function(ev, room) {
-        const e = document.getElementById("messageAudio");
-        if (e) {
-            e.play();
+    _getSoundForRoom: async function(room) {
+        // We do no caching here because the SDK caches the event content
+        // and the browser will cache the sound.
+        const ev = await room.getAccountData("uk.half-shot.notification.sound");
+        if (!ev) {
+            return null;
         }
+        let url = ev.getContent().url;
+        if (!url) {
+            console.warn(`${room.roomId} has custom notification sound event, but no url key`);
+            return null;
+        }
+        url = MatrixClientPeg.get().mxcUrlToHttp(url);
+        this.notifSoundsByRoom.set(room.roomId, url);
+        return url;
+    },
+
+    _playAudioNotification: function(ev, room) {
+        _getSoundForRoom(room).then((soundUrl) => {
+            console.log(`Got sound ${soundUrl || "default"} for ${room.roomId}`);
+            // XXX: How do we ensure this is a sound file and not
+            // going to be exploited?
+            const selector = document.querySelector(`audio source[src='${soundUrl}']`) || "#messageAudio";
+            let audioElement = null;
+            if (!selector) {
+                if (!soundUrl) {
+                    console.error("Tried to play alert sound but missing #messageAudio")
+                    return
+                }
+                audioElement = new HTMLAudioElement();
+                let sourceElement = new HTMLSourceElement();
+                // XXX: type
+                sourceElement.src = soundUrl;
+                audioElement.appendChild(sourceElement);
+                document.appendChild(audioElement);
+            } else {
+                audioElement = selector.parentNode;
+            }
+            audioElement.play();
+        });
     },
 
     start: function() {
