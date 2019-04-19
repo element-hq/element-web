@@ -96,28 +96,19 @@ const Notifier = {
         }
     },
 
-    setRoomSound: function(room, soundData) {
-        return MatrixClientPeg.get().setRoomAccountData(room.roomId, "uk.half-shot.notification.sound", soundData);
-    },
-
-    clearRoomSound: function(room) {
-        return room.setAccountData("uk.half-shot.notification.sound", null);
-    },
-
-    getSoundForRoom: async function(room) {
+    getSoundForRoom: async function(roomId) {
         // We do no caching here because the SDK caches the event content
         // and the browser will cache the sound.
-        let ev = await room.getAccountData("uk.half-shot.notification.sound");
-        if (!ev || !ev.getContent()) {
-            // Check the account data.
-            ev = await MatrixClientPeg.get().getAccountData("uk.half-shot.notification.sound");
-            if (!ev) {
+        let content = SettingsStore.getValue("notificationSound", roomId);
+        if (!content) {
+            content = SettingsStore.getValue("notificationSound");
+            if (!content) {
                 return null;
             }
         }
-        const content = ev.getContent();
+
         if (!content.url) {
-            console.warn(`${room.roomId} has custom notification sound event, but no url key`);
+            console.warn(`${roomId} has custom notification sound event, but no url key`);
             return null;
         }
 
@@ -130,7 +121,7 @@ const Notifier = {
     },
 
     _playAudioNotification: function(ev, room) {
-        this.getSoundForRoom(room).then((sound) => {
+        this.getSoundForRoom(room.roomId).then((sound) => {
             console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
             // XXX: How do we ensure this is a sound file and not
             // going to be exploited?

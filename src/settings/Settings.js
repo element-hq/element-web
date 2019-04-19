@@ -26,6 +26,7 @@ import ThemeController from './controllers/ThemeController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
+const LEVELS_ROOM_OR_ACCOUNT = ['room-account', 'account'];
 const LEVELS_ROOM_SETTINGS_WITH_ROOM = ['device', 'room-device', 'room-account', 'account', 'config', 'room'];
 const LEVELS_ACCOUNT_SETTINGS = ['device', 'account', 'config'];
 const LEVELS_FEATURE = ['device', 'config'];
@@ -314,6 +315,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new NotificationsEnabledController(),
+    },
+    "notificationSound": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
     },
     "notificationBodyEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

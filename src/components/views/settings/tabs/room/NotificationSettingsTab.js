@@ -20,6 +20,7 @@ import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
+import SettingsStore from '../../../../../settings/SettingsStore';
 
 export default class NotificationsSettingsTab extends React.Component {
     static propTypes = {
@@ -37,8 +38,7 @@ export default class NotificationsSettingsTab extends React.Component {
     }
 
     componentWillMount() {
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        Notifier.getSoundForRoom(room).then((soundData) => {
+        Notifier.getSoundForRoom(this.props.roomId).then((soundData) => {
             if (!soundData) {
                 return;
             }
@@ -79,14 +79,17 @@ export default class NotificationsSettingsTab extends React.Component {
             },
         );
 
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-
-        await Notifier.setRoomSound(room, {
-            name: this.state.uploadedFile.name,
-            type: type,
-            size: this.state.uploadedFile.size,
-            url,
-        });
+        await SettingsStore.setValue(
+            "notificationSound",
+            this.props.roomId,
+            "room-account",
+            {
+                name: this.state.uploadedFile.name,
+                type: type,
+                size: this.state.uploadedFile.size,
+                url,
+            },
+        );
 
         this.setState({
             uploadedFile: null,
@@ -98,8 +101,7 @@ export default class NotificationsSettingsTab extends React.Component {
     _clearSound(e) {
         e.stopPropagation();
         e.preventDefault();
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        Notifier.clearRoomSound(room);
+        SettingsStore.setValue("notificationSound", this.props.roomId, "room-account", null);
 
         this.setState({
             currentSound: "default",
