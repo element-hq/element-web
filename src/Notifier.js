@@ -99,36 +99,47 @@ const Notifier = {
     _getSoundForRoom: async function(room) {
         // We do no caching here because the SDK caches the event content
         // and the browser will cache the sound.
-        const ev = await room.getAccountData("uk.half-shot.notification.sound");
+        let ev = await room.getAccountData("uk.half-shot.notification.sound");
         if (!ev) {
-            return null;
+            // Check the account data.
+            ev = await MatrixClientPeg.get().getAccountData("uk.half-shot.notification.sound");
+            if (!ev) {
+                return null;
+            }
         }
-        let url = ev.getContent().url;
-        if (!url) {
+        const content = ev.getContent();
+        if (!content.url) {
             console.warn(`${room.roomId} has custom notification sound event, but no url key`);
             return null;
         }
-        url = MatrixClientPeg.get().mxcUrlToHttp(url);
-        return url;
+        return {
+            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            type: content.type,
+        };
     },
 
     _playAudioNotification: function(ev, room) {
-        this._getSoundForRoom(room).then((soundUrl) => {
-            console.log(`Got sound ${soundUrl || "default"} for ${room.roomId}`);
+        this._getSoundForRoom(room).then((sound) => {
+            console.log(`Got sound ${sound || "default"} for ${room.roomId}`);
             // XXX: How do we ensure this is a sound file and not
             // going to be exploited?
-            const selector = document.querySelector(soundUrl ? `audio[src='${soundUrl}']` : "#messageAudio");
+            const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
             let audioElement = selector;
             if (!selector) {
-                if (!soundUrl) {
+                if (!sound) {
                     console.error("Tried to play alert sound but missing #messageAudio")
-                    return
+                    return;
                 }
-                audioElement = new Audio(soundUrl);
+                audioElement = new Audio(sound.url);
+                if (sound.type) {
+                    audioElement.type = sound.type;
+                }
                 document.body.appendChild(audioElement);
             }
             audioElement.play();
-        });
+        }).catch((ex) => {
+            console.warn("Caught error when trying to fetch room notification sound:", ex);
+        })
     },
 
     start: function() {
