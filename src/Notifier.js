@@ -96,11 +96,19 @@ const Notifier = {
         }
     },
 
-    _getSoundForRoom: async function(room) {
+    setRoomSound: function(room, soundData) {
+        return MatrixClientPeg.get().setRoomAccountData(room.roomId, "uk.half-shot.notification.sound", soundData);
+    },
+
+    clearRoomSound: function(room) {
+        return room.setAccountData("uk.half-shot.notification.sound", null);
+    },
+
+    getSoundForRoom: async function(room) {
         // We do no caching here because the SDK caches the event content
         // and the browser will cache the sound.
         let ev = await room.getAccountData("uk.half-shot.notification.sound");
-        if (!ev) {
+        if (!ev || !ev.getContent()) {
             // Check the account data.
             ev = await MatrixClientPeg.get().getAccountData("uk.half-shot.notification.sound");
             if (!ev) {
@@ -112,15 +120,18 @@ const Notifier = {
             console.warn(`${room.roomId} has custom notification sound event, but no url key`);
             return null;
         }
+        
         return {
             url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            name: content.name,
             type: content.type,
+            size: content.size,
         };
     },
 
     _playAudioNotification: function(ev, room) {
-        this._getSoundForRoom(room).then((sound) => {
-            console.log(`Got sound ${sound || "default"} for ${room.roomId}`);
+        this.getSoundForRoom(room).then((sound) => {
+            console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
             // XXX: How do we ensure this is a sound file and not
             // going to be exploited?
             const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
