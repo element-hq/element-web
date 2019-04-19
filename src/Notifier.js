@@ -109,30 +109,23 @@ const Notifier = {
             return null;
         }
         url = MatrixClientPeg.get().mxcUrlToHttp(url);
-        this.notifSoundsByRoom.set(room.roomId, url);
         return url;
     },
 
     _playAudioNotification: function(ev, room) {
-        _getSoundForRoom(room).then((soundUrl) => {
+        this._getSoundForRoom(room).then((soundUrl) => {
             console.log(`Got sound ${soundUrl || "default"} for ${room.roomId}`);
             // XXX: How do we ensure this is a sound file and not
             // going to be exploited?
-            const selector = document.querySelector(`audio source[src='${soundUrl}']`) || "#messageAudio";
-            let audioElement = null;
+            const selector = document.querySelector(soundUrl ? `audio[src='${soundUrl}']` : "#messageAudio");
+            let audioElement = selector;
             if (!selector) {
                 if (!soundUrl) {
                     console.error("Tried to play alert sound but missing #messageAudio")
                     return
                 }
-                audioElement = new HTMLAudioElement();
-                let sourceElement = new HTMLSourceElement();
-                // XXX: type
-                sourceElement.src = soundUrl;
-                audioElement.appendChild(sourceElement);
-                document.appendChild(audioElement);
-            } else {
-                audioElement = selector.parentNode;
+                audioElement = new Audio(soundUrl);
+                document.body.appendChild(audioElement);
             }
             audioElement.play();
         });
