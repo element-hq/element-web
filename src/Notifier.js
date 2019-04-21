@@ -122,7 +122,7 @@ const Notifier = {
 
     _playAudioNotification: async function(ev, room) {
         const sound = SettingsStore.isFeatureEnabled("feature_notification_sounds") ? await this.getSoundForRoom(room.roomId) : null;
-        console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
+        console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
         // XXX: How do we ensure this is a sound file and not going to be exploited?
         try {
             const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
