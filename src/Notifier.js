@@ -120,11 +120,11 @@ const Notifier = {
         };
     },
 
-    _playAudioNotification: function(ev, room) {
-        this.getSoundForRoom(room.roomId).then((sound) => {
-            console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
-            // XXX: How do we ensure this is a sound file and not
-            // going to be exploited?
+    _playAudioNotification: async function(ev, room) {
+        const sound = SettingsStore.isFeatureEnabled("feature_notification_sounds") ? await this.getSoundForRoom(room.roomId) : null;
+        console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
+        // XXX: How do we ensure this is a sound file and not going to be exploited?
+        try {
             const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
             let audioElement = selector;
             if (!selector) {
@@ -139,9 +139,9 @@ const Notifier = {
                 document.body.appendChild(audioElement);
             }
             audioElement.play();
-        }).catch((ex) => {
+        } catch (ex) {
             console.warn("Caught error when trying to fetch room notification sound:", ex);
-        });
+        }
     },
 
     start: function() {

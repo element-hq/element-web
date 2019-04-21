@@ -119,6 +119,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_notification_sounds": {
+        isFeature: true,
+        displayName: _td("Custom Notification Sounds"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),

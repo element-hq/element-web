@@ -115,7 +115,7 @@ export default class NotificationsSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <span className='mx_SettingsTab_subheading'>{_t("Sounds")}</span>
                     <div>
-                        <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span>
+                        <span>{_t("Custom Notification Sounds")}: <code>{this.state.currentSound}</code></span>
                     </div>
                     <div>
                         <h3>{_t("Set a new custom sound")}</h3>

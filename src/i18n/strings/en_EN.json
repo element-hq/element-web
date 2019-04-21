@@ -1616,7 +1616,7 @@
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "Sounds": "Sounds",
-    "Notification sound": "Notification sound",
+    "Custom Notification Sounds": "Notification sound",
     "Set a new custom sound": "Set a new custom sound",
     "Reset to default sound": "Reset to default sound"
 }

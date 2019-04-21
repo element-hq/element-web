@@ -25,6 +25,7 @@ import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsT
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import SettingsStore from '../../../settings/SettingsStore';
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -50,11 +51,15 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_rolesIcon",
             <RolesRoomSettingsTab roomId={this.props.roomId} />,
         ));
-        tabs.push(new Tab(
-            _td("Notifications"),
-            "mx_RoomSettingsDialog_rolesIcon",
-            <NotificationSettingsTab roomId={this.props.roomId} />,
-        ));
+
+        if (SettingsStore.isFeatureEnabled("feature_notification_sounds")) {
+            tabs.push(new Tab(
+                _td("Notifications"),
+                "mx_RoomSettingsDialog_rolesIcon",
+                <NotificationSettingsTab roomId={this.props.roomId} />,
+            ));
+        }
+
         tabs.push(new Tab(
             _td("Advanced"),
             "mx_RoomSettingsDialog_warningIcon",
