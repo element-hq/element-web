@@ -122,7 +122,7 @@ const Notifier = {
 
     _playAudioNotification: function(ev, room) {
         this.getSoundForRoom(room.roomId).then((sound) => {
-            console.log(`Got sound ${sound.name || "default"} for ${room.roomId}`);
+            console.log(`Got sound ${sound && sound.name ? sound.name : "default"} for ${room.roomId}`);
             // XXX: How do we ensure this is a sound file and not
             // going to be exploited?
             const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
