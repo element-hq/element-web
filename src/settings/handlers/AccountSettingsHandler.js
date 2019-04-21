@@ -73,6 +73,10 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return !content['disable'];
         }
 
+        if (settingName === "notificationsEnabled") {
+            return this._getSettings("m.notification.sound");
+        }
+
         // Special case for breadcrumbs
         if (settingName === "breadcrumb_rooms") {
             const content = this._getSettings(BREADCRUMBS_EVENT_TYPE) || {};

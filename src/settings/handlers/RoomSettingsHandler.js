@@ -67,6 +67,10 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
             if (typeof(content['disable']) !== "boolean") return null;
             return !content['disable'];
         }
+        
+        if (settingName === "notificationsEnabled") {
+            return this._getSettings(roomId, "m.notification.sound");
+        }
 
         const settings = this._getSettings(roomId) || {};
         return settings[settingName];
