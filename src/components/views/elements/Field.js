@@ -18,6 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
+import { throttle } from 'lodash';
+
+// Invoke validation from user input (when typing, etc.) at most once every N ms.
+const VALIDATION_THROTTLE_MS = 200;
 
 export default class Field extends React.PureComponent {
     static propTypes = {
@@ -64,9 +68,7 @@ export default class Field extends React.PureComponent {
     };
 
     onChange = (ev) => {
-        this.validate({
-            focused: true,
-        });
+        this.validateOnChange();
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
             this.props.onChange(ev);
@@ -102,6 +104,12 @@ export default class Field extends React.PureComponent {
             feedback,
         });
     }
+
+    validateOnChange = throttle(() => {
+        this.validate({
+            focused: true,
+        });
+    }, VALIDATION_THROTTLE_MS);
 
     render() {
         const { element, prefix, onValidate, children, ...inputProps } = this.props;

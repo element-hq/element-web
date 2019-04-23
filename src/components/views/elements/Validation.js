@@ -37,7 +37,6 @@ import classNames from 'classnames';
  */
 export default function withValidation({ description, rules }) {
     return async function onValidate({ value, focused, allowEmpty = true }) {
-        // TODO: Re-run only after ~200ms of inactivity
         if (!value && allowEmpty) {
             return {
                 valid: null,
