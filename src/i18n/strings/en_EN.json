@@ -1326,7 +1326,6 @@
     "Enter email address (required on this homeserver)": "Enter email address (required on this homeserver)",
     "Doesn't look like a valid email address": "Doesn't look like a valid email address",
     "Enter password": "Enter password",
-    "Too short (min %(length)s)": "Too short (min %(length)s)",
     "Nice, strong password!": "Nice, strong password!",
     "Keep going...": "Keep going...",
     "Passwords don't match": "Passwords don't match",

@@ -28,8 +28,6 @@ import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 
-const MIN_PASSWORD_LENGTH = 6;
-
 // Phases
 // Show controls to configure server details
 const PHASE_SERVER_DETAILS = 0;
@@ -482,7 +480,6 @@ module.exports = React.createClass({
                 defaultPhoneCountry={this.state.formVals.phoneCountry}
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
-                minPasswordLength={MIN_PASSWORD_LENGTH}
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}

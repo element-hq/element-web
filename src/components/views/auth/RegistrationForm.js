@@ -48,7 +48,6 @@ module.exports = React.createClass({
         defaultPhoneNumber: PropTypes.string,
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
-        minPasswordLength: PropTypes.number,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -61,7 +60,6 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            minPasswordLength: 6,
             onValidationChange: console.error,
         };
     },
@@ -255,15 +253,6 @@ module.exports = React.createClass({
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
                 invalid: () => _t("Enter password"),
-            },
-            {
-                key: "minLength",
-                test: function({ value }) {
-                    return !value || value.length >= this.props.minPasswordLength;
-                },
-                invalid: function() {
-                    return _t("Too short (min %(length)s)", { length: this.props.minPasswordLength });
-                },
             },
             {
                 key: "complexity",
