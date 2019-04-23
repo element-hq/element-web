@@ -244,6 +244,7 @@ module.exports = React.createClass({
             const complexity = this.state.passwordComplexity;
             const score = complexity ? complexity.score : 0;
             return <progress
+                className="mx_AuthBody_passwordScore"
                 max={PASSWORD_MIN_SCORE}
                 value={score}
             />;
