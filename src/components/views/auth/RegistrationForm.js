@@ -33,6 +33,8 @@ const FIELD_USERNAME = 'field_username';
 const FIELD_PASSWORD = 'field_password';
 const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
 
+const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
+
 /**
  * A pure UI component which displays a registration form.
  */
@@ -75,13 +77,14 @@ module.exports = React.createClass({
             phoneNumber: "",
             password: "",
             passwordConfirm: "",
+            passwordComplexity: null,
         };
     },
 
-    onSubmit: function(ev) {
+    onSubmit: async function(ev) {
         ev.preventDefault();
 
-        const allFieldsValid = this.verifyFieldsBeforeSubmit();
+        const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
             return;
         }
@@ -126,7 +129,7 @@ module.exports = React.createClass({
         }
     },
 
-    verifyFieldsBeforeSubmit() {
+    async verifyFieldsBeforeSubmit() {
         const fieldIDsInDisplayOrder = [
             FIELD_USERNAME,
             FIELD_PASSWORD,
@@ -144,6 +147,10 @@ module.exports = React.createClass({
             }
             field.validate({ allowEmpty: false });
         }
+
+        // Validation and state updates are async, so we need to wait for them to complete
+        // first. Queue a `setState` callback and wait for it to resolve.
+        await new Promise(resolve => this.setState({}, resolve));
 
         if (this.allFieldsValid()) {
             return true;
@@ -198,8 +205,8 @@ module.exports = React.createClass({
         });
     },
 
-    onEmailValidate(fieldState) {
-        const result = this.validateEmailRules(fieldState);
+    async onEmailValidate(fieldState) {
+        const result = await this.validateEmailRules(fieldState);
         this.markFieldValid(FIELD_EMAIL, result.valid);
         return result;
     },
@@ -228,13 +235,21 @@ module.exports = React.createClass({
         });
     },
 
-    onPasswordValidate(fieldState) {
-        const result = this.validatePasswordRules(fieldState);
+    async onPasswordValidate(fieldState) {
+        const result = await this.validatePasswordRules(fieldState);
         this.markFieldValid(FIELD_PASSWORD, result.valid);
         return result;
     },
 
     validatePasswordRules: withValidation({
+        description: function() {
+            const complexity = this.state.passwordComplexity;
+            const score = complexity ? complexity.score : 0;
+            return <progress
+                max={PASSWORD_MIN_SCORE}
+                value={score}
+            />;
+        },
         rules: [
             {
                 key: "required",
@@ -250,6 +265,29 @@ module.exports = React.createClass({
                     return _t("Too short (min %(length)s)", { length: this.props.minPasswordLength });
                 },
             },
+            {
+                key: "complexity",
+                test: async function({ value }) {
+                    if (!value) {
+                        return false;
+                    }
+                    const { scorePassword } = await import('../../../utils/PasswordScorer');
+                    const complexity = scorePassword(value);
+                    this.setState({
+                        passwordComplexity: complexity,
+                    });
+                    return complexity.score >= PASSWORD_MIN_SCORE;
+                },
+                valid: () => _t("Nice, strong password!"),
+                invalid: function() {
+                    const complexity = this.state.passwordComplexity;
+                    if (!complexity) {
+                        return null;
+                    }
+                    const { feedback } = complexity;
+                    return feedback.warning || feedback.suggestions[0] || _t("Keep going...");
+                },
+            },
         ],
     }),
 
@@ -259,8 +297,8 @@ module.exports = React.createClass({
         });
     },
 
-    onPasswordConfirmValidate(fieldState) {
-        const result = this.validatePasswordConfirmRules(fieldState);
+    async onPasswordConfirmValidate(fieldState) {
+        const result = await this.validatePasswordConfirmRules(fieldState);
         this.markFieldValid(FIELD_PASSWORD_CONFIRM, result.valid);
         return result;
     },
@@ -295,8 +333,8 @@ module.exports = React.createClass({
         });
     },
 
-    onPhoneNumberValidate(fieldState) {
-        const result = this.validatePhoneNumberRules(fieldState);
+    async onPhoneNumberValidate(fieldState) {
+        const result = await this.validatePhoneNumberRules(fieldState);
         this.markFieldValid(FIELD_PHONE_NUMBER, result.valid);
         return result;
     },
@@ -325,8 +363,8 @@ module.exports = React.createClass({
         });
     },
 
-    onUsernameValidate(fieldState) {
-        const result = this.validateUsernameRules(fieldState);
+    async onUsernameValidate(fieldState) {
+        const result = await this.validateUsernameRules(fieldState);
         this.markFieldValid(FIELD_USERNAME, result.valid);
         return result;
     },

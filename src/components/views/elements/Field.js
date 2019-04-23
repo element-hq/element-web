@@ -87,12 +87,12 @@ export default class Field extends React.PureComponent {
         this.input.focus();
     }
 
-    validate({ focused, allowEmpty = true }) {
+    async validate({ focused, allowEmpty = true }) {
         if (!this.props.onValidate) {
             return;
         }
         const value = this.input ? this.input.value : null;
-        const { valid, feedback } = this.props.onValidate({
+        const { valid, feedback } = await this.props.onValidate({
             value,
             focused,
             allowEmpty,

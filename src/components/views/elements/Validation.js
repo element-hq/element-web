@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/* eslint-disable babel/no-invalid-this */
+
 import classNames from 'classnames';
 
 /**
@@ -34,7 +36,7 @@ import classNames from 'classnames';
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation({ description, rules }) {
-    return function onValidate({ value, focused, allowEmpty = true }) {
+    return async function onValidate({ value, focused, allowEmpty = true }) {
         // TODO: Re-run only after ~200ms of inactivity
         if (!value && allowEmpty) {
             return {
@@ -50,29 +52,35 @@ export default function withValidation({ description, rules }) {
                 if (!rule.key || !rule.test) {
                     continue;
                 }
-                // We're setting `this` to whichever component hold the validation
+                // We're setting `this` to whichever component holds the validation
                 // function. That allows rules to access the state of the component.
-                /* eslint-disable babel/no-invalid-this */
-                const ruleValid = rule.test.call(this, { value, allowEmpty });
+                const ruleValid = await rule.test.call(this, { value, allowEmpty });
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
                     // If the rule's result is valid and has text to show for
                     // the valid state, show it.
+                    const text = rule.valid.call(this);
+                    if (!text) {
+                        continue;
+                    }
                     results.push({
                         key: rule.key,
                         valid: true,
-                        text: rule.valid.call(this),
+                        text,
                     });
                 } else if (!ruleValid && rule.invalid) {
                     // If the rule's result is invalid and has text to show for
                     // the invalid state, show it.
+                    const text = rule.invalid.call(this);
+                    if (!text) {
+                        continue;
+                    }
                     results.push({
                         key: rule.key,
                         valid: false,
-                        text: rule.invalid.call(this),
+                        text,
                     });
                 }
-                /* eslint-enable babel/no-invalid-this */
             }
         }
 
@@ -102,7 +110,10 @@ export default function withValidation({ description, rules }) {
 
         let summary;
         if (description) {
-            summary = <div className="mx_Validation_description">{description()}</div>;
+            // We're setting `this` to whichever component holds the validation
+            // function. That allows rules to access the state of the component.
+            const content = description.call(this);
+            summary = <div className="mx_Validation_description">{content}</div>;
         }
 
         let feedback;

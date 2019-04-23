@@ -67,7 +67,9 @@ export function scorePassword(password) {
     if (password.length === 0) return null;
 
     const userInputs = ZXCVBN_USER_INPUTS.slice();
-    userInputs.push(MatrixClientPeg.get().getUserIdLocalpart());
+    if (MatrixClientPeg.get()) {
+        userInputs.push(MatrixClientPeg.get().getUserIdLocalpart());
+    }
 
     let zxcvbnResult = zxcvbn(password, userInputs);
     // Work around https://github.com/dropbox/zxcvbn/issues/216
