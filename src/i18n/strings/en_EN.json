@@ -822,7 +822,6 @@
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
     "Try again later, or ask a room admin to check if you have access.": "Try again later, or ask a room admin to check if you have access.",
     "%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
-    "Use Key Backup": "Use Key Backup",
     "Never lose encrypted messages": "Never lose encrypted messages",
     "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
     "Securely back up your keys to avoid losing them. <a>Learn more.</a>": "Securely back up your keys to avoid losing them. <a>Learn more.</a>",

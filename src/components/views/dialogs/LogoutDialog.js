@@ -130,7 +130,7 @@ export default class LogoutDialog extends React.Component {
                 const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
                 let setupButtonCaption;
                 if (this.state.backupInfo) {
-                    setupButtonCaption = _t("Use Key Backup");
+                    setupButtonCaption = _t("Connect this device to Key Backup");
                 } else {
                     // if there's an error fetching the backup info, we'll just assume there's
                     // no backup for the purpose of the button caption
