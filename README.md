@@ -187,7 +187,7 @@ Running as a Desktop app
 ========================
 
 Riot can also be run as a desktop app, wrapped in electron. You can download a
-pre-built version from https://riot.im/desktop.html or, if you prefer,
+pre-built version from https://riot.im/download/desktop/ or, if you prefer,
 build it yourself.
 
 To build it yourself, follow the instructions below.
