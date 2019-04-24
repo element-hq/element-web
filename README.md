@@ -31,7 +31,7 @@ Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
-To install Riot as a destktop application, see [Running as a desktop
+To install Riot as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
 
 Important Security Note
