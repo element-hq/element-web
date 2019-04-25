@@ -30,7 +30,7 @@ module.exports = async function scenario(createSession, restCreator) {
             console.log(`running tests on ${await session.browser.version()} ...`);
             firstUser = false;
         }
-        await signup(session, session.username, 'testtest', session.hsUrl);
+        await signup(session, session.username, 'testsarefun!!!', session.hsUrl);
         return session;
     }
 
