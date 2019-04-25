@@ -96,13 +96,14 @@ function onLinkContextMenu(ev, params) {
                     defaultPath: targetFileName,
                 });
 
+                if (!filePath) return; // user cancelled dialog
+
                 try {
                     if (url.startsWith("data:")) {
                         fs.writeFileSync(filePath, nativeImage.createFromDataURL(url));
                     } else {
                         request.get(url).pipe(fs.createWriteStream(filePath));
                     }
-
                 } catch (err) {
                     console.error(err);
                     dialog.showMessageBox({

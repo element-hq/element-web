@@ -1,14 +1,14 @@
 {
     "Dismiss": "Rezigni",
-    "powered by Matrix": "funkciigata de Matrix",
+    "powered by Matrix": "povigita per Matrix",
     "Custom Server Options": "Propraj servilaj elektoj",
     "Riot Desktop on %(platformName)s": "Riot Labortablo sur %(platformName)s",
     "Riot is not supported on mobile web. Install the app?": "Riot ne estas subtenata sur poŝkomputila reto. Ĉu instali la aplikaĵon?",
     "Unknown device": "Nekonata aparato",
     "You need to be using HTTPS to place a screen-sharing call.": "Vi devas uzi HTTPS por ekranvidadi.",
-    "Welcome to Riot.im": "Bonvenu al Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Malcentra, ĉifrita babilado &amp; kunlaboro povigita de [matrix]",
-    "Search the room directory": "Serĉi en la babilejo-listo",
+    "Welcome to Riot.im": "Bonvenon al Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Malcentra, ĉifrita babilado &amp; kunlaboro povigita per [matrix]",
+    "Search the room directory": "Serĉi en la ĉambra dosierujo",
     "Chat with Riot Bot": "Babilu kun la roboto Riot Bot",
     "Get started with some tips from Riot Bot!": "Komencu kun kelkaj sugestoj de la roboto Riot Bot!",
     "General discussion about Matrix and Riot": "Ĝenerala diskutado pri Matrix kaj Riot",
@@ -35,5 +35,11 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Multaj ĉambroj jam ekzistas en Matrix; kaj sendependaj, kaj ligitaj kun jamaj retoj (Slock, IRC, Gitter, ktp.). Rigardu la ĉambrujon!",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s per %(browserName)s je %(osName)s",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Vi povas uzi proprajn servilajn elektojn por saluti aliajn servilojn de Matrix, per specifo de alia hejmservila URL.<br/>Tio permesas al vi uzi klienton Riot kun jama konto de Matrix en alia hejmservilo.<br/><br/>Vi ankaŭ povas agordi propran identigan servilon, sed vi ne povos inviti uzantojn per retpoŝtadreso, aŭ esti invitata per retpoŝtadreso mem.",
-    "Co-ordination for Riot translators": "Kunordigo por tradukantoj de Riot"
+    "Co-ordination for Riot translators": "Kunordigo por tradukantoj de Riot",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Vi povas ankaŭ agordi propran identigan servilon, sed vi ne eblos inviti uzantojn per retpoŝtadresoj, nek eblos esti invitita per retpoŝtadreso.",
+    "Sign In": "Saluti",
+    "Create Account": "Krei konton",
+    "Need help?": "Ĉu vi bezonas helpon?",
+    "Explore rooms": "Esplori ĉambrojn",
+    "Room Directory": "Ĉambra dosierujo"
 }

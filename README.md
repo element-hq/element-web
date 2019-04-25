@@ -24,8 +24,8 @@ released version of Riot:
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
-Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot.asc .
+Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
+at https://packages.riot.im/riot-release-key.asc.
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -135,6 +135,8 @@ For a good example, see https://riot.im/develop/config.json.
        during authentication flows
     1. `authHeaderLogoUrl`: An logo image that is shown in the header during
        authentication flows
+    1. `authFooterLinks`: a list of links to show in the authentication page footer:
+      `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
@@ -230,7 +232,6 @@ All electron packages go into `electron_app/dist/`
 Many thanks to @aviraldg for the initial work on the electron integration.
 
 Other options for running as a desktop app:
- * https://github.com/krisak/vector-electron-desktop
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
@@ -242,6 +243,8 @@ Desktop app configuration
 =========================
 
 To run multiple instances of the desktop app for different accounts, you can launch the executable with the `--profile` argument followed by a unique identifier, e.g `riot-web --profile Work` for it to run a separate profile and not interfere with the default one.
+
+Alternatively, a custom location for the profile data can be specified using the `--profile-dir` flag followed by the desired path.
 
 To change the config.json for the desktop app, create a config file which will be used to override values in the config which ships in the package:
 + `%APPDATA%\$NAME\config.json` on Windows

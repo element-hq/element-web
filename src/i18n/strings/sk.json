@@ -35,5 +35,12 @@
     "Contributing code to Matrix and Riot": "Prispievanie kódu projektom Matrix a Riot",
     "Dev chat for the Riot/Web dev team": "Diskusia pre tím vývojárov Riot/Web",
     "Dev chat for the Dendrite dev team": "Diskusia pre tím vývojárov Dendrite",
-    "Co-ordination for Riot translators": "Koordinácia prekladov Riot"
+    "Co-ordination for Riot translators": "Koordinácia prekladov Riot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Môžete použiť vlastné možnosti servera na prihlásenie sa k ďalším serverom Matrix zadaním URL adresy domovského servera. Toto vám umožní použiť Riot na prihlásenie sa k existujúcemu Matrix účtu na inom domovskom servery.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Môžete tiež nastaviť vlastnú URL adresu servera totožností, potom ale nebudete môcť pozývať používateľov zadaním ich emailovej adresy a telefónneho čísla a ani ostatní nebudú môcť pozvať vás zadaním vašej emailovej adresy a telefónneho čísla.",
+    "Sign In": "Prihlásiť sa",
+    "Create Account": "Vytvoriť účet",
+    "Need help?": "Potrebujete pomoc?",
+    "Explore rooms": "Preskúmať miestnosti",
+    "Room Directory": "Adresár miestností"
 }
