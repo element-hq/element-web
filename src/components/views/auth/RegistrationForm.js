@@ -128,6 +128,13 @@ module.exports = React.createClass({
     },
 
     async verifyFieldsBeforeSubmit() {
+        // Blur the active element if any, so we first run its blur validation,
+        // which is less strict than the pass we're about to do below for all fields.
+        const activeElement = document.activeElement;
+        if (activeElement) {
+            activeElement.blur();
+        }
+
         const fieldIDsInDisplayOrder = [
             FIELD_USERNAME,
             FIELD_PASSWORD,
