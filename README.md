@@ -31,21 +31,8 @@ Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
-### Desktop Installation for Debian Stretch
-
-1. Add the repository to your sources.list using either of the following two options:
-  - Directly to sources.list:
-`echo "deb https://packages.riot.im/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
-  - As a separate entry in sources.list.d:
-`echo "deb https://packages.riot.im/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
-2. Download and add the gpg signing key used to authenticate the packages from the riot repository to your system's list of trusted keys:
-`curl -s https://packages.riot.im/debian/riot-im-archive-keyring.asc | sudo apt-key add -`
-- Optional: if you had the old Riot.im signing key in your apt keyring, delete it, as it is no longer considered trusted:
-`sudo apt-key del 0x48E8F4A1`
-3. Update your package lists:
-`sudo apt update`
-4. Install Riot:
-`sudo apt install riot-web`
+To install Riot as a desktop application, see [Running as a desktop
+app](#running-as-a-desktop-app) below.
 
 Important Security Note
 =======================
@@ -202,10 +189,10 @@ Running as a Desktop app
 ========================
 
 Riot can also be run as a desktop app, wrapped in electron. You can download a
-pre-built version from https://riot.im/desktop.html or, if you prefer,
-build it yourself. Requires Electron >=1.6.0
+pre-built version from https://riot.im/download/desktop/ or, if you prefer,
+build it yourself.
 
-To run as a desktop app:
+To build it yourself, follow the instructions below.
 
 1. Follow the instructions in 'Building From Source' above, but run
    `yarn build` instead of `yarn dist` (since we don't need the tarball).
