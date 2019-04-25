@@ -31,7 +31,7 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 
 pip install --upgrade setuptools
-pip install matrix-synapse[all]
+pip install matrix-synapse[resources.consent]
 python -m synapse.app.homeserver \
     --server-name localhost \
     --config-path homeserver.yaml \
