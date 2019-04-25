@@ -43,6 +43,8 @@ module.exports = async function signup(session, username, password, homeserver) 
     /// has happened before checking the form is good to go
     const registerButton = await session.query('.mx_Login_submit');
     await registerButton.focus();
+    // Password validation is async, wait for it to complete before submit
+    await session.query(".mx_Field_valid #mx_RegistrationForm_password");
     //check no errors
     const error_text = await session.tryGetInnertext('.mx_Login_error');
     assert.strictEqual(!!error_text, false);
