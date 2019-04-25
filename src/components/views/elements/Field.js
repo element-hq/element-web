@@ -18,6 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
+import { throttle } from 'lodash';
+
+// Invoke validation from user input (when typing, etc.) at most once every N ms.
+const VALIDATION_THROTTLE_MS = 200;
 
 export default class Field extends React.PureComponent {
     static propTypes = {
@@ -53,19 +57,72 @@ export default class Field extends React.PureComponent {
         };
     }
 
-    onChange = (ev) => {
-        if (this.props.onValidate) {
-            const result = this.props.onValidate(ev.target.value);
-            this.setState({
-                valid: result.valid,
-                feedback: result.feedback,
-            });
+    onFocus = (ev) => {
+        this.validate({
+            focused: true,
+        });
+        // Parent component may have supplied its own `onFocus` as well
+        if (this.props.onFocus) {
+            this.props.onFocus(ev);
         }
+    };
+
+    onChange = (ev) => {
+        this.validateOnChange();
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
             this.props.onChange(ev);
         }
     };
+
+    onBlur = (ev) => {
+        this.validate({
+            focused: false,
+        });
+        // Parent component may have supplied its own `onBlur` as well
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
+        }
+    };
+
+    focus() {
+        this.input.focus();
+    }
+
+    async validate({ focused, allowEmpty = true }) {
+        if (!this.props.onValidate) {
+            return;
+        }
+        const value = this.input ? this.input.value : null;
+        const { valid, feedback } = await this.props.onValidate({
+            value,
+            focused,
+            allowEmpty,
+        });
+
+        if (feedback) {
+            this.setState({
+                valid,
+                feedback,
+                feedbackVisible: true,
+            });
+        } else {
+            // When we receive null `feedback`, we want to hide the tooltip.
+            // We leave the previous `feedback` content in state without updating it,
+            // so that we can hide the tooltip containing the most recent feedback
+            // via CSS animation.
+            this.setState({
+                valid,
+                feedbackVisible: false,
+            });
+        }
+    }
+
+    validateOnChange = throttle(() => {
+        this.validate({
+            focused: true,
+        });
+    }, VALIDATION_THROTTLE_MS);
 
     render() {
         const { element, prefix, onValidate, children, ...inputProps } = this.props;
@@ -74,10 +131,12 @@ export default class Field extends React.PureComponent {
 
         // Set some defaults for the <input> element
         inputProps.type = inputProps.type || "text";
-        inputProps.ref = "fieldInput";
+        inputProps.ref = input => this.input = input;
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
+        inputProps.onFocus = this.onFocus;
         inputProps.onChange = this.onChange;
+        inputProps.onBlur = this.onBlur;
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
 
@@ -95,12 +154,13 @@ export default class Field extends React.PureComponent {
             mx_Field_invalid: onValidate && this.state.valid === false,
         });
 
-        // handle displaying feedback on validity
+        // Handle displaying feedback on validity
         const Tooltip = sdk.getComponent("elements.Tooltip");
-        let feedback;
+        let tooltip;
         if (this.state.feedback) {
-            feedback = <Tooltip
+            tooltip = <Tooltip
                 tooltipClassName="mx_Field_tooltip"
+                visible={this.state.feedbackVisible}
                 label={this.state.feedback}
             />;
         }
@@ -109,7 +169,7 @@ export default class Field extends React.PureComponent {
             {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
-            {feedback}
+            {tooltip}
         </div>;
     }
 }

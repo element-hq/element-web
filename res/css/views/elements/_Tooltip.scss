@@ -50,7 +50,6 @@ limitations under the License.
 
 .mx_Tooltip {
     display: none;
-    animation: mx_fadein 0.2s;
     position: fixed;
     border: 1px solid $menu-border-color;
     border-radius: 4px;
@@ -66,4 +65,12 @@ limitations under the License.
     max-width: 200px;
     word-break: break-word;
     margin-right: 50px;
+
+    &.mx_Tooltip_visible {
+        animation: mx_fadein 0.2s forwards;
+    }
+
+    &.mx_Tooltip_invisible {
+        animation: mx_fadeout 0.1s forwards;
+    }
 }
