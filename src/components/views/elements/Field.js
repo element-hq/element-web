@@ -99,10 +99,23 @@ export default class Field extends React.PureComponent {
             focused,
             allowEmpty,
         });
-        this.setState({
-            valid,
-            feedback,
-        });
+
+        if (feedback) {
+            this.setState({
+                valid,
+                feedback,
+                feedbackVisible: true,
+            });
+        } else {
+            // When we receive null `feedback`, we want to hide the tooltip.
+            // We leave the previous `feedback` content in state without updating it,
+            // so that we can hide the tooltip containing the most recent feedback
+            // via CSS animation.
+            this.setState({
+                valid,
+                feedbackVisible: false,
+            });
+        }
     }
 
     validateOnChange = throttle(() => {
@@ -147,6 +160,7 @@ export default class Field extends React.PureComponent {
         if (this.state.feedback) {
             tooltip = <Tooltip
                 tooltipClassName="mx_Field_tooltip"
+                visible={this.state.feedbackVisible}
                 label={this.state.feedback}
             />;
         }
