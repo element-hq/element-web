@@ -12,7 +12,8 @@
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
         "feature_groups": "labs",
-        "feature_pinning": "labs"
+        "feature_pinning": "labs",
+        "feature_reactions": "labs"
     },
     "default_federate": true,
     "default_theme": "light",
