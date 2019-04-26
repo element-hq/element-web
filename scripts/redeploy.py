@@ -2,7 +2,8 @@
 #
 # auto-deploy script for https://riot.im/develop
 #
-# Listens for HTTP hits. When it gets one, downloads the artifact from jenkins
+# Listens for buildkite webhook pokes (https://buildkite.com/docs/apis/webhooks)
+# When it gets one, downloads the artifact from buildkite
 # and deploys it as the new version.
 #
 # Requires the following python packages:
@@ -16,6 +17,8 @@ import time
 import traceback
 from urlparse import urljoin
 import glob
+import re
+import shutil
 
 from flask import Flask, jsonify, request, abort
 
@@ -23,10 +26,11 @@ from deploy import Deployer, DeployException
 
 app = Flask(__name__)
 
-arg_jenkins_url = None
 deployer = None
 arg_extract_path = None
 arg_symlink = None
+arg_webhook_token = None
+arg_api_token = None
 
 def create_symlink(source, linkname):
     try:
@@ -39,81 +43,98 @@ def create_symlink(source, linkname):
         else:
             raise e
 
+def req_headers():
+    return {
+        "Authorization": "Bearer %s" % (arg_api_token,),
+    }
+
 @app.route("/", methods=["POST"])
-def on_receive_jenkins_poke():
-    # {
-    #    "name": "VectorWebDevelop",
-    #    "build": {
-    #        "number": 8
-    #    }
-    # }
+def on_receive_buildkite_poke():
+    got_webhook_token = request.headers.get('X-Buildkite-Token')
+    if got_webhook_token != arg_webbook_token:
+        print("Denying request with incorrect webhook token: %s" % (got_webhook_token,))
+        abort(400, "Incorrect webhook token")
+        return
+
+    required_api_prefix = None
+    if arg_buildkit_org is not None:
+        required_api_prefix = 'https://api.buildkite.com/v2/organizations/%s' % (arg_buildkit_org,)
+
     incoming_json = request.get_json()
     if not incoming_json:
         abort(400, "No JSON provided!")
         return
     print("Incoming JSON: %s" % (incoming_json,))
 
-    job_name = incoming_json.get("name")
-    if not isinstance(job_name, basestring):
-        abort(400, "Bad job name: %s" % (job_name,))
+    event = incoming_json.get("event")
+    if event is None:
+        abort(400, "No 'event' specified")
         return
 
-    build_num = incoming_json.get("build", {}).get("number", 0)
-    if not build_num or build_num <= 0 or not isinstance(build_num, int):
-        abort(400, "Missing or bad build number")
+    if event == 'ping':
+        print("Got ping request - responding")
+        return jsonify({'response': 'pong!'})
+
+    if event != 'build.finished':
+        print("Rejecting '%s' event")
+        abort(400, "Unrecognised event")
         return
 
-    return fetch_jenkins_build(job_name, build_num)
-
-def fetch_jenkins_build(job_name, build_num):
-    artifact_url = urljoin(
-        arg_jenkins_url, "job/%s/%s/api/json" % (job_name, build_num)
-    )
-    artifact_response = requests.get(artifact_url).json()
-
-    # {
-    # "actions": [],
-    # "artifacts": [
-    #   {
-    #   "displayPath": "vector-043f6991a4ed-react-20f77d1224ef-js-0a7efe3e8bd5.tar.gz",
-    #   "fileName": "vector-043f6991a4ed-react-20f77d1224ef-js-0a7efe3e8bd5.tar.gz",
-    #   "relativePath": "vector-043f6991a4ed-react-20f77d1224ef-js-0a7efe3e8bd5.tar.gz"
-    #   }
-    # ],
-    # "building": false,
-    # "description": null,
-    # "displayName": "#11",
-    # "duration": 137976,
-    # "estimatedDuration": 132008,
-    # "executor": null,
-    # "fullDisplayName": "VectorWebDevelop #11",
-    # "id": "11",
-    # "keepLog": false,
-    # "number": 11,
-    # "queueId": 12254,
-    # "result": "SUCCESS",
-    # "timestamp": 1454432640079,
-    # "url": "http://matrix.org/jenkins/job/VectorWebDevelop/11/",
-    # "builtOn": "",
-    # "changeSet": {},
-    # "culprits": []
-    # }
-    if artifact_response.get("result") != "SUCCESS":
-        abort(404, "Not deploying. Build was not marked as SUCCESS.")
+    build_obj = incoming_json.get("build")
+    if build_obj is None:
+        abort(400, "No 'build' object")
         return
 
-    if len(artifact_response.get("artifacts", [])) != 1:
-        abort(404, "Not deploying. Build has an unexpected number of artifacts.")
+    build_url = build_obj.get('url')
+    if build_url is None:
+        abort(400, "build has no url")
         return
 
-    tar_gz_path = artifact_response["artifacts"][0]["relativePath"]
-    if not tar_gz_path.endswith(".tar.gz"):
-        abort(404, "Not deploying. Artifact is not a .tar.gz file")
+    if required_api_prefix is not None and not build_url.startswith(required_api_prefix):
+        print("Denying poke for build url with incorrect prefix: %s" % (build_url,))
+        abort(400, "Invalid build url")
         return
 
-    tar_gz_url = urljoin(
-        arg_jenkins_url, "job/%s/%s/artifact/%s" % (job_name, build_num, tar_gz_path)
-    )
+    build_num = build_obj.get('number')
+    if build_num is None:
+        abort(400, "build has no number")
+        return
+
+    pipeline_obj = incoming_json.get("pipeline")
+    if pipeline_obj is None:
+        abort(400, "No 'pipeline' object")
+        return
+
+    pipeline_name = pipeline_obj.get('name')
+    if pipeline_name is None:
+        abort(400, "pipeline has no name")
+        return
+
+    artifacts_url = build_url + "/artifacts"
+    artifacts_resp = requests.get(artifacts_url, headers=req_headers())
+    artifacts_resp.raise_for_status()
+    artifacts_array = artifacts_resp.json()
+    
+    for artifact in artifacts_array:
+        artifact_to_deploy = None
+        if re.match(r"dist/.*.tar.gz", artifact['path']):
+            artifact_to_deploy = artifact
+        if artifact_to_deploy is None:
+            print("No suitable artifacts found")
+            return jsonify({})
+
+    # double paranoia check: make sure the artifact is on the right org too
+    if required_api_prefix is not None and not artifact_to_deploy['url'].startswith(required_api_prefix):
+        print("Denying poke for build url with incorrect prefix: %s" % (artifact_to_deploy['url'],))
+        abort(400, "Refusing to deploy artifact from URL %s", artifact_to_deploy['url'])
+        return
+
+    return deploy_buildkite_artifact(artifact_to_deploy, pipeline_name, build_num)
+
+def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
+    artifact_response = requests.get(artifact['url'], headers=req_headers())
+    artifact_response.raise_for_status()
+    artifact_obj = artifact_response.json()
 
     # we extract into a directory based on the build number. This avoids the
     # problem of multiple builds building the same git version and thus having
@@ -122,9 +143,9 @@ def fetch_jenkins_build(job_name, build_num):
     #       a good deploy with a bad one
     #   (b) we'll be overwriting the live deployment, which means people might
     #       see half-written files.
-    build_dir = os.path.join(arg_extract_path, "%s-#%s" % (job_name, build_num))
+    build_dir = os.path.join(arg_extract_path, "%s-#%s" % (pipeline_name, build_num))
     try:
-        extracted_dir = deploy_tarball(tar_gz_url, build_dir)
+        extracted_dir = deploy_tarball(artifact_obj, build_dir)
     except DeployException as e:
         traceback.print_exc()
         abort(400, e.message)
@@ -133,7 +154,7 @@ def fetch_jenkins_build(job_name, build_num):
 
     return jsonify({})
 
-def deploy_tarball(tar_gz_url, build_dir):
+def deploy_tarball(artifact, build_dir):
     """Download a tarball from jenkins and unpack it
 
     Returns:
@@ -145,20 +166,22 @@ def deploy_tarball(tar_gz_url, build_dir):
         )
     os.mkdir(build_dir)
 
+    # Download the tarball here as buildkite needs auth to do this
+    # we don't pgp-sign buildkite artifacts, relying on HTTPS and buildkite
+    # not being evil. If that's not good enough for you, don't use riot.im/develop.
+    resp = requests.get(artifact['download_url'], stream=True, headers=req_headers())
+    resp.raise_for_status()
+    with open(artifact['filename'], 'wb') as ofp:
+        shutil.copyfileobj(resp.raw, ofp)
+
     # we rely on the fact that flask only serves one request at a time to
     # ensure that we do not overwrite a tarball from a concurrent request.
 
-    return deployer.deploy(tar_gz_url, build_dir)
+    return deployer.deploy(artifact['filename'], build_dir)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Runs a Vector redeployment server.")
-    parser.add_argument(
-        "-j", "--jenkins", dest="jenkins", default="https://matrix.org/jenkins/", help=(
-            "The base URL of the Jenkins web server. This will be hit to get the\
-            built artifacts (the .gz file) for redeploying."
-        )
-    )
     parser.add_argument(
         "-p", "--port", dest="port", default=4000, type=int, help=(
             "The port to listen on for requests from Jenkins."
@@ -204,13 +227,33 @@ if __name__ == "__main__":
         ),
     )
 
+    parser.add_argument(
+        "--webhook-token", dest="webhook_token", help=(
+            "Only accept pokes with this buildkite token."
+        ), required=True,
+    )
+
+    parser.add_argument(
+        "--api-token", dest="api_token", help=(
+            "API access token for buildkite. Require read_artifacts scope."
+        ), required=True,
+    )
+
+    # We require a matching webhook token, but because we take everything else
+    # about what to deploy from the poke body, we can be a little more paranoid
+    # and only accept builds / artifacts from a specific buildkite org
+    parser.add_argument(
+        "--org", dest="buildkite_org", help=(
+            "Lock down to this buildkite org"
+        )
+    )
+
     args = parser.parse_args()
-    if args.jenkins.endswith("/"): # important for urljoin
-        arg_jenkins_url = args.jenkins
-    else:
-        arg_jenkins_url = args.jenkins + "/"
     arg_extract_path = args.extract
     arg_symlink = args.symlink
+    arg_webbook_token = args.webhook_token
+    arg_api_token = args.api_token
+    arg_buildkit_org = args.buildkit_org
 
     if not os.path.isdir(arg_extract_path):
         os.mkdir(arg_extract_path)
@@ -222,25 +265,17 @@ if __name__ == "__main__":
     for include in args.include:
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
-
-    # we don't pgp-sign jenkins artifacts; instead we rely on HTTPS access to
-    # the jenkins server (and the jenkins server not being compromised and/or
-    # github not serving it compromised source). If that's not good enough for
-    # you, don't use riot.im/develop.
-    deployer.verify_signature = False
-
     if args.tarball_uri is not None:
         build_dir = os.path.join(arg_extract_path, "test-%i" % (time.time()))
         deploy_tarball(args.tarball_uri, build_dir)
     else:
         print(
-            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Include files: %s" %
+            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Include files: %s" %
             (args.port,
              arg_extract_path,
              " (clean after)" if deployer.should_clean else "",
              arg_symlink,
-             arg_jenkins_url,
              deployer.symlink_paths,
             )
         )
-        app.run(host="0.0.0.0", port=args.port, debug=True)
+        app.run(port=args.port, debug=False)
