@@ -4,8 +4,7 @@
 # react-sdk & js-sdk checkouts, for the case where these dependencies
 # are git checkouts.
 
-set -e
-set -x
+set -ex
 
 rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
