@@ -32,7 +32,7 @@ steps:
           image: "node:10"
           propagate-environment: true
 
-  - label: ":hammer: package"
+  - label: ":hammer: Package"
     command:
       - "echo '--- Fetching Dependencies'"
       - "./scripts/fetch-develop.deps.sh --depth 1"
