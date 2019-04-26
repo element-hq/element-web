@@ -28,7 +28,7 @@ app = Flask(__name__)
 deployer = None
 arg_extract_path = None
 arg_symlink = None
-arg_webbook_token = None
+arg_webhook_token = None
 arg_api_token = None
 
 def create_symlink(source, linkname):
