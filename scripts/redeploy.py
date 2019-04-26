@@ -242,7 +242,7 @@ if __name__ == "__main__":
     # about what to deploy from the poke body, we can be a little more paranoid
     # and only accept builds / artifacts from a specific buildkite org
     parser.add_argument(
-        "--org", dest="buildkit_org", help=(
+        "--org", dest="buildkite_org", help=(
             "Lock down to this buildkite org"
         )
     )
