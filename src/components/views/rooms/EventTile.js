@@ -309,7 +309,7 @@ module.exports = withMatrixClient(React.createClass({
         return actions.tweaks.highlight;
     },
 
-    onEditClicked: function(e) {
+    onOptionsClicked: function(e) {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
 
@@ -602,8 +602,8 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        const editButton = (
-            <span className="mx_EventTile_editButton" title={_t("Options")} onClick={this.onEditClicked} />
+        const optionsButton = (
+            <span className="mx_EventTile_optionsButton" title={_t("Options")} onClick={this.onOptionsClicked} />
         );
 
         const timestamp = this.props.mxEvent.getTs() ?
@@ -755,7 +755,7 @@ module.exports = withMatrixClient(React.createClass({
                                            showUrlPreview={this.props.showUrlPreview}
                                            onHeightChanged={this.props.onHeightChanged} />
                             { keyRequestInfo }
-                            { editButton }
+                            { optionsButton }
                         </div>
                         {
                             // The avatar goes after the event tile as it's absolutly positioned to be over the

@@ -219,7 +219,7 @@ limitations under the License.
     width: auto;
 }
 
-.mx_EventTile_editButton {
+.mx_EventTile_optionsButton {
     position: absolute;
     display: inline-block;
     visibility: hidden;
@@ -232,8 +232,8 @@ limitations under the License.
     user-select: none;
 }
 
-.mx_EventTile:hover .mx_EventTile_editButton,
-.mx_EventTile.menu .mx_EventTile_editButton {
+.mx_EventTile:hover .mx_EventTile_optionsButton,
+.mx_EventTile.menu .mx_EventTile_optionsButton {
     visibility: visible;
 }
 
@@ -551,7 +551,7 @@ limitations under the License.
         top: 3px;
     }
 
-    .mx_EventTile_editButton {
+    .mx_EventTile_optionsButton {
         top: 3px;
     }
 
