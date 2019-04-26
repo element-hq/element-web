@@ -1,24 +1,10 @@
 #!/bin/bash
 
-set -e
+# Runs package.sh setting the version to git hashes of the riot-web,
+# react-sdk & js-sdk checkouts, for the case where these dependencies
+# are git checkouts.
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm use 10
-
-set -x
-
-# check out corresponding branches of dependencies.
-# clone the deps with depth 1: we know we will only ever need that one commit.
-`dirname $0`/fetch-develop.deps.sh --depth 1
-
-yarn install
-
-# run the mocha tests
-yarn test
-
-# run eslint
-yarn lintall -- -f checkstyle -o eslint.xml || true
+set -ex
 
 rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
