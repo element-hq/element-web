@@ -115,8 +115,8 @@ def on_receive_buildkite_poke():
     artifacts_resp.raise_for_status()
     artifacts_array = artifacts_resp.json()
     
+    artifact_to_deploy = None
     for artifact in artifacts_array:
-        artifact_to_deploy = None
         if re.match(r"dist/.*.tar.gz", artifact['path']):
             artifact_to_deploy = artifact
         if artifact_to_deploy is None:
