@@ -166,6 +166,8 @@ def deploy_tarball(artifact, build_dir):
         )
     os.mkdir(build_dir)
 
+    print("Fetching artifact %s -> %s..." % (artifact['download_url'], artifact['filename'])
+
     # Download the tarball here as buildkite needs auth to do this
     # we don't pgp-sign buildkite artifacts, relying on HTTPS and buildkite
     # not being evil. If that's not good enough for you, don't use riot.im/develop.
@@ -173,6 +175,7 @@ def deploy_tarball(artifact, build_dir):
     resp.raise_for_status()
     with open(artifact['filename'], 'wb') as ofp:
         shutil.copyfileobj(resp.raw, ofp)
+    print("...download complete. Deploying...")
 
     # we rely on the fact that flask only serves one request at a time to
     # ensure that we do not overwrite a tarball from a concurrent request.
