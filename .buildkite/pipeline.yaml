@@ -39,7 +39,7 @@ steps:
       - "yarn install"
       - "echo '+++ Packaging'"
       - "./scripts/ci_package.sh"
-    #branches: "travis/test-build"
+    branches: "develop"
     artifact_paths: "dist/riot-*.tar.gz"
     plugins:
       - docker#v3.0.1:
