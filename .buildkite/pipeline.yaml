@@ -31,3 +31,16 @@ steps:
       - docker#v3.0.1:
           image: "node:10"
           propagate-environment: true
+
+  - label: ":hammer: package"
+    command:
+      - "echo '--- Fetching Dependencies'"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
+      - "yarn install"
+      - "echo '+++ Packaging'"
+      - "./scripts/ci_package.sh"
+    branches: "develop"
+    artifact_paths: "dist/riot-*.tar.gz"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
