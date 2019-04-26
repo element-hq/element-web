@@ -57,8 +57,8 @@ def on_receive_buildkite_poke():
         return
 
     required_api_prefix = None
-    if arg_buildkit_org is not None:
-        required_api_prefix = 'https://api.buildkite.com/v2/organizations/%s' % (arg_buildkit_org,)
+    if arg_buildkite_org is not None:
+        required_api_prefix = 'https://api.buildkite.com/v2/organizations/%s' % (arg_buildkite_org,)
 
     incoming_json = request.get_json()
     if not incoming_json:
@@ -166,7 +166,7 @@ def deploy_tarball(artifact, build_dir):
         )
     os.mkdir(build_dir)
 
-    print("Fetching artifact %s -> %s..." % (artifact['download_url'], artifact['filename'])
+    print("Fetching artifact %s -> %s..." % (artifact['download_url'], artifact['filename']))
 
     # Download the tarball here as buildkite needs auth to do this
     # we don't pgp-sign buildkite artifacts, relying on HTTPS and buildkite
@@ -256,7 +256,7 @@ if __name__ == "__main__":
     arg_symlink = args.symlink
     arg_webbook_token = args.webhook_token
     arg_api_token = args.api_token
-    arg_buildkit_org = args.buildkit_org
+    arg_buildkite_org = args.buildkite_org
 
     if not os.path.isdir(arg_extract_path):
         os.mkdir(arg_extract_path)
