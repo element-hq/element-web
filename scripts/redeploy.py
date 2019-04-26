@@ -2,7 +2,8 @@
 #
 # auto-deploy script for https://riot.im/develop
 #
-# Listens for HTTP hits. When it gets one, downloads the artifact from buildkite
+# Listens for buildkite webhook pokes (https://buildkite.com/docs/apis/webhooks)
+# When it gets one, downloads the artifact from buildkite
 # and deploys it as the new version.
 #
 # Requires the following python packages:
