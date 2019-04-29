@@ -279,7 +279,8 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.OtherThreePIDError: {
-                title = _t("Something went wrong with your invite to this room");
+                title = _t("Something went wrong with your invite to %(roomName)s",
+                    {roomName: this._roomName()});
                 const joinRule = this._joinRule();
                 const errCodeMessage = _t("%(errcode)s was returned while trying to valide your invite. You could try to pass this information on to a room admin.",
                     {errcode: this.state.threePidFetchError.errcode},
@@ -305,14 +306,19 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.InvitedEmailMismatch: {
-                title = _t("The room invite wasn't sent to your account");
+                title = _t("This invite to %(roomName)s wasn't sent to your account",
+                    {roomName: this._roomName()});
                 const joinRule = this._joinRule();
                 if (joinRule === "public") {
                     subTitle = _t("You can still join it because this is a public room.");
                     primaryActionLabel = _t("Join the discussion");
                     primaryActionHandler = this.props.onJoinClick;
                 } else {
-                    subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.", {email: this.props.invitedEmail});
+                    subTitle = _t(
+                        "Sign in with a different account, ask for another invite, or " +
+                        "add the e-mail address %(email)s to this account.",
+                        {email: this.props.invitedEmail},
+                    );
                     if (joinRule !== "invite") {
                         primaryActionLabel = _t("Try to join anyway");
                         primaryActionHandler = this.props.onJoinClick;
@@ -340,7 +346,8 @@ module.exports = React.createClass({
                     inviterElement = (<span className="mx_RoomPreviewBar_inviter">{this.props.inviterName}</span>);
                 }
 
-                title = _t("Do you want to join this room?");
+                title = _t("Do you want to join %(roomName)s?",
+                    {roomName: this._roomName()});
                 subTitle = [
                     avatar,
                     _t("<userName/> invited you", {}, {userName: () => inviterElement}),
@@ -354,7 +361,8 @@ module.exports = React.createClass({
             }
             case MessageCase.ViewingRoom: {
                 if (this.props.canPreview) {
-                    title = _t("You're previewing this room. Want to join it?");
+                    title = _t("You're previewing %(roomName)s. Want to join it?",
+                        {roomName: this._roomName()});
                 } else {
                     title = _t("%(roomName)s can't be previewed. Do you want to join it?",
                         {roomName: this._roomName(true)});
@@ -372,7 +380,10 @@ module.exports = React.createClass({
                 title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName(true)});
                 subTitle = [
                     _t("Try again later, or ask a room admin to check if you have access."),
-                    _t("%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
+                    _t(
+                        "%(errcode)s was returned while trying to access the room. " +
+                        "If you think you're seeing this message in error, please " +
+                        "<issueLink>submit a bug report</issueLink>.",
                         { errcode: this.props.error.errcode },
                         { issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
                             target="_blank" rel="noopener">{ label }</a> },
