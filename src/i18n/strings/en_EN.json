@@ -812,6 +812,7 @@
     "Try to join anyway": "Try to join anyway",
     "This invite to %(roomName)s wasn't sent to your account": "This invite to %(roomName)s wasn't sent to your account",
     "Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.": "Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.",
+    "Do you want to chat with %(user)s?": "Do you want to chat with %(user)s?",
     "Do you want to join %(roomName)s?": "Do you want to join %(roomName)s?",
     "<userName/> invited you": "<userName/> invited you",
     "Reject": "Reject",

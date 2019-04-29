@@ -118,8 +118,7 @@ module.exports = React.createClass({
             return MessageCase.NotLoggedIn;
         }
 
-        const myMember = this.props.room &&
-            this.props.room.getMember(MatrixClientPeg.get().getUserId());
+        const myMember = this._getMyMember();
 
         if (myMember) {
             if (myMember.isKicked()) {
@@ -158,9 +157,7 @@ module.exports = React.createClass({
     },
 
     _getKickOrBanInfo() {
-        const myMember = this.props.room ?
-            this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
-            null;
+        const myMember = this._getMyMember();
         if (!myMember) {
             return {};
         }
@@ -194,6 +191,13 @@ module.exports = React.createClass({
         }
     },
 
+    _getMyMember() {
+        return (
+            this.props.room &&
+            this.props.room.getMember(MatrixClientPeg.get().getUserId())
+        );
+    },
+
     _getInviteMember: function() {
         const {room} = this.props;
         if (!room) {
@@ -206,6 +210,16 @@ module.exports = React.createClass({
         }
         const inviterUserId = inviteEvent.events.member.getSender();
         return room.currentState.getMember(inviterUserId);
+    },
+
+    _isDMInvite() {
+        const myMember = this._getMyMember();
+        if (!myMember) {
+            return false;
+        }
+        const memberEvent = myMember.events.member;
+        const memberContent = memberEvent.getContent();
+        return memberContent.membership === "invite" && memberContent.is_direct;
     },
 
     onLoginClick: function() {
@@ -346,8 +360,14 @@ module.exports = React.createClass({
                     inviterElement = (<span className="mx_RoomPreviewBar_inviter">{this.props.inviterName}</span>);
                 }
 
-                title = _t("Do you want to join %(roomName)s?",
-                    {roomName: this._roomName()});
+                const isDM = this._isDMInvite();
+                if (isDM) {
+                    title = _t("Do you want to chat with %(user)s?",
+                        { user: inviteMember.name });
+                } else {
+                    title = _t("Do you want to join %(roomName)s?",
+                        { roomName: this._roomName() });
+                }
                 subTitle = [
                     avatar,
                     _t("<userName/> invited you", {}, {userName: () => inviterElement}),
