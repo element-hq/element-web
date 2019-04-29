@@ -87,14 +87,12 @@ export default class MessageActionBar extends React.PureComponent {
         this.onFocusChange(true);
     }
 
-    render() {
+    isContentActionable() {
         const { mxEvent } = this.props;
         const { status: eventStatus } = mxEvent;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
-
-        let replyButton;
 
         if (isSent && mxEvent.getType() === 'm.room.message') {
             const content = mxEvent.getContent();
@@ -103,11 +101,21 @@ export default class MessageActionBar extends React.PureComponent {
                 content.msgtype !== 'm.bad.encrypted' &&
                 content.hasOwnProperty('body')
             ) {
-                replyButton = <span className="mx_MessageActionBar_replyButton"
-                    title={_t("Reply")}
-                    onClick={this.onReplyClick}
-                />;
+                return true;
             }
+        }
+
+        return false;
+    }
+
+    render() {
+        let replyButton;
+
+        if (this.isContentActionable()) {
+            replyButton = <span className="mx_MessageActionBar_replyButton"
+                title={_t("Reply")}
+                onClick={this.onReplyClick}
+            />;
         }
 
         return <div className="mx_MessageActionBar">
