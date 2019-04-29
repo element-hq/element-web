@@ -18,20 +18,52 @@ limitations under the License.
     position: absolute;
     visibility: hidden;
     cursor: pointer;
-    top: 6px;
-    right: 6px;
+    display: flex;
+    height: 24px;
+    border-radius: 4px;
+    background: $primary-bg-color;
+    top: -13px;
+    right: 8px;
     user-select: none;
-}
 
-.mx_MessageActionBar_optionsButton {
-    display: inline-block;
-    width: 19px;
-    height: 19px;
-    background-image: url($edit-button-url);
-}
+    > * {
+        display: inline-block;
+        position: relative;
+        width: 27px;
+        border: 1px solid $message-action-bar-border-color;
+        margin-left: -1px;
 
-.mx_MatrixChat_useCompactLayout {
-    .mx_MessageActionBar {
-        top: 3px;
+        &:hover {
+            border-color: $message-action-bar-hover-border-color;
+            z-index: 1;
+        }
+
+        &:first-child {
+            border-radius: 3px 0 0 3px;
+        }
+
+        &:last-child {
+            border-radius: 0 3px 3px 0;
+        }
+
+        &:only-child {
+            border-radius: 3px;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $primary-fg-color;
+        }
     }
+}
+
+.mx_MessageActionBar_optionsButton::after {
+    mask-image: url('$(res)/img/icon_context.svg');
 }

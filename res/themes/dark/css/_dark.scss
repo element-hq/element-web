@@ -146,6 +146,9 @@ $room-warning-bg-color: $header-panel-bg-color;
 $dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
 
+$message-action-bar-border-color: $input-darker-bg-color;
+$message-action-bar-hover-border-color: $text-secondary-color;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

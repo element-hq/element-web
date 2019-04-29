@@ -78,10 +78,11 @@ export default class MessageActionBar extends React.PureComponent {
     }
 
     render() {
-        // TODO: Move the bar to a separate element once there are several buttons
-        return <span className="mx_MessageActionBar mx_MessageActionBar_optionsButton"
-            title={_t("Options")}
-            onClick={this.onOptionsClicked}
-        />;
+        return <div className="mx_MessageActionBar">
+            <span className="mx_MessageActionBar_optionsButton"
+                title={_t("Options")}
+                onClick={this.onOptionsClicked}
+            />
+        </div>;
     }
 }

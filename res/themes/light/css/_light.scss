@@ -73,7 +73,7 @@ $primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
 $input-border-color: #e7e7e7;
-$input-darker-bg-color: rgba(193, 201, 214, 0.29);
+$input-darker-bg-color: #e3e8f0;
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
@@ -153,7 +153,7 @@ $roomheader-button-color: #91A1C0;
 $groupheader-button-color: #91A1C0;
 $rightpanel-button-color: #91A1C0;
 $composer-button-color: #91A1C0;
-$roomtopic-color: #9fa9ba;
+$roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #c9ced6;
@@ -203,7 +203,6 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$edit-button-url: "$(res)/img/icon_context_message.svg";
 $copy-button-url: "$(res)/img/icon_copy_message.svg";
 
 // e2e
@@ -254,6 +253,9 @@ $authpage-secondary-color: #61708b;
 
 $dark-panel-bg-color: $secondary-accent-color;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
+
+$message-action-bar-border-color: $input-darker-bg-color;
+$message-action-bar-hover-border-color: $roomtopic-color;
 
 // ***** Mixins! *****
 
