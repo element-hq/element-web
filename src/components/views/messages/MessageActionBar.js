@@ -16,8 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import {EventStatus} from 'matrix-js-sdk';
+
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
+import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 
@@ -45,7 +48,14 @@ export default class MessageActionBar extends React.PureComponent {
         );
     }
 
-    onOptionsClicked = (ev) => {
+    onReplyClick = (ev) => {
+        dis.dispatch({
+            action: 'reply_to_event',
+            event: this.props.mxEvent,
+        });
+    }
+
+    onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         const buttonRect = ev.target.getBoundingClientRect();
 
@@ -78,10 +88,33 @@ export default class MessageActionBar extends React.PureComponent {
     }
 
     render() {
+        const { mxEvent } = this.props;
+        const { status: eventStatus } = mxEvent;
+
+        // status is SENT before remote-echo, null after
+        const isSent = !eventStatus || eventStatus === EventStatus.SENT;
+
+        let replyButton;
+
+        if (isSent && mxEvent.getType() === 'm.room.message') {
+            const content = mxEvent.getContent();
+            if (
+                content.msgtype &&
+                content.msgtype !== 'm.bad.encrypted' &&
+                content.hasOwnProperty('body')
+            ) {
+                replyButton = <span className="mx_MessageActionBar_replyButton"
+                    title={_t("Reply")}
+                    onClick={this.onReplyClick}
+                />;
+            }
+        }
+
         return <div className="mx_MessageActionBar">
+            {replyButton}
             <span className="mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
-                onClick={this.onOptionsClicked}
+                onClick={this.onOptionsClick}
             />
         </div>;
     }
