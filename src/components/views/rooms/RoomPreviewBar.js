@@ -334,12 +334,12 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.Invite: {
+                const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
+                const avatar = <RoomAvatar room={this.props.room} />;
+
                 const inviteMember = this._getInviteMember();
-                let avatar;
                 let inviterElement;
                 if (inviteMember) {
-                    const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-                    avatar = (<MemberAvatar member={inviteMember} />);
                     inviterElement = <span>
                         <span className="mx_RoomPreviewBar_inviter">
                             {inviteMember.rawDisplayName}
