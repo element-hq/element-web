@@ -24,7 +24,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
-import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -103,12 +102,6 @@ module.exports = React.createClass({
                 this.setState({threePidFetchError: err});
             });
         }
-    },
-
-    _onInviterClick(evt) {
-        evt.preventDefault();
-        const member = this._getInviteMember();
-        dis.dispatch({action: 'view_user_info', userId: member.userId});
     },
 
     _getMessageCase() {
@@ -346,16 +339,12 @@ module.exports = React.createClass({
                 let inviterElement;
                 if (inviteMember) {
                     const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-                    avatar = (<MemberAvatar member={inviteMember} onClick={this._onInviterClick} />);
-                    const inviterClasses = [
-                        "mx_RoomPreviewBar_inviter",
-                        getUserNameColorClass(inviteMember.userId),
-                    ].join(" ");
-                    inviterElement = (
-                        <a onClick={this._onInviterClick} className={inviterClasses}>
-                            {inviteMember.name}
-                        </a>
-                    );
+                    avatar = (<MemberAvatar member={inviteMember} />);
+                    inviterElement = <span>
+                        <span className="mx_RoomPreviewBar_inviter">
+                            {inviteMember.rawDisplayName}
+                        </span> ({inviteMember.userId})
+                    </span>;
                 } else {
                     inviterElement = (<span className="mx_RoomPreviewBar_inviter">{this.props.inviterName}</span>);
                 }
