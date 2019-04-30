@@ -21,7 +21,7 @@ limitations under the License.
     display: flex;
     height: 24px;
     border-radius: 4px;
-    background: $primary-bg-color;
+    background: $message-action-bar-bg-color;
     top: -13px;
     right: 8px;
     user-select: none;
@@ -59,7 +59,7 @@ limitations under the License.
             width: 100%;
             mask-repeat: no-repeat;
             mask-position: center;
-            background-color: $primary-fg-color;
+            background-color: $message-action-bar-fg-color;
         }
     }
 }
