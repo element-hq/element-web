@@ -128,6 +128,8 @@ For a good example, see https://riot.im/develop/config.json.
 1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
    in the `labs` section of settings.  The available optional experimental features vary from
    release to release.
+   * `feature_reactions` allows reacting to messages with emoji and displaying
+     reactions from other people
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
