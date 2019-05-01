@@ -23,6 +23,8 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
+import SettingsStore from '../../../settings/SettingsStore';
+import classNames from 'classnames';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -32,6 +34,15 @@ export default class MessageActionBar extends React.PureComponent {
         replyThread: PropTypes.element,
         onFocusChange: PropTypes.func,
     };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            agreeDimension: null,
+            likeDimension: null,
+        };
+    }
 
     onFocusChange = (focused) => {
         if (!this.props.onFocusChange) {
@@ -46,6 +57,31 @@ export default class MessageActionBar extends React.PureComponent {
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
             {event},
         );
+    }
+
+    onAgreeClick = (ev) => {
+        this.toggleDimensionValue("agreeDimension", "agree");
+    }
+
+    onDisagreeClick = (ev) => {
+        this.toggleDimensionValue("agreeDimension", "disagree");
+    }
+
+    onLikeClick = (ev) => {
+        this.toggleDimensionValue("likeDimension", "like");
+    }
+
+    onDislikeClick = (ev) => {
+        this.toggleDimensionValue("likeDimension", "dislike");
+    }
+
+    toggleDimensionValue(dimension, value) {
+        const state = this.state[dimension];
+        const newState = state !== value ? value : null;
+        this.setState({
+            [dimension]: newState,
+        });
+        // TODO: Send the reaction event
     }
 
     onReplyClick = (ev) => {
@@ -87,14 +123,12 @@ export default class MessageActionBar extends React.PureComponent {
         this.onFocusChange(true);
     }
 
-    render() {
+    isContentActionable() {
         const { mxEvent } = this.props;
         const { status: eventStatus } = mxEvent;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
-
-        let replyButton;
 
         if (isSent && mxEvent.getType() === 'm.room.message') {
             const content = mxEvent.getContent();
@@ -103,16 +137,103 @@ export default class MessageActionBar extends React.PureComponent {
                 content.msgtype !== 'm.bad.encrypted' &&
                 content.hasOwnProperty('body')
             ) {
-                replyButton = <span className="mx_MessageActionBar_replyButton"
-                    title={_t("Reply")}
-                    onClick={this.onReplyClick}
-                />;
+                return true;
             }
         }
 
+        return false;
+    }
+
+    isReactionsEnabled() {
+        return SettingsStore.isFeatureEnabled("feature_reactions");
+    }
+
+    renderAgreeDimension() {
+        if (!this.isReactionsEnabled()) {
+            return null;
+        }
+
+        const state = this.state.agreeDimension;
+        const options = [
+            {
+                key: "agree",
+                content: "👍",
+                onClick: this.onAgreeClick,
+            },
+            {
+                key: "disagree",
+                content: "👎",
+                onClick: this.onDisagreeClick,
+            },
+        ];
+
+        return <span className="mx_MessageActionBar_reactionDimension"
+            title={_t("Agree or Disagree")}
+        >
+            {this.renderReactionDimensionItems(state, options)}
+        </span>;
+    }
+
+    renderLikeDimension() {
+        if (!this.isReactionsEnabled()) {
+            return null;
+        }
+
+        const state = this.state.likeDimension;
+        const options = [
+            {
+                key: "like",
+                content: "🙂",
+                onClick: this.onLikeClick,
+            },
+            {
+                key: "dislike",
+                content: "😔",
+                onClick: this.onDislikeClick,
+            },
+        ];
+
+        return <span className="mx_MessageActionBar_reactionDimension"
+            title={_t("Like or Dislike")}
+        >
+            {this.renderReactionDimensionItems(state, options)}
+        </span>;
+    }
+
+    renderReactionDimensionItems(state, options) {
+        return options.map(option => {
+            const disabled = state && state !== option.key;
+            const classes = classNames({
+                mx_MessageActionBar_reactionDisabled: disabled,
+            });
+            return <span key={option.key}
+                className={classes}
+                onClick={option.onClick}
+            >
+                {option.content}
+            </span>;
+        });
+    }
+
+    render() {
+        let agreeDimensionReactionButtons;
+        let likeDimensionReactionButtons;
+        let replyButton;
+
+        if (this.isContentActionable()) {
+            agreeDimensionReactionButtons = this.renderAgreeDimension();
+            likeDimensionReactionButtons = this.renderLikeDimension();
+            replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                title={_t("Reply")}
+                onClick={this.onReplyClick}
+            />;
+        }
+
         return <div className="mx_MessageActionBar">
+            {agreeDimensionReactionButtons}
+            {likeDimensionReactionButtons}
             {replyButton}
-            <span className="mx_MessageActionBar_optionsButton"
+            <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}
             />

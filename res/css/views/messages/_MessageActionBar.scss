@@ -20,6 +20,7 @@ limitations under the License.
     cursor: pointer;
     display: flex;
     height: 24px;
+    line-height: 24px;
     border-radius: 4px;
     background: $message-action-bar-bg-color;
     top: -13px;
@@ -49,19 +50,19 @@ limitations under the License.
         &:only-child {
             border-radius: 3px;
         }
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            background-color: $message-action-bar-fg-color;
-        }
     }
+}
+
+.mx_MessageActionBar_maskButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $message-action-bar-fg-color;
 }
 
 .mx_MessageActionBar_replyButton::after {
@@ -70,4 +71,14 @@ limitations under the License.
 
 .mx_MessageActionBar_optionsButton::after {
     mask-image: url('$(res)/img/icon_context.svg');
+}
+
+.mx_MessageActionBar_reactionDimension {
+    width: 42px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.mx_MessageActionBar_reactionDisabled {
+    opacity: 0.4;
 }
