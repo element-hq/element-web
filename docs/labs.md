@@ -1,4 +1,4 @@
-# riot-web Labs features
+# Labs features
 
 Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
 [#riot-web:matrix.org] for more information.
