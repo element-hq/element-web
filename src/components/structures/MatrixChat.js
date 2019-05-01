@@ -50,7 +50,6 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import TimelineExplosionDialog from "../views/dialogs/TimelineExplosionDialog";
 
 const AutoDiscovery = Matrix.AutoDiscovery;
 
@@ -1305,17 +1304,6 @@ export default React.createClass({
                 return true;
             }
             return self._loggedInView.child.canResetTimelineInRoom(roomId);
-        });
-
-        cli.on('sync.unexpectedError', function(err) {
-            if (err.message && err.message.includes("live timeline ") && err.message.includes(" is no longer live ")) {
-                console.error("Caught timeline explosion - trying to ask user for more information");
-                if (Modal.hasDialogs()) {
-                    console.warn("User has another dialog open - skipping prompt");
-                    return;
-                }
-                Modal.createTrackedDialog('Timeline exploded', '', TimelineExplosionDialog, {});
-            }
         });
 
         cli.on('sync', function(state, prevState, data) {
