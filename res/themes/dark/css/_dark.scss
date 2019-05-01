@@ -151,6 +151,10 @@ $message-action-bar-fg-color: $header-panel-text-primary-color;
 $message-action-bar-border-color: #616b7f;
 $message-action-bar-hover-border-color: $header-panel-text-primary-color;
 
+$reaction-row-button-bg-color: $header-panel-bg-color;
+$reaction-row-button-border-color: #616b7f;
+$reaction-row-button-hover-border-color: $header-panel-text-primary-color;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
