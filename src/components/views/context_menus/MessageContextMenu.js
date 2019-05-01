@@ -27,6 +27,7 @@ import Modal from '../../../Modal';
 import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
+import { isContentActionable } from '../../../utils/EventUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -247,22 +248,19 @@ module.exports = React.createClass({
             );
         }
 
-        if (isSent && mxEvent.getType() === 'm.room.message') {
-            const content = mxEvent.getContent();
-            if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
-                forwardButton = (
-                    <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
-                        { _t('Forward Message') }
+        if (isContentActionable(mxEvent)) {
+            forwardButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
+                    { _t('Forward Message') }
+                </div>
+            );
+
+            if (this.state.canPin) {
+                pinButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
+                        { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
                     </div>
                 );
-
-                if (this.state.canPin) {
-                    pinButton = (
-                        <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
-                            { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
-                        </div>
-                    );
-                }
             }
         }
 

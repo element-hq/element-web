@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {EventStatus} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
@@ -24,7 +24,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import SettingsStore from '../../../settings/SettingsStore';
-import classNames from 'classnames';
+import { isContentActionable } from '../../../utils/EventUtils';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -123,27 +123,6 @@ export default class MessageActionBar extends React.PureComponent {
         this.onFocusChange(true);
     }
 
-    isContentActionable() {
-        const { mxEvent } = this.props;
-        const { status: eventStatus } = mxEvent;
-
-        // status is SENT before remote-echo, null after
-        const isSent = !eventStatus || eventStatus === EventStatus.SENT;
-
-        if (isSent && mxEvent.getType() === 'm.room.message') {
-            const content = mxEvent.getContent();
-            if (
-                content.msgtype &&
-                content.msgtype !== 'm.bad.encrypted' &&
-                content.hasOwnProperty('body')
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     isReactionsEnabled() {
         return SettingsStore.isFeatureEnabled("feature_reactions");
     }
@@ -220,7 +199,7 @@ export default class MessageActionBar extends React.PureComponent {
         let likeDimensionReactionButtons;
         let replyButton;
 
-        if (this.isContentActionable()) {
+        if (isContentActionable(this.props.mxEvent)) {
             agreeDimensionReactionButtons = this.renderAgreeDimension();
             likeDimensionReactionButtons = this.renderLikeDimension();
             replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
