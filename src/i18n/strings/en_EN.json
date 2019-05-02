@@ -302,6 +302,7 @@
     "Render simple counters in room header": "Render simple counters in room header",
     "Edit messages after they have been sent (refresh to apply changes)": "Edit messages after they have been sent (refresh to apply changes)",
     "React to messages with emoji (refresh to apply changes)": "React to messages with emoji (refresh to apply changes)",
+    "Show hidden events in timeline": "Show hidden events in timeline",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
     "Show a placeholder for removed messages": "Show a placeholder for removed messages",
