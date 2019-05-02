@@ -343,6 +343,7 @@
     "When I'm invited to a room": "When I'm invited to a room",
     "Call invitation": "Call invitation",
     "Messages sent by bot": "Messages sent by bot",
+    "When rooms are upgraded": "When rooms are upgraded",
     "Active call (%(roomName)s)": "Active call (%(roomName)s)",
     "unknown caller": "unknown caller",
     "Incoming voice call from %(name)s": "Incoming voice call from %(name)s",
