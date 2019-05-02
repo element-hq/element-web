@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
@@ -23,11 +24,42 @@ export default class ReactionsRowButton extends React.PureComponent {
         count: PropTypes.number.isRequired,
     }
 
+    constructor(props) {
+        super(props);
+
+        // TODO: This should be derived from actual reactions you may have sent
+        // once we have some API to read them.
+        this.state = {
+            selected: false,
+        };
+    }
+
+    onClick = (ev) => {
+        const state = this.state.selected;
+        this.setState({
+            selected: !state,
+        });
+        // TODO: Send the reaction event
+    };
+
     render() {
         const { content, count } = this.props;
+        const { selected } = this.state;
 
-        return <span className="mx_ReactionsRowButton">
-            {content} {count}
+        const classes = classNames({
+            mx_ReactionsRowButton: true,
+            mx_ReactionsRowButton_selected: selected,
+        });
+
+        let adjustedCount = count;
+        if (selected) {
+            adjustedCount++;
+        }
+
+        return <span className={classes}
+            onClick={this.onClick}
+        >
+            {content} {adjustedCount}
         </span>;
     }
 }

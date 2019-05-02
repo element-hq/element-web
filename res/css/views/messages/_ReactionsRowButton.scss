@@ -23,8 +23,14 @@ limitations under the License.
     border: 1px solid $reaction-row-button-border-color;
     border-radius: 10px;
     background-color: $reaction-row-button-bg-color;
+    cursor: pointer;
 
     &:hover {
         border-color: $reaction-row-button-hover-border-color;
+    }
+
+    &.mx_ReactionsRowButton_selected {
+        background-color: $reaction-row-button-selected-bg-color;
+        border-color: $reaction-row-button-selected-border-color;
     }
 }
