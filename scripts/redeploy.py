@@ -19,6 +19,8 @@ from urlparse import urljoin
 import glob
 import re
 import shutil
+import threading
+from Queue import Queue
 
 from flask import Flask, jsonify, request, abort
 
@@ -31,6 +33,8 @@ arg_extract_path = None
 arg_symlink = None
 arg_webhook_token = None
 arg_api_token = None
+
+workQueue = Queue()
 
 def create_symlink(source, linkname):
     try:
@@ -47,6 +51,16 @@ def req_headers():
     return {
         "Authorization": "Bearer %s" % (arg_api_token,),
     }
+
+# Buildkite considers a poke to have failed if it has to wait more than 10s for
+# data (any data, not just the initial response) and it normally takes longer than
+# that to download an artifact from buildkite. Apparently there is no way in flask
+# to finish the response and then keep doing stuff, so instead this has to involve
+# threading. Sigh.
+def worker_thread():
+    while True:
+        toDeploy = workQueue.get()
+        deploy_buildkite_artifact(*toDeploy)
 
 @app.route("/", methods=["POST"])
 def on_receive_buildkite_poke():
@@ -129,7 +143,16 @@ def on_receive_buildkite_poke():
         abort(400, "Refusing to deploy artifact from URL %s", artifact_to_deploy['url'])
         return
 
-    return deploy_buildkite_artifact(artifact_to_deploy, pipeline_name, build_num)
+    # there's no point building up a queue of things to deploy, so if there are any pending jobs,
+    # remove them
+    while not workQueue.empty():
+        try:
+            workQueue.get(False)
+        except:
+            pass
+    workQueue.put([artifact_to_deploy, pipeline_name, build_num])
+
+    return jsonify({})
 
 def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
     artifact_response = requests.get(artifact['url'], headers=req_headers())
@@ -151,8 +174,6 @@ def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
         abort(400, e.message)
 
     create_symlink(source=extracted_dir, linkname=arg_symlink)
-
-    return jsonify({})
 
 def deploy_tarball(artifact, build_dir):
     """Download a tarball from jenkins and unpack it
@@ -281,4 +302,7 @@ if __name__ == "__main__":
              deployer.symlink_paths,
             )
         )
+        fred = threading.Thread(target=worker_thread)
+        fred.daemon = True
+        fred.start()
         app.run(port=args.port, debug=False)
