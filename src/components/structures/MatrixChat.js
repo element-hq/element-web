@@ -50,6 +50,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import {ValidatedServerConfig} from "../../utils/AutoDiscoveryUtils";
 
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
@@ -107,6 +108,7 @@ export default React.createClass({
 
     propTypes: {
         config: PropTypes.object,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig),
         ConferenceHandler: PropTypes.any,
         onNewScreen: PropTypes.func,
         registrationUrl: PropTypes.string,
@@ -208,6 +210,7 @@ export default React.createClass({
 
     getServerProperties() {
         let props = this.state.serverConfig;
+        if (!props) props = this.props.serverConfig; // for unit tests
         if (!props) props = SdkConfig.get()["validated_server_config"];
         return {serverConfig: props};
     },
