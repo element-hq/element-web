@@ -18,6 +18,7 @@ module.exports = {
         // CSS themes
         "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+        "theme-tchap": "./node_modules/matrix-react-sdk/res/themes/tchap/css/tchap.scss",
     },
     module: {
         rules: [
