@@ -212,7 +212,7 @@ export default class PasswordLogin extends React.Component {
                     type="text"
                     label={SdkConfig.get().disable_custom_urls ?
                         _t("Username on %(hs)s", {
-                            hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
+                            hs: this.props.serverConfig.hsName,
                         }) : _t("Username")}
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
