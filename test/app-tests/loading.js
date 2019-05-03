@@ -146,6 +146,13 @@ describe('loading:', function() {
         const config = Object.assign({
             default_hs_url: DEFAULT_HS_URL,
             default_is_url: DEFAULT_IS_URL,
+            validated_server_config: {
+                hsUrl: DEFAULT_HS_URL,
+                hsName: "TEST_ENVIRONMENT",
+                hsNameIsDifferent: false, // yes, we lie
+                isUrl: DEFAULT_IS_URL,
+                identityEnabled: true,
+            },
             embeddedPages: {
                 homeUrl: 'data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==',
             },

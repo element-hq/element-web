@@ -96,8 +96,18 @@ describe('joining a room', function() {
 
             PlatformPeg.set(new WebPlatform());
 
+            const config = {
+                validated_server_config: {
+                    hsUrl: HS_URL,
+                    hsName: "TEST_ENVIRONMENT",
+                    hsNameIsDifferent: false, // yes, we lie
+                    isUrl: IS_URL,
+                    identityEnabled: true,
+                },
+            };
+
             const mc = (
-                <MatrixChat config={{}}
+                <MatrixChat config={config}
                     makeRegistrationUrl={()=>{throw new Error("unimplemented");}}
                     initialScreenAfterLogin={{
                         screen: 'directory',
