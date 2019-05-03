@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import classnames from 'classnames';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import {makeType} from "../../../utils/TypeUtils";
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
@@ -32,8 +34,13 @@ export const TYPES = {
         label: () => _t('Free'),
         logo: () => <img src={require('../../../../res/img/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
-        hsUrl: 'https://matrix.org',
-        isUrl: 'https://vector.im',
+        serverConfig: makeType(ValidatedServerConfig, {
+            hsUrl: "https://matrix.org",
+            hsName: "matrix.org",
+            hsNameIsDifferent: false,
+            isUrl: "https://vector.im",
+            identityEnabled: true,
+        }),
     },
     PREMIUM: {
         id: PREMIUM,
@@ -44,6 +51,7 @@ export const TYPES = {
                 {sub}
             </a>,
         }),
+        identityServerUrl: "https://vector.im",
     },
     ADVANCED: {
         id: ADVANCED,
@@ -56,10 +64,11 @@ export const TYPES = {
     },
 };
 
-export function getTypeFromHsUrl(hsUrl) {
+export function getTypeFromServerConfig(config) {
+    const {hsUrl} = config;
     if (!hsUrl) {
         return null;
-    } else if (hsUrl === TYPES.FREE.hsUrl) {
+    } else if (hsUrl === TYPES.FREE.serverConfig.hsUrl) {
         return FREE;
     } else if (new URL(hsUrl).hostname.endsWith('.modular.im')) {
         // This is an unlikely case to reach, as Modular defaults to hiding the
@@ -76,7 +85,7 @@ export default class ServerTypeSelector extends React.PureComponent {
         selected: PropTypes.string,
         // Handler called when the selected type changes.
         onChange: PropTypes.func.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -106,7 +115,7 @@ export default class ServerTypeSelector extends React.PureComponent {
         e.stopPropagation();
         const type = e.currentTarget.dataset.id;
         this.updateSelectedType(type);
-    }
+    };
 
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');

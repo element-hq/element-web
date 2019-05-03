@@ -446,13 +446,6 @@ module.exports = React.createClass({
                 onEditServerDetailsClick = this.onEditServerDetailsClick;
             }
 
-            // If the current HS URL is the default HS URL, then we can label it
-            // with the default HS name (if it exists).
-            let hsName;
-            if (this.state.hsUrl === this.props.defaultHsUrl) {
-                hsName = this.props.defaultServerName;
-            }
-
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -462,8 +455,7 @@ module.exports = React.createClass({
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
-                hsName={hsName}
-                hsUrl={this.state.hsUrl}
+                serverConfig={this.props.serverConfig}
             />;
         }
     },
