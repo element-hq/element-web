@@ -1,0 +1,11 @@
+# Exclude a bunch of stuff which can make the build context a larger than it needs to be
+.git/
+test/
+webapp/
+lib/
+node_modules/
+electron_app/
+karma-reports/
+.idea/
+.tmp/
+config.json*
