@@ -18,8 +18,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import SdkConfig from "../../../SdkConfig";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
+import * as ServerType from '../../views/auth/ServerTypeSelector';
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+
+// TODO: TravisR - Can this extend ServerConfig for most things?
 
 /*
  * Configure the Modular server name.
@@ -31,65 +37,87 @@ export default class ModularServerConfig extends React.PureComponent {
     static propTypes = {
         onServerConfigChange: PropTypes.func,
 
-        // default URLs are defined in config.json (or the hardcoded defaults)
-        // they are used if the user has not overridden them with a custom URL.
-        // In other words, if the custom URL is blank, the default is used.
-        defaultHsUrl: PropTypes.string, // e.g. https://matrix.org
-
-        // This component always uses the default IS URL and doesn't allow it
-        // to be changed.  We still receive it as a prop here to simplify
-        // consumers by still passing the IS URL via onServerConfigChange.
-        defaultIsUrl: PropTypes.string, // e.g. https://vector.im
-
-        // custom URLs are explicitly provided by the user and override the
-        // default URLs.  The user enters them via the component's input fields,
-        // which is reflected on these properties whenever on..UrlChanged fires.
-        // They are persisted in localStorage by MatrixClientPeg, and so can
-        // override the default URLs when the component initially loads.
-        customHsUrl: PropTypes.string,
+        // The current configuration that the user is expecting to change.
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-    }
+    };
 
     static defaultProps = {
         onServerConfigChange: function() {},
         customHsUrl: "",
         delayTimeMs: 0,
-    }
+    };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            hsUrl: props.customHsUrl,
+            busy: false,
+            errorText: "",
+            hsUrl: props.serverConfig.hsUrl,
+            isUrl: props.serverConfig.isUrl,
         };
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.customHsUrl === this.state.hsUrl) return;
+        if (newProps.serverConfig.hsUrl === this.state.hsUrl &&
+            newProps.serverConfig.isUrl === this.state.isUrl) return;
+
+        this.validateAndApplyServer(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
+    }
+
+    async validateAndApplyServer(hsUrl, isUrl) {
+        // Always try and use the defaults first
+        const defaultConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
+        if (defaultConfig.hsUrl === hsUrl && defaultConfig.isUrl === isUrl) {
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(defaultConfig);
+            return defaultConfig;
+        }
 
         this.setState({
-            hsUrl: newProps.customHsUrl,
+            hsUrl,
+            isUrl,
+            busy: true,
+            errorText: "",
         });
-        this.props.onServerConfigChange({
-            hsUrl: newProps.customHsUrl,
-            isUrl: this.props.defaultIsUrl,
-        });
+
+        try {
+            const result = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(result);
+            return result;
+        } catch (e) {
+            console.error(e);
+            let message = _t("Unable to validate homeserver/identity server");
+            if (e.translatedMessage) {
+                message = e.translatedMessage;
+            }
+            this.setState({
+                busy: false,
+                errorText: message,
+            });
+        }
+    }
+
+    async validateServer() {
+        // TODO: Do we want to support .well-known lookups here?
+        // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
+        // find their homeserver without demanding they use "https://matrix.org"
+        return this.validateAndApplyServer(this.state.hsUrl, ServerType.TYPES.PREMIUM.identityServerUrl);
     }
 
     onHomeserverBlur = (ev) => {
         this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            this.props.onServerConfigChange({
-                hsUrl: this.state.hsUrl,
-                isUrl: this.props.defaultIsUrl,
-            });
+            this.validateServer();
         });
-    }
+    };
 
     onHomeserverChange = (ev) => {
         const hsUrl = ev.target.value;
         this.setState({ hsUrl });
-    }
+    };
 
     _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
@@ -116,7 +144,7 @@ export default class ModularServerConfig extends React.PureComponent {
                 <div className="mx_ServerConfig_fields">
                     <Field id="mx_ServerConfig_hsUrl"
                         label={_t("Server Name")}
-                        placeholder={this.props.defaultHsUrl}
+                        placeholder={this.props.serverConfig.hsUrl}
                         value={this.state.hsUrl}
                         onBlur={this.onHomeserverBlur}
                         onChange={this.onHomeserverChange}

@@ -35,3 +35,8 @@ limitations under the License.
 .mx_ServerConfig_help:link {
     opacity: 0.8;
 }
+
+.mx_ServerConfig_error {
+    display: block;
+    color: $warning-color;
+}
