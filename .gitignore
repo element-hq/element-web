@@ -1,7 +1,6 @@
 /build
 /cert.pem
 /dist
-/karma-reports
 /key.pem
 /lib
 /node_modules

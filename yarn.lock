@@ -5353,14 +5353,6 @@ karma-cli@^1.0.1:
   dependencies:
     resolve "^1.1.6"
 
-karma-junit-reporter@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/karma-junit-reporter/-/karma-junit-reporter-2.0.0.tgz#f84629e0e1ef28dd2977c96f346c33d5bf93e159"
-  integrity sha1-+EYp4OHvKN0pd8lvNGwz1b+T4Vk=
-  dependencies:
-    path-is-absolute "^1.0.0"
-    xmlbuilder "3.1.0"
-
 karma-logcapture-reporter@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/karma-logcapture-reporter/-/karma-logcapture-reporter-0.0.1.tgz#bf1b0b1c915e0de295a15fe2f0179d4281bacddc"
@@ -5625,11 +5617,6 @@ lodash.union@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
-
-lodash@^3.5.0:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
-  integrity sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=
 
 lodash@^4.0.0, lodash@^4.1.1, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.5.0:
   version "4.17.11"
@@ -9277,13 +9264,6 @@ xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
-
-xmlbuilder@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-3.1.0.tgz#2c86888f2d4eade850fa38ca7f7223f7209516e1"
-  integrity sha1-LIaIjy1OrehQ+jjKf3Ij9yCVFuE=
-  dependencies:
-    lodash "^3.5.0"
 
 xmlbuilder@^9.0.7:
   version "9.0.7"

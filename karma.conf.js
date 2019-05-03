@@ -100,7 +100,7 @@ module.exports = function (config) {
 
         // test results reporter to use
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['logcapture', 'spec', 'junit', 'summary'],
+        reporters: ['logcapture', 'spec', 'summary'],
 
         specReporter: {
             suppressErrorSummary: false, // do print error summary
@@ -158,10 +158,6 @@ module.exports = function (config) {
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity,
-
-        junitReporter: {
-            outputDir: 'karma-reports',
-        },
 
         webpack: webpack_config,
 
