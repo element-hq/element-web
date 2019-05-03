@@ -58,7 +58,6 @@ module.exports = React.createClass({
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
-        skipServerDetails: PropTypes.bool,
         brand: PropTypes.string,
         email: PropTypes.string,
         // registration shouldn't know or care how login is done.
@@ -68,26 +67,6 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         const serverType = ServerType.getTypeFromHsUrl(this.props.customHsUrl);
-
-        const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
-        let initialPhase = this.getDefaultPhaseForServerType(serverType);
-        if (
-            // if we have these two, skip to the good bit
-            // (they could come in from the URL params in a
-            // registration email link)
-            (this.props.clientSecret && this.props.sessionId) ||
-            // if custom URLs aren't allowed, skip to form
-            !customURLsAllowed ||
-            // if other logic says to, skip to form
-            this.props.skipServerDetails
-        ) {
-            // TODO: It would seem we've now added enough conditions here that the initial
-            // phase will _always_ be the form. It's tempting to remove the complexity and
-            // just do that, but we keep tweaking and changing auth, so let's wait until
-            // things settle a bit.
-            // Filed https://github.com/vector-im/riot-web/issues/8886 to track this.
-            initialPhase = PHASE_REGISTRATION;
-        }
 
         return {
             busy: false,
@@ -111,7 +90,7 @@ module.exports = React.createClass({
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
-            phase: initialPhase,
+            phase: PHASE_REGISTRATION,
             flows: null,
         };
     },

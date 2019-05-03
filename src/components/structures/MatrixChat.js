@@ -249,17 +249,6 @@ export default React.createClass({
         return this.state.defaultIsUrl || "https://vector.im";
     },
 
-    /**
-     * Whether to skip the server details phase of registration and start at the
-     * actual form.
-     * @return {boolean}
-     *     If there was a configured default HS or default server name, skip the
-     *     the server details.
-     */
-    skipServerDetailsForRegistration() {
-        return !!this.state.defaultHsUrl;
-    },
-
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
@@ -1973,7 +1962,6 @@ export default React.createClass({
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
-                    skipServerDetails={this.skipServerDetailsForRegistration()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
