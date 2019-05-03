@@ -58,7 +58,6 @@ module.exports = React.createClass({
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
-        skipServerDetails: PropTypes.bool,
         brand: PropTypes.string,
         email: PropTypes.string,
         // registration shouldn't know or care how login is done.
