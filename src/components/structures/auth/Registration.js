@@ -17,16 +17,15 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-
 import Promise from 'bluebird';
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 // Phases
 // Show controls to configure server details
@@ -46,18 +45,7 @@ module.exports = React.createClass({
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
         idSid: PropTypes.string,
-        // The default server name to use when the user hasn't specified
-        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
-        // via `.well-known` discovery. The server name is used instead of the
-        // HS URL when talking about "your account".
-        defaultServerName: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
-        customHsUrl: PropTypes.string,
-        customIsUrl: PropTypes.string,
-        defaultHsUrl: PropTypes.string,
-        defaultIsUrl: PropTypes.string,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         brand: PropTypes.string,
         email: PropTypes.string,
         // registration shouldn't know or care how login is done.
@@ -66,7 +54,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        const serverType = ServerType.getTypeFromHsUrl(this.props.customHsUrl);
+        const serverType = ServerType.getTypeFromServerConfig(this.props.serverConfig);
 
         return {
             busy: false,
@@ -87,8 +75,6 @@ module.exports = React.createClass({
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
             serverType,
-            hsUrl: this.props.customHsUrl,
-            isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
             phase: PHASE_REGISTRATION,
             flows: null,
@@ -100,18 +86,22 @@ module.exports = React.createClass({
         this._replaceClient();
     },
 
-    onServerConfigChange: function(config) {
-        const newState = {};
-        if (config.hsUrl !== undefined) {
-            newState.hsUrl = config.hsUrl;
+    componentWillReceiveProps(newProps) {
+        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
+            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+
+        this._replaceClient(newProps.serverConfig);
+
+        // Handle cases where the user enters "https://matrix.org" for their server
+        // from the advanced option - we should default to FREE at that point.
+        const serverType = ServerType.getTypeFromServerConfig(newProps.serverConfig);
+        if (serverType !== this.state.serverType) {
+            // Reset the phase to default phase for the server type.
+            this.setState({
+                serverType,
+                phase: this.getDefaultPhaseForServerType(serverType),
+            });
         }
-        if (config.isUrl !== undefined) {
-            newState.isUrl = config.isUrl;
-        }
-        this.props.onServerConfigChange(config);
-        this.setState(newState, () => {
-            this._replaceClient();
-        });
     },
 
     getDefaultPhaseForServerType(type) {
@@ -136,19 +126,17 @@ module.exports = React.createClass({
         // the new type.
         switch (type) {
             case ServerType.FREE: {
-                const { hsUrl, isUrl } = ServerType.TYPES.FREE;
-                this.onServerConfigChange({
-                    hsUrl,
-                    isUrl,
-                });
+                const { serverConfig } = ServerType.TYPES.FREE;
+                this.props.onServerConfigChange(serverConfig);
                 break;
             }
             case ServerType.PREMIUM:
+                // We can accept whatever server config was the default here as this essentially
+                // acts as a slightly different "custom server"/ADVANCED option.
+                break;
             case ServerType.ADVANCED:
-                this.onServerConfigChange({
-                    hsUrl: this.props.defaultHsUrl,
-                    isUrl: this.props.defaultIsUrl,
-                });
+                // Use the default config from the config
+                this.props.onServerConfigChange(SdkConfig.get()["validated_server_config"]);
                 break;
         }
 
@@ -158,13 +146,15 @@ module.exports = React.createClass({
         });
     },
 
-    _replaceClient: async function() {
+    _replaceClient: async function(serverConfig) {
         this.setState({
             errorText: null,
         });
+        if (!serverConfig) serverConfig = this.props.serverConfig;
+        const {hsUrl, isUrl} = serverConfig;
         this._matrixClient = Matrix.createClient({
-            baseUrl: this.state.hsUrl,
-            idBaseUrl: this.state.isUrl,
+            baseUrl: hsUrl,
+            idBaseUrl: isUrl,
         });
         try {
             await this._makeRegisterRequest({});
@@ -189,12 +179,6 @@ module.exports = React.createClass({
     },
 
     onFormSubmit: function(formVals) {
-        // Don't allow the user to register if there's a discovery error
-        // Without this, the user could end up registering on the wrong homeserver.
-        if (this.props.defaultServerDiscoveryError) {
-            this.setState({errorText: this.props.defaultServerDiscoveryError});
-            return;
-        }
         this.setState({
             errorText: "",
             busy: true,
@@ -207,7 +191,7 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+            if (response.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
                     response.data.limit_type,
                     response.data.admin_contact, {
@@ -302,8 +286,13 @@ module.exports = React.createClass({
         });
     },
 
-    onServerDetailsNextPhaseClick(ev) {
+    async onServerDetailsNextPhaseClick(ev) {
         ev.stopPropagation();
+        // TODO: TravisR - Capture the user's input somehow else
+        if (this._serverConfigRef) {
+            // Just to make sure the user's input gets captured
+            await this._serverConfigRef.validateServer();
+        }
         this.setState({
             phase: PHASE_REGISTRATION,
         });
@@ -371,20 +360,17 @@ module.exports = React.createClass({
                 break;
             case ServerType.PREMIUM:
                 serverDetails = <ModularServerConfig
-                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
+                    ref={r => this._serverConfigRef = r}
+                    serverConfig={this.props.serverConfig}
+                    onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
                 />;
                 break;
             case ServerType.ADVANCED:
                 serverDetails = <ServerConfig
-                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                    customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
+                    ref={r => this._serverConfigRef = r}
+                    serverConfig={this.props.serverConfig}
+                    onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
                 />;
                 break;
@@ -392,6 +378,7 @@ module.exports = React.createClass({
 
         let nextButton = null;
         if (PHASES_ENABLED) {
+            // TODO: TravisR - Pull out server discovery from ServerConfig to disable the next button?
             nextButton = <AccessibleButton className="mx_Login_submit"
                 onClick={this.onServerDetailsNextPhaseClick}
             >
@@ -466,7 +453,7 @@ module.exports = React.createClass({
         const AuthPage = sdk.getComponent('auth.AuthPage');
 
         let errorText;
-        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        const err = this.state.errorText;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
