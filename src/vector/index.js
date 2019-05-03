@@ -452,8 +452,6 @@ async function verifyServerConfig() {
     // TODO: TravisR - Handle query string arguments for hs_url and is_url
     // We probably don't want to handle them unless the user is logged out though?
 
-    // TODO: TravisR - Handle case of no options specified whatsoever
-
     const config = SdkConfig.get();
     let wkConfig = config['default_server_config']; // overwritten later under some conditions
     const serverName = config['default_server_name'];
@@ -466,6 +464,9 @@ async function verifyServerConfig() {
             "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
             "or default_hs_url.",
         ));
+    }
+    if (incompatibleOptions.length < 1) {
+        throw newTranslatableError(_td("Invalid configuration: no default server specified."));
     }
 
     if (hsUrl) {
