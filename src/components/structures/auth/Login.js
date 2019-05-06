@@ -121,6 +121,14 @@ module.exports = React.createClass({
         this._unmounted = true;
     },
 
+    componentWillReceiveProps(newProps) {
+        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
+            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+
+        // Ensure that we end up actually logging in to the right place
+        this._initLoginLogic(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
+    },
+
     onPasswordLoginError: function(errorText) {
         this.setState({
             errorText,
