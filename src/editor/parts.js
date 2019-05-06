@@ -1,0 +1,174 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+class BasePart {
+    constructor(text = "") {
+        this._text = text;
+    }
+
+    acceptsInsertion(chr) {
+        return true;
+    }
+
+    acceptsRemoval(position, chr) {
+        return true;
+    }
+
+    merge(part) {
+        return false;
+    }
+
+    split(offset) {
+        const splitText = this.text.substr(offset);
+        this._text = this.text.substr(0, offset);
+        return new PlainPart(splitText);
+    }
+
+    // removes len chars, or returns the plain text this part should be replaced with
+    // if the part would become invalid if it removed everything.
+
+    // TODO: this should probably return the Part and caret position within this should be replaced with
+    remove(offset, len) {
+        // validate
+        const strWithRemoval = this.text.substr(0, offset) + this.text.substr(offset + len);
+        for(let i = offset; i < (len + offset); ++i) {
+            const chr = this.text.charAt(i);
+            if (!this.acceptsRemoval(i, chr)) {
+                return strWithRemoval;
+            }
+        }
+        this._text = strWithRemoval;
+    }
+
+    // append str, returns the remaining string if a character was rejected.
+    appendUntilRejected(str) {
+        for(let i = 0; i < str.length; ++i) {
+            const chr = str.charAt(i);
+            if (!this.acceptsInsertion(chr)) {
+                this._text = this._text + str.substr(0, i);
+                return str.substr(i);
+            }
+        }
+        this._text = this._text + str;
+    }
+
+    // inserts str at offset if all the characters in str were accepted, otherwise don't do anything
+    // return whether the str was accepted or not.
+    insertAll(offset, str) {
+        for(let i = 0; i < str.length; ++i) {
+            const chr = str.charAt(i);
+            if (!this.acceptsInsertion(chr)) {
+                return false;
+            }
+        }
+        const beforeInsert = this._text.substr(0, offset);
+        const afterInsert = this._text.substr(offset);
+        this._text = beforeInsert + str + afterInsert;
+        return true;
+    }
+
+
+    trim(len) {
+        const remaining = this._text.substr(len);
+        this._text = this._text.substr(0, len);
+        return remaining;
+    }
+
+    get text() {
+        return this._text;
+    }
+}
+
+export class PlainPart extends BasePart {
+    acceptsInsertion(chr) {
+        return chr !== "@" && chr !== "#";
+    }
+
+    toDOMNode() {
+        return document.createTextNode(this.text);
+    }
+
+    merge(part) {
+        if (part.type === this.type) {
+            this._text = this.text + part.text;
+            return true;
+        }
+        return false;
+    }
+
+    get type() {
+        return "plain";
+    }
+
+    updateDOMNode(node) {
+        if (node.textContent !== this.text) {
+            // console.log("changing plain text from", node.textContent, "to", this.text);
+            node.textContent = this.text;
+        }
+    }
+
+    canUpdateDOMNode(node) {
+        return node.nodeType === Node.TEXT_NODE;
+    }
+}
+
+class PillPart extends BasePart {
+    acceptsInsertion(chr) {
+        return chr !== " ";
+    }
+
+    acceptsRemoval(position, chr) {
+        return position !== 0;  //if you remove initial # or @, pill should become plain
+    }
+
+    toDOMNode() {
+        const container = document.createElement("span");
+        container.className = this.type;
+        container.appendChild(document.createTextNode(this.text));
+        return container;
+    }
+
+    updateDOMNode(node) {
+        const textNode = node.childNodes[0];
+        if (textNode.textContent !== this.text) {
+            // console.log("changing pill text from", textNode.textContent, "to", this.text);
+            textNode.textContent = this.text;
+        }
+        if (node.className !== this.type) {
+            // console.log("turning", node.className, "into", this.type);
+            node.className = this.type;
+        }
+    }
+
+    canUpdateDOMNode(node) {
+        return node.nodeType === Node.ELEMENT_NODE &&
+               node.nodeName === "SPAN" &&
+               node.childNodes.length === 1 &&
+               node.childNodes[0].nodeType === Node.TEXT_NODE;
+    }
+}
+
+export class RoomPillPart extends PillPart {
+    get type() {
+        return "room-pill";
+    }
+}
+
+export class UserPillPart extends PillPart {
+    get type() {
+        return "user-pill";
+    }
+}
