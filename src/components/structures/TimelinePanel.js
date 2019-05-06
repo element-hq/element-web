@@ -402,6 +402,9 @@ const TimelinePanel = React.createClass({
         if (payload.action === 'ignore_state_changed') {
             this.forceUpdate();
         }
+        if (payload.action === "edit_event") {
+            this.setState({editEvent: payload.event});
+        }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
@@ -1244,6 +1247,7 @@ const TimelinePanel = React.createClass({
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
+                editEvent={this.state.editEvent}
             />
         );
     },
