@@ -1,3 +1,14 @@
+Changes in [1.1.0](https://github.com/vector-im/riot-web/releases/tag/v1.1.0) (2019-05-07)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.1.0-rc.1...v1.1.0)
+
+ * Add Dockerfile
+   [\#9632](https://github.com/vector-im/riot-web/pull/9632)
+ * Add Dockerfile (part 2)
+   [\#9426](https://github.com/vector-im/riot-web/pull/9426)
+ * Add new scalar staging url
+   [\#9601](https://github.com/vector-im/riot-web/pull/9601)
+
 Changes in [1.1.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.1.0-rc.1) (2019-04-30)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.8...v1.1.0-rc.1)
