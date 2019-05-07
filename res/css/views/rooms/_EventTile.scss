@@ -31,6 +31,7 @@ limitations under the License.
     top: 14px;
     left: 8px;
     cursor: pointer;
+    user-select: none;
 }
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
@@ -62,6 +63,7 @@ limitations under the License.
     vertical-align: top;
     height: 16px;
     overflow: hidden;
+    user-select: none;
 
     img {
         vertical-align: -2px;
@@ -80,6 +82,7 @@ limitations under the License.
     width: 46px; /* 8 + 30 (avatar) + 8 */
     text-align: center;
     position: absolute;
+    user-select: none;
 }
 
 .mx_EventTile_line, .mx_EventTile_reply {
@@ -118,7 +121,7 @@ limitations under the License.
 }
 
 .mx_EventTile:hover .mx_EventTile_line,
-.mx_EventTile.menu .mx_EventTile_line
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line
 {
     background-color: $event-selected-color;
 }
@@ -203,7 +206,7 @@ limitations under the License.
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile_last > div > a > .mx_MessageTimestamp,
 .mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.menu > div > a > .mx_MessageTimestamp {
+.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp {
     visibility: visible;
 }
 
@@ -216,24 +219,8 @@ limitations under the License.
     width: auto;
 }
 
-.mx_EventTile_editButton {
-    position: absolute;
-    display: inline-block;
-    visibility: hidden;
-    cursor: pointer;
-    top: 6px;
-    right: 6px;
-    width: 19px;
-    height: 19px;
-    background-image: url($edit-button-url);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.mx_EventTile:hover .mx_EventTile_editButton,
-.mx_EventTile.menu .mx_EventTile_editButton {
+.mx_EventTile:hover .mx_MessageActionBar,
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar {
     visibility: visible;
 }
 
@@ -243,6 +230,7 @@ limitations under the License.
     width: 14px;
     height: 14px;
     top: 29px;
+    user-select: none;
 }
 
 .mx_EventTile_continuation .mx_EventTile_readAvatars,
@@ -547,10 +535,6 @@ limitations under the License.
     }
 
     .mx_EventTile_e2eIcon {
-        top: 3px;
-    }
-
-    .mx_EventTile_editButton {
         top: 3px;
     }
 

@@ -31,8 +31,18 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
         // Class applied to the tooltip itself
         tooltipClassName: React.PropTypes.string,
+        // Whether the tooltip is visible or hidden.
+        // The hidden state allows animating the tooltip away via CSS.
+        // Defaults to visible if unset.
+        visible: React.PropTypes.bool,
         // the react element to put into the tooltip
         label: React.PropTypes.node,
+    },
+
+    getDefaultProps() {
+        return {
+            visible: true,
+        };
     },
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
@@ -85,7 +95,10 @@ module.exports = React.createClass({
         style = this._updatePosition(style);
         style.display = "block";
 
-        const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName);
+        const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
+            "mx_Tooltip_visible": this.props.visible,
+            "mx_Tooltip_invisible": !this.props.visible,
+        });
 
         const tooltip = (
             <div className={tooltipClasses} style={style}>

@@ -117,6 +117,7 @@ export default class RoomBreadcrumbs extends React.Component {
     };
 
     onRoomTimeline = (event, room) => {
+        if (!room) return; // Can be null for the notification timeline, etc.
         if (this.state.rooms.map(r => r.room.roomId).includes(room.roomId)) {
             this._calculateRoomBadges(room);
         }

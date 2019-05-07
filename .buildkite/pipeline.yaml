@@ -79,3 +79,13 @@ steps:
       - docker#v3.0.1:
           image: "node:10"
           propagate-environment: true
+
+  - wait
+ 
+  - label: "🐴 Trigger riot-web"
+    trigger: "riot-web"
+    branches: "develop"
+    build:
+        branch: "develop"
+        message: "[react-sdk] ${BUILDKITE_MESSAGE}"
+    async: true

@@ -1,0 +1,84 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageActionBar {
+    position: absolute;
+    visibility: hidden;
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 4px;
+    background: $message-action-bar-bg-color;
+    top: -13px;
+    right: 8px;
+    user-select: none;
+
+    > * {
+        display: inline-block;
+        position: relative;
+        width: 27px;
+        border: 1px solid $message-action-bar-border-color;
+        margin-left: -1px;
+
+        &:hover {
+            border-color: $message-action-bar-hover-border-color;
+            z-index: 1;
+        }
+
+        &:first-child {
+            border-radius: 3px 0 0 3px;
+        }
+
+        &:last-child {
+            border-radius: 0 3px 3px 0;
+        }
+
+        &:only-child {
+            border-radius: 3px;
+        }
+    }
+}
+
+.mx_MessageActionBar_maskButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $message-action-bar-fg-color;
+}
+
+.mx_MessageActionBar_replyButton::after {
+    mask-image: url('$(res)/img/reply.svg');
+}
+
+.mx_MessageActionBar_optionsButton::after {
+    mask-image: url('$(res)/img/icon_context.svg');
+}
+
+.mx_MessageActionBar_reactionDimension {
+    width: 42px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.mx_MessageActionBar_reactionDisabled {
+    opacity: 0.4;
+}

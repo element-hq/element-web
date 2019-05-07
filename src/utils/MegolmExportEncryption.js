@@ -147,7 +147,7 @@ export async function encryptMegolmKeyFile(data, password, options) {
     // clear bit 63 of the IV to stop us hitting the 64-bit counter boundary
     // (which would mean we wouldn't be able to decrypt on Android). The loss
     // of a single bit of iv is a price we have to pay.
-    iv[9] &= 0x7f;
+    iv[8] &= 0x7f;
 
     const [aesKey, hmacKey] = await deriveKeys(salt, kdfRounds, password);
     const encodedData = new TextEncoder().encode(data);

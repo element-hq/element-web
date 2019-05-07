@@ -229,7 +229,7 @@ Controllers are notified of changes by the `SettingsStore`, and are given the op
 
 ### Features
 
-Features automatically get considered as `disabled` if they are not listed in the `SdkConfig` or `enable_labs` is 
+Features automatically get considered as `disabled` if they are not listed in the `SdkConfig` or `enableLabs` is 
 false/not set. Features are always checked against the configuration before going through the level order as they have 
 the option of being forced-on or forced-off for the application. This is done by the `features` section and looks 
 something like this:

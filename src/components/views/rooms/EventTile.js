@@ -17,7 +17,6 @@ limitations under the License.
 
 'use strict';
 
-
 import ReplyThread from "../elements/ReplyThread";
 
 const React = require('react');
@@ -30,7 +29,6 @@ const sdk = require('../../../index');
 const TextForEvent = require('../../../TextForEvent');
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 
-const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
@@ -172,8 +170,8 @@ module.exports = withMatrixClient(React.createClass({
 
     getInitialState: function() {
         return {
-            // Whether the context menu is being displayed.
-            menu: false,
+            // Whether the action bar is focused.
+            actionBarFocused: false,
             // Whether all read receipts are being displayed. If not, only display
             // a truncation of them.
             allReadAvatars: false,
@@ -307,36 +305,6 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         return actions.tweaks.highlight;
-    },
-
-    onEditClicked: function(e) {
-        const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-        const buttonRect = e.target.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset;
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-        const self = this;
-
-        const {tile, replyThread} = this.refs;
-
-        let e2eInfoCallback = null;
-        if (this.props.mxEvent.isEncrypted()) e2eInfoCallback = () => this.onCryptoClicked();
-
-        ContextualMenu.createMenu(MessageContextMenu, {
-            chevronOffset: 10,
-            mxEvent: this.props.mxEvent,
-            left: x,
-            top: y,
-            permalinkCreator: this.props.permalinkCreator,
-            eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
-            collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
-            e2eInfoCallback: e2eInfoCallback,
-            onFinished: function() {
-                self.setState({menu: false});
-            },
-        });
-        this.setState({menu: true});
     },
 
     toggleAllReadAvatars: function() {
@@ -490,6 +458,20 @@ module.exports = withMatrixClient(React.createClass({
         return null;
     },
 
+    onActionBarFocusChange(focused) {
+        this.setState({
+            actionBarFocused: focused,
+        });
+    },
+
+    getTile() {
+        return this.refs.tile;
+    },
+
+    getReplyThread() {
+        return this.refs.replyThread;
+    },
+
     render: function() {
         const MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         const SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -536,7 +518,7 @@ module.exports = withMatrixClient(React.createClass({
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
-            menu: this.state.menu,
+            mx_EventTile_actionBarFocused: this.state.actionBarFocused,
             mx_EventTile_verified: this.state.verified === true,
             mx_EventTile_unverified: this.state.verified === false,
             mx_EventTile_bad: isEncryptionFailure,
@@ -602,9 +584,14 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        const editButton = (
-            <span className="mx_EventTile_editButton" title={_t("Options")} onClick={this.onEditClicked} />
-        );
+        const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
+        const actionBar = <MessageActionBar
+            mxEvent={this.props.mxEvent}
+            permalinkCreator={this.props.permalinkCreator}
+            getTile={this.getTile}
+            getReplyThread={this.getReplyThread}
+            onFocusChange={this.onActionBarFocusChange}
+        />;
 
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
@@ -642,6 +629,14 @@ module.exports = withMatrixClient(React.createClass({
                 </span>
                 <ToolTipButton helpText={keyRequestHelpText} />
             </div> : null;
+
+        let reactions;
+        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+            const ReactionsRow = sdk.getComponent('messages.ReactionsRow');
+            reactions = <ReactionsRow
+                mxEvent={this.props.mxEvent}
+            />;
+        }
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -755,7 +750,8 @@ module.exports = withMatrixClient(React.createClass({
                                            showUrlPreview={this.props.showUrlPreview}
                                            onHeightChanged={this.props.onHeightChanged} />
                             { keyRequestInfo }
-                            { editButton }
+                            { reactions }
+                            { actionBar }
                         </div>
                         {
                             // The avatar goes after the event tile as it's absolutly positioned to be over the

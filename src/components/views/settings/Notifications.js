@@ -507,6 +507,7 @@ module.exports = React.createClass({
                 //'.m.rule.member_event': 'vector',
                 '.m.rule.call': 'vector',
                 '.m.rule.suppress_notices': 'vector',
+                '.m.rule.tombstone': 'vector',
 
                 // Others go to others
             };
@@ -562,6 +563,7 @@ module.exports = React.createClass({
                 //'im.vector.rule.member_event',
                 '.m.rule.call',
                 '.m.rule.suppress_notices',
+                '.m.rule.tombstone',
             ];
             for (const i in vectorRuleIds) {
                 const vectorRuleId = vectorRuleIds[i];
@@ -702,6 +704,10 @@ module.exports = React.createClass({
         const rows = [];
         for (const i in this.state.vectorPushRules) {
             const rule = this.state.vectorPushRules[i];
+            if (rule.rule === undefined && rule.vectorRuleId.startsWith(".m.")) {
+                console.warn(`Skipping render of rule ${rule.vectorRuleId} due to no underlying rule`);
+                continue;
+            }
             //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }

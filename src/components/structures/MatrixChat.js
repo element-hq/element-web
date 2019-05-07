@@ -50,7 +50,6 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import TimelineExplosionDialog from "../views/dialogs/TimelineExplosionDialog";
 
 const AutoDiscovery = Matrix.AutoDiscovery;
 
@@ -248,17 +247,6 @@ export default React.createClass({
 
     getDefaultIsUrl() {
         return this.state.defaultIsUrl || "https://vector.im";
-    },
-
-    /**
-     * Whether to skip the server details phase of registration and start at the
-     * actual form.
-     * @return {boolean}
-     *     If there was a configured default HS or default server name, skip the
-     *     the server details.
-     */
-    skipServerDetailsForRegistration() {
-        return !!this.state.defaultHsUrl;
     },
 
     componentWillMount: function() {
@@ -1307,17 +1295,6 @@ export default React.createClass({
             return self._loggedInView.child.canResetTimelineInRoom(roomId);
         });
 
-        cli.on('sync.unexpectedError', function(err) {
-            if (err.message && err.message.includes("live timeline ") && err.message.includes(" is no longer live ")) {
-                console.error("Caught timeline explosion - trying to ask user for more information");
-                if (Modal.hasDialogs()) {
-                    console.warn("User has another dialog open - skipping prompt");
-                    return;
-                }
-                Modal.createTrackedDialog('Timeline exploded', '', TimelineExplosionDialog, {});
-            }
-        });
-
         cli.on('sync', function(state, prevState, data) {
             // LifecycleStore and others cannot directly subscribe to matrix client for
             // events because flux only allows store state changes during flux dispatches.
@@ -1985,7 +1962,6 @@ export default React.createClass({
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
-                    skipServerDetails={this.skipServerDetailsForRegistration()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
