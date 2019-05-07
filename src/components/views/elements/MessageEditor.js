@@ -19,8 +19,8 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
-import {PlainPart} from '../../../editor/parts';
 import {getCaretOffset, setCaretPosition} from '../../../editor/caret';
+import parseEvent from '../../../editor/parse-event';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
@@ -37,9 +37,7 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        const body = this.props.event.getContent().body;
-        this.model = new EditorModel();
-        this.model.update(body, undefined, {offset: body.length});
+        this.model = new EditorModel(parseEvent(this.props.event));
         this.state = {
             parts: this.model.serializeParts(),
         };
