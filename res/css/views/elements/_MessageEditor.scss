@@ -17,12 +17,28 @@ limitations under the License.
 .mx_MessageEditor {
     border-radius: 4px;
     background-color: #f3f8fd;
-    padding: 10px;
+    padding: 11px 13px 7px 56px;
 
     .editor {
         border-radius: 4px;
         border: solid 1px #e9edf1;
         background-color: #ffffff;
+        padding: 10px;
+
+        span {
+            display: inline-block;
+            padding: 0 5px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        span.user-pill {
+            background: red;
+        }
+
+        span.room-pill {
+            background: green;
+        }
     }
 
     .buttons {
@@ -38,5 +54,13 @@ limitations under the License.
             color: $button-fg-color;
             font-weight: 600;
         }
+    }
+
+    .model {
+        background: lightgrey;
+        padding: 5px;
+        display: block;
+        white-space: pre;
+        font-size: 12px;
     }
 }

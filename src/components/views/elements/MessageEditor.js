@@ -18,6 +18,9 @@ import sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
+import EditorModel from '../../../editor/model';
+import {PlainPart} from '../../../editor/parts';
+import {getCaretOffset, setCaretPosition} from '../../../editor/caret';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
@@ -34,8 +37,24 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = {};
+        const body = this.props.event.getContent().body;
+        this.model = new EditorModel();
+        this.model.update(body, undefined, {offset: body.length});
+        this.state = {
+            parts: this.model.serializeParts(),
+        };
         this._onCancelClicked = this._onCancelClicked.bind(this);
+        this._onInput = this._onInput.bind(this);
+    }
+
+    _onInput(event) {
+        const editor = event.target;
+        const caretOffset = getCaretOffset(editor);
+        const caret = this.model.update(editor.textContent, event.inputType, caretOffset);
+        const parts = this.model.serializeParts();
+        this.setState({parts}, () => {
+            setCaretPosition(editor, caret);
+        });
     }
 
     _onCancelClicked() {
@@ -43,14 +62,24 @@ export default class MessageEditor extends React.Component {
     }
 
     render() {
+        const parts = this.state.parts.map((p, i) => {
+            const key = `${i}-${p.type}`;
+            switch (p.type) {
+                case "plain": return p.text;
+                case "room-pill": return (<span key={key} className="room-pill">{p.text}</span>);
+                case "user-pill": return (<span key={key} className="user-pill">{p.text}</span>);
+            }
+        });
+        const modelOutput = JSON.stringify(this.state.parts, undefined, 2);
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div className="mx_MessageEditor">
-                <div className="editor" contentEditable="true">
-                    {this.props.event.getContent().body}
+                <div className="editor" contentEditable="true" tabIndex="1" suppressContentEditableWarning={true} onInput={this._onInput}>
+                    {parts}
                 </div>
                 <div className="buttons">
                     <AccessibleButton onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
                 </div>
+                <code className="model">{modelOutput}</code>
             </div>;
     }
 }

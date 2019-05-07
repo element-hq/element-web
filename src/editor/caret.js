@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function getCaretPosition(editor) {
+export function getCaretOffset(editor) {
     const sel = document.getSelection();
     const atNodeEnd = sel.focusOffset === sel.focusNode.textContent.length;
-    let position = sel.focusOffset;
+    let offset = sel.focusOffset;
     let node = sel.focusNode;
 
     // when deleting the last character of a node,
     // the caret gets reported as being after the focusOffset-th node,
     // with the focusNode being the editor
     if (node === editor) {
-        let position = 0;
+        let offset = 0;
         for (let i = 0; i < sel.focusOffset; ++i) {
-            position += editor.childNodes[i].textContent.length;
+            offset += editor.childNodes[i].textContent.length;
         }
-        return {position, atNodeEnd: false};
+        return {offset, atNodeEnd: false};
     }
 
     // first make sure we're at the level of a direct child of editor
@@ -36,7 +36,7 @@ export function getCaretPosition(editor) {
         // include all preceding siblings of the non-direct editor children
         while (node.previousSibling) {
             node = node.previousSibling;
-            position += node.textContent.length;
+            offset += node.textContent.length;
         }
         // then move up
         // I guess technically there could be preceding text nodes in the parents here as well,
@@ -48,13 +48,13 @@ export function getCaretPosition(editor) {
     // now include the text length of all preceding direct editor children
     while (node.previousSibling) {
         node = node.previousSibling;
-        position += node.textContent.length;
+        offset += node.textContent.length;
     }
-    {
-        const {focusOffset, focusNode} = sel;
-        console.log("selection", {focusOffset, focusNode, position, atNodeEnd});
-    }
-    return {position, atNodeEnd};
+    // {
+    //     const {focusOffset, focusNode} = sel;
+    //     console.log("selection", {focusOffset, focusNode, position, atNodeEnd});
+    // }
+    return {offset, atNodeEnd};
 }
 
 export function setCaretPosition(editor, caretPosition) {

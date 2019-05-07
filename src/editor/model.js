@@ -40,18 +40,22 @@ export default class EditorModel {
         return this._parts;
     }
 
+    serializeParts() {
+        return this._parts.map(({type, text}) => {return {type, text};});
+    }
+
     _diff(newValue, inputType, caret) {
         if (inputType === "deleteByDrag") {
             return diffDeletion(this._previousValue, newValue);
         } else {
-            return diffAtCaret(this._previousValue, newValue, caret.position);
+            return diffAtCaret(this._previousValue, newValue, caret.offset);
         }
     }
 
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this._positionForOffset(diff.at, caret.atNodeEnd);
-        console.log("update at", {position, diff});
+        console.log("update at", {position, diff, newValue, prevValue: this._previousValue});
         if (diff.removed) {
             this._removeText(position, diff.removed.length);
         }
