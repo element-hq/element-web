@@ -33,7 +33,7 @@ const FIELD_USERNAME = 'field_username';
 const FIELD_PASSWORD = 'field_password';
 const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
 
-const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
+const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 /**
  * A pure UI component which displays a registration form.
