@@ -1,3 +1,14 @@
+Changes in [1.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.0) (2019-05-07)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.0-rc.1...v1.1.0)
+
+ * Relax password requirements to score of 3 out of 4
+   [\#2949](https://github.com/matrix-org/matrix-react-sdk/pull/2949)
+ * Restore access to message quote option on first click
+   [\#2948](https://github.com/matrix-org/matrix-react-sdk/pull/2948)
+ * Check for `room` in all `Room.timeline*` handlers
+   [\#2946](https://github.com/matrix-org/matrix-react-sdk/pull/2946)
+
 Changes in [1.1.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.0-rc.1) (2019-04-30)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.7...v1.1.0-rc.1)
