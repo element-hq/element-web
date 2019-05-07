@@ -464,6 +464,14 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
+    getTile() {
+        return this.refs.tile;
+    },
+
+    getReplyThread() {
+        return this.refs.replyThread;
+    },
+
     render: function() {
         const MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         const SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -580,8 +588,8 @@ module.exports = withMatrixClient(React.createClass({
         const actionBar = <MessageActionBar
             mxEvent={this.props.mxEvent}
             permalinkCreator={this.props.permalinkCreator}
-            tile={this.refs.tile}
-            replyThread={this.refs.replyThread}
+            getTile={this.getTile}
+            getReplyThread={this.getReplyThread}
             onFocusChange={this.onActionBarFocusChange}
         />;
 

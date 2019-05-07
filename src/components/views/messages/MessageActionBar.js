@@ -30,8 +30,8 @@ export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
         permalinkCreator: PropTypes.object,
-        tile: PropTypes.element,
-        replyThread: PropTypes.element,
+        getTile: PropTypes.func,
+        getReplyThread: PropTypes.func,
         onFocusChange: PropTypes.func,
     };
 
@@ -99,7 +99,9 @@ export default class MessageActionBar extends React.PureComponent {
         const x = buttonRect.right + window.pageXOffset;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
-        const {tile, replyThread} = this.props;
+        const { getTile, getReplyThread } = this.props;
+        const tile = getTile && getTile();
+        const replyThread = getReplyThread && getReplyThread();
 
         let e2eInfoCallback = null;
         if (this.props.mxEvent.isEncrypted()) {
