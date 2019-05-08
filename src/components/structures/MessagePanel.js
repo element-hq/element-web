@@ -92,6 +92,9 @@ module.exports = React.createClass({
 
         // show timestamps always
         alwaysShowTimestamps: PropTypes.bool,
+
+        // helper function to access relations for an event
+        getRelationsForEvent: PropTypes.func,
     },
 
     componentWillMount: function() {
@@ -529,6 +532,7 @@ module.exports = React.createClass({
                     permalinkCreator={this.props.permalinkCreator}
                     last={last}
                     isSelectedEvent={highlight}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
                 />
             </li>,
         );

@@ -159,6 +159,9 @@ module.exports = withMatrixClient(React.createClass({
 
         // show twelve hour timestamps
         isTwelveHour: PropTypes.bool,
+
+        // helper function to access relations for an event
+        getRelationsForEvent: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -472,6 +475,17 @@ module.exports = withMatrixClient(React.createClass({
         return this.refs.replyThread;
     },
 
+    getReactions() {
+        if (
+            !SettingsStore.isFeatureEnabled("feature_reactions") ||
+            !this.props.getRelationsForEvent
+        ) {
+            return null;
+        }
+        const eventId = this.props.mxEvent.getId();
+        return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
+    },
+
     render: function() {
         const MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         const SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -584,9 +598,11 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
+        const reactions = this.getReactions();
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
         const actionBar = <MessageActionBar
             mxEvent={this.props.mxEvent}
+            reactions={reactions}
             permalinkCreator={this.props.permalinkCreator}
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
@@ -630,11 +646,12 @@ module.exports = withMatrixClient(React.createClass({
                 <ToolTipButton helpText={keyRequestHelpText} />
             </div> : null;
 
-        let reactions;
+        let reactionsRow;
         if (SettingsStore.isFeatureEnabled("feature_reactions")) {
             const ReactionsRow = sdk.getComponent('messages.ReactionsRow');
-            reactions = <ReactionsRow
+            reactionsRow = <ReactionsRow
                 mxEvent={this.props.mxEvent}
+                reactions={reactions}
             />;
         }
 
@@ -750,7 +767,7 @@ module.exports = withMatrixClient(React.createClass({
                                            showUrlPreview={this.props.showUrlPreview}
                                            onHeightChanged={this.props.onHeightChanged} />
                             { keyRequestInfo }
-                            { reactions }
+                            { reactionsRow }
                             { actionBar }
                         </div>
                         {

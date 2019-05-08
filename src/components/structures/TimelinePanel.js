@@ -1168,6 +1168,10 @@ const TimelinePanel = React.createClass({
         });
     },
 
+    getRelationsForEvent(...args) {
+        return this.props.timelineSet.getRelationsForEvent(...args);
+    },
+
     render: function() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -1239,6 +1243,7 @@ const TimelinePanel = React.createClass({
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
+                getRelationsForEvent={this.getRelationsForEvent}
             />
         );
     },

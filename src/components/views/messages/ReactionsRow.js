@@ -20,37 +20,24 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { isContentActionable } from '../../../utils/EventUtils';
 
-// TODO: Actually load reactions from the timeline
-// Since we don't yet load reactions, let's inject some dummy data for testing the UI
-// only. The UI assumes these are already sorted into the order we want to present,
-// presumably highest vote first.
-const SAMPLE_REACTIONS = {
-    "👍": 4,
-    "👎": 2,
-    "🙂": 1,
-};
-
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for
         mxEvent: PropTypes.object.isRequired,
+        // The Relations model from the JS SDK for reactions to `mxEvent`
+        reactions: PropTypes.object,
     }
 
     render() {
-        const { mxEvent } = this.props;
+        const { mxEvent, reactions } = this.props;
 
-        if (!isContentActionable(mxEvent)) {
-            return null;
-        }
-
-        const content = mxEvent.getContent();
-        // TODO: Remove this once we load real reactions
-        if (!content.body || content.body !== "reactions test") {
+        if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        const items = Object.entries(SAMPLE_REACTIONS).map(([content, count]) => {
+        const items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
+            const count = events.length;
             return <ReactionsRowButton
                 key={content}
                 content={content}

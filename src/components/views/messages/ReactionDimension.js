@@ -18,18 +18,54 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import MatrixClientPeg from '../../../MatrixClientPeg';
+
 export default class ReactionDimension extends React.PureComponent {
     static propTypes = {
         options: PropTypes.array.isRequired,
         title: PropTypes.string,
+        // The Relations model from the JS SDK for reactions
+        reactions: PropTypes.object,
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            selected: null,
+            selected: this.getInitialSelection(),
         };
+    }
+
+    getInitialSelection() {
+        const myReactions = this.getMyReactions();
+        if (!myReactions) {
+            return null;
+        }
+        const { options } = this.props;
+        let selected = null;
+        for (const { key, content } of options) {
+            const reactionExists = myReactions.some(mxEvent => {
+                return mxEvent.getContent()["m.relates_to"].key === content;
+            });
+            if (reactionExists) {
+                if (selected) {
+                    // If there are multiple selected values (only expected to occur via
+                    // non-Riot clients), then act as if none are selected.
+                    return null;
+                }
+                selected = key;
+            }
+        }
+        return selected;
+    }
+
+    getMyReactions() {
+        const reactions = this.props.reactions;
+        if (!reactions) {
+            return null;
+        }
+        const userId = MatrixClientPeg.get().getUserId();
+        return reactions.getAnnotationsBySender()[userId];
     }
 
     onOptionClick = (ev) => {
