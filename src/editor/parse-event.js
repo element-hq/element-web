@@ -19,6 +19,9 @@ import { PlainPart, UserPillPart, RoomPillPart } from "./parts";
 
 function parseHtmlMessage(html) {
     const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+    // no nodes from parsing here should be inserted in the document,
+    // as scripts in event handlers, etc would be executed then.
+    // we're only taking text, so that is fine
     const nodes = Array.from(new DOMParser().parseFromString(html, "text/html").body.childNodes);
     const parts = nodes.map(n => {
         switch (n.nodeType) {

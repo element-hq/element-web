@@ -45,6 +45,7 @@ export default class EditorModel {
     }
 
     _diff(newValue, inputType, caret) {
+        // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
             return diffDeletion(this._previousValue, newValue);
         } else {
