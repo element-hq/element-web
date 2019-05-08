@@ -26,7 +26,10 @@ export function getCaretOffset(editor) {
     if (node === editor) {
         let offset = 0;
         for (let i = 0; i < sel.focusOffset; ++i) {
-            offset += editor.childNodes[i].textContent.length;
+            const node = editor.childNodes[i];
+            if (isVisibleNode(node)) {
+                offset += node.textContent.length;
+            }
         }
         return {offset, atNodeEnd: false};
     }
@@ -36,7 +39,9 @@ export function getCaretOffset(editor) {
         // include all preceding siblings of the non-direct editor children
         while (node.previousSibling) {
             node = node.previousSibling;
-            offset += node.textContent.length;
+            if (isVisibleNode(node)) {
+                offset += node.textContent.length;
+            }
         }
         // then move up
         // I guess technically there could be preceding text nodes in the parents here as well,
@@ -48,7 +53,9 @@ export function getCaretOffset(editor) {
     // now include the text length of all preceding direct editor children
     while (node.previousSibling) {
         node = node.previousSibling;
-        offset += node.textContent.length;
+        if (isVisibleNode(node)) {
+            offset += node.textContent.length;
+        }
     }
     // {
     //     const {focusOffset, focusNode} = sel;
@@ -57,22 +64,40 @@ export function getCaretOffset(editor) {
     return {offset, atNodeEnd};
 }
 
-export function setCaretPosition(editor, caretPosition) {
-    if (caretPosition) {
-        let focusNode = editor.childNodes[caretPosition.index];
-        if (!focusNode) {
-            focusNode = editor;
-        } else {
-            // make sure we have a text node
-            if (focusNode.nodeType === Node.ELEMENT_NODE) {
-                focusNode = focusNode.childNodes[0];
-            }
-        }
-        const sel = document.getSelection();
-        sel.removeAllRanges();
-        const range = document.createRange();
-        range.setStart(focusNode, caretPosition.offset);
-        range.collapse(true);
-        sel.addRange(range);
+function isVisibleNode(node) {
+    return node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE;
+}
+
+function untilVisibleNode(node) {
+    // need to ignore comment nodes that react uses
+    while (node && !isVisibleNode(node)) {
+        node = node.nextSibling;
     }
+    return node;
+}
+
+export function setCaretPosition(editor, caretPosition) {
+    let node = untilVisibleNode(editor.firstChild);
+    if (!node) {
+        node = editor;
+    } else {
+        let {index} = caretPosition;
+        while (node && index) {
+            node = untilVisibleNode(node.nextSibling);
+            --index;
+        }
+        if (!node) {
+            node = editor;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            // make sure we have a text node
+            node = node.childNodes[0];
+        }
+    }
+    console.log("setting caret", caretPosition, node);
+    const sel = document.getSelection();
+    sel.removeAllRanges();
+    const range = document.createRange();
+    range.setStart(node, caretPosition.offset);
+    range.collapse(true);
+    sel.addRange(range);
 }
