@@ -21,6 +21,7 @@ import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffset, setCaretPosition} from '../../../editor/caret';
 import parseEvent from '../../../editor/parse-event';
+import {renderModel, rerenderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
@@ -38,46 +39,66 @@ export default class MessageEditor extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.model = new EditorModel(parseEvent(this.props.event));
-        this.state = {
-            parts: this.model.serializeParts(),
-        };
-        this._onCancelClicked = this._onCancelClicked.bind(this);
-        this._onInput = this._onInput.bind(this);
+        this.state = {};
+        this._editorRef = null;
     }
 
-    _onInput(event) {
-        const editor = event.target;
-        const caretOffset = getCaretOffset(editor);
-        const caret = this.model.update(editor.textContent, event.inputType, caretOffset);
-        const parts = this.model.serializeParts();
-        this.setState({parts}, () => {
-            setCaretPosition(editor, caret);
-        });
+    _onInput = (event) => {
+        const caretOffset = getCaretOffset(this._editorRef);
+        const caret = this.model.update(this._editorRef.textContent, event.inputType, caretOffset);
+        // const parts = this.model.serializeParts();
+        const shouldRerender = event.inputType === "insertFromDrop" || event.inputType === "insertFromPaste";
+        if (shouldRerender) {
+            rerenderModel(this._editorRef, this.model);
+        } else {
+            renderModel(this._editorRef, this.model);
+        }
+        setCaretPosition(this._editorRef, caret);
+
+        const modelOutput = this._editorRef.parentElement.querySelector(".model");
+        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
     }
 
-    _onCancelClicked() {
+    _onCancelClicked = () => {
         dis.dispatch({action: "edit_event", event: null});
     }
 
+    _collectEditorRef = (ref) => {
+        this._editorRef = ref;
+    }
+
+    componentDidMount() {
+        const editor = this._editorRef;
+        rerenderModel(editor, this.model);
+        const modelOutput = this._editorRef.parentElement.querySelector(".model");
+        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
+    }
+
     render() {
-        const parts = this.state.parts.map((p, i) => {
-            const key = `${i}-${p.type}`;
-            switch (p.type) {
-                case "plain": return p.text;
-                case "room-pill": return (<span key={key} className="room-pill">{p.text}</span>);
-                case "user-pill": return (<span key={key} className="user-pill">{p.text}</span>);
-            }
-        });
-        const modelOutput = JSON.stringify(this.state.parts, undefined, 2);
+        // const parts = this.state.parts.map((p, i) => {
+        //     const key = `${i}-${p.type}`;
+        //     switch (p.type) {
+        //         case "plain": return p.text;
+        //         case "room-pill": return (<span key={key} className="room-pill">{p.text}</span>);
+        //         case "user-pill": return (<span key={key} className="user-pill">{p.text}</span>);
+        //     }
+        // });
+        // const modelOutput = JSON.stringify(this.state.parts, undefined, 2);
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div className="mx_MessageEditor">
-                <div className="editor" contentEditable="true" tabIndex="1" suppressContentEditableWarning={true} onInput={this._onInput}>
-                    {parts}
+                <div
+                    className="editor"
+                    contentEditable="true"
+                    tabIndex="1"
+                    // suppressContentEditableWarning={true}
+                    onInput={this._onInput}
+                    ref={this._collectEditorRef}
+                >
                 </div>
                 <div className="buttons">
                     <AccessibleButton onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
                 </div>
-                <code className="model">{modelOutput}</code>
+                <code className="model"></code>
             </div>;
     }
 }
