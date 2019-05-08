@@ -297,7 +297,7 @@
     "Show recent room avatars above the room list": "Show recent room avatars above the room list",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Group & filter rooms by custom tags (refresh to apply changes)",
     "Render simple counters in room header": "Render simple counters in room header",
-    "React to messages with emoji": "React to messages with emoji",
+    "React to messages with emoji (refresh to apply changes)": "React to messages with emoji (refresh to apply changes)",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
     "Show a placeholder for removed messages": "Show a placeholder for removed messages",
