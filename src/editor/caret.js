@@ -93,7 +93,6 @@ export function setCaretPosition(editor, caretPosition) {
             node = node.childNodes[0];
         }
     }
-    console.log("setting caret", caretPosition, node);
     const sel = document.getSelection();
     sel.removeAllRanges();
     const range = document.createRange();
