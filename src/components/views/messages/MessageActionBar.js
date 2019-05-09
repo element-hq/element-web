@@ -102,19 +102,9 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "agree",
-                content: "👍",
-            },
-            {
-                key: "disagree",
-                content: "👎",
-            },
-        ];
         return <ReactionDimension
             title={_t("Agree or Disagree")}
-            options={options}
+            options={["👍", "👎"]}
             reactions={this.props.reactions}
         />;
     }
@@ -125,19 +115,9 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "like",
-                content: "🙂",
-            },
-            {
-                key: "dislike",
-                content: "😔",
-            },
-        ];
         return <ReactionDimension
             title={_t("Like or Dislike")}
-            options={options}
+            options={["🙂", "😔"]}
             reactions={this.props.reactions}
         />;
     }

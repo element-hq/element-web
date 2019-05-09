@@ -22,6 +22,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class ReactionDimension extends React.PureComponent {
     static propTypes = {
+        // Array of strings containing the emoji for each option
         options: PropTypes.array.isRequired,
         title: PropTypes.string,
         // The Relations model from the JS SDK for reactions
@@ -68,12 +69,12 @@ export default class ReactionDimension extends React.PureComponent {
         }
         const { options } = this.props;
         let selected = null;
-        for (const { key, content } of options) {
+        for (const option of options) {
             const reactionExists = myReactions.some(mxEvent => {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
-                return mxEvent.getContent()["m.relates_to"].key === content;
+                return mxEvent.getContent()["m.relates_to"].key === option;
             });
             if (reactionExists) {
                 if (selected) {
@@ -81,7 +82,7 @@ export default class ReactionDimension extends React.PureComponent {
                     // non-Riot clients), then act as if none are selected.
                     return null;
                 }
-                selected = key;
+                selected = option;
             }
         }
         return selected;
@@ -98,12 +99,12 @@ export default class ReactionDimension extends React.PureComponent {
 
     onOptionClick = (ev) => {
         const { key } = ev.target.dataset;
-        this.toggleDimensionValue(key);
+        this.toggleDimension(key);
     }
 
-    toggleDimensionValue(value) {
+    toggleDimension(key) {
         const state = this.state.selected;
-        const newState = state !== value ? value : null;
+        const newState = state !== key ? key : null;
         this.setState({
             selected: newState,
         });
@@ -115,16 +116,16 @@ export default class ReactionDimension extends React.PureComponent {
         const { options } = this.props;
 
         const items = options.map(option => {
-            const disabled = selected && selected !== option.key;
+            const disabled = selected && selected !== option;
             const classes = classNames({
                 mx_ReactionDimension_disabled: disabled,
             });
-            return <span key={option.key}
-                data-key={option.key}
+            return <span key={option}
+                data-key={option}
                 className={classes}
                 onClick={this.onOptionClick}
             >
-                {option.content}
+                {option}
             </span>;
         });
 
