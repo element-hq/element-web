@@ -89,6 +89,7 @@ export default class AutocompleteWrapperModel {
                 const displayAlias = completion.completionId;
                 return new RoomPillPart(displayAlias);
             }
+            // also used for emoji completion
             default:
                 return new PlainPart(completion.completion);
         }
