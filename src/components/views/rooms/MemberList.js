@@ -20,6 +20,8 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {isValid3pidInvite} from "../../../RoomInvite";
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -347,6 +349,13 @@ module.exports = React.createClass({
         });
     },
 
+    _onPending3pidInviteClick: function(inviteEvent) {
+        dis.dispatch({
+            action: 'view_3pid_invite',
+            event: inviteEvent,
+        });
+    },
+
     _filterMembers: function(members, membership, query) {
         return members.filter((m) => {
             if (query) {
@@ -372,11 +381,7 @@ module.exports = React.createClass({
 
         if (room) {
             return room.currentState.getStateEvents("m.room.third_party_invite").filter(function(e) {
-                // any events without these keys are not valid 3pid invites, so we ignore them
-                const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
-                for (let i = 0; i < requiredKeys.length; ++i) {
-                    if (e.getContent()[requiredKeys[i]] === undefined) return false;
-                }
+                if (!isValid3pidInvite(e)) return false;
 
                 // discard all invites which have a m.room.member event since we've
                 // already added them.
@@ -408,6 +413,7 @@ module.exports = React.createClass({
                 return <EntityTile key={e.getStateKey()}
                     name={e.getContent().display_name}
                     suppressOnHover={true}
+                    onClick={() => this._onPending3pidInviteClick(e)}
                 />;
             }));
         }
@@ -439,7 +445,6 @@ module.exports = React.createClass({
 
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
@@ -466,7 +471,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     <div className="mx_MemberList_wrapper">
                         <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
@@ -475,7 +480,7 @@ module.exports = React.createClass({
                         { invitedHeader }
                         { invitedSection }
                     </div>
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
 
                 <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
                            placeholder={ _t('Filter room members') }

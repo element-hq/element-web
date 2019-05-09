@@ -40,7 +40,7 @@ $tagpanel-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: #111316;
+$event-selected-color: $header-panel-bg-color;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: $header-panel-border-color;
@@ -72,7 +72,7 @@ $avatar-bg-color: $bg-color;
 
 $h3-color: $primary-fg-color;
 
-$dialog-title-fg-color: #454545;
+$dialog-title-fg-color: $base-text-color;
 $dialog-backdrop-color: #000;
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
 $dialog-close-fg-color: #9fa9ba;
@@ -145,6 +145,17 @@ $room-warning-bg-color: $header-panel-bg-color;
 
 $dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
+
+$message-action-bar-bg-color: $header-panel-bg-color;
+$message-action-bar-fg-color: $header-panel-text-primary-color;
+$message-action-bar-border-color: #616b7f;
+$message-action-bar-hover-border-color: $header-panel-text-primary-color;
+
+$reaction-row-button-bg-color: $header-panel-bg-color;
+$reaction-row-button-border-color: #616b7f;
+$reaction-row-button-hover-border-color: $header-panel-text-primary-color;
+$reaction-row-button-selected-bg-color: #1f6954;
+$reaction-row-button-selected-border-color: $accent-color;
 
 // ***** Mixins! *****
 

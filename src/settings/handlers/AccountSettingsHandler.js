@@ -19,6 +19,8 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
 
+const BREADCRUMBS_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
+
 /**
  * Gets and sets settings at the "account" level for the current user.
  * This handler does not make use of the roomId parameter.
@@ -55,6 +57,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 const val = event.getContent()[settingName];
                 this._watchers.notifyUpdate(settingName, null, SettingLevel.ACCOUNT, val);
             }
+        } else if (event.getType() === BREADCRUMBS_EVENT_TYPE) {
+            const val = event.getContent()['rooms'] || [];
+            this._watchers.notifyUpdate("breadcrumb_rooms", null, SettingLevel.ACCOUNT, val);
         }
     }
 
@@ -66,6 +71,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             // Check to make sure that we actually got a boolean
             if (typeof(content['disable']) !== "boolean") return null;
             return !content['disable'];
+        }
+
+        // Special case for breadcrumbs
+        if (settingName === "breadcrumb_rooms") {
+            const content = this._getSettings(BREADCRUMBS_EVENT_TYPE) || {};
+            return content['rooms'] || [];
         }
 
         const settings = this._getSettings() || {};
@@ -87,6 +98,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             const content = this._getSettings("org.matrix.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
+        }
+
+        // Special case for breadcrumbs
+        if (settingName === "breadcrumb_rooms") {
+            const content = this._getSettings(BREADCRUMBS_EVENT_TYPE) || {};
+            content['rooms'] = newValue;
+            return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
         }
 
         const content = this._getSettings() || {};

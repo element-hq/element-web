@@ -1335,5 +1335,7 @@
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s zaktualizował(a) ten pokój.",
     "Show display name changes": "Pokaż zmiany wyświetlanej nazwy",
     "Show read receipts": "Wyświetl potwierdzenia odczytu",
-    "Send typing notifications": "Wyślij powiadomienia o pisaniu"
+    "Send typing notifications": "Wyślij powiadomienia o pisaniu",
+    "I don't want my encrypted messages": "Nie chcę moich zaszyfrowanych wiadomości",
+    "You'll lose access to your encrypted messages": "Utracisz dostęp do zaszyfrowanych wiadomości"
 }

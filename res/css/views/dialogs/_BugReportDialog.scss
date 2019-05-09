@@ -14,39 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_BugReportDialog_field_container {
-    display: flex;
-}
-
-.mx_BugReportDialog_field_label {
-    flex-basis: 150px;
-
-    text-align: right;
-
-    padding-top: 9px;
-    padding-right: 4px;
-
-    line-height: 18px;
+.mx_BugReportDialog .mx_Field {
+    flex: 1;
 }
 
 .mx_BugReportDialog_field_input {
-    flex-grow: 1;
-
-    /* taken from mx_ChatInviteDialog_inputContainer */
-    border-radius: 3px;
-    border: solid 1px $input-border-color;
-
-    font-size: 14px;
-
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-
-    margin-bottom: 4px;
-}
-
-.mx_BugReportDialog_field_input[type="text" i] {
-    padding-top: 9px;
-    padding-bottom: 9px;
+    // TODO: We should really apply this to all .mx_Field inputs.
+    // See https://github.com/vector-im/riot-web/issues/9344.
+    flex: 1;
 }

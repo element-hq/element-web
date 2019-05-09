@@ -294,6 +294,8 @@ module.exports = React.createClass({
         const fileName = content.body && content.body.length > 0 ? content.body : _t("Attachment");
         const contentUrl = this._getContentUrl();
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const fileSize = content.info ? content.info.size : null;
+        const fileType = content.info ? content.info.mimetype : "application/octet-stream";
 
         if (isEncrypted) {
             if (this.state.decryptedBlob === null) {
@@ -372,6 +374,50 @@ module.exports = React.createClass({
                 </span>
             );
         } else if (contentUrl) {
+            const downloadProps = {
+                target: "_blank",
+                rel: "noopener",
+
+                // We set the href regardless of whether or not we intercept the download
+                // because we don't really want to convert the file to a blob eagerly, and
+                // still want "open in new tab" and "save link as" to work.
+                href: contentUrl,
+            };
+
+            // Blobs can only have up to 500mb, so if the file reports as being too large then
+            // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
+            // it is too big. There is the risk of the reported file size and the actual file size
+            // being different, however the user shouldn't normally run into this problem.
+            const fileTooBig = typeof(fileSize) === 'number' ? fileSize > 524288000 : true;
+
+            if (["application/pdf"].includes(fileType) && !fileTooBig) {
+                // We want to force a download on this type, so use an onClick handler.
+                downloadProps["onClick"] = (e) => {
+                    console.log(`Downloading ${fileType} as blob (unencrypted)`);
+
+                    // Avoid letting the <a> do its thing
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Start a fetch for the download
+                    // Based upon https://stackoverflow.com/a/49500465
+                    fetch(contentUrl).then((response) => response.blob()).then((blob) => {
+                        const blobUrl = URL.createObjectURL(blob);
+
+                        // We have to create an anchor to download the file
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.download = fileName;
+                        tempAnchor.href = blobUrl;
+                        document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
+                        tempAnchor.click();
+                        tempAnchor.remove();
+                    });
+                };
+            } else {
+                // Else we are hoping the browser will do the right thing
+                downloadProps["download"] = fileName;
+            }
+
             // If the attachment is not encrypted then we check whether we
             // are being displayed in the room timeline or in a list of
             // files in the right hand side of the screen.
@@ -379,7 +425,7 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
-                            <a className="mx_MFileBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
+                            <a className="mx_MFileBody_downloadLink" {...downloadProps}>
                                 { fileName }
                             </a>
                             <div className="mx_MImageBody_size">
@@ -392,7 +438,7 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
-                            <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
+                            <a {...downloadProps}>
                                 <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
                                 { _t("Download %(text)s", { text: text }) }
                             </a>

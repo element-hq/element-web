@@ -31,6 +31,7 @@ import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
+import * as StorageManager from './utils/StorageManager';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -103,7 +104,7 @@ class MatrixClientPeg {
             } catch (err) {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
-                    this.matrixClient.store = new Matrix.MatrixInMemoryStore({
+                    this.matrixClient.store = new Matrix.MemoryStore({
                       localStorage: global.localStorage,
                     });
                 } else {
@@ -113,6 +114,8 @@ class MatrixClientPeg {
             }
         }
 
+        StorageManager.trackStores(this.matrixClient);
+
         // try to initialise e2e on the new client
         try {
             // check that we have a version of the js-sdk which includes initCrypto
@@ -120,7 +123,7 @@ class MatrixClientPeg {
                 await this.matrixClient.initCrypto();
             }
         } catch (e) {
-            if (e.name === 'InvalidCryptoStoreError') {
+            if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
@@ -130,7 +133,7 @@ class MatrixClientPeg {
             }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
-            console.warn("Unable to initialise e2e: " + e);
+            console.warn("Unable to initialise e2e", e);
         }
 
         const opts = utils.deepCopy(this.opts);
@@ -171,7 +174,7 @@ class MatrixClientPeg {
         return matches[1];
     }
 
-    _createClient(creds: MatrixClientCreds, useIndexedDb) {
+    _createClient(creds: MatrixClientCreds) {
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -183,7 +186,7 @@ class MatrixClientPeg {
             verificationMethods: [verificationMethods.SAS]
         };
 
-        this.matrixClient = createMatrixClient(opts, useIndexedDb);
+        this.matrixClient = createMatrixClient(opts);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

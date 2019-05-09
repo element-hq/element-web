@@ -144,7 +144,7 @@ module.exports = React.createClass({
 
     _launchManageIntegrations: function() {
         const IntegrationsManager = sdk.getComponent('views.settings.IntegrationsManager');
-        this._scalarClient.connect().done(() => {
+        this.scalarClient.connect().done(() => {
             const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room, 'add_integ') :
                 null;

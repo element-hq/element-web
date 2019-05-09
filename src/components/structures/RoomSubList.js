@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -146,8 +146,8 @@ const RoomSubList = React.createClass({
             key={room.roomId}
             collapsed={this.props.collapsed || false}
             unread={Unread.doesRoomHaveUnreadMessages(room)}
-            highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
-            notificationCount={room.getUnreadNotificationCount()}
+            highlight={this.props.isInvite || RoomNotifs.getUnreadNotificationCount(room, 'highlight') > 0}
+            notificationCount={RoomNotifs.getUnreadNotificationCount(room)}
             isInvite={this.props.isInvite}
             refreshSubList={this._updateSubListCount}
             incomingCall={null}

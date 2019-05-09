@@ -431,7 +431,7 @@ module.exports = React.createClass({
 
         const stripReply = ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: !SettingsStore.getValue('TextualBody.enableBigEmoji'),
+            disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         });

@@ -220,7 +220,17 @@ const Notifier = {
         }
     },
 
-    isToolbarHidden: function() {
+    shouldShowToolbar: function() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            return false;
+        }
+        const isGuest = client.isGuest();
+        return !isGuest && this.supportsDesktopNotifications() &&
+            !this.isEnabled() && !this._isToolbarHidden();
+    },
+
+    _isToolbarHidden: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
             return global.localStorage.getItem("notifications_hidden") === "true";

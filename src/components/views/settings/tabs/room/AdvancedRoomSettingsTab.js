@@ -21,10 +21,12 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
+import dis from "../../../../../dispatcher";
 
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
+        closeSettingsFn: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -38,8 +40,25 @@ export default class AdvancedRoomSettingsTab extends React.Component {
 
     componentWillMount() {
         // we handle lack of this object gracefully later, so don't worry about it failing here.
-        MatrixClientPeg.get().getRoom(this.props.roomId).getRecommendedVersion().then((v) => {
-            this.setState({upgradeRecommendation: v});
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        room.getRecommendedVersion().then((v) => {
+            const tombstone = room.currentState.getStateEvents("m.room.tombstone", "");
+
+            const additionalStateChanges = {};
+            const createEvent = room.currentState.getStateEvents("m.room.create", "");
+            const predecessor = createEvent ? createEvent.getContent().predecessor : null;
+            if (predecessor && predecessor.room_id) {
+                additionalStateChanges['oldRoomId'] = predecessor.room_id;
+                additionalStateChanges['oldEventId'] = predecessor.event_id;
+                additionalStateChanges['hasPreviousRoom'] = true;
+            }
+
+
+            this.setState({
+                upgraded: tombstone && tombstone.getContent().replacement_room,
+                upgradeRecommendation: v,
+                ...additionalStateChanges,
+            });
         });
     }
 
@@ -54,6 +73,18 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         Modal.createDialog(DevtoolsDialog, {roomId: this.props.roomId});
     };
 
+    _onOldRoomClicked = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.oldRoomId,
+            event_id: this.state.oldEventId,
+        });
+        this.props.closeSettingsFn();
+    };
+
     render() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
@@ -65,10 +96,35 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         }
 
         let roomUpgradeButton;
-        if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade) {
+        if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade && !this.state.upgraded) {
             roomUpgradeButton = (
-                <AccessibleButton onClick={this._upgradeRoom} kind='primary'>
-                    {_t("Upgrade room to version %(ver)s", {ver: this.state.upgradeRecommendation.version})}
+                <div>
+                    <p className='mx_SettingsTab_warningText'>
+                        {_t(
+                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
+                            "to the new version of the room.</i> We'll post a link to the new room in the old " +
+                            "version of the room - room members will have to click this link to join the new room.",
+                            {}, {
+                                "b": (sub) => <b>{sub}</b>,
+                                "i": (sub) => <i>{sub}</i>,
+                            },
+                        )}
+                    </p>
+                    <AccessibleButton onClick={this._upgradeRoom} kind='primary'>
+                        {_t("Upgrade this room to the recommended room version")}
+                    </AccessibleButton>
+                </div>
+            );
+        }
+
+        let oldRoomLink;
+        if (this.state.hasPreviousRoom) {
+            let name = _t("this room");
+            const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (room && room.name) name = room.name;
+            oldRoomLink = (
+                <AccessibleButton element='a' onClick={this._onOldRoomClicked}>
+                    {_t("View older messages in %(roomName)s.", {roomName: name})}
                 </AccessibleButton>
             );
         }
@@ -90,6 +146,7 @@ export default class AdvancedRoomSettingsTab extends React.Component {
                         <span>{_t("Room version:")}</span>&nbsp;
                         {room.getVersion()}
                     </div>
+                    {oldRoomLink}
                     {roomUpgradeButton}
                 </div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>

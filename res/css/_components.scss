@@ -6,6 +6,7 @@
 @import "./structures/_CreateRoom.scss";
 @import "./structures/_CustomRoomTagPanel.scss";
 @import "./structures/_FilePanel.scss";
+@import "./structures/_GenericErrorPage.scss";
 @import "./structures/_GroupView.scss";
 @import "./structures/_HeaderButtons.scss";
 @import "./structures/_HomePage.scss";
@@ -19,6 +20,7 @@
 @import "./structures/_RoomStatusBar.scss";
 @import "./structures/_RoomSubList.scss";
 @import "./structures/_RoomView.scss";
+@import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TabbedView.scss";
 @import "./structures/_TagPanel.scss";
@@ -46,11 +48,11 @@
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
 @import "./views/context_menus/_TopLeftMenu.scss";
+@import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
-@import "./views/dialogs/_ChatInviteDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
 @import "./views/dialogs/_CreateRoomDialog.scss";
@@ -69,7 +71,9 @@
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_UnknownDeviceDialog.scss";
+@import "./views/dialogs/_UploadConfirmDialog.scss";
 @import "./views/dialogs/_UserSettingsDialog.scss";
+@import "./views/dialogs/_WidgetOpenIDPermissionsDialog.scss";
 @import "./views/dialogs/keybackup/_CreateKeyBackupDialog.scss";
 @import "./views/dialogs/keybackup/_KeyBackupFailedDialog.scss";
 @import "./views/dialogs/keybackup/_RestoreKeyBackupDialog.scss";
@@ -96,6 +100,7 @@
 @import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_ToolTipButton.scss";
 @import "./views/elements/_Tooltip.scss";
+@import "./views/elements/_Validation.scss";
 @import "./views/globals/_MatrixToolbar.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
@@ -108,7 +113,11 @@
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
+@import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
+@import "./views/messages/_ReactionDimension.scss";
+@import "./views/messages/_ReactionsRow.scss";
+@import "./views/messages/_ReactionsRowButton.scss";
 @import "./views/messages/_RoomAvatarEvent.scss";
 @import "./views/messages/_SenderProfile.scss";
 @import "./views/messages/_TextualEvent.scss";

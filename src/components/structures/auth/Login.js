@@ -42,7 +42,12 @@ const PHASES_ENABLED = true;
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
 _td("Invalid homeserver discovery response");
+_td("Failed to get autodiscovery configuration from server");
+_td("Invalid base_url for m.homeserver");
+_td("Homeserver URL does not appear to be a valid Matrix homeserver");
 _td("Invalid identity server discovery response");
+_td("Invalid base_url for m.identity_server");
+_td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
 
 /**
@@ -53,8 +58,6 @@ module.exports = React.createClass({
 
     propTypes: {
         onLoggedIn: PropTypes.func.isRequired,
-
-        enableGuest: PropTypes.bool,
 
         // The default server name to use when the user hasn't specified
         // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
@@ -220,37 +223,6 @@ module.exports = React.createClass({
                 return;
             }
             this.setState({
-                busy: false,
-            });
-        }).done();
-    },
-
-    _onLoginAsGuestClick: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        const self = this;
-        self.setState({
-            busy: true,
-            errorText: null,
-            loginIncorrect: false,
-        });
-
-        this._loginLogic.loginAsGuest().then(function(data) {
-            self.props.onLoggedIn(data);
-        }, function(error) {
-            let errorText;
-            if (error.httpStatus === 403) {
-                errorText = _t("Guest access is disabled on this homeserver.");
-            } else {
-                errorText = self._errorTextFromError(error);
-            }
-            self.setState({
-                errorText: errorText,
-                loginIncorrect: false,
-            });
-        }).finally(function() {
-            self.setState({
                 busy: false,
             });
         }).done();
@@ -627,14 +599,6 @@ module.exports = React.createClass({
 
         const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
 
-        let loginAsGuestJsx;
-        if (this.props.enableGuest) {
-            loginAsGuestJsx =
-                <a className="mx_AuthBody_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
-                    { _t('Try the app first') }
-                </a>;
-        }
-
         let errorTextSection;
         if (errorText) {
             errorTextSection = (
@@ -658,7 +622,6 @@ module.exports = React.createClass({
                     <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
-                    { loginAsGuestJsx }
                 </AuthBody>
             </AuthPage>
         );

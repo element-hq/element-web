@@ -31,7 +31,8 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
-import {sendLoginRequest} from "./Login";
+import { sendLoginRequest } from "./Login";
+import * as StorageManager from './utils/StorageManager';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -102,9 +103,14 @@ export async function loadSession(opts) {
             return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
         }
 
-        // fall back to login screen
+        // fall back to welcome screen
         return false;
     } catch (e) {
+        if (e instanceof AbortLoginAndRebuildStorage) {
+            // If we're aborting login because of a storage inconsistency, we don't
+            // need to show the general failure dialog. Instead, just go back to welcome.
+            return false;
+        }
         return _handleLoadSessionFailure(e);
     }
 }
@@ -197,9 +203,6 @@ export function handleInvalidStoreError(e) {
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log(`Doing guest login on ${hsUrl}`);
 
-    // TODO: we should probably de-duplicate this and Login.loginAsGuest.
-    // Not really sure where the right home for it is.
-
     // create a temporary MatrixClient to do the login
     const client = Matrix.createClient({
         baseUrl: hsUrl,
@@ -278,7 +281,7 @@ async function _restoreFromLocalStorage() {
 }
 
 function _handleLoadSessionFailure(e) {
-    console.log("Unable to load session", e);
+    console.error("Unable to load session", e);
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
@@ -353,6 +356,22 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         await _clearStorage();
     }
 
+    const results = await StorageManager.checkConsistency();
+    // If there's an inconsistency between account data in local storage and the
+    // crypto store, we'll be generally confused when handling encrypted data.
+    // Show a modal recommending a full reset of storage.
+    if (results.dataInLocalStorage && !results.dataInCryptoStore) {
+        const signOut = await _showStorageEvictedDialog();
+        if (signOut) {
+            await _clearStorage();
+            // This error feels a bit clunky, but we want to make sure we don't go any
+            // further and instead head back to sign in.
+            throw new AbortLoginAndRebuildStorage(
+                "Aborting login in progress because of storage inconsistency",
+            );
+        }
+    }
+
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
 
     if (localStorage) {
@@ -382,6 +401,19 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     await startMatrixClient();
     return MatrixClientPeg.get();
 }
+
+function _showStorageEvictedDialog() {
+    const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
+    return new Promise(resolve => {
+        Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
+            onFinished: resolve,
+        });
+    });
+}
+
+// Note: Babel 6 requires the `transform-builtin-extend` plugin for this to satisfy
+// `instanceof`. Babel 7 supports this natively in their class handling.
+class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
     localStorage.setItem("mx_hs_url", credentials.homeserverUrl);

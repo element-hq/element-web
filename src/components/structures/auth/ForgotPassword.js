@@ -222,7 +222,7 @@ module.exports = React.createClass({
         }
 
         let yourMatrixAccountText = _t('Your Matrix account');
-        if (this.state.enteredHsUrl === this.props.defaultHsUrl) {
+        if (this.state.enteredHsUrl === this.props.defaultHsUrl && this.props.defaultServerName) {
             yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
                 serverName: this.props.defaultServerName,
             });

@@ -31,15 +31,29 @@ export default class LabelledToggleSwitch extends React.Component {
 
         // Whether or not to disable the toggle switch
         disabled: PropTypes.bool,
+
+        // True to put the toggle in front of the label
+        // Default false.
+        toggleInFront: PropTypes.bool,
     };
 
     render() {
         // This is a minimal version of a SettingsFlag
+
+        let firstPart = <span className="mx_SettingsFlag_label">{this.props.label}</span>;
+        let secondPart = <ToggleSwitch checked={this.props.value} disabled={this.props.disabled}
+                                         onChange={this.props.onChange} />;
+
+        if (this.props.toggleInFront) {
+            const temp = firstPart;
+            firstPart = secondPart;
+            secondPart = temp;
+        }
+
         return (
             <div className="mx_SettingsFlag">
-                <span className="mx_SettingsFlag_label">{this.props.label}</span>
-                <ToggleSwitch checked={this.props.value} disabled={this.props.disabled}
-                              onChange={this.props.onChange} />
+                {firstPart}
+                {secondPart}
             </div>
         );
     }

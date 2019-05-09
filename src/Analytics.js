@@ -84,6 +84,11 @@ const customVariables = {
         expl: _td('Whether or not you\'re using the Richtext mode of the Rich Text Editor'),
         example: 'off',
     },
+    'Breadcrumbs': {
+        id: 9,
+        expl: _td("Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)"),
+        example: 'disabled',
+    },
     'Homeserver URL': {
         id: 7,
         expl: _td('Your homeserver\'s URL'),
@@ -201,6 +206,7 @@ class Analytics {
 
     trackEvent(category, action, name, value) {
         if (this.disabled) return;
+        this._paq.push(['setCustomUrl', getRedactedUrl()]);
         this._paq.push(['trackEvent', category, action, name, value]);
     }
 
@@ -231,6 +237,11 @@ class Analytics {
     setRichtextMode(state) {
         if (this.disabled) return;
         this._setVisitVariable('RTE: Uses Richtext Mode', state ? 'on' : 'off');
+    }
+
+    setBreadcrumbs(state) {
+        if (this.disabled) return;
+        this._setVisitVariable('Breadcrumbs', state ? 'enabled' : 'disabled');
     }
 
     showDetailsModal() {

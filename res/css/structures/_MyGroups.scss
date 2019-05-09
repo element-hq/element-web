@@ -52,7 +52,7 @@ limitations under the License.
     background-color: $roomheader-addroom-bg-color;
     position: relative;
 
-    &:before {
+    &::before {
         background-color: $roomheader-addroom-fg-color;
         mask: url('$(res)/img/icons-create-room.svg');
         mask-repeat: no-repeat;
@@ -113,8 +113,7 @@ limitations under the License.
     overflow-x: hidden;
 
     display: flex;
-    flex-direction: row;
-    flex-flow: wrap;
+    flex-flow: row wrap;
     align-content: flex-start;
 }
 
@@ -153,6 +152,7 @@ limitations under the License.
 
 .mx_GroupTile_profile .mx_GroupTile_groupId {
     font-size: 13px;
+    opacity: 0.7;
 }
 
 .mx_GroupTile_profile .mx_GroupTile_desc {
@@ -162,8 +162,4 @@ limitations under the License.
     font-size: 13px;
     max-height: 36px;
     overflow: hidden;
-}
-
-.mx_GroupTile_profile .mx_GroupTile_groupId {
-    opacity: 0.7;
 }

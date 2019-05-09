@@ -67,13 +67,13 @@ limitations under the License.
 }
 
 .mx_GroupView_editable {
-    border-bottom: 1px solid $strong-input-border-color ! important;
+    border-bottom: 1px solid $strong-input-border-color !important;
     min-width: 150px;
     cursor: text;
 }
 
 .mx_GroupView_editable:focus {
-    border-bottom: 1px solid $accent-color ! important;
+    border-bottom: 1px solid $accent-color !important;
     outline: none;
     box-shadow: none;
 }
@@ -95,7 +95,7 @@ limitations under the License.
 
 .mx_GroupView_avatarPicker .mx_Spinner {
     width: 48px;
-    height: 48px ! important;
+    height: 48px !important;
 }
 
 .mx_GroupView_header_leftCol {
@@ -176,7 +176,7 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_GroupView_body  {
+.mx_GroupView_body {
     flex-grow: 1;
 }
 
@@ -333,7 +333,7 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_body .gm-scroll-view > *{
+.mx_GroupView_body .gm-scroll-view > * {
     margin: 11px 50px 0px 68px;
 }
 

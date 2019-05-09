@@ -28,8 +28,6 @@ import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 
-const MIN_PASSWORD_LENGTH = 6;
-
 // Phases
 // Show controls to configure server details
 const PHASE_SERVER_DETAILS = 0;
@@ -60,7 +58,6 @@ module.exports = React.createClass({
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
-        skipServerDetails: PropTypes.bool,
         brand: PropTypes.string,
         email: PropTypes.string,
         // registration shouldn't know or care how login is done.
@@ -70,26 +67,6 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         const serverType = ServerType.getTypeFromHsUrl(this.props.customHsUrl);
-
-        const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
-        let initialPhase = this.getDefaultPhaseForServerType(serverType);
-        if (
-            // if we have these two, skip to the good bit
-            // (they could come in from the URL params in a
-            // registration email link)
-            (this.props.clientSecret && this.props.sessionId) ||
-            // if custom URLs aren't allowed, skip to form
-            !customURLsAllowed ||
-            // if other logic says to, skip to form
-            this.props.skipServerDetails
-        ) {
-            // TODO: It would seem we've now added enough conditions here that the initial
-            // phase will _always_ be the form. It's tempting to remove the complexity and
-            // just do that, but we keep tweaking and changing auth, so let's wait until
-            // things settle a bit.
-            // Filed https://github.com/vector-im/riot-web/issues/8886 to track this.
-            initialPhase = PHASE_REGISTRATION;
-        }
 
         return {
             busy: false,
@@ -113,7 +90,7 @@ module.exports = React.createClass({
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
-            phase: initialPhase,
+            phase: PHASE_REGISTRATION,
             flows: null,
         };
     },
@@ -308,58 +285,6 @@ module.exports = React.createClass({
         });
     },
 
-    onFormValidationChange: function(fieldErrors) {
-        // `fieldErrors` is an object mapping field IDs to error codes when there is an
-        // error or `null` for no error, so the values array will be something like:
-        // `[ null, "RegistrationForm.ERR_PASSWORD_MISSING", null]`
-        // Find the first non-null error code and show that.
-        const errCode = Object.values(fieldErrors).find(value => !!value);
-        if (!errCode) {
-            this.setState({
-                errorText: null,
-            });
-            return;
-        }
-
-        let errMsg;
-        switch (errCode) {
-            case "RegistrationForm.ERR_PASSWORD_MISSING":
-                errMsg = _t('Missing password.');
-                break;
-            case "RegistrationForm.ERR_PASSWORD_MISMATCH":
-                errMsg = _t('Passwords don\'t match.');
-                break;
-            case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH});
-                break;
-            case "RegistrationForm.ERR_EMAIL_INVALID":
-                errMsg = _t('This doesn\'t look like a valid email address.');
-                break;
-            case "RegistrationForm.ERR_PHONE_NUMBER_INVALID":
-                errMsg = _t('This doesn\'t look like a valid phone number.');
-                break;
-            case "RegistrationForm.ERR_MISSING_EMAIL":
-                errMsg = _t('An email address is required to register on this homeserver.');
-                break;
-            case "RegistrationForm.ERR_MISSING_PHONE_NUMBER":
-                errMsg = _t('A phone number is required to register on this homeserver.');
-                break;
-            case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = _t("A username can only contain lower case letters, numbers and '=_-./'");
-                break;
-            case "RegistrationForm.ERR_USERNAME_BLANK":
-                errMsg = _t('You need to enter a username.');
-                break;
-            default:
-                console.error("Unknown error code: %s", errCode);
-                errMsg = _t('An unknown error occurred.');
-                break;
-        }
-        this.setState({
-            errorText: errMsg,
-        });
-    },
-
     onLoginClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -534,8 +459,6 @@ module.exports = React.createClass({
                 defaultPhoneCountry={this.state.formVals.phoneCountry}
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
-                minPasswordLength={MIN_PASSWORD_LENGTH}
-                onValidationChange={this.onFormValidationChange}
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}

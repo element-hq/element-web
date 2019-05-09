@@ -120,7 +120,7 @@ class RoomViewStore extends Store {
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this._state.roomId,
-                }, 'mx_SettingsDialog', /*isPriority=*/false, /*isStatic=*/true);
+                }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
         }

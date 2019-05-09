@@ -187,12 +187,17 @@ export default class KeyBackupPanel extends React.PureComponent {
                 clientBackupStatus = <div>
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t(
-                        "This device is <b>not backing up your keys</b>.", {},
+                        "This device is <b>not backing up your keys</b>, " +
+                        "but you do have an existing backup you can restore from " +
+                        "and add to going forward.", {},
                         {b: sub => <b>{sub}</b>},
                     )}</p>
-                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                    <p>{_t(
+                        "Connect this device to key backup before signing out to avoid " +
+                        "losing any keys that may only be on this device.",
+                    )}</p>
                 </div>;
-                restoreButtonCaption = _t("Use key backup");
+                restoreButtonCaption = _t("Connect this device to Key Backup");
             }
 
             let uploadStatus;
@@ -221,15 +226,25 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {sub}
                     </span>;
                 const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;
+                const fromThisDevice = (
+                    sig.device &&
+                    sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
+                );
                 let sigStatus;
                 if (!sig.device) {
                     sigStatus = _t(
                         "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.",
                         { deviceId: sig.deviceId }, { verify },
                     );
-                } else if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()) {
+                } else if (sig.valid && fromThisDevice) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from this device",
+                        {}, { validity },
+                    );
+                } else if (!sig.valid && fromThisDevice) {
+                    // it can happen...
+                    sigStatus = _t(
+                        "Backup has an <validity>invalid</validity> signature from this device",
                         {}, { validity },
                     );
                 } else if (sig.valid && sig.device.isVerified()) {

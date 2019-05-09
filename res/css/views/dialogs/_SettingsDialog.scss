@@ -14,34 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SettingsDialog {
-    .mx_Dialog {
-        max-width: 1000px;
-        width: 90%;
-        height: 80%;
-        border-radius: 4px;
-        padding-top: 0;
-        padding-right: 0;
-        padding-left: 0;
+// Not actually a component but things shared by settings components
+.mx_UserSettingsDialog, .mx_RoomSettingsDialog {
+    width: 90vw;
+    max-width: 1000px;
+    // set the height too since tabbed view scrolls itself.
+    height: 80vh;
 
-        .mx_TabbedView {
-            top: 65px;
-        }
+    .mx_TabbedView {
+        top: 65px;
+    }
 
-        .mx_TabbedView .mx_SettingsTab {
-            box-sizing: border-box;
-            min-width: 580px;
-            padding-right: 130px;
+    .mx_TabbedView .mx_SettingsTab {
+        box-sizing: border-box;
+        min-width: 580px;
+        padding-right: 100px;
 
-            // Put some padding on the bottom to avoid the settings tab from
-            // colliding harshly with the dialog when scrolled down.
-            padding-bottom: 100px;
-        }
+        // Put some padding on the bottom to avoid the settings tab from
+        // colliding harshly with the dialog when scrolled down.
+        padding-bottom: 100px;
+    }
 
-        .mx_Dialog_title {
-            text-align: center;
-            margin-top: 16px;
-            margin-bottom: 24px;
-        }
+    .mx_Dialog_title {
+        text-align: center;
+        margin-bottom: 24px;
     }
 }

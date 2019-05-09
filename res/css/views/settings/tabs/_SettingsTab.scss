@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_SettingsTab_warningText {
+    color: $warning-color;
+}
+
 .mx_SettingsTab_heading {
     font-size: 20px;
     font-weight: 600;
@@ -67,4 +71,8 @@ limitations under the License.
     // These views have a lot of the same repetitive information on it, so
     // give them more visual distinction between the sections.
     margin-top: 30px;
+}
+
+.mx_SettingsTab a {
+    color: $accent-color-alt;
 }

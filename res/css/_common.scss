@@ -36,6 +36,12 @@ body {
     color: $warning-color;
 }
 
+b {
+    // On Firefox, the default weight for `<b>` is `bolder` which results in no bold
+    // effect since we only have specific weights of our fonts available.
+    font-weight: bold;
+}
+
 h2 {
     color: $primary-fg-color;
     font-weight: 400;
@@ -118,7 +124,7 @@ textarea {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid #c1c1c1;
+        border: 1px solid $dialog-close-fg-color;
         // these things should probably not be defined
         // globally
         margin: 9px;
@@ -267,12 +273,16 @@ textarea {
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    padding: 40px 58px 36px 58px;
-    width: 60%;
-    max-width: 704px;
-    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
+    padding: 25px 30px 30px 30px;
     max-height: 80%;
+    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
+    border-radius: 4px;
     overflow-y: auto;
+}
+
+.mx_Dialog_fixedWidth {
+    width: 60vw;
+    max-width: 704px;
 }
 
 .mx_Dialog_staticWrapper .mx_Dialog {
@@ -317,13 +327,13 @@ textarea {
 
 .mx_Dialog_header {
     position: relative;
+    margin-bottom: 20px;
 }
 
 .mx_Dialog_title {
-    font-weight: bold;
     font-size: 22px;
     line-height: 36px;
-    color: $primary-fg-color;
+    color: $dialog-title-fg-color;
 }
 
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
@@ -338,13 +348,14 @@ textarea {
     mask: url('$(res)/img/feather-customised/cancel.svg');
     mask-repeat: no-repeat;
     mask-position: center;
-    width: 36px;
-    height: 36px;
-    background-color: $primary-fg-color;
+    mask-size: cover;
+    width: 14px;
+    height: 14px;
+    background-color: $dialog-close-fg-color;
     cursor: pointer;
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 4px;
+    right: 0px;
 }
 
 .mx_Dialog_content {
@@ -355,6 +366,7 @@ textarea {
 }
 
 .mx_Dialog_buttons {
+    margin-top: 20px;
     text-align: right;
 }
 
@@ -370,6 +382,10 @@ textarea {
     background-color: $button-secondary-bg-color;
 }
 
+.mx_Dialog button:last-child {
+    margin-right: 0px;
+}
+
 .mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
@@ -381,6 +397,7 @@ textarea {
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
+    min-width: 156px;
 }
 
 .mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
@@ -506,3 +523,38 @@ textarea {
     opacity: 0;
     cursor: pointer;
 }
+
+// username colors
+// used by SenderProfile & RoomPreviewBar
+.mx_Username_color1 {
+    color: $username-variant1-color;
+}
+
+.mx_Username_color2 {
+    color: $username-variant2-color;
+}
+
+.mx_Username_color3 {
+    color: $username-variant3-color;
+}
+
+.mx_Username_color4 {
+    color: $username-variant4-color;
+}
+
+.mx_Username_color5 {
+    color: $username-variant5-color;
+}
+
+.mx_Username_color6 {
+    color: $username-variant6-color;
+}
+
+.mx_Username_color7 {
+    color: $username-variant7-color;
+}
+
+.mx_Username_color8 {
+    color: $username-variant8-color;
+}
+

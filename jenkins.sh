@@ -29,6 +29,9 @@ yarn lintall -f checkstyle -o eslint.xml || true
 # re-run the linter, excluding any files known to have errors or warnings.
 yarn lintwithexclusions
 
+# lint styles
+yarn stylelint
+
 # delete the old tarball, if it exists
 rm -f matrix-react-sdk-*.tgz
 

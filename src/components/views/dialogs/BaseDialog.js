@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,6 +55,11 @@ export default React.createClass({
         // CSS class to apply to dialog div
         className: PropTypes.string,
 
+        // if true, dialog container is 60% of the viewport width. Otherwise,
+        // the container will have no fixed size, allowing its contents to
+        // determine its size. Default: true.
+        fixedWidth: PropTypes.bool,
+
         // Title for the dialog.
         title: PropTypes.node.isRequired,
 
@@ -72,6 +77,7 @@ export default React.createClass({
     getDefaultProps: function() {
         return {
             hasCancel: true,
+            fixedWidth: true,
         };
     },
 
@@ -113,7 +119,10 @@ export default React.createClass({
 
         return (
             <FocusTrap onKeyDown={this._onKeyDown}
-                className={this.props.className}
+                className={classNames({
+                    [this.props.className]: true,
+                    'mx_Dialog_fixedWidth': this.props.fixedWidth,
+                })}
                 role="dialog"
                 aria-labelledby='mx_BaseDialog_title'
                 // This should point to a node describing the dialog.
@@ -131,8 +140,8 @@ export default React.createClass({
                         { this.props.title }
                     </div>
                     { this.props.headerButton }
+                    { cancelButton }
                 </div>
-                { cancelButton }
                 { this.props.children }
             </FocusTrap>
         );

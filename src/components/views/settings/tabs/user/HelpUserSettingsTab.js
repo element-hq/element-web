@@ -136,7 +136,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     <li>
                         The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noopener" target="_blank">
                         default cover photo</a> is (C)&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>&nbsp;
+                        <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
                         <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">
                         CC-BY-SA 4.0</a>. No warranties are given.
@@ -235,8 +235,8 @@ export default class HelpUserSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Homeserver is")} {MatrixClientPeg.get().getHomeserverUrl()}<br />
-                        {_t("Identity Server is")} {MatrixClientPeg.get().getIdentityServerUrl()}<br />
+                        {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
+                        {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                         {_t("Access Token:") + ' '}
                         <AccessibleButton element="span" onClick={this._showSpoiler}
                                           data-spoiler={MatrixClientPeg.get().getAccessToken()}>

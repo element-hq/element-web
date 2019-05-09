@@ -81,26 +81,6 @@ export default class Login {
         return flowStep ? flowStep.type : null;
     }
 
-    loginAsGuest() {
-        const client = this._createTemporaryClient();
-        return client.registerGuest({
-            body: {
-                initial_device_display_name: this._defaultDeviceDisplayName,
-            },
-        }).then((creds) => {
-            return {
-                userId: creds.user_id,
-                deviceId: creds.device_id,
-                accessToken: creds.access_token,
-                homeserverUrl: this._hsUrl,
-                identityServerUrl: this._isUrl,
-                guest: true,
-            };
-        }, (error) => {
-            throw error;
-        });
-    }
-
     loginViaPassword(username, phoneCountry, phoneNumber, pass) {
         const self = this;
 

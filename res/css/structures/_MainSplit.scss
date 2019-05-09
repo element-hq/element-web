@@ -19,3 +19,9 @@ limitations under the License.
     flex-direction: row;
     min-width: 0;
 }
+
+// move hit area 5px to the right so it doesn't overlap with the timeline scrollbar
+.mx_MainSplit > .mx_ResizeHandle.mx_ResizeHandle_horizontal {
+    margin: 0 -10px 0 0;
+    padding: 0 10px 0 0;
+}

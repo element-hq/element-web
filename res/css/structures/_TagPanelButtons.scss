@@ -23,12 +23,12 @@ limitations under the License.
     padding: 17px 0 3px 0;
 }
 
-.mx_TagPanelButtons > .mx_GroupsButton:before {
+.mx_TagPanelButtons > .mx_GroupsButton::before {
     mask: url('$(res)/img/feather-customised/users.svg');
     mask-position: center 11px;
 }
 
-.mx_TagPanelButtons > .mx_TagPanelButtons_report:before {
+.mx_TagPanelButtons > .mx_TagPanelButtons_report::before {
     mask: url('$(res)/img/feather-customised/life-buoy.svg');
     mask-position: center 9px;
 }
@@ -43,7 +43,7 @@ limitations under the License.
     /* overwrite mx_RoleButton inline-block */
     display: block !important;
 
-    &:before {
+    &::before {
         background-color: $tagpanel-bg-color;
         mask-repeat: no-repeat;
         content: '';
