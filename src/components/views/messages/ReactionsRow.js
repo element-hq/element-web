@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import { isContentActionable } from '../../../utils/EventUtils';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
@@ -35,6 +36,10 @@ export default class ReactionsRow extends React.PureComponent {
             props.reactions.on("Relations.add", this.onReactionsChange);
             props.reactions.on("Relations.redaction", this.onReactionsChange);
         }
+
+        this.state = {
+            myReactions: this.getMyReactions(),
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,11 +64,24 @@ export default class ReactionsRow extends React.PureComponent {
 
     onReactionsChange = () => {
         // TODO: Call `onHeightChanged` as needed
+        this.setState({
+            myReactions: this.getMyReactions(),
+        });
         this.forceUpdate();
+    }
+
+    getMyReactions() {
+        const reactions = this.props.reactions;
+        if (!reactions) {
+            return null;
+        }
+        const userId = MatrixClientPeg.get().getUserId();
+        return reactions.getAnnotationsBySender()[userId];
     }
 
     render() {
         const { mxEvent, reactions } = this.props;
+        const { myReactions } = this.state;
 
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
@@ -75,10 +93,18 @@ export default class ReactionsRow extends React.PureComponent {
             if (!count) {
                 return null;
             }
+            const myReactionEvent = myReactions && myReactions.find(mxEvent => {
+                if (mxEvent.isRedacted()) {
+                    return false;
+                }
+                return mxEvent.getContent()["m.relates_to"].key === content;
+            });
             return <ReactionsRowButton
                 key={content}
                 content={content}
                 count={count}
+                mxEvent={mxEvent}
+                myReactionEvent={myReactionEvent}
             />;
         });
 

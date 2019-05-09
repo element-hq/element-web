@@ -22,6 +22,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class ReactionDimension extends React.PureComponent {
     static propTypes = {
+        mxEvent: PropTypes.object.isRequired,
         // Array of strings containing the emoji for each option
         options: PropTypes.array.isRequired,
         title: PropTypes.string,
@@ -32,9 +33,7 @@ export default class ReactionDimension extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {
-            selected: this.getSelection(),
-        };
+        this.state = this.getSelection();
 
         if (props.reactions) {
             props.reactions.on("Relations.add", this.onReactionsChange);
@@ -63,35 +62,42 @@ export default class ReactionDimension extends React.PureComponent {
     }
 
     onReactionsChange = () => {
-        this.setState({
-            selected: this.getSelection(),
-        });
+        this.setState(this.getSelection());
     }
 
     getSelection() {
         const myReactions = this.getMyReactions();
         if (!myReactions) {
-            return null;
+            return {
+                selectedOption: null,
+                selectedReactionEvent: null,
+            };
         }
         const { options } = this.props;
-        let selected = null;
+        let selectedOption = null;
+        let selectedReactionEvent = null;
         for (const option of options) {
-            const reactionExists = myReactions.some(mxEvent => {
+            const reactionForOption = myReactions.find(mxEvent => {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
                 return mxEvent.getContent()["m.relates_to"].key === option;
             });
-            if (reactionExists) {
-                if (selected) {
-                    // If there are multiple selected values (only expected to occur via
-                    // non-Riot clients), then act as if none are selected.
-                    return null;
-                }
-                selected = option;
+            if (!reactionForOption) {
+                continue;
             }
+            if (selectedOption) {
+                // If there are multiple selected values (only expected to occur via
+                // non-Riot clients), then act as if none are selected.
+                return {
+                    selectedOption: null,
+                    selectedReactionEvent: null,
+                };
+            }
+            selectedOption = option;
+            selectedReactionEvent = reactionForOption;
         }
-        return selected;
+        return { selectedOption, selectedReactionEvent };
     }
 
     getMyReactions() {
@@ -109,20 +115,34 @@ export default class ReactionDimension extends React.PureComponent {
     }
 
     toggleDimension(key) {
-        const state = this.state.selected;
-        const newState = state !== key ? key : null;
+        const { selectedOption, selectedReactionEvent } = this.state;
+        const newSelectedOption = selectedOption !== key ? key : null;
         this.setState({
-            selected: newState,
+            selectedOption: newSelectedOption,
         });
-        // TODO: Send the reaction event
+        if (selectedReactionEvent) {
+            MatrixClientPeg.get().redactEvent(
+                this.props.mxEvent.getRoomId(),
+                selectedReactionEvent.getId(),
+            );
+        }
+        if (newSelectedOption) {
+            MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), "m.reaction", {
+                "m.relates_to": {
+                    "rel_type": "m.annotation",
+                    "event_id": this.props.mxEvent.getId(),
+                    "key": newSelectedOption,
+                },
+            });
+        }
     }
 
     render() {
-        const { selected } = this.state;
+        const { selectedOption } = this.state;
         const { options } = this.props;
 
         const items = options.map(option => {
-            const disabled = selected && selected !== option;
+            const disabled = selectedOption && selectedOption !== option;
             const classes = classNames({
                 mx_ReactionDimension_disabled: disabled,
             });

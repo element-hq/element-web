@@ -106,6 +106,7 @@ export default class MessageActionBar extends React.PureComponent {
             title={_t("Agree or Disagree")}
             options={["👍", "👎"]}
             reactions={this.props.reactions}
+            mxEvent={this.props.mxEvent}
         />;
     }
 
@@ -119,6 +120,7 @@ export default class MessageActionBar extends React.PureComponent {
             title={_t("Like or Dislike")}
             options={["🙂", "😔"]}
             reactions={this.props.reactions}
+            mxEvent={this.props.mxEvent}
         />;
     }
 
