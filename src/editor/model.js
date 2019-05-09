@@ -17,12 +17,13 @@ limitations under the License.
 import {diffAtCaret, diffDeletion} from "./diff";
 
 export default class EditorModel {
-    constructor(parts, partCreator) {
+    constructor(parts, partCreator, updateCallback) {
         this._parts = parts;
         this._partCreator = partCreator;
         this._activePartIdx = null;
         this._autoComplete = null;
         this._autoCompletePartIdx = null;
+        this._updateCallback = updateCallback;
     }
 
     _insertPart(index, part) {
@@ -90,7 +91,7 @@ export default class EditorModel {
         const caretOffset = diff.at + (diff.added ? diff.added.length : 0);
         const newPosition = this._positionForOffset(caretOffset, true);
         this._setActivePart(newPosition);
-        return newPosition;
+        this._updateCallback(newPosition);
     }
 
     _setActivePart(pos) {
@@ -116,10 +117,12 @@ export default class EditorModel {
 
     _onAutoComplete = ({replacePart, replaceCaret, close}) => {
         this._replacePart(this._autoCompletePartIdx, replacePart);
+        const index = this._autoCompletePartIdx;
         if (close) {
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
         }
+        this._updateCallback(new DocumentPosition(index, replaceCaret));
     }
 
     /*

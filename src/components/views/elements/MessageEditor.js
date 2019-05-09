@@ -44,7 +44,11 @@ export default class MessageEditor extends React.Component {
             () => this._autocompleteRef,
             query => this.setState({query}),
         );
-        this.model = new EditorModel(parseEvent(this.props.event), partCreator);
+        this.model = new EditorModel(
+            parseEvent(this.props.event),
+            partCreator,
+            this._updateEditorState,
+        );
         const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
         this.state = {
             autoComplete: null,
@@ -54,20 +58,25 @@ export default class MessageEditor extends React.Component {
         this._autocompleteRef = null;
     }
 
-    _onInput = (event) => {
-        const caretOffset = getCaretOffset(this._editorRef);
-        const caret = this.model.update(this._editorRef.textContent, event.inputType, caretOffset);
-        // const parts = this.model.serializeParts();
-        const shouldRerender = event.inputType === "insertFromDrop" || event.inputType === "insertFromPaste";
+    _updateEditorState = (caret) => {
+        const shouldRerender = false; //event.inputType === "insertFromDrop" || event.inputType === "insertFromPaste";
         if (shouldRerender) {
             rerenderModel(this._editorRef, this.model);
         } else {
             renderModel(this._editorRef, this.model);
         }
-        setCaretPosition(this._editorRef, caret);
+        if (caret) {
+            setCaretPosition(this._editorRef, caret);
+        }
 
         this.setState({autoComplete: this.model.autoComplete});
-        this._updateModelOutput();
+        const modelOutput = this._editorRef.parentElement.querySelector(".model");
+        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
+    }
+
+    _onInput = (event) => {
+        const caretOffset = getCaretOffset(this._editorRef);
+        this.model.update(this._editorRef.textContent, event.inputType, caretOffset);
     }
 
     _onKeyDown = (event) => {
@@ -109,25 +118,14 @@ export default class MessageEditor extends React.Component {
 
     _onAutoCompleteConfirm = (completion) => {
         this.model.autoComplete.onComponentConfirm(completion);
-        renderModel(this._editorRef, this.model);
-        this._updateModelOutput();
     }
 
     _onAutoCompleteSelectionChange = (completion) => {
         this.model.autoComplete.onComponentSelectionChange(completion);
-        renderModel(this._editorRef, this.model);
-        this._updateModelOutput();
-    }
-
-    _updateModelOutput() {
-        const modelOutput = this._editorRef.parentElement.querySelector(".model");
-        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
     }
 
     componentDidMount() {
-        const editor = this._editorRef;
-        rerenderModel(editor, this.model);
-        this._updateModelOutput();
+        this._updateEditorState();
     }
 
     render() {
