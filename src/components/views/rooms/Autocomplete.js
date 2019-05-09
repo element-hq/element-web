@@ -303,6 +303,9 @@ Autocomplete.propTypes = {
     // method invoked with range and text content when completion is confirmed
     onConfirm: PropTypes.func.isRequired,
 
+    // method invoked when selected (if any) completion changes
+    onSelectionChange: PropTypes.func,
+
     // The room in which we're autocompleting
     room: PropTypes.instanceOf(Room),
 };
