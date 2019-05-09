@@ -193,9 +193,12 @@ module.exports = withMatrixClient(React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        this.props.matrixClient.on("deviceVerificationChanged",
-                                 this.onDeviceVerificationChanged);
+        const client = this.props.matrixClient;
+        client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
+        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+            this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
+        }
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -218,6 +221,9 @@ module.exports = withMatrixClient(React.createClass({
         const client = this.props.matrixClient;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
+        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+            this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
+        }
     },
 
     /** called when the event is decrypted after we show it.
@@ -484,6 +490,14 @@ module.exports = withMatrixClient(React.createClass({
         }
         const eventId = this.props.mxEvent.getId();
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
+    },
+
+    _onReactionsCreated(relationType, eventType) {
+        if (relationType !== "m.annotation" || eventType !== "m.reaction") {
+            return;
+        }
+        this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
+        this.forceUpdate();
     },
 
     render: function() {
