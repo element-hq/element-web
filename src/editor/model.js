@@ -116,7 +116,9 @@ export default class EditorModel {
     }
 
     _onAutoComplete = ({replacePart, replaceCaret, close}) => {
-        this._replacePart(this._autoCompletePartIdx, replacePart);
+        if (replacePart) {
+            this._replacePart(this._autoCompletePartIdx, replacePart);
+        }
         const index = this._autoCompletePartIdx;
         if (close) {
             this._autoComplete = null;

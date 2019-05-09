@@ -34,7 +34,7 @@ export default class AutocompleteWrapperModel {
     }
 
     onEnter() {
-
+        this._updateCallback({close: true});
     }
 
     onTab() {
