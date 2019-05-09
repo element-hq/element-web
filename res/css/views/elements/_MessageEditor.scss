@@ -24,7 +24,9 @@ limitations under the License.
         border: solid 1px #e9edf1;
         background-color: #ffffff;
         padding: 10px;
-        white-space: pre;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
 
         span {
             display: inline-block;
