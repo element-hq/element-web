@@ -28,7 +28,7 @@ export default class AutocompleteWrapperModel {
         this._getAutocompleterComponent().onEscape(e);
         this._updateCallback({
             replacePart: new PlainPart(this._queryPart.text),
-            replaceCaret: this._queryOffset,
+            caretOffset: this._queryOffset,
             close: true,
         });
     }
@@ -61,7 +61,7 @@ export default class AutocompleteWrapperModel {
         if (!completion) {
             this._updateCallback({
                 replacePart: this._queryPart,
-                replaceCaret: this._queryOffset,
+                caretOffset: this._queryOffset,
             });
         } else {
             this._updateCallback({

@@ -123,7 +123,7 @@ export default class EditorModel {
         }
     }
 
-    _onAutoComplete = ({replacePart, replaceCaret, close}) => {
+    _onAutoComplete = ({replacePart, caretOffset, close}) => {
         if (replacePart) {
             this._replacePart(this._autoCompletePartIdx, replacePart);
         }
@@ -132,7 +132,10 @@ export default class EditorModel {
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
         }
-        this._updateCallback(new DocumentPosition(index, replaceCaret));
+        if (caretOffset === undefined) {
+            caretOffset = replacePart.text.length;
+        }
+        this._updateCallback(new DocumentPosition(index, caretOffset));
     }
 
     /*
