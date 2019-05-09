@@ -14,22 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {PlainPart, RoomPillPart, UserPillPart} from "./parts";
 import {diffAtCaret, diffDeletion} from "./diff";
 
 export default class EditorModel {
-    constructor(parts = []) {
+    constructor(parts, partCreator) {
         this._parts = parts;
-        this.actions = null;
+        this._partCreator = partCreator;
         this._previousValue = parts.reduce((text, p) => text + p.text, "");
+        this._activePartIdx = null;
+        this._autoComplete = null;
+        this._autoCompletePartIdx = null;
     }
 
     _insertPart(index, part) {
         this._parts.splice(index, 0, part);
+        if (this._activePartIdx >= index) {
+            ++this._activePartIdx;
+        }
+        if (this._autoCompletePartIdx >= index) {
+            ++this._autoCompletePartIdx;
+        }
     }
 
     _removePart(index) {
         this._parts.splice(index, 1);
+        if (this._activePartIdx >= index) {
+            --this._activePartIdx;
+        }
+        if (this._autoCompletePartIdx >= index) {
+            --this._autoCompletePartIdx;
+        }
     }
 
     _replacePart(index, part) {
@@ -40,11 +54,21 @@ export default class EditorModel {
         return this._parts;
     }
 
+    get autoComplete() {
+        if (this._activePartIdx === this._autoCompletePartIdx) {
+            return this._autoComplete;
+        }
+        return null;
+    }
+
     serializeParts() {
         return this._parts.map(({type, text}) => {return {type, text};});
     }
 
     _diff(newValue, inputType, caret) {
+        // handle deleteContentForward (Delete key)
+        // and deleteContentBackward (Backspace)
+
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
             return diffDeletion(this._previousValue, newValue);
@@ -66,8 +90,37 @@ export default class EditorModel {
         this._mergeAdjacentParts();
         this._previousValue = newValue;
         const caretOffset = diff.at + (diff.added ? diff.added.length : 0);
-        return this._positionForOffset(caretOffset, true);
+        const newPosition = this._positionForOffset(caretOffset, true);
+        this._setActivePart(newPosition);
+        return newPosition;
     }
+
+    _setActivePart(pos) {
+        const {index} = pos;
+        const part = this._parts[index];
+        if (pos.index !== this._activePartIdx) {
+            this._activePartIdx = index;
+            // if there is a hidden autocomplete for this part, show it again
+            if (this._activePartIdx !== this._autoCompletePartIdx) {
+                // else try to create one
+                const ac = part.createAutoComplete(this._onAutoComplete);
+                if (ac) {
+                    // make sure that react picks up the difference between both acs
+                    this._autoComplete = ac;
+                    this._autoCompletePartIdx = index;
+                }
+            }
+        }
+        if (this._autoComplete) {
+            this._autoComplete.onPartUpdate(part, pos.offset);
+        }
+    }
+
+    /*
+    updateCaret(caret) {
+        // update active part here as well, hiding/showing autocomplete if needed
+    }
+    */
 
     _mergeAdjacentParts(docPos) {
         let prevPart = this._parts[0];
@@ -94,7 +147,7 @@ export default class EditorModel {
             const amount = Math.min(len, part.text.length - offset);
             const replaceWith = part.remove(offset, amount);
             if (typeof replaceWith === "string") {
-                this._replacePart(index, new PlainPart(replaceWith));
+                this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
             }
             part = this._parts[index];
             // remove empty part
@@ -123,17 +176,7 @@ export default class EditorModel {
             }
         }
         while (str) {
-            let newPart;
-            switch (str[0]) {
-                case "#":
-                    newPart = new RoomPillPart();
-                    break;
-                case "@":
-                    newPart = new UserPillPart();
-                    break;
-                default:
-                    newPart = new PlainPart();
-            }
+            const newPart = this._partCreator.createPartForInput(str);
             str = newPart.appendUntilRejected(str);
             this._insertPart(index, newPart);
             index += 1;
@@ -155,6 +198,14 @@ export default class EditorModel {
         });
 
         return new DocumentPosition(index, totalOffset - currentOffset);
+    }
+
+    _onAutoComplete = ({replacePart, replaceCaret, close}) => {
+        this._replacePart(this._autoCompletePartIdx, replacePart);
+        if (close) {
+            this._autoComplete = null;
+            this._autoCompletePartIdx = null;
+        }
     }
 }
 
