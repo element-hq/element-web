@@ -21,6 +21,9 @@ import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffset, setCaretPosition} from '../../../editor/caret';
 import parseEvent from '../../../editor/parse-event';
+import Autocomplete from '../rooms/Autocomplete';
+// import AutocompleteModel from '../../../editor/autocomplete';
+import {PartCreator} from '../../../editor/parts';
 import {renderModel, rerenderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
@@ -28,7 +31,6 @@ export default class MessageEditor extends React.Component {
     static propTypes = {
         // the latest event in this chain of replies
         event: PropTypes.instanceOf(MatrixEvent).isRequired,
-        // called when the ReplyThread contents has changed, including EventTiles thereof
         // onHeightChanged: PropTypes.func.isRequired,
     };
 
@@ -38,9 +40,18 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.model = new EditorModel(parseEvent(this.props.event));
-        this.state = {};
+        const partCreator = new PartCreator(
+            () => this._autocompleteRef,
+            query => this.setState({query}),
+        );
+        this.model = new EditorModel(parseEvent(this.props.event), partCreator);
+        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
+        this.state = {
+            autoComplete: null,
+            room,
+        };
         this._editorRef = null;
+        this._autocompleteRef = null;
     }
 
     _onInput = (event) => {
@@ -55,8 +66,33 @@ export default class MessageEditor extends React.Component {
         }
         setCaretPosition(this._editorRef, caret);
 
-        const modelOutput = this._editorRef.parentElement.querySelector(".model");
-        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
+        this.setState({autoComplete: this.model.autoComplete});
+        this._updateModelOutput();
+    }
+
+    _onKeyDown = (event) => {
+        if (event.metaKey || event.altKey || event.shiftKey) {
+            return;
+        }
+        if (!this.model.autoComplete) {
+            return;
+        }
+        const autoComplete = this.model.autoComplete;
+        switch (event.key) {
+            case "Enter":
+                autoComplete.onEnter(event); break;
+            case "ArrowUp":
+                autoComplete.onUpArrow(event); break;
+            case "ArrowDown":
+                autoComplete.onDownArrow(event); break;
+            case "Tab":
+                autoComplete.onTab(event); break;
+            case "Escape":
+                autoComplete.onEscape(event); break;
+            default:
+                return; // don't preventDefault on anything else
+        }
+        event.preventDefault();
     }
 
     _onCancelClicked = () => {
@@ -67,11 +103,31 @@ export default class MessageEditor extends React.Component {
         this._editorRef = ref;
     }
 
+    _collectAutocompleteRef = (ref) => {
+        this._autocompleteRef = ref;
+    }
+
+    _onAutoCompleteConfirm = (completion) => {
+        this.model.autoComplete.onComponentConfirm(completion);
+        renderModel(this._editorRef, this.model);
+        this._updateModelOutput();
+    }
+
+    _onAutoCompleteSelectionChange = (completion) => {
+        this.model.autoComplete.onComponentSelectionChange(completion);
+        renderModel(this._editorRef, this.model);
+        this._updateModelOutput();
+    }
+
+    _updateModelOutput() {
+        const modelOutput = this._editorRef.parentElement.querySelector(".model");
+        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
+    }
+
     componentDidMount() {
         const editor = this._editorRef;
         rerenderModel(editor, this.model);
-        const modelOutput = this._editorRef.parentElement.querySelector(".model");
-        modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
+        this._updateModelOutput();
     }
 
     render() {
@@ -84,14 +140,31 @@ export default class MessageEditor extends React.Component {
         //     }
         // });
         // const modelOutput = JSON.stringify(this.state.parts, undefined, 2);
+        let autoComplete;
+        if (this.state.autoComplete) {
+            const query = this.state.query;
+            const queryLen = query.length;
+            autoComplete = <div className="mx_MessageEditor_AutoCompleteWrapper">
+                <Autocomplete
+                    ref={this._collectAutocompleteRef}
+                    query={query}
+                    onConfirm={this._onAutoCompleteConfirm}
+                    onSelectionChange={this._onAutoCompleteSelectionChange}
+                    selection={{beginning: true, end: queryLen, start: queryLen}}
+                    room={this.state.room}
+                />
+            </div>;
+        }
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div className="mx_MessageEditor">
+                { autoComplete }
                 <div
                     className="editor"
                     contentEditable="true"
                     tabIndex="1"
                     // suppressContentEditableWarning={true}
                     onInput={this._onInput}
+                    onKeyDown={this._onKeyDown}
                     ref={this._collectEditorRef}
                 >
                 </div>

@@ -64,4 +64,9 @@ limitations under the License.
         white-space: pre;
         font-size: 12px;
     }
+
+    .mx_MessageEditor_AutoCompleteWrapper {
+        position: relative;
+        height: 0;
+    }
 }
