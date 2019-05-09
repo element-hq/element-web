@@ -37,14 +37,16 @@ function parseHtmlMessage(html) {
                         const resourceId = pillMatch[1]; // The room/user ID
                         const prefix = pillMatch[2]; // The first character of prefix
                         switch (prefix) {
-                            case "@": return new UserPillPart(resourceId);
-                            case "#": return new RoomPillPart(resourceId);
-                            default: return new PlainPart(n.innerText);
+                            case "@": return new UserPillPart(resourceId, n.textContent);
+                            case "#": return new RoomPillPart(resourceId, n.textContent);
+                            default: return new PlainPart(n.textContent);
                         }
                     }
                     default:
-                        return new PlainPart(n.innerText);
+                        return new PlainPart(n.textContent);
                 }
+            default:
+                return null;
         }
     }).filter(p => !!p);
     return parts;
