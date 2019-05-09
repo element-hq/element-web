@@ -37,18 +37,24 @@ export default class ReactionDimension extends React.PureComponent {
         };
 
         if (props.reactions) {
+            props.reactions.on("Relations.add", this.onReactionsChange);
             props.reactions.on("Relations.redaction", this.onReactionsChange);
         }
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.reactions !== nextProps.reactions) {
+            nextProps.reactions.on("Relations.add", this.onReactionsChange);
             nextProps.reactions.on("Relations.redaction", this.onReactionsChange);
         }
     }
 
     componentWillUnmount() {
         if (this.props.reactions) {
+            this.props.reactions.removeListener(
+                "Relations.add",
+                this.onReactionsChange,
+            );
             this.props.reactions.removeListener(
                 "Relations.redaction",
                 this.onReactionsChange,
