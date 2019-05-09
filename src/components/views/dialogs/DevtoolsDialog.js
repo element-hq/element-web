@@ -561,8 +561,6 @@ class ServersInRoomList extends DevtoolsComponent {
     constructor(props, context) {
         super(props, context);
 
-        this.onQuery = this.onQuery.bind(this);
-
         const room = MatrixClientPeg.get().getRoom(this.context.roomId);
         const servers = new Set();
         room.currentState.getStateEvents("m.room.member").forEach(ev => servers.add(ev.getSender().split(":")[1]));
@@ -576,7 +574,7 @@ class ServersInRoomList extends DevtoolsComponent {
         };
     }
 
-    onQuery(query) {
+    onQuery = (query) => {
         this.setState({ query });
     }
 

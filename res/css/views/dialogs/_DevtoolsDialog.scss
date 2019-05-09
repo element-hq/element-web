@@ -19,6 +19,7 @@ limitations under the License.
 }
 
 .mx_DevTools_ServersInRoomList_button {
+    /* Set the cursor back to default as `.mx_Dialog button` sets it to pointer */
     cursor: default !important;
 }
 
