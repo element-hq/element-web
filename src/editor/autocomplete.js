@@ -26,6 +26,11 @@ export default class AutocompleteWrapperModel {
 
     onEscape(e) {
         this._getAutocompleterComponent().onEscape(e);
+        this._updateCallback({
+            replacePart: new PlainPart(this._queryPart.text),
+            replaceCaret: this._queryOffset,
+            close: true,
+        });
     }
 
     onEnter() {
@@ -37,12 +42,10 @@ export default class AutocompleteWrapperModel {
     }
 
     onUpArrow() {
-        console.log("onUpArrow");
         this._getAutocompleterComponent().onUpArrow();
     }
 
     onDownArrow() {
-        console.log("onDownArrow");
         this._getAutocompleterComponent().onDownArrow();
     }
 
