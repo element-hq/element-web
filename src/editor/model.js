@@ -88,6 +88,7 @@ export default class EditorModel {
             this._addText(position, diff.added);
         }
         this._mergeAdjacentParts();
+        // TODO: now that parts can be outright deleted, this doesn't make sense anymore
         const caretOffset = diff.at + (diff.added ? diff.added.length : 0);
         const newPosition = this._positionForOffset(caretOffset, true);
         this._setActivePart(newPosition);
@@ -97,21 +98,27 @@ export default class EditorModel {
     _setActivePart(pos) {
         const {index} = pos;
         const part = this._parts[index];
-        if (pos.index !== this._activePartIdx) {
-            this._activePartIdx = index;
-            // if there is a hidden autocomplete for this part, show it again
-            if (this._activePartIdx !== this._autoCompletePartIdx) {
-                // else try to create one
-                const ac = part.createAutoComplete(this._onAutoComplete);
-                if (ac) {
-                    // make sure that react picks up the difference between both acs
-                    this._autoComplete = ac;
-                    this._autoCompletePartIdx = index;
+        if (part) {
+            if (index !== this._activePartIdx) {
+                this._activePartIdx = index;
+                if (this._activePartIdx !== this._autoCompletePartIdx) {
+                    // else try to create one
+                    const ac = part.createAutoComplete(this._onAutoComplete);
+                    if (ac) {
+                        // make sure that react picks up the difference between both acs
+                        this._autoComplete = ac;
+                        this._autoCompletePartIdx = index;
+                    }
                 }
             }
-        }
-        if (this._autoComplete) {
-            this._autoComplete.onPartUpdate(part, pos.offset);
+            // not _autoComplete, only there if active part is autocomplete part
+            if (this.autoComplete) {
+                this.autoComplete.onPartUpdate(part, pos.offset);
+            }
+        } else {
+            this._activePartIdx = null;
+            this._autoComplete = null;
+            this._autoCompletePartIdx = null;
         }
     }
 
@@ -181,14 +188,19 @@ export default class EditorModel {
         let {index, offset} = pos;
         const part = this._parts[index];
         if (part) {
-            if (part.insertAll(offset, str)) {
-                str = null;
+            if (part.canEdit) {
+                if (part.insertAll(offset, str)) {
+                    str = null;
+                } else {
+                    // console.log("splitting", offset, [part.text]);
+                    const splitPart = part.split(offset);
+                    // console.log("splitted", [part.text, splitPart.text]);
+                    index += 1;
+                    this._insertPart(index, splitPart);
+                }
             } else {
-                // console.log("splitting", offset, [part.text]);
-                const splitPart = part.split(offset);
-                // console.log("splitted", [part.text, splitPart.text]);
+                // insert str after this part
                 index += 1;
-                this._insertPart(index, splitPart);
             }
         }
         while (str) {
