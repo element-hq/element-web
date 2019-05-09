@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
+import Promise from "bluebird";
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -205,6 +207,47 @@ export const CommandMap = {
                 return success(cli.sendStateEvent(roomId, 'm.room.member', content, cli.getUserId()));
             }
             return reject(this.getUsage());
+        },
+    }),
+
+    roomavatar: new Command({
+        name: 'roomavatar',
+        args: '<mxc_url>',
+        description: _td('Changes your avatar in this current room only'),
+        runFn: function(roomId, args) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(roomId);
+            const userId = cli.getUserId();
+
+            let promise = Promise.resolve(args);
+            if (!args) {
+                promise = new Promise((resolve) => {
+                    const fileSelector = document.createElement('input');
+                    fileSelector.setAttribute('type', 'file');
+                    fileSelector.onchange = (ev) => {
+                        const file = ev.target.files[0];
+
+                        const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
+                        Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
+                            file,
+                            onFinished: (shouldContinue) => {
+                                if (shouldContinue) resolve(cli.uploadContent(file));
+                            },
+                        });
+                    };
+
+                    fileSelector.click();
+                });
+            }
+
+            return success(promise.then((url) => {
+                const ev = room.currentState.getStateEvents('m.room.member', userId);
+                const content = {
+                    ...ev ? ev.getContent() : { membership: 'join' },
+                    avatar_url: url,
+                };
+                return cli.sendStateEvent(roomId, 'm.room.member', content, userId);
+            }));
         },
     }),
 
