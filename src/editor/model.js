@@ -114,6 +114,14 @@ export default class EditorModel {
         }
     }
 
+    _onAutoComplete = ({replacePart, replaceCaret, close}) => {
+        this._replacePart(this._autoCompletePartIdx, replacePart);
+        if (close) {
+            this._autoComplete = null;
+            this._autoCompletePartIdx = null;
+        }
+    }
+
     /*
     updateCaret(caret) {
         // update active part here as well, hiding/showing autocomplete if needed
@@ -201,14 +209,6 @@ export default class EditorModel {
         });
 
         return new DocumentPosition(index, totalOffset - currentOffset);
-    }
-
-    _onAutoComplete = ({replacePart, replaceCaret, close}) => {
-        this._replacePart(this._autoCompletePartIdx, replacePart);
-        if (close) {
-            this._autoComplete = null;
-            this._autoCompletePartIdx = null;
-        }
     }
 }
 
