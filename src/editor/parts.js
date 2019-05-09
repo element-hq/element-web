@@ -91,6 +91,10 @@ class BasePart {
     get text() {
         return this._text;
     }
+
+    get canEdit() {
+        return true;
+    }
 }
 
 export class PlainPart extends BasePart {
@@ -164,6 +168,10 @@ class PillPart extends BasePart {
                node.nodeName === "SPAN" &&
                node.childNodes.length === 1 &&
                node.childNodes[0].nodeType === Node.TEXT_NODE;
+    }
+
+    get canEdit() {
+        return false;
     }
 }
 

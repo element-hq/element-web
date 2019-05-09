@@ -20,7 +20,6 @@ export default class EditorModel {
     constructor(parts, partCreator) {
         this._parts = parts;
         this._partCreator = partCreator;
-        this._previousValue = parts.reduce((text, p) => text + p.text, "");
         this._activePartIdx = null;
         this._autoComplete = null;
         this._autoCompletePartIdx = null;
@@ -68,19 +67,19 @@ export default class EditorModel {
     _diff(newValue, inputType, caret) {
         // handle deleteContentForward (Delete key)
         // and deleteContentBackward (Backspace)
-
+        const previousValue = this.parts.reduce((text, p) => text + p.text, "");
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
-            return diffDeletion(this._previousValue, newValue);
+            return diffDeletion(previousValue, newValue);
         } else {
-            return diffAtCaret(this._previousValue, newValue, caret.offset);
+            return diffAtCaret(previousValue, newValue, caret.offset);
         }
     }
 
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this._positionForOffset(diff.at, caret.atNodeEnd);
-        console.log("update at", {position, diff, newValue, prevValue: this._previousValue});
+        console.log("update at", {position, diff, newValue, prevValue: this.parts.reduce((text, p) => text + p.text, "")});
         if (diff.removed) {
             this._removeText(position, diff.removed.length);
         }
@@ -88,7 +87,6 @@ export default class EditorModel {
             this._addText(position, diff.added);
         }
         this._mergeAdjacentParts();
-        this._previousValue = newValue;
         const caretOffset = diff.at + (diff.added ? diff.added.length : 0);
         const newPosition = this._positionForOffset(caretOffset, true);
         this._setActivePart(newPosition);
@@ -141,23 +139,28 @@ export default class EditorModel {
 
     _removeText(pos, len) {
         let {index, offset} = pos;
-        while (len !== 0) {
+        while (len > 0) {
             // part might be undefined here
             let part = this._parts[index];
-            const amount = Math.min(len, part.text.length - offset);
-            const replaceWith = part.remove(offset, amount);
-            if (typeof replaceWith === "string") {
-                this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
-            }
-            part = this._parts[index];
-            // remove empty part
-            if (!part.text.length) {
-                this._removePart(index);
+            if (part.canEdit) {
+                const amount = Math.min(len, part.text.length - offset);
+                const replaceWith = part.remove(offset, amount);
+                if (typeof replaceWith === "string") {
+                    this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
+                }
+                part = this._parts[index];
+                // remove empty part
+                if (!part.text.length) {
+                    this._removePart(index);
+                } else {
+                    index += 1;
+                }
+                len -= amount;
+                offset = 0;
             } else {
-                index += 1;
+                len = part.length - (offset + len);
+                this._removePart(index);
             }
-            len -= amount;
-            offset = 0;
         }
     }
 
