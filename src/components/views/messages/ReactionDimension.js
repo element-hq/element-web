@@ -32,11 +32,36 @@ export default class ReactionDimension extends React.PureComponent {
         super(props);
 
         this.state = {
-            selected: this.getInitialSelection(),
+            selected: this.getSelection(),
         };
+
+        if (props.reactions) {
+            props.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
     }
 
-    getInitialSelection() {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.reactions !== nextProps.reactions) {
+            nextProps.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.reactions) {
+            this.props.reactions.removeListener(
+                "Relations.redaction",
+                this.onReactionsChange,
+            );
+        }
+    }
+
+    onReactionsChange = () => {
+        this.setState({
+            selected: this.getSelection(),
+        });
+    }
+
+    getSelection() {
         const myReactions = this.getMyReactions();
         if (!myReactions) {
             return null;
@@ -45,6 +70,9 @@ export default class ReactionDimension extends React.PureComponent {
         let selected = null;
         for (const { key, content } of options) {
             const reactionExists = myReactions.some(mxEvent => {
+                if (mxEvent.isRedacted()) {
+                    return false;
+                }
                 return mxEvent.getContent()["m.relates_to"].key === content;
             });
             if (reactionExists) {

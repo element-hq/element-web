@@ -28,6 +28,34 @@ export default class ReactionsRow extends React.PureComponent {
         reactions: PropTypes.object,
     }
 
+    constructor(props) {
+        super(props);
+
+        if (props.reactions) {
+            props.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.reactions !== nextProps.reactions) {
+            nextProps.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.reactions) {
+            this.props.reactions.removeListener(
+                "Relations.redaction",
+                this.onReactionsChange,
+            );
+        }
+    }
+
+    onReactionsChange = () => {
+        // TODO: Call `onHeightChanged` as needed
+        this.forceUpdate();
+    }
+
     render() {
         const { mxEvent, reactions } = this.props;
 
@@ -37,7 +65,10 @@ export default class ReactionsRow extends React.PureComponent {
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
         const items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
-            const count = events.length;
+            const count = events.size;
+            if (!count) {
+                return null;
+            }
             return <ReactionsRowButton
                 key={content}
                 content={content}
