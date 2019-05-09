@@ -81,15 +81,16 @@ export default class EditorModel {
         const diff = this._diff(newValue, inputType, caret);
         const position = this._positionForOffset(diff.at, caret.atNodeEnd);
         console.log("update at", {position, diff, newValue, prevValue: this.parts.reduce((text, p) => text + p.text, "")});
+        let removedOffsetDecrease = 0;
         if (diff.removed) {
-            this._removeText(position, diff.removed.length);
+            removedOffsetDecrease = this._removeText(position, diff.removed.length);
         }
+        let addedLen = 0;
         if (diff.added) {
-            this._addText(position, diff.added);
+            addedLen = this._addText(position, diff.added);
         }
         this._mergeAdjacentParts();
-        // TODO: now that parts can be outright deleted, this doesn't make sense anymore
-        const caretOffset = diff.at + (diff.added ? diff.added.length : 0);
+        const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         const newPosition = this._positionForOffset(caretOffset, true);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
@@ -157,13 +158,19 @@ export default class EditorModel {
         }
     }
 
+    /**
+     * removes `len` amount of characters at `pos`.
+     * @return {Number} how many characters before pos were also removed,
+     * usually because of non-editable parts that can only be removed in their entirety.
+     */
     _removeText(pos, len) {
         let {index, offset} = pos;
+        let removedOffsetDecrease = 0;
         while (len > 0) {
             // part might be undefined here
             let part = this._parts[index];
+            const amount = Math.min(len, part.text.length - offset);
             if (part.canEdit) {
-                const amount = Math.min(len, part.text.length - offset);
                 const replaceWith = part.remove(offset, amount);
                 if (typeof replaceWith === "string") {
                     this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
@@ -175,31 +182,38 @@ export default class EditorModel {
                 } else {
                     index += 1;
                 }
-                len -= amount;
-                offset = 0;
             } else {
-                len = part.length - (offset + len);
+                removedOffsetDecrease += offset;
                 this._removePart(index);
             }
+            len -= amount;
+            offset = 0;
         }
+        return removedOffsetDecrease;
     }
 
+    /**
+     * inserts `str` into the model at `pos`.
+     * @return {Number} how far from position (in characters) the insertion ended.
+     * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
+     */
     _addText(pos, str, actions) {
-        let {index, offset} = pos;
+        let {index} = pos;
+        const {offset} = pos;
+        let addLen = str.length;
         const part = this._parts[index];
         if (part) {
             if (part.canEdit) {
                 if (part.insertAll(offset, str)) {
                     str = null;
                 } else {
-                    // console.log("splitting", offset, [part.text]);
                     const splitPart = part.split(offset);
-                    // console.log("splitted", [part.text, splitPart.text]);
                     index += 1;
                     this._insertPart(index, splitPart);
                 }
             } else {
-                // insert str after this part
+                // not-editable, insert str after this part
+                addLen += part.text.length - offset;
                 index += 1;
             }
         }
@@ -209,6 +223,7 @@ export default class EditorModel {
             this._insertPart(index, newPart);
             index += 1;
         }
+        return addLen;
     }
 
     _positionForOffset(totalOffset, atPartEnd) {
