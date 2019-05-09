@@ -66,9 +66,13 @@ export default class MessageEditor extends React.Component {
             renderModel(this._editorRef, this.model);
         }
         if (caret) {
-            setCaretPosition(this._editorRef, caret);
+            try {
+                setCaretPosition(this._editorRef, caret);
+            } catch (err) {
+                console.error(err);
+            }
         }
-
+        console.log("_updateEditorState", this.state.autoComplete, this.model.autoComplete);
         this.setState({autoComplete: this.model.autoComplete});
         const modelOutput = this._editorRef.parentElement.querySelector(".model");
         modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
