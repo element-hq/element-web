@@ -24,6 +24,7 @@ limitations under the License.
     border-radius: 10px;
     background-color: $reaction-row-button-bg-color;
     cursor: pointer;
+    user-select: none;
 
     &:hover {
         border-color: $reaction-row-button-hover-border-color;
