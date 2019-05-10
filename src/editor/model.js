@@ -124,18 +124,24 @@ export default class EditorModel {
     }
 
     _onAutoComplete = ({replacePart, caretOffset, close}) => {
+        let pos;
         if (replacePart) {
             this._replacePart(this._autoCompletePartIdx, replacePart);
+            let index = this._autoCompletePartIdx;
+            if (caretOffset === undefined) {
+                caretOffset = 0;
+                index += 1;
+            }
+            pos = new DocumentPosition(index, caretOffset);
         }
-        const index = this._autoCompletePartIdx;
         if (close) {
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
         }
-        if (caretOffset === undefined) {
-            caretOffset = replacePart.text.length;
-        }
-        this._updateCallback(new DocumentPosition(index, caretOffset));
+        // rerender even if editor contents didn't change
+        // to make sure the MessageEditor checks
+        // model.autoComplete being empty and closes it
+        this._updateCallback(pos);
     }
 
     /*
