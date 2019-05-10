@@ -192,8 +192,8 @@ export const CommandMap = {
         },
     }),
 
-    roomnick: new Command({
-        name: 'roomnick',
+    myroomnick: new Command({
+        name: 'myroomnick',
         args: '<display_name>',
         description: _td('Changes your display nickname in the current room only'),
         runFn: function(roomId, args) {
@@ -210,9 +210,9 @@ export const CommandMap = {
         },
     }),
 
-    roomavatar: new Command({
-        name: 'roomavatar',
-        args: '<mxc_url>',
+    myroomavatar: new Command({
+        name: 'myroomavatar',
+        args: '[<mxc_url>]',
         description: _td('Changes your avatar in this current room only'),
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
@@ -770,6 +770,7 @@ const aliases = {
     j: "join",
     newballsplease: "discardsession",
     goto: "join", // because it handles event permalinks magically
+    roomnick: "myroomnick",
 };
 
 
