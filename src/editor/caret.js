@@ -68,35 +68,22 @@ function isVisibleNode(node) {
     return node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE;
 }
 
-function untilVisibleNode(node) {
-    // need to ignore comment nodes that react uses
-    while (node && !isVisibleNode(node)) {
-        node = node.nextSibling;
-    }
-    return node;
-}
-
 export function setCaretPosition(editor, caretPosition) {
-    let node = untilVisibleNode(editor.firstChild);
-    if (!node) {
-        node = editor;
-    } else {
-        let {index} = caretPosition;
-        while (node && index) {
-            node = untilVisibleNode(node.nextSibling);
-            --index;
-        }
-        if (!node) {
-            node = editor;
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            // make sure we have a text node
-            node = node.childNodes[0];
-        }
-    }
     const sel = document.getSelection();
     sel.removeAllRanges();
     const range = document.createRange();
-    range.setStart(node, caretPosition.offset);
-    range.collapse(true);
+    let focusNode = editor.childNodes[caretPosition.index];
+    // node not found, set caret at end
+    if (!focusNode) {
+        range.selectNodeContents(editor);
+        range.collapse(false);
+    } else {
+        // make sure we have a text node
+        if (focusNode.nodeType === Node.ELEMENT_NODE) {
+            focusNode = focusNode.childNodes[0];
+        }
+        range.setStart(focusNode, caretPosition.offset);
+        range.collapse(true);
+    }
     sel.addRange(range);
 }
