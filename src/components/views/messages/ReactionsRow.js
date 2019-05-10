@@ -42,10 +42,11 @@ export default class ReactionsRow extends React.PureComponent {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.reactions !== nextProps.reactions) {
-            nextProps.reactions.on("Relations.add", this.onReactionsChange);
-            nextProps.reactions.on("Relations.redaction", this.onReactionsChange);
+    componentDidUpdate(prevProps) {
+        if (prevProps.reactions !== this.props.reactions) {
+            this.props.reactions.on("Relations.add", this.onReactionsChange);
+            this.props.reactions.on("Relations.redaction", this.onReactionsChange);
+            this.onReactionsChange();
         }
     }
 
