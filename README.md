@@ -109,25 +109,31 @@ You can configure the app by copying `config.sample.json` to
 
 For a good example, see https://riot.im/develop/config.json.
 
-1. `default_server_name` sets the default server name to use for authentication.
-   This will trigger Riot to ask
-   `https://<server_name>/.well-known/matrix/client` for the homeserver and
-   identity server URLs to use. This is the recommended approach for setting a
-   default server. However, it is also possible to use the following to directly
-   configure each of the URLs:
-   * `default_hs_url` sets the default homeserver URL.
-   * `default_is_url` sets the default identity server URL (this is the server used
-      for verifying third party identifiers like email addresses). If this is blank,
-      registering with an email address, adding an email address to your account,
-      or inviting users via email address will not work.  Matrix identity servers are
-      very simple web services which map third party identifiers (currently only email
-      addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
-      for more details.  Currently the only public matrix identity servers are https://matrix.org
-      and https://vector.im.  In the future, identity servers will be decentralised.
-   * Riot will report an error if you accidentally configure both `default_server_name` _and_ `default_hs_url` since it's unclear which should take priority.
+1. `default_server_config` sets the default homeserver and identity server URL for
+   Riot to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
+   with added support for a `server_name` under the `m.homeserver` section to display
+   a custom homeserver name. Alternatively, the config can contain a `default_server_name`
+   instead which is where Riot will go to get that same object - see the `.well-known`
+   link above for more information. Note that the `default_server_name` is used to get
+   a complete server configuration whereas the `server_name` in the `default_server_config`
+   is for display purposes only.
+   * *Note*: The URLs can also be individually specified as `default_hs_url` and 
+     `default_is_url`, however these are deprecated. They are maintained for backwards
+     compatibility with older configurations. `default_is_url` is respected only
+     if `default_hs_url` is used.
+   * The identity server is used for verifying third party identifiers like emails
+     and phone numbers. It is not used to store your password or account information.
+     If not provided, the identity server defaults to vector.im unless `disable_identity_server`
+     is set to true in the config. Currently the only two public identity servers
+     are https://matrix.org and https://vector.im, however in future identity servers
+     will be decentralised.
+   * Riot will fail to load if a mix of `default_server_config`, `default_server_name`, or
+     `default_hs_url` is specified. When multiple sources are specified, it is unclear
+     which should take priority and therefore the application cannot continue.
 1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
    in the `labs` section of settings.  The available optional experimental features vary from
-   release to release.
+   release to release. Some of the available features are described in the Labs Feature section
+   of this README.
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
