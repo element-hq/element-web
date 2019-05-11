@@ -449,10 +449,23 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
+
         if (room && room.getMyMembership() === 'join') {
+            // assume we can invite until proven false
+            let canInvite = true;
+
+            const plEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+            const me = room.getMember(cli.getUserId());
+            if (plEvent && me) {
+                const content = plEvent.getContent();
+                if (content && content.invite > me.powerLevel) {
+                    canInvite = false;
+                }
+            }
+
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
-                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
                     <span>{ _t('Invite to this room') }</span>
                 </AccessibleButton>;
         }
