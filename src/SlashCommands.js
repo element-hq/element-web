@@ -30,6 +30,7 @@ import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
+import {textToHtmlRainbow} from "./utils/colour";
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -718,6 +719,26 @@ export const CommandMap = {
             return success();
         },
     }),
+
+    rainbow: new Command({
+        name: "rainbow",
+        description: _td(""),
+        args: '<message>',
+        runFn: function(roomId, args) {
+            if (!args) return reject(this.getUserId());
+            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, textToHtmlRainbow(args)));
+        },
+    }),
+
+    rainbowme: new Command({
+        name: "rainbowme",
+        description: _td(""),
+        args: '<message>',
+        runFn: function(roomId, args) {
+            if (!args) return reject(this.getUserId());
+            return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
+        },
+    })
 };
 /* eslint-enable babel/no-invalid-this */
 
