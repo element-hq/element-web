@@ -36,3 +36,11 @@ reactions from other people. This feature is currently under active development,
 and only portions have been implemented so far.
 
 [#riot-web:matrix.org]: https://matrix.to/#/#riot-web:matrix.org
+
+## Custom Notification Sounds
+
+Allows you to set your very own notification sounds for individual rooms.
+
+Once enabled, you can use room settings to set a custom sound for a room by going to
+the "Notifications" tab. Currently this feature will **not** carry across to other matrix
+clients other than versions of Riot-web with this feature enabled, as it is not in the spec.
