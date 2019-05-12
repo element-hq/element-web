@@ -122,6 +122,7 @@ export const SETTINGS = {
     "feature_notification_sounds": {
         isFeature: true,
         displayName: _td("Custom Notification Sounds"),
+    },
     "feature_reactions": {
         isFeature: true,
         displayName: _td("React to messages with emoji"),

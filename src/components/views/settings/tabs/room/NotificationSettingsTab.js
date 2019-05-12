@@ -20,12 +20,12 @@ import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
-import SettingsStore from '../../../../../settings/SettingsStore';
+import SettingsStore from  '../../../../../settings/SettingsStore';
+import { SettingLevel } from '../../../../../settings/SettingsStore';
 
 export default class NotificationsSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
-        closeSettingsFn: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -46,7 +46,7 @@ export default class NotificationsSettingsTab extends React.Component {
         });
     }
 
-    _onSoundUploadChanged(e) {
+    async _onSoundUploadChanged(e) {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
                 uploadedFile: null,
@@ -58,11 +58,18 @@ export default class NotificationsSettingsTab extends React.Component {
         this.setState({
             uploadedFile: file,
         });
+
+        try {
+            await this._saveSound();
+        } catch (ex) {
+            console.error(
+                `Unable to save notification sound for ${this.props.roomId}`,
+                ex,
+            );
+        }
     }
 
-    async _saveSound(e) {
-        e.stopPropagation();
-        e.preventDefault();
+    async _saveSound() {
         if (!this.state.uploadedFile) {
             return;
         }
@@ -82,7 +89,8 @@ export default class NotificationsSettingsTab extends React.Component {
         await SettingsStore.setValue(
             "notificationSound",
             this.props.roomId,
-            "room-account",
+            SettingsStore.
+            SettingLevel.ROOM_ACCOUNT,
             {
                 name: this.state.uploadedFile.name,
                 type: type,
@@ -101,7 +109,12 @@ export default class NotificationsSettingsTab extends React.Component {
     _clearSound(e) {
         e.stopPropagation();
         e.preventDefault();
-        SettingsStore.setValue("notificationSound", this.props.roomId, "room-account", null);
+        SettingsStore.setValue(
+            "notificationSound",
+            this.props.roomId,
+            SettingLevel.ROOM_ACCOUNT,
+            null,
+        );
 
         this.setState({
             currentSound: "default",
@@ -119,11 +132,8 @@ export default class NotificationsSettingsTab extends React.Component {
                     </div>
                     <div>
                         <h3>{_t("Set a new custom sound")}</h3>
-                        <form onSubmit={this._saveSound.bind(this)} autoComplete={false} noValidate={true}>
+                        <form autoComplete={false} noValidate={true}>
                             <input type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
-                            <AccessibleButton onClick={this._saveSound.bind(this)} kind="primary" disabled={!this.state.uploadedFile}>
-                                {_t("Save")}
-                            </AccessibleButton>
                         </form>
                         <AccessibleButton onClick={this._clearSound.bind(this)} kind="primary">
                                 {_t("Reset to default sound")}

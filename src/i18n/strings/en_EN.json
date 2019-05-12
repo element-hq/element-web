@@ -297,6 +297,7 @@
     "Show recent room avatars above the room list": "Show recent room avatars above the room list",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Group & filter rooms by custom tags (refresh to apply changes)",
     "Render simple counters in room header": "Render simple counters in room header",
+    "Custom Notification Sounds": "Custom Notification Sounds",
     "React to messages with emoji": "React to messages with emoji",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
@@ -613,6 +614,9 @@
     "Room Addresses": "Room Addresses",
     "Publish this room to the public in %(domain)s's room directory?": "Publish this room to the public in %(domain)s's room directory?",
     "URL Previews": "URL Previews",
+    "Sounds": "Sounds",
+    "Set a new custom sound": "Set a new custom sound",
+    "Reset to default sound": "Reset to default sound",
     "Change room avatar": "Change room avatar",
     "Change room name": "Change room name",
     "Change main address for the room": "Change main address for the room",
@@ -1619,9 +1623,5 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
-    "Sounds": "Sounds",
-    "Custom Notification Sounds": "Notification sound",
-    "Set a new custom sound": "Set a new custom sound",
-    "Reset to default sound": "Reset to default sound"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }

@@ -97,20 +97,24 @@ const Notifier = {
     },
 
     getSoundForRoom: async function(roomId) {
-        // We do no caching here because the SDK caches the event content
+        // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         let content = SettingsStore.getValue("notificationSound", roomId);
         if (!content) {
-            content = SettingsStore.getValue("notificationSound");
-            if (!content) {
-                return null;
-            }
+            return null;
         }
 
         if (!content.url) {
             console.warn(`${roomId} has custom notification sound event, but no url key`);
             return null;
         }
+        
+        if (!content.url.startsWith("mxc://")) {
+            console.warn(`${roomId} has custom notification sound event, but url is not a mxc url`);
+            return null;
+        }
+
+        // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
 
         return {
             url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
@@ -123,7 +127,7 @@ const Notifier = {
     _playAudioNotification: async function(ev, room) {
         const sound = SettingsStore.isFeatureEnabled("feature_notification_sounds") ? await this.getSoundForRoom(room.roomId) : null;
         console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
-        // XXX: How do we ensure this is a sound file and not going to be exploited?
+
         try {
             const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
             let audioElement = selector;
