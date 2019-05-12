@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
@@ -35,15 +34,6 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            agreeDimension: null,
-            likeDimension: null,
-        };
-    }
-
     onFocusChange = (focused) => {
         if (!this.props.onFocusChange) {
             return;
@@ -57,31 +47,6 @@ export default class MessageActionBar extends React.PureComponent {
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
             {event},
         );
-    }
-
-    onAgreeClick = (ev) => {
-        this.toggleDimensionValue("agreeDimension", "agree");
-    }
-
-    onDisagreeClick = (ev) => {
-        this.toggleDimensionValue("agreeDimension", "disagree");
-    }
-
-    onLikeClick = (ev) => {
-        this.toggleDimensionValue("likeDimension", "like");
-    }
-
-    onDislikeClick = (ev) => {
-        this.toggleDimensionValue("likeDimension", "dislike");
-    }
-
-    toggleDimensionValue(dimension, value) {
-        const state = this.state[dimension];
-        const newState = state !== value ? value : null;
-        this.setState({
-            [dimension]: newState,
-        });
-        // TODO: Send the reaction event
     }
 
     onReplyClick = (ev) => {
@@ -134,25 +99,21 @@ export default class MessageActionBar extends React.PureComponent {
             return null;
         }
 
-        const state = this.state.agreeDimension;
+        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
         const options = [
             {
                 key: "agree",
                 content: "👍",
-                onClick: this.onAgreeClick,
             },
             {
                 key: "disagree",
                 content: "👎",
-                onClick: this.onDisagreeClick,
             },
         ];
-
-        return <span className="mx_MessageActionBar_reactionDimension"
+        return <ReactionDimension
             title={_t("Agree or Disagree")}
-        >
-            {this.renderReactionDimensionItems(state, options)}
-        </span>;
+            options={options}
+        />;
     }
 
     renderLikeDimension() {
@@ -160,40 +121,21 @@ export default class MessageActionBar extends React.PureComponent {
             return null;
         }
 
-        const state = this.state.likeDimension;
+        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
         const options = [
             {
                 key: "like",
                 content: "🙂",
-                onClick: this.onLikeClick,
             },
             {
                 key: "dislike",
                 content: "😔",
-                onClick: this.onDislikeClick,
             },
         ];
-
-        return <span className="mx_MessageActionBar_reactionDimension"
+        return <ReactionDimension
             title={_t("Like or Dislike")}
-        >
-            {this.renderReactionDimensionItems(state, options)}
-        </span>;
-    }
-
-    renderReactionDimensionItems(state, options) {
-        return options.map(option => {
-            const disabled = state && state !== option.key;
-            const classes = classNames({
-                mx_MessageActionBar_reactionDisabled: disabled,
-            });
-            return <span key={option.key}
-                className={classes}
-                onClick={option.onClick}
-            >
-                {option.content}
-            </span>;
-        });
+            options={options}
+        />;
     }
 
     render() {
