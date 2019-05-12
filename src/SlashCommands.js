@@ -738,7 +738,7 @@ export const CommandMap = {
             if (!args) return reject(this.getUserId());
             return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
         },
-    })
+    }),
 };
 /* eslint-enable babel/no-invalid-this */
 
