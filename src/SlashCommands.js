@@ -722,7 +722,7 @@ export const CommandMap = {
 
     rainbow: new Command({
         name: "rainbow",
-        description: _td(""),
+        description: _td("Sends the given message coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
@@ -732,7 +732,7 @@ export const CommandMap = {
 
     rainbowme: new Command({
         name: "rainbowme",
-        description: _td(""),
+        description: _td("Sends the given emote coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
