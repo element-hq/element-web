@@ -29,6 +29,7 @@ import {
 } from '../../../notifications';
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
+import AccessibleButton from "../elements/AccessibleButton";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -654,6 +655,17 @@ module.exports = React.createClass({
         MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
     },
 
+    _onClearNotifications: function() {
+        const cli = MatrixClientPeg.get();
+
+        cli.getRooms().forEach(r => {
+            if (r.getUnreadNotificationCount() > 0) {
+                const events = r.getLiveTimeline().getEvents();
+                if (events.length) cli.sendReadReceipt(events.pop());
+            }
+        });
+    },
+
     _updatePushRuleActions: function(rule, actions, enabled) {
         const cli = MatrixClientPeg.get();
 
@@ -746,6 +758,13 @@ module.exports = React.createClass({
                                                       label={_t('Enable notifications for this account')}/>;
         }
 
+        let clearNotificationsButton;
+        if (MatrixClientPeg.get().getRooms().some(r => r.getUnreadNotificationCount() > 0)) {
+            clearNotificationsButton = <AccessibleButton onClick={this._onClearNotifications} kind='danger'>
+                {_t("Clear notifications")}
+            </AccessibleButton>;
+        }
+
         // When enabled, the master rule inhibits all existing rules
         // So do not show all notification settings
         if (this.state.masterPushRule && this.state.masterPushRule.enabled) {
@@ -756,6 +775,8 @@ module.exports = React.createClass({
                     <div className="mx_UserNotifSettings_notifTable">
                         { _t('All notifications are currently disabled for all targets.') }
                     </div>
+
+                    {clearNotificationsButton}
                 </div>
             );
         }
@@ -877,6 +898,7 @@ module.exports = React.createClass({
 
                     { devicesSection }
 
+                    { clearNotificationsButton }
                 </div>
 
             </div>
