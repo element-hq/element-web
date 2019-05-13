@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
-import { PlainPart, UserPillPart, RoomPillPart } from "./parts";
+import { PlainPart, UserPillPart, RoomPillPart, NewlinePart } from "./parts";
 
 function parseHtmlMessage(html) {
     const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
@@ -42,6 +42,8 @@ function parseHtmlMessage(html) {
                             default: return new PlainPart(n.textContent);
                         }
                     }
+                    case "BR":
+                        return new NewlinePart("\n");
                     default:
                         return new PlainPart(n.textContent);
                 }
