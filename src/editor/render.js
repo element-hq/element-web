@@ -41,7 +41,7 @@ export function renderModel(editor, model) {
         return lines;
     }, [[]]);
 
-    console.log(lines.map(parts => parts.map(p => p.toString())));
+    // console.log(lines.map(parts => parts.map(p => p.toString())));
 
     lines.forEach((parts, i) => {
         let lineContainer = editor.childNodes[i];
