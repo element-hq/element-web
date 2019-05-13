@@ -68,6 +68,9 @@ export default class ReactionsRow extends React.PureComponent {
         this.setState({
             myReactions: this.getMyReactions(),
         });
+        // Using `forceUpdate` for the moment, since we know the overall set of reactions
+        // has changed (this is triggered by events for that purpose only) and
+        // `PureComponent`s shallow state / props compare would otherwise filter this out.
         this.forceUpdate();
     }
 
