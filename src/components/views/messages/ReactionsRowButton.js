@@ -18,48 +18,48 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import MatrixClientPeg from '../../../MatrixClientPeg';
+
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
+        // The event we're displaying reactions for
+        mxEvent: PropTypes.object.isRequired,
         content: PropTypes.string.isRequired,
         count: PropTypes.number.isRequired,
-    }
-
-    constructor(props) {
-        super(props);
-
-        // TODO: This should be derived from actual reactions you may have sent
-        // once we have some API to read them.
-        this.state = {
-            selected: false,
-        };
+        // A possible Matrix event if the current user has voted for this type
+        myReactionEvent: PropTypes.object,
     }
 
     onClick = (ev) => {
-        const state = this.state.selected;
-        this.setState({
-            selected: !state,
-        });
-        // TODO: Send the reaction event
+        const { mxEvent, myReactionEvent, content } = this.props;
+        if (myReactionEvent) {
+            MatrixClientPeg.get().redactEvent(
+                mxEvent.getRoomId(),
+                myReactionEvent.getId(),
+            );
+        } else {
+            MatrixClientPeg.get().sendEvent(mxEvent.getRoomId(), "m.reaction", {
+                "m.relates_to": {
+                    "rel_type": "m.annotation",
+                    "event_id": mxEvent.getId(),
+                    "key": content,
+                },
+            });
+        }
     };
 
     render() {
-        const { content, count } = this.props;
-        const { selected } = this.state;
+        const { content, count, myReactionEvent } = this.props;
 
         const classes = classNames({
             mx_ReactionsRowButton: true,
-            mx_ReactionsRowButton_selected: selected,
+            mx_ReactionsRowButton_selected: !!myReactionEvent,
         });
-
-        let adjustedCount = count;
-        if (selected) {
-            adjustedCount++;
-        }
 
         return <span className={classes}
             onClick={this.onClick}
         >
-            {content} {adjustedCount}
+            {content} {count}
         </span>;
     }
 }

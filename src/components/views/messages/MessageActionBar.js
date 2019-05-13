@@ -28,6 +28,8 @@ import { isContentActionable } from '../../../utils/EventUtils';
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
+        // The Relations model from the JS SDK for reactions to `mxEvent`
+        reactions: PropTypes.object,
         permalinkCreator: PropTypes.object,
         getTile: PropTypes.func,
         getReplyThread: PropTypes.func,
@@ -100,19 +102,11 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "agree",
-                content: "👍",
-            },
-            {
-                key: "disagree",
-                content: "👎",
-            },
-        ];
         return <ReactionDimension
             title={_t("Agree or Disagree")}
-            options={options}
+            options={["👍", "👎"]}
+            reactions={this.props.reactions}
+            mxEvent={this.props.mxEvent}
         />;
     }
 
@@ -122,19 +116,11 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "like",
-                content: "🙂",
-            },
-            {
-                key: "dislike",
-                content: "😔",
-            },
-        ];
         return <ReactionDimension
             title={_t("Like or Dislike")}
-            options={options}
+            options={["🙂", "😔"]}
+            reactions={this.props.reactions}
+            mxEvent={this.props.mxEvent}
         />;
     }
 

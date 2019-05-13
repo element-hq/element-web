@@ -92,6 +92,9 @@ module.exports = React.createClass({
 
         // show timestamps always
         alwaysShowTimestamps: PropTypes.bool,
+
+        // helper function to access relations for an event
+        getRelationsForEvent: PropTypes.func,
     },
 
     componentWillMount: function() {
@@ -511,22 +514,27 @@ module.exports = React.createClass({
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
         ret.push(
-                <li key={eventId}
-                        ref={this._collectEventNode.bind(this, eventId)}
-                        data-scroll-tokens={scrollToken}>
-                    <EventTile mxEvent={mxEv} continuation={continuation}
-                        isRedacted={mxEv.isRedacted()}
-                        onHeightChanged={this._onHeightChanged}
-                        readReceipts={readReceipts}
-                        readReceiptMap={this._readReceiptMap}
-                        showUrlPreview={this.props.showUrlPreview}
-                        checkUnmounting={this._isUnmounting}
-                        eventSendStatus={mxEv.status}
-                        tileShape={this.props.tileShape}
-                        isTwelveHour={this.props.isTwelveHour}
-                        permalinkCreator={this.props.permalinkCreator}
-                        last={last} isSelectedEvent={highlight} />
-                </li>,
+            <li key={eventId}
+                ref={this._collectEventNode.bind(this, eventId)}
+                data-scroll-tokens={scrollToken}
+            >
+                <EventTile mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    onHeightChanged={this._onHeightChanged}
+                    readReceipts={readReceipts}
+                    readReceiptMap={this._readReceiptMap}
+                    showUrlPreview={this.props.showUrlPreview}
+                    checkUnmounting={this._isUnmounting}
+                    eventSendStatus={mxEv.status}
+                    tileShape={this.props.tileShape}
+                    isTwelveHour={this.props.isTwelveHour}
+                    permalinkCreator={this.props.permalinkCreator}
+                    last={last}
+                    isSelectedEvent={highlight}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                />
+            </li>,
         );
 
         return ret;
