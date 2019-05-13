@@ -76,7 +76,7 @@ module.exports = React.createClass({
             password: "",
             passwordConfirm: "",
             passwordComplexity: null,
-            passwordUnsafe: false,
+            passwordSafe: false,
         };
     },
 
@@ -271,19 +271,19 @@ module.exports = React.createClass({
                     }
                     const { scorePassword } = await import('../../../utils/PasswordScorer');
                     const complexity = scorePassword(value);
-                    const unsafe = complexity.score < PASSWORD_MIN_SCORE;
+                    const safe = complexity.score >= PASSWORD_MIN_SCORE;
                     const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
                     this.setState({
                         passwordComplexity: complexity,
-                        passwordUnsafe: unsafe,
+                        passwordSafe: safe,
                     });
-                    return allowUnsafe || !unsafe;
+                    return allowUnsafe || safe;
                 },
                 valid: function() {
                     // Unsafe passwords that are valid are only possible through a
                     // configuration flag. We'll print some helper text to signal
                     // to the user that their password is allowed, but unsafe.
-                    if (this.state.passwordUnsafe) {
+                    if (!this.state.passwordSafe) {
                         return _t("Password is allowed, but unsafe");
                     }
                     return _t("Nice, strong password!");
