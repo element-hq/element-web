@@ -198,9 +198,11 @@ export default class MImageBody extends React.Component {
             // so we'll need to download the original image for this to work
             // well for now. First, let's try a few cases that let us avoid
             // downloading the original:
-            if (pixelRatio === 1.0 ||
-                    (!content.info || !content.info.w ||
-                     !content.info.h || !content.info.size)) {
+            const info = content.info;
+            if (
+                pixelRatio === 1.0 ||
+                (!info || !info.w || !info.h || !info.size)
+            ) {
                 // always thumbnail. it may look a bit worse, but it'll save bandwidth.
                 // which is probably desirable on a lo-dpi device anyway.
                 return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
@@ -215,10 +217,10 @@ export default class MImageBody extends React.Component {
                 // timeline (e.g. >1MB).
 
                 const isLargerThanThumbnail = (
-                    content.info.w > thumbWidth ||
-                    content.info.h > thumbHeight
+                    info.w > thumbWidth ||
+                    info.h > thumbHeight
                 );
-                const isLargeFileSize = content.info.size > 1*1024*1024;
+                const isLargeFileSize = info.size > 1*1024*1024;
 
                 if (isLargeFileSize && isLargerThanThumbnail) {
                     // image is too large physically and bytewise to clutter our timeline so
