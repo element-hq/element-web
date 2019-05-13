@@ -80,8 +80,8 @@ export default class EditorModel {
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this._positionForOffset(diff.at, caret.atNodeEnd);
-        const valueWithCaret = newValue.slice(0, caret.offset) + "|" + newValue.slice(caret.offset);
-        console.log("update at", {diff, valueWithCaret});
+        // const valueWithCaret = newValue.slice(0, caret.offset) + "|" + newValue.slice(caret.offset);
+        // console.log("update at", {diff, valueWithCaret});
         let removedOffsetDecrease = 0;
         if (diff.removed) {
             removedOffsetDecrease = this._removeText(position, diff.removed.length);
@@ -93,6 +93,7 @@ export default class EditorModel {
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         const newPosition = this._positionForOffset(caretOffset, true);
+        // console.log("caretOffset", {at: diff.at, removedOffsetDecrease, addedLen}, newPosition);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
     }

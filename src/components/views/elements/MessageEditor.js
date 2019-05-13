@@ -57,7 +57,6 @@ export default class MessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
-        // document.execCommand("insertBrOnReturn", undefined, true);
     }
 
     _updateEditorState = (caret) => {
@@ -75,8 +74,9 @@ export default class MessageEditor extends React.Component {
     }
 
     _onInput = (event) => {
-        console.log("finding newValue", this._editorRef.innerHTML);
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
+        const sel = document.getSelection();
+        // console.log("finding newValue", this._editorRef.innerHTML, sel);
+        const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.model.update(text, event.inputType, caret);
     }
 

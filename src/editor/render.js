@@ -74,12 +74,10 @@ export function renderModel(editor, model) {
                 --surplusElementCount;
             }
         } else {
-            // empty div needs to have a BR in it
+            // empty div needs to have a BR in it to give it height
             let foundBR = false;
             let partNode = lineContainer.firstChild;
-            console.log("partNode", partNode, editor.innerHTML);
             while (partNode) {
-                console.log("partNode(in loop)", partNode);
                 if (!foundBR && partNode.tagName === "BR") {
                     foundBR = true;
                 } else {
@@ -88,7 +86,6 @@ export function renderModel(editor, model) {
                 partNode = partNode.nextSibling;
             }
             if (!foundBR) {
-                console.log("adding a BR in an empty div because there was none already");
                 lineContainer.appendChild(document.createElement("br"));
             }
         }
