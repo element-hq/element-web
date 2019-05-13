@@ -41,6 +41,16 @@ export default class ModularServerConfig extends React.PureComponent {
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
+
+        // Called after the component calls onServerConfigChange
+        onAfterSubmit: PropTypes.func,
+
+        // Optional text for the submit button. If falsey, no button will be shown.
+        submitText: PropTypes.string,
+
+        // Optional class for the submit button. Only applies if the submit button
+        // is to be rendered.
+        submitClass: PropTypes.string,
     };
 
     static defaultProps = {
@@ -119,6 +129,16 @@ export default class ModularServerConfig extends React.PureComponent {
         this.setState({ hsUrl });
     };
 
+    onSubmit = async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        await this.validateServer();
+
+        if (this.props.onAfterSubmit) {
+            this.props.onAfterSubmit();
+        }
+    };
+
     _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
             clearTimeout(existingTimeoutId);
@@ -128,6 +148,16 @@ export default class ModularServerConfig extends React.PureComponent {
 
     render() {
         const Field = sdk.getComponent('elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        const submitButton = this.props.submitText
+            ? <AccessibleButton
+                element="button"
+                type="submit"
+                className={this.props.submitClass}
+                onClick={this.onSubmit}
+                disabled={this.state.busy}>{this.props.submitText}</AccessibleButton>
+            : null;
 
         return (
             <div className="mx_ServerConfig">
@@ -141,15 +171,18 @@ export default class ModularServerConfig extends React.PureComponent {
                         </a>,
                     },
                 )}
-                <div className="mx_ServerConfig_fields">
-                    <Field id="mx_ServerConfig_hsUrl"
-                        label={_t("Server Name")}
-                        placeholder={this.props.serverConfig.hsUrl}
-                        value={this.state.hsUrl}
-                        onBlur={this.onHomeserverBlur}
-                        onChange={this.onHomeserverChange}
-                    />
-                </div>
+                <form onSubmit={this.onSubmit} autoComplete={false} action={null}>
+                    <div className="mx_ServerConfig_fields">
+                        <Field id="mx_ServerConfig_hsUrl"
+                            label={_t("Server Name")}
+                            placeholder={this.props.serverConfig.hsUrl}
+                            value={this.state.hsUrl}
+                            onBlur={this.onHomeserverBlur}
+                            onChange={this.onHomeserverChange}
+                        />
+                    </div>
+                    {submitButton}
+                </form>
             </div>
         );
     }
