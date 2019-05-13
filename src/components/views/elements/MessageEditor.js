@@ -56,6 +56,7 @@ export default class MessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
+        // document.execCommand("insertBrOnReturn", undefined, true);
     }
 
     _updateEditorState = (caret) => {
@@ -72,15 +73,38 @@ export default class MessageEditor extends React.Component {
                 console.error(err);
             }
         }
-        console.log("_updateEditorState", this.state.autoComplete, this.model.autoComplete);
         this.setState({autoComplete: this.model.autoComplete});
         const modelOutput = this._editorRef.parentElement.querySelector(".model");
         modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
     }
 
     _onInput = (event) => {
+        console.log("finding newValue", this._editorRef.innerHTML);
+        let newValue = "";
+        let node = this._editorRef.firstChild;
+        while (node && node !== this._editorRef) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                newValue += node.nodeValue;
+            }
+
+            if (node.firstChild) {
+                node = node.firstChild;
+            } else if (node.nextSibling) {
+                node = node.nextSibling;
+            } else {
+                while (!node.nextSibling && node !== this._editorRef) {
+                    node = node.parentElement;
+                    if (node.tagName === "DIV" && node.nextSibling && node.nextSibling.tagName === "DIV" && node !== this._editorRef) {
+                        newValue += "\n";
+                    }
+                }
+                if (node !== this._editorRef) {
+                    node = node.nextSibling;
+                }
+            }
+        }
         const caretOffset = getCaretOffset(this._editorRef);
-        this.model.update(this._editorRef.textContent, event.inputType, caretOffset);
+        this.model.update(newValue, event.inputType, caretOffset);
     }
 
     _onKeyDown = (event) => {

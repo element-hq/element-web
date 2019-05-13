@@ -95,11 +95,15 @@ class BasePart {
     get canEdit() {
         return true;
     }
+
+    toString() {
+        return `${this.type}(${this.text})`;
+    }
 }
 
 export class PlainPart extends BasePart {
     acceptsInsertion(chr) {
-        return chr !== "@" && chr !== "#" && chr !== ":";
+        return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "\n";
     }
 
     toDOMNode() {
@@ -175,6 +179,34 @@ class PillPart extends BasePart {
     }
 }
 
+export class NewlinePart extends BasePart {
+    acceptsInsertion(chr) {
+        return this.text.length === 0 && chr === "\n";
+    }
+
+    acceptsRemoval(position, chr) {
+        return true;
+    }
+
+    toDOMNode() {
+        return document.createElement("br");
+    }
+
+    merge() {
+        return false;
+    }
+
+    updateDOMNode() {}
+
+    canUpdateDOMNode(node) {
+        return node.tagName === "BR";
+    }
+
+    get type() {
+        return "newline";
+    }
+}
+
 export class RoomPillPart extends PillPart {
     constructor(displayAlias) {
         super(displayAlias, displayAlias);
@@ -228,6 +260,8 @@ export class PartCreator {
             case "@":
             case ":":
                 return new PillCandidatePart("", this._autoCompleteCreator);
+            case "\n":
+                return new NewlinePart();
             default:
                 return new PlainPart();
         }

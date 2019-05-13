@@ -80,7 +80,8 @@ export default class EditorModel {
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this._positionForOffset(diff.at, caret.atNodeEnd);
-        console.log("update at", {position, diff, newValue, prevValue: this.parts.reduce((text, p) => text + p.text, "")});
+        const valueWithCaret = newValue.slice(0, caret.offset) + "|" + newValue.slice(caret.offset);
+        console.log("update at", {diff, valueWithCaret});
         let removedOffsetDecrease = 0;
         if (diff.removed) {
             removedOffsetDecrease = this._removeText(position, diff.removed.length);

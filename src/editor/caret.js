@@ -16,56 +16,67 @@ limitations under the License.
 
 export function getCaretOffset(editor) {
     const sel = document.getSelection();
-    const atNodeEnd = sel.focusOffset === sel.focusNode.textContent.length;
-    let offset = sel.focusOffset;
-    let node = sel.focusNode;
-
+    console.info("getCaretOffset", sel.focusNode, sel.focusOffset);
     // when deleting the last character of a node,
     // the caret gets reported as being after the focusOffset-th node,
     // with the focusNode being the editor
-    if (node === editor) {
-        let offset = 0;
-        for (let i = 0; i < sel.focusOffset; ++i) {
-            const node = editor.childNodes[i];
-            if (isVisibleNode(node)) {
-                offset += node.textContent.length;
-            }
-        }
-        return {offset, atNodeEnd: false};
+    let offset = 0;
+    let node;
+    let atNodeEnd = true;
+    if (sel.focusNode.nodeType === Node.TEXT_NODE) {
+        node = sel.focusNode;
+        offset = sel.focusOffset;
+        atNodeEnd = sel.focusOffset === sel.focusNode.textContent.length;
+    } else if (sel.focusNode.nodeType === Node.ELEMENT_NODE) {
+        node = sel.focusNode.childNodes[sel.focusOffset];
+        offset = nodeLength(node);
     }
 
-    // first make sure we're at the level of a direct child of editor
-    if (node.parentElement !== editor) {
-        // include all preceding siblings of the non-direct editor children
+    while (node !== editor) {
         while (node.previousSibling) {
             node = node.previousSibling;
-            if (isVisibleNode(node)) {
-                offset += node.textContent.length;
-            }
+            offset += nodeLength(node);
         }
-        // then move up
-        // I guess technically there could be preceding text nodes in the parents here as well,
-        // but we're assuming there are no mixed text and element nodes
-        while (node.parentElement !== editor) {
-            node = node.parentElement;
-        }
+        // then 1 move up
+        node = node.parentElement;
     }
-    // now include the text length of all preceding direct editor children
-    while (node.previousSibling) {
-        node = node.previousSibling;
-        if (isVisibleNode(node)) {
-            offset += node.textContent.length;
-        }
-    }
+
+    return {offset, atNodeEnd};
+
+
+    // // first make sure we're at the level of a direct child of editor
+    // if (node.parentElement !== editor) {
+    //     // include all preceding siblings of the non-direct editor children
+    //     while (node.previousSibling) {
+    //         node = node.previousSibling;
+    //         offset += nodeLength(node);
+    //     }
+    //     // then move up
+    //     // I guess technically there could be preceding text nodes in the parents here as well,
+    //     // but we're assuming there are no mixed text and element nodes
+    //     while (node.parentElement !== editor) {
+    //         node = node.parentElement;
+    //     }
+    // }
+    // // now include the text length of all preceding direct editor children
+    // while (node.previousSibling) {
+    //     node = node.previousSibling;
+    //     offset += nodeLength(node);
+    // }
     // {
     //     const {focusOffset, focusNode} = sel;
     //     console.log("selection", {focusOffset, focusNode, position, atNodeEnd});
     // }
-    return {offset, atNodeEnd};
 }
 
-function isVisibleNode(node) {
-    return node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE;
+function nodeLength(node) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+        const isBlock = node.tagName === "DIV";
+        const isLastDiv = !node.nextSibling || node.nextSibling.tagName !== "DIV";
+        return node.textContent.length + ((isBlock && !isLastDiv) ? 1 : 0);
+    } else {
+        return node.textContent.length;
+    }
 }
 
 export function setCaretPosition(editor, caretPosition) {

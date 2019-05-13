@@ -18,35 +18,85 @@ export function rerenderModel(editor, model) {
     while (editor.firstChild) {
         editor.removeChild(editor.firstChild);
     }
+    let lineContainer = document.createElement("div");
+    editor.appendChild(lineContainer);
     for (const part of model.parts) {
-        editor.appendChild(part.toDOMNode());
+        if (part.type === "newline") {
+            lineContainer = document.createElement("div");
+            editor.appendChild(lineContainer);
+        } else {
+            lineContainer.appendChild(part.toDOMNode());
+        }
     }
 }
 
 export function renderModel(editor, model) {
-    // remove unwanted nodes, like <br>s
-    for (let i = 0; i < model.parts.length; ++i) {
-        const part = model.parts[i];
-        let node = editor.childNodes[i];
-        while (node && !part.canUpdateDOMNode(node)) {
-            editor.removeChild(node);
-            node = editor.childNodes[i];
+    const lines = model.parts.reduce((lines, part) => {
+        if (part.type === "newline") {
+            lines.push([]);
+        } else {
+            const lastLine = lines[lines.length - 1];
+            lastLine.push(part);
         }
-    }
-    for (let i = 0; i < model.parts.length; ++i) {
-        const part = model.parts[i];
-        const node = editor.childNodes[i];
-        if (node && part) {
-            part.updateDOMNode(node);
-        } else if (part) {
-            editor.appendChild(part.toDOMNode());
-        } else if (node) {
-            editor.removeChild(node);
+        return lines;
+    }, [[]]);
+
+    console.log(lines.map(parts => parts.map(p => p.toString())));
+
+    lines.forEach((parts, i) => {
+        let lineContainer = editor.childNodes[i];
+        while (lineContainer && (lineContainer.tagName !== "DIV" || !!lineContainer.className)) {
+            editor.removeChild(lineContainer);
+            lineContainer = editor.childNodes[i];
         }
-    }
-    let surplusElementCount = Math.max(0, editor.childNodes.length - model.parts.length);
-    while (surplusElementCount) {
-        editor.removeChild(editor.lastChild);
-        --surplusElementCount;
-    }
+        if (!lineContainer) {
+            lineContainer = document.createElement("div");
+            editor.appendChild(lineContainer);
+        }
+
+        if (parts.length) {
+            parts.forEach((part, j) => {
+                let partNode = lineContainer.childNodes[j];
+                while (partNode && !part.canUpdateDOMNode(partNode)) {
+                    lineContainer.removeChild(partNode);
+                    partNode = lineContainer.childNodes[j];
+                }
+                if (partNode && part) {
+                    part.updateDOMNode(partNode);
+                } else if (part) {
+                    lineContainer.appendChild(part.toDOMNode());
+                }
+            });
+
+            let surplusElementCount = Math.max(0, lineContainer.childNodes.length - parts.length);
+            while (surplusElementCount) {
+                lineContainer.removeChild(lineContainer.lastChild);
+                --surplusElementCount;
+            }
+        } else {
+            // empty div needs to have a BR in it
+            let foundBR = false;
+            let partNode = lineContainer.firstChild;
+            console.log("partNode", partNode, editor.innerHTML);
+            while (partNode) {
+                console.log("partNode(in loop)", partNode);
+                if (!foundBR && partNode.tagName === "BR") {
+                    foundBR = true;
+                } else {
+                    lineContainer.removeChild(partNode);
+                }
+                partNode = partNode.nextSibling;
+            }
+            if (!foundBR) {
+                console.log("adding a BR in an empty div because there was none already");
+                lineContainer.appendChild(document.createElement("br"));
+            }
+        }
+
+        let surplusElementCount = Math.max(0, editor.childNodes.length - lines.length);
+        while (surplusElementCount) {
+            editor.removeChild(editor.lastChild);
+            --surplusElementCount;
+        }
+    });
 }
