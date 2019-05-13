@@ -151,7 +151,7 @@ module.exports = React.createClass({
                 continue;
             }
             // We must wait for these validations to finish before queueing
-            // up the setState below so our setState gies in the queue after
+            // up the setState below so our setState goes in the queue after
             // all the setStates from these validate calls (that's how we
             // know they've finished).
             await field.validate({ allowEmpty: false });
