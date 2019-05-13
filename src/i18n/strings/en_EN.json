@@ -179,6 +179,8 @@
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.",
     "Displays action": "Displays action",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
+    "Sends the given message coloured as a rainbow": "Sends the given message coloured as a rainbow",
+    "Sends the given emote coloured as a rainbow": "Sends the given emote coloured as a rainbow",
     "Unrecognised command:": "Unrecognised command:",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
