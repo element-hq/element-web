@@ -19,7 +19,8 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
-import {getCaretOffset, setCaretPosition} from '../../../editor/caret';
+import {setCaretPosition} from '../../../editor/caret';
+import {getCaretOffsetAndText} from '../../../editor/dom';
 import parseEvent from '../../../editor/parse-event';
 import Autocomplete from '../rooms/Autocomplete';
 // import AutocompleteModel from '../../../editor/autocomplete';
@@ -60,15 +61,10 @@ export default class MessageEditor extends React.Component {
     }
 
     _updateEditorState = (caret) => {
-        const shouldRerender = false; //event.inputType === "insertFromDrop" || event.inputType === "insertFromPaste";
-        if (shouldRerender) {
-            rerenderModel(this._editorRef, this.model);
-        } else {
-            renderModel(this._editorRef, this.model);
-        }
+        renderModel(this._editorRef, this.model);
         if (caret) {
             try {
-                setCaretPosition(this._editorRef, caret);
+                setCaretPosition(this._editorRef, this.model, caret);
             } catch (err) {
                 console.error(err);
             }
@@ -80,31 +76,8 @@ export default class MessageEditor extends React.Component {
 
     _onInput = (event) => {
         console.log("finding newValue", this._editorRef.innerHTML);
-        let newValue = "";
-        let node = this._editorRef.firstChild;
-        while (node && node !== this._editorRef) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                newValue += node.nodeValue;
-            }
-
-            if (node.firstChild) {
-                node = node.firstChild;
-            } else if (node.nextSibling) {
-                node = node.nextSibling;
-            } else {
-                while (!node.nextSibling && node !== this._editorRef) {
-                    node = node.parentElement;
-                    if (node.tagName === "DIV" && node.nextSibling && node.nextSibling.tagName === "DIV" && node !== this._editorRef) {
-                        newValue += "\n";
-                    }
-                }
-                if (node !== this._editorRef) {
-                    node = node.nextSibling;
-                }
-            }
-        }
-        const caretOffset = getCaretOffset(this._editorRef);
-        this.model.update(newValue, event.inputType, caretOffset);
+        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
+        this.model.update(text, event.inputType, caret);
     }
 
     _onKeyDown = (event) => {
