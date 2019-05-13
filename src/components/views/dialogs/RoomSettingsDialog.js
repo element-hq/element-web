@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,11 +27,28 @@ import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsT
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SettingsStore from '../../../settings/SettingsStore';
+import dis from "../../../dispatcher";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
+    };
+
+    componentWillMount() {
+        this._dispatcherRef = dis.register(this._onAction);
+    }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    _onAction = (payload) => {
+        // When room changes below us, close the room settings
+        // whilst the modal is open this can only be triggered when someone hits Leave Room
+        if (payload.action === 'view_next_room') {
+            this.props.onFinished();
+        }
     };
 
     _getTabs() {
