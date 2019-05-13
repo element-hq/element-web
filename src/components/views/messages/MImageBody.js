@@ -200,6 +200,7 @@ export default class MImageBody extends React.Component {
             // downloading the original:
             const info = content.info;
             if (
+                this._isGif() ||
                 pixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
