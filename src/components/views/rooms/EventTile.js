@@ -182,6 +182,8 @@ module.exports = withMatrixClient(React.createClass({
             verified: null,
             // Whether onRequestKeysClick has been called since mounting.
             previouslyRequestedKeys: false,
+            // The Relations model from the JS SDK for reactions to `mxEvent`
+            reactions: this.getReactions(),
         };
     },
 
@@ -497,7 +499,9 @@ module.exports = withMatrixClient(React.createClass({
             return;
         }
         this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
-        this.forceUpdate();
+        this.setState({
+            reactions: this.getReactions(),
+        });
     },
 
     render: function() {
@@ -612,11 +616,10 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        const reactions = this.getReactions();
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
         const actionBar = <MessageActionBar
             mxEvent={this.props.mxEvent}
-            reactions={reactions}
+            reactions={this.state.reactions}
             permalinkCreator={this.props.permalinkCreator}
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
@@ -665,7 +668,7 @@ module.exports = withMatrixClient(React.createClass({
             const ReactionsRow = sdk.getComponent('messages.ReactionsRow');
             reactionsRow = <ReactionsRow
                 mxEvent={this.props.mxEvent}
-                reactions={reactions}
+                reactions={this.state.reactions}
             />;
         }
 
