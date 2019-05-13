@@ -1168,6 +1168,10 @@ const TimelinePanel = React.createClass({
         });
     },
 
+    getRelationsForEvent(...args) {
+        return this.props.timelineSet.getRelationsForEvent(...args);
+    },
+
     render: function() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -1193,9 +1197,9 @@ const TimelinePanel = React.createClass({
 
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <div className="mx_RoomView_empty">{ this.props.empty }</div>
-                    </div>
+                <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
+                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                </div>
             );
         }
 
@@ -1217,28 +1221,29 @@ const TimelinePanel = React.createClass({
         );
         return (
             <MessagePanel ref="messagePanel"
-                          room={this.props.timelineSet.room}
-                          permalinkCreator={this.props.permalinkCreator}
-                          hidden={this.props.hidden}
-                          backPaginating={this.state.backPaginating}
-                          forwardPaginating={forwardPaginating}
-                          events={this.state.events}
-                          highlightedEventId={this.props.highlightedEventId}
-                          readMarkerEventId={this.state.readMarkerEventId}
-                          readMarkerVisible={this.state.readMarkerVisible}
-                          suppressFirstDateSeparator={this.state.canBackPaginate}
-                          showUrlPreview={this.props.showUrlPreview}
-                          showReadReceipts={this.props.showReadReceipts}
-                          ourUserId={MatrixClientPeg.get().credentials.userId}
-                          stickyBottom={stickyBottom}
-                          onScroll={this.onMessageListScroll}
-                          onFillRequest={this.onMessageListFillRequest}
-                          onUnfillRequest={this.onMessageListUnfillRequest}
-                          isTwelveHour={this.state.isTwelveHour}
-                          alwaysShowTimestamps={this.state.alwaysShowTimestamps}
-                          className={this.props.className}
-                          tileShape={this.props.tileShape}
-                          resizeNotifier={this.props.resizeNotifier}
+                room={this.props.timelineSet.room}
+                permalinkCreator={this.props.permalinkCreator}
+                hidden={this.props.hidden}
+                backPaginating={this.state.backPaginating}
+                forwardPaginating={forwardPaginating}
+                events={this.state.events}
+                highlightedEventId={this.props.highlightedEventId}
+                readMarkerEventId={this.state.readMarkerEventId}
+                readMarkerVisible={this.state.readMarkerVisible}
+                suppressFirstDateSeparator={this.state.canBackPaginate}
+                showUrlPreview={this.props.showUrlPreview}
+                showReadReceipts={this.props.showReadReceipts}
+                ourUserId={MatrixClientPeg.get().credentials.userId}
+                stickyBottom={stickyBottom}
+                onScroll={this.onMessageListScroll}
+                onFillRequest={this.onMessageListFillRequest}
+                onUnfillRequest={this.onMessageListUnfillRequest}
+                isTwelveHour={this.state.isTwelveHour}
+                alwaysShowTimestamps={this.state.alwaysShowTimestamps}
+                className={this.props.className}
+                tileShape={this.props.tileShape}
+                resizeNotifier={this.props.resizeNotifier}
+                getRelationsForEvent={this.getRelationsForEvent}
             />
         );
     },
