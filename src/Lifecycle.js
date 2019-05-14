@@ -131,8 +131,8 @@ export function getStoredSessionOwner() {
  *     for a real user. If there is no stored session, return null.
  */
 export function getStoredSessionIsGuest() {
-    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = _getLocalStorageSessionVars();
-    return hsUrl && userId && accessToken ? isGuest : null;
+    const sessVars = _getLocalStorageSessionVars();
+    return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
 }
 
 /**
