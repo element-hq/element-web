@@ -21,11 +21,12 @@ import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
+import {htmlSerialize, textSerialize, requiresHtml} from '../../../editor/serialize';
 import parseEvent from '../../../editor/parse-event';
 import Autocomplete from '../rooms/Autocomplete';
 // import AutocompleteModel from '../../../editor/autocomplete';
 import {PartCreator} from '../../../editor/parts';
-import {renderModel, rerenderModel} from '../../../editor/render';
+import {renderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
@@ -109,6 +110,26 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: "edit_event", event: null});
     }
 
+    _onSaveClicked = () => {
+        const content = {
+            "msgtype": "m.text",
+            "body": textSerialize(this.model),
+            "m.relates_to": {
+                "rel_type": "m.replace",
+                "event_id": this.props.event.getId(),
+            },
+        };
+        if (requiresHtml(this.model)) {
+            content.format = "org.matrix.custom.html";
+            content.formatted_body = htmlSerialize(this.model);
+        }
+
+        const roomId = this.props.event.getRoomId();
+        this.context.matrixClient.sendMessage(roomId, content);
+
+        dis.dispatch({action: "edit_event", event: null});
+    }
+
     _collectEditorRef = (ref) => {
         this._editorRef = ref;
     }
@@ -130,15 +151,6 @@ export default class MessageEditor extends React.Component {
     }
 
     render() {
-        // const parts = this.state.parts.map((p, i) => {
-        //     const key = `${i}-${p.type}`;
-        //     switch (p.type) {
-        //         case "plain": return p.text;
-        //         case "room-pill": return (<span key={key} className="room-pill">{p.text}</span>);
-        //         case "user-pill": return (<span key={key} className="user-pill">{p.text}</span>);
-        //     }
-        // });
-        // const modelOutput = JSON.stringify(this.state.parts, undefined, 2);
         let autoComplete;
         if (this.state.autoComplete) {
             const query = this.state.query;
@@ -161,14 +173,13 @@ export default class MessageEditor extends React.Component {
                     className="editor"
                     contentEditable="true"
                     tabIndex="1"
-                    // suppressContentEditableWarning={true}
                     onInput={this._onInput}
                     onKeyDown={this._onKeyDown}
                     ref={this._collectEditorRef}
-                >
-                </div>
+                ></div>
                 <div className="buttons">
-                    <AccessibleButton onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
+                    <AccessibleButton kind="secondary" onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
+                    <AccessibleButton kind="primary" onClick={this._onSaveClicked}>{_t("Save")}</AccessibleButton>
                 </div>
                 <code className="model"></code>
             </div>;

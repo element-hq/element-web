@@ -47,16 +47,13 @@ limitations under the License.
 
     .buttons {
         display: flex;
-        flex-direction: column;
-        align-items: end;
+        flex-direction: row;
+        justify-content: end;
         padding: 5px 0;
 
         .mx_AccessibleButton {
-            background-color: $button-bg-color;
-            border-radius: 4px;
+            margin-left: 5px;
             padding: 5px 40px;
-            color: $button-fg-color;
-            font-weight: 600;
         }
     }
 
