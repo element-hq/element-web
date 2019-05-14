@@ -204,6 +204,7 @@ const TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
+        MatrixClientPeg.get().on("Room.replaceEvent", this.onRoomReplaceEvent);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
@@ -282,6 +283,7 @@ const TimelinePanel = React.createClass({
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
+            client.removeListener("Room.replaceEvent", this.onRoomReplaceEvent);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
@@ -503,6 +505,17 @@ const TimelinePanel = React.createClass({
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
         this.forceUpdate();
+    },
+
+    onRoomReplaceEvent: function(replacedEvent, newEvent, room) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.timelineSet.room) return;
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        this._reloadEvents();
     },
 
     onRoomReceipt: function(ev, room) {
