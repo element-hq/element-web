@@ -54,7 +54,7 @@ function parseHtmlMessage(html) {
     return parts;
 }
 
-export default function parseEvent(event) {
+export function parseEvent(event) {
     const content = event.getContent();
     if (content.format === "org.matrix.custom.html") {
         return parseHtmlMessage(content.formatted_body);

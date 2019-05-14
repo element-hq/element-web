@@ -22,7 +22,7 @@ import EditorModel from '../../../editor/model';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerialize, textSerialize, requiresHtml} from '../../../editor/serialize';
-import parseEvent from '../../../editor/parse-event';
+import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
 // import AutocompleteModel from '../../../editor/autocomplete';
 import {PartCreator} from '../../../editor/parts';
