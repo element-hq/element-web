@@ -1046,6 +1046,12 @@ export default class MessageComposerInput extends React.Component {
             return change.insertText('\n');
         }
 
+        if (this.autocomplete.countCompletions() > 0) {
+            this.autocomplete.hide();
+            ev.preventDefault();
+            return true;
+        }
+
         const editorState = this.state.editorState;
 
         const lastBlock = editorState.blocks.last();
