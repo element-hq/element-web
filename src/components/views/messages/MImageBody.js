@@ -197,15 +197,18 @@ export default class MImageBody extends React.Component {
             // synapse only supports 800x600 thumbnails for now though,
             // so we'll need to download the original image for this to work
             // well for now. First, let's try a few cases that let us avoid
-            // downloading the original:
+            // downloading the original, including:
+            //   - When displaying a GIF, we always want to thumbnail so that we can
+            //     properly respect the user's GIF autoplay setting (which relies on
+            //     thumbnailing to produce the static preview image)
+            //   - On a low DPI device, always thumbnail to save bandwidth
+            //   - If there's no sizing info in the event, default to thumbnail
             const info = content.info;
             if (
                 this._isGif() ||
                 pixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
-                // always thumbnail. it may look a bit worse, but it'll save bandwidth.
-                // which is probably desirable on a lo-dpi device anyway.
                 return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
             } else {
                 // we should only request thumbnails if the image is bigger than 800x600
