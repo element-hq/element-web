@@ -670,6 +670,31 @@ export default class MessageComposerInput extends React.Component {
 
     onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
         this.suppressAutoComplete = false;
+        this.direction = '';
+
+        // Navigate autocomplete list with arrow keys
+        if (this.autocomplete.state.completionList.length > 0) {
+            if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
+                switch (ev.keyCode) {
+                    case KeyCode.LEFT:
+                        this.moveAutocompleteSelection(true);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.RIGHT:
+                        this.moveAutocompleteSelection(false);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.UP:
+                        this.moveAutocompleteSelection(true);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.DOWN:
+                        this.moveAutocompleteSelection(false);
+                        ev.preventDefault();
+                        return true;
+                }
+            }
+        }
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
