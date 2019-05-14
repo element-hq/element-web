@@ -59,6 +59,17 @@ export default function parseEvent(event) {
     if (content.format === "org.matrix.custom.html") {
         return parseHtmlMessage(content.formatted_body);
     } else {
-        return [new PlainPart(content.body)];
+        const lines = content.body.split("\n");
+        const parts = lines.reduce((parts, line, i) => {
+            const isLast = i === lines.length - 1;
+            const text = new PlainPart(line);
+            const newLine = !isLast && new NewlinePart("\n");
+            if (newLine) {
+                return parts.concat(text, newLine);
+            } else {
+                return parts.concat(text);
+            }
+        }, []);
+        return parts;
     }
 }
