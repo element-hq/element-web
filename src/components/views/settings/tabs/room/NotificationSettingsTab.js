@@ -46,6 +46,13 @@ export default class NotificationsSettingsTab extends React.Component {
         });
     }
 
+    async _triggerUploader(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        this.refs.soundUpload.click();
+    }
+
     async _onSoundUploadChanged(e) {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
@@ -133,10 +140,15 @@ export default class NotificationsSettingsTab extends React.Component {
                     <div>
                         <h3>{_t("Set a new custom sound")}</h3>
                         <form autoComplete={false} noValidate={true}>
-                            <input type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
+                            <input ref="soundUpload" className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
                         </form>
-                        <AccessibleButton onClick={this._clearSound.bind(this)} kind="primary">
-                                {_t("Reset to default sound")}
+
+                        <AccessibleButton onClick={this._triggerUploader.bind(this)} kind="primary">
+                                {_t("Browse")}
+                        </AccessibleButton>
+
+                        <AccessibleButton className="mx_NotificationSound_resetSound" onClick={this._clearSound.bind(this)} kind="primary">
+                                {_t("Reset")}
                         </AccessibleButton>
                     </div>
                 </div>
