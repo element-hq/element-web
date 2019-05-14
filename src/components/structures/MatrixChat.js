@@ -1710,14 +1710,15 @@ export default React.createClass({
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
-        // XXX: This should be in state or ideally store(s) because we risk not
-        //      rendering the most up-to-date view of state otherwise.
-        this._is_registered = true;
         if (this.state.register_session_id) {
             // The user came in through an email validation link. To avoid overwriting
-            // their session, check to make sure the session isn't someone else.
+            // their session, check to make sure the session isn't someone else, and
+            // isn't a guest user since we'll usually have set a guest user session before
+            // starting the registration process. This isn't perfect since it's possible
+            // the user had a separate guest session they didn't actually mean to replace.
             const sessionOwner = Lifecycle.getStoredSessionOwner();
-            if (sessionOwner && sessionOwner !== credentials.userId) {
+            const sessionIsGuest = Lifecycle.getStoredSessionIsGuest();
+            if (sessionOwner && !sessionIsGuest && sessionOwner !== credentials.userId) {
                 console.log(
                     `Found a session for ${sessionOwner} but ${credentials.userId} is trying to verify their ` +
                     `email address. Restoring the session for ${sessionOwner} with warning.`,
@@ -1748,6 +1749,9 @@ export default React.createClass({
                 return MatrixClientPeg.get();
             }
         }
+        // XXX: This should be in state or ideally store(s) because we risk not
+        //      rendering the most up-to-date view of state otherwise.
+        this._is_registered = true;
         return Lifecycle.setLoggedIn(credentials);
     },
 
