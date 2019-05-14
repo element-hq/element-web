@@ -111,18 +111,21 @@ export default class MessageEditor extends React.Component {
     }
 
     _onSaveClicked = () => {
-        const content = {
+        const newContent = {
             "msgtype": "m.text",
             "body": textSerialize(this.model),
+        };
+        if (requiresHtml(this.model)) {
+            newContent.format = "org.matrix.custom.html";
+            newContent.formatted_body = htmlSerialize(this.model);
+        }
+        const content = Object.assign({
+            "m.new_content": newContent,
             "m.relates_to": {
                 "rel_type": "m.replace",
                 "event_id": this.props.event.getOriginalId(),
             },
-        };
-        if (requiresHtml(this.model)) {
-            content.format = "org.matrix.custom.html";
-            content.formatted_body = htmlSerialize(this.model);
-        }
+        }, newContent);
 
         const roomId = this.props.event.getRoomId();
         this.context.matrixClient.sendMessage(roomId, content);
