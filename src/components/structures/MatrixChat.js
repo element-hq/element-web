@@ -1710,9 +1710,6 @@ export default React.createClass({
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
-        // XXX: This should be in state or ideally store(s) because we risk not
-        //      rendering the most up-to-date view of state otherwise.
-        this._is_registered = true;
         if (this.state.register_session_id) {
             // The user came in through an email validation link. To avoid overwriting
             // their session, check to make sure the session isn't someone else.
@@ -1748,6 +1745,9 @@ export default React.createClass({
                 return MatrixClientPeg.get();
             }
         }
+        // XXX: This should be in state or ideally store(s) because we risk not
+        //      rendering the most up-to-date view of state otherwise.
+        this._is_registered = true;
         return Lifecycle.setLoggedIn(credentials);
     },
 
