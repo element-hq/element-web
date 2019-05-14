@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,6 +76,7 @@ module.exports = React.createClass({
             password: "",
             passwordConfirm: "",
             passwordComplexity: null,
+            passwordSafe: false,
         };
     },
 
@@ -150,7 +151,11 @@ module.exports = React.createClass({
             if (!field) {
                 continue;
             }
-            field.validate({ allowEmpty: false });
+            // We must wait for these validations to finish before queueing
+            // up the setState below so our setState goes in the queue after
+            // all the setStates from these validate calls (that's how we
+            // know they've finished).
+            await field.validate({ allowEmpty: false });
         }
 
         // Validation and state updates are async, so we need to wait for them to complete
@@ -270,12 +275,23 @@ module.exports = React.createClass({
                     }
                     const { scorePassword } = await import('../../../utils/PasswordScorer');
                     const complexity = scorePassword(value);
+                    const safe = complexity.score >= PASSWORD_MIN_SCORE;
+                    const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
                     this.setState({
                         passwordComplexity: complexity,
+                        passwordSafe: safe,
                     });
-                    return complexity.score >= PASSWORD_MIN_SCORE;
+                    return allowUnsafe || safe;
                 },
-                valid: () => _t("Nice, strong password!"),
+                valid: function() {
+                    // Unsafe passwords that are valid are only possible through a
+                    // configuration flag. We'll print some helper text to signal
+                    // to the user that their password is allowed, but unsafe.
+                    if (!this.state.passwordSafe) {
+                        return _t("Password is allowed, but unsafe");
+                    }
+                    return _t("Nice, strong password!");
+                },
                 invalid: function() {
                     const complexity = this.state.passwordComplexity;
                     if (!complexity) {

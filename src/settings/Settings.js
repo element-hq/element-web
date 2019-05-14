@@ -125,7 +125,7 @@ export const SETTINGS = {
     },
     "feature_reactions": {
         isFeature: true,
-        displayName: _td("React to messages with emoji"),
+        displayName: _td("React to messages with emoji (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

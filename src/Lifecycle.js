@@ -127,6 +127,15 @@ export function getStoredSessionOwner() {
 }
 
 /**
+ * @returns {bool} True if the stored session is for a guest user or false if it is
+ *     for a real user. If there is no stored session, return null.
+ */
+export function getStoredSessionIsGuest() {
+    const sessVars = _getLocalStorageSessionVars();
+    return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
+}
+
+/**
  * @param {Object} queryParams    string->string map of the
  *     query-parameters extracted from the real query-string of the starting
  *     URI.
@@ -235,7 +244,15 @@ function _getLocalStorageSessionVars() {
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
 
-    return {hsUrl, isUrl, accessToken, userId, deviceId};
+    let isGuest;
+    if (localStorage.getItem("mx_is_guest") !== null) {
+        isGuest = localStorage.getItem("mx_is_guest") === "true";
+    } else {
+        // legacy key name
+        isGuest = localStorage.getItem("matrix-is-guest") === "true";
+    }
+
+    return {hsUrl, isUrl, accessToken, userId, deviceId, isGuest};
 }
 
 // returns a promise which resolves to true if a session is found in
@@ -253,15 +270,7 @@ async function _restoreFromLocalStorage() {
         return false;
     }
 
-    const {hsUrl, isUrl, accessToken, userId, deviceId} = _getLocalStorageSessionVars();
-
-    let isGuest;
-    if (localStorage.getItem("mx_is_guest") !== null) {
-        isGuest = localStorage.getItem("mx_is_guest") === "true";
-    } else {
-        // legacy key name
-        isGuest = localStorage.getItem("matrix-is-guest") === "true";
-    }
+    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = _getLocalStorageSessionVars();
 
     if (accessToken && userId && hsUrl) {
         console.log(`Restoring session for ${userId}`);

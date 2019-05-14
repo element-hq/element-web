@@ -74,7 +74,7 @@ describe('matrix-to', function() {
     });
 
     it('should pick no candidate servers when the room has no members', function() {
-        const room = mockRoom(null, []);
+        const room = mockRoom("!fake:example.org", []);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
@@ -82,7 +82,7 @@ describe('matrix-to', function() {
     });
 
     it('should pick a candidate server for the highest power level user in the room', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:pl_50",
                 powerLevel: 50,
@@ -109,7 +109,7 @@ describe('matrix-to', function() {
             userId: "@alice:pl_95",
             powerLevel: 95,
         };
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:pl_50",
                 powerLevel: 50,
@@ -132,7 +132,7 @@ describe('matrix-to', function() {
     });
 
     it('should pick candidate servers based on user population', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:first",
                 powerLevel: 0,
@@ -168,7 +168,7 @@ describe('matrix-to', function() {
     });
 
     it('should pick prefer candidate servers with higher power levels', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:first",
                 powerLevel: 100,
@@ -195,7 +195,7 @@ describe('matrix-to', function() {
     });
 
     it('should pick a maximum of 3 candidate servers', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:alpha",
                 powerLevel: 100,
@@ -224,7 +224,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider IPv4 hosts', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:127.0.0.1",
                 powerLevel: 100,
@@ -237,7 +237,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider IPv6 hosts', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:[::1]",
                 powerLevel: 100,
@@ -250,7 +250,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider IPv4 hostnames with ports', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:127.0.0.1:8448",
                 powerLevel: 100,
@@ -263,7 +263,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider IPv6 hostnames with ports', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:[::1]:8448",
                 powerLevel: 100,
@@ -276,7 +276,7 @@ describe('matrix-to', function() {
     });
 
     it('should work with hostnames with ports', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:example.org:8448",
                 powerLevel: 100,
@@ -291,7 +291,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider servers explicitly denied by ACLs', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:evilcorp.com",
                 powerLevel: 100,
@@ -311,7 +311,7 @@ describe('matrix-to', function() {
     });
 
     it('should not consider servers not allowed by ACLs', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:evilcorp.com",
                 powerLevel: 100,
@@ -331,7 +331,7 @@ describe('matrix-to', function() {
     });
 
     it('should consider servers not explicitly banned by ACLs', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:evilcorp.com",
                 powerLevel: 100,
@@ -352,7 +352,7 @@ describe('matrix-to', function() {
     });
 
     it('should consider servers not disallowed by ACLs', function() {
-        const room = mockRoom(null, [
+        const room = mockRoom("!fake:example.org", [
             {
                 userId: "@alice:evilcorp.com",
                 powerLevel: 100,

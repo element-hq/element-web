@@ -19,42 +19,96 @@ import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import { isContentActionable } from '../../../utils/EventUtils';
-
-// TODO: Actually load reactions from the timeline
-// Since we don't yet load reactions, let's inject some dummy data for testing the UI
-// only. The UI assumes these are already sorted into the order we want to present,
-// presumably highest vote first.
-const SAMPLE_REACTIONS = {
-    "👍": 4,
-    "👎": 2,
-    "🙂": 1,
-};
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for
         mxEvent: PropTypes.object.isRequired,
+        // The Relations model from the JS SDK for reactions to `mxEvent`
+        reactions: PropTypes.object,
+    }
+
+    constructor(props) {
+        super(props);
+
+        if (props.reactions) {
+            props.reactions.on("Relations.add", this.onReactionsChange);
+            props.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+
+        this.state = {
+            myReactions: this.getMyReactions(),
+        };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.reactions !== this.props.reactions) {
+            this.props.reactions.on("Relations.add", this.onReactionsChange);
+            this.props.reactions.on("Relations.redaction", this.onReactionsChange);
+            this.onReactionsChange();
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.reactions) {
+            this.props.reactions.removeListener(
+                "Relations.add",
+                this.onReactionsChange,
+            );
+            this.props.reactions.removeListener(
+                "Relations.redaction",
+                this.onReactionsChange,
+            );
+        }
+    }
+
+    onReactionsChange = () => {
+        // TODO: Call `onHeightChanged` as needed
+        this.setState({
+            myReactions: this.getMyReactions(),
+        });
+        // Using `forceUpdate` for the moment, since we know the overall set of reactions
+        // has changed (this is triggered by events for that purpose only) and
+        // `PureComponent`s shallow state / props compare would otherwise filter this out.
+        this.forceUpdate();
+    }
+
+    getMyReactions() {
+        const reactions = this.props.reactions;
+        if (!reactions) {
+            return null;
+        }
+        const userId = MatrixClientPeg.get().getUserId();
+        return reactions.getAnnotationsBySender()[userId];
     }
 
     render() {
-        const { mxEvent } = this.props;
+        const { mxEvent, reactions } = this.props;
+        const { myReactions } = this.state;
 
-        if (!isContentActionable(mxEvent)) {
-            return null;
-        }
-
-        const content = mxEvent.getContent();
-        // TODO: Remove this once we load real reactions
-        if (!content.body || content.body !== "reactions test") {
+        if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        const items = Object.entries(SAMPLE_REACTIONS).map(([content, count]) => {
+        const items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
+            const count = events.size;
+            if (!count) {
+                return null;
+            }
+            const myReactionEvent = myReactions && myReactions.find(mxEvent => {
+                if (mxEvent.isRedacted()) {
+                    return false;
+                }
+                return mxEvent.getContent()["m.relates_to"].key === content;
+            });
             return <ReactionsRowButton
                 key={content}
                 content={content}
                 count={count}
+                mxEvent={mxEvent}
+                myReactionEvent={myReactionEvent}
             />;
         });
 
