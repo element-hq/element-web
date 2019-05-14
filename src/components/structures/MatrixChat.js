@@ -203,9 +203,12 @@ export default React.createClass({
         };
     },
 
-    // TODO: TravisR - Remove this or put it somewhere else
     getFallbackHsUrl: function() {
-        return this.props.config.fallback_hs_url;
+        if (this.props.serverConfig.isDefault) {
+            return this.props.config.fallback_hs_url;
+        } else {
+            return null;
+        }
     },
 
     getServerProperties() {
