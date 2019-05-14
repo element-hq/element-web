@@ -1,3 +1,9 @@
+Changes in [1.1.1](https://github.com/vector-im/riot-web/releases/tag/v1.1.1) (2019-05-14)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.1.0...v1.1.1)
+
+ * react-sdk v1.1.1 to fix regressions with registration
+
 Changes in [1.1.0](https://github.com/vector-im/riot-web/releases/tag/v1.1.0) (2019-05-07)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.1.0-rc.1...v1.1.0)
