@@ -37,7 +37,8 @@ function walkDOMDepthFirst(editor, enterNodeCallback, leaveNodeCallback) {
 }
 
 export function getCaretOffsetAndText(editor, sel) {
-    let {focusOffset, focusNode} = sel;
+    let {focusNode} = sel;
+    const {focusOffset} = sel;
     let caretOffset = focusOffset;
     let foundCaret = false;
     let text = "";

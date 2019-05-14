@@ -40,9 +40,7 @@ export function renderModel(editor, model) {
         }
         return lines;
     }, [[]]);
-
-    // console.log(lines.map(parts => parts.map(p => p.toString())));
-
+    // TODO: refactor this code, DRY it
     lines.forEach((parts, i) => {
         let lineContainer = editor.childNodes[i];
         while (lineContainer && (lineContainer.tagName !== "DIV" || !!lineContainer.className)) {

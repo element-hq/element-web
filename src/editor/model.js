@@ -171,6 +171,8 @@ export default class EditorModel {
 
     /**
      * removes `len` amount of characters at `pos`.
+     * @param {Object} pos
+     * @param {Number} len
      * @return {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
@@ -205,10 +207,12 @@ export default class EditorModel {
 
     /**
      * inserts `str` into the model at `pos`.
+     * @param {Object} pos
+     * @param {string} str
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    _addText(pos, str, actions) {
+    _addText(pos, str) {
         let {index} = pos;
         const {offset} = pos;
         let addLen = str.length;
