@@ -702,8 +702,6 @@ export default class MessageComposerInput extends React.Component {
             this.direction = 'Previous';
         } else if (ev.keyCode === KeyCode.RIGHT) {
             this.direction = 'Next';
-        } else {
-            this.direction = '';
         }
 
         switch (ev.keyCode) {
@@ -1197,35 +1195,28 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
-        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
-            return;
-        }
+        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) return;
 
-        // Select history only if we are not currently auto-completing
-        if (this.autocomplete.state.completionList.length === 0) {
-            const selection = this.state.editorState.selection;
+        // Select history
+        const selection = this.state.editorState.selection;
 
-            // selection must be collapsed
-            if (!selection.isCollapsed) return;
-            const document = this.state.editorState.document;
+        // selection must be collapsed
+        if (!selection.isCollapsed) return;
+        const document = this.state.editorState.document;
 
-            // and we must be at the edge of the document (up=start, down=end)
-            if (up) {
-                if (!selection.anchor.isAtStartOfNode(document)) return;
+        // and we must be at the edge of the document (up=start, down=end)
+        if (up) {
+            if (!selection.anchor.isAtStartOfNode(document)) return;
 
-                const editEvent = findEditableEvent(this.props.room, false);
-                if (editEvent) {
-                    // We're selecting history, so prevent the key event from doing anything else
-                    e.preventDefault();
-                    dis.dispatch({
-                        action: 'edit_event',
-                        event: editEvent,
-                    });
-                }
+            const editEvent = findEditableEvent(this.props.room, false);
+            if (editEvent) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+                dis.dispatch({
+                    action: 'edit_event',
+                    event: editEvent,
+                });
             }
-        } else {
-            this.moveAutocompleteSelection(up);
-            e.preventDefault();
         }
     };
 
