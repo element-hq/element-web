@@ -88,7 +88,7 @@ limitations under the License.
 }
 
 .mx_MemberList_invite.mx_AccessibleButton_disabled {
-    background-color: grey;
+    background-color: $greyed-fg-color;;
     cursor: not-allowed;
 }
 
