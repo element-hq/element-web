@@ -87,6 +87,11 @@ limitations under the License.
     }
 }
 
+.mx_MemberList_invite.mx_AccessibleButton_disabled {
+    background-color: $greyed-fg-color;;
+    cursor: not-allowed;
+}
+
 .mx_MemberList_invite span {
     background-image: url('$(res)/img/feather-customised/user-add.svg');
     background-repeat: no-repeat;
