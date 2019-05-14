@@ -49,7 +49,7 @@ module.exports = React.createClass({
             return <div />; // We should never have been instaniated in this case
         }
         const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
-        const permalinkCreator = new RoomPermalinkCreator(prevRoom);
+        const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         return <div className="mx_CreateEvent">
