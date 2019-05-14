@@ -62,7 +62,21 @@ async function initPage() {
     }
 
     if (serverName) {
-        // TODO: TravisR .well-known lookup
+        // We also do our own minimal .well-known validation to avoid pulling in the js-sdk
+        try {
+            const result = await fetch(`https://${serverName}/.well-known/matrix/client`);
+            const wkConfig = await result.json();
+            if (wkConfig && wkConfig['m.homeserver']) {
+                hsUrl = wkConfig['m.homeserver']['base_url'];
+
+                if (wkConfig['m.identity_server']) {
+                    isUrl = wkConfig['m.identity_server']['base_url'];
+                }
+            }
+        } catch (e) {
+            console.error(e);
+            return renderConfigError("Unable to fetch homeserver configuration");
+        }
     }
 
     if (defaultHsUrl) {
@@ -70,10 +84,14 @@ async function initPage() {
         isUrl = defaultIsUrl;
     }
 
+    if (!hsUrl) {
+        return renderConfigError("Unable to locate homeserver");
+    }
+
     if (hsUrl && !hsUrl.endsWith('/')) hsUrl += '/';
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
-    if (hsUrl && hsUrl !== 'https://matrix.org/') {
+    if (hsUrl !== 'https://matrix.org/') {
         document.getElementById('step2_container').style.display = 'block';
         document.getElementById('hs_url').innerText = hsUrl;
         document.getElementById('step_login_header').innerHTML= 'Step 3: Register or Log in';
