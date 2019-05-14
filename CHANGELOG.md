@@ -1,3 +1,12 @@
+Changes in [1.1.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.1) (2019-05-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.0...v1.1.1)
+
+ * Fix registration with email
+   [\#2970](https://github.com/matrix-org/matrix-react-sdk/pull/2970)
+ * Fix bug where email was not required where it shouldn't have been
+   [\#2969](https://github.com/matrix-org/matrix-react-sdk/pull/2969)
+
 Changes in [1.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.0) (2019-05-07)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.0-rc.1...v1.1.0)
