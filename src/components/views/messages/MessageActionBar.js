@@ -103,6 +103,10 @@ export default class MessageActionBar extends React.PureComponent {
         return SettingsStore.isFeatureEnabled("feature_reactions");
     }
 
+    isEditingEnabled() {
+        return SettingsStore.isFeatureEnabled("feature_message_editing");
+    }
+
     renderAgreeDimension() {
         if (!this.isReactionsEnabled()) {
             return null;
@@ -144,10 +148,12 @@ export default class MessageActionBar extends React.PureComponent {
                 title={_t("Reply")}
                 onClick={this.onReplyClick}
             />;
-            editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
-                title={_t("Edit")}
-                onClick={this.onEditClick}
-            />;
+            if (this.isEditingEnabled()) {
+                editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+                    title={_t("Edit")}
+                    onClick={this.onEditClick}
+                />;
+            }
         }
 
         return <div className="mx_MessageActionBar">
