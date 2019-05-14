@@ -1735,9 +1735,13 @@ export default React.createClass({
     onRegistered: function(credentials) {
         if (this.state.register_session_id) {
             // The user came in through an email validation link. To avoid overwriting
-            // their session, check to make sure the session isn't someone else.
+            // their session, check to make sure the session isn't someone else, and
+            // isn't a guest user since we'll usually have set a guest user session before
+            // starting the registration process. This isn't perfect since it's possible
+            // the user had a separate guest session they didn't actually mean to replace.
             const sessionOwner = Lifecycle.getStoredSessionOwner();
-            if (sessionOwner && sessionOwner !== credentials.userId) {
+            const sessionIsGuest = Lifecycle.getStoredSessionIsGuest();
+            if (sessionOwner && !sessionIsGuest && sessionOwner !== credentials.userId) {
                 console.log(
                     `Found a session for ${sessionOwner} but ${credentials.userId} is trying to verify their ` +
                     `email address. Restoring the session for ${sessionOwner} with warning.`,
