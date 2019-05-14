@@ -116,7 +116,7 @@ export default class MessageEditor extends React.Component {
             "body": textSerialize(this.model),
             "m.relates_to": {
                 "rel_type": "m.replace",
-                "event_id": this.props.event.getId(),
+                "event_id": this.props.event.getOriginalId(),
             },
         };
         if (requiresHtml(this.model)) {
