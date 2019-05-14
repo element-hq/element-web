@@ -673,23 +673,23 @@ export default class MessageComposerInput extends React.Component {
         this.direction = '';
 
         // Navigate autocomplete list with arrow keys
-        if (this.autocomplete.state.completionList.length > 0) {
+        if (this.autocomplete.countCompletions() > 0) {
             if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
                 switch (ev.keyCode) {
                     case KeyCode.LEFT:
-                        this.moveAutocompleteSelection(true);
+                        this.autocomplete.moveSelection(-1);
                         ev.preventDefault();
                         return true;
                     case KeyCode.RIGHT:
-                        this.moveAutocompleteSelection(false);
+                        this.autocomplete.moveSelection(+1);
                         ev.preventDefault();
                         return true;
                     case KeyCode.UP:
-                        this.moveAutocompleteSelection(true);
+                        this.autocomplete.moveSelection(-1);
                         ev.preventDefault();
                         return true;
                     case KeyCode.DOWN:
-                        this.moveAutocompleteSelection(false);
+                        this.autocomplete.moveSelection(+1);
                         ev.preventDefault();
                         return true;
                 }
@@ -1225,21 +1225,17 @@ export default class MessageComposerInput extends React.Component {
             someCompletions: null,
         });
         e.preventDefault();
-        if (this.autocomplete.state.completionList.length === 0) {
+        if (this.autocomplete.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             const completionCount = await this.autocomplete.forceComplete();
             this.setState({
                 someCompletions: completionCount > 0,
             });
             // Select the first item by moving "down"
-            await this.moveAutocompleteSelection(false);
+            await this.autocomplete.moveSelection(+1);
         } else {
-            await this.moveAutocompleteSelection(e.shiftKey);
+            await this.autocomplete.moveSelection(e.shiftKey ? -1 : +1);
         }
-    };
-
-    moveAutocompleteSelection = (up) => {
-        up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
     onEscape = async (e) => {
