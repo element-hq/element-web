@@ -497,6 +497,7 @@ async function verifyServerConfig() {
     }
 
     const validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
+    validatedConfig.isDefault = true;
 
     // Just in case we ever have to debug this
     console.log("Using homeserver config:", validatedConfig);
