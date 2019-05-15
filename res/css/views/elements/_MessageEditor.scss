@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_MessageEditor {
     border-radius: 4px;
-    background-color: #f3f8fd;
+    background-color: $header-panel-bg-color;
     padding: 11px 13px 7px 56px;
 
     .mx_MessageEditor_editor {
