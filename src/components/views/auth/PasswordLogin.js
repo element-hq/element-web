@@ -284,8 +284,9 @@ export default class PasswordLogin extends React.Component {
             signInToText = _t('Sign in to your Matrix account on <underlinedServerName />', {}, {
                 'underlinedServerName': () => {
                     return <TextWithTooltip
-                               class="mx_Login_underlinedServerName"
-                               tooltip={this.props.serverConfig.hsUrl}>
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
                         {this.props.serverConfig.hsName}
                     </TextWithTooltip>;
                 },

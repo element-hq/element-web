@@ -522,7 +522,8 @@ module.exports = React.createClass({
                 'underlinedServerName': () => {
                     return <TextWithTooltip
                         class="mx_Login_underlinedServerName"
-                        tooltip={this.props.serverConfig.hsUrl}>
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
                         {this.props.serverConfig.hsName}
                     </TextWithTooltip>;
                 },
