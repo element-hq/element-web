@@ -79,3 +79,7 @@ limitations under the License.
 .mx_Login_type_dropdown {
     min-width: 200px;
 }
+
+.mx_Login_underlinedServerName {
+    border-bottom: 1px dashed $accent-color;
+}

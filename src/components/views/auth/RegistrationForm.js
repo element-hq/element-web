@@ -516,9 +516,17 @@ module.exports = React.createClass({
             serverName: this.props.serverConfig.hsName,
         });
         if (this.props.serverConfig.hsNameIsDifferent) {
-            // TODO: TravisR - Use tooltip to underline
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
             yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
-                'underlinedServerName': () => <u>{this.props.serverConfig.hsName}</u>,
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
         }
 
