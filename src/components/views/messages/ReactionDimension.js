@@ -82,7 +82,7 @@ export default class ReactionDimension extends React.PureComponent {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
-                return mxEvent.getContent()["m.relates_to"].key === option;
+                return mxEvent.getRelation().key === option;
             });
             if (!reactionForOption) {
                 continue;
