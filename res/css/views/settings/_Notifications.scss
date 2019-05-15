@@ -76,6 +76,21 @@ limitations under the License.
     display: none;
 }
 
-.mx_NotificationSound_resetSound {
+.mx_NotificationSound_browse {
+    color: $accent-color;
+    border: 1px solid $accent-color;
+    background-color: transparent;
+}
+
+.mx_NotificationSound_save {
     margin-left: 5px;
+    color: white;
+    background-color: $accent-color;
+}
+
+.mx_NotificationSound_resetSound {
+    margin-top: 5px;
+    color: white;
+    border: $warning-color;
+    background-color: $warning-color;
 }

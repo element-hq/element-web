@@ -20,7 +20,7 @@ import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
-import SettingsStore from  '../../../../../settings/SettingsStore';
+import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from '../../../../../settings/SettingsStore';
 
 export default class NotificationsSettingsTab extends React.Component {
@@ -65,14 +65,19 @@ export default class NotificationsSettingsTab extends React.Component {
         this.setState({
             uploadedFile: file,
         });
+    }
+
+    async _onClickSaveSound(e) {
+        e.stopPropagation();
+        e.preventDefault();
 
         try {
             await this._saveSound();
         } catch (ex) {
             console.error(
                 `Unable to save notification sound for ${this.props.roomId}`,
-                ex,
             );
+            console.error(ex);
         }
     }
 
@@ -80,6 +85,7 @@ export default class NotificationsSettingsTab extends React.Component {
         if (!this.state.uploadedFile) {
             return;
         }
+        
         let type = this.state.uploadedFile.type;
         if (type === "video/ogg") {
             // XXX: I've observed browsers allowing users to pick a audio/ogg files,
@@ -87,6 +93,7 @@ export default class NotificationsSettingsTab extends React.Component {
             // suck at detecting mimetypes.
             type = "audio/ogg";
         }
+
         const url = await MatrixClientPeg.get().uploadContent(
             this.state.uploadedFile, {
                 type,
@@ -96,7 +103,6 @@ export default class NotificationsSettingsTab extends React.Component {
         await SettingsStore.setValue(
             "notificationSound",
             this.props.roomId,
-            SettingsStore.
             SettingLevel.ROOM_ACCOUNT,
             {
                 name: this.state.uploadedFile.name,
@@ -108,7 +114,6 @@ export default class NotificationsSettingsTab extends React.Component {
 
         this.setState({
             uploadedFile: null,
-            uploadedFileUrl: null,
             currentSound: this.state.uploadedFile.name,
         });
     }
@@ -129,13 +134,25 @@ export default class NotificationsSettingsTab extends React.Component {
     }
 
     render() {
+        let currentUploadedFile = null;
+        if (this.state.uploadedFile) {
+            currentUploadedFile = (
+                <div>
+                    <span>{_t("Uploaded sound")}: <code>{this.state.uploadedFile.name}</code></span>
+                </div>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <span className='mx_SettingsTab_subheading'>{_t("Sounds")}</span>
                     <div>
-                        <span>{_t("Custom Notification Sounds")}: <code>{this.state.currentSound}</code></span>
+                        <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br/>
+                        <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
+                                {_t("Reset")}
+                        </AccessibleButton>
                     </div>
                     <div>
                         <h3>{_t("Set a new custom sound")}</h3>
@@ -143,13 +160,16 @@ export default class NotificationsSettingsTab extends React.Component {
                             <input ref="soundUpload" className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
                         </form>
 
-                        <AccessibleButton onClick={this._triggerUploader.bind(this)} kind="primary">
+                        {currentUploadedFile}
+
+                        <AccessibleButton className="mx_NotificationSound_browse" onClick={this._triggerUploader.bind(this)} kind="primary">
                                 {_t("Browse")}
                         </AccessibleButton>
 
-                        <AccessibleButton className="mx_NotificationSound_resetSound" onClick={this._clearSound.bind(this)} kind="primary">
-                                {_t("Reset")}
+                        <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this._onClickSaveSound.bind(this)} kind="primary">
+                                {_t("Save")}
                         </AccessibleButton>
+                        <br />
                     </div>
                 </div>
             </div>
