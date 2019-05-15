@@ -169,6 +169,8 @@ export function trackStores(client) {
  * has been wiped by the browser: this flag is saved to localStorage
  * and if it is true and not crypto data is found, an error is
  * presented to the user.
+ *
+ * @param {bool} cryptoInited True if crypto has been set up
  */
 export function setCryptoInitialised(cryptoInited) {
     localStorage.setItem("mx_crypto_initialised", cryptoInited);
