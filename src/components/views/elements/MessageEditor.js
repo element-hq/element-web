@@ -118,7 +118,7 @@ export default class MessageEditor extends React.Component {
             "m.new_content": newContent,
             "m.relates_to": {
                 "rel_type": "m.replace",
-                "event_id": this.props.event.getOriginalId(),
+                "event_id": this.props.event.getId(),
             },
         }, newContent);
 

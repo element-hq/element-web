@@ -507,7 +507,7 @@ const TimelinePanel = React.createClass({
         this.forceUpdate();
     },
 
-    onRoomReplaceEvent: function(replacedEvent, newEvent, room) {
+    onRoomReplaceEvent: function(replacedEvent, room) {
         if (this.unmounted) return;
 
         // ignore events for other rooms
@@ -515,7 +515,7 @@ const TimelinePanel = React.createClass({
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
-        this._reloadEvents();
+        this.forceUpdate();
     },
 
     onRoomReceipt: function(ev, room) {

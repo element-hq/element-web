@@ -57,9 +57,10 @@ function parseHtmlMessage(html) {
 export function parseEvent(event) {
     const content = event.getContent();
     if (content.format === "org.matrix.custom.html") {
-        return parseHtmlMessage(content.formatted_body);
+        return parseHtmlMessage(content.formatted_body || "");
     } else {
-        const lines = content.body.split("\n");
+        const body = content.body || "";
+        const lines = body.split("\n");
         const parts = lines.reduce((parts, line, i) => {
             const isLast = i === lines.length - 1;
             const text = new PlainPart(line);

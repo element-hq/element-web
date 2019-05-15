@@ -137,6 +137,7 @@ module.exports = React.createClass({
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
+                nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
                 nextState.links !== this.state.links ||

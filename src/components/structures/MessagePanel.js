@@ -526,6 +526,7 @@ module.exports = React.createClass({
                 <EventTile mxEvent={mxEv}
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
