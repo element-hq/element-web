@@ -24,16 +24,14 @@ import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerialize, textSerialize, requiresHtml} from '../../../editor/serialize';
 import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
-// import AutocompleteModel from '../../../editor/autocomplete';
 import {PartCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
     static propTypes = {
-        // the latest event in this chain of replies
+        // the message event being edited
         event: PropTypes.instanceOf(MatrixEvent).isRequired,
-        // onHeightChanged: PropTypes.func.isRequired,
     };
 
     static contextTypes = {
@@ -70,13 +68,10 @@ export default class MessageEditor extends React.Component {
             }
         }
         this.setState({autoComplete: this.model.autoComplete});
-        // const modelOutput = this._editorRef.parentElement.querySelector(".model");
-        // modelOutput.textContent = JSON.stringify(this.model.serializeParts(), undefined, 2);
     }
 
     _onInput = (event) => {
         const sel = document.getSelection();
-        // console.log("finding newValue", this._editorRef.innerHTML, sel);
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.model.update(text, event.inputType, caret);
     }
@@ -133,14 +128,6 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: "edit_event", event: null});
     }
 
-    _collectEditorRef = (ref) => {
-        this._editorRef = ref;
-    }
-
-    _collectAutocompleteRef = (ref) => {
-        this._autocompleteRef = ref;
-    }
-
     _onAutoCompleteConfirm = (completion) => {
         this.model.autoComplete.onComponentConfirm(completion);
     }
@@ -160,7 +147,7 @@ export default class MessageEditor extends React.Component {
             const queryLen = query.length;
             autoComplete = <div className="mx_MessageEditor_AutoCompleteWrapper">
                 <Autocomplete
-                    ref={this._collectAutocompleteRef}
+                    ref={ref => this._autocompleteRef = ref}
                     query={query}
                     onConfirm={this._onAutoCompleteConfirm}
                     onSelectionChange={this._onAutoCompleteSelectionChange}
@@ -173,18 +160,17 @@ export default class MessageEditor extends React.Component {
         return <div className="mx_MessageEditor">
                 { autoComplete }
                 <div
-                    className="editor"
+                    className="mx_MessageEditor_editor"
                     contentEditable="true"
                     tabIndex="1"
                     onInput={this._onInput}
                     onKeyDown={this._onKeyDown}
-                    ref={this._collectEditorRef}
+                    ref={ref => this._editorRef = ref}
                 ></div>
-                <div className="buttons">
+                <div className="mx_MessageEditor_buttons">
                     <AccessibleButton kind="secondary" onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this._onSaveClicked}>{_t("Save")}</AccessibleButton>
                 </div>
-                <code className="model"></code>
             </div>;
     }
 }

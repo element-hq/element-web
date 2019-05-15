@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ limitations under the License.
     background-color: #f3f8fd;
     padding: 11px 13px 7px 56px;
 
-    .editor {
+    .mx_MessageEditor_editor {
         border-radius: 4px;
         border: solid 1px #e9edf1;
         background-color: #ffffff;
@@ -45,7 +45,7 @@ limitations under the License.
         }
     }
 
-    .buttons {
+    .mx_MessageEditor_buttons {
         display: flex;
         flex-direction: row;
         justify-content: end;
@@ -55,14 +55,6 @@ limitations under the License.
             margin-left: 5px;
             padding: 5px 40px;
         }
-    }
-
-    .model {
-        background: lightgrey;
-        padding: 5px;
-        display: none;
-        white-space: pre;
-        font-size: 12px;
     }
 
     .mx_MessageEditor_AutoCompleteWrapper {

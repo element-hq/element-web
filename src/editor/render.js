@@ -14,22 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function rerenderModel(editor, model) {
-    while (editor.firstChild) {
-        editor.removeChild(editor.firstChild);
-    }
-    let lineContainer = document.createElement("div");
-    editor.appendChild(lineContainer);
-    for (const part of model.parts) {
-        if (part.type === "newline") {
-            lineContainer = document.createElement("div");
-            editor.appendChild(lineContainer);
-        } else {
-            lineContainer.appendChild(part.toDOMNode());
-        }
-    }
-}
-
 export function renderModel(editor, model) {
     const lines = model.parts.reduce((lines, part) => {
         if (part.type === "newline") {
