@@ -119,6 +119,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_message_editing": {
+        isFeature: true,
+        displayName: _td("Edit messages after they have been sent (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_notification_sounds": {
         isFeature: true,
         displayName: _td("Custom Notification Sounds"),

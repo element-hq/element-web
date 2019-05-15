@@ -589,6 +589,7 @@ module.exports = withMatrixClient(React.createClass({
 
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
+        can.invite = me.powerLevel >= powerLevels.invite;
         can.mute = me.powerLevel >= editPowerLevel;
         can.modifyLevel = me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel);
         can.modifyLevelMax = me.powerLevel;
@@ -727,7 +728,7 @@ module.exports = withMatrixClient(React.createClass({
                 );
             }
 
-            if (!member || !member.membership || member.membership === 'leave') {
+            if (this.state.can.invite && (!member || !member.membership || member.membership === 'leave')) {
                 const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
                 const onInviteUserButton = async () => {
                     try {

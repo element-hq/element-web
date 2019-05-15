@@ -69,6 +69,10 @@ limitations under the License.
     mask-image: url('$(res)/img/reply.svg');
 }
 
+.mx_MessageActionBar_editButton::after {
+    mask-image: url('$(res)/img/edit.svg');
+}
+
 .mx_MessageActionBar_optionsButton::after {
     mask-image: url('$(res)/img/icon_context.svg');
 }
