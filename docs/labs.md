@@ -35,4 +35,11 @@ That's it. Now should see your new counter under the header.
 reactions from other people. This feature is currently under active development,
 and only portions have been implemented so far.
 
+## Message editing
+
+`feature_message_editing` allows editing messages after they have been sent,
+accessible from the reaction/context bar when hovering a message.
+This feature is currently under active development,
+and only portions have been implemented so far.
+
 [#riot-web:matrix.org]: https://matrix.to/#/#riot-web:matrix.org
