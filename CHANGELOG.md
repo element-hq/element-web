@@ -1,3 +1,12 @@
+Changes in [1.1.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.2) (2019-05-15)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.1...v1.1.2)
+
+ * Always thumbnail for GIFs
+   [\#2976](https://github.com/matrix-org/matrix-react-sdk/pull/2976)
+ * Fix Single Sign-on
+   [\#2975](https://github.com/matrix-org/matrix-react-sdk/pull/2975)
+
 Changes in [1.1.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.1.1) (2019-05-14)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.0...v1.1.1)
