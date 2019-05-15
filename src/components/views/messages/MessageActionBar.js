@@ -23,7 +23,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import SettingsStore from '../../../settings/SettingsStore';
-import { isContentActionable } from '../../../utils/EventUtils';
+import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -148,12 +148,12 @@ export default class MessageActionBar extends React.PureComponent {
                 title={_t("Reply")}
                 onClick={this.onReplyClick}
             />;
-            if (this.isEditingEnabled()) {
-                editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
-                    title={_t("Edit")}
-                    onClick={this.onEditClick}
-                />;
-            }
+        }
+        if (this.isEditingEnabled() && canEditContent(this.props.mxEvent)) {
+            editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+                title={_t("Edit")}
+                onClick={this.onEditClick}
+            />;
         }
 
         return <div className="mx_MessageActionBar">

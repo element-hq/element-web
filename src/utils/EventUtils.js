@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { EventStatus } from 'matrix-js-sdk';
+import MatrixClientPeg from '../MatrixClientPeg';
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -42,4 +43,9 @@ export function isContentActionable(mxEvent) {
     }
 
     return false;
+}
+
+export function canEditContent(mxEvent) {
+    return isContentActionable(mxEvent) &&
+        mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }

@@ -110,9 +110,15 @@ export default class MessageEditor extends React.Component {
             "msgtype": "m.text",
             "body": textSerialize(this.model),
         };
+        const contentBody = {
+            msgtype: newContent.msgtype,
+            body: ` * ${newContent.body}`,
+        };
         if (requiresHtml(this.model)) {
             newContent.format = "org.matrix.custom.html";
             newContent.formatted_body = htmlSerialize(this.model);
+            contentBody.format = newContent.format;
+            contentBody.formatted_body = ` * ${newContent.formatted_body}`;
         }
         const content = Object.assign({
             "m.new_content": newContent,
@@ -120,7 +126,7 @@ export default class MessageEditor extends React.Component {
                 "rel_type": "m.replace",
                 "event_id": this.props.event.getId(),
             },
-        }, newContent);
+        }, contentBody);
 
         const roomId = this.props.event.getRoomId();
         this.context.matrixClient.sendMessage(roomId, content);
@@ -138,6 +144,13 @@ export default class MessageEditor extends React.Component {
 
     componentDidMount() {
         this._updateEditorState();
+        const sel = document.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(this._editorRef);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        this._editorRef.focus();
     }
 
     render() {
