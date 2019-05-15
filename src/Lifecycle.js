@@ -369,7 +369,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     // If there's an inconsistency between account data in local storage and the
     // crypto store, we'll be generally confused when handling encrypted data.
     // Show a modal recommending a full reset of storage.
-    if (results.dataInLocalStorage && !results.dataInCryptoStore) {
+    if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
         const signOut = await _showStorageEvictedDialog();
         if (signOut) {
             await _clearStorage();
