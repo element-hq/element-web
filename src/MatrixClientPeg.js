@@ -121,6 +121,7 @@ class MatrixClientPeg {
             // check that we have a version of the js-sdk which includes initCrypto
             if (this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
+                StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
