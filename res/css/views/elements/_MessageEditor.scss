@@ -1,0 +1,64 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageEditor {
+    border-radius: 4px;
+    background-color: $header-panel-bg-color;
+    padding: 11px 13px 7px 56px;
+
+    .mx_MessageEditor_editor {
+        border-radius: 4px;
+        border: solid 1px #e9edf1;
+        background-color: #ffffff;
+        padding: 10px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+
+        span {
+            display: inline-block;
+            padding: 0 5px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        span.user-pill, span.room-pill {
+            border-radius: 16px;
+            display: inline-block;
+            color: $primary-fg-color;
+            background-color: $other-user-pill-bg-color;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+
+    .mx_MessageEditor_buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        padding: 5px 0;
+
+        .mx_AccessibleButton {
+            margin-left: 5px;
+            padding: 5px 40px;
+        }
+    }
+
+    .mx_MessageEditor_AutoCompleteWrapper {
+        position: relative;
+        height: 0;
+    }
+}

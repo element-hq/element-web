@@ -58,6 +58,13 @@ export default class MessageActionBar extends React.PureComponent {
         });
     }
 
+    onEditClick = (ev) => {
+        dis.dispatch({
+            action: 'edit_event',
+            event: this.props.mxEvent,
+        });
+    }
+
     onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         const buttonRect = ev.target.getBoundingClientRect();
@@ -96,6 +103,10 @@ export default class MessageActionBar extends React.PureComponent {
         return SettingsStore.isFeatureEnabled("feature_reactions");
     }
 
+    isEditingEnabled() {
+        return SettingsStore.isFeatureEnabled("feature_message_editing");
+    }
+
     renderAgreeDimension() {
         if (!this.isReactionsEnabled()) {
             return null;
@@ -128,6 +139,7 @@ export default class MessageActionBar extends React.PureComponent {
         let agreeDimensionReactionButtons;
         let likeDimensionReactionButtons;
         let replyButton;
+        let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
             agreeDimensionReactionButtons = this.renderAgreeDimension();
@@ -136,12 +148,19 @@ export default class MessageActionBar extends React.PureComponent {
                 title={_t("Reply")}
                 onClick={this.onReplyClick}
             />;
+            if (this.isEditingEnabled()) {
+                editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+                    title={_t("Edit")}
+                    onClick={this.onEditClick}
+                />;
+            }
         }
 
         return <div className="mx_MessageActionBar">
             {agreeDimensionReactionButtons}
             {likeDimensionReactionButtons}
             {replyButton}
+            {editButton}
             <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}
