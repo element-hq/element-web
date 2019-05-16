@@ -119,7 +119,7 @@ export default class UserProvider extends AutocompleteProvider {
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24} />}
-                            title={displayName}
+                            title={displayName}mx_DevTools_content
                             description={user.userId} />
                     ),
                     range,
