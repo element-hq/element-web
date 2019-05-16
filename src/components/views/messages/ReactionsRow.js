@@ -80,7 +80,7 @@ export default class ReactionsRow extends React.PureComponent {
             return null;
         }
         const userId = MatrixClientPeg.get().getUserId();
-        return reactions.getAnnotationsBySender()[userId];
+        return [...reactions.getAnnotationsBySender()[userId].values()];
     }
 
     render() {
