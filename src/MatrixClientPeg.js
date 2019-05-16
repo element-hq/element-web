@@ -188,8 +188,7 @@ class MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             verificationMethods: [verificationMethods.SAS],
-            unstableClientRelationAggregation: aggregateRelations,
-            unstableClientRelationReplacements: enableEdits,
+            unstableClientRelationAggregation: aggregateRelations || enableEdits,
         };
 
         this.matrixClient = createMatrixClient(opts);
