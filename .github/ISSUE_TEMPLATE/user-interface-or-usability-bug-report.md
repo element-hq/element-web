@@ -2,7 +2,7 @@
 name: User Interface or Usability Bug report
 about: Please include screenshots in UI/UX bug reports
 title: ''
-labels: ''
+labels: bug, ui/ux
 assignees: ''
 
 ---
