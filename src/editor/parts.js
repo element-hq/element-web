@@ -205,6 +205,14 @@ export class NewlinePart extends BasePart {
     get type() {
         return "newline";
     }
+
+    // this makes the cursor skip this part when it is inserted
+    // rather than trying to append to it, which is what we want.
+    // As a newline can also be only one character, it makes sense
+    // as it can only be one character long. This caused #9741.
+    get canEdit() {
+        return false;
+    }
 }
 
 export class RoomPillPart extends PillPart {

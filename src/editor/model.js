@@ -88,7 +88,8 @@ export default class EditorModel {
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
-        const newPosition = this._positionForOffset(caretOffset, true);
+        let newPosition = this._positionForOffset(caretOffset, true);
+        newPosition = newPosition.skipUneditableParts(this._parts);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
     }
@@ -260,5 +261,14 @@ class DocumentPosition {
 
     get offset() {
         return this._offset;
+    }
+
+    skipUneditableParts(parts) {
+        const part = parts[this.index];
+        if (part && !part.canEdit) {
+            return new DocumentPosition(this.index + 1, 0);
+        } else {
+            return this;
+        }
     }
 }
