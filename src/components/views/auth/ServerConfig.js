@@ -30,12 +30,22 @@ import SdkConfig from "../../../SdkConfig";
 
 export default class ServerConfig extends React.PureComponent {
     static propTypes = {
-        onServerConfigChange: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
 
         // The current configuration that the user is expecting to change.
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
+
+        // Called after the component calls onServerConfigChange
+        onAfterSubmit: PropTypes.func,
+
+        // Optional text for the submit button. If falsey, no button will be shown.
+        submitText: PropTypes.string,
+
+        // Optional class for the submit button. Only applies if the submit button
+        // is to be rendered.
+        submitClass: PropTypes.string,
     };
 
     static defaultProps = {
@@ -124,6 +134,16 @@ export default class ServerConfig extends React.PureComponent {
         this.setState({ isUrl });
     };
 
+    onSubmit = async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        await this.validateServer();
+
+        if (this.props.onAfterSubmit) {
+            this.props.onAfterSubmit();
+        }
+    };
+
     _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
             clearTimeout(existingTimeoutId);
@@ -138,9 +158,19 @@ export default class ServerConfig extends React.PureComponent {
 
     render() {
         const Field = sdk.getComponent('elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const errorText = this.state.errorText
             ? <span className='mx_ServerConfig_error'>{this.state.errorText}</span>
+            : null;
+
+        const submitButton = this.props.submitText
+            ? <AccessibleButton
+                  element="button"
+                  type="submit"
+                  className={this.props.submitClass}
+                  onClick={this.onSubmit}
+                  disabled={this.state.busy}>{this.props.submitText}</AccessibleButton>
             : null;
 
         return (
@@ -152,24 +182,27 @@ export default class ServerConfig extends React.PureComponent {
                     </a>,
                 })}
                 {errorText}
-                <div className="mx_ServerConfig_fields">
-                    <Field id="mx_ServerConfig_hsUrl"
-                        label={_t("Homeserver URL")}
-                        placeholder={this.props.serverConfig.hsUrl}
-                        value={this.state.hsUrl}
-                        onBlur={this.onHomeserverBlur}
-                        onChange={this.onHomeserverChange}
-                        disabled={this.state.busy}
-                    />
-                    <Field id="mx_ServerConfig_isUrl"
-                        label={_t("Identity Server URL")}
-                        placeholder={this.props.serverConfig.isUrl}
-                        value={this.state.isUrl}
-                        onBlur={this.onIdentityServerBlur}
-                        onChange={this.onIdentityServerChange}
-                        disabled={this.state.busy}
-                    />
-                </div>
+                <form onSubmit={this.onSubmit} autoComplete={false} action={null}>
+                    <div className="mx_ServerConfig_fields">
+                        <Field id="mx_ServerConfig_hsUrl"
+                            label={_t("Homeserver URL")}
+                            placeholder={this.props.serverConfig.hsUrl}
+                            value={this.state.hsUrl}
+                            onBlur={this.onHomeserverBlur}
+                            onChange={this.onHomeserverChange}
+                            disabled={this.state.busy}
+                        />
+                        <Field id="mx_ServerConfig_isUrl"
+                            label={_t("Identity Server URL")}
+                            placeholder={this.props.serverConfig.isUrl}
+                            value={this.state.isUrl}
+                            onBlur={this.onIdentityServerBlur}
+                            onChange={this.onIdentityServerChange}
+                            disabled={this.state.busy}
+                        />
+                    </div>
+                    {submitButton}
+                </form>
             </div>
         );
     }

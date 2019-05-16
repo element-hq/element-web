@@ -20,7 +20,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
+import {_t, _td} from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
@@ -287,13 +287,7 @@ module.exports = React.createClass({
         this.props.onRegisterClick();
     },
 
-    async onServerDetailsNextPhaseClick(ev) {
-        ev.stopPropagation();
-        // TODO: TravisR - Capture the user's input somehow else
-        if (this._serverConfigRef) {
-            // Just to make sure the user's input gets captured
-            await this._serverConfigRef.validateServer();
-        }
+    async onServerDetailsNextPhaseClick() {
         this.setState({
             phase: PHASE_LOGIN,
         });
@@ -425,7 +419,6 @@ module.exports = React.createClass({
 
     renderServerComponent() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
@@ -435,26 +428,19 @@ module.exports = React.createClass({
             return null;
         }
 
-        const serverDetails = <ServerConfig
-            ref={r => this._serverConfigRef = r}
+        const serverDetailsProps = {};
+        if (PHASES_ENABLED) {
+            serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
+            serverDetailsProps.submitText = _t("Next");
+            serverDetailsProps.submitClass = "mx_Login_submit";
+        }
+
+        return <ServerConfig
             serverConfig={this.props.serverConfig}
             onServerConfigChange={this.props.onServerConfigChange}
             delayTimeMs={250}
+            {...serverDetailsProps}
         />;
-
-        let nextButton = null;
-        if (PHASES_ENABLED) {
-            // TODO: TravisR - Pull out server discovery from ServerConfig to disable the next button?
-            nextButton = <AccessibleButton className="mx_Login_submit"
-                onClick={this.onServerDetailsNextPhaseClick}>
-                {_t("Next")}
-            </AccessibleButton>;
-        }
-
-        return <div>
-            {serverDetails}
-            {nextButton}
-        </div>;
     },
 
     renderLoginComponentForStep() {

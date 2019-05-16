@@ -124,13 +124,7 @@ module.exports = React.createClass({
         });
     },
 
-    async onServerDetailsNextPhaseClick(ev) {
-        ev.stopPropagation();
-        // TODO: TravisR - Capture the user's input somehow else
-        if (this._serverConfigRef) {
-            // Just to make sure the user's input gets captured
-            await this._serverConfigRef.validateServer();
-        }
+    async onServerDetailsNextPhaseClick() {
         this.setState({
             phase: PHASE_FORGOT,
         });
@@ -160,25 +154,19 @@ module.exports = React.createClass({
 
     renderServerDetails() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        // TODO: TravisR - Pull out server discovery from ServerConfig to disable the next button?
-        return <div>
-            <ServerConfig
-                ref={r => this._serverConfigRef = r}
-                serverConfig={this.props.serverConfig}
-                onServerConfigChange={this.props.onServerConfigChange}
-                delayTimeMs={0} />
-            <AccessibleButton className="mx_Login_submit"
-                onClick={this.onServerDetailsNextPhaseClick}
-            >
-                {_t("Next")}
-            </AccessibleButton>
-        </div>;
+        return <ServerConfig
+            serverConfig={this.props.serverConfig}
+            onServerConfigChange={this.props.onServerConfigChange}
+            delayTimeMs={0}
+            onAfterSubmit={this.onServerDetailsNextPhaseClick}
+            submitText={_t("Next")}
+            submitClass="mx_Login_submit"
+        />;
     },
 
     renderForgot() {
@@ -194,9 +182,17 @@ module.exports = React.createClass({
             serverName: this.props.serverConfig.hsName,
         });
         if (this.props.serverConfig.hsNameIsDifferent) {
-            // TODO: TravisR - Use tooltip to underline
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
             yourMatrixAccountText = _t('Your Matrix account on <underlinedServerName />', {}, {
-                'underlinedServerName': () => <u>{this.props.serverConfig.hsName}</u>,
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
         }
 

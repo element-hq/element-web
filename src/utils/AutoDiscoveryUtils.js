@@ -26,6 +26,8 @@ export class ValidatedServerConfig {
 
     isUrl: string;
     identityEnabled: boolean;
+
+    isDefault: boolean;
 }
 
 export default class AutoDiscoveryUtils {
@@ -99,6 +101,7 @@ export default class AutoDiscoveryUtils {
             hsNameIsDifferent: url.hostname !== preferredHomeserverName,
             isUrl: preferredIdentityUrl,
             identityEnabled: !SdkConfig.get()['disable_identity_server'],
+            isDefault: false,
         });
     }
 }
