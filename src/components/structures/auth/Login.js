@@ -24,8 +24,8 @@ import {_t, _td} from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
-import {messageForResourceLimitError} from '../../../utils/ErrorUtils';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -235,21 +235,25 @@ module.exports = React.createClass({
         this.setState({ username: username });
     },
 
-    onUsernameBlur: function(username) {
+    onUsernameBlur: async function(username) {
         this.setState({
             username: username,
+            busy: true, // unset later by the result of onServerConfigChange
             errorText: null,
         });
-        if (username[0] === "@" && false) { // TODO: TravisR - Restore this
+        if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
             try {
-                // we have to append 'https://' to make the URL constructor happy
-                // otherwise we get things like 'protocol: matrix.org, pathname: 8448'
-                const url = new URL("https://" + serverName);
-                this._tryWellKnownDiscovery(url.hostname);
+                const result = await AutoDiscoveryUtils.validateServerName(serverName);
+                this.props.onServerConfigChange(result);
             } catch (e) {
                 console.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
-                this.setState({errorText: _t("Failed to perform homeserver discovery")});
+
+                let message = _t("Failed to perform homeserver discovery");
+                if (e.translatedMessage) {
+                    message = e.translatedMessage;
+                }
+                this.setState({errorText: message, busy: false});
             }
         }
     },
