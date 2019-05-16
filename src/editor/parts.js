@@ -57,7 +57,7 @@ class BasePart {
     appendUntilRejected(str) {
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr)) {
+            if (!this.acceptsInsertion(chr, i)) {
                 this._text = this._text + str.substr(0, i);
                 return str.substr(i);
             }
@@ -180,8 +180,8 @@ class PillPart extends BasePart {
 }
 
 export class NewlinePart extends BasePart {
-    acceptsInsertion(chr) {
-        return this.text.length === 0 && chr === "\n";
+    acceptsInsertion(chr, i) {
+        return (this.text.length + i) === 0 && chr === "\n";
     }
 
     acceptsRemoval(position, chr) {
@@ -204,6 +204,14 @@ export class NewlinePart extends BasePart {
 
     get type() {
         return "newline";
+    }
+
+    // this makes the cursor skip this part when it is inserted
+    // rather than trying to append to it, which is what we want.
+    // As a newline can also be only one character, it makes sense
+    // as it can only be one character long. This caused #9741.
+    get canEdit() {
+        return false;
     }
 }
 

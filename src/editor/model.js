@@ -61,6 +61,16 @@ export default class EditorModel {
         return null;
     }
 
+    getPositionAtEnd() {
+        if (this._parts.length) {
+            const index = this._parts.length - 1;
+            const part = this._parts[index];
+            return new DocumentPosition(index, part.text.length);
+        } else {
+            return new DocumentPosition(0, 0);
+        }
+    }
+
     serializeParts() {
         return this._parts.map(({type, text}) => {return {type, text};});
     }
@@ -88,7 +98,8 @@ export default class EditorModel {
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
-        const newPosition = this._positionForOffset(caretOffset, true);
+        let newPosition = this._positionForOffset(caretOffset, true);
+        newPosition = newPosition.skipUneditableParts(this._parts);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
     }
@@ -172,21 +183,26 @@ export default class EditorModel {
             // part might be undefined here
             let part = this._parts[index];
             const amount = Math.min(len, part.text.length - offset);
-            if (part.canEdit) {
-                const replaceWith = part.remove(offset, amount);
-                if (typeof replaceWith === "string") {
-                    this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
-                }
-                part = this._parts[index];
-                // remove empty part
-                if (!part.text.length) {
-                    this._removePart(index);
+            // don't allow 0 amount deletions
+            if (amount) {
+                if (part.canEdit) {
+                    const replaceWith = part.remove(offset, amount);
+                    if (typeof replaceWith === "string") {
+                        this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
+                    }
+                    part = this._parts[index];
+                    // remove empty part
+                    if (!part.text.length) {
+                        this._removePart(index);
+                    } else {
+                        index += 1;
+                    }
                 } else {
-                    index += 1;
+                    removedOffsetDecrease += offset;
+                    this._removePart(index);
                 }
             } else {
-                removedOffsetDecrease += offset;
-                this._removePart(index);
+                index += 1;
             }
             len -= amount;
             offset = 0;
@@ -260,5 +276,14 @@ class DocumentPosition {
 
     get offset() {
         return this._offset;
+    }
+
+    skipUneditableParts(parts) {
+        const part = parts[this.index];
+        if (part && !part.canEdit) {
+            return new DocumentPosition(this.index + 1, 0);
+        } else {
+            return this;
+        }
     }
 }
