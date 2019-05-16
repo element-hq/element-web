@@ -128,8 +128,10 @@ class SendCustomEvent extends GenericEditor {
 
         return <div>
             <div className="mx_DevTools_content">
-                { this.textInput('eventType', _t('Event Type')) }
-                { this.state.isStateEvent && this.textInput('stateKey', _t('State Key')) }
+                <div className="mx_DevTools_eventTypeStateKeyGroup">
+                    { this.textInput('eventType', _t('Event Type')) }
+                    { this.state.isStateEvent && this.textInput('stateKey', _t('State Key')) }
+                </div>
 
                 <br />
 
