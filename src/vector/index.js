@@ -449,8 +449,9 @@ async function loadLanguage() {
 async function verifyServerConfig() {
     console.log("Verifying homeserver configuration");
 
-    // TODO: TravisR - Handle query string arguments for hs_url and is_url
-    // We probably don't want to handle them unless the user is logged out though?
+    // Note: the query string may include is_url and hs_url - we only respect these in the
+    // context of email validation. Because we don't respect them otherwise, we do not need
+    // to parse or consider them here.
 
     const config = SdkConfig.get();
     let wkConfig = config['default_server_config']; // overwritten later under some conditions
