@@ -63,6 +63,11 @@ export default class ReplyThread extends React.Component {
     static getParentEventId(ev) {
         if (!ev || ev.isRedacted()) return;
 
+        // XXX: For newer relations (annotations, replacements, etc.), we now
+        // have a `getRelation` helper on the event, and you might assume it
+        // could be used here for replies as well... However, the helper
+        // currently assumes the relation has a `rel_type`, which older replies
+        // do not, so this block is left as-is for now.
         const mRelatesTo = ev.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];

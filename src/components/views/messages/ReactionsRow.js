@@ -101,7 +101,7 @@ export default class ReactionsRow extends React.PureComponent {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
-                return mxEvent.getContent()["m.relates_to"].key === content;
+                return mxEvent.getRelation().key === content;
             });
             return <ReactionsRowButton
                 key={content}
