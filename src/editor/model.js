@@ -183,21 +183,26 @@ export default class EditorModel {
             // part might be undefined here
             let part = this._parts[index];
             const amount = Math.min(len, part.text.length - offset);
-            if (part.canEdit) {
-                const replaceWith = part.remove(offset, amount);
-                if (typeof replaceWith === "string") {
-                    this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
-                }
-                part = this._parts[index];
-                // remove empty part
-                if (!part.text.length) {
-                    this._removePart(index);
+            // don't allow 0 amount deletions
+            if (amount) {
+                if (part.canEdit) {
+                    const replaceWith = part.remove(offset, amount);
+                    if (typeof replaceWith === "string") {
+                        this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
+                    }
+                    part = this._parts[index];
+                    // remove empty part
+                    if (!part.text.length) {
+                        this._removePart(index);
+                    } else {
+                        index += 1;
+                    }
                 } else {
-                    index += 1;
+                    removedOffsetDecrease += offset;
+                    this._removePart(index);
                 }
             } else {
-                removedOffsetDecrease += offset;
-                this._removePart(index);
+                index += 1;
             }
             len -= amount;
             offset = 0;
