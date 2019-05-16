@@ -195,13 +195,13 @@ export default class ImageView extends React.Component {
                     <img src={this.props.src} title={this.props.name} style={effectiveStyle} className="mainImage" />
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <AccessibleButton className="mx_ImageView_rotateCounterClockwise" onClick={ this.rotateCounterClockwise }>
+                            <AccessibleButton className="mx_ImageView_rotateCounterClockwise" title={_t("Rotate Left")} onClick={ this.rotateCounterClockwise }>
                                 <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
                             </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_rotateClockwise" onClick={ this.rotateClockwise }>
+                            <AccessibleButton className="mx_ImageView_rotateClockwise" title={_t("Rotate Right")} onClick={ this.rotateClockwise }>
                                 <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
                             </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }>
+                            <AccessibleButton className="mx_ImageView_cancel" title={_t("Close")} onClick={ this.props.onFinished }>
                               <img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } />
                             </AccessibleButton>
                             <div className="mx_ImageView_shim">
