@@ -450,8 +450,13 @@ module.exports = React.createClass({
 
     _getTilesForEvent: function(prevEvent, mxEv, last) {
         const EventTile = sdk.getComponent('rooms.EventTile');
+        const MessageEditor = sdk.getComponent('elements.MessageEditor');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
+
+        if (this.props.editEvent && this.props.editEvent.getId() === mxEv.getId()) {
+            return [<MessageEditor key={mxEv.getId()} event={mxEv} />];
+        }
 
         // is this a continuation of the previous message?
         let continuation = false;
@@ -521,12 +526,13 @@ module.exports = React.createClass({
                 <EventTile mxEvent={mxEv}
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
                     showUrlPreview={this.props.showUrlPreview}
                     checkUnmounting={this._isUnmounting}
-                    eventSendStatus={mxEv.status}
+                    eventSendStatus={mxEv.replacementOrOwnStatus()}
                     tileShape={this.props.tileShape}
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}

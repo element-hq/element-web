@@ -1824,5 +1824,6 @@
     "Riot failed to get the public room list.": "Riot-ek ezin izan du du gelen zerrenda publikoa eskuratu.",
     "The homeserver may be unavailable or overloaded.": "Hasiera-zerbitzaria eskuraezin edo kargatuegia egon daiteke.",
     "You have %(count)s unread notifications in a prior version of this room.|other": "Irakurri gabeko %(count)s jakinarazpen dituzu gela honen aurreko bertsio batean.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Irakurri gabeko %(count)s jakinarazpen duzu gela honen aurreko bertsio batean."
+    "You have %(count)s unread notifications in a prior version of this room.|one": "Irakurri gabeko %(count)s jakinarazpen duzu gela honen aurreko bertsio batean.",
+    "Replying With Files": "Fitxategiekin erantzutea"
 }

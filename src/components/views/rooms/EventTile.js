@@ -779,6 +779,7 @@ module.exports = withMatrixClient(React.createClass({
                             { thread }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
+                                           replacingEventId={this.props.replacingEventId}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}

@@ -257,11 +257,11 @@ $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 $message-action-bar-bg-color: $primary-bg-color;
 $message-action-bar-fg-color: $primary-fg-color;
 $message-action-bar-border-color: #e9edf1;
-$message-action-bar-hover-border-color: #b8c1d2;
+$message-action-bar-hover-border-color: $focus-bg-color;
 
 $reaction-row-button-bg-color: $header-panel-bg-color;
 $reaction-row-button-border-color: #e9edf1;
-$reaction-row-button-hover-border-color: #bebebe;
+$reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 $reaction-row-button-selected-border-color: $accent-color;
 

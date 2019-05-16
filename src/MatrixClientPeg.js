@@ -121,6 +121,7 @@ class MatrixClientPeg {
             // check that we have a version of the js-sdk which includes initCrypto
             if (this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
+                StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
@@ -176,6 +177,7 @@ class MatrixClientPeg {
 
     _createClient(creds: MatrixClientCreds) {
         const aggregateRelations = SettingsStore.isFeatureEnabled("feature_reactions");
+        const enableEdits = SettingsStore.isFeatureEnabled("feature_message_editing");
 
         const opts = {
             baseUrl: creds.homeserverUrl,
@@ -186,7 +188,7 @@ class MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             verificationMethods: [verificationMethods.SAS],
-            unstableClientRelationAggregation: aggregateRelations,
+            unstableClientRelationAggregation: aggregateRelations || enableEdits,
         };
 
         this.matrixClient = createMatrixClient(opts);

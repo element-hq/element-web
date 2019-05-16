@@ -23,7 +23,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import SettingsStore from '../../../settings/SettingsStore';
-import { isContentActionable } from '../../../utils/EventUtils';
+import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -54,6 +54,13 @@ export default class MessageActionBar extends React.PureComponent {
     onReplyClick = (ev) => {
         dis.dispatch({
             action: 'reply_to_event',
+            event: this.props.mxEvent,
+        });
+    }
+
+    onEditClick = (ev) => {
+        dis.dispatch({
+            action: 'edit_event',
             event: this.props.mxEvent,
         });
     }
@@ -96,6 +103,10 @@ export default class MessageActionBar extends React.PureComponent {
         return SettingsStore.isFeatureEnabled("feature_reactions");
     }
 
+    isEditingEnabled() {
+        return SettingsStore.isFeatureEnabled("feature_message_editing");
+    }
+
     renderAgreeDimension() {
         if (!this.isReactionsEnabled()) {
             return null;
@@ -128,6 +139,7 @@ export default class MessageActionBar extends React.PureComponent {
         let agreeDimensionReactionButtons;
         let likeDimensionReactionButtons;
         let replyButton;
+        let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
             agreeDimensionReactionButtons = this.renderAgreeDimension();
@@ -137,11 +149,18 @@ export default class MessageActionBar extends React.PureComponent {
                 onClick={this.onReplyClick}
             />;
         }
+        if (this.isEditingEnabled() && canEditContent(this.props.mxEvent)) {
+            editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+                title={_t("Edit")}
+                onClick={this.onEditClick}
+            />;
+        }
 
         return <div className="mx_MessageActionBar">
             {agreeDimensionReactionButtons}
             {likeDimensionReactionButtons}
             {replyButton}
+            {editButton}
             <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}

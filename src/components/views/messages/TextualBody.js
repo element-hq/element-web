@@ -88,7 +88,10 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._unmounted = false;
+        this._applyFormatting();
+    },
 
+    _applyFormatting() {
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
@@ -123,7 +126,11 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate: function(prevProps) {
+        const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
+        if (messageWasEdited) {
+            this._applyFormatting();
+        }
         this.calculateUrlPreview();
     },
 
@@ -137,6 +144,7 @@ module.exports = React.createClass({
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
+                nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
                 nextState.links !== this.state.links ||

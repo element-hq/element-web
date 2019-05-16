@@ -208,6 +208,7 @@ const TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
+        MatrixClientPeg.get().on("Event.replaced", this.onEventReplaced);
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
@@ -286,6 +287,7 @@ const TimelinePanel = React.createClass({
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
+            client.removeListener("Event.replaced", this.onEventReplaced);
             client.removeListener("sync", this.onSync);
         }
     },
@@ -402,6 +404,9 @@ const TimelinePanel = React.createClass({
         if (payload.action === 'ignore_state_changed') {
             this.forceUpdate();
         }
+        if (payload.action === "edit_event") {
+            this.setState({editEvent: payload.event});
+        }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
@@ -492,6 +497,17 @@ const TimelinePanel = React.createClass({
     },
 
     onRoomRedaction: function(ev, room) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.timelineSet.room) return;
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        this.forceUpdate();
+    },
+
+    onEventReplaced: function(replacedEvent, room) {
         if (this.unmounted) return;
 
         // ignore events for other rooms
@@ -1244,6 +1260,7 @@ const TimelinePanel = React.createClass({
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
+                editEvent={this.state.editEvent}
             />
         );
     },
