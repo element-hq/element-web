@@ -1428,7 +1428,7 @@
     "General failure": "Allgemeiner Fehler",
     "Failed to perform homeserver discovery": "Fehler beim Aufspüren des Heimservers",
     "Unknown failure discovering homeserver": "Unbekannter Fehler beim Aufspüren des Heimservers",
-    "Great! This passphrase looks strong enough.": "Gut! Diese Passphrase sieht start genug aus.",
+    "Great! This passphrase looks strong enough.": "Gut! Diese Passphrase sieht stark genug aus.",
     "Secure your encrypted message history with a Recovery Passphrase.": "Sichere deine sichere Nachrichtenhistorie mit einer Wiederherstellungspassphrase.",
     "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Wenn du deine verschlüsselte Nachrichtenhistorie nicht auf anderen Geräten verfügbar haben möchtest, <button>wiederspreche</button>.",
     "Or, if you don't want to create a Recovery Passphrase, skip this step and <button>download a recovery key</button>.": "Oder, wenn du keine Wiederherstellungspassphrase erzeugen möchtest, überspringe diesen Schritt und <button>lade einen Wiederherstellungsschlüssel herunter</button>.",
@@ -1807,5 +1807,6 @@
     "Thank you for verifying your email! The account you're logged into here (%(sessionUserId)s) appears to be different from the account you've verified an email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, please log out first.": "Danke für das Verifizieren deiner E-Mail! Das Konto, mit dem du angemeldet bist (%(sessionUserId)s) scheint ein anderes zu sein als das wofür die die E-Mail verifizierst (%(verifiedUserId)s). Wenn du dich als %(verifiedUserId2)s anmelden willst, melde dich zuerst ab.",
     "Could not load user profile": "Konnte Nutzerprofil nicht laden",
     "Your Matrix account": "Dein Matrixkonto",
-    "Your Matrix account on %(serverName)s": "Dein Matrixkonto auf %(serverName)s"
+    "Your Matrix account on %(serverName)s": "Dein Matrixkonto auf %(serverName)s",
+    "Show recent room avatars above the room list": "Zeige die letzten Avatare über der Raumliste an (neu laden um Änderungen zu übernehmen)"
 }
