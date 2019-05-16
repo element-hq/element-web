@@ -61,6 +61,16 @@ export default class EditorModel {
         return null;
     }
 
+    getPositionAtEnd() {
+        if (this._parts.length) {
+            const index = this._parts.length - 1;
+            const part = this._parts[index];
+            return new DocumentPosition(index, part.text.length);
+        } else {
+            return new DocumentPosition(0, 0);
+        }
+    }
+
     serializeParts() {
         return this._parts.map(({type, text}) => {return {type, text};});
     }

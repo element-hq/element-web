@@ -144,12 +144,7 @@ export default class MessageEditor extends React.Component {
 
     componentDidMount() {
         this._updateEditorState();
-        const sel = document.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(this._editorRef);
-        range.collapse(false);
-        sel.removeAllRanges();
-        sel.addRange(range);
+        setCaretPosition(this._editorRef, this.model, this.model.getPositionAtEnd());
         this._editorRef.focus();
     }
 
