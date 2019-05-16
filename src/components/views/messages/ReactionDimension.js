@@ -37,6 +37,7 @@ export default class ReactionDimension extends React.PureComponent {
 
         if (props.reactions) {
             props.reactions.on("Relations.add", this.onReactionsChange);
+            props.reactions.on("Relations.remove", this.onReactionsChange);
             props.reactions.on("Relations.redaction", this.onReactionsChange);
         }
     }
@@ -44,6 +45,7 @@ export default class ReactionDimension extends React.PureComponent {
     componentDidUpdate(prevProps) {
         if (prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on("Relations.add", this.onReactionsChange);
+            this.props.reactions.on("Relations.remove", this.onReactionsChange);
             this.props.reactions.on("Relations.redaction", this.onReactionsChange);
             this.onReactionsChange();
         }
@@ -53,6 +55,10 @@ export default class ReactionDimension extends React.PureComponent {
         if (this.props.reactions) {
             this.props.reactions.removeListener(
                 "Relations.add",
+                this.onReactionsChange,
+            );
+            this.props.reactions.removeListener(
+                "Relations.remove",
                 this.onReactionsChange,
             );
             this.props.reactions.removeListener(
@@ -107,7 +113,7 @@ export default class ReactionDimension extends React.PureComponent {
             return null;
         }
         const userId = MatrixClientPeg.get().getUserId();
-        return reactions.getAnnotationsBySender()[userId];
+        return [...reactions.getAnnotationsBySender()[userId].values()];
     }
 
     onOptionClick = (ev) => {
