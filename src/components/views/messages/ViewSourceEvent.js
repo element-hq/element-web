@@ -63,5 +63,5 @@ export default class ViewSourceEvent extends React.PureComponent {
                 onClick={this.onToggle}
             />
         </span>;
-        }
     }
+}
