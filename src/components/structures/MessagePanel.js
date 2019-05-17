@@ -249,7 +249,7 @@ module.exports = React.createClass({
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (SettingsStore.isFeatureEnabled("showHiddenEventsInTimeline")) {
+        if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
             return true;
         }
 

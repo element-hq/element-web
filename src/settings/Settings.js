@@ -130,12 +130,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "showHiddenEventsInTimeline": {
-        isFeature: true,
-        displayName: _td("Show hidden events in timeline"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
@@ -373,5 +367,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Order rooms in the room list by most important first instead of most recent'),
         default: true,
+    },
+    "showHiddenEventsInTimeline": {
+        displayName: _td("Show hidden events in timeline"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
     },
 };

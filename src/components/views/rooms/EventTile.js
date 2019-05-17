@@ -521,7 +521,7 @@ module.exports = withMatrixClient(React.createClass({
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
-        if (!tileHandler && SettingsStore.isFeatureEnabled("showHiddenEventsInTimeline")) {
+        if (!tileHandler && SettingsStore.getValue("showHiddenEventsInTimeline")) {
             tileHandler = "messages.ViewSourceEvent";
         }
         // This shouldn't happen: the caller should check we support this type
