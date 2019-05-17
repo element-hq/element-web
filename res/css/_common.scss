@@ -110,6 +110,10 @@ textarea {
     color: $primary-fg-color;
 }
 
+.mx_HiddenFocusable {
+    outline: none;
+}
+
 // .mx_textinput is a container for a text input
 // + some other controls like buttons, ...
 // it has the appearance of a text box so the controls
