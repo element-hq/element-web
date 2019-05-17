@@ -907,6 +907,7 @@
     "Invalid file%(extra)s": "Invalid file%(extra)s",
     "Error decrypting image": "Error decrypting image",
     "Error decrypting video": "Error decrypting video",
+    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s changed the room avatar to <img/>",

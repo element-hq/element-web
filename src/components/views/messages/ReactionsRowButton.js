@@ -19,15 +19,26 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
 
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for
         mxEvent: PropTypes.object.isRequired,
+        // The reaction content / key / emoji
         content: PropTypes.string.isRequired,
-        count: PropTypes.number.isRequired,
+        // A Set of Martix reaction events for this key
+        reactionEvents: PropTypes.object.isRequired,
         // A possible Matrix event if the current user has voted for this type
         myReactionEvent: PropTypes.object,
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tooltipVisible: false,
+        };
     }
 
     onClick = (ev) => {
@@ -48,18 +59,53 @@ export default class ReactionsRowButton extends React.PureComponent {
         }
     };
 
+    onMouseOver = () => {
+        this.setState({
+            // To avoid littering the DOM with a tooltip for every reaction,
+            // only render it on first use.
+            tooltipRendered: true,
+            tooltipVisible: true,
+        });
+    }
+
+    onMouseOut = () => {
+        this.setState({
+            tooltipVisible: false,
+        });
+    }
+
     render() {
-        const { content, count, myReactionEvent } = this.props;
+        const ReactionsRowButtonTooltip =
+            sdk.getComponent('messages.ReactionsRowButtonTooltip');
+        const { content, reactionEvents, myReactionEvent } = this.props;
+
+        const count = reactionEvents.size;
+        if (!count) {
+            return null;
+        }
 
         const classes = classNames({
             mx_ReactionsRowButton: true,
             mx_ReactionsRowButton_selected: !!myReactionEvent,
         });
 
+        let tooltip;
+        if (this.state.tooltipRendered) {
+            tooltip = <ReactionsRowButtonTooltip
+                mxEvent={this.props.mxEvent}
+                content={content}
+                reactionEvents={reactionEvents}
+                visible={this.state.tooltipVisible}
+            />;
+        }
+
         return <span className={classes}
             onClick={this.onClick}
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
         >
             {content} {count}
+            {tooltip}
         </span>;
     }
 }
