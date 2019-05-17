@@ -17,13 +17,13 @@ limitations under the License.
 .mx_MessageEditor {
     border-radius: 4px;
     padding: 3px;
-    margin: -7px -7px -5px -7px; // no idea why this is working
+    margin: -7px -10px -5px -10px; // from fiddling around in inspector
 
     .mx_MessageEditor_editor {
         border-radius: 4px;
         border: solid 1px #e9edf1;
         background-color: #ffffff;
-        padding: 3px;
+        padding: 3px 6px;
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
