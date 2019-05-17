@@ -448,14 +448,17 @@ module.exports = React.createClass({
             const Tooltip = sdk.getComponent('elements.Tooltip');
             const editEvent = this.props.mxEvent.replacingEvent();
             const date = editEvent && formatDate(editEvent.getDate());
-            editedTooltip = <Tooltip label={_t("Edited at %(date)s.", {date})} />;
+            editedTooltip = <Tooltip
+                tooltipClassName="mx_EventTile_editedTooltip mx_Tooltip_timeline"
+                label={_t("Edited at %(date)s.", {date})}
+            />;
         }
         return (
             <div
                 key="editedMarker" className="mx_EventTile_edited"
                 onMouseEnter={this._onMouseEnterEditedMarker}
                 onMouseLeave={this._onMouseLeaveEditedMarker}
-            >{editedTooltip}<span>{`(${_t("Edited")})`}</span></div>
+            >{editedTooltip}<span>{`(${_t("edited")})`}</span></div>
         );
     },
 
