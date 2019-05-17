@@ -40,16 +40,17 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
         const partCreator = new PartCreator(
             () => this._autocompleteRef,
             query => this.setState({query}),
+            room,
         );
         this.model = new EditorModel(
-            parseEvent(this.props.event),
+            parseEvent(this.props.event, room),
             partCreator,
             this._updateEditorState,
         );
-        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
         this.state = {
             autoComplete: null,
             room,

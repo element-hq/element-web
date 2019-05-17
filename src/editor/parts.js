@@ -216,8 +216,9 @@ export class NewlinePart extends BasePart {
 }
 
 export class RoomPillPart extends PillPart {
-    constructor(displayAlias) {
+    constructor(displayAlias, room) {
         super(displayAlias, displayAlias);
+        this._room = room;
     }
 
     get type() {
@@ -226,6 +227,11 @@ export class RoomPillPart extends PillPart {
 }
 
 export class UserPillPart extends PillPart {
+    constructor(userId, displayName, member) {
+        super(userId, displayName);
+        this._member = member;
+    }
+
     get type() {
         return "user-pill";
     }
@@ -256,9 +262,14 @@ export class PillCandidatePart extends PlainPart {
 }
 
 export class PartCreator {
-    constructor(getAutocompleterComponent, updateQuery) {
+    constructor(getAutocompleterComponent, updateQuery, room) {
         this._autoCompleteCreator = (updateCallback) => {
-            return new AutocompleteWrapperModel(updateCallback, getAutocompleterComponent, updateQuery);
+            return new AutocompleteWrapperModel(
+                updateCallback,
+                getAutocompleterComponent,
+                updateQuery,
+                room,
+            );
         };
     }
 
