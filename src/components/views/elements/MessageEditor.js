@@ -107,10 +107,12 @@ export default class MessageEditor extends React.Component {
         } else if (event.key === "Enter") {
             this._sendEdit();
             event.preventDefault();
+        } else if (event.key === "Escape") {
+            this._cancelEdit();
         }
     }
 
-    _onCancelClicked = () => {
+    _cancelEdit = () => {
         dis.dispatch({action: "edit_event", event: null});
     }
 
@@ -185,7 +187,7 @@ export default class MessageEditor extends React.Component {
                     ref={ref => this._editorRef = ref}
                 ></div>
                 <div className="mx_MessageEditor_buttons">
-                    <AccessibleButton kind="secondary" onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
+                    <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
                 </div>
             </div>;
