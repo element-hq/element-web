@@ -322,6 +322,14 @@ const LoggedInView = React.createClass({
                     handled = true;
                 }
                 break;
+            case KeyCode.KEY_I:
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'toggle_top_left_menu',
+                    });
+                    handled = true;
+                }
+                break;
         }
 
         if (handled) {
