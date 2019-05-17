@@ -77,35 +77,44 @@ export default class MessageEditor extends React.Component {
     }
 
     _onKeyDown = (event) => {
+        // insert newline on Shift+Enter
+        if (event.shiftKey && event.key === "Enter") {
+            event.preventDefault(); // just in case the browser does support this
+            document.execCommand("insertHTML", undefined, "\n");
+            return;
+        }
+        // autocomplete or enter to send below shouldn't have any modifier keys pressed.
         if (event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
-        if (!this.model.autoComplete) {
-            return;
+        if (this.model.autoComplete) {
+            const autoComplete = this.model.autoComplete;
+            switch (event.key) {
+                case "Enter":
+                    autoComplete.onEnter(event); break;
+                case "ArrowUp":
+                    autoComplete.onUpArrow(event); break;
+                case "ArrowDown":
+                    autoComplete.onDownArrow(event); break;
+                case "Tab":
+                    autoComplete.onTab(event); break;
+                case "Escape":
+                    autoComplete.onEscape(event); break;
+                default:
+                    return; // don't preventDefault on anything else
+            }
+            event.preventDefault();
+        } else if (event.key === "Enter") {
+            this._sendEdit();
+            event.preventDefault();
         }
-        const autoComplete = this.model.autoComplete;
-        switch (event.key) {
-            case "Enter":
-                autoComplete.onEnter(event); break;
-            case "ArrowUp":
-                autoComplete.onUpArrow(event); break;
-            case "ArrowDown":
-                autoComplete.onDownArrow(event); break;
-            case "Tab":
-                autoComplete.onTab(event); break;
-            case "Escape":
-                autoComplete.onEscape(event); break;
-            default:
-                return; // don't preventDefault on anything else
-        }
-        event.preventDefault();
     }
 
     _onCancelClicked = () => {
         dis.dispatch({action: "edit_event", event: null});
     }
 
-    _onSaveClicked = () => {
+    _sendEdit = () => {
         const newContent = {
             "msgtype": "m.text",
             "body": textSerialize(this.model),
@@ -177,7 +186,7 @@ export default class MessageEditor extends React.Component {
                 ></div>
                 <div className="mx_MessageEditor_buttons">
                     <AccessibleButton kind="secondary" onClick={this._onCancelClicked}>{_t("Cancel")}</AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this._onSaveClicked}>{_t("Save")}</AccessibleButton>
+                    <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
                 </div>
             </div>;
     }
