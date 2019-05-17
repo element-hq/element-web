@@ -156,8 +156,9 @@ $reaction-row-button-border-color: #616b7f;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
-$reaction-row-button-tooltip-bg-color: $tagpanel-bg-color;
-$reaction-row-button-tooltip-fg-color: #ffffff;
+
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
 
 // ***** Mixins! *****
 

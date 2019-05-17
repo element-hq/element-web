@@ -15,18 +15,8 @@ limitations under the License.
 */
 
 .mx_ReactionsRowButtonTooltip {
-    box-shadow: none;
-    background-color: $reaction-row-button-tooltip-bg-color;
-    color: $reaction-row-button-tooltip-fg-color;
-    text-align: center;
     font-size: 8px;
     padding: 6px;
-    border: none;
-    border-radius: 3px;
-
-    .mx_Tooltip_chevron::after {
-        border-right-color: $reaction-row-button-tooltip-bg-color;
-    }
 
     .mx_ReactionsRowButtonTooltip_reactedWith {
         opacity: 0.7;
