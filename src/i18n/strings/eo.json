@@ -41,5 +41,6 @@
     "Create Account": "Krei konton",
     "Need help?": "Ĉu vi bezonas helpon?",
     "Explore rooms": "Esplori ĉambrojn",
-    "Room Directory": "Ĉambra dosierujo"
+    "Room Directory": "Ĉambra dosierujo",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Vi povas uzi proprajn servilajn elekteblojn por saluti aliajn servilojn de Matrix, donante alian hejmeservilan URL-on. Tio povigos vin uzi programon Riot kun jama konto de Matrix en alia hejmservilo."
 }
