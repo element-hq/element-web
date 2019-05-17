@@ -43,6 +43,10 @@ limitations under the License.
     padding-top: 0px ! important;
 }
 
+.mx_EventTile_isEditing {
+    background-color: $header-panel-bg-color;
+}
+
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
     font-size: 14px;
