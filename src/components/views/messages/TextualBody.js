@@ -148,6 +148,7 @@ module.exports = React.createClass({
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
+                nextProps.isEditing !== this.props.isEditing ||
                 nextState.links !== this.state.links ||
                 nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
@@ -463,6 +464,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (this.props.isEditing) {
+            const MessageEditor = sdk.getComponent('elements.MessageEditor');
+            return <MessageEditor event={this.props.mxEvent} />;
+        }
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
