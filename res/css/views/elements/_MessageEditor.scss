@@ -17,7 +17,10 @@ limitations under the License.
 .mx_MessageEditor {
     border-radius: 4px;
     padding: 3px;
-    margin: -7px -10px -5px -10px; // from fiddling around in inspector
+    // this is to try not make the text move but still have some
+    // padding around and in the editor.
+    // Actual values from fiddling around in inspector
+    margin: -7px -10px -5px -10px;
 
     .mx_MessageEditor_editor {
         border-radius: 4px;
