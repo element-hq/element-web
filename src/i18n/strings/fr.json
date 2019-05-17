@@ -716,7 +716,7 @@
     "%(names)s and %(count)s others are typing|other": "%(names)s et %(count)s autres écrivent",
     "Jump to read receipt": "Aller à l'accusé de lecture",
     "World readable": "Lisible publiquement",
-    "Guests can join": "Les invités peuvent rejoindre le salon",
+    "Guests can join": "Accessible aux invités",
     "To invite users into the room, you must be a": "Pour inviter des utilisateurs dans le salon, vous devez être un(e)",
     "To configure the room, you must be a": "Pour configurer le salon, vous devez être un(e)",
     "To kick users, you must be a": "Pour expulser des utilisateurs, vous devez être",
