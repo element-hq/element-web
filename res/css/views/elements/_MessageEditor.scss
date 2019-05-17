@@ -41,6 +41,8 @@ limitations under the License.
         }
 
         span.user-pill, span.room-pill {
+            height: 20px;
+            line-height: 20px;
             border-radius: 16px;
             display: inline-block;
             color: $primary-fg-color;
