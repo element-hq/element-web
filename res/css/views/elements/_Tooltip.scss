@@ -82,6 +82,9 @@ limitations under the License.
     text-align: center;
     border: none;
     border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 6px 8px;
 
     .mx_Tooltip_chevron::after {
         border-right-color: $tooltip-timeline-bg-color;

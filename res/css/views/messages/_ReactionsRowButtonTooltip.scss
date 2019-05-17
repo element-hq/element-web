@@ -14,11 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReactionsRowButtonTooltip {
-    font-size: 8px;
-    padding: 6px;
-
-    .mx_ReactionsRowButtonTooltip_reactedWith {
-        opacity: 0.7;
-    }
+.mx_ReactionsRowButtonTooltip_reactedWith {
+    opacity: 0.7;
 }

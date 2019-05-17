@@ -449,8 +449,8 @@ module.exports = React.createClass({
             const editEvent = this.props.mxEvent.replacingEvent();
             const date = editEvent && formatDate(editEvent.getDate());
             editedTooltip = <Tooltip
-                tooltipClassName="mx_EventTile_editedTooltip mx_Tooltip_timeline"
-                label={_t("Edited at %(date)s.", {date})}
+                tooltipClassName="mx_Tooltip_timeline"
+                label={_t("Edited at %(date)s", {date})}
             />;
         }
         return (

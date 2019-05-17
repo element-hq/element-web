@@ -917,7 +917,7 @@
     "Failed to copy": "Failed to copy",
     "Add an Integration": "Add an Integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-    "Edited at %(date)s.": "Edited at %(date)s.",
+    "Edited at %(date)s": "Edited at %(date)s",
     "edited": "edited",
     "Removed or unknown message type": "Removed or unknown message type",
     "Message removed by %(userId)s": "Message removed by %(userId)s",
