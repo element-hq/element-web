@@ -189,7 +189,7 @@ module.exports = React.createClass({
             const imgNode = (
                 <img className="mx_BaseAvatar_image" src={imageUrl}
                     alt="" title={title} onError={this.onError}
-                    width={width} height={height} />
+                    width={width} height={height} aria-hidden="true" />
             );
             if (onClick != null) {
                 return (
