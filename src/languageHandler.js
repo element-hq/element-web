@@ -125,20 +125,25 @@ export function _t(text, variables, tags) {
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function substitute(text, variables, tags) {
-    const regexpMapping = {};
+    let result = text;
 
     if (variables !== undefined) {
+        const regexpMapping = {};
         for (const variable in variables) {
             regexpMapping[`%\\(${variable}\\)s`] = variables[variable];
         }
+        result = replaceByRegexes(result, regexpMapping);
     }
 
     if (tags !== undefined) {
+        const regexpMapping = {};
         for (const tag in tags) {
             regexpMapping[`(<${tag}>(.*?)<\\/${tag}>|<${tag}>|<${tag}\\s*\\/>)`] = tags[tag];
         }
+        result = replaceByRegexes(result, regexpMapping);
     }
-    return replaceByRegexes(text, regexpMapping);
+
+    return result;
 }
 
 /*
