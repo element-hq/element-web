@@ -1969,5 +1969,6 @@
     "Unbans user with given ID": "Visszaengedi a megadott azonosítójú felhasználót",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>ezzel reagált: %(shortName)s</reactedWith>",
     "Edited at %(date)s.": "Szerkesztve ekkor: %(date)s.",
-    "edited": "szerkesztve"
+    "edited": "szerkesztve",
+    "Edited at %(date)s": "Szerkesztve: %(date)s"
 }
