@@ -89,7 +89,9 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._unmounted = false;
-        this._applyFormatting();
+        if (!this.props.isEditing) {
+            this._applyFormatting();
+        }
     },
 
     _applyFormatting() {
@@ -128,11 +130,13 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(prevProps) {
-        const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-        if (messageWasEdited) {
-            this._applyFormatting();
+        if (!this.props.isEditing) {
+            const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
+            if (messageWasEdited) {
+                this._applyFormatting();
+            }
+            this.calculateUrlPreview();
         }
-        this.calculateUrlPreview();
     },
 
     componentWillUnmount: function() {
