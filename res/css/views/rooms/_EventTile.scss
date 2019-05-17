@@ -76,6 +76,10 @@ limitations under the License.
     }
 }
 
+.mx_EventTile_isEditing .mx_MessageTimestamp {
+    visibility: hidden !important;
+}
+
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
     visibility: hidden;
