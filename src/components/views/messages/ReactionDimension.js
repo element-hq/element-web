@@ -168,6 +168,7 @@ export default class ReactionDimension extends React.PureComponent {
 
         return <span className="mx_ReactionDimension"
             title={this.props.title}
+            aria-hidden={true}
         >
             {items}
         </span>;
