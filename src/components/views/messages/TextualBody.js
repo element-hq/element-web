@@ -22,6 +22,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
+import {formatDate} from '../../../DateUtils';
 import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from '../../../Modal';
@@ -148,6 +149,7 @@ module.exports = React.createClass({
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
                 nextState.links !== this.state.links ||
+                nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
     },
 
@@ -432,6 +434,31 @@ module.exports = React.createClass({
         });
     },
 
+    _onMouseEnterEditedMarker: function() {
+        this.setState({editedMarkerHovered: true});
+    },
+
+    _onMouseLeaveEditedMarker: function() {
+        this.setState({editedMarkerHovered: false});
+    },
+
+    _renderEditedMarker: function() {
+        let editedTooltip;
+        if (this.state.editedMarkerHovered) {
+            const Tooltip = sdk.getComponent('elements.Tooltip');
+            const editEvent = this.props.mxEvent.replacingEvent();
+            const date = editEvent && formatDate(editEvent.getDate());
+            editedTooltip = <Tooltip label={_t("Edited at %(date)s.", {date})} />;
+        }
+        return (
+            <div
+                key="editedMarker" className="mx_EventTile_edited"
+                onMouseEnter={this._onMouseEnterEditedMarker}
+                onMouseLeave={this._onMouseLeaveEditedMarker}
+            >{editedTooltip}<span>{`(${_t("Edited")})`}</span></div>
+        );
+    },
+
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const mxEvent = this.props.mxEvent;
@@ -443,6 +470,9 @@ module.exports = React.createClass({
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         });
+        if (this.props.replacingEventId) {
+            body = [body, this._renderEditedMarker()];
+        }
 
         if (this.props.highlightLink) {
             body = <a href={this.props.highlightLink}>{ body }</a>;
