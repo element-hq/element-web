@@ -27,6 +27,8 @@ limitations under the License.
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
+        max-height: 200px;
+        overflow-x: auto;
 
         span {
             display: inline-block;
