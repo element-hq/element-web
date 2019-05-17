@@ -1969,5 +1969,6 @@
     "Invalid base_url for m.homeserver": "base_url pour m.homeserver non valide",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "L’URL du serveur d’accueil ne semble pas être un serveur d’accueil Matrix valide",
     "Invalid base_url for m.identity_server": "base_url pour m.identity_server non valide",
-    "Identity server URL does not appear to be a valid identity server": "L’URL du serveur d’identité ne semble pas être un serveur d’identité valide"
+    "Identity server URL does not appear to be a valid identity server": "L’URL du serveur d’identité ne semble pas être un serveur d’identité valide",
+    "Edited at %(date)s": "Édité à %(date)s"
 }
