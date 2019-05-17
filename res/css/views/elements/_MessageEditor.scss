@@ -61,7 +61,7 @@ limitations under the License.
         z-index: 100;
         right: 0;
         margin: 0 -110px 0 0;
-        padding-right: 107px;
+        padding-right: 104px;
 
         .mx_AccessibleButton {
             margin-left: 5px;
@@ -77,4 +77,5 @@ limitations under the License.
 
 .mx_EventTile_last .mx_MessageEditor_buttons {
     position: static;
+    margin-right: -103px;
 }
