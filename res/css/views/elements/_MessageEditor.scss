@@ -45,8 +45,23 @@ limitations under the License.
             display: inline-block;
             color: $primary-fg-color;
             background-color: $other-user-pill-bg-color;
-            padding-left: 5px;
+            padding-left: 21px;
             padding-right: 5px;
+            position: relative;
+
+            &::before {
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                content: var(--avatar-letter);
+                width: 16px;
+                height: 16px;
+                background: var(--avatar-background);    //set on parent by JS
+                color: var(--avatar-color);
+                background-repeat: no-repeat;
+                background-size: 16px;
+                border-radius: 8px;
+            }
         }
     }
 

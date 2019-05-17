@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import AutocompleteWrapperModel from "./autocomplete";
+import Avatar from "../Avatar";
 
 class BasePart {
     constructor(text = "") {
@@ -230,6 +231,20 @@ export class UserPillPart extends PillPart {
     constructor(userId, displayName, member) {
         super(userId, displayName);
         this._member = member;
+    }
+
+    toDOMNode() {
+        const pill = super.toDOMNode();
+        const avatarUrl = Avatar.avatarUrlForMember(this._member, 16, 16);
+        if (avatarUrl) {
+            pill.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
+            pill.style.setProperty("--avatar-letter", "''");
+        } else {
+            pill.style.setProperty("--avatar-background", `green`);
+            pill.style.setProperty("--avatar-color", `white`);
+            pill.style.setProperty("--avatar-letter", `'${this.text[0].toUpperCase()}'`);
+        }
+        return pill;
     }
 
     get type() {
