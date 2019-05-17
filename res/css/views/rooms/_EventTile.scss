@@ -377,6 +377,14 @@ limitations under the License.
     left: 41px;
 }
 
+.mx_EventTile_content .mx_EventTile_edited {
+    user-select: none;
+    font-size: 12px;
+    color: $roomtopic-color;
+    display: inline-block;
+    margin-left: 9px;
+}
+
 /* Various markdown overrides */
 
 .mx_EventTile_content .markdown-body {
