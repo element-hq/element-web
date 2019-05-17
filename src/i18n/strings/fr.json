@@ -641,7 +641,7 @@
     "Revoke widget access": "Révoquer les accès du widget",
     "Sets the room topic": "Défini le sujet du salon",
     "To get started, please pick a username!": "Pour commencer, choisissez un nom d'utilisateur !",
-    "Unable to create widget.": "Impossible de créer un widget.",
+    "Unable to create widget.": "Impossible de créer le widget.",
     "Unbans user with given id": "Révoque le bannissement de l'utilisateur à partir de son identifiant",
     "You are not in this room.": "Vous n'êtes pas dans ce salon.",
     "You do not have permission to do that in this room.": "Vous n'avez pas la permission d'effectuer cette action dans ce salon.",
