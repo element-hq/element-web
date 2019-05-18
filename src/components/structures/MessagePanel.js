@@ -24,6 +24,7 @@ import {wantsDateSeparator} from '../../DateUtils';
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
+import SettingsStore from '../../settings/SettingsStore';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -246,6 +247,10 @@ module.exports = React.createClass({
     _shouldShowEvent: function(mxEv) {
         if (mxEv.sender && MatrixClientPeg.get().isUserIgnored(mxEv.sender.userId)) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
+        }
+
+        if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+            return true;
         }
 
         const EventTile = sdk.getComponent('rooms.EventTile');

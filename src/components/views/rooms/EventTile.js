@@ -520,7 +520,10 @@ module.exports = withMatrixClient(React.createClass({
             eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
-        const tileHandler = getHandlerTile(this.props.mxEvent);
+        let tileHandler = getHandlerTile(this.props.mxEvent);
+        if (!tileHandler && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+            tileHandler = "messages.ViewSourceEvent";
+        }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {

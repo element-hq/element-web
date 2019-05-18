@@ -52,6 +52,7 @@ export default class LabsUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     {flags}
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );
