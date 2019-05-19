@@ -674,14 +674,13 @@ module.exports = withMatrixClient(React.createClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
-                const EmojiText = sdk.getComponent('elements.EmojiText');
                 const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
-                            <EmojiText element="a" href={permalink} onClick={this.onPermalinkClicked}>
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
-                            </EmojiText>
+                            </a>
                         </div>
                         <div className="mx_EventTile_senderDetails">
                             { avatar }

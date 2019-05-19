@@ -51,10 +51,9 @@ import ContentMessages from '../../../ContentMessages';
 
 import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 
-import {
-    asciiRegexp, unicodeRegexp, shortnameToUnicode,
-    asciiList, mapUnicodeToShort, toShort,
-} from 'emojione';
+import EMOJIBASE from 'emojibase-data/en/compact.json';
+import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
@@ -63,9 +62,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 
-const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
-const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
-const EMOJI_REGEX = new RegExp(unicodeRegexp, 'g');
+const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
 
@@ -273,9 +270,8 @@ export default class MessageComposerInput extends React.Component {
                                 case 'emoji':
                                     // XXX: apparently you can't return plain strings from serializer rules
                                     // until https://github.com/ianstormtaylor/slate/pull/1854 is merged.
-                                    // So instead we temporarily wrap emoji from RTE in an arbitrary tag
-                                    // (<b/>).  <span/> would be nicer, but in practice it causes CSS issues.
-                                    return <b>{ obj.data.get('emojiUnicode') }</b>;
+                                    // So instead we temporarily wrap emoji from RTE in a span.
+                                    return <span>{ obj.data.get('emojiUnicode') }</span>;
                             }
                             return this.renderNode({
                                 node: obj,
@@ -375,7 +371,6 @@ export default class MessageComposerInput extends React.Component {
                 const html = HtmlUtils.bodyToHtml(payload.event.getContent(), null, {
                     forComposerQuote: true,
                     returnString: true,
-                    emojiOne: false,
                 });
                 const fragment = this.html.deserialize(html);
                 // FIXME: do we want to put in a permalink to the original quote here?
@@ -540,10 +535,7 @@ export default class MessageComposerInput extends React.Component {
                 // The first matched group includes just the matched plaintext emoji
                 const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emojiMatch) {
-                    // plaintext -> hex unicode
-                    const emojiUc = asciiList[emojiMatch[1]];
-                    // hex unicode -> shortname -> actual unicode
-                    const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+                    const unicodeEmoji = EMOJIBASE.find(e => e.emoticon && e.emoticon.contains(emoijMatch[1]));
 
                     const range = Range.create({
                         anchor: {
@@ -559,54 +551,6 @@ export default class MessageComposerInput extends React.Component {
                     editorState = change.value;
                 }
             }
-        }
-
-        // emojioneify any emoji
-        let foundEmoji;
-        do {
-            foundEmoji = false;
-
-            for (const node of editorState.document.getTexts()) {
-                if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
-                    let match;
-                    EMOJI_REGEX.lastIndex = 0;
-                    while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
-                        const range = Range.create({
-                            anchor: {
-                                key: node.key,
-                                offset: match.index,
-                            },
-                            focus: {
-                                key: node.key,
-                                offset: match.index + match[0].length,
-                            },
-                        });
-                        const inline = Inline.create({
-                            type: 'emoji',
-                            data: { emojiUnicode: match[0] },
-                        });
-                        change = change.insertInlineAtRange(range, inline);
-                        editorState = change.value;
-
-                        // if we replaced an emoji, start again looking for more
-                        // emoji in the new editor state since doing the replacement
-                        // will change the node structure & offsets so we can't compute
-                        // insertion ranges from node.key / match.index anymore.
-                        foundEmoji = true;
-                        break;
-                    }
-                }
-            }
-        } while (foundEmoji);
-
-        // work around weird bug where inserting emoji via the macOS
-        // emoji picker can leave the selection stuck in the emoji's
-        // child text.  This seems to happen due to selection getting
-        // moved in the normalisation phase after calculating these changes
-        if (editorState.selection.anchor.key &&
-            editorState.document.getParent(editorState.selection.anchor.key).type === 'emoji') {
-            change = change.moveToStartOfNextText();
-            editorState = change.value;
         }
 
         if (this.props.onInputStateChanged && editorState.blocks.size > 0) {
@@ -1295,7 +1239,7 @@ export default class MessageComposerInput extends React.Component {
         // Move selection to the end of the selected history
         const change = editorState.change().moveToEndOfNode(editorState.document);
 
-        // We don't call this.onChange(change) now, as fixups on stuff like emoji
+        // We don't call this.onChange(change) now, as fixups on stuff like pills
         // should already have been done and persisted in the history.
         editorState = change.value;
 
@@ -1473,20 +1417,8 @@ export default class MessageComposerInput extends React.Component {
                            </a>;
                 }
             }
-            case 'emoji': {
-                const { data } = node;
-                const emojiUnicode = data.get('emojiUnicode');
-                const uri = RichText.unicodeToEmojiUri(emojiUnicode);
-                const shortname = toShort(emojiUnicode);
-                const className = classNames('mx_emojione', {
-                    mx_emojione_selected: isSelected,
-                });
-                const style = {};
-                if (props.selected) style.border = '1px solid blue';
-                return <img className={ className } src={ uri }
-                    title={ shortname } alt={ emojiUnicode } style={style}
-                />;
-            }
+            case 'emoji':
+                return data.get('emojiUnicode');
         }
     };
 

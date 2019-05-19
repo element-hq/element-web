@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+
+// This generates src/stripped-emoji.json as used by the EmojiProvider autocomplete
+// provider.
+
+// FIXME: we no longer depends on emojione, so this generation script no longer
+// works, but the expectation is that we will shift to using emojimart or
+// similar as an emoji picker before this next needs to be run again.
+
 const EMOJI_DATA = require('emojione/emoji.json');
 const EMOJI_SUPPORTED = Object.keys(require('emojione').emojioneList);
 const fs = require('fs');

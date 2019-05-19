@@ -114,13 +114,9 @@ module.exports = React.createClass({
             return null;
         }
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
-
         return (
             <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                <EmojiText>
-                    { summaries.join(", ") }
-                </EmojiText>
+                { summaries.join(", ") }
             </span>
         );
     },

@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {shortnameToUnicode, asciiRegexp, unicodeRegexp} from 'emojione';
 import QueryMatcher from './QueryMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
@@ -27,7 +26,11 @@ import type {Completion, SelectionRange} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
+import { shortcodeToUnicode } from './HtmlUtils';
 
+import UNICODE_REGEX from 'emojibase-regex';
+import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import SHORTCODE_REGEX from 'emojibase-regex/shortcode';
 import EmojiData from '../stripped-emoji.json';
 
 const LIMIT = 20;
@@ -44,15 +47,15 @@ const CATEGORY_ORDER = [
     'modifier',
 ];
 
-// Match for ":wink:" or ascii-style ";-)" provided by emojione
+// Match for ":wink:" or ascii-style ";-)" provided by emojibase
 // (^|\s|(emojiUnicode)) to make sure we're either at the start of the string or there's a
 // whitespace character or an emoji before the emoji. The reason for unicodeRegexp is
 // that we need to support inputting multiple emoji with no space between them.
-const EMOJI_REGEX = new RegExp('(?:^|\\s|' + unicodeRegexp + ')(' + asciiRegexp + '|:[+-\\w]*:?)$', 'g');
+const EMOJI_REGEX = new RegExp('(?:^|\\s|' + UNICODE_REGEX + ')(' + EMOTICON_REGEX + '|:[+-\\w]*:?)$', 'g');
 
 // We also need to match the non-zero-length prefixes to remove them from the final match,
 // and update the range so that we don't replace the whitespace or the previous emoji.
-const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + unicodeRegexp + ')');
+const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + UNICODE_REGEX + ')');
 
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
@@ -101,8 +104,6 @@ export default class EmojiProvider extends AutocompleteProvider {
             return []; // don't give any suggestions if the user doesn't want them
         }
 
-        const EmojiText = sdk.getComponent('views.elements.EmojiText');
-
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
@@ -133,12 +134,12 @@ export default class EmojiProvider extends AutocompleteProvider {
             completions = _sortBy(_uniq(completions), sorters);
 
             completions = completions.map((result) => {
-                const {shortname} = result;
-                const unicode = shortnameToUnicode(shortname);
+                const { shortname } = result;
+                const unicode = shortcodeToUnicode(shortname);
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{ unicode }</EmojiText>} />
+                        <PillCompletion title={shortname} initialComponent={<span style={{maxWidth: '1em'}}>{ unicode }</span>} />
                     ),
                     range,
                 };

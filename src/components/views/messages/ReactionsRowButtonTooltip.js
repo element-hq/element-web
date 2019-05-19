@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
-import { unicodeToShort } from '../../../HtmlUtils';
+import { unicodeToShortcode } from '../../../HtmlUtils';
 import { _t } from '../../../languageHandler';
 
 export default class ReactionsRowButtonTooltip extends React.PureComponent {
@@ -45,7 +45,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                 const { name } = room.getMember(reactionEvent.getSender());
                 senders.push(name);
             }
-            const shortName = unicodeToShort(content) || content;
+            const shortName = unicodeToShortcode(content) || content;
             tooltipLabel = <div>{_t(
                 "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
                 {

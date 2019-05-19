@@ -31,11 +31,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length === 0) return null;
         return (
-            <EmojiText element="div" className="mx_TextualEvent">{ text }</EmojiText>
+            <div className="mx_TextualEvent">{ text }</div>
         );
     },
 });

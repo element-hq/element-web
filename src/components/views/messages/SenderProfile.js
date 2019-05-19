@@ -95,7 +95,6 @@ export default React.createClass({
     },
 
     render() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
         const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
@@ -117,7 +116,7 @@ export default React.createClass({
             />;
         }
 
-        const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
+        const nameElem = name || '';
 
         // Name + flair
         const nameFlair = <span>
