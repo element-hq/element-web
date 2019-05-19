@@ -534,7 +534,8 @@ export default class MessageComposerInput extends React.Component {
                 // The first matched group includes just the matched plaintext emoji
                 const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emoticonMatch) {
-                    const unicodeEmoji = EMOJIBASE.find(e => e.emoticon && e.emoticon.contains(emoticonMatch[1]));
+                    const data = EMOJIBASE.find(e => e.emoticon === emoticonMatch[1]);
+                    const unicodeEmoji = data ? data.unicode : '';
 
                     const range = Range.create({
                         anchor: {
