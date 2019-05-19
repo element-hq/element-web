@@ -35,6 +35,9 @@ const LIMIT = 20;
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
 const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
 
+// XXX: it's very unclear why we bother with this generated emojidata file.
+// all it means is that we end up bloating the bundle with precomputed stuff
+// which would be trivial to calculate and cache on demand.
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
