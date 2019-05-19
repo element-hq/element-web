@@ -61,7 +61,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 
-const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX + ')\\s$');
+const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
 
@@ -532,14 +532,14 @@ export default class MessageComposerInput extends React.Component {
             // Automatic replacement of plaintext emoji to Unicode emoji
             if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
                 // The first matched group includes just the matched plaintext emoji
-                const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-                if (emojiMatch) {
-                    const unicodeEmoji = EMOJIBASE.find(e => e.emoticon && e.emoticon.contains(emoijMatch[1]));
+                const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
+                if (emoticonMatch) {
+                    const unicodeEmoji = EMOJIBASE.find(e => e.emoticon && e.emoticon.contains(emoticonMatch[1]));
 
                     const range = Range.create({
                         anchor: {
                             key: editorState.startText.key,
-                            offset: currentStartOffset - emojiMatch[1].length - 1,
+                            offset: currentStartOffset - emoticonMatch[1].length - 1,
                         },
                         focus: {
                             key: editorState.startText.key,

@@ -74,22 +74,23 @@ export function containsEmoji(str) {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    const data = EMOJIBASE.find((e)=>{ e.unicode === char });
-    return (data && data.shortcodes ? data.shortcodes[0] : '');
+    const data = EMOJIBASE.find(e => e.unicode === char);
+    return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
 /**
  * Returns the unicode character for an emoji shortcode
  *
  * @param {String} shortcode The shortcode (such as :thumbup:)
- * @return {String} The emoji character
+ * @return {String} The emoji character; null if none exists
  */
 export function shortcodeToUnicode(shortcode) {
-    const data = EMOJIBASE.find((e)=>{ e.shortcodes && e.shortcodes.contains(shortcode) });
-    return data.unicode;
+    shortcode = shortcode.slice(1, shortcode.length - 1);
+    const data = EMOJIBASE.find(e => e.shortcodes && e.shortcodes.includes(shortcode));
+    return data ? data.unicode : null;
 }
 
-export function processHtmlForSending(html: string): string {
+export function processHtmlForSending   (html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
 

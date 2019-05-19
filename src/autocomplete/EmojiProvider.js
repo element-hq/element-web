@@ -34,35 +34,16 @@ import SHORTCODE_REGEX from 'emojibase-regex/shortcode';
 import EmojiData from '../stripped-emoji.json';
 
 const LIMIT = 20;
-const CATEGORY_ORDER = [
-    'people',
-    'food',
-    'objects',
-    'activity',
-    'nature',
-    'travel',
-    'flags',
-    'regional',
-    'symbols',
-    'modifier',
-];
 
-// Match for ":wink:" or ascii-style ";-)" provided by emojibase
-// (^|\s|(emojiUnicode)) to make sure we're either at the start of the string or there's a
-// whitespace character or an emoji before the emoji. The reason for unicodeRegexp is
-// that we need to support inputting multiple emoji with no space between them.
-const EMOJI_REGEX = new RegExp('(?:^|\\s|' + UNICODE_REGEX.source + ')(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
-
-// We also need to match the non-zero-length prefixes to remove them from the final match,
-// and update the range so that we don't replace the whitespace or the previous emoji.
-const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + UNICODE_REGEX.source + ')');
+// Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
+const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
 
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
             return a.emoji_order - b.emoji_order;
         }
-        return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+        return a.category - b.category;
     },
 ).map((a, index) => {
     return {
@@ -108,20 +89,18 @@ export default class EmojiProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
             let matchedString = command[0];
-
-            // Remove prefix of any length (single whitespace or unicode emoji)
-            const prefixMatch = MATCH_PREFIX_REGEX.exec(matchedString);
-            if (prefixMatch) {
-                matchedString = matchedString.slice(prefixMatch[0].length);
-                range.start += prefixMatch[0].length;
-            }
             completions = this.matcher.match(matchedString);
 
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
+            console.log("pre-sorted completions", completions);
+
             const sorters = [];
-            // First, sort by score (Infinity if matchedString not in shortname)
+            // make sure that emoticons come first
+            sorters.push((c) => score(matchedString, c.aliases_ascii));
+
+            // then sort by score (Infinity if matchedString not in shortname)
             sorters.push((c) => score(matchedString, c.shortname));
             // If the matchedString is not empty, sort by length of shortname. Example:
             //  matchedString = ":bookmark"
@@ -144,6 +123,8 @@ export default class EmojiProvider extends AutocompleteProvider {
                     range,
                 };
             }).slice(0, LIMIT);
+
+            console.log("mapped completions", completions);
         }
         return completions;
     }
