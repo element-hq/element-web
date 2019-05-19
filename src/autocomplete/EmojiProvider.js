@@ -51,11 +51,11 @@ const CATEGORY_ORDER = [
 // (^|\s|(emojiUnicode)) to make sure we're either at the start of the string or there's a
 // whitespace character or an emoji before the emoji. The reason for unicodeRegexp is
 // that we need to support inputting multiple emoji with no space between them.
-const EMOJI_REGEX = new RegExp('(?:^|\\s|' + UNICODE_REGEX + ')(' + EMOTICON_REGEX + '|:[+-\\w]*:?)$', 'g');
+const EMOJI_REGEX = new RegExp('(?:^|\\s|' + UNICODE_REGEX.source + ')(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
 
 // We also need to match the non-zero-length prefixes to remove them from the final match,
 // and update the range so that we don't replace the whitespace or the previous emoji.
-const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + UNICODE_REGEX + ')');
+const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + UNICODE_REGEX.source + ')');
 
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
