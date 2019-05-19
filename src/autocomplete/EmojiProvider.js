@@ -20,7 +20,6 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
-import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {Completion, SelectionRange} from './Autocompleter';
 import _uniq from 'lodash/uniq';
@@ -28,9 +27,7 @@ import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
 
-import UNICODE_REGEX from 'emojibase-regex';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import SHORTCODE_REGEX from 'emojibase-regex/shortcode';
 import EmojiData from '../stripped-emoji.json';
 
 const LIMIT = 20;
@@ -88,7 +85,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            let matchedString = command[0];
+            const matchedString = command[0];
             completions = this.matcher.match(matchedString);
 
             // Do second match with shouldMatchWordsOnly in order to match against 'name'

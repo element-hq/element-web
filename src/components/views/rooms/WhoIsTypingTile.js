@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
 import MatrixClientPeg from '../../../MatrixClientPeg';

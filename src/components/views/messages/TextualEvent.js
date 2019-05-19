@@ -20,7 +20,6 @@ const React = require('react');
 import PropTypes from 'prop-types';
 
 const TextForEvent = require('../../../TextForEvent');
-import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'TextualEvent',

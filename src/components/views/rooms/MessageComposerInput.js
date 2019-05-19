@@ -1417,8 +1417,10 @@ export default class MessageComposerInput extends React.Component {
                            </a>;
                 }
             }
-            case 'emoji':
+            case 'emoji': {
+                const { data } = node;
                 return data.get('emojiUnicode');
+            }
         }
     };
 
