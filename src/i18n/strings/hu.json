@@ -1970,5 +1970,6 @@
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>ezzel reagált: %(shortName)s</reactedWith>",
     "Edited at %(date)s.": "Szerkesztve ekkor: %(date)s.",
     "edited": "szerkesztve",
-    "Edited at %(date)s": "Szerkesztve: %(date)s"
+    "Edited at %(date)s": "Szerkesztve: %(date)s",
+    "Show hidden events in timeline": "Rejtett események megmutatása az idővonalon"
 }
