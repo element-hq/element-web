@@ -40,7 +40,6 @@ import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
 
-import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";

@@ -26,7 +26,7 @@ import type {Completion, SelectionRange} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
-import { shortcodeToUnicode } from './HtmlUtils';
+import { shortcodeToUnicode } from '../HtmlUtils';
 
 import UNICODE_REGEX from 'emojibase-regex';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';

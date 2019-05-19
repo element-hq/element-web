@@ -73,7 +73,7 @@ export function containsEmoji(str) {
  */
 export function unicodeToShortcode(char) {
     const data = EMOJIBASE.find((e)=>{ e.unicode === char });
-    return (data && data.shortcodes ? data.shortcodes[0] : '';
+    return (data && data.shortcodes ? data.shortcodes[0] : '');
 }
 
 /**
