@@ -411,6 +411,7 @@ limitations under the License.
 
 .mx_EventTile_content .markdown-body {
     pre, code {
+        font-family: $monospace-font-family ! important;
         // deliberate constants as we're behind an invert filter
         color: #333;
     }

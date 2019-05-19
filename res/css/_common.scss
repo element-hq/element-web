@@ -32,6 +32,10 @@ body {
     margin: 0px;
 }
 
+code {
+    font-family: $monospace-font-family;
+}
+
 .error, .warning {
     color: $warning-color;
 }
