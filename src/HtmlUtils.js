@@ -32,7 +32,7 @@ import MatrixClientPeg from './MatrixClientPeg';
 import url from 'url';
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
-import EMOJI_REGEX from 'emojibase-regex';
+import EMOJIBASE_REGEX from 'emojibase-regex';
 
 linkifyMatrix(linkify);
 
@@ -49,6 +49,8 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 
 // Regex pattern for whitespace characters
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
+
+const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX})+$`, "i");
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -442,7 +444,6 @@ export function bodyToHtml(content, highlights, opts={}) {
 
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
-        EMOJI_REGEX.lastIndex = 0;
         let contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
 
         // Ignore spaces in body text. Emojis with spaces in between should
@@ -454,7 +455,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         // presented as large.
         contentBodyTrimmed = contentBodyTrimmed.replace(ZWJ_REGEX, '');
 
-        const match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length &&
                     // Prevent user pills expanding for users with only emoji in
                     // their username
