@@ -57,8 +57,6 @@ const COPY_LIST = [
     ["res/themes/**", "webapp/themes"],
     ["res/vector-icons/**", "webapp/vector-icons"],
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
-    ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
-    ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
 ];
