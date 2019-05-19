@@ -1970,5 +1970,6 @@
     "Homeserver URL does not appear to be a valid Matrix homeserver": "L’URL du serveur d’accueil ne semble pas être un serveur d’accueil Matrix valide",
     "Invalid base_url for m.identity_server": "base_url pour m.identity_server non valide",
     "Identity server URL does not appear to be a valid identity server": "L’URL du serveur d’identité ne semble pas être un serveur d’identité valide",
-    "Edited at %(date)s": "Édité à %(date)s"
+    "Edited at %(date)s": "Édité à %(date)s",
+    "Show hidden events in timeline": "Afficher les évènements cachés dans l’historique"
 }
