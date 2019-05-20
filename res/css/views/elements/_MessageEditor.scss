@@ -40,13 +40,21 @@ limitations under the License.
             color: white;
         }
 
+        span.room-pill {
+            color: $accent-fg-color;
+            background-color: $rte-room-pill-color;
+        }
+
+        span.user-pill {
+            color: $primary-fg-color;
+            background-color: $other-user-pill-bg-color;
+        }
+
         span.user-pill, span.room-pill {
             height: 20px;
             line-height: 20px;
             border-radius: 16px;
             display: inline-block;
-            color: $primary-fg-color;
-            background-color: $other-user-pill-bg-color;
             padding-left: 21px;
             padding-right: 5px;
             position: relative;
