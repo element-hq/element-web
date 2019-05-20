@@ -61,7 +61,6 @@ export default class AutocompleteProvider {
 
         let match;
         while ((match = commandRegex.exec(query)) != null) {
-            console.log('Matched ' + JSON.stringify(match));
             const start = match.index;
             const end = start + match[0].length;
             if (selection.start <= end && selection.end >= start) {

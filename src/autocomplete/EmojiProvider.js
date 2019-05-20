@@ -94,8 +94,6 @@ export default class EmojiProvider extends AutocompleteProvider {
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
-            console.log("pre-sorted completions", completions);
-
             const sorters = [];
             // make sure that emoticons come first
             sorters.push((c) => score(matchedString, c.aliases_ascii));
@@ -123,8 +121,6 @@ export default class EmojiProvider extends AutocompleteProvider {
                     range,
                 };
             }).slice(0, LIMIT);
-
-            console.log("mapped completions", completions);
         }
         return completions;
     }
