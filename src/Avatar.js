@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 import {ContentRepo} from 'matrix-js-sdk';
 import MatrixClientPeg from './MatrixClientPeg';
+import DMRoomMap from './utils/DMRoomMap';
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
@@ -62,6 +63,8 @@ module.exports = {
     /**
      * returns the first (non-sigil) character of 'name',
      * converted to uppercase
+     * @param {string} name
+     * @return {string} the first letter
      */
     getInitialLetter(name) {
         if (name.length < 1) {
@@ -89,5 +92,38 @@ module.exports = {
 
         const firstChar = name.substring(idx, idx+chars);
         return firstChar.toUpperCase();
+    },
+
+    avatarUrlForRoom(room, width, height, resizeMethod) {
+        const explicitRoomAvatar = room.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
+            width,
+            height,
+            resizeMethod,
+            false,
+        );
+        if (explicitRoomAvatar) {
+            return explicitRoomAvatar;
+        }
+
+        let otherMember = null;
+        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        if (otherUserId) {
+            otherMember = room.getMember(otherUserId);
+        } else {
+            // if the room is not marked as a 1:1, but only has max 2 members
+            // then still try to show any avatar (pref. other member)
+            otherMember = room.getAvatarFallbackMember();
+        }
+        if (otherMember) {
+            return otherMember.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                width,
+                height,
+                resizeMethod,
+                false,
+            );
+        }
+        return null;
     },
 };
