@@ -133,38 +133,6 @@ module.exports = React.createClass({
         }
     },
 
-    /**
-     * returns the first (non-sigil) character of 'name',
-     * converted to uppercase
-     */
-    _getInitialLetter: function(name) {
-        if (name.length < 1) {
-            return undefined;
-        }
-
-        let idx = 0;
-        const initial = name[0];
-        if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
-            idx++;
-        }
-
-        // string.codePointAt(0) would do this, but that isn't supported by
-        // some browsers (notably PhantomJS).
-        let chars = 1;
-        const first = name.charCodeAt(idx);
-
-        // check if it’s the start of a surrogate pair
-        if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
-            const second = name.charCodeAt(idx+1);
-            if (second >= 0xDC00 && second <= 0xDFFF) {
-                chars++;
-            }
-        }
-
-        const firstChar = name.substring(idx, idx+chars);
-        return firstChar.toUpperCase();
-    },
-
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const imageUrl = this.state.imageUrls[this.state.urlsIndex];
