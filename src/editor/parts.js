@@ -17,6 +17,8 @@ limitations under the License.
 import AutocompleteWrapperModel from "./autocomplete";
 import Avatar from "../Avatar";
 
+const DPR = window.devicePixelRatio;
+
 class BasePart {
     constructor(text = "") {
         this._text = text;
@@ -153,6 +155,7 @@ class PillPart extends BasePart {
         const container = document.createElement("span");
         container.className = this.type;
         container.appendChild(document.createTextNode(this.text));
+        this.setAvatar(container);
         return container;
     }
 
@@ -166,6 +169,7 @@ class PillPart extends BasePart {
             // console.log("turning", node.className, "into", this.type);
             node.className = this.type;
         }
+        this.setAvatar(node);
     }
 
     canUpdateDOMNode(node) {
@@ -222,6 +226,9 @@ export class RoomPillPart extends PillPart {
         this._room = room;
     }
 
+    setAvatar(node) {
+    }
+
     get type() {
         return "room-pill";
     }
@@ -233,18 +240,21 @@ export class UserPillPart extends PillPart {
         this._member = member;
     }
 
-    toDOMNode() {
-        const pill = super.toDOMNode();
-        const avatarUrl = Avatar.avatarUrlForMember(this._member, 16, 16);
-        if (avatarUrl) {
-            pill.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
-            pill.style.setProperty("--avatar-letter", "''");
-        } else {
-            pill.style.setProperty("--avatar-background", `green`);
-            pill.style.setProperty("--avatar-color", `white`);
-            pill.style.setProperty("--avatar-letter", `'${this.text[0].toUpperCase()}'`);
+    setAvatar(node) {
+        const name = this._member.name || this._member.userId;
+        const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
+        let avatarUrl = Avatar.avatarUrlForMember(this._member, 16 * DPR, 16 * DPR);
+        let initialLetter = "";
+        if (avatarUrl === defaultAvatarUrl) {
+            // the url from defaultAvatarUrlForString is meant to go in an img element,
+            // which has the base of the document. we're using it in css,
+            // which has the base of the theme css file, two levels deeper than the document,
+            // so go up to the level of the document.
+            avatarUrl = `../../${avatarUrl}`;
+            initialLetter = Avatar.getInitialLetter(name);
         }
-        return pill;
+        node.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
+        node.style.setProperty("--avatar-letter", `'${initialLetter}'`);
     }
 
     get type() {

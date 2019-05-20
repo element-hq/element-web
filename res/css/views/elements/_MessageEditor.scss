@@ -59,10 +59,14 @@ limitations under the License.
                 width: 16px;
                 height: 16px;
                 background: var(--avatar-background);    //set on parent by JS
-                color: var(--avatar-color);
+                color: $avatar-initial-color;
                 background-repeat: no-repeat;
                 background-size: 16px;
                 border-radius: 8px;
+                text-align: center;
+                font-weight: normal;
+                line-height: 16px;
+                font-size: 10.4px;
             }
         }
     }
