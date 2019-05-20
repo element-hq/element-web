@@ -520,7 +520,10 @@ module.exports = withMatrixClient(React.createClass({
             eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
-        const tileHandler = getHandlerTile(this.props.mxEvent);
+        let tileHandler = getHandlerTile(this.props.mxEvent);
+        if (!tileHandler && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+            tileHandler = "messages.ViewSourceEvent";
+        }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
@@ -540,6 +543,7 @@ module.exports = withMatrixClient(React.createClass({
 
         const classes = classNames({
             mx_EventTile: true,
+            mx_EventTile_isEditing: this.props.isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
             mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
@@ -617,14 +621,14 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
-        const actionBar = <MessageActionBar
+        const actionBar = !this.props.isEditing ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
             permalinkCreator={this.props.permalinkCreator}
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
             onFocusChange={this.onActionBarFocusChange}
-        />;
+        /> : undefined;
 
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
@@ -779,6 +783,7 @@ module.exports = withMatrixClient(React.createClass({
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            replacingEventId={this.props.replacingEventId}
+                                           isEditing={this.props.isEditing}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}

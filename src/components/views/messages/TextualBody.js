@@ -89,7 +89,9 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._unmounted = false;
-        this._applyFormatting();
+        if (!this.props.isEditing) {
+            this._applyFormatting();
+        }
     },
 
     _applyFormatting() {
@@ -128,11 +130,14 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(prevProps) {
-        const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-        if (messageWasEdited) {
-            this._applyFormatting();
+        if (!this.props.isEditing) {
+            const stoppedEditing = prevProps.isEditing && !this.props.isEditing;
+            const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
+            if (messageWasEdited || stoppedEditing) {
+                this._applyFormatting();
+            }
+            this.calculateUrlPreview();
         }
-        this.calculateUrlPreview();
     },
 
     componentWillUnmount: function() {
@@ -148,6 +153,7 @@ module.exports = React.createClass({
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
+                nextProps.isEditing !== this.props.isEditing ||
                 nextState.links !== this.state.links ||
                 nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
@@ -463,6 +469,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (this.props.isEditing) {
+            const MessageEditor = sdk.getComponent('elements.MessageEditor');
+            return <MessageEditor event={this.props.mxEvent} />;
+        }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 

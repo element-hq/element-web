@@ -21,6 +21,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import { unicodeToShortcode } from '../../../HtmlUtils';
 import { _t } from '../../../languageHandler';
+import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 
 export default class ReactionsRowButtonTooltip extends React.PureComponent {
     static propTypes = {
@@ -54,7 +55,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                 {
                     reactors: () => {
                         return <div className="mx_ReactionsRowButtonTooltip_senders">
-                            {senders.join(", ")}
+                            {formatCommaSeparatedList(senders, 6)}
                         </div>;
                     },
                     reactedWith: (sub) => {
