@@ -66,7 +66,7 @@ limitations under the License.
                 content: var(--avatar-letter);
                 width: 16px;
                 height: 16px;
-                background: var(--avatar-background);    //set on parent by JS
+                background: var(--avatar-background), $avatar-bg-color;
                 color: $avatar-initial-color;
                 background-repeat: no-repeat;
                 background-size: 16px;
