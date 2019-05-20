@@ -89,7 +89,7 @@ export default class AutocompleteWrapperModel {
             }
             case "#": {
                 const displayAlias = completion.completionId;
-                return new RoomPillPart(displayAlias, this._room);
+                return new RoomPillPart(displayAlias);
             }
             // also used for emoji completion
             default:

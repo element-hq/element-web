@@ -38,7 +38,7 @@ function parseHtmlMessage(html, room) {
                         const prefix = pillMatch[2]; // The first character of prefix
                         switch (prefix) {
                             case "@": return new UserPillPart(resourceId, n.textContent, room.getMember(resourceId));
-                            case "#": return new RoomPillPart(resourceId, n.textContent, room);
+                            case "#": return new RoomPillPart(resourceId);
                             default: return new PlainPart(n.textContent);
                         }
                     }
