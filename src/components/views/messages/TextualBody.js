@@ -131,8 +131,9 @@ module.exports = React.createClass({
 
     componentDidUpdate: function(prevProps) {
         if (!this.props.isEditing) {
+            const stoppedEditing = prevProps.isEditing && !this.props.isEditing;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            if (messageWasEdited) {
+            if (messageWasEdited || stoppedEditing) {
                 this._applyFormatting();
             }
             this.calculateUrlPreview();
