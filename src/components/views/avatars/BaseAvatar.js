@@ -176,7 +176,7 @@ module.exports = React.createClass({
         } = this.props;
 
         if (imageUrl === this.state.defaultImageUrl) {
-            const initialLetter = this._getInitialLetter(name);
+            const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
                 <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
                     style={{ fontSize: (width * 0.65) + "px",
