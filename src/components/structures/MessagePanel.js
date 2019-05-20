@@ -716,7 +716,7 @@ module.exports = React.createClass({
         );
 
         let whoIsTyping;
-        if (this.props.room) {
+        if (this.props.room && !this.props.tileShape) {
             whoIsTyping = (<WhoIsTypingTile
                 room={this.props.room}
                 onShown={this._onTypingShown}
