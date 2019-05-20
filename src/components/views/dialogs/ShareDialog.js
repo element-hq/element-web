@@ -114,7 +114,8 @@ export default class ShareDialog extends React.Component {
             top: y,
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         }, false);
-        e.target.onmouseleave = close;
+        // Drop a reference to this close handler for componentWillUnmount
+        this.closeCopiedTooltip = e.target.onmouseleave = close;
     }
 
     onLinkSpecificEventCheckboxClick() {
@@ -129,6 +130,12 @@ export default class ShareDialog extends React.Component {
             permalinkCreator.load();
             this.setState({permalinkCreator});
         }
+    }
+
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape or clicking X really quickly
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
     render() {
