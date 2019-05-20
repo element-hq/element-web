@@ -90,7 +90,7 @@ export function shortcodeToUnicode(shortcode) {
     return data ? data.unicode : null;
 }
 
-export function processHtmlForSending   (html: string): string {
+export function processHtmlForSending(html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
 
