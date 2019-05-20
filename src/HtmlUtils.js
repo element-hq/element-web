@@ -541,8 +541,8 @@ export function bodyToHtml(content, highlights, opts={}) {
     });
 
     return isDisplayedWithHtml ?
-        <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span className={className} dir="auto">{ strippedBody }</span>;
+        <span key="body" className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span key="body" className={className} dir="auto">{ strippedBody }</span>;
 }
 
 export function emojifyText(text, addAlt) {
