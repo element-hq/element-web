@@ -16,6 +16,7 @@ limitations under the License.
 
 import AutocompleteWrapperModel from "./autocomplete";
 import Avatar from "../Avatar";
+import MatrixClientPeg from "../MatrixClientPeg";
 
 const DPR = window.devicePixelRatio;
 
@@ -221,12 +222,31 @@ export class NewlinePart extends BasePart {
 }
 
 export class RoomPillPart extends PillPart {
-    constructor(displayAlias, room) {
+    constructor(displayAlias) {
         super(displayAlias, displayAlias);
-        this._room = room;
+        this._room = this._findRoomByAlias(displayAlias);
+    }
+
+    _findRoomByAlias(alias) {
+        const client = MatrixClientPeg.get();
+        if (alias[0] === '#') {
+            return client.getRooms().find((r) => {
+                return r.getAliases().includes(alias);
+            });
+        } else {
+            return client.getRoom(alias);
+        }
     }
 
     setAvatar(node) {
+        let initialLetter = "";
+        let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * DPR, 16 * DPR);
+        if (!avatarUrl) {
+            initialLetter = Avatar.getInitialLetter(this._room.name);
+            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+        }
+        node.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
+        node.style.setProperty("--avatar-letter", `'${initialLetter}'`);
     }
 
     get type() {
