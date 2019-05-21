@@ -19,7 +19,7 @@ limitations under the License.
  * object. Useful in scenarios where componentDidMount does not have a
  * useful reference to an element, but one needs to focus the element on
  * first render. Example usage: ref={focusCapturedRef}
- * @param ref The React reference to focus on, if not null
+ * @param {function} ref The React reference to focus on, if not null
  */
 export function focusCapturedRef(ref) {
     if (ref) {
