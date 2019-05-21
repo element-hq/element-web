@@ -276,7 +276,10 @@ export class UserPillPart extends PillPart {
     setAvatar(node) {
         const name = this._member.name || this._member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
-        let avatarUrl = Avatar.avatarUrlForMember(this._member, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
+        let avatarUrl = Avatar.avatarUrlForMember(
+            this._member,
+            16 * window.devicePixelRatio,
+            16 * window.devicePixelRatio);
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
             // the url from defaultAvatarUrlForString is meant to go in an img element,
