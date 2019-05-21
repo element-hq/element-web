@@ -204,7 +204,7 @@ export default React.createClass({
     },
 
     getFallbackHsUrl: function() {
-        if (this.props.serverConfig.isDefault) {
+        if (this.props.serverConfig && this.props.serverConfig.isDefault) {
             return this.props.config.fallback_hs_url;
         } else {
             return null;
