@@ -1454,5 +1454,17 @@
     "The other party cancelled the verification.": "La alia kontrolano nuligis la kontrolon.",
     "You've successfully verified this user.": "Vi sukcese kontrolis ĉi tiun uzanton.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Sekuraj mesaĝoj kun ĉi tiu uzanto estas tutvoje ĉirfitaj kaj nelegeblaj al ceteruloj.",
-    "Verify this user by confirming the following emoji appear on their screen.": "Kontrolu ĉi tiun uzanton per konfirmo, ke la jenaj bildsignoj aperis sur ĝia ekrano."
+    "Verify this user by confirming the following emoji appear on their screen.": "Kontrolu ĉi tiun uzanton per konfirmo, ke la jenaj bildsignoj aperis sur ĝia ekrano.",
+    "Verify this user by confirming the following number appears on their screen.": "Kontrolu ĉu tiun uzanton per konfirmo, ke la jena numero aperis sur ĝia ekrano.",
+    "Unable to find a supported verification method.": "Ne povas trovi subtenatan metodon de kontrolo.",
+    "For maximum security, we recommend you do this in person or use another trusted means of communication.": "Por la plej bona sekureco, ni rekomendas fari ĉi tion persone, aŭ per alia, fidata komunikilo.",
+    "Santa": "Kristnaska viro",
+    "Thumbs up": "Dikfingro supren",
+    "Paperclip": "Paperkuntenilo",
+    "Pin": "Pinglo",
+    "Your homeserver does not support device management.": "Via hejmservilo ne subtenas administradon de aparatoj.",
+    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Ni sendis al vi retleteron por konfirmi vian adreson. Bonvolu sekvi la tieajn intrukciojn kaj poste klaki al la butono sube.",
+    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ĉu vi certas? Vi perdos ĉiujn viajn ĉifritajn mesaĝojn, se viaj ŝlosiloj ne estas savkopiitaj.",
+    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
+    "This device is backing up your keys. ": "Ĉi tiu aparato savkopias viajn ŝlosilojn. "
 }
