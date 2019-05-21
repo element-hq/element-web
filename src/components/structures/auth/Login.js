@@ -236,12 +236,13 @@ module.exports = React.createClass({
     },
 
     onUsernameBlur: async function(username) {
+        const doWellknownLookup = username[0] === "@";
         this.setState({
             username: username,
-            busy: true, // unset later by the result of onServerConfigChange
+            busy: doWellknownLookup, // unset later by the result of onServerConfigChange
             errorText: null,
         });
-        if (username[0] === "@") {
+        if (doWellknownLookup) {
             const serverName = username.split(':').slice(1).join(':');
             try {
                 const result = await AutoDiscoveryUtils.validateServerName(serverName);
