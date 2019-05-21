@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
+import {focusCapturedRef} from "../../utils/Accessibility";
 
 const AVATAR_SIZE = 28;
 
@@ -143,6 +145,7 @@ export default class TopLeftMenuButton extends React.Component {
             top: y,
             userId: MatrixClientPeg.get().getUserId(),
             displayName: this._getDisplayName(),
+            containerRef: focusCapturedRef, // Focus the TopLeftMenu on first render
             onFinished: () => {
                 this.setState({ menuDisplayed: false, menuFunctions: null });
             },

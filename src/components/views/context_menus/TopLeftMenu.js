@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,13 +24,16 @@ import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import {focusCapturedRef} from "../../../utils/Accessibility";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {
         displayName: PropTypes.string.isRequired,
         userId: PropTypes.string.isRequired,
         onFinished: PropTypes.func,
+
+        // Optional function to collect a reference to the container
+        // of this component directly.
+        containerRef: PropTypes.func,
     };
 
     constructor() {
@@ -93,7 +97,7 @@ export class TopLeftMenu extends React.Component {
             {_t("Settings")}
         </li>;
 
-        return <div className="mx_TopLeftMenu mx_HiddenFocusable" tabIndex={0} ref={focusCapturedRef}>
+        return <div className="mx_TopLeftMenu mx_HiddenFocusable" tabIndex={0} ref={this.props.containerRef}>
             <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true}>
                 <div>{this.props.displayName}</div>
                 <div className="mx_TopLeftMenu_greyedText" aria-hidden={true}>{this.props.userId}</div>
