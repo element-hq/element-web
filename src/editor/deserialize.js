@@ -56,7 +56,7 @@ function parseHtmlMessage(html, room) {
                     case "STRONG":
                         return new PlainPart(`**${n.textContent}**`);
                     case "PRE":
-                        return new PlainPart(`\`\`\`${n.textContent}\`\`\``);
+                        return new PlainPart(`\`\`\`\n${n.textContent}\`\`\``);
                     case "CODE":
                         return new PlainPart(`\`${n.textContent}\``);
                     default:
