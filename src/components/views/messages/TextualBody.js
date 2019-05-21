@@ -136,7 +136,6 @@ module.exports = React.createClass({
             if (messageWasEdited || stoppedEditing) {
                 this._applyFormatting();
             }
-            this.calculateUrlPreview();
         }
     },
 
