@@ -160,8 +160,11 @@ module.exports = withMatrixClient(React.createClass({
         // show twelve hour timestamps
         isTwelveHour: PropTypes.bool,
 
-        // helper function to access relations for an event
+        // helper function to access relations for this event
         getRelationsForEvent: PropTypes.func,
+
+        // whether to show reactions for this event
+        showReactions: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -198,7 +201,7 @@ module.exports = withMatrixClient(React.createClass({
         const client = this.props.matrixClient;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
-        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (this.props.showReactions && SettingsStore.isFeatureEnabled("feature_reactions")) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
         }
     },
@@ -223,7 +226,7 @@ module.exports = withMatrixClient(React.createClass({
         const client = this.props.matrixClient;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
-        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (this.props.showReactions && SettingsStore.isFeatureEnabled("feature_reactions")) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
         }
     },
@@ -485,6 +488,7 @@ module.exports = withMatrixClient(React.createClass({
 
     getReactions() {
         if (
+            !this.props.showReactions ||
             !this.props.getRelationsForEvent ||
             !SettingsStore.isFeatureEnabled("feature_reactions")
         ) {
