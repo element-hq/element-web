@@ -40,11 +40,25 @@ function parseHtmlMessage(html, room) {
                         switch (prefix) {
                             case "@": return new UserPillPart(resourceId, n.textContent, room.getMember(resourceId));
                             case "#": return new RoomPillPart(resourceId);
-                            default: return new PlainPart(n.textContent);
+                            default: {
+                                if (href === n.textContent) {
+                                    return new PlainPart(n.textContent);
+                                } else {
+                                    return new PlainPart(`[${n.textContent}](${href})`);
+                                }
+                            }
                         }
                     }
                     case "BR":
                         return new NewlinePart("\n");
+                    case "EM":
+                        return new PlainPart(`*${n.textContent}*`);
+                    case "STRONG":
+                        return new PlainPart(`**${n.textContent}**`);
+                    case "PRE":
+                        return new PlainPart(`\`\`\`${n.textContent}\`\`\``);
+                    case "CODE":
+                        return new PlainPart(`\`${n.textContent}\``);
                     default:
                         return new PlainPart(n.textContent);
                 }
