@@ -161,7 +161,7 @@ module.exports = React.createClass({
     calculateUrlPreview: function() {
         //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
-        if (this.props.showUrlPreview && !this.state.links.length) {
+        if (this.props.showUrlPreview) {
             let links = this.findLinks(this.refs.content.children);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
