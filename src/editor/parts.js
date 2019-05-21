@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import AutocompleteWrapperModel from "./autocomplete";
+import Avatar from "../Avatar";
+import MatrixClientPeg from "../MatrixClientPeg";
 
 class BasePart {
     constructor(text = "") {
@@ -150,21 +152,21 @@ class PillPart extends BasePart {
 
     toDOMNode() {
         const container = document.createElement("span");
-        container.className = this.type;
+        container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
+        this.setAvatar(container);
         return container;
     }
 
     updateDOMNode(node) {
         const textNode = node.childNodes[0];
         if (textNode.textContent !== this.text) {
-            // console.log("changing pill text from", textNode.textContent, "to", this.text);
             textNode.textContent = this.text;
         }
-        if (node.className !== this.type) {
-            // console.log("turning", node.className, "into", this.type);
-            node.className = this.type;
+        if (node.className !== this.className) {
+            node.className = this.className;
         }
+        this.setAvatar(node);
     }
 
     canUpdateDOMNode(node) {
@@ -172,6 +174,20 @@ class PillPart extends BasePart {
                node.nodeName === "SPAN" &&
                node.childNodes.length === 1 &&
                node.childNodes[0].nodeType === Node.TEXT_NODE;
+    }
+
+    // helper method for subclasses
+    _setAvatarVars(node, avatarUrl, initialLetter) {
+        const avatarBackground = `url('${avatarUrl}')`;
+        const avatarLetter = `'${initialLetter}'`;
+        // check if the value is changing,
+        // otherwise the avatars flicker on every keystroke while updating.
+        if (node.style.getPropertyValue("--avatar-background") !== avatarBackground) {
+            node.style.setProperty("--avatar-background", avatarBackground);
+        }
+        if (node.style.getPropertyValue("--avatar-letter") !== avatarLetter) {
+            node.style.setProperty("--avatar-letter", avatarLetter);
+        }
     }
 
     get canEdit() {
@@ -218,16 +234,70 @@ export class NewlinePart extends BasePart {
 export class RoomPillPart extends PillPart {
     constructor(displayAlias) {
         super(displayAlias, displayAlias);
+        this._room = this._findRoomByAlias(displayAlias);
+    }
+
+    _findRoomByAlias(alias) {
+        const client = MatrixClientPeg.get();
+        if (alias[0] === '#') {
+            return client.getRooms().find((r) => {
+                return r.getAliases().includes(alias);
+            });
+        } else {
+            return client.getRoom(alias);
+        }
+    }
+
+    setAvatar(node) {
+        let initialLetter = "";
+        let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
+        if (!avatarUrl) {
+            initialLetter = Avatar.getInitialLetter(this._room.name);
+            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+        }
+        this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
     get type() {
         return "room-pill";
     }
+
+    get className() {
+        return "mx_RoomPill mx_Pill";
+    }
 }
 
 export class UserPillPart extends PillPart {
+    constructor(userId, displayName, member) {
+        super(userId, displayName);
+        this._member = member;
+    }
+
+    setAvatar(node) {
+        const name = this._member.name || this._member.userId;
+        const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
+        let avatarUrl = Avatar.avatarUrlForMember(
+            this._member,
+            16 * window.devicePixelRatio,
+            16 * window.devicePixelRatio);
+        let initialLetter = "";
+        if (avatarUrl === defaultAvatarUrl) {
+            // the url from defaultAvatarUrlForString is meant to go in an img element,
+            // which has the base of the document. we're using it in css,
+            // which has the base of the theme css file, two levels deeper than the document,
+            // so go up to the level of the document.
+            avatarUrl = `../../${avatarUrl}`;
+            initialLetter = Avatar.getInitialLetter(name);
+        }
+        this._setAvatarVars(node, avatarUrl, initialLetter);
+    }
+
     get type() {
         return "user-pill";
+    }
+
+    get className() {
+        return "mx_UserPill mx_Pill";
     }
 }
 
@@ -256,9 +326,14 @@ export class PillCandidatePart extends PlainPart {
 }
 
 export class PartCreator {
-    constructor(getAutocompleterComponent, updateQuery) {
+    constructor(getAutocompleterComponent, updateQuery, room) {
         this._autoCompleteCreator = (updateCallback) => {
-            return new AutocompleteWrapperModel(updateCallback, getAutocompleterComponent, updateQuery);
+            return new AutocompleteWrapperModel(
+                updateCallback,
+                getAutocompleterComponent,
+                updateQuery,
+                room,
+            );
         };
     }
 
