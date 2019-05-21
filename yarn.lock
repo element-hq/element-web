@@ -3144,7 +3144,7 @@ emoji-regex@^7.0.1:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha512-CwBLREIQ7LvYFB0WyRvwhq5N5qPhc6PMjD6bYggFlI5YyDgl+0vxq5VHbMOFqLg7hfWzmu8T5Z1QofhmTIhItA==
 
-emojione@2.2.7, emojione@^2.2.7:
+emojione@2.2.7:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/emojione/-/emojione-2.2.7.tgz#46457cf6b9b2f8da13ae8a2e4e547de06ee15e96"
   integrity sha1-RkV89rmy+NoTroouTlR94G7hXpY=
@@ -6800,6 +6800,13 @@ pluralizers@^0.1.7:
   resolved "https://registry.yarnpkg.com/pluralizers/-/pluralizers-0.1.7.tgz#8d38dd0a1b660e739b10ab2eab10b684c9d50142"
   integrity sha512-mw6AejUiCaMQ6uPN9ObjJDTnR5AnBSmnHHy3uVTbxrSFSxO5scfwpTs8Dxyb6T2v7GSulhvOq+pm9y+hXUvtOA==
 
+png-chunks-extract@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/png-chunks-extract/-/png-chunks-extract-1.0.0.tgz#fad4a905e66652197351c65e35b92c64311e472d"
+  integrity sha1-+tSpBeZmUhlzUcZeNbksZDEeRy0=
+  dependencies:
+    crc-32 "^0.3.0"
+
 portfinder@^1.0.20:
   version "1.0.20"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.20.tgz#bea68632e54b2e13ab7b0c4775e9b41bf270e44a"
@@ -6808,13 +6815,6 @@ portfinder@^1.0.20:
     async "^1.5.2"
     debug "^2.2.0"
     mkdirp "0.5.x"
-
-png-chunks-extract@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/png-chunks-extract/-/png-chunks-extract-1.0.0.tgz#fad4a905e66652197351c65e35b92c64311e472d"
-  integrity sha1-+tSpBeZmUhlzUcZeNbksZDEeRy0=
-  dependencies:
-    crc-32 "^0.3.0"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
