@@ -22,7 +22,7 @@ import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerialize, textSerialize, requiresHtml} from '../../../editor/serialize';
+import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
 import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
@@ -128,9 +128,10 @@ export default class MessageEditor extends React.Component {
             msgtype: newContent.msgtype,
             body: ` * ${newContent.body}`,
         };
-        if (requiresHtml(this.model)) {
+        const formattedBody = htmlSerializeIfNeeded(this.model);
+        if (formattedBody) {
             newContent.format = "org.matrix.custom.html";
-            newContent.formatted_body = htmlSerialize(this.model);
+            newContent.formatted_body = formattedBody;
             contentBody.format = newContent.format;
             contentBody.formatted_body = ` * ${newContent.formatted_body}`;
         }
