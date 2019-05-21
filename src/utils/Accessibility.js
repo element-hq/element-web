@@ -14,6 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+ * Automatically focuses the captured reference when receiving a non-null
+ * object. Useful in scenarios where componentDidMount does not have a
+ * useful reference to an element, but one needs to focus the element on
+ * first render. Example usage: ref={focusCapturedRef}
+ * @param ref The React reference to focus on, if not null
+ */
 export function focusCapturedRef(ref) {
-    if (ref) ref.focus();
+    if (ref) {
+        ref.focus();
+    }
 }
