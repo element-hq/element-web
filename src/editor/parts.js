@@ -154,7 +154,7 @@ class PillPart extends BasePart {
 
     toDOMNode() {
         const container = document.createElement("span");
-        container.className = this.type;
+        container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
         this.setAvatar(container);
         return container;
@@ -163,12 +163,10 @@ class PillPart extends BasePart {
     updateDOMNode(node) {
         const textNode = node.childNodes[0];
         if (textNode.textContent !== this.text) {
-            // console.log("changing pill text from", textNode.textContent, "to", this.text);
             textNode.textContent = this.text;
         }
-        if (node.className !== this.type) {
-            // console.log("turning", node.className, "into", this.type);
-            node.className = this.type;
+        if (node.className !== this.className) {
+            node.className = this.className;
         }
         this.setAvatar(node);
     }
@@ -178,6 +176,20 @@ class PillPart extends BasePart {
                node.nodeName === "SPAN" &&
                node.childNodes.length === 1 &&
                node.childNodes[0].nodeType === Node.TEXT_NODE;
+    }
+
+    // helper method for subclasses
+    _setAvatarVars(node, avatarUrl, initialLetter) {
+        const avatarBackground = `url('${avatarUrl}')`;
+        const avatarLetter = `'${initialLetter}'`;
+        // check if the value is changing,
+        // otherwise the avatars flicker on every keystroke while updating.
+        if (node.style.getPropertyValue("--avatar-background") !== avatarBackground) {
+            node.style.setProperty("--avatar-background", avatarBackground);
+        }
+        if (node.style.getPropertyValue("--avatar-letter") !== avatarLetter) {
+            node.style.setProperty("--avatar-letter", avatarLetter);
+        }
     }
 
     get canEdit() {
@@ -245,12 +257,15 @@ export class RoomPillPart extends PillPart {
             initialLetter = Avatar.getInitialLetter(this._room.name);
             avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
         }
-        node.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
-        node.style.setProperty("--avatar-letter", `'${initialLetter}'`);
+        this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
     get type() {
         return "room-pill";
+    }
+
+    get className() {
+        return "mx_RoomPill mx_Pill";
     }
 }
 
@@ -273,12 +288,15 @@ export class UserPillPart extends PillPart {
             avatarUrl = `../../${avatarUrl}`;
             initialLetter = Avatar.getInitialLetter(name);
         }
-        node.style.setProperty("--avatar-background", `url('${avatarUrl}')`);
-        node.style.setProperty("--avatar-letter", `'${initialLetter}'`);
+        this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
     get type() {
         return "user-pill";
+    }
+
+    get className() {
+        return "mx_UserPill mx_Pill";
     }
 }
 

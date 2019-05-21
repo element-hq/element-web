@@ -34,32 +34,11 @@ limitations under the License.
         max-height: 200px;
         overflow-x: auto;
 
-        span {
-            display: inline-block;
-            padding: 0 5px;
-            border-radius: 4px;
-            color: white;
-        }
-
-        span.room-pill {
-            color: $accent-fg-color;
-            background-color: $rte-room-pill-color;
-        }
-
-        span.user-pill {
-            color: $primary-fg-color;
-            background-color: $other-user-pill-bg-color;
-        }
-
-        span.user-pill, span.room-pill {
-            height: 20px;
-            line-height: 20px;
-            border-radius: 16px;
-            display: inline-block;
+        span.mx_UserPill, span.mx_RoomPill {
             padding-left: 21px;
-            padding-right: 5px;
             position: relative;
 
+            // avatar psuedo element
             &::before {
                 position: absolute;
                 left: 2px;
