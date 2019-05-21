@@ -32,6 +32,10 @@ body {
     margin: 0px;
 }
 
+pre, code {
+    font-family: $monospace-font-family;
+}
+
 .error, .warning {
     color: $warning-color;
 }
@@ -443,15 +447,6 @@ textarea {
     padding: 9px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
-}
-
-.mx_emojione {
-    height: 1em;
-    vertical-align: middle;
-}
-
-.mx_emojione_selected {
-    background-color: $accent-color;
 }
 
 ::-moz-selection {

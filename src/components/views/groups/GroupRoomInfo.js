@@ -149,7 +149,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
@@ -221,7 +220,7 @@ module.exports = React.createClass({
                     </AccessibleButton>
                     { avatarElement }
 
-                    <EmojiText element="h2">{ groupRoomName }</EmojiText>
+                    <h2>{ groupRoomName }</h2>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">

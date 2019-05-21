@@ -166,7 +166,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
         const {
@@ -178,13 +177,13 @@ module.exports = React.createClass({
         if (imageUrl === this.state.defaultImageUrl) {
             const initialLetter = this._getInitialLetter(name);
             const textNode = (
-                <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
+                <span className="mx_BaseAvatar_initial" aria-hidden="true"
                     style={{ fontSize: (width * 0.65) + "px",
                     width: width + "px",
                     lineHeight: height + "px" }}
                 >
                     { initialLetter }
-                </EmojiText>
+                </span>
             );
             const imgNode = (
                 <img className="mx_BaseAvatar_image" src={imageUrl}

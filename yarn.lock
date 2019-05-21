@@ -2576,10 +2576,15 @@ emoji-regex@^7.0.1:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha512-CwBLREIQ7LvYFB0WyRvwhq5N5qPhc6PMjD6bYggFlI5YyDgl+0vxq5VHbMOFqLg7hfWzmu8T5Z1QofhmTIhItA==
 
-emojione@2.2.7:
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/emojione/-/emojione-2.2.7.tgz#46457cf6b9b2f8da13ae8a2e4e547de06ee15e96"
-  integrity sha1-RkV89rmy+NoTroouTlR94G7hXpY=
+emojibase-data@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-4.0.0.tgz#3feb3e5bb5e5f2b6373b183b0f038c60889a9e29"
+  integrity sha512-Yi4A1IxB7iZ+09Wqr2BEpHSQfugc5I8G+wckDOhCia0F7oOdErf/85jCwbpRQy7xtBbvlyS3xQrYedSeQot5Og==
+
+emojibase-regex@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-3.0.0.tgz#fc7a17aa20584df5a73619f06ac236b8a5bb452d"
+  integrity sha512-iNDkbtn8UxKTxjIlvHLqfXovZaIulnuuyo2/emU+ZlPr2OmzxGfiDI+iIQ3WWqdlA6lgjrPNWgpbytt4lnJYrg==
 
 emojis-list@^2.0.0:
   version "2.1.0"

@@ -342,7 +342,6 @@ module.exports = React.createClass({
             badge = <div className={badgeClasses}>{ badgeContent }</div>;
         }
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
         let subtextLabel;
         let tooltip;
@@ -354,14 +353,7 @@ module.exports = React.createClass({
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
-
-            if (this.state.selected) {
-                const nameSelected = <EmojiText>{ name }</EmojiText>;
-
-                label = <div title={name} className={nameClasses} dir="auto">{ nameSelected }</div>;
-            } else {
-                label = <EmojiText element="div" title={name} className={nameClasses} dir="auto">{ name }</EmojiText>;
-            }
+            label = <div title={name} className={nameClasses} dir="auto">{ name }</div>;
         } else if (this.state.hover) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;

@@ -15,22 +15,22 @@
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.
  */
 @font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 400;
-  src: url('$(res)/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url('$(res)/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 600;
-  src: url('$(res)/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    src: url('$(res)/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 700;
-  src: url('$(res)/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    src: url('$(res)/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
 }
 
 /*
@@ -50,4 +50,14 @@
     src: url('$(res)/fonts/Fira_Mono/FiraMono-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+}
+
+/* a COLR/CPAL version of Twemoji used for consistent cross-browser emoji
+ * taken from https://github.com/mozilla/twemoji-colr
+ * using the fix from https://github.com/mozilla/twemoji-colr/issues/50 to
+ * work on macOS
+ */
+@font-face {
+    font-family: "Twemoji Mozilla";
+    src: url('$(res)/fonts/Twemoji_Mozilla/TwemojiMozilla.woff2') format('woff2');
 }

@@ -473,7 +473,6 @@ module.exports = React.createClass({
             const MessageEditor = sdk.getComponent('elements.MessageEditor');
             return <MessageEditor event={this.props.mxEvent} />;
         }
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
@@ -512,12 +511,12 @@ module.exports = React.createClass({
                 return (
                     <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
-                        <EmojiText
+                        <span
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
                             { name }
-                        </EmojiText>
+                        </span>
                         &nbsp;
                         { body }
                         { widgets }
