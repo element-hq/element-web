@@ -114,6 +114,14 @@ textarea {
     color: $primary-fg-color;
 }
 
+// This is used to hide the standard outline added by browsers for
+// accessible (focusable) components. Not intended for buttons, but
+// should be used on things like focusable containers where the outline
+// is usually not helping anyone.
+.mx_HiddenFocusable {
+    outline: none;
+}
+
 // .mx_textinput is a container for a text input
 // + some other controls like buttons, ...
 // it has the appearance of a text box so the controls

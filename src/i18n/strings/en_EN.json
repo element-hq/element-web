@@ -1494,6 +1494,7 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "Failed to load timeline position": "Failed to load timeline position",
     "Guest": "Guest",
+    "Your profile": "Your profile",
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "Uploading %(filename)s and %(count)s others|zero": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",

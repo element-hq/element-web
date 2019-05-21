@@ -322,6 +322,18 @@ const LoggedInView = React.createClass({
                     handled = true;
                 }
                 break;
+            case KeyCode.KEY_I:
+                // Ideally this would be CTRL+P for "Profile", but that's
+                // taken by the print dialog. CTRL+I for "Information"
+                // will have to do.
+
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'toggle_top_left_menu',
+                    });
+                    handled = true;
+                }
+                break;
         }
 
         if (handled) {
