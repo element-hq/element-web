@@ -46,7 +46,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                 const { name } = room.getMember(reactionEvent.getSender());
                 senders.push(name);
             }
-            const shortName = unicodeToShortcode(content) || content;
+            const shortName = unicodeToShortcode(content);
             tooltipLabel = <div>{_t(
                 "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
                 {
@@ -59,6 +59,9 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                         </div>;
                     },
                     reactedWith: (sub) => {
+                        if (!shortName) {
+                            return null;
+                        }
                         return <div className="mx_ReactionsRowButtonTooltip_reactedWith">
                             {sub}
                         </div>;
