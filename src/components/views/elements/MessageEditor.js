@@ -27,6 +27,7 @@ import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 export default class MessageEditor extends React.Component {
     static propTypes = {
@@ -177,7 +178,7 @@ export default class MessageEditor extends React.Component {
             </div>;
         }
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return <div className="mx_MessageEditor">
+        return <div className={classNames("mx_MessageEditor", this.props.className)}>
                 { autoComplete }
                 <div
                     className="mx_MessageEditor_editor"

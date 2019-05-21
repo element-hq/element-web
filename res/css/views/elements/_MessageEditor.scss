@@ -20,7 +20,8 @@ limitations under the License.
     // this is to try not make the text move but still have some
     // padding around and in the editor.
     // Actual values from fiddling around in inspector
-    margin: -7px 24px -5px -10px;   // right margin: -10px + 34px
+    margin: -7px -10px -5px -10px;
+    overflow: visible !important;   // override mx_EventTile_content
 
     .mx_MessageEditor_editor {
         border-radius: 4px;
@@ -90,7 +91,7 @@ limitations under the License.
         z-index: 100;
         right: 0;
         margin: 0 -110px 0 0;
-        padding-right: 138px;
+        padding-right: 147px;
 
         .mx_AccessibleButton {
             margin-left: 5px;

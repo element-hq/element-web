@@ -471,7 +471,7 @@ module.exports = React.createClass({
     render: function() {
         if (this.props.isEditing) {
             const MessageEditor = sdk.getComponent('elements.MessageEditor');
-            return <MessageEditor event={this.props.mxEvent} />;
+            return <MessageEditor event={this.props.mxEvent} className="mx_EventTile_content" />;
         }
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const mxEvent = this.props.mxEvent;
