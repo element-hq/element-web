@@ -368,4 +368,9 @@ export const SETTINGS = {
         displayName: _td('Order rooms in the room list by most important first instead of most recent'),
         default: true,
     },
+    "showHiddenEventsInTimeline": {
+        displayName: _td("Show hidden events in timeline"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
 };

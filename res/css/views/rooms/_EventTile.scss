@@ -43,6 +43,10 @@ limitations under the License.
     padding-top: 0px ! important;
 }
 
+.mx_EventTile_isEditing {
+    background-color: $header-panel-bg-color;
+}
+
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
     font-size: 14px;
@@ -70,6 +74,10 @@ limitations under the License.
         margin-right: 2px;
         border-radius: 8px;
     }
+}
+
+.mx_EventTile_isEditing .mx_MessageTimestamp {
+    visibility: hidden !important;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
@@ -375,6 +383,14 @@ limitations under the License.
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon {
     display: block;
     left: 41px;
+}
+
+.mx_EventTile_content .mx_EventTile_edited {
+    user-select: none;
+    font-size: 12px;
+    color: $roomtopic-color;
+    display: inline-block;
+    margin-left: 9px;
 }
 
 /* Various markdown overrides */

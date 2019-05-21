@@ -16,17 +16,22 @@ limitations under the License.
 
 .mx_MessageEditor {
     border-radius: 4px;
-    background-color: $header-panel-bg-color;
-    padding: 11px 13px 7px 56px;
+    padding: 3px;
+    // this is to try not make the text move but still have some
+    // padding around and in the editor.
+    // Actual values from fiddling around in inspector
+    margin: -7px -10px -5px -10px;
 
     .mx_MessageEditor_editor {
         border-radius: 4px;
-        border: solid 1px #e9edf1;
-        background-color: #ffffff;
-        padding: 10px;
+        border: solid 1px $primary-hairline-color;
+        background-color: $primary-bg-color;
+        padding: 3px 6px;
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
+        max-height: 200px;
+        overflow-x: auto;
 
         span {
             display: inline-block;
@@ -48,8 +53,15 @@ limitations under the License.
     .mx_MessageEditor_buttons {
         display: flex;
         flex-direction: row;
-        justify-content: end;
-        padding: 5px 0;
+        justify-content: flex-end;
+        padding: 5px;
+        position: absolute;
+        left: 0;
+        background: $header-panel-bg-color;
+        z-index: 100;
+        right: 0;
+        margin: 0 -110px 0 0;
+        padding-right: 104px;
 
         .mx_AccessibleButton {
             margin-left: 5px;
@@ -61,4 +73,9 @@ limitations under the License.
         position: relative;
         height: 0;
     }
+}
+
+.mx_EventTile_last .mx_MessageEditor_buttons {
+    position: static;
+    margin-right: -103px;
 }

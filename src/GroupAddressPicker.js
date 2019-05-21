@@ -38,7 +38,7 @@ export function showGroupInviteDialog(groupId) {
         Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
             title: _t("Invite new community members"),
             description: description,
-            placeholder: _t("Name or matrix ID"),
+            placeholder: _t("Name or Matrix ID"),
             button: _t("Invite to Community"),
             validAddressTypes: ['mx-user-id'],
             onFinished: (success, addrs) => {

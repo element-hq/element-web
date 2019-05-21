@@ -108,6 +108,17 @@ function unicodeToImage(str, addAlt) {
 }
 
 /**
+ * Returns the shortcode for an emoji character.
+ *
+ * @param {String} char The emoji character
+ * @return {String} The shortcode (such as :thumbup:)
+ */
+export function unicodeToShort(char) {
+    const unicode = emojione.jsEscapeMap[char];
+    return emojione.mapUnicodeToShort()[unicode];
+}
+
+/**
  * Given one or more unicode characters (represented by unicode
  * character number), return an image node with the corresponding
  * emoji.
@@ -530,8 +541,8 @@ export function bodyToHtml(content, highlights, opts={}) {
     });
 
     return isDisplayedWithHtml ?
-        <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span className={className} dir="auto">{ strippedBody }</span>;
+        <span key="body" className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span key="body" className={className} dir="auto">{ strippedBody }</span>;
 }
 
 export function emojifyText(text, addAlt) {
