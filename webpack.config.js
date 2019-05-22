@@ -18,6 +18,10 @@ module.exports = {
         // CSS themes
         "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+
+        // twemoji fonts which need to be dynamically loaded
+        "twemoji-colr": "./node_modules/matrix-react-sdk/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2",
+        "twemoji-sbix": "./node_modules/matrix-react-sdk/res/fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2",
     },
     module: {
         rules: [
@@ -75,6 +79,15 @@ module.exports = {
                 // Use a content-based hash in the name so that we can set a long cache
                 // lifetime for assets while still delivering changes quickly.
                 oneOf: [
+                    {
+                        // allow runtime loading of twemoji (at the expense of cachebusting).
+                        resource: /TwemojiMozilla.*\.woff2$/,
+                        loader: 'file-loader',
+                        options: {
+                            name: 'fonts/[name].[ext]',
+                            outputPath: getImgOutputPath,
+                        },
+                    },
                     {
                         // Images referenced in CSS files
                         issuer: /\.(scss|css)$/,
