@@ -550,7 +550,7 @@ module.exports = withMatrixClient(React.createClass({
         // changes to DOM elements. As such, we hack a bunch of conditions together.
         //
         // Screen readers do not react well to aria attributes changing dynamically after
-        // parsing them. Although readers watch the DOM, the cannot react to aria-hidden
+        // parsing them. Although readers watch the DOM, they cannot react to aria-hidden
         // going from true to false. To work around that, we check to see if the eventSendStatus
         // is something worthwhile for us to read out. We specifically don't want to read
         // out pending/queued messages because they'll be read out again when they are sent.
@@ -568,7 +568,7 @@ module.exports = withMatrixClient(React.createClass({
         // which sent the event). This allows us to do a few checks on whether to speak:
         //  * If the event was sent by our user ID and the eventSendStatus is 'sent', then speak.
         //    We cannot check the transaction_id at this point because it is undefined. We can
-        //    make the assumption that 'sent' means this exact client is handling it though.
+        //    make the assumption that 'sent' means this exact device is handling it though.
         //  * If the event was sent by our user ID and the eventSendStatus is falsey (null), then
         //    only speak if the event was not sent by us (no transaction_id).
         //  * If the event was not sent by our user ID then speak.
@@ -580,7 +580,7 @@ module.exports = withMatrixClient(React.createClass({
         //
         // Hopefully all of that leads to us not reading out messages in duplicate or triplicate.
         const sentByMyUserId = this.props.mxEvent.getSender() === MatrixClientPeg.get().getUserId();
-        const sentByThisClient = !!this.props.mxEvent.getUnsigned()["transaction_id"];
+        const sentByThisDevice = !!this.props.mxEvent.getUnsigned()["transaction_id"];
         const screenReaderShouldSpeak = isSending ? false : (
             this.props.eventSendStatus
             ? sentByMyUserId && this.props.eventSendStatus === 'sent'
