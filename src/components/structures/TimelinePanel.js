@@ -556,6 +556,9 @@ const TimelinePanel = React.createClass({
     },
 
     onEventDecrypted: function(ev) {
+        // Can be null for the notification timeline, etc.
+        if (!this.props.timelineSet.room) return;
+
         // Need to update as we don't display event tiles for events that
         // haven't yet been decrypted. The event will have just been updated
         // in place so we just need to re-render.
