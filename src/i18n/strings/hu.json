@@ -1962,5 +1962,16 @@
     "Invalid base_url for m.homeserver": "Hibás base_url az m.homeserver -hez",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "A matrix URL nem tűnik érvényesnek",
     "Invalid base_url for m.identity_server": "Érvénytelen base_url az m.identity_server -hez",
-    "Identity server URL does not appear to be a valid identity server": "Az Azonosító szerver URL nem tűnik érvényesnek"
+    "Identity server URL does not appear to be a valid identity server": "Az Azonosító szerver URL nem tűnik érvényesnek",
+    "A conference call could not be started because the integrations server is not available": "A konferencia hívást nem lehet elkezdeni mert az integrációs szerver nem érhető el",
+    "Name or Matrix ID": "Név vagy Matrix azon.",
+    "Email, name or Matrix ID": "E-mail, név vagy Matrix azon.",
+    "Unbans user with given ID": "Visszaengedi a megadott azonosítójú felhasználót",
+    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>ezzel reagált: %(shortName)s</reactedWith>",
+    "Edited at %(date)s.": "Szerkesztve ekkor: %(date)s.",
+    "edited": "szerkesztve",
+    "Edited at %(date)s": "Szerkesztve: %(date)s",
+    "Show hidden events in timeline": "Rejtett események megmutatása az idővonalon",
+    "Add room": "Szoba hozzáadása",
+    "Your profile": "Profilod"
 }
