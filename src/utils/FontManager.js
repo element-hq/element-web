@@ -79,6 +79,8 @@ export async function fixupColorFonts() {
     if (await isColrFontSupported()) {
         const path = `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2")}')`;
         document.fonts.add(new FontFace("Twemoji", path, {}));
+        // For at least Chrome on Windows 10, we have to explictly add extra
+        // weights for the emoji to appear in bold messages, etc.
         document.fonts.add(new FontFace("Twemoji", path, { weight: 600 }));
         document.fonts.add(new FontFace("Twemoji", path, { weight: 700 }));
     }
