@@ -1052,6 +1052,7 @@
     "%(oneUser)schanged their avatar %(count)s times|one": "%(oneUser)schanged their avatar",
     "collapse": "collapse",
     "expand": "expand",
+    "Edit message": "Edit message",
     "Power level": "Power level",
     "Custom level": "Custom level",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
