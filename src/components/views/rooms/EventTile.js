@@ -636,8 +636,12 @@ module.exports = withMatrixClient(React.createClass({
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const timestamp = this.props.mxEvent.getTs() ?
-            <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
+        const timestamp = this.props.mxEvent.getTs()
+            ? <MessageTimestamp
+                showTwelveHour={this.props.isTwelveHour}
+                ts={this.props.mxEvent.getTs()}
+                ariaHidden={muteScreenReader}
+            /> : null;
 
         const keyRequestHelpText =
             <div className="mx_EventTile_keyRequestInfo_tooltip_contents">
@@ -781,7 +785,7 @@ module.exports = withMatrixClient(React.createClass({
                         </div>
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <a href={permalink} onClick={this.onPermalinkClicked} aria-hidden={muteScreenReader}>
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
