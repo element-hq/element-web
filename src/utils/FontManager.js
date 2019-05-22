@@ -31,7 +31,8 @@ async function isColrFontSupported() {
     // Firefox has supported COLR fonts since version 26
     // but doesn't support the check below with content blocking enabled.
     if (navigator.userAgent.includes("Firefox")) {
-        return true;
+        colrFontSupported = true;
+        return colrFontSupported;
     }
 
     try {
