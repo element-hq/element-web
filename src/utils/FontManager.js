@@ -78,9 +78,9 @@ export async function fixupColorFonts() {
     // we programatically add the right fontface.
     let font;
     if (await isColrFontSupported()) {
-        font = new FontFace("Twemoji", "url('../../fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2')", {});
+        font = new FontFace("Twemoji", `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2")}')`, {});
     } else {
-        font = new FontFace("Twemoji", "url('../../fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2')", {});
+        font = new FontFace("Twemoji", `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2")}')`, {});
     }
     document.fonts.add(font);
 }
