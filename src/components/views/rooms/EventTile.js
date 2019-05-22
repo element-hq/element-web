@@ -541,6 +541,8 @@ module.exports = withMatrixClient(React.createClass({
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
+        const muteScreenReader = isSending || !this.props.eventSendStatus;
+
         const classes = classNames({
             mx_EventTile: true,
             mx_EventTile_isEditing: this.props.isEditing,
@@ -597,9 +599,13 @@ module.exports = withMatrixClient(React.createClass({
         if (this.props.mxEvent.sender && avatarSize) {
             avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender}
+                        <MemberAvatar
+                            member={this.props.mxEvent.sender}
                             width={avatarSize} height={avatarSize}
                             viewUserOnClick={true}
+                            aria-hidden={true} /* silence screen readers */
+                            buttonRole={null} /* trick screen readers into thinking this is not a button */
+                            tabIndex={null} /* trick screen readers into thinking this is not a button */
                         />
                     </div>
             );
@@ -769,7 +775,7 @@ module.exports = withMatrixClient(React.createClass({
                     'replyThread',
                 );
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-hidden={muteScreenReader}>
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
@@ -793,7 +799,7 @@ module.exports = withMatrixClient(React.createClass({
                             { actionBar }
                         </div>
                         {
-                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // The avatar goes after the event tile as it's absolutely positioned to be over the
                             // event tile line, so needs to be later in the DOM so it appears on top (this avoids
                             // the need for further z-indexing chaos)
                         }
