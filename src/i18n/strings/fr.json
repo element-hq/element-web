@@ -1972,5 +1972,6 @@
     "Identity server URL does not appear to be a valid identity server": "L’URL du serveur d’identité ne semble pas être un serveur d’identité valide",
     "Edited at %(date)s": "Édité à %(date)s",
     "Show hidden events in timeline": "Afficher les évènements cachés dans l’historique",
-    "Your profile": "Votre profil"
+    "Your profile": "Votre profil",
+    "Add room": "Ajouter un salon"
 }
