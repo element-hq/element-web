@@ -789,7 +789,7 @@ module.exports = withMatrixClient(React.createClass({
                         </div>
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a href={permalink} onClick={this.onPermalinkClicked} aria-hidden={muteScreenReader}>
+                            <a href={permalink} onClick={this.onPermalinkClicked} aria-hidden={true}>
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
