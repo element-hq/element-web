@@ -96,6 +96,8 @@ module.exports = React.createClass({
     },
 
     _applyFormatting() {
+        this.activateSpoilers(this.refs.content.children);
+
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
@@ -181,6 +183,34 @@ module.exports = React.createClass({
                     this.setState({ widgetHidden: hidden });
                 }
             }
+        }
+    },
+
+    activateSpoilers: function(nodes) {
+        let node = nodes[0];
+        while (node) {
+            if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
+                const spoilerContainer = document.createElement('span');
+
+                const reason = node.getAttribute("data-mx-spoiler");
+                const Spoiler = sdk.getComponent('elements.Spoiler');
+                node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
+                const spoiler = <Spoiler
+                    reason={reason}
+                    contentHtml={node.outerHTML}
+                />;
+
+                ReactDOM.render(spoiler, spoilerContainer);
+                node.parentNode.replaceChild(spoilerContainer, node);
+
+                node = spoilerContainer;
+            }
+
+            if (node.childNodes && node.childNodes.length) {
+                this.activateSpoilers(node.childNodes);
+            }
+
+            node = node.nextSibling;
         }
     },
 

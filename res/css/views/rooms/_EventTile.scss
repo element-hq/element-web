@@ -280,6 +280,33 @@ limitations under the License.
     overflow-y: hidden;
 }
 
+/* Spoiler stuff */
+.mx_EventTile_spoiler {
+    cursor: pointer;
+}
+
+.mx_EventTile_spoiler_reason {
+    color: $event-timestamp-color;
+    font-size: 11px;
+}
+
+.mx_EventTile_spoiler_content {
+    background-color: black;
+}
+
+.mx_EventTile_spoiler_content > span {
+    visibility: hidden;
+}
+
+
+.mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content {
+    background-color: initial;
+}
+
+.mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content > span {
+    visibility: visible;
+}
+
 /* End to end encryption stuff */
 .mx_EventTile:hover .mx_EventTile_e2eIcon {
     opacity: 1;
