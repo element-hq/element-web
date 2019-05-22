@@ -29,31 +29,35 @@ async function isColrFontSupported() {
     }
 
     try {
-        let canvas = document.createElement('canvas');
-        let context = canvas.getContext('2d');
-        let img = new Image();
-        let fontCOLR = 'd09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==';
-        let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="100" style="background:#fff;fill:#000;">' +
-                      '<style type="text/css">'+
-                          '@font-face{font-family:"chromacheck-colr";src:url(data:application/x-font-woff;base64,'+fontCOLR+') format("woff");}'+
-                      '</style>'+
-                      '<text x="0" y="0" font-size="20">' +
-                          '<tspan font-family="chromacheck-colr" x="0" dy="20">&#xe900;</tspan>' + // COLR
-                      '</text>' +
-                  '</svg>';
-        canvas.width  = 20;
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const img = new Image();
+        // eslint-disable-next-line
+        const fontCOLR = 'd09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==';
+        const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="100" style="background:#fff;fill:#000;">
+            <style type="text/css">
+                @font-face {
+                    font-family: "chromacheck-colr";
+                    src: url(data:application/x-font-woff;base64,${fontCOLR}) format("woff");
+                }
+            </style>
+            <text x="0" y="0" font-size="20">
+                <tspan font-family="chromacheck-colr" x="0" dy="20">&#xe900;</tspan>
+            </text>
+        </svg>`;
+        canvas.width = 20;
         canvas.height = 100;
 
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 
         // FIXME wait for safari load our colr font
-        const wait = ms => new Promise((r, j)=>setTimeout(r, ms))
+        const wait = ms => new Promise((r, j)=>setTimeout(r, ms));
         await wait(500);
 
         context.drawImage(img, 0, 0);
         colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
-    }
-    catch (e) {
+    } catch (e) {
         console.error("Couldn't load colr font", e);
         colrFontSupported = false;
     }
@@ -69,8 +73,7 @@ export async function fixupColorFonts() {
     let font;
     if (await isColrFontSupported()) {
         font = new FontFace("Twemoji", "url('../../fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2')", {});
-    }
-    else {
+    } else {
         font = new FontFace("Twemoji", "url('../../fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2')", {});
     }
     document.fonts.add(font);
