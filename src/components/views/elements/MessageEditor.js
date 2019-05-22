@@ -187,6 +187,7 @@ export default class MessageEditor extends React.Component {
                     onInput={this._onInput}
                     onKeyDown={this._onKeyDown}
                     ref={ref => this._editorRef = ref}
+                    aria-label={_t("Edit message")}
                 ></div>
                 <div className="mx_MessageEditor_buttons">
                     <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
