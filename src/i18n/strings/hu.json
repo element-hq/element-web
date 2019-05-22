@@ -1971,5 +1971,7 @@
     "Edited at %(date)s.": "Szerkesztve ekkor: %(date)s.",
     "edited": "szerkesztve",
     "Edited at %(date)s": "Szerkesztve: %(date)s",
-    "Show hidden events in timeline": "Rejtett események megmutatása az idővonalon"
+    "Show hidden events in timeline": "Rejtett események megmutatása az idővonalon",
+    "Add room": "Szoba hozzáadása",
+    "Your profile": "Profilod"
 }
