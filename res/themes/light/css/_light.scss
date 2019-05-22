@@ -5,9 +5,9 @@
    Arial empirically gets it right, hence prioritising Arial here. */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
-$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Noto Color Emoji', Arial, Helvetica, Sans-Serif;
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Arial, Helvetica, Sans-Serif;
 
-$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Noto Color Emoji', Courier, monospace;
+$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Courier, monospace;
 
 // unified palette
 // try to use these colors when possible
