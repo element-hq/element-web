@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -201,6 +202,20 @@ module.exports = React.createClass({
             formVals: formVals,
             doingUIAuth: true,
         });
+    },
+
+    _requestEmailToken: function(emailAddress, clientSecret, sendAttempt, sessionId) {
+        return this._matrixClient.requestRegisterEmailToken(
+            emailAddress,
+            clientSecret,
+            sendAttempt,
+            this.props.makeRegistrationUrl({
+                client_secret: clientSecret,
+                hs_url: this._matrixClient.getHomeserverUrl(),
+                is_url: this._matrixClient.getIdentityServerUrl(),
+                session_id: sessionId,
+            }),
+        );
     },
 
     _onUIAuthFinished: async function(success, response, extra) {
@@ -424,7 +439,7 @@ module.exports = React.createClass({
                 makeRequest={this._makeRegisterRequest}
                 onAuthFinished={this._onUIAuthFinished}
                 inputs={this._getUIAuthInputs()}
-                makeRegistrationUrl={this.props.makeRegistrationUrl}
+                requestEmailToken={this._requestEmailToken}
                 sessionId={this.props.sessionId}
                 clientSecret={this.props.clientSecret}
                 emailSid={this.props.idSid}
