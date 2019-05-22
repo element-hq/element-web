@@ -5,11 +5,9 @@
    Arial empirically gets it right, hence prioritising Arial here. */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
-$font-family: Nunito, 'Twemoji Mozilla', Arial, Helvetica, Sans-Serif;
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Noto Color Emoji', Arial, Helvetica, Sans-Serif;
 
-// XXX: In theory this should be Fira, but it's a bit ugly.
-// TODO: make it consistent cross-browser
-$monospace-font-family: Consolas, 'Liberation Mono', Courier, 'Twemoji Mozilla', monospace;
+$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Noto Color Emoji', Courier, monospace;
 
 // unified palette
 // try to use these colors when possible
