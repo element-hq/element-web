@@ -1126,5 +1126,10 @@
     "Collapse panel": "Sakļaut (saritināt) paneli",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Tavā pašreizējā pārlūkā aplikācijas izskats un uzvedība var būt pilnīgi neatbilstoša, kā arī dažas no visām funkcijām var nedarboties. Ja vēlies turpināt izmantot šo pārlūku, Tu vari arī turpināt, apzinoties, ka šajā gadījumā esi viens/a ar iespējamo problēmu!",
     "Checking for an update...": "Lūkojos pēc aktualizācijas...",
-    "There are advanced notifications which are not shown here": "Pastāv papildus paziņojumi, kuri šeit netiek rādīti"
+    "There are advanced notifications which are not shown here": "Pastāv papildus paziņojumi, kuri šeit netiek rādīti",
+    "e.g. %(exampleValue)s": "piemēram %(exampleValue)s",
+    "e.g. <CurrentPageURL>": "piemēram <CurrentPageURL>",
+    "Your device resolution": "Tavas iekārtas izšķirtspēja",
+    "Sign In": "Ienākt",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Varat arī iestatīt pielāgotu identitātes serveri, bet jūs nevarēsiet uzaicināt lietotājus izmantojot e-pasta adresi, kā arī tikt uzaicināts pēc e-pasta adreses."
 }
