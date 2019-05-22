@@ -31,7 +31,8 @@ async function isColrFontSupported() {
     // Firefox has supported COLR fonts since version 26
     // but doesn't support the check below with content blocking enabled.
     if (navigator.userAgent.includes("Firefox")) {
-        return true;
+        colrFontSupported = true;
+        return colrFontSupported;
     }
 
     try {
@@ -75,15 +76,11 @@ export async function fixupColorFonts() {
         return;
     }
 
-    // we programatically add the right fontface.
-    let font;
     if (await isColrFontSupported()) {
-        font = new FontFace("Twemoji",
+        const font = new FontFace("Twemoji",
             `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2")}')`, {});
-    } else {
-        font = new FontFace("Twemoji",
-            `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2")}')`, {});
+        document.fonts.add(font);
     }
-    document.fonts.add(font);
+    // if not supported, the browser will fall back to one of the native fonts specified.
 }
 
