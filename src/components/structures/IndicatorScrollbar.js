@@ -129,7 +129,7 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
-            if (Math.abs(e.deltaX) < xyThreshold) {
+            if (Math.abs(e.deltaX) <= xyThreshold) {
                 // noinspection JSSuspiciousNameCombination
                 this._scrollElement.scrollLeft += e.deltaY * yRetention;
             }
