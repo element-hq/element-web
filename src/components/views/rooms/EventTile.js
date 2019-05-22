@@ -581,11 +581,14 @@ module.exports = withMatrixClient(React.createClass({
         // Hopefully all of that leads to us not reading out messages in duplicate or triplicate.
         const sentByMyUserId = this.props.mxEvent.getSender() === MatrixClientPeg.get().getUserId();
         const sentByThisDevice = !!this.props.mxEvent.getUnsigned()["transaction_id"];
-        const screenReaderShouldSpeak = isSending ? false : (
-            this.props.eventSendStatus
-            ? sentByMyUserId && this.props.eventSendStatus === 'sent'
-            : !sentByMyUserId || !sentByThisClient
-        );
+        let screenReaderShouldSpeak = false;
+        if (!isSending) {
+            if (this.props.eventSendStatus === 'sent') {
+                screenReaderShouldSpeak = sentByMyUserId;
+            } else if (!this.props.eventSendStatus) {
+                screenReaderShouldSpeak = !sentByMyUserId || !sentByThisDevice;
+            }
+        }
 
         const classes = classNames({
             mx_EventTile: true,
