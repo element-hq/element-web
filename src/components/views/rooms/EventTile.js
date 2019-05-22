@@ -32,6 +32,7 @@ import withMatrixClient from '../../../wrappers/withMatrixClient';
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -545,7 +546,46 @@ module.exports = withMatrixClient(React.createClass({
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
-        const muteScreenReader = isSending || !this.props.eventSendStatus;
+        // TLDR: Screen readers are complicated and can watch for new DOM elements, but not
+        // changes to DOM elements. As such, we hack a bunch of conditions together.
+        //
+        // Screen readers do not react well to aria attributes changing dynamically after
+        // parsing them. Although readers watch the DOM, the cannot react to aria-hidden
+        // going from true to false. To work around that, we check to see if the eventSendStatus
+        // is something worthwhile for us to read out. We specifically don't want to read
+        // out pending/queued messages because they'll be read out again when they are sent.
+        //
+        // There's a small annoyance with doing this though: if we can't change the aria attrs,
+        // we need to track the entry state for when the component mounts. As it stands, the
+        // EventTile is unmounted/mounted when going pending->sent, and then a simple properties
+        // change is made to mxEvent for sent->null (the final state). We abuse this cycle to
+        // mute the pending state and react on the sent state.
+        //
+        // However there's then a bug where readers don't read messages from other people (they
+        // enter the component as eventSendStatus of null) - to counteract this, we look for a
+        // transaction_id under the unsigned object of the event. According to the spec, we can
+        // use this to determine if an event was sent by us (as it's bound to the access token
+        // which sent the event). This allows us to do a few checks on whether to speak:
+        //  * If the event was sent by our user ID and the eventSendStatus is 'sent', then speak.
+        //    We cannot check the transaction_id at this point because it is undefined. We can
+        //    make the assumption that 'sent' means this exact client is handling it though.
+        //  * If the event was sent by our user ID and the eventSendStatus is falsey (null), then
+        //    only speak if the event was not sent by us (no transaction_id).
+        //  * If the event was not sent by our user ID then speak.
+        //
+        // Note: although NVDA (a screen reader) does react to aria-hidden changing, it does so
+        // in a horrible way. Because multiple properties and DOM elements are changing, it reads
+        // the message twice when we limit the 'should speak' checks to just 'if eventSendStatus
+        // is null'. This is part of the reason for the complexity above.
+        //
+        // Hopefully all of that leads to us not reading out messages in duplicate or triplicate.
+        const sentByMyUserId = this.props.mxEvent.getSender() === MatrixClientPeg.get().getUserId();
+        const sentByThisClient = !!this.props.mxEvent.getUnsigned()["transaction_id"];
+        const screenReaderShouldSpeak = isSending ? false : (
+            this.props.eventSendStatus
+            ? sentByMyUserId && this.props.eventSendStatus === 'sent'
+            : !sentByMyUserId || !sentByThisClient
+        );
 
         const classes = classNames({
             mx_EventTile: true,
@@ -644,7 +684,7 @@ module.exports = withMatrixClient(React.createClass({
             ? <MessageTimestamp
                 showTwelveHour={this.props.isTwelveHour}
                 ts={this.props.mxEvent.getTs()}
-                ariaHidden={muteScreenReader}
+                ariaHidden={!screenReaderShouldSpeak}
             /> : null;
 
         const keyRequestHelpText =
@@ -783,7 +823,7 @@ module.exports = withMatrixClient(React.createClass({
                     'replyThread',
                 );
                 return (
-                    <div className={classes} aria-hidden={muteScreenReader}>
+                    <div className={classes} aria-hidden={!screenReaderShouldSpeak}>
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
