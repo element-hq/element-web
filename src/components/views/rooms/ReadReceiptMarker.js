@@ -211,13 +211,11 @@ module.exports = React.createClass({
                 <MemberAvatar
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}
+                    aria-hidden="true"
                     width={14} height={14} resizeMethod="crop"
                     style={style}
                     title={title}
                     onClick={this.props.onClick}
-                    aria-hidden={true} /* silence screen readers */
-                    buttonRole={null} /* trick screen readers into thinking this is not a button */
-                    tabIndex={null} /* trick screen readers into thinking this is not a button */
                 />
             </Velociraptor>
         );
