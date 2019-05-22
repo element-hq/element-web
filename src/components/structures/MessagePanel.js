@@ -96,6 +96,9 @@ module.exports = React.createClass({
 
         // helper function to access relations for an event
         getRelationsForEvent: PropTypes.func,
+
+        // whether to show reactions for an event
+        showReactions: PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -541,6 +544,7 @@ module.exports = React.createClass({
                     last={last}
                     isSelectedEvent={highlight}
                     getRelationsForEvent={this.props.getRelationsForEvent}
+                    showReactions={this.props.showReactions}
                 />
             </li>,
         );

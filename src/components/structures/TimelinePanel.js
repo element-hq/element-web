@@ -106,6 +106,9 @@ const TimelinePanel = React.createClass({
 
         // placeholder text to use if the timeline is empty
         empty: PropTypes.string,
+
+        // whether to show reactions for an event
+        showReactions: PropTypes.bool,
     },
 
     statics: {
@@ -1261,6 +1264,7 @@ const TimelinePanel = React.createClass({
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
                 editEvent={this.state.editEvent}
+                showReactions={this.props.showReactions}
             />
         );
     },
