@@ -42,5 +42,8 @@
     "Create Account": "Създай акаунт",
     "Need help?": "Нужда от помощ?",
     "Explore rooms": "Открий стаи",
-    "Room Directory": "Директория със стаи"
+    "Room Directory": "Директория със стаи",
+    "Unexpected error preparing the app. See console for details.": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невалидна конфигурация: може да е указано само едно от: default_server_config, default_server_name, или default_hs_url.",
+    "Invalid configuration: no default server specified.": "Невалидна конфигурация: не е указан сървър по подразбиране."
 }
