@@ -1836,5 +1836,18 @@
     "Unbans user with given ID": "Riammette l'utente con l'ID dato",
     "Sends the given message coloured as a rainbow": "Invia il messaggio dato colorato come un arcobaleno",
     "Sends the given emote coloured as a rainbow": "Invia l'emoticon dato colorato come un arcobaleno",
-    "The user's homeserver does not support the version of the room.": "L'homeserver dell'utente non supporta la versione della stanza."
+    "The user's homeserver does not support the version of the room.": "L'homeserver dell'utente non supporta la versione della stanza.",
+    "Show recent room avatars above the room list": "Mostra gli avatar recenti della stanza sopra l'elenco stanze",
+    "Edit messages after they have been sent (refresh to apply changes)": "Modifica i messaggi dopo l'invio (ricarica per applicare le modifiche)",
+    "React to messages with emoji (refresh to apply changes)": "Reagisci ai messaggi con emoji (ricarica per applicare le modifiche)",
+    "Show hidden events in timeline": "Mostra eventi nascosti nella timeline",
+    "When rooms are upgraded": "Quando le stanze vengono aggiornate",
+    "This device is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Questo dispositivo <b>non sta facendo backup delle tue chiavi</b>, ma hai un backup esistente che puoi ripristinare e aggiungere da adesso in poi.",
+    "Connect this device to key backup before signing out to avoid losing any keys that may only be on this device.": "Connetti questo dispositivo al backup chiavi prima di disconnetterti per evitare di perdere chiavi che potrebbero essere solo in questo dispositivo.",
+    "Connect this device to Key Backup": "Connetti questo dispositibo al Backup Chiavi",
+    "Backup has an <validity>invalid</validity> signature from this device": "Il backup ha un firma <validity>non valida</validity> da questo dispositivo",
+    "this room": "questa stanza",
+    "View older messages in %(roomName)s.": "Vedi messaggi più vecchi in %(roomName)s.",
+    "Joining room …": "Ingresso nella stanza …",
+    "Loading …": "Caricamento …"
 }
