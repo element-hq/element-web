@@ -37,7 +37,7 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit käyttää edistyksellisiä asetuksia kirjautuaksesi muille Matrix palvelimille, määrittelemällä kotipalvelimen URL-osoitteen.<br/>Tämän avulla voit käyttää Riot:ia olemassa olevalla toisen Matrix palvelimen käyttäjätilillä.<br/><br/>Voit myös asettaa valinnaisen identiteettipalvelimen, mutta et voi kutsua käyttäjiä sähköpostiosoitteella tai tulla kutsutuksi.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Voit käyttää mukautettuja palvelinasetuksia kirjautuaksesi muihin Matrix-palvelimiin. Tämä mahdollistaa Riotin käyttämisen toisella kotipalvelimella olevalla Matrix-tilillä.",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit myös määrittää toisen identiteettipalvelimen, mutta et voi kutsua muita käyttäjiä sähköpostin perusteella tai saada itse kutsua sähköpostin perusteella.",
-    "Sign In": "Kirjaudu sisään",
+    "Sign In": "Kirjaudu",
     "Create Account": "Luo tili",
     "Need help?": "Tarvitsetko apua?",
     "Explore rooms": "Etsi huoneita",
