@@ -39,6 +39,8 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
+import {makeType} from "matrix-react-sdk/lib/utils/TypeUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/lib/utils/AutoDiscoveryUtils";
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -146,6 +148,13 @@ describe('loading:', function() {
         const config = Object.assign({
             default_hs_url: DEFAULT_HS_URL,
             default_is_url: DEFAULT_IS_URL,
+            validated_server_config: makeType(ValidatedServerConfig, {
+                hsUrl: DEFAULT_HS_URL,
+                hsName: "TEST_ENVIRONMENT",
+                hsNameIsDifferent: false, // yes, we lie
+                isUrl: DEFAULT_IS_URL,
+                identityEnabled: true,
+            }),
             embeddedPages: {
                 homeUrl: 'data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==',
             },
@@ -160,6 +169,7 @@ describe('loading:', function() {
                 <MatrixChat
                     onNewScreen={onNewScreen}
                     config={config}
+                    serverConfig={config.validated_server_config}
                     realQueryParams={params}
                     startingFragmentQueryParams={fragParts.params}
                     enableGuest={true}
@@ -616,10 +626,20 @@ describe('loading:', function() {
 
     // check that we have a Login component, send a 'user:pass' login,
     // and await the HTTP requests.
-    function completeLogin(matrixChat) {
+    async function completeLogin(matrixChat) {
         // we expect a single <Login> component
         const login = ReactTestUtils.findRenderedComponentWithType(
             matrixChat, sdk.getComponent('structures.auth.Login'));
+
+        // When we switch to the login component, it'll hit the login endpoint
+        // for proof of life and to get flows. We'll only give it one option.
+        httpBackend.when('GET', '/login')
+            .respond(200, {"flows": [{"type": "m.login.password"}]});
+        httpBackend.flush(); // We already would have tried the GET /login request
+
+        // Give the component some time to finish processing the login flows before
+        // continuing.
+        await Promise.delay(100);
 
         httpBackend.when('POST', '/login').check(function(req) {
             expect(req.data.type).toEqual('m.login.password');

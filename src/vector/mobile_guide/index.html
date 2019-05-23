@@ -4,6 +4,11 @@
 
 <style type="text/css">
 
+/* By default, hide the custom IS stuff - enabled in JS */
+#custom_is, #is_url {
+    display: none;
+}
+
 body {
     background: #c5e0f7;
     background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
@@ -109,6 +114,14 @@ body {
     margin: 20px;
 }
 
+.mx_HomePage_errorContainer {
+    display: none; /* shown in JS if needed */
+    margin: 20px;
+    border: 1px solid red;
+    background-color: #ffb9b9;
+    padding: 5px;
+}
+
 .mx_HomePage_container h1,
 .mx_HomePage_container h2,
 .mx_HomePage_container h3,
@@ -151,6 +164,10 @@ body {
 </head>
 
 <body>
+
+  <div class="mx_HomePage_errorContainer">
+    <!-- populated by JS if needed -->
+  </div>
 
   <div class="mx_HomePage_container">
       <div class="mx_HomePage_col mx_HomePage_header">
@@ -365,7 +382,9 @@ body {
               <p>Launch the app, and enable <strong>Use custom server options (advanced)</strong>.</p>
               <p class="mx_Spacer">In the homeserver field, enter:</p>
               <p><strong id="hs_url"></strong></p>
-              <p class="mx_Spacer"><em>Note: You shouldn&apos;t need to modify the identity server field, which by default is set to https://vector.im.</em></p>
+              <p class="mx_Spacer" id="default_is"><em>Note: You shouldn&apos;t need to modify the identity server field, which by default is set to https://vector.im.</em></p>
+              <p class="mx_Spacer" id="custom_is">In the identity server field, enter:</p>
+              <p><strong id="is_url"></strong></p>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,6 +45,9 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
+import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
+import {AutoDiscovery} from "matrix-js-sdk/lib/autodiscovery";
 
 import url from 'url';
 
@@ -341,22 +344,37 @@ async function loadApp() {
         const platform = PlatformPeg.get();
         platform.startUpdater();
 
-        const MatrixChat = sdk.getComponent('structures.MatrixChat');
-        window.matrixChat = ReactDOM.render(
-            <MatrixChat
-                onNewScreen={onNewScreen}
-                makeRegistrationUrl={makeRegistrationUrl}
-                ConferenceHandler={VectorConferenceHandler}
-                config={configJson}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragparts.params}
-                enableGuest={!configJson.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-            />,
-            document.getElementById('matrixchat'),
-        );
+        // Don't bother loading the app until the config is verified
+        verifyServerConfig().then((newConfig) => {
+            const MatrixChat = sdk.getComponent('structures.MatrixChat');
+            window.matrixChat = ReactDOM.render(
+                <MatrixChat
+                    onNewScreen={onNewScreen}
+                    makeRegistrationUrl={makeRegistrationUrl}
+                    ConferenceHandler={VectorConferenceHandler}
+                    config={newConfig}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragparts.params}
+                    enableGuest={!configJson.disable_guests}
+                    onTokenLoginCompleted={onTokenLoginCompleted}
+                    initialScreenAfterLogin={getScreenFromLocation(window.location)}
+                    defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+                />,
+                document.getElementById('matrixchat'),
+            );
+        }).catch(err => {
+            console.error(err);
+
+            const errorMessage = err.translatedMessage
+                || _t("Unexpected error preparing the app. See console for details.");
+
+            // Like the compatibility page, AWOOOOOGA at the user
+            const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+            window.matrixChat = ReactDOM.render(
+                <GenericErrorPage message={errorMessage} />,
+                document.getElementById('matrixchat'),
+            );
+        });
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
@@ -426,6 +444,70 @@ async function loadLanguage() {
     } catch (e) {
         console.error("Unable to set language", e);
     }
+}
+
+async function verifyServerConfig() {
+    console.log("Verifying homeserver configuration");
+
+    // Note: the query string may include is_url and hs_url - we only respect these in the
+    // context of email validation. Because we don't respect them otherwise, we do not need
+    // to parse or consider them here.
+
+    const config = SdkConfig.get();
+    let wkConfig = config['default_server_config']; // overwritten later under some conditions
+    const serverName = config['default_server_name'];
+    const hsUrl = config['default_hs_url'];
+    const isUrl = config['default_is_url'];
+
+    const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
+    if (incompatibleOptions.length > 1) {
+        throw newTranslatableError(_td(
+            "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+            "or default_hs_url.",
+        ));
+    }
+    if (incompatibleOptions.length < 1) {
+        throw newTranslatableError(_td("Invalid configuration: no default server specified."));
+    }
+
+    if (hsUrl) {
+        console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
+
+        wkConfig = {
+            "m.homeserver": {
+                "base_url": hsUrl,
+            },
+        };
+        if (isUrl) {
+            wkConfig["m.identity_server"] = {
+                "base_url": isUrl,
+            };
+        }
+    }
+
+    let result = null;
+
+    if (wkConfig) {
+        console.log("Config uses a default_server_config - validating object");
+        result = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
+    }
+
+    if (serverName) {
+        console.log("Config uses a default_server_name - doing .well-known lookup");
+        result = await AutoDiscovery.findClientConfig(serverName);
+    }
+
+    const validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
+    validatedConfig.isDefault = true;
+
+    // Just in case we ever have to debug this
+    console.log("Using homeserver config:", validatedConfig);
+
+    // Add the newly built config to the actual config for use by the app
+    console.log("Updating SdkConfig with validated discovery information");
+    SdkConfig.add({"validated_server_config": validatedConfig});
+
+    return SdkConfig.get();
 }
 
 loadApp();

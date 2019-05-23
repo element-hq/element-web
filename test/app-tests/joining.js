@@ -37,6 +37,8 @@ const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-addons-test-utils');
 const expect = require('expect');
 import Promise from 'bluebird';
+import {makeType} from "matrix-react-sdk/lib/utils/TypeUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/lib/utils/AutoDiscoveryUtils";
 
 const test_utils = require('../test-utils');
 const MockHttpBackend = require('matrix-mock-request');
@@ -96,8 +98,20 @@ describe('joining a room', function() {
 
             PlatformPeg.set(new WebPlatform());
 
+            const config = {
+                validated_server_config: makeType(ValidatedServerConfig, {
+                    hsUrl: HS_URL,
+                    hsName: "TEST_ENVIRONMENT",
+                    hsNameIsDifferent: false, // yes, we lie
+                    isUrl: IS_URL,
+                    identityEnabled: true,
+                }),
+            };
+
             const mc = (
-                <MatrixChat config={{}}
+                <MatrixChat
+                    config={config}
+                    serverConfig={config.validated_server_config}
                     makeRegistrationUrl={()=>{throw new Error("unimplemented");}}
                     initialScreenAfterLogin={{
                         screen: 'directory',
