@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 export default class MessageEditor extends React.Component {
     static propTypes = {
@@ -40,16 +42,17 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
         const partCreator = new PartCreator(
             () => this._autocompleteRef,
             query => this.setState({query}),
+            room,
         );
         this.model = new EditorModel(
-            parseEvent(this.props.event),
+            parseEvent(this.props.event, room),
             partCreator,
             this._updateEditorState,
         );
-        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
         this.state = {
             autoComplete: null,
             room,
@@ -176,7 +179,7 @@ export default class MessageEditor extends React.Component {
             </div>;
         }
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return <div className="mx_MessageEditor">
+        return <div className={classNames("mx_MessageEditor", this.props.className)}>
                 { autoComplete }
                 <div
                     className="mx_MessageEditor_editor"
@@ -185,6 +188,7 @@ export default class MessageEditor extends React.Component {
                     onInput={this._onInput}
                     onKeyDown={this._onKeyDown}
                     ref={ref => this._editorRef = ref}
+                    aria-label={_t("Edit message")}
                 ></div>
                 <div className="mx_MessageEditor_buttons">
                     <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>

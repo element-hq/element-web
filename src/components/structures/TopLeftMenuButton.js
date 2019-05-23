@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +24,8 @@ import BaseAvatar from '../views/avatars/BaseAvatar';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
+import dis from "../../dispatcher";
+import {focusCapturedRef} from "../../utils/Accessibility";
 
 const AVATAR_SIZE = 28;
 
@@ -37,6 +40,7 @@ export default class TopLeftMenuButton extends React.Component {
         super();
         this.state = {
             menuDisplayed: false,
+            menuFunctions: null, // should be { close: fn }
             profileInfo: null,
         };
 
@@ -59,6 +63,8 @@ export default class TopLeftMenuButton extends React.Component {
     }
 
     async componentDidMount() {
+        this._dispatcherRef = dis.register(this.onAction);
+
         try {
             const profileInfo = await this._getProfileInfo();
             this.setState({profileInfo});
@@ -67,6 +73,17 @@ export default class TopLeftMenuButton extends React.Component {
             console.error(ex);
         }
     }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    onAction = (payload) => {
+        // For accessibility
+        if (payload.action === "toggle_top_left_menu") {
+            if (this._buttonRef) this._buttonRef.click();
+        }
+    };
 
     _getDisplayName() {
         if (MatrixClientPeg.get().isGuest()) {
@@ -88,7 +105,13 @@ export default class TopLeftMenuButton extends React.Component {
         }
 
         return (
-            <AccessibleButton className="mx_TopLeftMenuButton" onClick={this.onToggleMenu}>
+            <AccessibleButton
+                className="mx_TopLeftMenuButton"
+                role="button"
+                onClick={this.onToggleMenu}
+                inputRef={(r) => this._buttonRef = r}
+                aria-label={_t("Your profile")}
+            >
                 <BaseAvatar
                     idName={MatrixClientPeg.get().getUserId()}
                     name={name}
@@ -98,7 +121,7 @@ export default class TopLeftMenuButton extends React.Component {
                     resizeMethod="crop"
                 />
                 { nameElement }
-                <span className="mx_TopLeftMenuButton_chevron"></span>
+                <span className="mx_TopLeftMenuButton_chevron" />
             </AccessibleButton>
         );
     }
@@ -107,20 +130,26 @@ export default class TopLeftMenuButton extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
+        if (this.state.menuDisplayed && this.state.menuFunctions) {
+            this.state.menuFunctions.close();
+            return;
+        }
+
         const elementRect = e.currentTarget.getBoundingClientRect();
         const x = elementRect.left;
         const y = elementRect.top + elementRect.height;
 
-        ContextualMenu.createMenu(TopLeftMenu, {
+        const menuFunctions = ContextualMenu.createMenu(TopLeftMenu, {
             chevronFace: "none",
             left: x,
             top: y,
             userId: MatrixClientPeg.get().getUserId(),
             displayName: this._getDisplayName(),
+            containerRef: focusCapturedRef, // Focus the TopLeftMenu on first render
             onFinished: () => {
-                this.setState({ menuDisplayed: false });
+                this.setState({ menuDisplayed: false, menuFunctions: null });
             },
         });
-        this.setState({ menuDisplayed: true });
+        this.setState({ menuDisplayed: true, menuFunctions });
     }
 }

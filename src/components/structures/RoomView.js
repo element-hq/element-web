@@ -1832,6 +1832,7 @@ module.exports = React.createClass({
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
+                showReactions={true}
             />);
 
         let topUnreadMessagesBar = null;

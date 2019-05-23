@@ -63,8 +63,12 @@ export default function AccessibleButton(props) {
         };
     }
 
-    restProps.tabIndex = restProps.tabIndex || "0";
-    restProps.role = "button";
+    // Pass through the ref - used for keyboard shortcut access to some buttons
+    restProps.ref = restProps.inputRef;
+    delete restProps.inputRef;
+
+    restProps.tabIndex = restProps.tabIndex === undefined ? "0" : restProps.tabIndex;
+    restProps.role = restProps.role === undefined ? "button" : restProps.role;
     restProps.className = (restProps.className ? restProps.className + " " : "") +
                           "mx_AccessibleButton";
 
@@ -89,6 +93,7 @@ export default function AccessibleButton(props) {
  */
 AccessibleButton.propTypes = {
     children: PropTypes.node,
+    inputRef: PropTypes.func,
     element: PropTypes.string,
     onClick: PropTypes.func.isRequired,
 

@@ -45,12 +45,18 @@ class FlairAvatar extends React.Component {
         const tooltip = this.props.groupProfile.name ?
             `${this.props.groupProfile.name} (${this.props.groupProfile.groupId})`:
             this.props.groupProfile.groupId;
+
+        // Note: we hide flair from screen readers but ideally we'd support
+        // reading something out on hover. There's no easy way to do this though,
+        // so instead we just hide it completely.
         return <img
             src={httpUrl}
             width="16"
             height="16"
             onClick={this.onClick}
-            title={tooltip} />;
+            title={tooltip}
+            aria-hidden={true}
+        />;
     }
 }
 

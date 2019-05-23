@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +16,9 @@ limitations under the License.
 */
 
 const React = require('react');
-const ReactDOM = require("react-dom");
 import { _t } from '../../languageHandler';
-const Matrix = require("matrix-js-sdk");
 const sdk = require('../../index');
 const MatrixClientPeg = require("../../MatrixClientPeg");
-const dis = require("../../dispatcher");
 
 /*
  * Component which shows the global notification list using a TimelinePanel
@@ -44,7 +42,7 @@ const NotificationPanel = React.createClass({
                     manageReadReceipts={false}
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
-                    showUrlPreview = {false}
+                    showUrlPreview={false}
                     tileShape="notif"
                     empty={_t('You have no visible notifications')}
                 />

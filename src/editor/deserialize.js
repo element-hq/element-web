@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ limitations under the License.
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { PlainPart, UserPillPart, RoomPillPart, NewlinePart } from "./parts";
 
-function parseHtmlMessage(html) {
+function parseHtmlMessage(html, room) {
     const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
@@ -37,8 +38,8 @@ function parseHtmlMessage(html) {
                         const resourceId = pillMatch[1]; // The room/user ID
                         const prefix = pillMatch[2]; // The first character of prefix
                         switch (prefix) {
-                            case "@": return new UserPillPart(resourceId, n.textContent);
-                            case "#": return new RoomPillPart(resourceId, n.textContent);
+                            case "@": return new UserPillPart(resourceId, n.textContent, room.getMember(resourceId));
+                            case "#": return new RoomPillPart(resourceId);
                             default: return new PlainPart(n.textContent);
                         }
                     }
@@ -54,10 +55,10 @@ function parseHtmlMessage(html) {
     return parts;
 }
 
-export function parseEvent(event) {
+export function parseEvent(event, room) {
     const content = event.getContent();
     if (content.format === "org.matrix.custom.html") {
-        return parseHtmlMessage(content.formatted_body || "");
+        return parseHtmlMessage(content.formatted_body || "", room);
     } else {
         const body = content.body || "";
         const lines = body.split("\n");

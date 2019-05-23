@@ -40,7 +40,12 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation {
-    padding-top: 0px ! important;
+    padding-top: 0px !important;
+
+    &.mx_EventTile_isEditing {
+        padding-top: 5px !important;
+        margin-top: -5px;
+    }
 }
 
 .mx_EventTile_isEditing {
@@ -116,7 +121,7 @@ limitations under the License.
 /* HACK to override line-height which is already marked important elsewhere */
 .mx_EventTile_bigEmoji.mx_EventTile_bigEmoji {
     font-size: 48px ! important;
-    line-height: 48px ! important;
+    line-height: 52px ! important;
 }
 
 /* this is used for the tile for the event which is selected via the URL.
@@ -157,8 +162,7 @@ limitations under the License.
 }
 
 .mx_EventTile_sending .mx_UserPill,
-.mx_EventTile_sending .mx_RoomPill,
-.mx_EventTile_sending .mx_emojione {
+.mx_EventTile_sending .mx_RoomPill {
     opacity: 0.5;
 }
 
@@ -420,6 +424,7 @@ limitations under the License.
 
 .mx_EventTile_content .markdown-body {
     pre, code {
+        font-family: $monospace-font-family ! important;
         // deliberate constants as we're behind an invert filter
         color: #333;
     }

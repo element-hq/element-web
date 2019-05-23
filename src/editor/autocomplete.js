@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,11 +18,12 @@ limitations under the License.
 import {UserPillPart, RoomPillPart, PlainPart} from "./parts";
 
 export default class AutocompleteWrapperModel {
-    constructor(updateCallback, getAutocompleterComponent, updateQuery) {
+    constructor(updateCallback, getAutocompleterComponent, updateQuery, room) {
         this._updateCallback = updateCallback;
         this._getAutocompleterComponent = getAutocompleterComponent;
         this._updateQuery = updateQuery;
         this._query = null;
+        this._room = room;
     }
 
     onEscape(e) {
@@ -83,7 +85,8 @@ export default class AutocompleteWrapperModel {
             case "@": {
                 const displayName = completion.completion;
                 const userId = completion.completionId;
-                return new UserPillPart(userId, displayName);
+                const member = this._room.getMember(userId);
+                return new UserPillPart(userId, displayName, member);
             }
             case "#": {
                 const displayAlias = completion.completionId;

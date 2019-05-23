@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 import {ContentRepo} from 'matrix-js-sdk';
 import MatrixClientPeg from './MatrixClientPeg';
+import DMRoomMap from './utils/DMRoomMap';
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
@@ -57,5 +58,72 @@ module.exports = {
             total += s.charCodeAt(i);
         }
         return require('../res/img/' + images[total % images.length] + '.png');
+    },
+
+    /**
+     * returns the first (non-sigil) character of 'name',
+     * converted to uppercase
+     * @param {string} name
+     * @return {string} the first letter
+     */
+    getInitialLetter(name) {
+        if (name.length < 1) {
+            return undefined;
+        }
+
+        let idx = 0;
+        const initial = name[0];
+        if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
+            idx++;
+        }
+
+        // string.codePointAt(0) would do this, but that isn't supported by
+        // some browsers (notably PhantomJS).
+        let chars = 1;
+        const first = name.charCodeAt(idx);
+
+        // check if it’s the start of a surrogate pair
+        if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
+            const second = name.charCodeAt(idx+1);
+            if (second >= 0xDC00 && second <= 0xDFFF) {
+                chars++;
+            }
+        }
+
+        const firstChar = name.substring(idx, idx+chars);
+        return firstChar.toUpperCase();
+    },
+
+    avatarUrlForRoom(room, width, height, resizeMethod) {
+        const explicitRoomAvatar = room.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
+            width,
+            height,
+            resizeMethod,
+            false,
+        );
+        if (explicitRoomAvatar) {
+            return explicitRoomAvatar;
+        }
+
+        let otherMember = null;
+        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        if (otherUserId) {
+            otherMember = room.getMember(otherUserId);
+        } else {
+            // if the room is not marked as a 1:1, but only has max 2 members
+            // then still try to show any avatar (pref. other member)
+            otherMember = room.getAvatarFallbackMember();
+        }
+        if (otherMember) {
+            return otherMember.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                width,
+                height,
+                resizeMethod,
+                false,
+            );
+        }
+        return null;
     },
 };

@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,7 +58,6 @@ import SettingsStore from "../../../settings/SettingsStore";
  *                         session to be failed and the process to go back to the start.
  * setEmailSid:            m.login.email.identity only: a function to be called with the
  *                         email sid after a token is requested.
- * makeRegistrationUrl     A function that makes a registration URL
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
@@ -365,45 +365,12 @@ export const EmailIdentityAuthEntry = React.createClass({
         stageState: PropTypes.object.isRequired,
         fail: PropTypes.func.isRequired,
         setEmailSid: PropTypes.func.isRequired,
-        makeRegistrationUrl: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             requestingToken: false,
         };
-    },
-
-    componentWillMount: function() {
-        if (this.props.stageState.emailSid === null) {
-            this.setState({requestingToken: true});
-            this._requestEmailToken().catch((e) => {
-                this.props.fail(e);
-            }).finally(() => {
-                this.setState({requestingToken: false});
-            }).done();
-        }
-    },
-
-    /*
-     * Requests a verification token by email.
-     */
-    _requestEmailToken: function() {
-        const nextLink = this.props.makeRegistrationUrl({
-            client_secret: this.props.clientSecret,
-            hs_url: this.props.matrixClient.getHomeserverUrl(),
-            is_url: this.props.matrixClient.getIdentityServerUrl(),
-            session_id: this.props.authSessionId,
-        });
-
-        return this.props.matrixClient.requestRegisterEmailToken(
-            this.props.inputs.emailAddress,
-            this.props.clientSecret,
-            1, // TODO: Multiple send attempts?
-            nextLink,
-        ).then((result) => {
-            this.props.setEmailSid(result.sid);
-        });
     },
 
     render: function() {

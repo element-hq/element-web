@@ -21,6 +21,7 @@ limitations under the License.
     // padding around and in the editor.
     // Actual values from fiddling around in inspector
     margin: -7px -10px -5px -10px;
+    overflow: visible !important;   // override mx_EventTile_content
 
     .mx_MessageEditor_editor {
         border-radius: 4px;
@@ -33,20 +34,28 @@ limitations under the License.
         max-height: 200px;
         overflow-x: auto;
 
-        span {
-            display: inline-block;
-            padding: 0 5px;
-            border-radius: 4px;
-            color: white;
-        }
+        span.mx_UserPill, span.mx_RoomPill {
+            padding-left: 21px;
+            position: relative;
 
-        span.user-pill, span.room-pill {
-            border-radius: 16px;
-            display: inline-block;
-            color: $primary-fg-color;
-            background-color: $other-user-pill-bg-color;
-            padding-left: 5px;
-            padding-right: 5px;
+            // avatar psuedo element
+            &::before {
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                content: var(--avatar-letter);
+                width: 16px;
+                height: 16px;
+                background: var(--avatar-background), $avatar-bg-color;
+                color: $avatar-initial-color;
+                background-repeat: no-repeat;
+                background-size: 16px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: normal;
+                line-height: 16px;
+                font-size: 10.4px;
+            }
         }
     }
 
@@ -61,7 +70,7 @@ limitations under the License.
         z-index: 100;
         right: 0;
         margin: 0 -110px 0 0;
-        padding-right: 104px;
+        padding-right: 147px;
 
         .mx_AccessibleButton {
             margin-left: 5px;
@@ -77,5 +86,5 @@ limitations under the License.
 
 .mx_EventTile_last .mx_MessageEditor_buttons {
     position: static;
-    margin-right: -103px;
+    margin-right: -147px;
 }

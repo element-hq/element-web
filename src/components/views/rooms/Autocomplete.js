@@ -256,8 +256,6 @@ export default class Autocomplete extends React.Component {
     }
 
     render() {
-        const EmojiText = sdk.getComponent('views.elements.EmojiText');
-
         let position = 1;
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
             const completions = completionResult.completions.map((completion, i) => {
@@ -282,7 +280,7 @@ export default class Autocomplete extends React.Component {
 
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">
-                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</EmojiText>
+                    <div className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</div>
                     { completionResult.provider.renderCompletions(completions) }
                 </div>
             ) : null;

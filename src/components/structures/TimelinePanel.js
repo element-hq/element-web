@@ -106,6 +106,9 @@ const TimelinePanel = React.createClass({
 
         // placeholder text to use if the timeline is empty
         empty: PropTypes.string,
+
+        // whether to show reactions for an event
+        showReactions: PropTypes.bool,
     },
 
     statics: {
@@ -553,6 +556,9 @@ const TimelinePanel = React.createClass({
     },
 
     onEventDecrypted: function(ev) {
+        // Can be null for the notification timeline, etc.
+        if (!this.props.timelineSet.room) return;
+
         // Need to update as we don't display event tiles for events that
         // haven't yet been decrypted. The event will have just been updated
         // in place so we just need to re-render.
@@ -1261,6 +1267,7 @@ const TimelinePanel = React.createClass({
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
                 editEvent={this.state.editEvent}
+                showReactions={this.props.showReactions}
             />
         );
     },
