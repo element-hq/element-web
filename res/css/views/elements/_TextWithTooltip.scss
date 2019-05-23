@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,29 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ServerConfig_fields {
-    display: flex;
-    margin: 1em 0;
-}
-
-.mx_ServerConfig_fields .mx_Field {
-    flex: 1;
-    margin: 0 5px;
-}
-
-.mx_ServerConfig_fields .mx_Field:first-child {
-    margin-left: 0;
-}
-
-.mx_ServerConfig_fields .mx_Field:last-child {
-    margin-right: 0;
-}
-
-.mx_ServerConfig_help:link {
-    opacity: 0.8;
-}
-
-.mx_ServerConfig_error {
-    display: block;
-    color: $warning-color;
+.mx_TextWithTooltip_tooltip {
+    display: none;
 }

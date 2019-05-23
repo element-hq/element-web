@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,11 +22,29 @@ import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 /**
  * A pure UI component which displays a username/password form.
  */
-class PasswordLogin extends React.Component {
+export default class PasswordLogin extends React.Component {
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired, // fn(username, password)
+        onError: PropTypes.func,
+        onForgotPasswordClick: PropTypes.func, // fn()
+        initialUsername: PropTypes.string,
+        initialPhoneCountry: PropTypes.string,
+        initialPhoneNumber: PropTypes.string,
+        initialPassword: PropTypes.string,
+        onUsernameChanged: PropTypes.func,
+        onPhoneCountryChanged: PropTypes.func,
+        onPhoneNumberChanged: PropTypes.func,
+        onPasswordChanged: PropTypes.func,
+        loginIncorrect: PropTypes.bool,
+        disableSubmit: PropTypes.bool,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+    };
+
     static defaultProps = {
         onError: function() {},
         onEditServerDetailsClick: null,
@@ -40,13 +59,12 @@ class PasswordLogin extends React.Component {
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
-        // This is optional and only set if we used a server name to determine
-        // the HS URL via `.well-known` discovery. The server name is used
-        // instead of the HS URL when talking about where to "sign in to".
-        hsName: null,
-        hsUrl: "",
         disableSubmit: false,
-    }
+    };
+
+    static LOGIN_FIELD_EMAIL = "login_field_email";
+    static LOGIN_FIELD_MXID = "login_field_mxid";
+    static LOGIN_FIELD_PHONE = "login_field_phone";
 
     constructor(props) {
         super(props);
@@ -195,7 +213,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     label={SdkConfig.get().disable_custom_urls ?
                         _t("Username on %(hs)s", {
-                            hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
+                            hs: this.props.serverConfig.hsName,
                         }) : _t("Username")}
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
@@ -258,20 +276,22 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let signInToText = _t('Sign in to your Matrix account');
-        if (this.props.hsName) {
-            signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
-                serverName: this.props.hsName,
+        let signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            signInToText = _t('Sign in to your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                // ignore
-            }
         }
 
         let editLink = null;
@@ -353,27 +373,3 @@ class PasswordLogin extends React.Component {
         );
     }
 }
-
-PasswordLogin.LOGIN_FIELD_EMAIL = "login_field_email";
-PasswordLogin.LOGIN_FIELD_MXID = "login_field_mxid";
-PasswordLogin.LOGIN_FIELD_PHONE = "login_field_phone";
-
-PasswordLogin.propTypes = {
-    onSubmit: PropTypes.func.isRequired, // fn(username, password)
-    onError: PropTypes.func,
-    onForgotPasswordClick: PropTypes.func, // fn()
-    initialUsername: PropTypes.string,
-    initialPhoneCountry: PropTypes.string,
-    initialPhoneNumber: PropTypes.string,
-    initialPassword: PropTypes.string,
-    onUsernameChanged: PropTypes.func,
-    onPhoneCountryChanged: PropTypes.func,
-    onPhoneNumberChanged: PropTypes.func,
-    onPasswordChanged: PropTypes.func,
-    loginIncorrect: PropTypes.bool,
-    hsName: PropTypes.string,
-    hsUrl: PropTypes.string,
-    disableSubmit: PropTypes.bool,
-};
-
-module.exports = PasswordLogin;

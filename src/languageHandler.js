@@ -32,6 +32,18 @@ counterpart.setSeparator('|');
 // Fall back to English
 counterpart.setFallbackLocale('en');
 
+/**
+ * Helper function to create an error which has an English message
+ * with a translatedMessage property for use by the consumer.
+ * @param {string} message Message to translate.
+ * @returns {Error} The constructed error.
+ */
+export function newTranslatableError(message) {
+    const error = new Error(message);
+    error.translatedMessage = _t(message);
+    return error;
+}
+
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
 export function _td(s) {

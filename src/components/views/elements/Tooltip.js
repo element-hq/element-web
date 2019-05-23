@@ -79,6 +79,10 @@ module.exports = React.createClass({
         let offset = 0;
         if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
             offset = Math.floor((parentBox.height - MIN_TOOLTIP_HEIGHT) / 2);
+        } else {
+            // The tooltip is larger than the parent height: figure out what offset
+            // we need so that we're still centered.
+            offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
         }
         style.top = (parentBox.top - 2) + window.pageYOffset + offset;
         style.left = 6 + parentBox.right + window.pageXOffset;
