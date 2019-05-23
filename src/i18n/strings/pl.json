@@ -1435,5 +1435,11 @@
     "Begin Verifying": "Rozpocznij weryfikację",
     "Waiting for partner to accept...": "Czekanie, aż partner zaakceptuje…",
     "Room Settings - %(roomName)s": "Ustawienia pokoju - %(roomName)s",
-    "Doesn't look like a valid phone number": "To nie wygląda na poprawny numer telefonu"
+    "Doesn't look like a valid phone number": "To nie wygląda na poprawny numer telefonu",
+    "Globe": "Ziemia",
+    "Smiley": "Uśmiech",
+    "Spanner": "Klucz francuski",
+    "Santa": "Mikołaj",
+    "Gift": "Prezent",
+    "Hammer": "Młotek"
 }

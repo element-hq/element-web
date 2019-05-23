@@ -1490,7 +1490,7 @@
     "The other party cancelled the verification.": "L'autre personne a annulé la vérification.",
     "Verified!": "Vérifié !",
     "You've successfully verified this user.": "Vous avez vérifié cet utilisateur avec succès.",
-    "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Les messages sécurisés avec cet utilisateur sont chiffrés de bout en bout et ne peuvent être lus par personne d'autre.",
+    "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Les messages sécurisés avec cet utilisateur sont chiffrés de bout en bout et ne peuvent être lus par d’autres personnes.",
     "Got It": "Compris",
     "Verify this user by confirming the following number appears on their screen.": "Vérifier cet utilisateur en confirmant que le nombre suivant apparaît sur leur écran.",
     "For maximum security, we reccommend you do this in person or use another trusted means of communication.": "Pour une sécurité maximale, nous recommandons que vous fassiez cela en personne ou que vous utilisiez un autre moyen sûr de communication.",
@@ -1569,7 +1569,7 @@
     "Begin Verifying": "Commencer la vérification",
     "Waiting for partner to accept...": "Nous attendons que le partenaire accepte…",
     "Use two-way text verification": "Utiliser la vérification textuelle bidirectionnelle",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Vérifier cet utilisateur pour que ce soit un utilisateur de confiance. Faire confiance aux utilisateurs vous apporte la tranquillité d'esprit quand vous utilisez des messages chiffrés de bout en bout.",
+    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Vérifier cet utilisateur pour que ce soit un utilisateur de confiance. Faire confiance aux utilisateurs vous apporte une tranquillité d’esprit quand vous utilisez des messages chiffrés de bout en bout.",
     "Verifying this user will mark their device as trusted, and also mark your device as trusted to them.": "En vérifiant cet utilisateur, son appareil sera marqué comme appareil de confiance, et le vôtre sera aussi marqué comme appareil de confiance pour lui.",
     "Waiting for partner to confirm...": "Nous attendons que le partenaire confirme…",
     "Incoming Verification Request": "Demande de vérification entrante",
@@ -1973,5 +1973,6 @@
     "Edited at %(date)s": "Édité à %(date)s",
     "Show hidden events in timeline": "Afficher les évènements cachés dans l’historique",
     "Your profile": "Votre profil",
-    "Add room": "Ajouter un salon"
+    "Add room": "Ajouter un salon",
+    "Edit message": "Éditer le message"
 }

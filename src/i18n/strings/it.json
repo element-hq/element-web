@@ -1822,5 +1822,19 @@
     "Riot failed to get the public room list.": "Riot non è riuscito ad ottenere l'elenco di stanze pubbliche.",
     "The homeserver may be unavailable or overloaded.": "L'homeserver potrebbe non essere disponibile o sovraccarico.",
     "You have %(count)s unread notifications in a prior version of this room.|other": "Hai %(count)s notifiche non lette in una versione precedente di questa stanza.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Hai %(count)s notifiche non lette in una versione precedente di questa stanza."
+    "You have %(count)s unread notifications in a prior version of this room.|one": "Hai %(count)s notifiche non lette in una versione precedente di questa stanza.",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Che tu stia usando o meno la funzione 'breadcrumbs' (avatar sopra l'elenco delle stanze)",
+    "A conference call could not be started because the integrations server is not available": "Non è stato possibile avviare una conferenza perchè il server di integrazione non è disponibile",
+    "Replying With Files": "Risposta con dei file",
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Al momento non è possibile rispondere con un file. Vorresti inviare questo file senza rispondere?",
+    "The file '%(fileName)s' failed to upload.": "Invio del file '%(fileName)s' fallito.",
+    "The server does not support the room version specified.": "Il server non supporta la versione di stanza specificata.",
+    "Name or Matrix ID": "Nome o ID Matrix",
+    "Email, name or Matrix ID": "Email, nome o ID Matrix",
+    "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Conferma di volere continuare nell'aggiornamento di questa stanza dalla <oldVersion /> alla <newVersion />.",
+    "Changes your avatar in this current room only": "Cambia il tuo avatar solo nella stanza attuale",
+    "Unbans user with given ID": "Riammette l'utente con l'ID dato",
+    "Sends the given message coloured as a rainbow": "Invia il messaggio dato colorato come un arcobaleno",
+    "Sends the given emote coloured as a rainbow": "Invia l'emoticon dato colorato come un arcobaleno",
+    "The user's homeserver does not support the version of the room.": "L'homeserver dell'utente non supporta la versione della stanza."
 }
