@@ -1796,5 +1796,10 @@
     "Upload %(count)s other files|other": "%(count)s overige bestanden uploaden",
     "Upload %(count)s other files|one": "%(count)s overig bestand uploaden",
     "Cancel All": "Alles annuleren",
-    "Upload Error": "Uploadfout"
+    "Upload Error": "Uploadfout",
+    "A conference call could not be started because the integrations server is not available": "Daar de integratieserver onbereikbaar is kon het groepsaudiogesprek niet gestart worden.",
+    "The server does not support the room version specified.": "De server ondersteunt deze versie van gesprekken niet.",
+    "Name or Matrix ID": "Naam of Matrix-ID",
+    "Email, name or Matrix ID": "E-mail, naam, of matrix-ID",
+    "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Bevestig dat u dit gesprek van <oldVersion /> wilt opwaarderen naar <newVersion />."
 }
