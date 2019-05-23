@@ -1875,5 +1875,13 @@
     "Riot failed to get the public room list.": "Riot не успя да вземе списъка с публични стаи.",
     "The homeserver may be unavailable or overloaded.": "Сървърът може да не е наличен или претоварен.",
     "You have %(count)s unread notifications in a prior version of this room.|other": "Имате %(count)s непрочетени известия в предишна версия на тази стая.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Имате %(count)s непрочетено известие в предишна версия на тази стая."
+    "You have %(count)s unread notifications in a prior version of this room.|one": "Имате %(count)s непрочетено известие в предишна версия на тази стая.",
+    "A conference call could not be started because the integrations server is not available": "Не може да бъде започнат конферентен разговор, защото сървърът за интеграции не е достъпен",
+    "The server does not support the room version specified.": "Сървърът не поддържа указаната версия на стая.",
+    "Name or Matrix ID": "Име или Matrix идентификатор",
+    "Email, name or Matrix ID": "Имейл, име или Matrix идентификатор",
+    "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Потвърдете, че искате да обновите стаята от <oldVersion /> до <newVersion />.",
+    "Changes your avatar in this current room only": "Променя снимката Ви само в тази стая",
+    "Unbans user with given ID": "Премахва блокирането на потребител с даден идентификатор",
+    "Sends the given message coloured as a rainbow": "Изпраща текущото съобщение оцветено като дъга"
 }
