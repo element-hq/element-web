@@ -469,7 +469,7 @@ export function bodyToHtml(content, highlights, opts={}) {
     const className = classNames({
         'mx_EventTile_body': true,
         'mx_EventTile_bigEmoji': emojiBody,
-        'markdown-body': isHtmlMessage,
+        'markdown-body': isHtmlMessage && !emojiBody,
     });
 
     return isDisplayedWithHtml ?
