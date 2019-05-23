@@ -32,6 +32,7 @@ import withMatrixClient from '../../../wrappers/withMatrixClient';
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -545,6 +546,50 @@ module.exports = withMatrixClient(React.createClass({
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
+        // TLDR: Screen readers are complicated and can watch for new DOM elements, but not
+        // changes to DOM elements. As such, we hack a bunch of conditions together.
+        //
+        // Screen readers do not react well to aria attributes changing dynamically after
+        // parsing them. Although readers watch the DOM, they cannot react to aria-hidden
+        // going from true to false. To work around that, we check to see if the eventSendStatus
+        // is something worthwhile for us to read out. We specifically don't want to read
+        // out pending/queued messages because they'll be read out again when they are sent.
+        //
+        // There's a small annoyance with doing this though: if we can't change the aria attrs,
+        // we need to track the entry state for when the component mounts. As it stands, the
+        // EventTile is unmounted/mounted when going pending->sent, and then a simple properties
+        // change is made to mxEvent for sent->null (the final state). We abuse this cycle to
+        // mute the pending state and react on the sent state.
+        //
+        // However there's then a bug where readers don't read messages from other people (they
+        // enter the component as eventSendStatus of null) - to counteract this, we look for a
+        // transaction_id under the unsigned object of the event. According to the spec, we can
+        // use this to determine if an event was sent by us (as it's bound to the access token
+        // which sent the event). This allows us to do a few checks on whether to speak:
+        //  * If the event was sent by our user ID and the eventSendStatus is 'sent', then speak.
+        //    We cannot check the transaction_id at this point because it is undefined. We can
+        //    make the assumption that 'sent' means this exact device is handling it though.
+        //  * If the event was sent by our user ID and the eventSendStatus is falsey (null), then
+        //    only speak if the event was not sent by us (no transaction_id).
+        //  * If the event was not sent by our user ID then speak.
+        //
+        // Note: although NVDA (a screen reader) does react to aria-hidden changing, it does so
+        // in a horrible way. Because multiple properties and DOM elements are changing, it reads
+        // the message twice when we limit the 'should speak' checks to just 'if eventSendStatus
+        // is null'. This is part of the reason for the complexity above.
+        //
+        // Hopefully all of that leads to us not reading out messages in duplicate or triplicate.
+        const sentByMyUserId = this.props.mxEvent.getSender() === MatrixClientPeg.get().getUserId();
+        const sentByThisDevice = !!this.props.mxEvent.getUnsigned()["transaction_id"];
+        let screenReaderShouldSpeak = false;
+        if (!isSending) {
+            if (this.props.eventSendStatus === 'sent') {
+                screenReaderShouldSpeak = sentByMyUserId;
+            } else if (!this.props.eventSendStatus) {
+                screenReaderShouldSpeak = !sentByMyUserId || !sentByThisDevice;
+            }
+        }
+
         const classes = classNames({
             mx_EventTile: true,
             mx_EventTile_isEditing: this.props.isEditing,
@@ -601,9 +646,13 @@ module.exports = withMatrixClient(React.createClass({
         if (this.props.mxEvent.sender && avatarSize) {
             avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender}
+                        <MemberAvatar
+                            member={this.props.mxEvent.sender}
                             width={avatarSize} height={avatarSize}
                             viewUserOnClick={true}
+                            aria-hidden={true} /* silence screen readers */
+                            buttonRole={null} /* trick screen readers into thinking this is not a button */
+                            tabIndex={null} /* trick screen readers into thinking this is not a button */
                         />
                     </div>
             );
@@ -634,8 +683,12 @@ module.exports = withMatrixClient(React.createClass({
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const timestamp = this.props.mxEvent.getTs() ?
-            <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
+        const timestamp = this.props.mxEvent.getTs()
+            ? <MessageTimestamp
+                showTwelveHour={this.props.isTwelveHour}
+                ts={this.props.mxEvent.getTs()}
+                ariaHidden={!screenReaderShouldSpeak}
+            /> : null;
 
         const keyRequestHelpText =
             <div className="mx_EventTile_keyRequestInfo_tooltip_contents">
@@ -773,13 +826,13 @@ module.exports = withMatrixClient(React.createClass({
                     'replyThread',
                 );
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-hidden={!screenReaderShouldSpeak}>
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <a href={permalink} onClick={this.onPermalinkClicked} aria-hidden={true}>
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
@@ -797,7 +850,7 @@ module.exports = withMatrixClient(React.createClass({
                             { actionBar }
                         </div>
                         {
-                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // The avatar goes after the event tile as it's absolutely positioned to be over the
                             // event tile line, so needs to be later in the DOM so it appears on top (this avoids
                             // the need for further z-indexing chaos)
                         }
