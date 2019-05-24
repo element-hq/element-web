@@ -74,7 +74,6 @@ async function isColrFontSupported() {
         colrFontSupported = false;
     }
 
-    console.log({colrFontSupported});
     return colrFontSupported;
 }
 
