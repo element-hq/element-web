@@ -60,6 +60,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
+import { findPreviousEditableEvent } from '../../../utils/EventUtils';
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -1188,14 +1189,16 @@ export default class MessageComposerInput extends React.Component {
             // and we must be at the edge of the document (up=start, down=end)
             if (up) {
                 if (!selection.anchor.isAtStartOfNode(document)) return;
-            } else {
-                if (!selection.anchor.isAtEndOfNode(document)) return;
-            }
 
-            const selected = this.selectHistory(up);
-            if (selected) {
-                // We're selecting history, so prevent the key event from doing anything else
-                e.preventDefault();
+                const editEvent = findPreviousEditableEvent(this.props.room);
+                if (editEvent) {
+                    // We're selecting history, so prevent the key event from doing anything else
+                    e.preventDefault();
+                    dis.dispatch({
+                        action: 'edit_event',
+                        event: editEvent,
+                    });
+                }
             }
         } else {
             this.moveAutocompleteSelection(up);

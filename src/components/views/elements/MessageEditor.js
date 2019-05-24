@@ -23,6 +23,7 @@ import EditorModel from '../../../editor/model';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
+import {findPreviousEditableEvent, findNextEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
@@ -42,7 +43,7 @@ export default class MessageEditor extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        const room = this.context.matrixClient.getRoom(this.props.event.getRoomId());
+        const room = this._getRoom();
         const partCreator = new PartCreator(
             () => this._autocompleteRef,
             query => this.setState({query}),
@@ -61,6 +62,10 @@ export default class MessageEditor extends React.Component {
         this._autocompleteRef = null;
     }
 
+    _getRoom() {
+        return this.context.matrixClient.getRoom(this.props.event.getRoomId());
+    }
+
     _updateEditorState = (caret) => {
         renderModel(this._editorRef, this.model);
         if (caret) {
@@ -77,6 +82,16 @@ export default class MessageEditor extends React.Component {
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.model.update(text, event.inputType, caret);
+    }
+
+    _isCaretAtStart() {
+        const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
+        return caret.offset === 0;
+    }
+
+    _isCaretAtEnd() {
+        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
+        return caret.offset === text.length;
     }
 
     _onKeyDown = (event) => {
@@ -112,6 +127,27 @@ export default class MessageEditor extends React.Component {
             event.preventDefault();
         } else if (event.key === "Escape") {
             this._cancelEdit();
+        } else if (event.key === "ArrowUp") {
+            if (!this._isCaretAtStart()) {
+                return;
+            }
+            const previousEvent = findPreviousEditableEvent(this._getRoom(), this.props.event.getId());
+            if (previousEvent) {
+                dis.dispatch({action: 'edit_event', event: previousEvent});
+                event.preventDefault();
+            }
+        } else if (event.key === "ArrowDown") {
+            if (!this._isCaretAtEnd()) {
+                return;
+            }
+            const nextEvent = findNextEditableEvent(this._getRoom(), this.props.event.getId());
+            if (nextEvent) {
+                dis.dispatch({action: 'edit_event', event: nextEvent});
+            } else {
+                dis.dispatch({action: 'edit_event', event: null});
+                dis.dispatch({action: 'focus_composer'});
+            }
+            event.preventDefault();
         }
     }
 
