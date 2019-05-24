@@ -1927,5 +1927,11 @@
     "Invalid base_url for m.homeserver": "Base_url per m.homeserver non valido",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "L'URL dell'homeserver non sembra essere un homeserver Matrix valido",
     "Invalid base_url for m.identity_server": "Base_url per m.identity_server non valido",
-    "Identity server URL does not appear to be a valid identity server": "L'URL del server di identità non sembra essere un server di identità valido"
+    "Identity server URL does not appear to be a valid identity server": "L'URL del server di identità non sembra essere un server di identità valido",
+    "No homeserver URL provided": "Nessun URL homeserver fornito",
+    "Unexpected error resolving homeserver configuration": "Errore inaspettato nella risoluzione della configurazione homeserver",
+    "Unable to validate homeserver/identity server": "Impossibile validare l'homeserver/il server di identità",
+    "Sign in to your Matrix account on <underlinedServerName />": "Accedi al tuo account Matrix su <underlinedServerName />",
+    "Create your Matrix account on <underlinedServerName />": "Crea il tuo account Matrix su <underlinedServerName />",
+    "Your Matrix account on <underlinedServerName />": "Il tuo account Matrix su <underlinedServerName />"
 }
