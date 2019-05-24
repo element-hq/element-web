@@ -194,7 +194,7 @@ each time you download a new version of Riot.
 Running as a Desktop app
 ========================
 
-Riot can also be run as a desktop app, wrapped in electron. You can download a
+Riot can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from https://riot.im/download/desktop/ or, if you prefer,
 build it yourself.
 
@@ -202,13 +202,13 @@ To build it yourself, follow the instructions below.
 
 1. Follow the instructions in 'Building From Source' above, but run
    `yarn build` instead of `yarn dist` (since we don't need the tarball).
-2. Install electron and run it:
+2. Install Electron and run it:
 
    ```bash
    yarn electron
    ```
 
-To build packages, use electron-builder. This is configured to output:
+To build packages, use `electron-builder`. This is configured to output:
  * `dmg` + `zip` for macOS
  * `exe` + `nupkg` for Windows
  * `deb` for Linux
@@ -220,22 +220,20 @@ for dependencies required for building packages for various platforms.
 
 The only platform that can build packages for all three platforms is macOS:
 ```bash
-brew install wine --without-x11
 brew install mono
-brew install gnu-tar
 yarn install
 yarn build:electron
 ```
 
-For other packages, use electron-builder manually. For example, to build a package
-for 64 bit Linux:
+For other packages, use `electron-builder` manually. For example, to build a
+package for 64 bit Linux:
 
  1. Follow the instructions in 'Building From Source' above
  2. `node_modules/.bin/build -l --x64`
 
-All electron packages go into `electron_app/dist/`
+All Electron packages go into `electron_app/dist/`
 
-Many thanks to @aviraldg for the initial work on the electron integration.
+Many thanks to @aviraldg for the initial work on the Electron integration.
 
 Other options for running as a desktop app:
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
