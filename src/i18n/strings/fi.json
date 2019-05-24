@@ -1626,7 +1626,7 @@
     "Confirm": "Varmista",
     "Use an email address to recover your account. Other users can invite you to rooms using your contact details.": "Käytä sähköpostia tilisi palauttamiseen. Muut käyttäjät voivat kutsua sinut huoneisiin yhteystiedoillasi.",
     "Other servers": "Muut palvelimet",
-    "Enter custom server URLs <a>What does this mean?</a>": "Syötä mukautettujen palvelinten osoitteet. <a>Mitä tämä tarkoittaa?</a>",
+    "Enter custom server URLs <a>What does this mean?</a>": "Syötä mukautetut palvelinten osoitteet. <a>Mitä tämä tarkoittaa?</a>",
     "Free": "Ilmainen",
     "Join millions for free on the largest public server": "Liity ilmaiseksi miljoonien joukkoon suurimmalla julkisella palvelimella",
     "Premium": "Premium",
@@ -1854,5 +1854,15 @@
     "No homeserver URL provided": "Kotipalvelimen osoite puuttuu",
     "Unexpected error resolving homeserver configuration": "Odottamaton virhe selvitettäessä kotipalvelimen asetuksia",
     "Edit message": "Muokkaa viestiä",
-    "Sign in to your Matrix account on <underlinedServerName />": "Kirjaudu Matrix-tilillesi palvelimella <underlinedServerName />"
+    "Sign in to your Matrix account on <underlinedServerName />": "Kirjaudu Matrix-tilillesi palvelimella <underlinedServerName />",
+    "Show hidden events in timeline": "Näytä piilotetut tapahtumat aikajanalla",
+    "Connect this device to Key Backup": "Yhdistä tämä laite avainten varmuuskopiointiin",
+    "GitHub issue": "GitHub-issue",
+    "Notes": "Huomautukset",
+    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Sisällytä tähän lisätiedot, joista voi olla apua ongelman analysoinnissa, kuten mitä olit tekemässä, huoneen tunnukset, käyttäjätunnukset, jne.",
+    "Unable to validate homeserver/identity server": "Kotipalvelinta/identiteettipalvelinta ei voida validoida",
+    "Create your Matrix account on <underlinedServerName />": "Luo Matrix-tili palvelimelle <underlinedServerName />",
+    "Add room": "Lisää huone",
+    "Your profile": "Oma profiilisi",
+    "Your Matrix account on <underlinedServerName />": "Matrix-tilisi palvelimella <underlinedServerName />"
 }
