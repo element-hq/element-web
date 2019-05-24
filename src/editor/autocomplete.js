@@ -39,8 +39,24 @@ export default class AutocompleteWrapperModel {
         this._updateCallback({close: true});
     }
 
-    onTab() {
-        //forceCompletion here?
+    async onTab(e) {
+        const acComponent = this._getAutocompleterComponent();
+
+        if (acComponent.state.completionList.length === 0) {
+            // Force completions to show for the text currently entered
+            await acComponent.forceComplete();
+            // Select the first item by moving "down"
+            await acComponent.onDownArrow();
+        } else {
+            if (e.shiftKey) {
+                await acComponent.onUpArrow();
+            } else {
+                await acComponent.onDownArrow();
+            }
+        }
+        this._updateCallback({
+            close: true,
+        });
     }
 
     onUpArrow() {
