@@ -314,7 +314,7 @@ export class PillCandidatePart extends PlainPart {
     }
 
     acceptsInsertion(chr, i) {
-        if (i === 0) {
+        if ((this.text.length + i) === 0) {
             return true;
         } else {
             return super.acceptsInsertion(chr, i);
