@@ -28,10 +28,13 @@ async function isColrFontSupported() {
         return colrFontSupported;
     }
 
+    console.log("Checking for COLR support");
+
     // Firefox has supported COLR fonts since version 26
     // but doesn't support the check below with content blocking enabled.
     if (navigator.userAgent.includes("Firefox")) {
         colrFontSupported = true;
+        console.log("Browser is Firefox - assuming COLR is supported");
         return colrFontSupported;
     }
 
@@ -62,12 +65,16 @@ async function isColrFontSupported() {
         const wait = ms => new Promise((r, j)=>setTimeout(r, ms));
         await wait(500);
 
+        console.log("Drawing canvas to detect COLR support");
         context.drawImage(img, 0, 0);
         colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
+        console.log("Canvas check revealed COLR is supported? " + colrFontSupported);
     } catch (e) {
-        console.error("Couldn't load colr font", e);
+        console.error("Couldn't load COLR font", e);
         colrFontSupported = false;
     }
+
+    console.log({colrFontSupported});
     return colrFontSupported;
 }
 
