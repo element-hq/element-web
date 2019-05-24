@@ -60,6 +60,7 @@ export default class MessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
+        this._hasModifications = false;
     }
 
     _getRoom() {
@@ -79,6 +80,7 @@ export default class MessageEditor extends React.Component {
     }
 
     _onInput = (event) => {
+        this._hasModifications = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.model.update(text, event.inputType, caret);
@@ -128,7 +130,7 @@ export default class MessageEditor extends React.Component {
         } else if (event.key === "Escape") {
             this._cancelEdit();
         } else if (event.key === "ArrowUp") {
-            if (!this._isCaretAtStart()) {
+            if (this._hasModifications || !this._isCaretAtStart()) {
                 return;
             }
             const previousEvent = findPreviousEditableEvent(this._getRoom(), this.props.event.getId());
@@ -137,7 +139,7 @@ export default class MessageEditor extends React.Component {
                 event.preventDefault();
             }
         } else if (event.key === "ArrowDown") {
-            if (!this._isCaretAtEnd()) {
+            if (this._hasModifications || !this._isCaretAtEnd()) {
                 return;
             }
             const nextEvent = findNextEditableEvent(this._getRoom(), this.props.event.getId());
