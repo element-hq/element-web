@@ -6,6 +6,7 @@
 /node_modules
 /electron_app/node_modules
 /electron_app/dist
+/electron_app/pub
 /packages/
 /webapp
 /.npmrc
