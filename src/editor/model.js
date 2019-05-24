@@ -232,8 +232,9 @@ export default class EditorModel {
                     index += 1;
                     this._insertPart(index, splitPart);
                 }
-            } else {
-                // not-editable, insert str after this part
+            } else if (offset !== 0) {
+                // not-editable part, caret is not at start,
+                // so insert str after this part
                 addLen += part.text.length - offset;
                 index += 1;
             }
