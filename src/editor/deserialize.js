@@ -110,6 +110,9 @@ function parseHtmlMessage(html, room) {
                     case "CODE":
                         parts.push(new PlainPart(`\`${n.textContent}\``));
                         break;
+                    case "DEL":
+                        parts.push(new PlainPart(`<del>${n.textContent}</del>`));
+                        break;
                     default:
                         parts.push(new PlainPart(n.textContent));
                         break;
