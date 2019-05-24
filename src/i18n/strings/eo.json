@@ -1499,5 +1499,7 @@
     "Request media permissions": "Peti aŭdovidajn permesojn",
     "Audio Output": "Sona eligo",
     "this room": "ĉi tiu ĉambro",
-    "View older messages in %(roomName)s.": "Montri pli malnovajn mesaĝojn en %(roomName)s."
+    "View older messages in %(roomName)s.": "Montri pli malnovajn mesaĝojn en %(roomName)s.",
+    "Account management": "Administrado de kontoj",
+    "This event could not be displayed": "Ĉi tiu okazo ne povis montriĝi"
 }
