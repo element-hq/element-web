@@ -1627,7 +1627,7 @@
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s позволи на гости да влизат в стаята.",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s спря достъпа на гости за влизане в стаята.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s промени правилото за достъп на гости на %(rule)s",
-    "Group & filter rooms by custom tags (refresh to apply changes)": "Групирай & филтрирай стаи по собствен етикет (презареди, за да влезе в сила)",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "Групирай & филтрирай стаи по собствен етикет (презаредете за да влезе в сила)",
     "Verify this user by confirming the following emoji appear on their screen.": "Потвърдете този потребител, като установите че следното емоджи се вижда на екрана им.",
     "Unable to find a supported verification method.": "Не може да бъде намерен поддържан метод за потвърждение.",
     "Dog": "Куче",
@@ -1883,5 +1883,10 @@
     "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Потвърдете, че искате да обновите стаята от <oldVersion /> до <newVersion />.",
     "Changes your avatar in this current room only": "Променя снимката Ви само в тази стая",
     "Unbans user with given ID": "Премахва блокирането на потребител с даден идентификатор",
-    "Sends the given message coloured as a rainbow": "Изпраща текущото съобщение оцветено като дъга"
+    "Sends the given message coloured as a rainbow": "Изпраща текущото съобщение оцветено като дъга",
+    "No homeserver URL provided": "Не е указан адрес на сървър",
+    "Unexpected error resolving homeserver configuration": "Неочаквана грешка в намирането на сървърната конфигурация",
+    "The user's homeserver does not support the version of the room.": "Сървърът на потребителя не поддържа версията на стаята.",
+    "Edit messages after they have been sent (refresh to apply changes)": "Редактиране на съобщения след изпращането им (презаредете за да влезе в сила)",
+    "React to messages with emoji (refresh to apply changes)": "Реакция към съобщения с емоджи (презаредете за да влезе в сила)"
 }
