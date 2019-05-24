@@ -234,6 +234,13 @@ module.exports = React.createClass({
         }
     },
 
+    scrollToEventIfNeeded: function(eventId) {
+        const node = this.eventNodes[eventId];
+        if (node) {
+            node.scrollIntoView({block: "nearest", behavior: "instant"});
+        }
+    },
+
     /* check the scroll state and send out pagination requests if necessary.
      */
     checkFillState: function() {
