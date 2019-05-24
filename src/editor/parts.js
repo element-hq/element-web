@@ -313,8 +313,16 @@ export class PillCandidatePart extends PlainPart {
         return this._autoCompleteCreator(updateCallback);
     }
 
-    acceptsInsertion(chr) {
-        return true;
+    acceptsInsertion(chr, i) {
+        if (i === 0) {
+            return true;
+        } else {
+            return super.acceptsInsertion(chr, i);
+        }
+    }
+
+    merge() {
+        return false;
     }
 
     acceptsRemoval(position, chr) {
