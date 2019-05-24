@@ -15,19 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function htmlSerialize(model) {
+import Markdown from '../Markdown';
+
+export function mdSerialize(model) {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
             case "newline":
-                return html + "<br />";
+                return html + "\n";
             case "plain":
             case "pill-candidate":
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `<a href="https://matrix.to/#/${part.resourceId}">${part.text}</a>`;
+                return html + `[${part.text}](https://matrix.to/#/${part.resourceId})`;
         }
     }, "");
+}
+
+export function htmlSerializeIfNeeded(model) {
+    const md = mdSerialize(model);
+    const parser = new Markdown(md);
+    if (!parser.isPlainText()) {
+        return parser.toHTML();
+    }
 }
 
 export function textSerialize(model) {

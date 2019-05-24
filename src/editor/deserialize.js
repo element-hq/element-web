@@ -18,40 +18,111 @@ limitations under the License.
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { PlainPart, UserPillPart, RoomPillPart, NewlinePart } from "./parts";
 
+const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+
+function parseLink(a, parts, room) {
+    const {href} = a;
+    const pillMatch = REGEX_MATRIXTO.exec(href) || [];
+    const resourceId = pillMatch[1]; // The room/user ID
+    const prefix = pillMatch[2]; // The first character of prefix
+    switch (prefix) {
+        case "@":
+            parts.push(new UserPillPart(
+                resourceId,
+                a.textContent,
+                room.getMember(resourceId),
+            ));
+            break;
+        case "#":
+            parts.push(new RoomPillPart(resourceId));
+            break;
+        default: {
+            if (href === a.textContent) {
+                    parts.push(new PlainPart(a.textContent));
+            } else {
+                    parts.push(new PlainPart(`[${a.textContent}](${href})`));
+            }
+            break;
+        }
+    }
+}
+
 function parseHtmlMessage(html, room) {
-    const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
-    const nodes = Array.from(new DOMParser().parseFromString(html, "text/html").body.childNodes);
-    const parts = nodes.map(n => {
+    const root = new DOMParser().parseFromString(html, "text/html").body;
+    let n = root.firstChild;
+    const parts = [];
+    let isFirstNode = true;
+    while (n && n !== root) {
         switch (n.nodeType) {
             case Node.TEXT_NODE:
-                return new PlainPart(n.nodeValue);
+                // the plainpart doesn't accept \n and will cause
+                // a newlinepart to be created.
+                if (n.nodeValue !== "\n") {
+                    parts.push(new PlainPart(n.nodeValue));
+                }
+                break;
             case Node.ELEMENT_NODE:
                 switch (n.nodeName) {
-                    case "MX-REPLY":
-                        return null;
-                    case "A": {
-                        const {href} = n;
-                        const pillMatch = REGEX_MATRIXTO.exec(href) || [];
-                        const resourceId = pillMatch[1]; // The room/user ID
-                        const prefix = pillMatch[2]; // The first character of prefix
-                        switch (prefix) {
-                            case "@": return new UserPillPart(resourceId, n.textContent, room.getMember(resourceId));
-                            case "#": return new RoomPillPart(resourceId);
-                            default: return new PlainPart(n.textContent);
+                    case "DIV":
+                    case "P": {
+                        // block element should cause line break if not first
+                        if (!isFirstNode) {
+                            parts.push(new NewlinePart("\n"));
+                        }
+                        // decend into paragraph or div
+                        if (n.firstChild) {
+                            n = n.firstChild;
+                            continue;
+                        } else {
+                            break;
                         }
                     }
+                    case "A": {
+                        parseLink(n, parts, room);
+                        break;
+                    }
                     case "BR":
-                        return new NewlinePart("\n");
+                        parts.push(new NewlinePart("\n"));
+                        break;
+                    case "EM":
+                        parts.push(new PlainPart(`*${n.textContent}*`));
+                        break;
+                    case "STRONG":
+                        parts.push(new PlainPart(`**${n.textContent}**`));
+                        break;
+                    case "PRE": {
+                        // block element should cause line break if not first
+                        if (!isFirstNode) {
+                            parts.push(new NewlinePart("\n"));
+                        }
+                        const preLines = `\`\`\`\n${n.textContent}\`\`\``.split("\n");
+                        preLines.forEach((l, i) => {
+                            parts.push(new PlainPart(l));
+                            if (i < preLines.length - 1) {
+                                parts.push(new NewlinePart("\n"));
+                            }
+                        });
+                        break;
+                    }
+                    case "CODE":
+                        parts.push(new PlainPart(`\`${n.textContent}\``));
+                        break;
                     default:
-                        return new PlainPart(n.textContent);
+                        parts.push(new PlainPart(n.textContent));
+                        break;
                 }
-            default:
-                return null;
+                break;
         }
-    }).filter(p => !!p);
+        // go up if we can't go next
+        if (!n.nextSibling) {
+            n = n.parentElement;
+        }
+        n = n.nextSibling;
+        isFirstNode = false;
+    }
     return parts;
 }
 
