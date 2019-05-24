@@ -70,20 +70,20 @@ module.exports = {
             const ev = room.timeline[i];
 
             if (ev.getId() == readUpToId) {
-                // If we've read up to this event, there's nothing more recents
+                // If we've read up to this event, there's nothing more recent
                 // that counts and we can stop looking because the user's read
                 // this and everything before.
                 return false;
             } else if (!shouldHideEvent(ev) && this.eventTriggersUnreadCount(ev)) {
                 // We've found a message that counts before we hit
-                // the read marker, so this room is definitely unread.
+                // the user's read receipt, so this room is definitely unread.
                 return true;
             }
         }
-        // If we got here, we didn't find a message that counted but didn't
-        // find the read marker either, so we guess and say that the room
-        // is unread on the theory that false positives are better than
-        // false negatives here.
+        // If we got here, we didn't find a message that counted but didn't find
+        // the user's read receipt either, so we guess and say that the room is
+        // unread on the theory that false positives are better than false
+        // negatives here.
         return true;
     },
 };
