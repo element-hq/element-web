@@ -1508,5 +1508,14 @@
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Ŝanĝoj al viaj komunumaj <bold1>nomo</bold1> kaj <bold2>profilbildo</bold2> eble ne montriĝos al aliaj uzantoj ĝis 30 minutoj.",
     "Who can join this community?": "Kiu povas aliĝi al tiu ĉi komunumo?",
     "This room is not public. You will not be able to rejoin without an invite.": "Ĉi tiu ĉambro ne estas publika. Vi ne povos realiĝi sen invito.",
-    "Can't leave Server Notices room": "Ne eblas eliri el ĉambro « Server Notices »"
+    "Can't leave Server Notices room": "Ne eblas eliri el ĉambro « Server Notices »",
+    "Revoke invite": "Nuligi inviton",
+    "Invited by %(sender)s": "Invitita de %(sender)s",
+    "Error updating main address": "Eraro dum ĝisdatigo de la ĉefa adreso",
+    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Okazis eraro dum ĝisdatiko de la ĉefa adreso de la ĉambro. Aŭ la servilo tion ne permesas, aŭ io misfunkciis.",
+    "Error creating alias": "Eraro dum kreado de kromnomo",
+    "There was an error creating that alias. It may not be allowed by the server or a temporary failure occurred.": "Okazis eraro dum kreado de tiu kromnomo. Aŭ la servilo tion ne permesas, aŭ io misfunkciis.",
+    "Error removing alias": "Eraro dum forigo de kromnomo",
+    "There was an error removing that alias. It may no longer exist or a temporary error occurred.": "Okazis eraro dum forigo de tiu kromnomo. Aŭ ĝi ne plu ekzistas, aŭ io misfunkciis.",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "En ĉifritaj ĉambroj, kiel ĉi tiu, antaŭrigardoj al URL-oj estas implicite malŝaltitaj por certigi, ke via hejmservilo (kie la antaŭrigardoj estas generataj) ne povas kolekti informojn pri ligiloj en ĉi tiu ĉambro."
 }
