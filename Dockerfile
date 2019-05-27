@@ -23,7 +23,7 @@ RUN cp /src/config.sample.json /src/webapp/config.json
 
 
 # App
-FROM nginx:latest
+FROM nginx:alpine
 
 COPY --from=builder /src/webapp /app
 
