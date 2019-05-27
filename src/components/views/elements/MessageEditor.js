@@ -155,6 +155,7 @@ export default class MessageEditor extends React.Component {
 
     _cancelEdit = () => {
         dis.dispatch({action: "edit_event", event: null});
+        dis.dispatch({action: 'focus_composer'});
     }
 
     _sendEdit = () => {
@@ -185,6 +186,7 @@ export default class MessageEditor extends React.Component {
         this.context.matrixClient.sendMessage(roomId, content);
 
         dis.dispatch({action: "edit_event", event: null});
+        dis.dispatch({action: 'focus_composer'});
     }
 
     _onAutoCompleteConfirm = (completion) => {
