@@ -52,6 +52,16 @@ export function canEditContent(mxEvent) {
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
 
+export function canEditOwnEvent(mxEvent) {
+    // for now we only allow editing
+    // your own events. So this just call through
+    // In the future though, moderators will be able to
+    // edit other people's messages as well but we don't
+    // want findEditableEvent to return other people's events
+    // hence this method.
+    return canEditContent(mxEvent);
+}
+
 export function findEditableEvent(room, isForward, fromEventId = undefined) {
     const liveTimeline = room.getLiveTimeline();
     const events = liveTimeline.getEvents();
@@ -71,7 +81,7 @@ export function findEditableEvent(room, isForward, fromEventId = undefined) {
             // don't look further than 100 events from `fromEventId`
             // to not iterate potentially 1000nds of events on key up/down
             endIdx = Math.min(Math.max(0, i + (inc * 100)), maxIdx);
-        } else if (foundFromEventId && !shouldHideEvent(e) && canEditContent(e)) {
+        } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(e)) {
             // otherwise look for editable event
             return e;
         }
