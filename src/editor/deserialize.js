@@ -66,6 +66,8 @@ function parseHtmlMessage(html, room) {
                 break;
             case Node.ELEMENT_NODE:
                 switch (n.nodeName) {
+                    case "MX-REPLY":
+                        break;
                     case "DIV":
                     case "P": {
                         // block element should cause line break if not first
