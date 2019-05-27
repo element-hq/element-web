@@ -61,6 +61,7 @@ export function canEditOwnEvent(mxEvent) {
     return canEditContent(mxEvent);
 }
 
+const MAX_JUMP_DISTANCE = 100;
 export function findEditableEvent(room, isForward, fromEventId = undefined) {
     const liveTimeline = room.getLiveTimeline();
     const events = liveTimeline.getEvents();
@@ -69,7 +70,7 @@ export function findEditableEvent(room, isForward, fromEventId = undefined) {
     const beginIdx = isForward ? 0 : maxIdx;
     let endIdx = isForward ? maxIdx : 0;
     if (!fromEventId) {
-        endIdx = Math.min(Math.max(0, beginIdx + (inc * 100)), maxIdx);
+        endIdx = Math.min(Math.max(0, beginIdx + (inc * MAX_JUMP_DISTANCE)), maxIdx);
     }
     let foundFromEventId = !fromEventId;
     for (let i = beginIdx; i !== (endIdx + inc); i += inc) {
@@ -77,9 +78,9 @@ export function findEditableEvent(room, isForward, fromEventId = undefined) {
         // find start event first
         if (!foundFromEventId && e.getId() === fromEventId) {
             foundFromEventId = true;
-            // don't look further than 100 events from `fromEventId`
+            // don't look further than MAX_JUMP_DISTANCE events from `fromEventId`
             // to not iterate potentially 1000nds of events on key up/down
-            endIdx = Math.min(Math.max(0, i + (inc * 100)), maxIdx);
+            endIdx = Math.min(Math.max(0, i + (inc * MAX_JUMP_DISTANCE)), maxIdx);
         } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(e)) {
             // otherwise look for editable event
             return e;
