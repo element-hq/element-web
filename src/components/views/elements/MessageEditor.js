@@ -23,7 +23,7 @@ import EditorModel from '../../../editor/model';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
-import {findPreviousEditableEvent, findNextEditableEvent} from '../../../utils/EventUtils';
+import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
@@ -133,7 +133,7 @@ export default class MessageEditor extends React.Component {
             if (this._hasModifications || !this._isCaretAtStart()) {
                 return;
             }
-            const previousEvent = findPreviousEditableEvent(this._getRoom(), this.props.event.getId());
+            const previousEvent = findEditableEvent(this._getRoom(), false, this.props.event.getId());
             if (previousEvent) {
                 dis.dispatch({action: 'edit_event', event: previousEvent});
                 event.preventDefault();
@@ -142,7 +142,7 @@ export default class MessageEditor extends React.Component {
             if (this._hasModifications || !this._isCaretAtEnd()) {
                 return;
             }
-            const nextEvent = findNextEditableEvent(this._getRoom(), this.props.event.getId());
+            const nextEvent = findEditableEvent(this._getRoom(), true, this.props.event.getId());
             if (nextEvent) {
                 dis.dispatch({action: 'edit_event', event: nextEvent});
             } else {

@@ -59,7 +59,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
-import { findPreviousEditableEvent } from '../../../utils/EventUtils';
+import {findEditableEvent} from '../../../utils/EventUtils';
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -1181,7 +1181,7 @@ export default class MessageComposerInput extends React.Component {
             if (up) {
                 if (!selection.anchor.isAtStartOfNode(document)) return;
 
-                const editEvent = findPreviousEditableEvent(this.props.room);
+                const editEvent = findEditableEvent(this.props.room, false);
                 if (editEvent) {
                     // We're selecting history, so prevent the key event from doing anything else
                     e.preventDefault();

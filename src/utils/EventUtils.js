@@ -52,34 +52,29 @@ export function canEditContent(mxEvent) {
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
 
-export function findPreviousEditableEvent(room, fromEventId = undefined) {
+export function findEditableEvent(room, isForward, fromEventId = undefined) {
     const liveTimeline = room.getLiveTimeline();
     const events = liveTimeline.getEvents();
-    let startFromIdx = events.length - 1;
-    if (fromEventId) {
-        const fromEventIdx = findLastIndex(events, e => e.getId() === fromEventId);
-        if (fromEventIdx !== -1) {
-            startFromIdx = fromEventIdx - 1;
-        }
+    const maxIdx = events.length - 1;
+    const inc = isForward ? 1 : -1;
+    const beginIdx = isForward ? 0 : maxIdx;
+    let endIdx = isForward ? maxIdx : 0;
+    if (!fromEventId) {
+        endIdx = Math.min(Math.max(0, beginIdx + (inc * 100)), maxIdx);
     }
-    const nextEventIdx = findLastIndex(events, e => !shouldHideEvent(e) && canEditContent(e), startFromIdx);
-    if (nextEventIdx !== -1) {
-        return events[nextEventIdx];
+    let foundFromEventId = !fromEventId;
+    for (let i = beginIdx; i !== (endIdx + inc); i += inc) {
+        const e = events[i];
+        // find start event first
+        if (!foundFromEventId && e.getId() === fromEventId) {
+            foundFromEventId = true;
+            // don't look further than 100 events from `fromEventId`
+            // to not iterate potentially 1000nds of events on key up/down
+            endIdx = Math.min(Math.max(0, i + (inc * 100)), maxIdx);
+        } else if (foundFromEventId && !shouldHideEvent(e) && canEditContent(e)) {
+            // otherwise look for editable event
+            return e;
+        }
     }
 }
 
-export function findNextEditableEvent(room, fromEventId = undefined) {
-    const liveTimeline = room.getLiveTimeline();
-    const events = liveTimeline.getEvents();
-    let startFromIdx = 0;
-    if (fromEventId) {
-        const fromEventIdx = findIndex(events, e => e.getId() === fromEventId);
-        if (fromEventIdx !== -1) {
-            startFromIdx = fromEventIdx + 1;
-        }
-    }
-    const nextEventIdx = findIndex(events, e => !shouldHideEvent(e) && canEditContent(e), startFromIdx);
-    if (nextEventIdx !== -1) {
-        return events[nextEventIdx];
-    }
-}
