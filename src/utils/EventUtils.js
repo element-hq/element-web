@@ -16,7 +16,7 @@ limitations under the License.
 
 import { EventStatus } from 'matrix-js-sdk';
 import MatrixClientPeg from '../MatrixClientPeg';
-
+import shouldHideEvent from "../shouldHideEvent";
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
  * which effectively checks whether it's a regular message that has been sent and that we
@@ -50,3 +50,41 @@ export function canEditContent(mxEvent) {
         mxEvent.getOriginalContent().msgtype === "m.text" &&
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
+
+export function canEditOwnEvent(mxEvent) {
+    // for now we only allow editing
+    // your own events. So this just call through
+    // In the future though, moderators will be able to
+    // edit other people's messages as well but we don't
+    // want findEditableEvent to return other people's events
+    // hence this method.
+    return canEditContent(mxEvent);
+}
+
+const MAX_JUMP_DISTANCE = 100;
+export function findEditableEvent(room, isForward, fromEventId = undefined) {
+    const liveTimeline = room.getLiveTimeline();
+    const events = liveTimeline.getEvents();
+    const maxIdx = events.length - 1;
+    const inc = isForward ? 1 : -1;
+    const beginIdx = isForward ? 0 : maxIdx;
+    let endIdx = isForward ? maxIdx : 0;
+    if (!fromEventId) {
+        endIdx = Math.min(Math.max(0, beginIdx + (inc * MAX_JUMP_DISTANCE)), maxIdx);
+    }
+    let foundFromEventId = !fromEventId;
+    for (let i = beginIdx; i !== (endIdx + inc); i += inc) {
+        const e = events[i];
+        // find start event first
+        if (!foundFromEventId && e.getId() === fromEventId) {
+            foundFromEventId = true;
+            // don't look further than MAX_JUMP_DISTANCE events from `fromEventId`
+            // to not iterate potentially 1000nds of events on key up/down
+            endIdx = Math.min(Math.max(0, i + (inc * MAX_JUMP_DISTANCE)), maxIdx);
+        } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(e)) {
+            // otherwise look for editable event
+            return e;
+        }
+    }
+}
+

@@ -408,7 +408,13 @@ const TimelinePanel = React.createClass({
             this.forceUpdate();
         }
         if (payload.action === "edit_event") {
-            this.setState({editEvent: payload.event});
+            this.setState({editEvent: payload.event}, () => {
+                if (payload.event && this.refs.messagePanel) {
+                    this.refs.messagePanel.scrollToEventIfNeeded(
+                        payload.event.getId(),
+                    );
+                }
+            });
         }
     },
 
