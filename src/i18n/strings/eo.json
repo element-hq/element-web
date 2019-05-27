@@ -1499,5 +1499,14 @@
     "Request media permissions": "Peti aŭdovidajn permesojn",
     "Audio Output": "Sona eligo",
     "this room": "ĉi tiu ĉambro",
-    "View older messages in %(roomName)s.": "Montri pli malnovajn mesaĝojn en %(roomName)s."
+    "View older messages in %(roomName)s.": "Montri pli malnovajn mesaĝojn en %(roomName)s.",
+    "Account management": "Administrado de kontoj",
+    "This event could not be displayed": "Ĉi tiu okazo ne povis montriĝi",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Bonvolu instari <chromeLink>Ĥromon</chromeLink>, <firefoxLink>Fajrfokson</firefoxLink>, aŭ <safariLink>Safarion</safariLink> por la plej bonaj spertoj.",
+    "If this is unexpected, please contact your system administrator or technical support representative.": "Se estas neatendite, bonvolu kontakti vian sisteman administranton aŭ teĥnikan subtenanton.",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Vi estas administranto de tiu ĉi komunumo. Sen invito de alia administranto vi ne povos realiĝi.",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Ŝanĝoj al viaj komunumaj <bold1>nomo</bold1> kaj <bold2>profilbildo</bold2> eble ne montriĝos al aliaj uzantoj ĝis 30 minutoj.",
+    "Who can join this community?": "Kiu povas aliĝi al tiu ĉi komunumo?",
+    "This room is not public. You will not be able to rejoin without an invite.": "Ĉi tiu ĉambro ne estas publika. Vi ne povos realiĝi sen invito.",
+    "Can't leave Server Notices room": "Ne eblas eliri el ĉambro « Server Notices »"
 }
