@@ -1974,5 +1974,11 @@
     "Show hidden events in timeline": "Afficher les évènements cachés dans l’historique",
     "Your profile": "Votre profil",
     "Add room": "Ajouter un salon",
-    "Edit message": "Éditer le message"
+    "Edit message": "Éditer le message",
+    "No homeserver URL provided": "Aucune URL de serveur d’accueil fournie",
+    "Unexpected error resolving homeserver configuration": "Une erreur inattendue est survenue pendant la résolution de la configuration du serveur d’accueil",
+    "Unable to validate homeserver/identity server": "Impossible de valider le serveur d’accueil/d’identité",
+    "Sign in to your Matrix account on <underlinedServerName />": "Connectez-vous à votre compte Matrix sur <underlinedServerName />",
+    "Create your Matrix account on <underlinedServerName />": "Créez votre compte Matrix sur <underlinedServerName />",
+    "Your Matrix account on <underlinedServerName />": "Votre compte Matrix sur <underlinedServerName />"
 }
