@@ -44,14 +44,11 @@ export function setCaretPosition(editor, model, caretPosition) {
     let focusNode;
     const lineNode = editor.childNodes[lineIndex];
     if (lineNode) {
-        if (lineNode.childNodes.length === 0 && offset === 0) {
+        focusNode = lineNode.childNodes[nodeIndex];
+        if (!focusNode) {
             focusNode = lineNode;
-        } else {
-            focusNode = lineNode.childNodes[nodeIndex];
-
-            if (focusNode && focusNode.nodeType === Node.ELEMENT_NODE) {
-                focusNode = focusNode.childNodes[0];
-            }
+        } else if (focusNode.nodeType === Node.ELEMENT_NODE) {
+            focusNode = focusNode.childNodes[0];
         }
     }
     // node not found, set caret at end
