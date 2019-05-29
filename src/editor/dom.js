@@ -15,22 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function walkDOMDepthFirst(editor, enterNodeCallback, leaveNodeCallback) {
-    let node = editor.firstChild;
-    while (node && node !== editor) {
-        enterNodeCallback(node);
-        if (node.firstChild) {
+export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
+    let node = rootNode.firstChild;
+    while (node && node !== rootNode) {
+        const shouldDecend = enterNodeCallback(node);
+        if (shouldDecend && node.firstChild) {
             node = node.firstChild;
         } else if (node.nextSibling) {
             node = node.nextSibling;
         } else {
-            while (!node.nextSibling && node !== editor) {
+            while (!node.nextSibling && node !== rootNode) {
                 node = node.parentElement;
-                if (node !== editor) {
+                if (node !== rootNode) {
                     leaveNodeCallback(node);
                 }
             }
-            if (node !== editor) {
+            if (node !== rootNode) {
                 node = node.nextSibling;
             }
         }
@@ -62,6 +62,7 @@ export function getCaretOffsetAndText(editor, sel) {
             }
             text += nodeText;
         }
+        return true;
     }
 
     function leaveNodeCallback(node) {
