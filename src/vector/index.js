@@ -371,7 +371,7 @@ async function loadApp() {
             errorMessage = <span>
                 {_t(
                     "Your configuration appears to be invalid. Please correct the error below " +
-                    "and re-open Riot."
+                    "and re-open Riot.",
                 )}
                 <br />
                 <br />
