@@ -38,8 +38,9 @@ function safariVersionCheck(ua) {
             return colrFontSupported;
         }
     } catch (err) {
-        console.error("Couldn't determine Safari version to check COLR font support, assuming no.", err);
+        console.error("Error in Safari COLR version check", err);
     }
+    console.warn("Couldn't determine Safari version to check COLR font support, assuming no.");
     return false;
 }
 
