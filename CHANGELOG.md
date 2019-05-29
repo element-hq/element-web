@@ -1,3 +1,9 @@
+Changes in [1.2.0](https://github.com/vector-im/riot-web/releases/tag/v1.2.0) (2019-05-29)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.0-rc.1...v1.2.0)
+
+ * Upgrade to JS SDK v1.2.0 and React SDK v1.2.0 to fix some regressions
+
 Changes in [1.2.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.2.0-rc.1) (2019-05-23)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.1.2...v1.2.0-rc.1)
