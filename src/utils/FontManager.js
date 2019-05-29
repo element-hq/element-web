@@ -22,18 +22,22 @@ limitations under the License.
  */
 
 function safariVersionCheck(ua) {
-    const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|\.]+) Safari/);
-    if (safariVersionMatch) {
-        const macOSVersionStr = safariVersionMatch[1];
-        const safariVersionStr = safariVersionMatch[2];
-        const macOSVersion = macOSVersionStr.split("_").map(n => parseInt(n, 10));
-        const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
-        const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
-        // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
-        console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12,` +
-            `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr},` +
-            `supported: ${colrFontSupported}`);
-        return colrFontSupported;
+    try {
+        const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|\.]+) Safari/);
+        if (safariVersionMatch) {
+            const macOSVersionStr = safariVersionMatch[1];
+            const safariVersionStr = safariVersionMatch[2];
+            const macOSVersion = macOSVersionStr.split("_").map(n => parseInt(n, 10));
+            const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
+            const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
+            // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
+            console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12,` +
+                `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr},` +
+                `supported: ${colrFontSupported}`);
+            return colrFontSupported;
+        }
+    } catch (err) {
+        console.error("Couldn't determine Safari version to check COLR font support, assuming no.", err);
     }
     return false;
 }
