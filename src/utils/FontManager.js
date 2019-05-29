@@ -31,7 +31,7 @@ function safariVersionCheck(ua) {
             const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
             const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
             // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
-            console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12,` +
+            console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12, ` +
                 `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
                 `COLR supported: ${colrFontSupported}`);
             return colrFontSupported;
