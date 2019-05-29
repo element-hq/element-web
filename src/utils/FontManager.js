@@ -21,21 +21,16 @@ limitations under the License.
  * MIT license
  */
 
-let colrFontSupported = undefined;
-
 async function isColrFontSupported() {
-    if (colrFontSupported !== undefined) {
-        return colrFontSupported;
-    }
-
     console.log("Checking for COLR support");
 
     // Firefox has supported COLR fonts since version 26
-    // but doesn't support the check below with content blocking enabled.
+    // but doesn't support the check below without
+    // "Extract canvas data" permissions
+    // when content blocking is enabled.
     if (navigator.userAgent.includes("Firefox")) {
-        colrFontSupported = true;
         console.log("Browser is Firefox - assuming COLR is supported");
-        return colrFontSupported;
+        return true;
     }
 
     try {
@@ -61,26 +56,25 @@ async function isColrFontSupported() {
 
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 
-        // FIXME wait for safari load our colr font
-        const wait = ms => new Promise((r, j)=>setTimeout(r, ms));
-        await wait(500);
-
+        console.log("Waiting for COLR SVG to load");
+        await new Promise(resolve => img.onload = resolve);
         console.log("Drawing canvas to detect COLR support");
         context.drawImage(img, 0, 0);
-        colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
+        const colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
         console.log("Canvas check revealed COLR is supported? " + colrFontSupported);
+        return colrFontSupported;
     } catch (e) {
         console.error("Couldn't load COLR font", e);
-        colrFontSupported = false;
+        return false;
     }
-
-    return colrFontSupported;
 }
 
+let colrFontCheckStarted = false;
 export async function fixupColorFonts() {
-    if (colrFontSupported !== undefined) {
+    if (colrFontCheckStarted) {
         return;
     }
+    colrFontCheckStarted = true;
 
     if (await isColrFontSupported()) {
         const path = `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2")}')`;
