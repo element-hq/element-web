@@ -23,7 +23,7 @@ limitations under the License.
 
 function safariVersionCheck(ua) {
     try {
-        const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|\.]+) Safari/);
+        const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|.]+).*Safari/);
         if (safariVersionMatch) {
             const macOSVersionStr = safariVersionMatch[1];
             const safariVersionStr = safariVersionMatch[2];
