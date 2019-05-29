@@ -21,6 +21,23 @@ limitations under the License.
  * MIT license
  */
 
+function safariVersionCheck(ua) {
+    const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|\.]+) Safari/);
+    if (safariVersionMatch) {
+        const macOSVersionStr = safariVersionMatch[1];
+        const safariVersionStr = safariVersionMatch[2];
+        const macOSVersion = macOSVersionStr.split("_").map(n => parseInt(n, 10));
+        const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
+        const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
+        // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
+        console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12,` +
+            `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr},` +
+            `supported: ${colrFontSupported}`);
+        return colrFontSupported;
+    }
+    return false;
+}
+
 async function isColrFontSupported() {
     console.log("Checking for COLR support");
 
@@ -31,6 +48,12 @@ async function isColrFontSupported() {
     if (navigator.userAgent.includes("Firefox")) {
         console.log("Browser is Firefox - assuming COLR is supported");
         return true;
+    }
+    // Safari doesn't wait for the font to load (if it doesn't have it in cache)
+    // to emit the load event on the image, so there is no way to not make the check
+    // reliable. Instead sniff the version.
+    if (navigator.userAgent.includes("Safari")) {
+        return safariVersionCheck(navigator.userAgent);
     }
 
     try {
