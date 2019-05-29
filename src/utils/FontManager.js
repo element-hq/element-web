@@ -21,21 +21,43 @@ limitations under the License.
  * MIT license
  */
 
-let colrFontSupported = undefined;
+function safariVersionCheck(ua) {
+    try {
+        const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|.]+).*Safari/);
+        if (safariVersionMatch) {
+            const macOSVersionStr = safariVersionMatch[1];
+            const safariVersionStr = safariVersionMatch[2];
+            const macOSVersion = macOSVersionStr.split("_").map(n => parseInt(n, 10));
+            const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
+            const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
+            // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
+            console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12, ` +
+                `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
+                `COLR supported: ${colrFontSupported}`);
+            return colrFontSupported;
+        }
+    } catch (err) {
+        console.error("Couldn't determine Safari version to check COLR font support, assuming no.", err);
+    }
+    return false;
+}
 
 async function isColrFontSupported() {
-    if (colrFontSupported !== undefined) {
-        return colrFontSupported;
-    }
-
     console.log("Checking for COLR support");
 
     // Firefox has supported COLR fonts since version 26
-    // but doesn't support the check below with content blocking enabled.
+    // but doesn't support the check below without
+    // "Extract canvas data" permissions
+    // when content blocking is enabled.
     if (navigator.userAgent.includes("Firefox")) {
-        colrFontSupported = true;
         console.log("Browser is Firefox - assuming COLR is supported");
-        return colrFontSupported;
+        return true;
+    }
+    // Safari doesn't wait for the font to load (if it doesn't have it in cache)
+    // to emit the load event on the image, so there is no way to not make the check
+    // reliable. Instead sniff the version.
+    if (navigator.userAgent.includes("Safari")) {
+        return safariVersionCheck(navigator.userAgent);
     }
 
     try {
@@ -61,26 +83,25 @@ async function isColrFontSupported() {
 
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 
-        // FIXME wait for safari load our colr font
-        const wait = ms => new Promise((r, j)=>setTimeout(r, ms));
-        await wait(500);
-
+        console.log("Waiting for COLR SVG to load");
+        await new Promise(resolve => img.onload = resolve);
         console.log("Drawing canvas to detect COLR support");
         context.drawImage(img, 0, 0);
-        colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
+        const colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
         console.log("Canvas check revealed COLR is supported? " + colrFontSupported);
+        return colrFontSupported;
     } catch (e) {
         console.error("Couldn't load COLR font", e);
-        colrFontSupported = false;
+        return false;
     }
-
-    return colrFontSupported;
 }
 
+let colrFontCheckStarted = false;
 export async function fixupColorFonts() {
-    if (colrFontSupported !== undefined) {
+    if (colrFontCheckStarted) {
         return;
     }
+    colrFontCheckStarted = true;
 
     if (await isColrFontSupported()) {
         const path = `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2")}')`;
