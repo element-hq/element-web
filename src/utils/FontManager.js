@@ -33,7 +33,7 @@ function safariVersionCheck(ua) {
             // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
             console.log(`Browser is Safari - requiring macOS 10.14 and Safari 12,` +
                 `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr},` +
-                `supported: ${colrFontSupported}`);
+                `COLR supported: ${colrFontSupported}`);
             return colrFontSupported;
         }
     } catch (err) {
