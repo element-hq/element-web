@@ -1,3 +1,15 @@
+Changes in [1.2.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.0) (2019-05-29)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.2.0-rc.1...v1.2.0)
+
+ * COLR font check fixes for release
+   [\#3041](https://github.com/matrix-org/matrix-react-sdk/pull/3041)
+ * Revert "Make the timeline less noisy for screen readers (mk II) #3019" for
+   release
+   [\#3036](https://github.com/matrix-org/matrix-react-sdk/pull/3036)
+ * Override font for usercontent download link for release
+   [\#3037](https://github.com/matrix-org/matrix-react-sdk/pull/3037)
+
 Changes in [1.2.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.0-rc.1) (2019-05-23)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.1.2...v1.2.0-rc.1)
