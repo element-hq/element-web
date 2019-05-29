@@ -122,7 +122,7 @@ export async function loadSession(opts) {
  * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
  */
 export function getStoredSessionOwner() {
-    const {hsUrl, userId, accessToken} = _getLocalStorageSessionVars();
+    const {hsUrl, userId, accessToken} = getLocalStorageSessionVars();
     return hsUrl && userId && accessToken ? userId : null;
 }
 
@@ -131,7 +131,7 @@ export function getStoredSessionOwner() {
  *     for a real user. If there is no stored session, return null.
  */
 export function getStoredSessionIsGuest() {
-    const sessVars = _getLocalStorageSessionVars();
+    const sessVars = getLocalStorageSessionVars();
     return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
 }
 
@@ -237,7 +237,12 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
-function _getLocalStorageSessionVars() {
+/**
+ * Retrieves information about the stored session in localstorage. The session
+ * may not be valid, as it is not tested for consistency here.
+ * @returns {Object} Information about the session - see implementation for variables.
+ */
+export function getLocalStorageSessionVars() {
     const hsUrl = localStorage.getItem("mx_hs_url");
     const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     const accessToken = localStorage.getItem("mx_access_token");
@@ -270,7 +275,7 @@ async function _restoreFromLocalStorage() {
         return false;
     }
 
-    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = _getLocalStorageSessionVars();
+    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = getLocalStorageSessionVars();
 
     if (accessToken && userId && hsUrl) {
         console.log(`Restoring session for ${userId}`);
