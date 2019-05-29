@@ -67,8 +67,8 @@ export default function AccessibleButton(props) {
     restProps.ref = restProps.inputRef;
     delete restProps.inputRef;
 
-    restProps.tabIndex = restProps.tabIndex === undefined ? "0" : restProps.tabIndex;
-    restProps.role = restProps.role === undefined ? "button" : restProps.role;
+    restProps.tabIndex = restProps.tabIndex || "0";
+    restProps.role = "button";
     restProps.className = (restProps.className ? restProps.className + " " : "") +
                           "mx_AccessibleButton";
 
