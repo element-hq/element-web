@@ -1329,7 +1329,6 @@
     "The phone number field must not be blank.": "The phone number field must not be blank.",
     "The password field must not be blank.": "The password field must not be blank.",
     "Email": "Email",
-    "Username on %(hs)s": "Username on %(hs)s",
     "Username": "Username",
     "Phone": "Phone",
     "Not sure of your password? <a>Set a new one</a>": "Not sure of your password? <a>Set a new one</a>",

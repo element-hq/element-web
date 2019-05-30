@@ -211,10 +211,7 @@ export default class PasswordLogin extends React.Component {
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
-                    label={SdkConfig.get().disable_custom_urls ?
-                        _t("Username on %(hs)s", {
-                            hs: this.props.serverConfig.hsName,
-                        }) : _t("Username")}
+                    label={_t("Username")}
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
