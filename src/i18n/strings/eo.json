@@ -1541,5 +1541,7 @@
     "Rotate counter-clockwise": "Turni kontraŭhorloĝe",
     "Rotate Right": "Turni dekstren",
     "Rotate clockwise": "Turni laŭhorloĝe",
-    "Edit message": "Redakti mesaĝon"
+    "Edit message": "Redakti mesaĝon",
+    "This room has already been upgraded.": "Ĉi tiu ĉambro jam gradaltiĝis.",
+    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <i>nestabilan</i>."
 }
