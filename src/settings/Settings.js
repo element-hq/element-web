@@ -129,6 +129,8 @@ export const SETTINGS = {
     "feature_notification_sounds": {
         isFeature: true,
         displayName: _td("Custom Notification Sounds"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
     },
     "feature_reactions": {
         isFeature: true,
