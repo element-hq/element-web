@@ -76,15 +76,13 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
-        const notification = new global.Notification(
-            title,
-            {
-                body: msg,
-                icon: avatarUrl,
-                tag: "vector",
-                silent: true, // we play our own sounds
-            },
-        );
+        const notifBody = {
+            body: msg,
+            tag: "vector",
+            silent: true, // we play our own sounds
+        };
+        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        const notification = new global.Notification(title, notifBody);
 
         notification.onclick = function() {
             dis.dispatch({
