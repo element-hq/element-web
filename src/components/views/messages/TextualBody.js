@@ -30,12 +30,11 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
-import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";
 import {host as matrixtoHost} from '../../../matrix-to';
+import {pillifyLinks} from '../../../utils/pillify';
 
 module.exports = React.createClass({
     displayName: 'TextualBody',
@@ -99,7 +98,7 @@ module.exports = React.createClass({
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        this.pillifyLinks(this.refs.content.children);
+        pillifyLinks(this.refs.content.children, this.props.mxEvent);
         HtmlUtils.linkifyElement(this.refs.content);
         this.calculateUrlPreview();
 
@@ -181,104 +180,6 @@ module.exports = React.createClass({
                     this.setState({ widgetHidden: hidden });
                 }
             }
-        }
-    },
-
-    pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
-        let node = nodes[0];
-        while (node) {
-            let pillified = false;
-
-            if (node.tagName === "A" && node.getAttribute("href")) {
-                const href = node.getAttribute("href");
-
-                // If the link is a (localised) matrix.to link, replace it with a pill
-                const Pill = sdk.getComponent('elements.Pill');
-                if (Pill.isMessagePillUrl(href)) {
-                    const pillContainer = document.createElement('span');
-
-                    const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                    const pill = <Pill
-                        url={href}
-                        inMessage={true}
-                        room={room}
-                        shouldShowPillAvatar={shouldShowPillAvatar}
-                    />;
-
-                    ReactDOM.render(pill, pillContainer);
-                    node.parentNode.replaceChild(pillContainer, node);
-                    // Pills within pills aren't going to go well, so move on
-                    pillified = true;
-
-                    // update the current node with one that's now taken its place
-                    node = pillContainer;
-                }
-            } else if (
-                node.nodeType === Node.TEXT_NODE &&
-                // as applying pills happens outside of react, make sure we're not doubly
-                // applying @room pills here, as a rerender with the same content won't touch the DOM
-                // to clear the pills from the last run of pillifyLinks
-                !node.parentElement.classList.contains("mx_AtRoomPill")
-            ) {
-                const Pill = sdk.getComponent('elements.Pill');
-
-                let currentTextNode = node;
-                const roomNotifTextNodes = [];
-
-                // Take a textNode and break it up to make all the instances of @room their
-                // own textNode, adding those nodes to roomNotifTextNodes
-                while (currentTextNode !== null) {
-                    const roomNotifPos = Pill.roomNotifPos(currentTextNode.textContent);
-                    let nextTextNode = null;
-                    if (roomNotifPos > -1) {
-                        let roomTextNode = currentTextNode;
-
-                        if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
-                        if (roomTextNode.textContent.length > Pill.roomNotifLen()) {
-                            nextTextNode = roomTextNode.splitText(Pill.roomNotifLen());
-                        }
-                        roomNotifTextNodes.push(roomTextNode);
-                    }
-                    currentTextNode = nextTextNode;
-                }
-
-                if (roomNotifTextNodes.length > 0) {
-                    const pushProcessor = new PushProcessor(MatrixClientPeg.get());
-                    const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
-                    if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
-                        // Now replace all those nodes with Pills
-                        for (const roomNotifTextNode of roomNotifTextNodes) {
-                            // Set the next node to be processed to the one after the node
-                            // we're adding now, since we've just inserted nodes into the structure
-                            // we're iterating over.
-                            // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
-                            node = roomNotifTextNode.nextSibling;
-
-                            const pillContainer = document.createElement('span');
-                            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                            const pill = <Pill
-                                type={Pill.TYPE_AT_ROOM_MENTION}
-                                inMessage={true}
-                                room={room}
-                                shouldShowPillAvatar={true}
-                            />;
-
-                            ReactDOM.render(pill, pillContainer);
-                            roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
-                        }
-                        // Nothing else to do for a text node (and we don't need to advance
-                        // the loop pointer because we did it above)
-                        continue;
-                    }
-                }
-            }
-
-            if (node.childNodes && node.childNodes.length && !pillified) {
-                this.pillifyLinks(node.childNodes);
-            }
-
-            node = node.nextSibling;
         }
     },
 
