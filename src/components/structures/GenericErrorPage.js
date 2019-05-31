@@ -20,7 +20,7 @@ import {_t} from "../../languageHandler";
 
 export default class GenericErrorPage extends React.PureComponent {
     static propTypes = {
-        message: PropTypes.string.isRequired,
+        message: PropTypes.object.isRequired, // jsx to display
     };
 
     render() {
