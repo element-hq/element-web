@@ -134,6 +134,8 @@ For a good example, see https://riot.im/develop/config.json.
    in the `labs` section of settings.  The available optional experimental features vary from
    release to release. Some of the available features are described in the Labs Feature section
    of this README.
+1. `showLabsSettings`: Shows the "labs" tab of user settings even when no `features` are enabled
+   or present. Useful for getting at settings which may be otherwise hidden.
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
