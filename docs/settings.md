@@ -51,6 +51,17 @@ Settings are the different options a user may set or experience in the applicati
 }
 ```
 
+Settings that support the config level can be set in the config file under the `settingDefaults` key (note that the "theme" setting is special cased to the `default_theme` in the config file):
+```
+{
+  ...
+  settingDefaults: {
+    settingName: true
+  },
+  ...
+}
+```
+
 ### Getting values for a setting
 
 After importing `SettingsStore`, simply make a call to `SettingsStore.getValue`. The `roomId` parameter should always 
