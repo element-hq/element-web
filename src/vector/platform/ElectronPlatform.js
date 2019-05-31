@@ -141,14 +141,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
 
         // Notifications in Electron use the HTML5 notification API
-        const notification = new global.Notification(
-            title,
-            {
-                body: msg,
-                icon: avatarUrl,
-                silent: true, // we play our own sounds
-            },
-        );
+        const notifBody = {
+            body: msg,
+            silent: true, // we play our own sounds
+        };
+        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        const notification = new global.Notification(title, notifBody);
 
         notification.onclick = () => {
             dis.dispatch({
