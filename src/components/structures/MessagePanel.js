@@ -325,6 +325,11 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
+        this._readReceiptsByEvent = {};
+        if (this.props.showReadReceipts) {
+            this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
+        }
+
         const isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
@@ -525,10 +530,8 @@ module.exports = React.createClass({
         // Local echos have a send "status".
         const scrollToken = mxEv.status ? undefined : eventId;
 
-        let readReceipts;
-        if (this.props.showReadReceipts) {
-            readReceipts = this._getReadReceiptsForEvent(mxEv);
-        }
+        const readReceipts = this._readReceiptsByEvent[eventId];
+
         ret.push(
             <li key={eventId}
                 ref={this._collectEventNode.bind(this, eventId)}
@@ -568,7 +571,7 @@ module.exports = React.createClass({
         return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
     },
 
-    // get a list of read receipts that should be shown next to this event
+    // Get a list of read receipts that should be shown next to this event
     // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
     _getReadReceiptsForEvent: function(event) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
@@ -593,10 +596,37 @@ module.exports = React.createClass({
                 ts: r.data ? r.data.ts : 0,
             });
         });
+        return receipts;
+    },
 
-        return receipts.sort((r1, r2) => {
-            return r2.ts - r1.ts;
-        });
+    // Get an object that maps from event ID to a list of read receipts that
+    // should be shown next to that event. If a hidden event has read receipts,
+    // they are folded into the receipts of the last shown event.
+    _getReadReceiptsByShownEvent: function() {
+        const receiptsByEvent = {};
+
+        let lastShownEventId;
+        for (const event of this.props.events) {
+            if (this._shouldShowEvent(event)) {
+                lastShownEventId = event.getId();
+            }
+            if (!lastShownEventId) {
+                continue;
+            }
+            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
+            const newReceipts = this._getReadReceiptsForEvent(event);
+            receiptsByEvent[lastShownEventId] = existingReceipts.concat(newReceipts);
+        }
+
+        // After grouping receipts by shown events, do another pass to sort each
+        // receipt list.
+        for (const eventId in receiptsByEvent) {
+            receiptsByEvent[eventId].sort((r1, r2) => {
+                return r2.ts - r1.ts;
+            });
+        }
+
+        return receiptsByEvent;
     },
 
     _getReadMarkerTile: function(visible) {
