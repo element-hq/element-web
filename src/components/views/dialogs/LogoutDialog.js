@@ -20,11 +20,12 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class LogoutDialog extends React.Component {
     defaultProps = {
         onFinished: function() {},
-    }
+    };
 
     constructor() {
         super();
@@ -34,9 +35,11 @@ export default class LogoutDialog extends React.Component {
         this._onSetRecoveryMethodClick = this._onSetRecoveryMethodClick.bind(this);
         this._onLogoutConfirm = this._onLogoutConfirm.bind(this);
 
-        const shouldLoadBackupStatus = !MatrixClientPeg.get().getKeyBackupEnabled();
+        const lowBandwidth = SettingsStore.getValue("lowBandwidth");
+        const shouldLoadBackupStatus = !lowBandwidth && !MatrixClientPeg.get().getKeyBackupEnabled();
 
         this.state = {
+            shouldLoadBackupStatus: shouldLoadBackupStatus,
             loading: shouldLoadBackupStatus,
             backupInfo: null,
             error: null,
@@ -110,16 +113,16 @@ export default class LogoutDialog extends React.Component {
     }
 
     render() {
-        const description = <div>
-            <p>{_t(
-                "Encrypted messages are secured with end-to-end encryption. " +
-                "Only you and the recipient(s) have the keys to read these messages.",
-            )}</p>
-            <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
-        </div>;
-
-        if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+        if (this.state.shouldLoadBackupStatus) {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+
+            const description = <div>
+                <p>{_t(
+                    "Encrypted messages are secured with end-to-end encryption. " +
+                    "Only you and the recipient(s) have the keys to read these messages.",
+                )}</p>
+                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+            </div>;
 
             let dialogContent;
             if (this.state.loading) {
