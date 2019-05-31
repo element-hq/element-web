@@ -370,8 +370,8 @@ async function loadApp() {
                 || _t("Unexpected error preparing the app. See console for details.");
             errorMessage = <span>
                 {_t(
-                    "Your configuration appears to be invalid. Please correct the error below " +
-                    "and re-open Riot.",
+                    "This installation of Riot seems to have an invalid server configuration. " +
+                    "If you are the administrator, please correct the error below",
                 )}
                 <br />
                 <br />
