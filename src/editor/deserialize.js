@@ -17,32 +17,125 @@ limitations under the License.
 
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { PlainPart, UserPillPart, RoomPillPart, NewlinePart } from "./parts";
+import { walkDOMDepthFirst } from "./dom";
 
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
-function parseLink(a, parts, room) {
+function parseLink(a, room) {
     const {href} = a;
     const pillMatch = REGEX_MATRIXTO.exec(href) || [];
     const resourceId = pillMatch[1]; // The room/user ID
     const prefix = pillMatch[2]; // The first character of prefix
     switch (prefix) {
         case "@":
-            parts.push(new UserPillPart(
+            return new UserPillPart(
                 resourceId,
                 a.textContent,
                 room.getMember(resourceId),
-            ));
-            break;
+            );
         case "#":
-            parts.push(new RoomPillPart(resourceId));
-            break;
+            return new RoomPillPart(resourceId);
         default: {
             if (href === a.textContent) {
-                    parts.push(new PlainPart(a.textContent));
+                return new PlainPart(a.textContent);
             } else {
-                    parts.push(new PlainPart(`[${a.textContent}](${href})`));
+                return new PlainPart(`[${a.textContent}](${href})`);
             }
-            break;
+        }
+    }
+}
+
+function parseCodeBlock(n) {
+    const parts = [];
+    const preLines = ("```\n" + n.textContent + "```").split("\n");
+    preLines.forEach((l, i) => {
+        parts.push(new PlainPart(l));
+        if (i < preLines.length - 1) {
+            parts.push(new NewlinePart("\n"));
+        }
+    });
+    return parts;
+}
+
+function parseElement(n, room) {
+    switch (n.nodeName) {
+        case "A":
+            return parseLink(n, room);
+        case "BR":
+            return new NewlinePart("\n");
+        case "EM":
+            return new PlainPart(`*${n.textContent}*`);
+        case "STRONG":
+            return new PlainPart(`**${n.textContent}**`);
+        case "PRE":
+            return parseCodeBlock(n);
+        case "CODE":
+            return new PlainPart(`\`${n.textContent}\``);
+        case "DEL":
+            return new PlainPart(`<del>${n.textContent}</del>`);
+        case "LI":
+            if (n.parentElement.nodeName === "OL") {
+                return new PlainPart(` 1. `);
+            } else {
+                return new PlainPart(` - `);
+            }
+        default:
+            // don't textify block nodes we'll decend into
+            if (!checkDecendInto(n)) {
+                return new PlainPart(n.textContent);
+            }
+    }
+}
+
+function checkDecendInto(node) {
+    switch (node.nodeName) {
+        case "PRE":
+            // a code block is textified in parseCodeBlock
+            // as we don't want to preserve markup in it,
+            // so no need to decend into it
+            return false;
+        default:
+            return checkBlockNode(node);
+    }
+}
+
+function checkBlockNode(node) {
+    switch (node.nodeName) {
+        case "PRE":
+        case "BLOCKQUOTE":
+        case "DIV":
+        case "P":
+        case "UL":
+        case "OL":
+        case "LI":
+            return true;
+        default:
+            return false;
+    }
+}
+
+function checkIgnored(n) {
+    if (n.nodeType === Node.TEXT_NODE) {
+        // riot adds \n text nodes in a lot of places,
+        // which should be ignored
+        return n.nodeValue === "\n";
+    } else if (n.nodeType === Node.ELEMENT_NODE) {
+        return n.nodeName === "MX-REPLY";
+    }
+    return true;
+}
+
+function prefixQuoteLines(isFirstNode, parts) {
+    const PREFIX = "> ";
+    // a newline (to append a > to) wouldn't be added to parts for the first line
+    // if there was no content before the BLOCKQUOTE, so handle that
+    if (isFirstNode) {
+        parts.splice(0, 0, new PlainPart(PREFIX));
+    }
+    for (let i = 0; i < parts.length; i += 1) {
+        if (parts[i].type === "newline") {
+            parts.splice(i + 1, 0, new PlainPart(PREFIX));
+            i += 1;
         }
     }
 }
@@ -51,83 +144,64 @@ function parseHtmlMessage(html, room) {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
-    const root = new DOMParser().parseFromString(html, "text/html").body;
-    let n = root.firstChild;
+    const rootNode = new DOMParser().parseFromString(html, "text/html").body;
     const parts = [];
-    let isFirstNode = true;
-    while (n && n !== root) {
-        switch (n.nodeType) {
-            case Node.TEXT_NODE:
-                // the plainpart doesn't accept \n and will cause
-                // a newlinepart to be created.
-                if (n.nodeValue !== "\n") {
-                    parts.push(new PlainPart(n.nodeValue));
-                }
-                break;
-            case Node.ELEMENT_NODE:
-                switch (n.nodeName) {
-                    case "MX-REPLY":
-                        break;
-                    case "DIV":
-                    case "P": {
-                        // block element should cause line break if not first
-                        if (!isFirstNode) {
-                            parts.push(new NewlinePart("\n"));
-                        }
-                        // decend into paragraph or div
-                        if (n.firstChild) {
-                            n = n.firstChild;
-                            continue;
-                        } else {
-                            break;
-                        }
-                    }
-                    case "A": {
-                        parseLink(n, parts, room);
-                        break;
-                    }
-                    case "BR":
-                        parts.push(new NewlinePart("\n"));
-                        break;
-                    case "EM":
-                        parts.push(new PlainPart(`*${n.textContent}*`));
-                        break;
-                    case "STRONG":
-                        parts.push(new PlainPart(`**${n.textContent}**`));
-                        break;
-                    case "PRE": {
-                        // block element should cause line break if not first
-                        if (!isFirstNode) {
-                            parts.push(new NewlinePart("\n"));
-                        }
-                        const preLines = `\`\`\`\n${n.textContent}\`\`\``.split("\n");
-                        preLines.forEach((l, i) => {
-                            parts.push(new PlainPart(l));
-                            if (i < preLines.length - 1) {
-                                parts.push(new NewlinePart("\n"));
-                            }
-                        });
-                        break;
-                    }
-                    case "CODE":
-                        parts.push(new PlainPart(`\`${n.textContent}\``));
-                        break;
-                    case "DEL":
-                        parts.push(new PlainPart(`<del>${n.textContent}</del>`));
-                        break;
-                    default:
-                        parts.push(new PlainPart(n.textContent));
-                        break;
-                }
-                break;
+    let lastNode;
+    let inQuote = false;
+
+    function onNodeEnter(n) {
+        if (checkIgnored(n)) {
+            return false;
         }
-        // go up if we can't go next
-        if (!n.nextSibling) {
-            n = n.parentElement;
+        if (n.nodeName === "BLOCKQUOTE") {
+            inQuote = true;
         }
-        n = n.nextSibling;
-        isFirstNode = false;
+
+        const newParts = [];
+        if (lastNode && (checkBlockNode(lastNode) || checkBlockNode(n))) {
+            newParts.push(new NewlinePart("\n"));
+        }
+
+        if (n.nodeType === Node.TEXT_NODE) {
+            newParts.push(new PlainPart(n.nodeValue));
+        } else if (n.nodeType === Node.ELEMENT_NODE) {
+            const parseResult = parseElement(n, room);
+            if (parseResult) {
+                if (Array.isArray(parseResult)) {
+                    newParts.push(...parseResult);
+                } else {
+                    newParts.push(parseResult);
+                }
+            }
+        }
+
+        if (newParts.length && inQuote) {
+            const isFirstPart = parts.length === 0;
+            prefixQuoteLines(isFirstPart, newParts);
+        }
+
+        parts.push(...newParts);
+
+        // extra newline after quote, only if there something behind it...
+        if (lastNode && lastNode.nodeName === "BLOCKQUOTE") {
+            parts.push(new NewlinePart("\n"));
+        }
+        lastNode = null;
+        return checkDecendInto(n);
     }
+
+    function onNodeLeave(n) {
+        if (checkIgnored(n)) {
+            return;
+        }
+        if (n.nodeName === "BLOCKQUOTE") {
+            inQuote = false;
+        }
+        lastNode = n;
+    }
+
+    walkDOMDepthFirst(rootNode, onNodeEnter, onNodeLeave);
+
     return parts;
 }
 
