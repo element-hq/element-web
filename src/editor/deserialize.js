@@ -47,7 +47,7 @@ function parseLink(a, room) {
 
 function parseCodeBlock(n) {
     const parts = [];
-    const preLines = `\`\`\`\n${n.textContent}\`\`\``.split("\n");
+    const preLines = ("```\n" + n.textContent + "```").split("\n");
     preLines.forEach((l, i) => {
         parts.push(new PlainPart(l));
         if (i < preLines.length - 1) {
