@@ -61,12 +61,13 @@ export function renderModel(editor, model) {
             let foundBR = false;
             let partNode = lineContainer.firstChild;
             while (partNode) {
+                const nextNode = partNode.nextSibling;
                 if (!foundBR && partNode.tagName === "BR") {
                     foundBR = true;
                 } else {
                     lineContainer.removeChild(partNode);
                 }
-                partNode = partNode.nextSibling;
+                partNode = nextNode;
             }
             if (!foundBR) {
                 lineContainer.appendChild(document.createElement("br"));
