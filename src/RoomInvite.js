@@ -45,7 +45,7 @@ export function showStartChatInviteDialog() {
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
-        placeholder: _t("Email, name or matrix ID"),
+        placeholder: _t("Email, name or Matrix ID"),
         validAddressTypes: ['mx-user-id', 'email'],
         button: _t("Start Chat"),
         onFinished: _onStartChatFinished,
@@ -58,11 +58,29 @@ export function showRoomInviteDialog(roomId) {
         title: _t('Invite new room members'),
         description: _t('Who would you like to add to this room?'),
         button: _t('Send Invites'),
-        placeholder: _t("Email, name or matrix ID"),
+        placeholder: _t("Email, name or Matrix ID"),
         onFinished: (shouldInvite, addrs) => {
             _onRoomInviteFinished(roomId, shouldInvite, addrs);
         },
     });
+}
+
+/**
+ * Checks if the given MatrixEvent is a valid 3rd party user invite.
+ * @param {MatrixEvent} event The event to check
+ * @returns {boolean} True if valid, false otherwise
+ */
+export function isValid3pidInvite(event) {
+    if (!event || event.getType() !== "m.room.third_party_invite") return false;
+
+    // any events without these keys are not valid 3pid invites, so we ignore them
+    const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
+    for (let i = 0; i < requiredKeys.length; ++i) {
+        if (!event.getContent()[requiredKeys[i]]) return false;
+    }
+
+    // Valid enough by our standards
+    return true;
 }
 
 function _onStartChatFinished(shouldInvite, addrs) {

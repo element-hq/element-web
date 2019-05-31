@@ -115,7 +115,7 @@ export default React.createClass({
         // user ID roughly looks okay from a Matrix perspective.
         if (!SAFE_LOCALPART_REGEX.test(this.state.username)) {
             this.setState({
-                usernameError: _t("Only use lower case letters, numbers and '=_-./'"),
+                usernameError: _t("A username can only contain lower case letters, numbers and '=_-./'"),
             });
             return Promise.reject();
         }

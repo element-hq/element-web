@@ -47,7 +47,7 @@ export default class AppPermission extends React.Component {
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarningImage'>
-                    <img src={require("../../../../res/img/feather-icons/warning-triangle.svg")} alt={_t('Warning!')} />
+                    <img src={require("../../../../res/img/feather-customised/warning-triangle.svg")} alt={_t('Warning!')} />
                 </div>
                 <div className='mx_AppPermissionWarningText'>
                     <span className='mx_AppPermissionWarningTextLabel'>{ _t('Do you want to load widget from URL:') }</span> <span className='mx_AppPermissionWarningTextURL'>{ this.state.curlBase }</span>

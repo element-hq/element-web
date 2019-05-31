@@ -92,7 +92,7 @@ module.exports = React.createClass({
                 </span>
                 <div className="mx_PinnedEventTile_message">
                     <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" maxImageHeight={150}
-                                  onWidgetLoad={() => {}} // we need to give this, apparently
+                                  onHeightChanged={() => {}} // we need to give this, apparently
                     />
                 </div>
             </div>

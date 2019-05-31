@@ -21,19 +21,80 @@ limitations under the License.
     padding: 25px 60px;
     box-sizing: border-box;
     font-size: 12px;
-    color: $authpage-body-color;
-}
+    color: $authpage-secondary-color;
 
-.mx_AuthBody h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-top: 8px;
-}
+    h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 8px;
+        color: $authpage-primary-color;
+    }
 
-.mx_AuthBody h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: $primary-fg-color;
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: $authpage-primary-color;
+    }
+
+    a:link,
+    a:hover,
+    a:visited {
+        color: $accent-color;
+        text-decoration: none;
+    }
+
+    input[type=text],
+    input[type=password] {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Field input,
+    .mx_Field select {
+        color: $authpage-primary-color;
+        background-color: $authpage-body-bg-color;
+    }
+
+    .mx_Field label {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Field input:focus + label,
+    .mx_Field input:not(:placeholder-shown) + label,
+    .mx_Field textarea:focus + label,
+    .mx_Field textarea:not(:placeholder-shown) + label,
+    .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+    .mx_Field_labelAlwaysTopLeft label {
+        background-color: $authpage-body-bg-color;
+    }
+
+    input.error {
+        color: $warning-color;
+    }
+
+    .mx_Field input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .mx_Field_select::before {
+        background-color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_arrow {
+        background: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_menu {
+        background-color: $authpage-body-bg-color;
+
+        .mx_Dropdown_option_highlight {
+            background-color: $authpage-focus-bg-color;
+        }
+    }
 }
 
 .mx_AuthBody_editServerDetails {
@@ -42,38 +103,54 @@ limitations under the License.
     font-weight: normal;
 }
 
-.mx_AuthBody .mx_Field input {
-    width: 100%;
-    box-sizing: border-box;
-}
-
 .mx_AuthBody_fieldRow {
     display: flex;
     margin-bottom: 10px;
 }
 
-.mx_AuthBody_fieldRow > * {
+.mx_AuthBody_fieldRow > .mx_Field {
     margin: 0 5px;
     flex: 1;
 }
 
-.mx_AuthBody_fieldRow > *:first-child {
+.mx_AuthBody_fieldRow > .mx_Field:first-child {
     margin-left: 0;
 }
 
-.mx_AuthBody_fieldRow > *:last-child {
+.mx_AuthBody_fieldRow > .mx_Field:last-child {
     margin-right: 0;
-}
-
-.mx_AuthBody a:link,
-.mx_AuthBody a:hover,
-.mx_AuthBody a:visited {
-    color: $accent-color;
-    text-decoration: none;
 }
 
 .mx_AuthBody_changeFlow {
     display: block;
     text-align: center;
     width: 100%;
+}
+
+.mx_AuthBody_spinner {
+    margin: 1em 0;
+}
+
+.mx_AuthBody_passwordScore {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    border: 0;
+    border-radius: 2px;
+    position: absolute;
+    top: -12px;
+
+    &::-moz-progress-bar {
+        border-radius: 2px;
+        background-color: $accent-color;
+    }
+
+    &::-webkit-progress-bar,
+    &::-webkit-progress-value {
+        border-radius: 2px;
+    }
+
+    &::-webkit-progress-value {
+        background-color: $accent-color;
+    }
 }

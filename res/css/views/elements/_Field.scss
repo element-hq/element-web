@@ -14,11 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* TODO: Consider unifying with general input styles in _dharma.scss */
+/* TODO: Consider unifying with general input styles in _light.scss */
 
 .mx_Field {
+    display: flex;
     position: relative;
     margin: 1em 0;
+    border-radius: 4px;
+    transition: border-color 0.25s;
+    border: 1px solid $input-border-color;
+}
+
+.mx_Field_prefix {
+    border-right: 1px solid $input-border-color;
 }
 
 .mx_Field input,
@@ -27,10 +35,12 @@ limitations under the License.
     font-weight: normal;
     font-family: $font-family;
     font-size: 14px;
+    border: none;
+    // Even without a border here, we still need this avoid overlapping the rounded
+    // corners on the field above.
     border-radius: 4px;
-    transition: border-color 0.25s;
-    border: 1px solid $input-border-color;
     padding: 8px 9px;
+    color: $primary-fg-color;
     background-color: $primary-bg-color;
 }
 
@@ -47,18 +57,21 @@ limitations under the License.
     right: 10px;
     width: 10px;
     height: 6px;
-    mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
+    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
     background-color: $primary-fg-color;
     z-index: 1;
     pointer-events: none;
 }
 
+.mx_Field:focus-within {
+    border-color: $input-focused-border-color;
+}
+
 .mx_Field input:focus,
 .mx_Field select:focus,
 .mx_Field textarea:focus {
     outline: 0;
-    border-color: $input-focused-border-color;
 }
 
 .mx_Field input::placeholder,
@@ -87,21 +100,29 @@ limitations under the License.
     top: 0px;
     margin: 7px 8px;
     padding: 2px;
+    pointer-events: none; // Allow clicks to fall through to the input
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 20px); // 100% of parent minus margin and padding
 }
 
 .mx_Field input:focus + label,
 .mx_Field input:not(:placeholder-shown) + label,
 .mx_Field textarea:focus + label,
 .mx_Field textarea:not(:placeholder-shown) + label,
-.mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
+.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+.mx_Field_labelAlwaysTopLeft label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
         top 0.25s ease-out 0s,
         background-color 0.25s ease-out 0s;
     font-size: 10px;
-    top: -14px;
+    top: -13px;
+    padding: 0 2px;
     background-color: $field-focused-label-bg-color;
+    pointer-events: initial;
 }
 
 .mx_Field input:focus + label,
@@ -111,7 +132,56 @@ limitations under the License.
 }
 
 .mx_Field select:disabled,
-.mx_Field input:disabled {
+.mx_Field select:disabled + label,
+.mx_Field input:disabled,
+.mx_Field input:disabled + label,
+.mx_Field textarea:disabled,
+.mx_Field textarea:disabled + label {
     background-color: $field-focused-label-bg-color;
     color: $greyed-fg-color;
+}
+
+.mx_Field_valid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $input-valid-border-color;
+    }
+
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $input-valid-border-color;
+    }
+}
+
+.mx_Field_invalid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $input-invalid-border-color;
+    }
+
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $input-invalid-border-color;
+    }
+}
+
+.mx_Field_tooltip {
+    margin-top: -12px;
+    margin-left: 4px;
+    width: 200px;
+}
+
+.mx_Field_tooltip.mx_Field_valid {
+    animation: mx_fadeout 1s 2s forwards;
+}
+
+// Customise other components when placed inside a Field
+
+.mx_Field .mx_Dropdown_input {
+    border: initial;
+    border-radius: initial;
+}
+
+.mx_Field .mx_CountryDropdown {
+    width: 67px;
 }

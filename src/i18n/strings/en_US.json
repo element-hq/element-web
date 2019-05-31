@@ -261,6 +261,7 @@
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s placed a %(callType)s call.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
     "Power level must be positive integer.": "Power level must be positive integer.",
+    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
     "Privacy warning": "Privacy warning",
     "Privileged Users": "Privileged Users",
     "Profile": "Profile",
@@ -883,5 +884,11 @@
     "Missing roomId.": "Missing roomId.",
     "Opens the Developer Tools dialog": "Opens the Developer Tools dialog",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
-    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s changed their display name to %(displayName)s."
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s changed their display name to %(displayName)s.",
+    "Spanner": "Wrench",
+    "Aeroplane": "Airplane",
+    "Cat": "Cat",
+    "Sends the given message coloured as a rainbow": "Sends the given message colored as a rainbow",
+    "Sends the given emote coloured as a rainbow": "Sends the given emote colored as a rainbow",
+    "Unrecognised address": "Unrecognized address"
 }

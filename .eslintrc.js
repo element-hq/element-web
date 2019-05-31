@@ -15,6 +15,9 @@ module.exports = {
       "flowtype",
       "babel"
     ],
+    globals: {
+        LANGUAGES_FILE: "readonly",
+    },
     env: {
         es6: true,
     },
@@ -91,13 +94,13 @@ module.exports = {
             // to JSX.
             ignorePattern: '^\\s*<',
             ignoreComments: true,
+            ignoreRegExpLiterals: true,
             code: 120,
         }],
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
         "prefer-const": ["warn"],
-        "arrow-parens": "off",
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",

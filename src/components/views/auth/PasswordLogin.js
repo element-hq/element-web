@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,11 +22,29 @@ import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 /**
  * A pure UI component which displays a username/password form.
  */
-class PasswordLogin extends React.Component {
+export default class PasswordLogin extends React.Component {
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired, // fn(username, password)
+        onError: PropTypes.func,
+        onForgotPasswordClick: PropTypes.func, // fn()
+        initialUsername: PropTypes.string,
+        initialPhoneCountry: PropTypes.string,
+        initialPhoneNumber: PropTypes.string,
+        initialPassword: PropTypes.string,
+        onUsernameChanged: PropTypes.func,
+        onPhoneCountryChanged: PropTypes.func,
+        onPhoneNumberChanged: PropTypes.func,
+        onPasswordChanged: PropTypes.func,
+        loginIncorrect: PropTypes.bool,
+        disableSubmit: PropTypes.bool,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+    };
+
     static defaultProps = {
         onError: function() {},
         onEditServerDetailsClick: null,
@@ -40,9 +59,12 @@ class PasswordLogin extends React.Component {
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
-        hsUrl: "",
         disableSubmit: false,
-    }
+    };
+
+    static LOGIN_FIELD_EMAIL = "login_field_email";
+    static LOGIN_FIELD_MXID = "login_field_mxid";
+    static LOGIN_FIELD_PHONE = "login_field_phone";
 
     constructor(props) {
         super(props);
@@ -54,6 +76,7 @@ class PasswordLogin extends React.Component {
             loginType: PasswordLogin.LOGIN_FIELD_MXID,
         };
 
+        this.onForgotPasswordClick = this.onForgotPasswordClick.bind(this);
         this.onSubmitForm = this.onSubmitForm.bind(this);
         this.onUsernameChanged = this.onUsernameChanged.bind(this);
         this.onUsernameBlur = this.onUsernameBlur.bind(this);
@@ -65,9 +88,10 @@ class PasswordLogin extends React.Component {
         this.isLoginEmpty = this.isLoginEmpty.bind(this);
     }
 
-    componentWillMount() {
-        this._passwordField = null;
-        this._loginField = null;
+    onForgotPasswordClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onForgotPasswordClick();
     }
 
     onSubmitForm(ev) {
@@ -127,7 +151,8 @@ class PasswordLogin extends React.Component {
         this.props.onUsernameBlur(ev.target.value);
     }
 
-    onLoginTypeChange(loginType) {
+    onLoginTypeChange(ev) {
+        const loginType = ev.target.value;
         this.props.onError(null); // send a null error to clear any error messages
         this.setState({
             loginType: loginType,
@@ -158,67 +183,64 @@ class PasswordLogin extends React.Component {
     }
 
     renderLoginField(loginType) {
-        const classes = {
-            mx_Login_field: true,
-        };
+        const Field = sdk.getComponent('elements.Field');
+
+        const classes = {};
 
         switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
                 classes.error = this.props.loginIncorrect && !this.state.username;
-                return <input
-                    className="mx_Login_field"
-                    ref={(e) => {this._loginField = e;}}
+                return <Field
+                    className={classNames(classes)}
+                    id="mx_PasswordLogin_email"
+                    name="username" // make it a little easier for browser's remember-password
                     key="email_input"
                     type="text"
-                    name="username" // make it a little easier for browser's remember-password
-                    onChange={this.onUsernameChanged}
-                    onBlur={this.onUsernameBlur}
+                    label={_t("Email")}
                     placeholder="joe@example.com"
                     value={this.state.username}
+                    onChange={this.onUsernameChanged}
+                    onBlur={this.onUsernameBlur}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.error = this.props.loginIncorrect && !this.state.username;
-                return <input
+                return <Field
                     className={classNames(classes)}
-                    ref={(e) => {this._loginField = e;}}
+                    id="mx_PasswordLogin_username"
+                    name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
-                    name="username" // make it a little easier for browser's remember-password
+                    label={_t("Username")}
+                    value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
-                    placeholder={SdkConfig.get().disable_custom_urls ?
-                                      _t("Username on %(hs)s", {
-                                        hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
-                                      }) : _t("Username")}
-                    value={this.state.username}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
-                classes.mx_Login_field_has_prefix = true;
                 classes.error = this.props.loginIncorrect && !this.state.phoneNumber;
-                return <div className="mx_Login_phoneSection">
-                    <CountryDropdown
-                        className="mx_Login_phoneCountry mx_Login_field_prefix"
-                        onOptionChange={this.onPhoneCountryChanged}
-                        value={this.state.phoneCountry}
-                        isSmall={true}
-                        showPrefix={true}
-                    />
-                    <input
-                        className={classNames(classes)}
-                        ref={(e) => {this._loginField = e;}}
-                        key="phone_input"
-                        type="text"
-                        name="phoneNumber"
-                        onChange={this.onPhoneNumberChanged}
-                        onBlur={this.onPhoneNumberBlur}
-                        placeholder={_t("Mobile phone number")}
-                        value={this.state.phoneNumber}
-                        autoFocus
-                    />
-                </div>;
+
+                const phoneCountry = <CountryDropdown
+                    value={this.state.phoneCountry}
+                    isSmall={true}
+                    showPrefix={true}
+                    onOptionChange={this.onPhoneCountryChanged}
+                />;
+
+                return <Field
+                    className={classNames(classes)}
+                    id="mx_PasswordLogin_phoneNumber"
+                    name="phoneNumber"
+                    key="phone_input"
+                    type="text"
+                    label={_t("Phone")}
+                    value={this.state.phoneNumber}
+                    prefix={phoneCountry}
+                    onChange={this.onPhoneNumberChanged}
+                    onBlur={this.onPhoneNumberBlur}
+                    autoFocus
+                />;
             }
         }
     }
@@ -234,13 +256,15 @@ class PasswordLogin extends React.Component {
     }
 
     render() {
+        const Field = sdk.getComponent('elements.Field');
+
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = <span>
                 {_t('Not sure of your password? <a>Set a new one</a>', {}, {
                     a: sub => <a className="mx_Login_forgot"
-                        onClick={this.props.onForgotPasswordClick}
+                        onClick={this.onForgotPasswordClick}
                         href="#"
                     >
                         {sub}
@@ -249,14 +273,22 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let yourMatrixAccountText = _t('Your account');
-        try {
-            const parsedHsUrl = new URL(this.props.hsUrl);
-            yourMatrixAccountText = _t('Your %(serverName)s account', {
-                serverName: parsedHsUrl.hostname,
+        let signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            signInToText = _t('Sign in to your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
-        } catch (e) {
-            // ignore
         }
 
         let editLink = null;
@@ -264,16 +296,13 @@ class PasswordLogin extends React.Component {
             editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
-                {_t('Edit')}
+                {_t('Change')}
             </a>;
         }
 
         const pwFieldClass = classNames({
-            mx_Login_field: true,
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
-
-        const Dropdown = sdk.getComponent('elements.Dropdown');
 
         const loginField = this.renderLoginField(this.state.loginType);
 
@@ -282,14 +311,32 @@ class PasswordLogin extends React.Component {
             loginType = (
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
-                    <Dropdown
+                    <Field
                         className="mx_Login_type_dropdown"
+                        id="mx_PasswordLogin_type"
+                        element="select"
                         value={this.state.loginType}
-                        onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('Username') }</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
-                    </Dropdown>
+                        onChange={this.onLoginTypeChange}
+                    >
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_MXID}
+                            value={PasswordLogin.LOGIN_FIELD_MXID}
+                        >
+                            {_t('Username')}
+                        </option>
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_EMAIL}
+                            value={PasswordLogin.LOGIN_FIELD_EMAIL}
+                        >
+                            {_t('Email address')}
+                        </option>
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_PHONE}
+                            value={PasswordLogin.LOGIN_FIELD_PHONE}
+                        >
+                            {_t('Phone')}
+                        </option>
+                    </Field>
                 </div>
             );
         }
@@ -297,19 +344,22 @@ class PasswordLogin extends React.Component {
         return (
             <div>
                 <h3>
-                    {yourMatrixAccountText}
+                    {signInToText}
                     {editLink}
                 </h3>
                 <form onSubmit={this.onSubmitForm}>
-                    { loginType }
-                    { loginField }
-                    <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
+                    {loginType}
+                    {loginField}
+                    <Field
+                        className={pwFieldClass}
+                        id="mx_PasswordLogin_password"
+                        type="password"
                         name="password"
-                        value={this.state.password} onChange={this.onPasswordChanged}
-                        placeholder={_t('Password')}
+                        label={_t('Password')}
+                        value={this.state.password}
+                        onChange={this.onPasswordChanged}
                     />
-                    <br />
-                    { forgotPasswordJsx }
+                    {forgotPasswordJsx}
                     <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
@@ -320,25 +370,3 @@ class PasswordLogin extends React.Component {
         );
     }
 }
-
-PasswordLogin.LOGIN_FIELD_EMAIL = "login_field_email";
-PasswordLogin.LOGIN_FIELD_MXID = "login_field_mxid";
-PasswordLogin.LOGIN_FIELD_PHONE = "login_field_phone";
-
-PasswordLogin.propTypes = {
-    onSubmit: PropTypes.func.isRequired, // fn(username, password)
-    onError: PropTypes.func,
-    onForgotPasswordClick: PropTypes.func, // fn()
-    initialUsername: PropTypes.string,
-    initialPhoneCountry: PropTypes.string,
-    initialPhoneNumber: PropTypes.string,
-    initialPassword: PropTypes.string,
-    onUsernameChanged: PropTypes.func,
-    onPhoneCountryChanged: PropTypes.func,
-    onPhoneNumberChanged: PropTypes.func,
-    onPasswordChanged: PropTypes.func,
-    loginIncorrect: PropTypes.bool,
-    disableSubmit: PropTypes.bool,
-};
-
-module.exports = PasswordLogin;

@@ -47,7 +47,9 @@ export default React.createClass({
 
     _onUpgradeClick: function() {
         this.setState({busy: true});
-        MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).catch((err) => {
+        MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
+            this.props.onFinished(true);
+        }).catch((err) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to upgrade room', '', ErrorDialog, {
                 title: _t("Failed to upgrade room"),
@@ -82,10 +84,9 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_RoomUpgradeDialog"
-                onFinished={this.onCancelled}
+                onFinished={this.props.onFinished}
                 title={_t("Upgrade Room Version")}
                 contentId='mx_Dialog_content'
-                onFinished={this.props.onFinished}
                 hasCancel={true}
             >
                 <p>

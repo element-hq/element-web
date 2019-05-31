@@ -48,19 +48,13 @@ module.exports = React.createClass({
                 </p>
                 <p>
                 { _t(
-                    'Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> ' +
-                    'for the best experience.',
+                    'Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ' +
+                    'or <safariLink>Safari</safariLink> for the best experience.',
                     {},
                     {
                         'chromeLink': (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
-                        'firefoxLink': (sub) => <a href="https://getfirefox.com">{sub}</a>,
-                    },
-                )}
-                { _t('<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.',
-                    {},
-                    {
-                        'safariLink': (sub) => <a href="http://apple.com/safari">{sub}</a>,
-                        'operaLink': (sub) => <a href="http://opera.com">{sub}</a>,
+                        'firefoxLink': (sub) => <a href="https://firefox.com">{sub}</a>,
+                        'safariLink': (sub) => <a href="https://apple.com/safari">{sub}</a>,
                     },
                 )}
                 </p>

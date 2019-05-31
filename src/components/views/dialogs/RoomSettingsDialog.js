@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,28 +19,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
-import AdvancedRoomSettingsTab from "../settings/tabs/AdvancedRoomSettingsTab";
-import dis from '../../../dispatcher';
-import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
-import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
-import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
+import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
+import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
+import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
+import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import sdk from "../../../index";
-
-// TODO: Ditch this whole component
-export class TempTab extends React.Component {
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-    };
-
-    componentDidMount(): void {
-        dis.dispatch({action: "open_old_room_settings"});
-        this.props.onClose();
-    }
-
-    render() {
-        return <div>Hello World</div>;
-    }
-}
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import dis from "../../../dispatcher";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -47,17 +33,20 @@ export default class RoomSettingsDialog extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
-    componentWillMount(): void {
-        this.dispatcherRef = dis.register(this._onAction);
+    componentWillMount() {
+        this._dispatcherRef = dis.register(this._onAction);
     }
 
-    componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
     }
 
     _onAction = (payload) => {
-        if (payload.action !== 'close_room_settings') return;
-        this.props.onFinished();
+        // When room changes below us, close the room settings
+        // whilst the modal is open this can only be triggered when someone hits Leave Room
+        if (payload.action === 'view_next_room') {
+            this.props.onFinished();
+        }
     };
 
     _getTabs() {
@@ -81,13 +70,8 @@ export default class RoomSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Advanced"),
             "mx_RoomSettingsDialog_warningIcon",
-            <AdvancedRoomSettingsTab roomId={this.props.roomId} />,
+            <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
         ));
-        // tabs.push(new Tab(
-        //     _td("Visit old settings"),
-        //     "mx_RoomSettingsDialog_warningIcon",
-        //     <TempTab onClose={this.props.onFinished} />,
-        // ));
 
         return tabs;
     }
@@ -95,9 +79,10 @@ export default class RoomSettingsDialog extends React.Component {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
+        const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
         return (
             <BaseDialog className='mx_RoomSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Room Settings")}>
+                        onFinished={this.props.onFinished} title={_t("Room Settings - %(roomName)s", {roomName})}>
                 <div className='ms_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} />
                 </div>

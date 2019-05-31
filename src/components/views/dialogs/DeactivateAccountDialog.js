@@ -21,7 +21,7 @@ import sdk from '../../../index';
 import Analytics from '../../../Analytics';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
-import Velocity from 'velocity-vector';
+import Velocity from 'velocity-animate';
 import { _t } from '../../../languageHandler';
 
 export default class DeactivateAccountDialog extends React.Component {

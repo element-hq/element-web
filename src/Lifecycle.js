@@ -31,8 +31,9 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
+import { sendLoginRequest } from "./Login";
+import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
-import {sendLoginRequest} from "./Login";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -103,11 +104,36 @@ export async function loadSession(opts) {
             return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
         }
 
-        // fall back to login screen
+        // fall back to welcome screen
         return false;
     } catch (e) {
+        if (e instanceof AbortLoginAndRebuildStorage) {
+            // If we're aborting login because of a storage inconsistency, we don't
+            // need to show the general failure dialog. Instead, just go back to welcome.
+            return false;
+        }
         return _handleLoadSessionFailure(e);
     }
+}
+
+/**
+ * Gets the user ID of the persisted session, if one exists. This does not validate
+ * that the user's credentials still work, just that they exist and that a user ID
+ * is associated with them. The session is not loaded.
+ * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
+ */
+export function getStoredSessionOwner() {
+    const {hsUrl, userId, accessToken} = _getLocalStorageSessionVars();
+    return hsUrl && userId && accessToken ? userId : null;
+}
+
+/**
+ * @returns {bool} True if the stored session is for a guest user or false if it is
+ *     for a real user. If there is no stored session, return null.
+ */
+export function getStoredSessionIsGuest() {
+    const sessVars = _getLocalStorageSessionVars();
+    return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
 }
 
 /**
@@ -187,9 +213,6 @@ export function handleInvalidStoreError(e) {
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log(`Doing guest login on ${hsUrl}`);
 
-    // TODO: we should probably de-duplicate this and Login.loginAsGuest.
-    // Not really sure where the right home for it is.
-
     // create a temporary MatrixClient to do the login
     const client = Matrix.createClient({
         baseUrl: hsUrl,
@@ -215,6 +238,24 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
+function _getLocalStorageSessionVars() {
+    const hsUrl = localStorage.getItem("mx_hs_url");
+    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const accessToken = localStorage.getItem("mx_access_token");
+    const userId = localStorage.getItem("mx_user_id");
+    const deviceId = localStorage.getItem("mx_device_id");
+
+    let isGuest;
+    if (localStorage.getItem("mx_is_guest") !== null) {
+        isGuest = localStorage.getItem("mx_is_guest") === "true";
+    } else {
+        // legacy key name
+        isGuest = localStorage.getItem("matrix-is-guest") === "true";
+    }
+
+    return {hsUrl, isUrl, accessToken, userId, deviceId, isGuest};
+}
+
 // returns a promise which resolves to true if a session is found in
 // localstorage
 //
@@ -229,19 +270,8 @@ async function _restoreFromLocalStorage() {
     if (!localStorage) {
         return false;
     }
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-    const accessToken = localStorage.getItem("mx_access_token");
-    const userId = localStorage.getItem("mx_user_id");
-    const deviceId = localStorage.getItem("mx_device_id");
 
-    let isGuest;
-    if (localStorage.getItem("mx_is_guest") !== null) {
-        isGuest = localStorage.getItem("mx_is_guest") === "true";
-    } else {
-        // legacy key name
-        isGuest = localStorage.getItem("matrix-is-guest") === "true";
-    }
+    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = _getLocalStorageSessionVars();
 
     if (accessToken && userId && hsUrl) {
         console.log(`Restoring session for ${userId}`);
@@ -261,7 +291,7 @@ async function _restoreFromLocalStorage() {
 }
 
 function _handleLoadSessionFailure(e) {
-    console.log("Unable to load session", e);
+    console.error("Unable to load session", e);
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
@@ -336,6 +366,22 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         await _clearStorage();
     }
 
+    const results = await StorageManager.checkConsistency();
+    // If there's an inconsistency between account data in local storage and the
+    // crypto store, we'll be generally confused when handling encrypted data.
+    // Show a modal recommending a full reset of storage.
+    if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
+        const signOut = await _showStorageEvictedDialog();
+        if (signOut) {
+            await _clearStorage();
+            // This error feels a bit clunky, but we want to make sure we don't go any
+            // further and instead head back to sign in.
+            throw new AbortLoginAndRebuildStorage(
+                "Aborting login in progress because of storage inconsistency",
+            );
+        }
+    }
+
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
 
     if (localStorage) {
@@ -365,6 +411,19 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     await startMatrixClient();
     return MatrixClientPeg.get();
 }
+
+function _showStorageEvictedDialog() {
+    const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
+    return new Promise(resolve => {
+        Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
+            onFinished: resolve,
+        });
+    });
+}
+
+// Note: Babel 6 requires the `transform-builtin-extend` plugin for this to satisfy
+// `instanceof`. Babel 7 supports this natively in their class handling.
+class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
     localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
@@ -440,7 +499,7 @@ async function startMatrixClient() {
     dis.dispatch({action: 'will_start_client'}, true);
 
     Notifier.start();
-    UserActivity.start();
+    UserActivity.sharedInstance().start();
     if (!SettingsStore.getValue("lowBandwidth")) {
         Presence.start();
     }
@@ -488,7 +547,7 @@ function _clearStorage() {
  */
 export function stopMatrixClient() {
     Notifier.stop();
-    UserActivity.stop();
+    UserActivity.sharedInstance().stop();
     Presence.stop();
     ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();

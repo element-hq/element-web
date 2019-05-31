@@ -17,6 +17,7 @@ limitations under the License.
 
 'use strict';
 import SettingsStore from "../../../settings/SettingsStore";
+import Timer from "../../../utils/Timer";
 
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -32,14 +33,16 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
+import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer} from '../../../resizer'
+import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+const HOVER_MOVE_TIMEOUT = 1000;
 
 function labelForTagName(tagName) {
     if (tagName.startsWith('u.')) return tagName.slice(2);
@@ -72,6 +75,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
 
+        this._hoverClearTimer = null;
         this._subListRefs = {
             // key => RoomSubList ref
         };
@@ -94,7 +98,7 @@ module.exports = React.createClass({
             // update overflow indicators
             this._checkSubListsOverflow();
             // don't store height for collapsed sublists
-            if(!this.collapsedState[key]) {
+            if (!this.collapsedState[key]) {
                 this.subListSizes[key] = size;
                 window.localStorage.setItem("mx_roomlist_sizes",
                     JSON.stringify(this.subListSizes));
@@ -121,6 +125,7 @@ module.exports = React.createClass({
             incomingCall: null,
             selectedTags: [],
             hover: false,
+            customTags: CustomRoomTagStore.getTags(),
         };
     },
 
@@ -170,6 +175,15 @@ module.exports = React.createClass({
             this._delayedRefreshRoomList();
         });
 
+
+        if (SettingsStore.isFeatureEnabled("feature_custom_tags")) {
+            this._customTagStoreToken = CustomRoomTagStore.addListener(() => {
+                this.setState({
+                    customTags: CustomRoomTagStore.getTags(),
+                });
+            });
+        }
+
         this.refreshRoomList();
 
         // order of the sublists
@@ -183,7 +197,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         const cfg = {
-            layout: this._layout,
+            getLayout: () => this._layout,
         };
         this.resizer = new Resizer(this.resizeContainer, Distributor, cfg);
         this.resizer.setClassNames({
@@ -198,7 +212,9 @@ module.exports = React.createClass({
         this._checkSubListsOverflow();
 
         this.resizer.attach();
-        window.addEventListener("resize", this.onWindowResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("leftPanelResized", this.onResize);
+        }
         this.mounted = true;
     },
 
@@ -246,7 +262,6 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this.mounted = false;
 
-        window.removeEventListener("resize", this.onWindowResize);
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -259,12 +274,20 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
 
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.removeListener("leftPanelResized", this.onResize);
+        }
+
+
         if (this._tagStoreToken) {
             this._tagStoreToken.remove();
         }
 
         if (this._roomListStoreToken) {
             this._roomListStoreToken.remove();
+        }
+        if (this._customTagStoreToken) {
+            this._customTagStoreToken.remove();
         }
 
         // NB: GroupStore is not a Flux.Store
@@ -276,13 +299,14 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList.cancelPendingCall();
     },
 
-    onWindowResize: function() {
+
+    onResize: function() {
         if (this.mounted && this._layout && this.resizeContainer &&
             Array.isArray(this._layoutSections)
         ) {
             this._layout.update(
                 this._layoutSections,
-                this.resizeContainer.offsetHeight
+                this.resizeContainer.offsetHeight,
             );
         }
     },
@@ -343,11 +367,32 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
-    onMouseEnter: function(ev) {
-        this.setState({hover: true});
+    onMouseMove: async function(ev) {
+        if (!this._hoverClearTimer) {
+            this.setState({hover: true});
+            this._hoverClearTimer = new Timer(HOVER_MOVE_TIMEOUT);
+            this._hoverClearTimer.start();
+            let finished = true;
+            try {
+                await this._hoverClearTimer.finished();
+            } catch (err) {
+                finished = false;
+            }
+            this._hoverClearTimer = null;
+            if (finished) {
+                this.setState({hover: false});
+                this._delayedRefreshRoomList();
+            }
+        } else {
+            this._hoverClearTimer.restart();
+        }
     },
 
     onMouseLeave: function(ev) {
+        if (this._hoverClearTimer) {
+            this._hoverClearTimer.abort();
+            this._hoverClearTimer = null;
+        }
         this.setState({hover: false});
 
         // Refresh the room list just in case the user missed something.
@@ -705,6 +750,7 @@ module.exports = React.createClass({
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
+                addRoomLabel: _t("Start chat"),
             },
             {
                 list: this.state.lists['im.vector.fake.recent'],
@@ -717,7 +763,8 @@ module.exports = React.createClass({
         ];
         const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
-                return !tagName.match(STANDARD_TAGS_REGEX);
+                return (!this.state.customTags || this.state.customTags[tagName]) &&
+                    !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
                     list: this.state.lists[tagName],
@@ -759,7 +806,7 @@ module.exports = React.createClass({
 
         return (
             <div ref={this._collectResizeContainer} className="mx_RoomList"
-                 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                 onMouseMove={this.onMouseMove} onMouseLeave={this.onMouseLeave}>
                 { subListComponents }
             </div>
         );

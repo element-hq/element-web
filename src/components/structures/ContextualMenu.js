@@ -56,6 +56,7 @@ export default class ContextualMenu extends React.Component {
         menuPaddingRight: PropTypes.number,
         menuPaddingBottom: PropTypes.number,
         menuPaddingLeft: PropTypes.number,
+        zIndex: PropTypes.number,
 
         // If true, insert an invisible screen-sized element behind the
         // menu that when clicked will close it.
@@ -215,16 +216,22 @@ export default class ContextualMenu extends React.Component {
             menuStyle["paddingRight"] = props.menuPaddingRight;
         }
 
+        const wrapperStyle = {};
+        if (!isNaN(Number(props.zIndex))) {
+            menuStyle["zIndex"] = props.zIndex + 1;
+            wrapperStyle["zIndex"] = props.zIndex;
+        }
+
         const ElementClass = props.elementClass;
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
-        return <div className={className} style={position}>
+        return <div className={className} style={{...position, ...wrapperStyle}}>
             <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-            { props.hasBackground && <div className="mx_ContextualMenu_background"
+            { props.hasBackground && <div className="mx_ContextualMenu_background" style={wrapperStyle}
                                           onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
             <style>{ chevronCSS }</style>
         </div>;

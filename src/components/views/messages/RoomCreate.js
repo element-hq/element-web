@@ -18,8 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dis from '../../../dispatcher';
-import { makeEventPermalink } from '../../../matrix-to';
+import { RoomPermalinkCreator } from '../../../matrix-to';
 import { _t } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 module.exports = React.createClass({
     displayName: 'RoomCreate',
@@ -47,13 +48,17 @@ module.exports = React.createClass({
         if (predecessor === undefined) {
             return <div />; // We should never have been instaniated in this case
         }
+        const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
+        const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
+        permalinkCreator.load();
+        const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         return <div className="mx_CreateEvent">
-            <img className="mx_CreateEvent_image" src={require("../../../../res/img/room-continuation.svg")} />
+            <div className="mx_CreateEvent_image" />
             <div className="mx_CreateEvent_header">
                 {_t("This room is a continuation of another conversation.")}
             </div>
             <a className="mx_CreateEvent_link"
-                href={makeEventPermalink(predecessor['room_id'], predecessor['event_id'])}
+                href={predecessorPermalink}
                 onClick={this._onLinkClicked}
             >
                 {_t("Click here to see older messages.")}

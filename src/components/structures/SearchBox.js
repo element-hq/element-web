@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,22 +15,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
-import { _t } from '../../languageHandler';
+import PropTypes from 'prop-types';
 import { KeyCode } from '../../Keyboard';
-import sdk from '../../index';
 import dis from '../../dispatcher';
-import rate_limited_func from '../../ratelimitedfunc';
+import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
 
     propTypes: {
-        onSearch: React.PropTypes.func,
-        onCleared: React.PropTypes.func,
+        onSearch: PropTypes.func,
+        onCleared: PropTypes.func,
+        className: PropTypes.string,
+        placeholder: PropTypes.string.isRequired,
+
+        // If true, the search box will focus and clear itself
+        // on room search focus action (it would be nicer to take
+        // this functionality out, but not obvious how that would work)
+        enableRoomSearchFocus: PropTypes.bool,
+    },
+
+    getDefaultProps: function() {
+        return {
+            enableRoomSearchFocus: false,
+        };
     },
 
     getInitialState: function() {
@@ -47,6 +58,8 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        if (!this.props.enableRoomSearchFocus) return;
+
         switch (payload.action) {
             case 'view_room':
                 if (this.refs.search && payload.clear_search) {
@@ -67,12 +80,9 @@ module.exports = React.createClass({
         this.onSearch();
     },
 
-    onSearch: new rate_limited_func(
-        function() {
-            this.props.onSearch(this.refs.search.value);
-        },
-        100,
-    ),
+    onSearch: throttle(function() {
+        this.props.onSearch(this.refs.search.value);
+    }, 200, {trailing: true, leading: true}),
 
     _onKeyDown: function(ev) {
         switch (ev.keyCode) {
@@ -95,26 +105,32 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
-
+        // check for collapsed here and
+        // not at parent so we keep
+        // searchTerm in our state
+        // when collapsing and expanding
+        if (this.props.collapsed) {
+            return null;
+        }
         const clearButton = this.state.searchTerm.length > 0 ?
             (<AccessibleButton key="button"
                     className="mx_SearchBox_closeButton"
-                    onClick={ () => {this._clearSearch("button")} }>
-            </AccessibleButton>) :  undefined;
+                    onClick={ () => {this._clearSearch("button"); } }>
+            </AccessibleButton>) : undefined;
 
+        const className = this.props.className || "";
         return (
             <div className="mx_SearchBox mx_textinput">
                 <input
                     key="searchfield"
                     type="text"
                     ref="search"
-                    className="mx_textinput_icon mx_textinput_search"
+                    className={"mx_textinput_icon mx_textinput_search " + className}
                     value={ this.state.searchTerm }
                     onFocus={ this._onFocus }
                     onChange={ this.onChange }
                     onKeyDown={ this._onKeyDown }
-                    placeholder={ _t('Filter room names') }
+                    placeholder={ this.props.placeholder }
                 />
                 { clearButton }
             </div>

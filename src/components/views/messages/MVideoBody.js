@@ -33,7 +33,7 @@ module.exports = React.createClass({
         mxEvent: PropTypes.object.isRequired,
 
         /* called when the video has loaded */
-        onWidgetLoad: PropTypes.func.isRequired,
+        onHeightChanged: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
-                    this.props.onWidgetLoad();
+                    this.props.onHeightChanged();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err);

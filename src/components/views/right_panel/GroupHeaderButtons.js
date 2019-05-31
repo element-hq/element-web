@@ -19,23 +19,30 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher';
 import HeaderButton from './HeaderButton';
 import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
+const GROUP_PHASES = [
+    RightPanel.Phase.GroupMemberInfo,
+    RightPanel.Phase.GroupMemberList,
+];
+const ROOM_PHASES = [
+    RightPanel.Phase.GroupRoomList,
+    RightPanel.Phase.GroupRoomInfo,
+];
+
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, RightPanel.Phase.GroupMemberList);
+        this._onMembersClicked = this._onMembersClicked.bind(this);
+        this._onRoomsClicked = this._onRoomsClicked.bind(this);
     }
 
     onAction(payload) {
         super.onAction(payload);
 
         if (payload.action === "view_user") {
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
             if (payload.member) {
                 this.setPhase(RightPanel.Phase.RoomMemberInfo, {member: payload.member});
             } else {
@@ -54,25 +61,26 @@ export default class GroupHeaderButtons extends HeaderButtons {
         }
     }
 
-    renderButtons() {
-        const groupPhases = [
-            RightPanel.Phase.GroupMemberInfo,
-            RightPanel.Phase.GroupMemberList,
-        ];
-        const roomPhases = [
-            RightPanel.Phase.GroupRoomList,
-            RightPanel.Phase.GroupRoomInfo,
-        ];
+    _onMembersClicked() {
+        this.togglePhase(RightPanel.Phase.GroupMemberList, GROUP_PHASES);
+    }
 
+    _onRoomsClicked() {
+        this.togglePhase(RightPanel.Phase.GroupRoomList, ROOM_PHASES);
+    }
+
+    renderButtons() {
         return [
-            <HeaderButton key="_groupMembersButton" title={_t('Members')} iconSrc={require("../../../../res/img/icons-people.svg")}
-                isHighlighted={this.isPhase(groupPhases)}
-                clickPhase={RightPanel.Phase.GroupMemberList}
+            <HeaderButton key="groupMembersButton" name="groupMembersButton"
+                title={_t('Members')}
+                isHighlighted={this.isPhase(GROUP_PHASES)}
+                onClick={this._onMembersClicked}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
-            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc={require("../../../../res/img/icons-room-nobg.svg")}
-                isHighlighted={this.isPhase(roomPhases)}
-                clickPhase={RightPanel.Phase.GroupRoomList}
+            <HeaderButton key="roomsButton" name="roomsButton"
+                title={_t('Rooms')}
+                isHighlighted={this.isPhase(ROOM_PHASES)}
+                onClick={this._onRoomsClicked}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
             />,
         ];

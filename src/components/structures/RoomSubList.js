@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ import IndicatorScrollbar from './IndicatorScrollbar';
 import { KeyCode } from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
-
+import RoomTile from "../views/rooms/RoomTile";
+import LazyRenderList from "../views/elements/LazyRenderList";
+import {_t} from "../../languageHandler";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -41,6 +43,7 @@ const RoomSubList = React.createClass({
         list: PropTypes.arrayOf(PropTypes.object).isRequired,
         label: PropTypes.string.isRequired,
         tagName: PropTypes.string,
+        addRoomLabel: PropTypes.string,
 
         order: PropTypes.string.isRequired,
 
@@ -60,6 +63,9 @@ const RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
+            // some values to get LazyRenderList starting
+            scrollerHeight: 800,
+            scrollTop: 0,
         };
     },
 
@@ -127,46 +133,6 @@ const RoomSubList = React.createClass({
         });
     },
 
-    _shouldShowNotifBadge: function(roomNotifState) {
-        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
-        return showBadgeInStates.indexOf(roomNotifState) > -1;
-    },
-
-    _shouldShowMentionBadge: function(roomNotifState) {
-        return roomNotifState !== RoomNotifs.MUTE;
-    },
-
-    /**
-     * Total up all the notification counts from the rooms
-     *
-     * @returns {Array} The array takes the form [total, highlight] where highlight is a bool
-     */
-    roomNotificationCount: function() {
-        const self = this;
-
-        if (this.props.isInvite) {
-            return [0, true];
-        }
-
-        return this.props.list.reduce(function(result, room, index) {
-            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            const highlight = room.getUnreadNotificationCount('highlight') > 0;
-            const notificationCount = room.getUnreadNotificationCount();
-
-            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
-            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
-            const badges = notifBadges || mentionBadges;
-
-            if (badges) {
-                result[0] += notificationCount;
-                if (highlight) {
-                    result[1] = true;
-                }
-            }
-            return result;
-        }, [0, false]);
-    },
-
     _updateSubListCount: function() {
         // Force an update by setting the state to the current state
         // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
@@ -174,45 +140,33 @@ const RoomSubList = React.createClass({
         this.setState(this.state);
     },
 
-    makeRoomTiles: function() {
-        const RoomTile = sdk.getComponent("rooms.RoomTile");
-        return this.props.list.map((room, index) => {
-            return <RoomTile
-                room={room}
-                roomSubList={this}
-                tagName={this.props.tagName}
-                key={room.roomId}
-                collapsed={this.props.collapsed || false}
-                unread={Unread.doesRoomHaveUnreadMessages(room)}
-                highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
-                isInvite={this.props.isInvite}
-                refreshSubList={this._updateSubListCount}
-                incomingCall={null}
-                onClick={this.onRoomTileClick}
-            />;
-        });
+    makeRoomTile: function(room) {
+        return <RoomTile
+            room={room}
+            roomSubList={this}
+            tagName={this.props.tagName}
+            key={room.roomId}
+            collapsed={this.props.collapsed || false}
+            unread={Unread.doesRoomHaveUnreadMessages(room)}
+            highlight={this.props.isInvite || RoomNotifs.getUnreadNotificationCount(room, 'highlight') > 0}
+            notificationCount={RoomNotifs.getUnreadNotificationCount(room)}
+            isInvite={this.props.isInvite}
+            refreshSubList={this._updateSubListCount}
+            incomingCall={null}
+            onClick={this.onRoomTileClick}
+        />;
     },
 
     _onNotifBadgeClick: function(e) {
         // prevent the roomsublist collapsing
         e.preventDefault();
         e.stopPropagation();
-        // find first room which has notifications and switch to it
-        for (const room of this.props.list) {
-            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            const highlight = room.getUnreadNotificationCount('highlight') > 0;
-            const notificationCount = room.getUnreadNotificationCount();
-
-            const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge(roomNotifState);
-            const mentionBadges = highlight && this._shouldShowMentionBadge(roomNotifState);
-
-            if (notifBadges || mentionBadges) {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: room.roomId,
-                });
-                return;
-            }
+        const room = this.props.list.find(room => RoomNotifs.getRoomHasBadge(room));
+        if (room) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId,
+            });
         }
     },
 
@@ -240,9 +194,11 @@ const RoomSubList = React.createClass({
 
     _getHeaderJsx: function(isCollapsed) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const subListNotifications = this.roomNotificationCount();
-        const subListNotifCount = subListNotifications[0];
-        const subListNotifHighlight = subListNotifications[1];
+        const subListNotifications = !this.props.isInvite ?
+            RoomNotifs.aggregateNotificationCount(this.props.list) :
+            {count: 0, highlight: true};
+        const subListNotifCount = subListNotifications.count;
+        const subListNotifHighlight = subListNotifications.highlight;
 
         let badge;
         if (!this.props.collapsed) {
@@ -278,7 +234,11 @@ const RoomSubList = React.createClass({
         let addRoomButton;
         if (this.props.onAddRoom) {
             addRoomButton = (
-                <AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom" />
+                <AccessibleButton
+                    onClick={ this.props.onAddRoom }
+                    className="mx_RoomSubList_addRoom"
+                    title={this.props.addRoomLabel || _t("Add room")}
+                />
             );
         }
 
@@ -317,6 +277,21 @@ const RoomSubList = React.createClass({
         if (this.refs.subList) {
             this.refs.subList.style.height = `${height}px`;
         }
+        this._updateLazyRenderHeight(height);
+    },
+
+    _updateLazyRenderHeight: function(height) {
+        this.setState({scrollerHeight: height});
+    },
+
+    _onScroll: function() {
+        this.setState({scrollTop: this.refs.scroller.getScrollTop()});
+    },
+
+    _canUseLazyListRendering() {
+        // for now disable lazy rendering as they are already rendered tiles
+        // not rooms like props.list we pass to LazyRenderList
+        return !this.props.extraTiles || !this.props.extraTiles.length;
     },
 
     render: function() {
@@ -333,12 +308,24 @@ const RoomSubList = React.createClass({
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
-            } else {
-                const tiles = this.makeRoomTiles();
-                tiles.push(...this.props.extraTiles);
+            } else if (this._canUseLazyListRendering()) {
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
+                        <LazyRenderList
+                            scrollTop={this.state.scrollTop }
+                            height={ this.state.scrollerHeight }
+                            renderItem={ this.makeRoomTile }
+                            itemHeight={34}
+                            items={ this.props.list } />
+                    </IndicatorScrollbar>
+                </div>;
+            } else {
+                const roomTiles = this.props.list.map(r => this.makeRoomTile(r));
+                const tiles = roomTiles.concat(this.props.extraTiles);
+                return <div ref="subList" className={subListClasses}>
+                    {this._getHeaderJsx(isCollapsed)}
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
                         { tiles }
                     </IndicatorScrollbar>
                 </div>;

@@ -24,7 +24,7 @@ limitations under the License.
     padding-bottom: 10px;
 
     &:before {
-        mask: url("$(res)/img/e2e/lock-warning.svg");
+        mask: url("$(res)/img/e2e/lock-warning-filled.svg");
         mask-repeat: no-repeat;
         background-color: $primary-fg-color;
         content: "";

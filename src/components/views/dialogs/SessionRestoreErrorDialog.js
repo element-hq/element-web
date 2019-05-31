@@ -41,7 +41,7 @@ export default React.createClass({
         Modal.createTrackedDialog('Session Restore Confirm Logout', '', QuestionDialog, {
             title: _t("Sign out"),
             description:
-                <div>{ _t("Log out and remove encryption keys?") }</div>,
+                <div>{ _t("Sign out and remove encryption keys?") }</div>,
             button: _t("Sign out"),
             danger: true,
             onFinished: this.props.onFinished,

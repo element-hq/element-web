@@ -25,8 +25,6 @@ export default class StatusMessageContextMenu extends React.Component {
     static propTypes = {
         // js-sdk User object. Not required because it might not exist.
         user: PropTypes.object,
-        // True when waiting for status change to complete.
-        waiting: false,
     };
 
     constructor(props, context) {
@@ -45,7 +43,7 @@ export default class StatusMessageContextMenu extends React.Component {
         user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     }
 
-    componentWillUmount() {
+    componentWillUnmount() {
         const { user } = this.props;
         if (!user) {
             return;

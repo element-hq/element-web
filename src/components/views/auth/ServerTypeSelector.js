@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import classnames from 'classnames';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import {makeType} from "../../../utils/TypeUtils";
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
@@ -30,40 +32,47 @@ export const TYPES = {
     FREE: {
         id: FREE,
         label: () => _t('Free'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/matrix-org-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
-        hsUrl: 'https://matrix.org',
-        isUrl: 'https://vector.im',
+        serverConfig: makeType(ValidatedServerConfig, {
+            hsUrl: "https://matrix.org",
+            hsName: "matrix.org",
+            hsNameIsDifferent: false,
+            isUrl: "https://vector.im",
+            identityEnabled: true,
+        }),
     },
     PREMIUM: {
         id: PREMIUM,
         label: () => _t('Premium'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/modular-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/modular-bw-logo.svg')} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
             a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
                 {sub}
             </a>,
         }),
+        identityServerUrl: "https://vector.im",
     },
     ADVANCED: {
         id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
-            <img src={require('../../../../res/img/feather-icons/globe.svg')} />
+            <img src={require('../../../../res/img/feather-customised/globe.svg')} />
             {_t('Other')}
         </div>,
         description: () => _t('Find other public servers or use a custom server'),
     },
 };
 
-function getDefaultType(defaultHsUrl) {
-    if (!defaultHsUrl) {
+export function getTypeFromServerConfig(config) {
+    const {hsUrl} = config;
+    if (!hsUrl) {
         return null;
-    } else if (defaultHsUrl === TYPES.FREE.hsUrl) {
+    } else if (hsUrl === TYPES.FREE.serverConfig.hsUrl) {
         return FREE;
-    } else if (new URL(defaultHsUrl).hostname.endsWith('.modular.im')) {
-        // TODO: Use a Riot config parameter to detect Modular-ness.
-        // https://github.com/vector-im/riot-web/issues/8253
+    } else if (new URL(hsUrl).hostname.endsWith('.modular.im')) {
+        // This is an unlikely case to reach, as Modular defaults to hiding the
+        // server type selector.
         return PREMIUM;
     } else {
         return ADVANCED;
@@ -72,26 +81,22 @@ function getDefaultType(defaultHsUrl) {
 
 export default class ServerTypeSelector extends React.PureComponent {
     static propTypes = {
-        // The default HS URL as another way to set the initially selected type.
-        defaultHsUrl: PropTypes.string,
+        // The default selected type.
+        selected: PropTypes.string,
         // Handler called when the selected type changes.
         onChange: PropTypes.func.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
 
         const {
-            defaultHsUrl,
-            onChange,
+            selected,
         } = props;
-        const type = getDefaultType(defaultHsUrl);
+
         this.state = {
-            selected: type,
+            selected,
         };
-        if (onChange) {
-            onChange(type);
-        }
     }
 
     updateSelectedType(type) {
@@ -110,7 +115,7 @@ export default class ServerTypeSelector extends React.PureComponent {
         e.stopPropagation();
         const type = e.currentTarget.dataset.id;
         this.updateSelectedType(type);
-    }
+    };
 
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');

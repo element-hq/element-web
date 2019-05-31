@@ -19,11 +19,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
-import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import { _t } from '../../../languageHandler';
-import {hashCode} from '../../../utils/FormattingUtils';
+import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 
 export default React.createClass({
     displayName: 'SenderProfile',
@@ -95,9 +94,8 @@ export default React.createClass({
     },
 
     render() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
-        const colorNumber = hashCode(mxEvent.getSender()) % 8;
+        const colorClass = getUserNameColorClass(mxEvent.getSender());
         const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         const {msgtype} = mxEvent.getContent();
 
@@ -117,11 +115,11 @@ export default React.createClass({
             />;
         }
 
-        const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
+        const nameElem = name || '';
 
         // Name + flair
         const nameFlair = <span>
-            <span className={`mx_SenderProfile_name mx_SenderProfile_color${colorNumber}`}>
+            <span className={`mx_SenderProfile_name ${colorClass}`}>
                 { nameElem }
             </span>
             { flair }

@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,7 +61,7 @@ export default React.createClass({
         inputs: PropTypes.object,
 
         // As js-sdk interactive-auth
-        makeRegistrationUrl: PropTypes.func,
+        requestEmailToken: PropTypes.func,
         sessionId: PropTypes.string,
         clientSecret: PropTypes.string,
         emailSid: PropTypes.string,
@@ -96,6 +97,7 @@ export default React.createClass({
             sessionId: this.props.sessionId,
             clientSecret: this.props.clientSecret,
             emailSid: this.props.emailSid,
+            requestEmailToken: this.props.requestEmailToken,
         });
 
         this._authLogic.attemptAuth().then((result) => {
@@ -202,7 +204,6 @@ export default React.createClass({
                 stageState={this.state.stageState}
                 fail={this._onAuthStageFailed}
                 setEmailSid={this._setEmailSid}
-                makeRegistrationUrl={this.props.makeRegistrationUrl}
                 showContinue={!this.props.continueIsManaged}
             />
         );

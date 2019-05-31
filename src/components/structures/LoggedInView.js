@@ -22,15 +22,16 @@ import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
-import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
+import { fixupColorFonts } from '../../utils/FontManager';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
+import { getHomePageUrl } from '../../utils/pages';
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -57,7 +58,6 @@ const LoggedInView = React.createClass({
         matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         page_type: PropTypes.string.isRequired,
         onRoomCreated: PropTypes.func,
-        onUserSettingsClose: PropTypes.func,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
@@ -119,6 +119,20 @@ const LoggedInView = React.createClass({
         this._matrixClient.on("accountData", this.onAccountData);
         this._matrixClient.on("sync", this.onSync);
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+
+        fixupColorFonts();
+    },
+
+    componentDidUpdate(prevProps) {
+        // attempt to guess when a banner was opened or closed
+        if (
+            (prevProps.showCookieBar !== this.props.showCookieBar) ||
+            (prevProps.hasNewVersion !== this.props.hasNewVersion) ||
+            (prevProps.userHasGeneratedPassword !== this.props.userHasGeneratedPassword) ||
+            (prevProps.showNotifierToolbar !== this.props.showNotifierToolbar)
+        ) {
+            this.props.resizeNotifier.notifyBannersChanged();
+        }
     },
 
     componentWillUnmount: function() {
@@ -173,6 +187,7 @@ const LoggedInView = React.createClass({
             },
             onResized: (size) => {
                 window.localStorage.setItem("mx_lhs_size", '' + size);
+                this.props.resizeNotifier.notifyLeftHandleResized();
             },
         };
         const resizer = new Resizer(
@@ -310,6 +325,18 @@ const LoggedInView = React.createClass({
                     handled = true;
                 }
                 break;
+            case KeyCode.KEY_I:
+                // Ideally this would be CTRL+P for "Profile", but that's
+                // taken by the print dialog. CTRL+I for "Information"
+                // will have to do.
+
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'toggle_top_left_menu',
+                    });
+                    handled = true;
+                }
+                break;
         }
 
         if (handled) {
@@ -421,8 +448,8 @@ const LoggedInView = React.createClass({
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
-        const UserSettings = sdk.getComponent('structures.UserSettings');
-        const HomePage = sdk.getComponent('structures.HomePage');
+        const UserView = sdk.getComponent('structures.UserView');
+        const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
@@ -448,14 +475,8 @@ const LoggedInView = React.createClass({
                         disabled={this.props.middleDisabled}
                         collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
+                        resizeNotifier={this.props.resizeNotifier}
                     />;
-                break;
-
-            case PageTypes.UserSettings:
-                pageElement = <UserSettings
-                    onClose={this.props.onCloseAllSettings}
-                    brand={this.props.config.brand}
-                />;
                 break;
 
             case PageTypes.MyGroups:
@@ -468,16 +489,16 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
-                    pageElement = <HomePage
-                        homePageUrl={this.props.config.welcomePageUrl}
+                    const pageUrl = getHomePageUrl(this.props.config);
+                    pageElement = <EmbeddedPage className="mx_HomePage"
+                        url={pageUrl}
+                        scrollbar={true}
                     />;
                 }
                 break;
 
             case PageTypes.UserView:
-                pageElement = null; // deliberately null for now
-                // TODO: fix/remove UserView
-                // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                pageElement = <UserView userId={this.props.currentUserId} />;
                 break;
             case PageTypes.GroupView:
                 pageElement = <GroupView
@@ -496,7 +517,6 @@ const LoggedInView = React.createClass({
         });
 
         let topBar;
-        const isGuest = this.props.matrixClient.isGuest();
         if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
             topBar = <ServerLimitBar kind='hard'
                 adminContact={this.state.syncErrorData.error.data.admin_contact}
@@ -520,10 +540,7 @@ const LoggedInView = React.createClass({
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
-        } else if (
-            !isGuest && Notifier.supportsDesktopNotifications() &&
-            !Notifier.isEnabled() && !Notifier.isToolbarHidden()
-        ) {
+        } else if (this.props.showNotifierToolbar) {
             topBar = <MatrixToolbar />;
         }
 
@@ -541,7 +558,7 @@ const LoggedInView = React.createClass({
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
-                            toolbarShown={!!topBar}
+                            resizeNotifier={this.props.resizeNotifier}
                             collapsed={this.props.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />

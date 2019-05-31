@@ -68,12 +68,11 @@ module.exports = React.createClass({
     },
 
     _shouldShowNotifBadge: function() {
-        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
-        return showBadgeInStates.indexOf(this.state.notifState) > -1;
+        return RoomNotifs.BADGE_STATES.includes(this.state.notifState);
     },
 
     _shouldShowMentionBadge: function() {
-        return this.state.notifState !== RoomNotifs.MUTE;
+        return RoomNotifs.MENTION_BADGE_STATES.includes(this.state.notifState);
     },
 
     _isDirectMessageRoom: function(roomId) {
@@ -106,13 +105,6 @@ module.exports = React.createClass({
             return "";
         }
         return statusUser._unstable_statusMessage;
-    },
-
-    onRoomTimeline: function(ev, room) {
-        if (room !== this.props.room) return;
-        this.setState({
-            notificationCount: this.props.room.getUnreadNotificationCount(),
-        });
     },
 
     onRoomName: function(room) {
@@ -159,7 +151,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
@@ -179,7 +170,6 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
@@ -306,7 +296,7 @@ module.exports = React.createClass({
 
     render: function() {
         const isInvite = this.props.room.getMyMembership() === "invite";
-        const notificationCount = this.state.notificationCount;
+        const notificationCount = this.props.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
         const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
@@ -352,7 +342,6 @@ module.exports = React.createClass({
             badge = <div className={badgeClasses}>{ badgeContent }</div>;
         }
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
         let subtextLabel;
         let tooltip;
@@ -364,17 +353,10 @@ module.exports = React.createClass({
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
-
-            if (this.state.selected) {
-                const nameSelected = <EmojiText>{ name }</EmojiText>;
-
-                label = <div title={name} className={nameClasses} dir="auto">{ nameSelected }</div>;
-            } else {
-                label = <EmojiText element="div" title={name} className={nameClasses} dir="auto">{ name }</EmojiText>;
-            }
+            label = <div title={name} className={nameClasses} dir="auto">{ name }</div>;
         } else if (this.state.hover) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
         }
 
         //var incomingCallBox;

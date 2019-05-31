@@ -290,7 +290,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src={require("../../../res/img/feather-icons/e2e/warning.svg")} width="24" height="24" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -304,12 +304,10 @@ module.exports = React.createClass({
 
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
-
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src={require("../../../res/img/feather-icons/e2e/warning.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }

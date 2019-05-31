@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017, 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,55 +20,55 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
-import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
-
 import PasswordReset from "../../../PasswordReset";
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+
+// Phases
+// Show controls to configure server details
+const PHASE_SERVER_DETAILS = 0;
+// Show the forgot password inputs
+const PHASE_FORGOT = 1;
+// Email is in the process of being sent
+const PHASE_SENDING_EMAIL = 2;
+// Email has been sent
+const PHASE_EMAIL_SENT = 3;
+// User has clicked the link in email and completed reset
+const PHASE_DONE = 4;
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
-        defaultHsUrl: PropTypes.string,
-        defaultIsUrl: PropTypes.string,
-        customHsUrl: PropTypes.string,
-        customIsUrl: PropTypes.string,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        onServerConfigChange: PropTypes.func.isRequired,
         onLoginClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
-
-        // The default server name to use when the user hasn't specified
-        // one. This is used when displaying the defaultHsUrl in the UI.
-        defaultServerName: PropTypes.string,
-
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
     },
 
     getInitialState: function() {
         return {
-            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
-            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
-            progress: null,
-            password: null,
-            password2: null,
+            phase: PHASE_FORGOT,
+            email: "",
+            password: "",
+            password2: "",
             errorText: null,
         };
     },
 
-    submitPasswordReset: function(hsUrl, identityUrl, email, password) {
+    submitPasswordReset: function(email, password) {
         this.setState({
-            progress: "sending_email",
+            phase: PHASE_SENDING_EMAIL,
         });
-        this.reset = new PasswordReset(hsUrl, identityUrl);
+        this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
         this.reset.resetPassword(email, password).done(() => {
             this.setState({
-                progress: "sent_email",
+                phase: PHASE_EMAIL_SENT,
             });
         }, (err) => {
             this.showErrorDialog(_t('Failed to send email') + ": " + err.message);
             this.setState({
-                progress: null,
+                phase: PHASE_FORGOT,
             });
         });
     },
@@ -80,7 +80,7 @@ module.exports = React.createClass({
             return;
         }
         this.reset.checkEmailLinkClicked().done((res) => {
-            this.setState({ progress: "complete" });
+            this.setState({ phase: PHASE_DONE });
         }, (err) => {
             this.showErrorDialog(err.message);
         });
@@ -88,13 +88,6 @@ module.exports = React.createClass({
 
     onSubmitForm: function(ev) {
         ev.preventDefault();
-
-        // Don't allow the user to register if there's a discovery error
-        // Without this, the user could end up registering on the wrong homeserver.
-        if (this.props.defaultServerDiscoveryError) {
-            this.setState({errorText: this.props.defaultServerDiscoveryError});
-            return;
-        }
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -109,39 +102,20 @@ module.exports = React.createClass({
                 description:
                     <div>
                         { _t(
-                            'Resetting password will currently reset any ' +
-                            'end-to-end encryption keys on all devices, ' +
-                            'making encrypted chat history unreadable, ' +
-                            'unless you first export your room keys and re-import ' +
-                            'them afterwards. In future this will be improved.',
+                            "Changing your password will reset any end-to-end encryption keys " +
+                            "on all of your devices, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another device before resetting your " +
+                            "password.",
                         ) }
                     </div>,
                 button: _t('Continue'),
-                extraButtons: [
-                    <button key="export_keys" className="mx_Dialog_primary"
-                            onClick={this._onExportE2eKeysClicked}>
-                        { _t('Export E2E room keys') }
-                    </button>,
-                ],
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        this.submitPasswordReset(
-                            this.state.enteredHomeserverUrl, this.state.enteredIdentityServerUrl,
-                            this.state.email, this.state.password,
-                        );
+                        this.submitPasswordReset(this.state.email, this.state.password);
                     }
                 },
             });
         }
-    },
-
-    _onExportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Export E2E Keys', 'Forgot Password',
-            import('../../../async-components/views/dialogs/ExportE2eKeysDialog'),
-            {
-                matrixClient: MatrixClientPeg.get(),
-            },
-        );
     },
 
     onInputChanged: function(stateKey, ev) {
@@ -150,15 +124,18 @@ module.exports = React.createClass({
         });
     },
 
-    onServerConfigChange: function(config) {
-        const newState = {};
-        if (config.hsUrl !== undefined) {
-            newState.enteredHomeserverUrl = config.hsUrl;
-        }
-        if (config.isUrl !== undefined) {
-            newState.enteredIdentityServerUrl = config.isUrl;
-        }
-        this.setState(newState);
+    async onServerDetailsNextPhaseClick() {
+        this.setState({
+            phase: PHASE_FORGOT,
+        });
+    },
+
+    onEditServerDetailsClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_SERVER_DETAILS,
+        });
     },
 
     onLoginClick: function(ev) {
@@ -175,94 +152,159 @@ module.exports = React.createClass({
         });
     },
 
+    renderServerDetails() {
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
+
+        if (SdkConfig.get()['disable_custom_urls']) {
+            return null;
+        }
+
+        return <ServerConfig
+            serverConfig={this.props.serverConfig}
+            onServerConfigChange={this.props.onServerConfigChange}
+            delayTimeMs={0}
+            onAfterSubmit={this.onServerDetailsNextPhaseClick}
+            submitText={_t("Next")}
+            submitClass="mx_Login_submit"
+        />;
+    },
+
+    renderForgot() {
+        const Field = sdk.getComponent('elements.Field');
+
+        let errorText = null;
+        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        if (err) {
+            errorText = <div className="mx_Login_error">{ err }</div>;
+        }
+
+        let yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            yourMatrixAccountText = _t('Your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
+            });
+        }
+
+        // If custom URLs are allowed, wire up the server details edit link.
+        let editLink = null;
+        if (!SdkConfig.get()['disable_custom_urls']) {
+            editLink = <a className="mx_AuthBody_editServerDetails"
+                href="#" onClick={this.onEditServerDetailsClick}
+            >
+                {_t('Change')}
+            </a>;
+        }
+
+        return <div>
+            <h3>
+                {yourMatrixAccountText}
+                {editLink}
+            </h3>
+            {errorText}
+            <form onSubmit={this.onSubmitForm}>
+                <div className="mx_AuthBody_fieldRow">
+                    <Field
+                        id="mx_ForgotPassword_email"
+                        name="reset_email" // define a name so browser's password autofill gets less confused
+                        type="text"
+                        label={_t('Email')}
+                        value={this.state.email}
+                        onChange={this.onInputChanged.bind(this, "email")}
+                        autoFocus
+                    />
+                </div>
+                <div className="mx_AuthBody_fieldRow">
+                    <Field
+                        id="mx_ForgotPassword_password"
+                        name="reset_password"
+                        type="password"
+                        label={_t('Password')}
+                        value={this.state.password}
+                        onChange={this.onInputChanged.bind(this, "password")}
+                    />
+                    <Field
+                        id="mx_ForgotPassword_passwordConfirm"
+                        name="reset_password_confirm"
+                        type="password"
+                        label={_t('Confirm')}
+                        value={this.state.password2}
+                        onChange={this.onInputChanged.bind(this, "password2")}
+                    />
+                </div>
+                <span>{_t(
+                    'A verification email will be sent to your inbox to confirm ' +
+                    'setting your new password.',
+                )}</span>
+                <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
+            </form>
+            <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+                {_t('Sign in instead')}
+            </a>
+        </div>;
+    },
+
+    renderSendingEmail() {
+        const Spinner = sdk.getComponent("elements.Spinner");
+        return <Spinner />;
+    },
+
+    renderEmailSent() {
+        return <div>
+            {_t("An email has been sent to %(emailAddress)s. Once you've followed the " +
+                "link it contains, click below.", { emailAddress: this.state.email })}
+            <br />
+            <input className="mx_Login_submit" type="button" onClick={this.onVerify}
+                value={_t('I have verified my email address')} />
+        </div>;
+    },
+
+    renderDone() {
+        return <div>
+            <p>{_t("Your password has been reset.")}</p>
+            <p>{_t(
+                "You have been logged out of all devices and will no longer receive " +
+                "push notifications. To re-enable notifications, sign in again on each " +
+                "device.",
+            )}</p>
+            <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
+                value={_t('Return to login screen')} />
+        </div>;
+    },
+
     render: function() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
-        const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const Spinner = sdk.getComponent("elements.Spinner");
 
         let resetPasswordJsx;
-
-        if (this.state.progress === "sending_email") {
-            resetPasswordJsx = <Spinner />;
-        } else if (this.state.progress === "sent_email") {
-            resetPasswordJsx = (
-                <div>
-                    { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, " +
-                        "click below.", { emailAddress: this.state.email }) }
-                    <br />
-                    <input className="mx_Login_submit" type="button" onClick={this.onVerify}
-                        value={_t('I have verified my email address')} />
-                </div>
-            );
-        } else if (this.state.progress === "complete") {
-            resetPasswordJsx = (
-                <div>
-                    <p>{ _t('Your password has been reset') }.</p>
-                    <p>{ _t('You have been logged out of all devices and will no longer receive push notifications. ' +
-                        'To re-enable notifications, sign in again on each device') }.</p>
-                    <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
-                        value={_t('Return to login screen')} />
-                </div>
-            );
-        } else {
-            let serverConfigSection;
-            if (!SdkConfig.get()['disable_custom_urls']) {
-                serverConfigSection = (
-                    <ServerConfig ref="serverConfig"
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={0} />
-                );
-            }
-
-            let errorText = null;
-            const err = this.state.errorText || this.props.defaultServerDiscoveryError;
-            if (err) {
-                errorText = <div className="mx_Login_error">{ err }</div>;
-            }
-
-            resetPasswordJsx = (
-            <div>
-                <p>
-                    { _t('To reset your password, enter the email address linked to your account') }:
-                </p>
-                <div>
-                    <form onSubmit={this.onSubmitForm}>
-                        <input className="mx_Login_field" ref="user" type="text"
-                            name="reset_email" // define a name so browser's password autofill gets less confused
-                            value={this.state.email}
-                            onChange={this.onInputChanged.bind(this, "email")}
-                            placeholder={_t('Email address')} autoFocus />
-                        <br />
-                        <input className="mx_Login_field" ref="pass" type="password"
-                            name="reset_password"
-                            value={this.state.password}
-                            onChange={this.onInputChanged.bind(this, "password")}
-                            placeholder={_t('New password')} />
-                        <br />
-                        <input className="mx_Login_field" ref="pass" type="password"
-                            name="reset_password_confirm"
-                            value={this.state.password2}
-                            onChange={this.onInputChanged.bind(this, "password2")}
-                            placeholder={_t('Confirm your new password')} />
-                        <br />
-                        <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
-                    </form>
-                    { serverConfigSection }
-                    { errorText }
-                    <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                        { _t('Sign in instead') }
-                    </a>
-                </div>
-            </div>
-            );
+        switch (this.state.phase) {
+            case PHASE_SERVER_DETAILS:
+                resetPasswordJsx = this.renderServerDetails();
+                break;
+            case PHASE_FORGOT:
+                resetPasswordJsx = this.renderForgot();
+                break;
+            case PHASE_SENDING_EMAIL:
+                resetPasswordJsx = this.renderSendingEmail();
+                break;
+            case PHASE_EMAIL_SENT:
+                resetPasswordJsx = this.renderEmailSent();
+                break;
+            case PHASE_DONE:
+                resetPasswordJsx = this.renderDone();
+                break;
         }
-
 
         return (
             <AuthPage>

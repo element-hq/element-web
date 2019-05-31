@@ -15,48 +15,112 @@ limitations under the License.
 */
 
 .mx_RoomPreviewBar {
-    text-align: center;
-    height: 176px;
-    background-color: $event-selected-color;
+    flex: 0 0 auto;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     display: flex;
-    background-color: $preview-bar-bg-color;
     -webkit-align-items: center;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 600;
+
+        &.mx_RoomPreviewBar_spinnerTitle {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+
+    .mx_Spinner {
+        width: auto;
+        height: auto;
+        margin: 10px 10px 10px 0;
+        flex: 0 0 auto;
+    }
 }
 
-.mx_RoomPreviewBar_wrapper {
+.mx_RoomPreviewBar_dark {
+    background-color: $tagpanel-bg-color;
+    color: $accent-fg-color;
 }
 
-.mx_RoomPreviewBar_invite_text {
-    color: $primary-fg-color;
+.mx_RoomPreviewBar_actions {
+    display: flex;
 }
 
-.mx_RoomPreviewBar_join_text {
-    color: $warning-color;
+.mx_RoomPreviewBar_message {
+    display: flex;
+    align-items: stretch;
+
+    p {
+        overflow-wrap: break-word;
+    }
 }
 
-.mx_RoomPreviewBar_preview_text {
-    margin-top: 25px;
-    color: $settings-grey-fg-color;
+.mx_RoomPreviewBar_panel {
+    padding: 8px 8px 8px 20px;
+    border-top: 1px solid $panel-divider-color;
+
+    flex-direction: row;
+
+    .mx_RoomPreviewBar_actions {
+        flex: 0 0 auto;
+        flex-direction: row;
+        padding: 3px 8px;
+
+        &>* {
+            margin-left: 12px;
+        }
+    }
+
+    .mx_RoomPreviewBar_message {
+        flex: 1 0 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+
+        &>* {
+            margin: 4px;
+        }
+    }
 }
 
-.mx_RoomPreviewBar_join_text a {
+.mx_RoomPreviewBar_dialog {
+    margin: auto;
+    box-sizing: content;
+    width: 400px;
+    border-radius: 4px;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+
+    .mx_RoomPreviewBar_message {
+        flex-direction: column;
+
+        &>* {
+            margin: 5px 0 20px 0;
+        }
+    }
+
+    .mx_RoomPreviewBar_actions {
+        flex-direction: column-reverse;
+        .mx_AccessibleButton {
+            padding: 7px 50px;//extra wide
+        }
+
+        &>* {
+            margin-top: 12px;
+        }
+    }
+}
+
+.mx_RoomPreviewBar_inviter {
+    font-weight: 600;
+}
+
+a.mx_RoomPreviewBar_inviter {
     text-decoration: underline;
     cursor: pointer;
-}
-
-.mx_RoomPreviewBar_warning {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-}
-
-.mx_RoomPreviewBar_warningIcon {
-    padding: 12px;
-}
-
-.mx_RoomPreviewBar_spinnerIntro {
-    margin-top: 50px;
 }

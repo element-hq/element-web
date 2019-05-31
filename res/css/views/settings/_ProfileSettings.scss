@@ -35,6 +35,14 @@ limitations under the License.
     margin-top: 0;
 }
 
+.mx_ProfileSettings_hostingSignup {
+    margin-left: 20px;
+
+    img {
+        margin-left: 5px;
+    }
+}
+
 .mx_ProfileSettings_avatar {
     width: 88px;
     height: 88px;
@@ -104,7 +112,7 @@ limitations under the License.
 
 .mx_ProfileSettings_avatarOverlayImg:before {
     background-color: $settings-profile-overlay-placeholder-fg-color;
-    mask: url("$(res)/img/feather-icons/upload.svg");
+    mask: url("$(res)/img/feather-customised/upload.svg");
     mask-repeat: no-repeat;
     mask-size: 14px;
     mask-position: center;

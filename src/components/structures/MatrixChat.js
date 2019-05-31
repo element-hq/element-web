@@ -29,6 +29,7 @@ import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
 import dis from "../../dispatcher";
+import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
@@ -40,6 +41,7 @@ import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 require('../../stores/LifecycleStore');
 import PageTypes from '../../PageTypes';
+import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
@@ -47,8 +49,8 @@ import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
-
-const AutoDiscovery = Matrix.AutoDiscovery;
+import ResizeNotifier from "../../utils/ResizeNotifier";
+import {ValidatedServerConfig} from "../../utils/AutoDiscoveryUtils";
 
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
@@ -60,27 +62,30 @@ const VIEWS = {
     // trying to re-animate a matrix client or register as a guest.
     LOADING: 0,
 
+    // we are showing the welcome view
+    WELCOME: 1,
+
     // we are showing the login view
-    LOGIN: 1,
+    LOGIN: 2,
 
     // we are showing the registration view
-    REGISTER: 2,
+    REGISTER: 3,
 
     // completeing the registration flow
-    POST_REGISTRATION: 3,
+    POST_REGISTRATION: 4,
 
     // showing the 'forgot password' view
-    FORGOT_PASSWORD: 4,
+    FORGOT_PASSWORD: 5,
 
     // we have valid matrix credentials (either via an explicit login, via the
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
     // process because we need to clear out indexeddb. While it is going on we
     // show a big spinner.
-    LOGGING_IN: 5,
+    LOGGING_IN: 6,
 
     // we are logged in with an active matrix client.
-    LOGGED_IN: 6,
+    LOGGED_IN: 7,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -103,6 +108,7 @@ export default React.createClass({
 
     propTypes: {
         config: PropTypes.object,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig),
         ConferenceHandler: PropTypes.any,
         onNewScreen: PropTypes.func,
         registrationUrl: PropTypes.string,
@@ -134,10 +140,6 @@ export default React.createClass({
 
     childContextTypes: {
         appConfig: PropTypes.object,
-    },
-
-    AuxPanel: {
-        RoomSettings: "room_settings",
     },
 
     getChildContext: function() {
@@ -179,21 +181,15 @@ export default React.createClass({
             // Parameters used in the registration dance with the IS
             register_client_secret: null,
             register_session_id: null,
-            register_hs_url: null,
-            register_is_url: null,
             register_id_sid: null,
-
-            // Parameters used for setting up the authentication views
-            defaultServerName: this.props.config.default_server_name,
-            defaultHsUrl: this.props.config.default_hs_url,
-            defaultIsUrl: this.props.config.default_is_url,
-            defaultServerDiscoveryError: null,
 
             // When showing Modal dialogs we need to set aria-hidden on the root app element
             // and disable it when there are no dialogs
             hideToSRUsers: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
+            resizeNotifier: new ResizeNotifier(),
+            showNotifierToolbar: false,
         };
         return s;
     },
@@ -207,42 +203,19 @@ export default React.createClass({
         };
     },
 
-    getDefaultServerName: function() {
-        return this.state.defaultServerName;
-    },
-
-    getCurrentHsUrl: function() {
-        if (this.state.register_hs_url) {
-            return this.state.register_hs_url;
-        } else if (MatrixClientPeg.get()) {
-            return MatrixClientPeg.get().getHomeserverUrl();
-        } else {
-            return this.getDefaultHsUrl();
-        }
-    },
-
-    getDefaultHsUrl(defaultToMatrixDotOrg) {
-        defaultToMatrixDotOrg = typeof(defaultToMatrixDotOrg) !== 'boolean' ? true : defaultToMatrixDotOrg;
-        if (!this.state.defaultHsUrl && defaultToMatrixDotOrg) return "https://matrix.org";
-        return this.state.defaultHsUrl;
-    },
-
     getFallbackHsUrl: function() {
-        return this.props.config.fallback_hs_url;
-    },
-
-    getCurrentIsUrl: function() {
-        if (this.state.register_is_url) {
-            return this.state.register_is_url;
-        } else if (MatrixClientPeg.get()) {
-            return MatrixClientPeg.get().getIdentityServerUrl();
+        if (this.props.serverConfig && this.props.serverConfig.isDefault) {
+            return this.props.config.fallback_hs_url;
         } else {
-            return this.getDefaultIsUrl();
+            return null;
         }
     },
 
-    getDefaultIsUrl() {
-        return this.state.defaultIsUrl || "https://vector.im";
+    getServerProperties() {
+        let props = this.state.serverConfig;
+        if (!props) props = this.props.serverConfig; // for unit tests
+        if (!props) props = SdkConfig.get()["validated_server_config"];
+        return {serverConfig: props};
     },
 
     componentWillMount: function() {
@@ -254,40 +227,6 @@ export default React.createClass({
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
-        }
-
-        // Set up the default URLs (async)
-        if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
-            this.setState({loadingDefaultHomeserver: true});
-            this._tryDiscoverDefaultHomeserver(this.getDefaultServerName());
-        } else if (this.getDefaultServerName() && this.getDefaultHsUrl(false)) {
-            // Ideally we would somehow only communicate this to the server admins, but
-            // given this is at login time we can't really do much besides hope that people
-            // will check their settings.
-            this.setState({
-                defaultServerName: null, // To un-hide any secrets people might be keeping
-                defaultServerDiscoveryError: _t(
-                    "Invalid configuration: Cannot supply a default homeserver URL and " +
-                    "a default server name",
-                ),
-            });
-        }
-
-        // Set a default HS with query param `hs_url`
-        const paramHs = this.props.startingFragmentQueryParams.hs_url;
-        if (paramHs) {
-            console.log('Setting register_hs_url ', paramHs);
-            this.setState({
-                register_hs_url: paramHs,
-            });
-        }
-        // Set a default IS with query param `is_url`
-        const paramIs = this.props.startingFragmentQueryParams.is_url;
-        if (paramIs) {
-            console.log('Setting register_is_url ', paramIs);
-            this.setState({
-                register_is_url: paramIs,
-            });
         }
 
         // a thing to call showScreen with once login completes.  this is kept
@@ -305,6 +244,9 @@ export default React.createClass({
         // N.B. we don't call the whole of setTheme() here as we may be
         // racing with the theme CSS download finishing from index.js
         Tinter.tint();
+
+        // For PersistentElement
+        this.state.resizeNotifier.on("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentDidMount: function() {
@@ -346,25 +288,7 @@ export default React.createClass({
                 return;
             }
 
-            // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
-            // asynchronous ones.
-            return Promise.resolve().then(() => {
-                return Lifecycle.loadSession({
-                    fragmentQueryParams: this.props.startingFragmentQueryParams,
-                    enableGuest: this.props.enableGuest,
-                    guestHsUrl: this.getCurrentHsUrl(),
-                    guestIsUrl: this.getCurrentIsUrl(),
-                    defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-                });
-            }).then((loadedSession) => {
-                if (!loadedSession) {
-                    // fall back to showing the login screen
-                    dis.dispatch({action: "start_login"});
-                }
-            });
-            // Note we don't catch errors from this: we catch everything within
-            // loadSession as there's logic there to ask the user if they want
-            // to try logging out.
+            return this._loadSession();
         });
 
         if (SettingsStore.getValue("showCookieBar")) {
@@ -378,11 +302,34 @@ export default React.createClass({
         }
     },
 
+    _loadSession: function() {
+        // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
+        // asynchronous ones.
+        return Promise.resolve().then(() => {
+            return Lifecycle.loadSession({
+                fragmentQueryParams: this.props.startingFragmentQueryParams,
+                enableGuest: this.props.enableGuest,
+                guestHsUrl: this.getServerProperties().serverConfig.hsUrl,
+                guestIsUrl: this.getServerProperties().serverConfig.isUrl,
+                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            });
+        }).then((loadedSession) => {
+            if (!loadedSession) {
+                // fall back to showing the welcome screen
+                dis.dispatch({action: "view_welcome_page"});
+            }
+        });
+        // Note we don't catch errors from this: we catch everything within
+        // loadSession as there's logic there to ask the user if they want
+        // to try logging out.
+    },
+
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
+        this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentWillUpdate: function(props, state) {
@@ -541,19 +488,8 @@ export default React.createClass({
                     },
                 });
                 break;
-            case 'view_user':
-                // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapsedRhs) {
-                    setTimeout(()=>{
-                        dis.dispatch({
-                            action: 'show_right_panel',
-                        });
-                        dis.dispatch({
-                            action: 'view_user',
-                            member: payload.member,
-                        });
-                    }, 0);
-                }
+            case 'view_user_info':
+                this._viewUser(payload.userId, payload.subAction);
                 break;
             case 'view_room':
                 // Takes either a room ID or room alias: if switching to a room the client is already
@@ -572,40 +508,14 @@ export default React.createClass({
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
             case 'view_user_settings': {
-                if (true || SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
-                    const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
-                } else {
-                    this._setPage(PageTypes.UserSettings);
-                    this.notifyNewScreen('settings');
-                }
+                const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+
+                // View the welcome or home page if we need something to look at
+                this._viewSomethingBehindModal();
                 break;
             }
-            case 'view_old_user_settings':
-                this._setPage(PageTypes.UserSettings);
-                this.notifyNewScreen('settings');
-                break;
-            case 'close_settings':
-                this.setState({
-                    leftDisabled: false,
-                    rightDisabled: false,
-                    middleDisabled: false,
-                });
-                if (this.state.page_type === PageTypes.UserSettings) {
-                    // We do this to get setPage and notifyNewScreen
-                    if (this.state.currentRoomId) {
-                        this._viewRoom({
-                            room_id: this.state.currentRoomId,
-                        });
-                    } else if (this.state.currentGroupId) {
-                        this._viewGroup({
-                            group_id: this.state.currentGroupId,
-                        });
-                    } else {
-                        this._viewHome();
-                    }
-                }
-                break;
             case 'view_create_room':
                 this._createRoom();
                 break;
@@ -620,11 +530,8 @@ export default React.createClass({
                     config: this.props.config,
                 }, 'mx_RoomDirectory_dialogWrapper');
 
-                // View the home page if we need something to look at
-                if (!this.state.currentGroupId && !this.state.currentRoomId) {
-                    this._setPage(PageTypes.HomePage);
-                    this.notifyNewScreen('home');
-                }
+                // View the welcome or home page if we need something to look at
+                this._viewSomethingBehindModal();
             }
             break;
             case 'view_my_groups':
@@ -633,6 +540,9 @@ export default React.createClass({
                 break;
             case 'view_group':
                 this._viewGroup(payload);
+                break;
+            case 'view_welcome_page':
+                this._viewWelcome();
                 break;
             case 'view_home_page':
                 this._viewHome();
@@ -649,8 +559,9 @@ export default React.createClass({
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
                 break;
-            case 'notifier_enabled':
-                this.forceUpdate();
+            case 'notifier_enabled': {
+                    this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
+                }
                 break;
             case 'hide_left_panel':
                 this.setState({
@@ -682,11 +593,9 @@ export default React.createClass({
                 });
                 break;
             }
-            // case 'set_theme':
-                // disable changing the theme for now
-                // as other themes are not compatible with dharma
-                // this._onSetTheme(payload.value);
-                // break;
+            case 'set_theme':
+                this._onSetTheme(payload.value);
+                break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -847,6 +756,7 @@ export default React.createClass({
         this.focusComposer = true;
 
         const newState = {
+            view: VIEWS.LOGGED_IN,
             currentRoomId: roomInfo.room_id || null,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
@@ -909,6 +819,23 @@ export default React.createClass({
         this.notifyNewScreen('group/' + groupId);
     },
 
+    _viewSomethingBehindModal() {
+        if (this.state.view !== VIEWS.LOGGED_IN) {
+            this._viewWelcome();
+            return;
+        }
+        if (!this.state.currentGroupId && !this.state.currentRoomId) {
+            this._viewHome();
+        }
+    },
+
+    _viewWelcome() {
+        this.setStateForNewView({
+            view: VIEWS.WELCOME,
+        });
+        this.notifyNewScreen('welcome');
+    },
+
     _viewHome: function() {
         // The home page requires the "logged in" view, so we'll set that.
         this.setStateForNewView({
@@ -916,6 +843,22 @@ export default React.createClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
+    },
+
+    _viewUser: function(userId, subAction) {
+        // Wait for the first sync so that `getRoom` gives us a room object if it's
+        // in the sync response
+        const waitForSync = this.firstSyncPromise ?
+            this.firstSyncPromise.promise : Promise.resolve();
+        waitForSync.then(() => {
+            if (subAction === 'chat') {
+                this._chatCreateOrReuse(userId);
+                return;
+            }
+            this.notifyNewScreen('user/' + userId);
+            this.setState({currentUserId: userId});
+            this._setPage(PageTypes.UserView);
+        });
     },
 
     _setMxId: function(payload) {
@@ -982,11 +925,11 @@ export default React.createClass({
             }
             dis.dispatch({
                 action: 'require_registration',
-                // If the set_mxid dialog is cancelled, view /home because if the browser
-                // was pointing at /user/@someone:domain?action=chat, the URL needs to be
-                // reset so that they can revisit /user/.. // (and trigger
+                // If the set_mxid dialog is cancelled, view /welcome because if the
+                // browser was pointing at /user/@someone:domain?action=chat, the URL
+                // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
-                go_home_on_cancel: true,
+                go_welcome_on_cancel: true,
             });
             return;
         }
@@ -1053,35 +996,48 @@ export default React.createClass({
             button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
-                    const d = MatrixClientPeg.get().leave(roomId);
+                    const d = MatrixClientPeg.get().leaveRoomChain(roomId);
 
                     // FIXME: controller shouldn't be loading a view :(
                     const Loader = sdk.getComponent("elements.Spinner");
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                    d.then(() => {
+                    d.then((errors) => {
                         modal.close();
+
+                        for (const leftRoomId of Object.keys(errors)) {
+                            const err = errors[leftRoomId];
+                            if (!err) continue;
+
+                            console.error("Failed to leave room " + leftRoomId + " " + err);
+                            let title = _t("Failed to leave room");
+                            let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
+                            if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
+                                title = _t("Can't leave Server Notices room");
+                                message = _t(
+                                    "This room is used for important messages from the Homeserver, " +
+                                    "so you cannot leave it.",
+                                );
+                            } else if (err && err.message) {
+                                message = err.message;
+                            }
+                            Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
+                                title: title,
+                                description: message,
+                            });
+                            return;
+                        }
+
                         if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
-                            dis.dispatch({action: 'close_room_settings'});
                         }
                     }, (err) => {
+                        // This should only happen if something went seriously wrong with leaving the chain.
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
-                        let title = _t("Failed to leave room");
-                        let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
-                        if (err.errcode == 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
-                            title = _t("Can't leave Server Notices room");
-                            message = _t(
-                                "This room is used for important messages from the Homeserver, " +
-                                "so you cannot leave it.",
-                            );
-                        } else if (err && err.message) {
-                            message = err.message;
-                        }
                         Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                            title: title,
-                            description: message,
+                            title: _t("Failed to leave room"),
+                            description: _t("Unknown error"),
                         });
                     });
                 }
@@ -1169,7 +1125,7 @@ export default React.createClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
-        this.setStateForNewView({view: VIEWS.LOGGED_IN});
+        this.setStateForNewView({ view: VIEWS.LOGGED_IN });
         if (this._is_registered) {
             this._is_registered = false;
 
@@ -1209,7 +1165,15 @@ export default React.createClass({
                 room_id: localStorage.getItem('mx_last_room_id'),
             });
         } else {
-            dis.dispatch({action: 'view_home_page'});
+            if (MatrixClientPeg.get().isGuest()) {
+                dis.dispatch({action: 'view_welcome_page'});
+            } else if (getHomePageUrl(this.props.config)) {
+                dis.dispatch({action: 'view_home_page'});
+            } else {
+                this.firstSyncPromise.promise.then(() => {
+                    dis.dispatch({action: 'view_next_room'});
+                });
+            }
         }
     },
 
@@ -1294,7 +1258,10 @@ export default React.createClass({
             self.firstSyncPromise.resolve();
 
             dis.dispatch({action: 'focus_composer'});
-            self.setState({ready: true});
+            self.setState({
+                ready: true,
+                showNotifierToolbar: Notifier.shouldShowToolbar(),
+            });
         });
         cli.on('Call.incoming', function(call) {
             // we dispatch this synchronously to make sure that the event
@@ -1495,6 +1462,10 @@ export default React.createClass({
             dis.dispatch({
                 action: 'view_user_settings',
             });
+        } else if (screen == 'welcome') {
+            dis.dispatch({
+                action: 'view_welcome_page',
+            });
         } else if (screen == 'home') {
             dis.dispatch({
                 action: 'view_home_page',
@@ -1519,7 +1490,16 @@ export default React.createClass({
         } else if (screen.indexOf('room/') == 0) {
             const segments = screen.substring(5).split('/');
             const roomString = segments[0];
-            const eventId = segments[1]; // undefined if no event id given
+            let eventId = segments.splice(1).join("/"); // empty string if no event id given
+
+            // Previously we pulled the eventID from the segments in such a way
+            // where if there was no eventId then we'd get undefined. However, we
+            // now do a splice and join to handle v3 event IDs which results in
+            // an empty string. To maintain our potential contract with the rest
+            // of the app, we coerce the eventId to be undefined where applicable.
+            if (!eventId) eventId = undefined;
+
+            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
 
             // FIXME: sort_out caseConsistency
             const thirdPartyInvite = {
@@ -1560,31 +1540,13 @@ export default React.createClass({
                 payload.room_id = roomString;
             }
 
-            // we can't view a room unless we're logged in
-            // (a guest account is fine)
-            if (this.state.view === VIEWS.LOGGED_IN) {
-                dis.dispatch(payload);
-            }
+            dis.dispatch(payload);
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
-
-            // Wait for the first sync so that `getRoom` gives us a room object if it's
-            // in the sync response
-            const waitFor = this.firstSyncPromise ?
-                this.firstSyncPromise.promise : Promise.resolve();
-            waitFor.then(() => {
-                if (params.action === 'chat') {
-                    this._chatCreateOrReuse(userId);
-                    return;
-                }
-
-                this._setPage(PageTypes.UserView);
-                this.notifyNewScreen('user/' + userId);
-                const member = new Matrix.RoomMember(null, userId);
-                dis.dispatch({
-                    action: 'view_user',
-                    member: member,
-                });
+            dis.dispatch({
+                action: 'view_user_info',
+                userId: userId,
+                subAction: params.action,
             });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
@@ -1654,7 +1616,12 @@ export default React.createClass({
             dis.dispatch({ action: 'show_right_panel' });
         }
 
+        this.state.resizeNotifier.notifyWindowResized();
         this._windowWidth = window.innerWidth;
+    },
+
+    _dispatchTimelineResize() {
+        dis.dispatch({ action: 'timeline_resize' });
     },
 
     onRoomCreated: function(roomId) {
@@ -1676,13 +1643,47 @@ export default React.createClass({
         this.showScreen("forgot_password");
     },
 
-    onReturnToAppClick: function() {
-        // treat it the same as if the user had completed the login
-        this._onLoggedIn();
-    },
-
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
+        if (this.state.register_session_id) {
+            // The user came in through an email validation link. To avoid overwriting
+            // their session, check to make sure the session isn't someone else, and
+            // isn't a guest user since we'll usually have set a guest user session before
+            // starting the registration process. This isn't perfect since it's possible
+            // the user had a separate guest session they didn't actually mean to replace.
+            const sessionOwner = Lifecycle.getStoredSessionOwner();
+            const sessionIsGuest = Lifecycle.getStoredSessionIsGuest();
+            if (sessionOwner && !sessionIsGuest && sessionOwner !== credentials.userId) {
+                console.log(
+                    `Found a session for ${sessionOwner} but ${credentials.userId} is trying to verify their ` +
+                    `email address. Restoring the session for ${sessionOwner} with warning.`,
+                );
+                this._loadSession();
+
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                // N.B. first param is passed to piwik and so doesn't want i18n
+                Modal.createTrackedDialog('Existing session on register', '',
+                    QuestionDialog, {
+                    title: _t('You are logged in to another account'),
+                    description: _t(
+                        "Thank you for verifying your email! The account you're logged into here " +
+                        "(%(sessionUserId)s) appears to be different from the account you've verified an " +
+                        "email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, " +
+                        "please log out first.", {
+                            sessionUserId: sessionOwner,
+                            verifiedUserId: credentials.userId,
+
+                            // TODO: Fix translations to support reusing variables.
+                            // https://github.com/vector-im/riot-web/issues/9086
+                            verifiedUserId2: credentials.userId,
+                        },
+                    ),
+                    hasCancelButton: false,
+                });
+
+                return MatrixClientPeg.get();
+            }
+        }
         // XXX: This should be in state or ideally store(s) because we risk not
         //      rendering the most up-to-date view of state otherwise.
         this._is_registered = true;
@@ -1722,7 +1723,7 @@ export default React.createClass({
     },
 
     _setPageSubtitle: function(subtitle='') {
-        document.title = `Riot ${subtitle}`;
+        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
     },
 
     updateStatusIndicator: function(state, prevState) {
@@ -1761,44 +1762,7 @@ export default React.createClass({
     },
 
     onServerConfigChange(config) {
-        const newState = {};
-        if (config.hsUrl) {
-            newState.register_hs_url = config.hsUrl;
-        }
-        if (config.isUrl) {
-            newState.register_is_url = config.isUrl;
-        }
-        this.setState(newState);
-    },
-
-    _tryDiscoverDefaultHomeserver: async function(serverName) {
-        try {
-            const discovery = await AutoDiscovery.findClientConfig(serverName);
-            const state = discovery["m.homeserver"].state;
-            if (state !== AutoDiscovery.SUCCESS) {
-                console.error("Failed to discover homeserver on startup:", discovery);
-                this.setState({
-                    defaultServerDiscoveryError: discovery["m.homeserver"].error,
-                    loadingDefaultHomeserver: false,
-                });
-            } else {
-                const hsUrl = discovery["m.homeserver"].base_url;
-                const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
-                    ? discovery["m.identity_server"].base_url
-                    : "https://vector.im";
-                this.setState({
-                    defaultHsUrl: hsUrl,
-                    defaultIsUrl: isUrl,
-                    loadingDefaultHomeserver: false,
-                });
-            }
-        } catch (e) {
-            console.error(e);
-            this.setState({
-                defaultServerDiscoveryError: _t("Unknown error discovering homeserver"),
-                loadingDefaultHomeserver: false,
-            });
-        }
+        this.setState({serverConfig: config});
     },
 
     _makeRegistrationUrl: function(params) {
@@ -1817,8 +1781,7 @@ export default React.createClass({
 
         if (
             this.state.view === VIEWS.LOADING ||
-            this.state.view === VIEWS.LOGGING_IN ||
-            this.state.loadingDefaultHomeserver
+            this.state.view === VIEWS.LOGGING_IN
         ) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
@@ -1883,6 +1846,11 @@ export default React.createClass({
             }
         }
 
+        if (this.state.view === VIEWS.WELCOME) {
+            const Welcome = sdk.getComponent('auth.Welcome');
+            return <Welcome />;
+        }
+
         if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             return (
@@ -1891,21 +1859,13 @@ export default React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
-                    referrer={this.props.startingFragmentQueryParams.referrer}
-                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
-                    defaultHsUrl={this.getDefaultHsUrl()}
-                    defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
-                    customHsUrl={this.getCurrentHsUrl()}
-                    customIsUrl={this.getCurrentIsUrl()}
                     makeRegistrationUrl={this._makeRegistrationUrl}
-                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
-                    onRegisterClick={this.onRegisterClick}
-                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     onServerConfigChange={this.onServerConfigChange}
-                    />
+                    {...this.getServerProperties()}
+                />
             );
         }
 
@@ -1914,14 +1874,11 @@ export default React.createClass({
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             return (
                 <ForgotPassword
-                    defaultServerName={this.getDefaultServerName()}
-                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
-                    defaultHsUrl={this.getDefaultHsUrl()}
-                    defaultIsUrl={this.getDefaultIsUrl()}
-                    customHsUrl={this.getCurrentHsUrl()}
-                    customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
-                    onLoginClick={this.onLoginClick} />
+                    onLoginClick={this.onLoginClick}
+                    onServerConfigChange={this.onServerConfigChange}
+                    {...this.getServerProperties()}
+                />
             );
         }
 
@@ -1931,17 +1888,11 @@ export default React.createClass({
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
-                    defaultHsUrl={this.getDefaultHsUrl()}
-                    defaultIsUrl={this.getDefaultIsUrl()}
-                    customHsUrl={this.getCurrentHsUrl()}
-                    customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    enableGuest={this.props.enableGuest}
-                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     onServerConfigChange={this.onServerConfigChange}
+                    {...this.getServerProperties()}
                 />
             );
         }

@@ -28,28 +28,28 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_UnknownDeviceDialog ul {
+    list-style: none;
+    padding: 0;
+}
+// userid
+.mx_UnknownDeviceDialog p {
+    font-weight: bold;
+    font-size: 16px;
+}
+
 .mx_UnknownDeviceDialog .mx_DeviceVerifyButtons {
-    float: right;
+    flex-direction: row !important;
 }
 
 .mx_UnknownDeviceDialog .mx_Dialog_content {
     margin-bottom: 24px;
 }
 
-.mx_UnknownDeviceDialog .mx_MemberDeviceInfo {
-    float: right;
-    clear: both;
-    padding: 0px;
-    padding-top: 8px;
+.mx_UnknownDeviceDialog_deviceList > li {
+    padding: 4px;
 }
 
-.mx_UnknownDeviceDialog .mx_MemberDeviceInfo_textButton {
-    @mixin mx_DialogButton_small;
-    background-color: $primary-bg-color;
-    color: $accent-color;
-}
-
-.mx_UnknownDeviceDialog .mx_UnknownDeviceDialog_deviceList li {
-    height: 40px;
-    border-bottom: 1px solid $primary-hairline-color;
+.mx_UnknownDeviceDialog_deviceList > li > * {
+    padding-bottom: 0;
 }

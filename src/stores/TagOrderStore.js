@@ -15,7 +15,10 @@ limitations under the License.
 */
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
+import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
+import * as RoomNotifs from "../RoomNotifs";
+import MatrixClientPeg from '../MatrixClientPeg';
 
 const INITIAL_STATE = {
     orderedTags: null,
@@ -47,7 +50,15 @@ class TagOrderStore extends Store {
     __onDispatch(payload) {
         switch (payload.action) {
             // Initialise state after initial sync
+            case 'view_room': {
+                const relatedGroupIds = GroupStore.getGroupIdsForRoomId(payload.room_id);
+                this._updateBadges(relatedGroupIds);
+                break;
+            }
             case 'MatrixActions.sync': {
+                if (payload.state === 'SYNCING' || payload.state === 'PREPARED') {
+                    this._updateBadges();
+                }
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
@@ -164,6 +175,23 @@ class TagOrderStore extends Store {
         }
     }
 
+    _updateBadges(groupIds = this._state.joinedGroupIds) {
+        if (groupIds && groupIds.length) {
+            const client = MatrixClientPeg.get();
+            const changedBadges = {};
+            groupIds.forEach(groupId => {
+                const rooms =
+                    GroupStore.getGroupRooms(groupId)
+                    .map(r => client.getRoom(r.roomId)) // to Room objects
+                    .filter(r => r !== null && r !== undefined);   // filter out rooms we haven't joined from the group
+                const badge = rooms && RoomNotifs.aggregateNotificationCount(rooms);
+                changedBadges[groupId] = (badge && badge.count !== 0) ? badge : undefined;
+            });
+            const newBadges = Object.assign({}, this._state.badges, changedBadges);
+            this._setState({badges: newBadges});
+        }
+    }
+
     _updateOrderedTags() {
         this._setState({
             orderedTags:
@@ -188,6 +216,11 @@ class TagOrderStore extends Store {
         );
 
         return tagsToKeep.concat(groupIdsToAdd);
+    }
+
+    getGroupBadge(groupId) {
+        const badges = this._state.badges;
+        return badges && badges[groupId];
     }
 
     getOrderedTags() {

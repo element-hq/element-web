@@ -44,6 +44,7 @@ import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -588,6 +589,7 @@ module.exports = withMatrixClient(React.createClass({
 
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
+        can.invite = me.powerLevel >= powerLevels.invite;
         can.mute = me.powerLevel >= editPowerLevel;
         can.modifyLevel = me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel);
         can.modifyLevelMax = me.powerLevel;
@@ -726,7 +728,7 @@ module.exports = withMatrixClient(React.createClass({
                 );
             }
 
-            if (!member || !member.membership || member.membership === 'leave') {
+            if (this.state.can.invite && (!member || !member.membership || member.membership === 'leave')) {
                 const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
                 const onInviteUserButton = async () => {
                     try {
@@ -734,8 +736,8 @@ module.exports = withMatrixClient(React.createClass({
                         // we're only inviting one user.
                         const inviter = new MultiInviter(roomId);
                         await inviter.invite([member.userId]).then(() => {
-                            if (inviter.getCompletionState(userId) !== "invited")
-                                throw new Error(inviter.getErrorText(userId));
+                            if (inviter.getCompletionState(member.userId) !== "invited")
+                                throw new Error(inviter.getErrorText(member.userId));
                         });
                     } catch (err) {
                         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
@@ -941,24 +943,29 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         let roomMemberDetails = null;
+        let e2eIconElement;
+
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
             roomMemberDetails = <div>
                 <div className="mx_MemberInfo_profileField">
-                    { _t("Level:") } <b>
-                        <PowerSelector controlled={true}
-                            value={parseInt(this.props.member.powerLevel)}
-                            maxValue={this.state.can.modifyLevelMax}
-                            disabled={!this.state.can.modifyLevel}
-                            usersDefault={powerLevelUsersDefault}
-                            onChange={this.onPowerChange} />
-                    </b>
+                    <PowerSelector
+                        value={parseInt(this.props.member.powerLevel)}
+                        maxValue={this.state.can.modifyLevelMax}
+                        disabled={!this.state.can.modifyLevel}
+                        usersDefault={powerLevelUsersDefault}
+                        onChange={this.onPowerChange} />
                 </div>
                 <div className="mx_MemberInfo_profileField">
                     {presenceLabel}
                     {statusLabel}
                 </div>
             </div>;
+
+            const isEncrypted = this.props.matrixClient.isRoomEncrypted(this.props.member.roomId);
+            if (this.state.e2eStatus && isEncrypted) {
+                e2eIconElement = (<E2EIcon status={this.state.e2eStatus} isUser={true} />);
+            }
         }
 
         const avatarUrl = this.props.member.getMxcAvatarUrl();
@@ -967,20 +974,25 @@ module.exports = withMatrixClient(React.createClass({
             const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = <div className="mx_MemberInfo_avatar">
                 <img src={httpUrl} />
-            </div>
+            </div>;
         }
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-        const EmojiText = sdk.getComponent('elements.EmojiText');
+
+        let backButton;
+        if (this.props.member.roomId) {
+            backButton = (<AccessibleButton className="mx_MemberInfo_cancel"
+                onClick={this.onCancel}
+                title={_t('Close')}
+            />);
+        }
 
         return (
             <div className="mx_MemberInfo">
                     <div className="mx_MemberInfo_name">
-                        <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                            <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
-                        </AccessibleButton>
-                        { this.state.e2eStatus ? <E2EIcon status={this.state.e2eStatus} isUser={true} /> : undefined }
-                        <EmojiText element="h2">{ memberName }</EmojiText>
+                        { backButton }
+                        { e2eIconElement }
+                        <h2>{ memberName }</h2>
                     </div>
                     { avatarElement }
                     <div className="mx_MemberInfo_container">
@@ -992,7 +1004,7 @@ module.exports = withMatrixClient(React.createClass({
                             { roomMemberDetails }
                         </div>
                     </div>
-                    <GeminiScrollbarWrapper autoshow={true} className="mx_MemberInfo_scrollContainer">
+                    <AutoHideScrollbar className="mx_MemberInfo_scrollContainer">
                         <div className="mx_MemberInfo_container">
                             { this._renderUserOptions() }
 
@@ -1004,7 +1016,7 @@ module.exports = withMatrixClient(React.createClass({
 
                             { spinner }
                         </div>
-                    </GeminiScrollbarWrapper>
+                    </AutoHideScrollbar>
             </div>
         );
     },

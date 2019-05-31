@@ -21,6 +21,7 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
@@ -34,6 +35,7 @@ import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
+import {Group} from "matrix-js-sdk";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -263,7 +265,7 @@ const RoleUserList = React.createClass({
         Modal.createTrackedDialog('Add Users to Group Summary', '', AddressPickerDialog, {
             title: _t('Add users to the community summary'),
             description: _t("Who would you like to add to this summary?"),
-            placeholder: _t("Name or matrix ID"),
+            placeholder: _t("Name or Matrix ID"),
             button: _t("Add to summary"),
             validAddressTypes: ['mx-user-id'],
             groupId: this.props.groupId,
@@ -569,7 +571,7 @@ export default React.createClass({
     _onShareClick: function() {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share community dialog', '', ShareDialog, {
-            target: this._matrixClient.getGroup(this.props.groupId),
+            target: this._matrixClient.getGroup(this.props.groupId) || new Group(this.props.groupId),
         });
     },
 
@@ -815,6 +817,23 @@ export default React.createClass({
         });
 
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
+
+        const hostingSignupLink = getHostingLink('community-settings');
+        let hostingSignup = null;
+        if (hostingSignupLink && this.state.isUserPrivileged) {
+            hostingSignup = <div className="mx_GroupView_hostingSignup">
+                {_t(
+                    "Want more than a community? <a>Get your own server</a>", {},
+                    {
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                    },
+                )}
+                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                    <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
+                </a>
+            </div>;
+        }
+
         const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
             <div className="mx_GroupView_changeDelayWarning">
                 { _t(
@@ -829,6 +848,7 @@ export default React.createClass({
             </div> : <div />;
         return <div className={groupSettingsSectionClasses}>
             { header }
+            { hostingSignup }
             { changeDelayWarning }
             { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
@@ -1157,7 +1177,6 @@ export default React.createClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
@@ -1248,13 +1267,17 @@ export default React.createClass({
             if (this.state.editing) {
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onSaveClick} key="_saveButton"
+                        key="_saveButton"
+                        onClick={this._onSaveClick}
                     >
                         { _t('Save') }
                     </AccessibleButton>,
                 );
                 rightButtons.push(
-                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
+                    <AccessibleButton className="mx_RoomHeader_cancelButton"
+                        key="_cancelButton"
+                        onClick={this._onCancelClick}
+                    >
                         <img src={require("../../../res/img/cancel.svg")} className="mx_filterFlipColor"
                             width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
@@ -1262,16 +1285,20 @@ export default React.createClass({
             } else {
                 if (summary.user && summary.user.membership === 'join') {
                     rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                        <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_editButton"
+                            key="_editButton"
+                            onClick={this._onEditClick}
+                            title={_t("Community Settings")}
                         >
-                            <TintableSvg src={require("../../../res/img/icons-settings-room.svg")} width="16" height="16" />
                         </AccessibleButton>,
                     );
                 }
                 rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button" onClick={this._onShareClick} title={_t('Share Community')} key="_shareButton">
-                        <TintableSvg src={require("../../../res/img/icons-share.svg")} width="16" height="16" />
+                    <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_shareButton"
+                        key="_shareButton"
+                        onClick={this._onShareClick}
+                        title={_t('Share Community')}
+                    >
                     </AccessibleButton>,
                 );
             }

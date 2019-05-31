@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,11 +44,10 @@ const READ_RECEIPT_INTERVAL_MS = 500;
 
 const DEBUG = false;
 
+let debuglog = function() {};
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    var debuglog = console.log.bind(console);
-} else {
-    var debuglog = function() {};
+    debuglog = console.log.bind(console);
 }
 
 /*
@@ -55,7 +55,7 @@ if (DEBUG) {
  *
  * Also responsible for handling and sending read receipts.
  */
-var TimelinePanel = React.createClass({
+const TimelinePanel = React.createClass({
     displayName: 'TimelinePanel',
 
     propTypes: {
@@ -106,6 +106,9 @@ var TimelinePanel = React.createClass({
 
         // placeholder text to use if the timeline is empty
         empty: PropTypes.string,
+
+        // whether to show reactions for an event
+        showReactions: PropTypes.bool,
     },
 
     statics: {
@@ -208,6 +211,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
+        MatrixClientPeg.get().on("Event.replaced", this.onEventReplaced);
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
@@ -286,6 +290,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
+            client.removeListener("Event.replaced", this.onEventReplaced);
             client.removeListener("sync", this.onSync);
         }
     },
@@ -402,6 +407,15 @@ var TimelinePanel = React.createClass({
         if (payload.action === 'ignore_state_changed') {
             this.forceUpdate();
         }
+        if (payload.action === "edit_event") {
+            this.setState({editEvent: payload.event}, () => {
+                if (payload.event && this.refs.messagePanel) {
+                    this.refs.messagePanel.scrollToEventIfNeeded(
+                        payload.event.getId(),
+                    );
+                }
+            });
+        }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
@@ -444,6 +458,7 @@ var TimelinePanel = React.createClass({
 
             const updatedState = {events: events};
 
+            let callRMUpdated;
             if (this.props.manageReadMarkers) {
                 // when a new event arrives when the user is not watching the
                 // window, but the window is in its auto-scroll mode, make sure the
@@ -451,12 +466,12 @@ var TimelinePanel = React.createClass({
                 //
                 // We ignore events we have sent ourselves; we don't want to see the
                 // read-marker when a remote echo of an event we have just sent takes
-                // more than the timeout on userCurrentlyActive.
+                // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
-                var callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
+                callRMUpdated = false;
+                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -491,6 +506,17 @@ var TimelinePanel = React.createClass({
     },
 
     onRoomRedaction: function(ev, room) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.timelineSet.room) return;
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        this.forceUpdate();
+    },
+
+    onEventReplaced: function(replacedEvent, room) {
         if (this.unmounted) return;
 
         // ignore events for other rooms
@@ -536,6 +562,9 @@ var TimelinePanel = React.createClass({
     },
 
     onEventDecrypted: function(ev) {
+        // Can be null for the notification timeline, etc.
+        if (!this.props.timelineSet.room) return;
+
         // Need to update as we don't display event tiles for events that
         // haven't yet been decrypted. The event will have just been updated
         // in place so we just need to re-render.
@@ -562,10 +591,10 @@ var TimelinePanel = React.createClass({
         this._readMarkerActivityTimer = new Timer(initialTimeout);
 
         while (this._readMarkerActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readMarkerActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveRecently(this._readMarkerActivityTimer);
             try {
                 await this._readMarkerActivityTimer.finished();
-            } catch(e) { continue; /* aborted */ }
+            } catch (e) { continue; /* aborted */ }
             // outside of try/catch to not swallow errors
             this.updateReadMarker();
         }
@@ -574,10 +603,10 @@ var TimelinePanel = React.createClass({
     updateReadReceiptOnUserActivity: async function() {
         this._readReceiptActivityTimer = new Timer(READ_RECEIPT_INTERVAL_MS);
         while (this._readReceiptActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readReceiptActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveNow(this._readReceiptActivityTimer);
             try {
                 await this._readReceiptActivityTimer.finished();
-            } catch(e) { continue; /* aborted */ }
+            } catch (e) { continue; /* aborted */ }
             // outside of try/catch to not swallow errors
             this.sendReadReceipt();
         }
@@ -733,7 +762,8 @@ var TimelinePanel = React.createClass({
         const events = this._timelineWindow.getEvents();
 
         // first find where the current RM is
-        for (var i = 0; i < events.length; i++) {
+        let i;
+        for (i = 0; i < events.length; i++) {
             if (events[i].getId() == this.state.readMarkerEventId) {
                 break;
             }
@@ -745,7 +775,7 @@ var TimelinePanel = React.createClass({
         // now think about advancing it
         const myUserId = MatrixClientPeg.get().credentials.userId;
         for (i++; i < events.length; i++) {
-            var ev = events[i];
+            const ev = events[i];
             if (!ev.sender || ev.sender.userId != myUserId) {
                 break;
             }
@@ -753,7 +783,7 @@ var TimelinePanel = React.createClass({
         // i is now the first unread message which we didn't send ourselves.
         i--;
 
-        var ev = events[i];
+        const ev = events[i];
         this._setReadMarker(ev.getId(), ev.getTs());
     },
 
@@ -883,7 +913,7 @@ var TimelinePanel = React.createClass({
         return ret;
     },
 
-    /**
+    /*
      * called by the parent component when PageUp/Down/etc is pressed.
      *
      * We pass it down to the scroll panel.
@@ -937,6 +967,11 @@ var TimelinePanel = React.createClass({
             {windowLimit: this.props.timelineCap});
 
         const onLoaded = () => {
+            // clear the timeline min-height when
+            // (re)loading the timeline
+            if (this.refs.messagePanel) {
+                this.refs.messagePanel.onTimelineReset();
+            }
             this._reloadEvents();
 
             // If we switched away from the room while there were pending
@@ -971,11 +1006,10 @@ var TimelinePanel = React.createClass({
         };
 
         const onError = (error) => {
-            this.setState({timelineLoading: false});
+            this.setState({ timelineLoading: false });
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
             );
-            const msg = error.message ? error.message : JSON.stringify(error);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
             let onFinished;
@@ -993,9 +1027,18 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            const message = (error.errcode == 'M_FORBIDDEN')
-            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.")
-                : _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
+            let message;
+            if (error.errcode == 'M_FORBIDDEN') {
+                message = _t(
+                    "Tried to load a specific point in this room's timeline, but you " +
+                    "do not have permission to view the message in question.",
+                );
+            } else {
+                message = _t(
+                    "Tried to load a specific point in this room's timeline, but was " +
+                    "unable to find it.",
+                );
+            }
             Modal.createTrackedDialog('Failed to load timeline position', '', ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description: message,
@@ -1100,12 +1143,13 @@ var TimelinePanel = React.createClass({
     },
 
     /**
-     * get the id of the event corresponding to our user's latest read-receipt.
+     * Get the id of the event corresponding to our user's latest read-receipt.
      *
      * @param {Boolean} ignoreSynthesized If true, return only receipts that
      *                                    have been sent by the server, not
      *                                    implicit ones generated by the JS
      *                                    SDK.
+     * @return {String} the event ID
      */
     _getCurrentReadReceipt: function(ignoreSynthesized) {
         const client = MatrixClientPeg.get();
@@ -1154,6 +1198,10 @@ var TimelinePanel = React.createClass({
         });
     },
 
+    getRelationsForEvent(...args) {
+        return this.props.timelineSet.getRelationsForEvent(...args);
+    },
+
     render: function() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -1179,9 +1227,9 @@ var TimelinePanel = React.createClass({
 
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <div className="mx_RoomView_empty">{ this.props.empty }</div>
-                    </div>
+                <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
+                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                </div>
             );
         }
 
@@ -1203,26 +1251,31 @@ var TimelinePanel = React.createClass({
         );
         return (
             <MessagePanel ref="messagePanel"
-                          room={this.props.timelineSet.room}
-                          hidden={this.props.hidden}
-                          backPaginating={this.state.backPaginating}
-                          forwardPaginating={forwardPaginating}
-                          events={this.state.events}
-                          highlightedEventId={this.props.highlightedEventId}
-                          readMarkerEventId={this.state.readMarkerEventId}
-                          readMarkerVisible={this.state.readMarkerVisible}
-                          suppressFirstDateSeparator={this.state.canBackPaginate}
-                          showUrlPreview={this.props.showUrlPreview}
-                          showReadReceipts={this.props.showReadReceipts}
-                          ourUserId={MatrixClientPeg.get().credentials.userId}
-                          stickyBottom={stickyBottom}
-                          onScroll={this.onMessageListScroll}
-                          onFillRequest={this.onMessageListFillRequest}
-                          onUnfillRequest={this.onMessageListUnfillRequest}
-                          isTwelveHour={this.state.isTwelveHour}
-                          alwaysShowTimestamps={this.state.alwaysShowTimestamps}
-                          className={this.props.className}
-                          tileShape={this.props.tileShape}
+                room={this.props.timelineSet.room}
+                permalinkCreator={this.props.permalinkCreator}
+                hidden={this.props.hidden}
+                backPaginating={this.state.backPaginating}
+                forwardPaginating={forwardPaginating}
+                events={this.state.events}
+                highlightedEventId={this.props.highlightedEventId}
+                readMarkerEventId={this.state.readMarkerEventId}
+                readMarkerVisible={this.state.readMarkerVisible}
+                suppressFirstDateSeparator={this.state.canBackPaginate}
+                showUrlPreview={this.props.showUrlPreview}
+                showReadReceipts={this.props.showReadReceipts}
+                ourUserId={MatrixClientPeg.get().credentials.userId}
+                stickyBottom={stickyBottom}
+                onScroll={this.onMessageListScroll}
+                onFillRequest={this.onMessageListFillRequest}
+                onUnfillRequest={this.onMessageListUnfillRequest}
+                isTwelveHour={this.state.isTwelveHour}
+                alwaysShowTimestamps={this.state.alwaysShowTimestamps}
+                className={this.props.className}
+                tileShape={this.props.tileShape}
+                resizeNotifier={this.props.resizeNotifier}
+                getRelationsForEvent={this.getRelationsForEvent}
+                editEvent={this.state.editEvent}
+                showReactions={this.props.showReactions}
             />
         );
     },

@@ -38,7 +38,8 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         this.state = {
             loading: true,
             error: null,
-            unverifiedDevice: null,
+            backupInfo: null,
+            notNowClicked: false,
         };
     }
 
@@ -47,10 +48,12 @@ export default class RoomRecoveryReminder extends React.PureComponent {
     }
 
     async _loadBackupStatus() {
-        let backupSigStatus;
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-            backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+            this.setState({
+                loading: false,
+                backupInfo,
+            });
         } catch (e) {
             console.log("Unable to fetch key backup status", e);
             this.setState({
@@ -59,44 +62,24 @@ export default class RoomRecoveryReminder extends React.PureComponent {
             });
             return;
         }
-
-        let unverifiedDevice;
-        for (const sig of backupSigStatus.sigs) {
-            if (sig.device && !sig.device.isVerified()) {
-                unverifiedDevice = sig.device;
-                break;
-            }
-        }
-        this.setState({
-            loading: false,
-            unverifiedDevice,
-        });
     }
 
     showSetupDialog = () => {
-        if (this.state.unverifiedDevice) {
+        if (this.state.backupInfo) {
             // A key backup exists for this account, but the creating device is not
-            // verified, so we'll show the device verify dialog.
-            // TODO: Should change to a restore key backup flow that checks the recovery
-            // passphrase while at the same time also cross-signing the device as well in
-            // a single flow (for cases where a key backup exists but the backup creating
-            // device is unverified).  Since we don't have that yet, we'll look for an
-            // unverified device and verify it.  Note that this means we won't restore
-            // keys yet; instead we'll only trust the backup for sending our own new keys
-            // to it.
-            const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-            Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-                userId: MatrixClientPeg.get().credentials.userId,
-                device: this.state.unverifiedDevice,
-            });
-            return;
+            // verified, so restore the backup which will give us the keys from it and
+            // allow us to trust it (ie. upload keys to it)
+            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {});
+        } else {
+            Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
+                import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
+            );
         }
+    }
 
-        // The default case assumes that a key backup doesn't exist for this account, so
-        // we'll show the create key backup flow.
-        Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
-            import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
-        );
+    onOnNotNowClick = () => {
+        this.setState({notNowClicked: true});
     }
 
     onDontAskAgainClick = () => {
@@ -126,60 +109,55 @@ export default class RoomRecoveryReminder extends React.PureComponent {
     }
 
     render() {
-        if (this.state.loading) {
+        // If there was an error loading just don't display the banner: we'll try again
+        // next time the user switchs to the room.
+        if (this.state.error || this.state.loading || this.state.notNowClicked) {
             return null;
         }
 
         const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
 
-        let body;
-        let primaryCaption = _t("Set up");
-        if (this.state.error) {
-            body = <div className="error">
-                {_t("Unable to load key backup status")}
-            </div>;
-        } else if (this.state.unverifiedDevice) {
-            // A key backup exists for this account, but the creating device is not
-            // verified.
-            body = <div>
-                <p>{_t(
-                    "Secure Message Recovery has been set up on another device: <deviceName></deviceName>",
-                    {},
-                    {
-                        deviceName: () => <i>{this.state.unverifiedDevice.unsigned.device_display_name}</i>,
-                    },
-                )}</p>
-                <p>{_t(
-                    "To view your secure message history and ensure you can view new " +
-                    "messages on future devices, verify that device now.",
-                )}</p>
-            </div>;
-            primaryCaption = _t("Verify device");
+        let setupCaption;
+        if (this.state.backupInfo) {
+            setupCaption = _t("Connect this device to Key Backup");
         } else {
-            // The default case assumes that a key backup doesn't exist for this account.
-            // (This component doesn't currently check that itself.)
-            body = _t(
-                "If you log out or use another device, you'll lose your " +
-                "secure message history. To prevent this, set up Secure " +
-                "Message Recovery.",
-            );
+            setupCaption = _t("Start using Key Backup");
         }
 
         return (
             <div className="mx_RoomRecoveryReminder">
                 <div className="mx_RoomRecoveryReminder_header">{_t(
-                    "Secure Message Recovery",
+                    "Never lose encrypted messages",
                 )}</div>
-                <div className="mx_RoomRecoveryReminder_body">{body}</div>
+                <div className="mx_RoomRecoveryReminder_body">
+                    <p>{_t(
+                        "Messages in this room are secured with end-to-end " +
+                        "encryption. Only you and the recipient(s) have the " +
+                        "keys to read these messages.",
+                    )}</p>
+                    <p>{_t(
+                        "Securely back up your keys to avoid losing them. " +
+                        "<a>Learn more.</a>", {},
+                        {
+                            // TODO: We don't have this link yet: this will prevent the translators
+                            // having to re-translate the string when we do.
+                            a: sub => '',
+                        },
+                    )}</p>
+                </div>
                 <div className="mx_RoomRecoveryReminder_buttons">
-                    <AccessibleButton className="mx_RoomRecoveryReminder_button mx_RoomRecoveryReminder_secondary"
-                        onClick={this.onDontAskAgainClick}>
-                        { _t("Don't ask again") }
-                    </AccessibleButton>
                     <AccessibleButton className="mx_RoomRecoveryReminder_button"
                         onClick={this.onSetupClick}>
-                        {primaryCaption}
+                        {setupCaption}
                     </AccessibleButton>
+                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                        onClick={this.onOnNotNowClick}>
+                        { _t("Not now") }
+                    </AccessibleButton></p>
+                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                        onClick={this.onDontAskAgainClick}>
+                        { _t("Don't ask me again") }
+                    </AccessibleButton></p>
                 </div>
             </div>
         );

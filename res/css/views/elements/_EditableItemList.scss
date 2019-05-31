@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,47 +16,38 @@ limitations under the License.
 
 .mx_EditableItemList {
     margin-top: 12px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 .mx_EditableItem {
-    display: flex;
-    margin-left: 56px;
+    margin-bottom: 5px;
+    margin-left: 15px;
 }
 
-.mx_EditableItem .mx_EditableItem_editable {
-    border: 0px;
-    border-bottom: 1px solid $strong-input-border-color;
-    padding: 0px;
-    min-width: 240px;
-    max-width: 400px;
-    margin-bottom: 16px;
-}
-
-.mx_EditableItem .mx_EditableItem_editable:focus {
-    border-bottom: 1px solid $accent-color;
-    outline: none;
-    box-shadow: none;
-}
-
-.mx_EditableItem .mx_EditableItem_editablePlaceholder {
-    color: $settings-grey-fg-color;
-}
-
-.mx_EditableItem .mx_EditableItem_addButton,
-.mx_EditableItem .mx_EditableItem_removeButton {
-    padding-left: 0.5em;
-    position: relative;
+.mx_EditableItem_delete {
+    margin-right: 5px;
     cursor: pointer;
-
-    visibility: hidden;
+    vertical-align: middle;
 }
 
-.mx_EditableItem:hover .mx_EditableItem_addButton,
-.mx_EditableItem:hover .mx_EditableItem_removeButton {
-    visibility: visible;
+.mx_EditableItem_email {
+    vertical-align: middle;
+}
+
+.mx_EditableItem_promptText {
+    margin-right: 10px;
+}
+
+.mx_EditableItem_confirmBtn {
+    margin-right: 5px;
+}
+
+.mx_EditableItemList_newItem .mx_Field input {
+    // Use 100% of the space available for the input, but don't let the 10px
+    // padding on either side of the input to push it out of alignment.
+    width: calc(100% - 20px);
 }
 
 .mx_EditableItemList_label {
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }

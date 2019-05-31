@@ -117,7 +117,6 @@ export default React.createClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         const groupName = this.props.group.name || this.props.group.groupId;
         const httpAvatarUrl = this.props.group.avatarUrl ?
@@ -129,9 +128,9 @@ export default React.createClass({
             'mx_RoomTile_badgeShown': this.state.badgeHover || this.state.menuDisplayed,
         });
 
-        const label = <EmojiText element="div" title={this.props.group.groupId} className={nameClasses} dir="auto">
+        const label = <div title={this.props.group.groupId} className={nameClasses} dir="auto">
             { groupName }
-        </EmojiText>;
+        </div>;
 
         const badgeEllipsis = this.state.badgeHover || this.state.menuDisplayed;
         const badgeClasses = classNames('mx_RoomTile_badge mx_RoomTile_highlight', {
@@ -143,13 +142,14 @@ export default React.createClass({
 
         let tooltip;
         if (this.props.collapsed && this.state.hover) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={groupName} dir="auto" />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_RoomTile_tooltip" label={groupName} dir="auto" />;
         }
 
         const classes = classNames('mx_RoomTile mx_RoomTile_highlight', {
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_selected': this.state.selected,
+            'mx_GroupInviteTile': true,
         });
 
         return (

@@ -24,8 +24,10 @@ import { KeyCode } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
-
+import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
+import {_t} from "../../languageHandler";
+import Analytics from "../../Analytics";
 
 
 const LeftPanel = React.createClass({
@@ -44,11 +46,23 @@ const LeftPanel = React.createClass({
     getInitialState: function() {
         return {
             searchFilter: '',
+            breadcrumbs: false,
         };
     },
 
     componentWillMount: function() {
         this.focusedElement = null;
+
+        this._settingWatchRef = SettingsStore.watchSetting(
+            "feature_room_breadcrumbs", null, this._onBreadcrumbsChanged);
+
+        const useBreadcrumbs = SettingsStore.isFeatureEnabled("feature_room_breadcrumbs");
+        Analytics.setBreadcrumbs(useBreadcrumbs);
+        this.setState({breadcrumbs: useBreadcrumbs});
+    },
+
+    componentWillUnmount: function() {
+        SettingsStore.unwatchSetting(this._settingWatchRef);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -70,6 +84,22 @@ const LeftPanel = React.createClass({
         }
 
         return false;
+    },
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.breadcrumbs !== this.state.breadcrumbs) {
+            Analytics.setBreadcrumbs(this.state.breadcrumbs);
+        }
+    },
+
+    _onBreadcrumbsChanged: function(settingName, roomId, level, valueAtLevel, value) {
+        // Features are only possible at a single level, so we can get away with using valueAtLevel.
+        // The SettingsStore runs on the same tick as the update, so `value` will be wrong.
+        this.setState({breadcrumbs: valueAtLevel});
+
+        // For some reason the setState doesn't trigger a render of the component, so force one.
+        // Probably has to do with the change happening outside of a change detector cycle.
+        this.forceUpdate();
     },
 
     _onFocus: function(ev) {
@@ -182,13 +212,25 @@ const LeftPanel = React.createClass({
 
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
+        const RoomBreadcrumbs = sdk.getComponent('rooms.RoomBreadcrumbs');
         const TagPanel = sdk.getComponent('structures.TagPanel');
+        const CustomRoomTagPanel = sdk.getComponent('structures.CustomRoomTagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
         const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
-        const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
+        let tagPanelContainer;
+
+        const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+
+        if (tagPanelEnabled) {
+            tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
+                <TagPanel />
+                { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
+                <TagPanelButtons />
+            </div>);
+        }
 
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
@@ -199,27 +241,35 @@ const LeftPanel = React.createClass({
             },
         );
 
-        const searchBox = !this.props.collapsed ?
-            <SearchBox onSearch={ this.onSearch } onCleared={ this.onSearchCleared } /> :
-            undefined;
+        const searchBox = (<SearchBox
+            enableRoomSearchFocus={true}
+            placeholder={ _t('Filter room names') }
+            onSearch={ this.onSearch }
+            onCleared={ this.onSearchCleared }
+            collapsed={this.props.collapsed} />);
+
+        let breadcrumbs;
+        if (this.state.breadcrumbs) {
+            breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
+        }
 
         return (
             <div className={containerClasses}>
-                { tagPanel }
+                { tagPanelContainer }
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
+                    { breadcrumbs }
                     { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
-                        toolbarShown={this.props.toolbarShown}
+                        resizeNotifier={this.props.resizeNotifier}
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />
                 </aside>
             </div>
         );
-        // <BottomLeftMenu collapsed={this.props.collapsed}/>
     },
 });
 

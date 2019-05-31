@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import LazyLoadingController from "./controllers/LazyLoadingController";
 import CustomStatusController from "./controllers/CustomStatusController";
+import ThemeController from './controllers/ThemeController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -93,12 +93,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_tabbed_settings": {
-        isFeature: true,
-        displayName: _td("Tabbed settings"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
@@ -106,16 +100,15 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_lazyloading": {
+    "feature_room_breadcrumbs": {
         isFeature: true,
-        displayName: _td("Increase performance by only loading room members on first view"),
+        displayName: _td("Show recent room avatars above the room list"),
         supportedLevels: LEVELS_FEATURE,
-        controller: new LazyLoadingController(),
-        default: true,
+        default: false,
     },
-    "feature_keybackup": {
+    "feature_custom_tags": {
         isFeature: true,
-        displayName: _td("Backup of encryption keys to server"),
+        displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -125,9 +118,15 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_sas": {
+    "feature_message_editing": {
         isFeature: true,
-        displayName: _td("Two-way device verification using short text"),
+        displayName: _td("Edit messages after they have been sent (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_reactions": {
+        isFeature: true,
+        displayName: _td("React to messages with emoji (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -168,7 +167,7 @@ export const SETTINGS = {
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
-        displayName: _td('Show read receipts'),
+        displayName: _td('Show read receipts sent by other users'),
         default: true,
         invertedSettingName: 'hideReadReceipts',
     },
@@ -245,12 +244,13 @@ export const SETTINGS = {
         invertedSettingName: 'TagPanel.disableTagPanel',
     },
     "theme": {
-        supportedLevels: ['config'],
-        default: "dharma",
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: "light",
+        controller: new ThemeController(),
     },
-    "webRtcForcePeerToPeer": {
+    "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
+        displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
         default: true,
         invertedSettingName: 'webRtcForceTURN',
     },
@@ -269,6 +269,10 @@ export const SETTINGS = {
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
+    },
+    "breadcrumb_rooms": {
+        supportedLevels: ['account'],
+        default: [],
     },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -333,16 +337,6 @@ export const SETTINGS = {
         default: true,
         controller: new AudioNotificationsEnabledController(),
     },
-    "pinMentionedRooms": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Pin rooms I'm mentioned in to the top of the room list"),
-        default: false,
-    },
-    "pinUnreadRooms": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Pin unread rooms to the top of the room list"),
-        default: false,
-    },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable widget screenshots on supported widgets'),
@@ -360,6 +354,23 @@ export const SETTINGS = {
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show developer tools'),
+        default: false,
+    },
+    "widgetOpenIDPermissions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {
+            allow: [],
+            deny: [],
+        },
+    },
+    "RoomList.orderByImportance": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        default: true,
+    },
+    "showHiddenEventsInTimeline": {
+        displayName: _td("Show hidden events in timeline"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
     "lowBandwidth": {

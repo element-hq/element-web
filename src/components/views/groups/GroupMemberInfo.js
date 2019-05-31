@@ -180,7 +180,6 @@ module.exports = React.createClass({
             this.props.groupMember.displayname || this.props.groupMember.userId
         );
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
             <div className="mx_MemberInfo">
@@ -189,7 +188,7 @@ module.exports = React.createClass({
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     { avatarElement }
-                    <EmojiText element="h2">{ groupMemberName }</EmojiText>
+                    <h2>{ groupMemberName }</h2>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">

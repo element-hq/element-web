@@ -20,7 +20,7 @@ import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
-import {makeEventPermalink, makeGroupPermalink, makeRoomPermalink, makeUserPermalink} from "../../../matrix-to";
+import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../matrix-to";
 import * as ContextualMenu from "../../structures/ContextualMenu";
 
 const socials = [
@@ -114,13 +114,28 @@ export default class ShareDialog extends React.Component {
             top: y,
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         }, false);
-        e.target.onmouseleave = close;
+        // Drop a reference to this close handler for componentWillUnmount
+        this.closeCopiedTooltip = e.target.onmouseleave = close;
     }
 
     onLinkSpecificEventCheckboxClick() {
         this.setState({
             linkSpecificEvent: !this.state.linkSpecificEvent,
         });
+    }
+
+    componentWillMount() {
+        if (this.props.target instanceof Room) {
+            const permalinkCreator = new RoomPermalinkCreator(this.props.target);
+            permalinkCreator.load();
+            this.setState({permalinkCreator});
+        }
+    }
+
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape or clicking X really quickly
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
     render() {
@@ -146,9 +161,9 @@ export default class ShareDialog extends React.Component {
             }
 
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = makeEventPermalink(this.props.target.roomId, events[events.length - 1].getId());
+                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
             } else {
-                matrixToUrl = makeRoomPermalink(this.props.target.roomId);
+                matrixToUrl = this.state.permalinkCreator.forRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             title = _t('Share User');
@@ -169,9 +184,9 @@ export default class ShareDialog extends React.Component {
             </div>;
 
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = makeEventPermalink(this.props.target.getRoomId(), this.props.target.getId());
+                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
             } else {
-                matrixToUrl = makeRoomPermalink(this.props.target.getRoomId());
+                matrixToUrl = this.props.permalinkCreator.forRoom();
             }
         }
 

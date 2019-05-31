@@ -77,7 +77,7 @@ export default React.createClass({
                     <div role="alert">{ this.state.authError.message || this.state.authError.toString() }</div>
                     <br />
                     <AccessibleButton onClick={this._onDismissClick}
-                        className="mx_UserSettings_button"
+                        className="mx_GeneralButton"
                         autoFocus="true"
                     >
                         { _t("Dismiss") }

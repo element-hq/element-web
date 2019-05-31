@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
-import SettingsStore from '../../../settings/SettingsStore';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 
 const MODE_LEGACY = 'legacy';
@@ -48,7 +47,7 @@ export default class DeviceVerifyDialog extends React.Component {
         this._showSasEvent = null;
         this.state = {
             phase: PHASE_START,
-            mode: SettingsStore.isFeatureEnabled("feature_sas") ? MODE_SAS : MODE_LEGACY,
+            mode: MODE_SAS,
             sasVerified: false,
         };
     }
@@ -61,6 +60,11 @@ export default class DeviceVerifyDialog extends React.Component {
     }
 
     _onSwitchToLegacyClick = () => {
+        if (this._verifier) {
+            this._verifier.removeListener('show_sas', this._onVerifierShowSas);
+            this._verifier.cancel('User cancel');
+            this._verifier = null;
+        }
         this.setState({mode: MODE_LEGACY});
     }
 
@@ -185,11 +189,21 @@ export default class DeviceVerifyDialog extends React.Component {
 
     _renderSasVerificationPhaseWaitAccept() {
         const Spinner = sdk.getComponent("views.elements.Spinner");
+        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
         return (
             <div>
                 <Spinner />
                 <p>{_t("Waiting for partner to accept...")}</p>
+                <p>{_t(
+                    "Nothing appearing? Not all clients support interactive verification yet. " +
+                    "<button>Use legacy verification</button>.",
+                    {}, {button: sub => <AccessibleButton element='span' className="mx_linkButton"
+                        onClick={this._onSwitchToLegacyClick}
+                    >
+                        {sub}
+                    </AccessibleButton>},
+                )}</p>
             </div>
         );
     }
@@ -241,7 +255,7 @@ export default class DeviceVerifyDialog extends React.Component {
                         "and ask them whether the key they see in their User Settings " +
                         "for this device matches the key below:") }
                 </p>
-                <div className="mx_UserSettings_cryptoSection">
+                <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
                         <li><label>{ _t("Device name") }:</label> <span>{ this.props.device.getDisplayName() }</span></li>
                         <li><label>{ _t("Device ID") }:</label> <span><code>{ this.props.device.deviceId }</code></span></li>

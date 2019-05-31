@@ -45,6 +45,7 @@ export default function shouldHideEvent(ev) {
 
     // Hide redacted events
     if (ev.isRedacted() && !isEnabled('showRedactions')) return true;
+    if (ev.isRelation("m.replace")) return true;
 
     const eventDiff = memberEventDiff(ev);
 

@@ -20,10 +20,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
 import Analytics from '../../../Analytics';
 import AccessibleButton from '../elements/AccessibleButton';
-import TintableSvg from '../elements/TintableSvg';
 
 export default class HeaderButton extends React.Component {
     constructor() {
@@ -33,17 +31,14 @@ export default class HeaderButton extends React.Component {
 
     onClick(ev) {
         Analytics.trackEvent(...this.props.analytics);
-        dis.dispatch({
-            action: 'view_right_panel_phase',
-            phase: this.props.clickPhase,
-            fromHeader: true,
-        });
+        this.props.onClick();
     }
 
     render() {
         const classes = classNames({
             mx_RightPanel_headerButton: true,
             mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
+            [`mx_RightPanel_${this.props.name}`]: true,
         });
 
         return <AccessibleButton
@@ -51,25 +46,23 @@ export default class HeaderButton extends React.Component {
             aria-expanded={this.props.isHighlighted}
             title={this.props.title}
             className={classes}
-            onClick={this.onClick} >
-                <TintableSvg src={this.props.iconSrc} width="20" height="20" />
-            </AccessibleButton>;
+            onClick={this.onClick}>
+        </AccessibleButton>;
     }
 }
 
 HeaderButton.propTypes = {
     // Whether this button is highlighted
     isHighlighted: PropTypes.bool.isRequired,
-    // The phase to swap to when the button is clicked
-    clickPhase: PropTypes.string.isRequired,
-    // The source file of the icon to display
-    iconSrc: PropTypes.string.isRequired,
-
+    // click handler
+    onClick: PropTypes.func.isRequired,
     // The badge to display above the icon
     badge: PropTypes.node,
     // The parameters to track the click event
     analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
 
+    // Button name
+    name: PropTypes.string.isRequired,
     // Button title
     title: PropTypes.string.isRequired,
 };

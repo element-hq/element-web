@@ -18,7 +18,12 @@ limitations under the License.
     margin: 10px 0;
 }
 
-.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_RoomStateExplorer_query {
+.mx_DevTools_ServersInRoomList_button {
+    /* Set the cursor back to default as `.mx_Dialog button` sets it to pointer */
+    cursor: default !important;
+}
+
+.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button, .mx_DevTools_RoomStateExplorer_query {
     margin-bottom: 10px;
     width: 100%;
 }
@@ -67,10 +72,23 @@ limitations under the License.
 
 .mx_DevTools_textarea {
     font-size: 12px;
-    max-width: 624px;
+    max-width: 684px;
     min-height: 250px;
     padding: 10px;
     width: 100%;
+}
+
+.mx_DevTools_content .mx_Field_input {
+    display: inline-block;
+}
+
+.mx_DevTools_eventTypeStateKeyGroup {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mx_DevTools_content .mx_Field_input:first-of-type {
+    margin-right: 42px;
 }
 
 .mx_DevTools_tgl {

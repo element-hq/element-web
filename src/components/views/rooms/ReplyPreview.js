@@ -20,6 +20,8 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
+import PropTypes from "prop-types";
+import {RoomPermalinkCreator} from "../../../matrix-to";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -29,6 +31,10 @@ function cancelQuoting() {
 }
 
 export default class ReplyPreview extends React.Component {
+    static propTypes = {
+        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
+    };
+
     constructor(props, context) {
         super(props, context);
 
@@ -60,13 +66,12 @@ export default class ReplyPreview extends React.Component {
         if (!this.state.event) return null;
 
         const EventTile = sdk.getComponent('rooms.EventTile');
-        const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
-                <EmojiText element="div" className="mx_ReplyPreview_header mx_ReplyPreview_title">
+                <div className="mx_ReplyPreview_header mx_ReplyPreview_title">
                     { '💬 ' + _t('Replying') }
-                </EmojiText>
+                </div>
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
                     <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18"
                          onClick={cancelQuoting} />
@@ -75,6 +80,7 @@ export default class ReplyPreview extends React.Component {
                 <EventTile last={true}
                            tileShape="reply_preview"
                            mxEvent={this.state.event}
+                           permalinkCreator={this.props.permalinkCreator}
                            isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </div>
         </div>;

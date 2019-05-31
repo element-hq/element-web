@@ -75,6 +75,7 @@ limitations under the License.
     font-size: 12px;
     padding: 0 5px;
     background-color: $roomtile-name-color;
+    cursor: pointer;
 }
 
 .mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
@@ -82,15 +83,24 @@ limitations under the License.
 }
 
 .mx_RoomSubList_addRoom {
-    background-color: $roomheader-addroom-color;
-    color: $roomsublist-background;
-    background-image: url('$(res)/img/icons-room-add.svg');
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: $roomheader-addroom-bg-color;
     border-radius: 10px; // 16/2 + 2 padding
     height: 16px;
     flex: 0 0 16px;
-    background-clip: content-box;
+    position: relative;
+
+    &::before {
+        background-color: $roomheader-addroom-fg-color;
+        mask: url('$(res)/img/icons-room-add.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
 .mx_RoomSubList_badgeHighlight {
@@ -99,7 +109,7 @@ limitations under the License.
 
 .mx_RoomSubList_chevron {
     pointer-events: none;
-    mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
+    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
     transition: transform 0.2s ease-in;
     width: 10px;
@@ -127,6 +137,26 @@ limitations under the License.
     padding: 0 8px;
 }
 
+.collapsed {
+    .mx_RoomSubList_scroll {
+        padding: 0;
+    }
+
+    .mx_RoomSubList_labelContainer {
+        margin-right: 14px;
+        margin-left: 2px;
+    }
+
+    .mx_RoomSubList_addRoom {
+        margin-left: 3px;
+        margin-right: 10px;
+    }
+
+    .mx_RoomSubList_label > span {
+        display: none;
+    }
+}
+
 // overflow indicators
 .mx_RoomSubList:not(.resized-all) > .mx_RoomSubList_scroll {
     &.mx_IndicatorScrollbar_topOverflow::before,
@@ -151,10 +181,10 @@ limitations under the License.
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
         transition: background-image 0.1s ease-in;
-        background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
+        background: linear-gradient(to top, $panel-gradient);
     }
 
-/*
+    /*
     // for now, we remove the bottomOverflow entirely as we don't want to
     // lose the screen real-estate due to a bg-colored gradient, but we also
     // don't want to use drop shadows and risk a confusing hierarchy of cards.
@@ -165,26 +195,5 @@ limitations under the License.
         margin: 0px -8px;
         background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.0));
     }
-*/
-}
-
-.collapsed {
-
-    .mx_RoomSubList_scroll {
-        padding: 0;
-    }
-
-    .mx_RoomSubList_labelContainer {
-        margin-right: 14px;
-        margin-left: 2px;
-    }
-
-    .mx_RoomSubList_addRoom {
-        margin-left: 3px;
-        margin-right: 10px;
-    }
-
-    .mx_RoomSubList_label > span {
-        display: none;
-    }
+    */
 }

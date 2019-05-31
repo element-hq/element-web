@@ -25,14 +25,20 @@ import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
+import PersistedElement from "../elements/PersistedElement";
 
 const widgetType = 'm.stickerpicker';
 
-// We sit in a context menu, so the persisted element container needs to float
-// above it, so it needs a greater z-index than the ContextMenu
-const STICKERPICKER_Z_INDEX = 5000;
+// This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
+// We sit in a context menu, so this should be given to the context menu.
+const STICKERPICKER_Z_INDEX = 3500;
+
+// Key to store the widget's AppTile under in PersistedElement
+const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 export default class Stickerpicker extends React.Component {
+    static currentWidget;
+
     constructor(props) {
         super(props);
         this._onShowStickersClick = this._onShowStickersClick.bind(this);
@@ -103,6 +109,9 @@ export default class Stickerpicker extends React.Component {
     }
 
     componentWillUnmount() {
+        const client = MatrixClientPeg.get();
+        if (client) client.removeListener('accountData', this._updateWidget);
+
         window.removeEventListener('resize', this._onResize);
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
@@ -123,6 +132,29 @@ export default class Stickerpicker extends React.Component {
 
     _updateWidget() {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
+        if (!stickerpickerWidget) {
+            Stickerpicker.currentWidget = null;
+            this.setState({stickerpickerWidget: null, widgetId: null});
+            return;
+        }
+
+        const currentWidget = Stickerpicker.currentWidget;
+        let currentUrl = null;
+        if (currentWidget && currentWidget.content && currentWidget.content.url) {
+            currentUrl = currentWidget.content.url;
+        }
+
+        let newUrl = null;
+        if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
+            newUrl = stickerpickerWidget.content.url;
+        }
+
+        if (newUrl !== currentUrl) {
+            // Destroy the existing frame so a new one can be created
+            PersistedElement.destroyElement(PERSISTED_ELEMENT_KEY);
+        }
+
+        Stickerpicker.currentWidget = stickerpickerWidget;
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
@@ -208,7 +240,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement persistKey="stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
+                    <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
                             id={stickerpickerWidget.id}
                             url={stickerpickerWidget.content.url}
@@ -226,6 +258,7 @@ export default class Stickerpicker extends React.Component {
                             showTitle={false}
                             showMinimise={true}
                             showDelete={false}
+                            showCancel={false}
                             showPopout={false}
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
@@ -306,22 +339,25 @@ export default class Stickerpicker extends React.Component {
      */
     _launchManageIntegrations() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+        this.scalarClient.connect().done(() => {
+            const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
                     this.props.room,
                     'type_' + widgetType,
                     this.state.widgetId,
                 ) :
                 null;
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-            src: src,
-        }, "mx_IntegrationsManager");
-
-        this.setState({showStickers: false});
+            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                src: src,
+            }, "mx_IntegrationsManager");
+            this.setState({showStickers: false});
+        }, (err) => {
+            this.setState({imError: err});
+            console.error('Error ensuring a valid scalar_token exists', err);
+        });
     }
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const ContextualMenu = sdk.getComponent('structures.ContextualMenu');
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         let stickersButton;
@@ -339,6 +375,7 @@ export default class Stickerpicker extends React.Component {
             menuPaddingTop={0}
             menuPaddingLeft={0}
             menuPaddingRight={0}
+            zIndex={STICKERPICKER_Z_INDEX}
         />;
 
         if (this.state.showStickers) {
@@ -347,11 +384,10 @@ export default class Stickerpicker extends React.Component {
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_stickers mx_Stickers_hideStickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers"
                     onClick={this._onHideStickersClick}
-                    ref='target'
-                    title={_t("Hide Stickers")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/face.svg")} width="20" height="20" />
+                    title={_t("Hide Stickers")}
+                >
                 </AccessibleButton>;
         } else {
             // Show show-stickers button
@@ -359,10 +395,10 @@ export default class Stickerpicker extends React.Component {
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_show_stickers"
-                    className="mx_MessageComposer_stickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
-                    title={_t("Show Stickers")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/face.svg")} width="20" height="20" />
+                    title={_t("Show Stickers")}
+                >
                 </AccessibleButton>;
         }
         return <div>
