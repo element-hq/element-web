@@ -48,6 +48,7 @@ import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/lib/autodiscovery";
+import * as Lifecycle from "matrix-react-sdk/lib/Lifecycle";
 
 import url from 'url';
 
@@ -365,8 +366,17 @@ async function loadApp() {
         }).catch(err => {
             console.error(err);
 
-            const errorMessage = err.translatedMessage
+            let errorMessage = err.translatedMessage
                 || _t("Unexpected error preparing the app. See console for details.");
+            errorMessage = <span>
+                {_t(
+                    "This installation of Riot seems to have an invalid server configuration. " +
+                    "If you are the administrator, please correct the error below",
+                )}
+                <br />
+                <br />
+                {errorMessage}
+            </span>;
 
             // Like the compatibility page, AWOOOOOGA at the user
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
@@ -447,57 +457,75 @@ async function loadLanguage() {
 }
 
 async function verifyServerConfig() {
-    console.log("Verifying homeserver configuration");
+    let validatedConfig;
+    try {
+        console.log("Verifying homeserver configuration");
 
-    // Note: the query string may include is_url and hs_url - we only respect these in the
-    // context of email validation. Because we don't respect them otherwise, we do not need
-    // to parse or consider them here.
+        // Note: the query string may include is_url and hs_url - we only respect these in the
+        // context of email validation. Because we don't respect them otherwise, we do not need
+        // to parse or consider them here.
 
-    const config = SdkConfig.get();
-    let wkConfig = config['default_server_config']; // overwritten later under some conditions
-    const serverName = config['default_server_name'];
-    const hsUrl = config['default_hs_url'];
-    const isUrl = config['default_is_url'];
+        const config = SdkConfig.get();
+        let wkConfig = config['default_server_config']; // overwritten later under some conditions
+        const serverName = config['default_server_name'];
+        const hsUrl = config['default_hs_url'];
+        const isUrl = config['default_is_url'];
 
-    const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
-    if (incompatibleOptions.length > 1) {
-        throw newTranslatableError(_td(
-            "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-            "or default_hs_url.",
-        ));
-    }
-    if (incompatibleOptions.length < 1) {
-        throw newTranslatableError(_td("Invalid configuration: no default server specified."));
-    }
+        const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
+        if (incompatibleOptions.length > 1) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw newTranslatableError(_td(
+                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+                "or default_hs_url.",
+            ));
+        }
+        if (incompatibleOptions.length < 1) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw newTranslatableError(_td("Invalid configuration: no default server specified."));
+        }
 
-    if (hsUrl) {
-        console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
+        if (hsUrl) {
+            console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
 
-        wkConfig = {
-            "m.homeserver": {
-                "base_url": hsUrl,
-            },
-        };
-        if (isUrl) {
-            wkConfig["m.identity_server"] = {
-                "base_url": isUrl,
+            wkConfig = {
+                "m.homeserver": {
+                    "base_url": hsUrl,
+                },
             };
+            if (isUrl) {
+                wkConfig["m.identity_server"] = {
+                    "base_url": isUrl,
+                };
+            }
+        }
+
+        let discoveryResult = null;
+        if (wkConfig) {
+            console.log("Config uses a default_server_config - validating object");
+            discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
+        }
+
+        if (serverName) {
+            console.log("Config uses a default_server_name - doing .well-known lookup");
+            discoveryResult = await AutoDiscovery.findClientConfig(serverName);
+        }
+
+        validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult);
+    } catch (e) {
+        const {hsUrl, isUrl, userId} = Lifecycle.getLocalStorageSessionVars();
+        if (hsUrl && userId) {
+            console.error(e);
+            console.warn("A session was found - suppressing config error and using the session's homeserver");
+
+            console.log("Using pre-existing hsUrl and isUrl: ", {hsUrl, isUrl});
+            validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+        } else {
+            // the user is not logged in, so scream
+            throw e;
         }
     }
 
-    let result = null;
 
-    if (wkConfig) {
-        console.log("Config uses a default_server_config - validating object");
-        result = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
-    }
-
-    if (serverName) {
-        console.log("Config uses a default_server_name - doing .well-known lookup");
-        result = await AutoDiscovery.findClientConfig(serverName);
-    }
-
-    const validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
     validatedConfig.isDefault = true;
 
     // Just in case we ever have to debug this
