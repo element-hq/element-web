@@ -3,7 +3,7 @@
     "This email address is already in use": "Denne e-postadressen er allerede i bruk",
     "This phone number is already in use": "Dette mobilnummeret er allerede i bruk",
     "Failed to verify email address: make sure you clicked the link in the email": "Klarte ikke verifisere e-postadressen: dobbelsjekk at du trykket på lenken i e-posten",
-    "The platform you're on": "Platformen du bruker",
+    "The platform you're on": "Platformen du befinner deg på",
     "The version of Riot.im": "Versjonen av Riot.im",
     "Whether or not you're logged in (we don't record your user name)": "Om du er logget inn eller ei (vi loggfører ikke brukernavnet ditt)",
     "Your language of choice": "Ditt valgte språk",
@@ -236,8 +236,15 @@
     "Usage": "Bruk",
     "Searches DuckDuckGo for results": "Søker DuckDuckGo for resultater",
     "/ddg is not a command": "/ddg er ikke en kommando",
-    "To use it, just wait for autocomplete results to load and tab through them.": "For å bruke det, bare vent til autofullfør-resultatetene til å laste, og tab deg gjennom dem.",
+    "To use it, just wait for autocomplete results to load and tab through them.": "For å bruke det, bare vent for autofullfør-resultatetene til å laste, og tab deg gjennom dem.",
     "Upgrades a room to a new version": "Oppgraderer et rom til en ny versjon",
     "Changes your display nickname": "Endrer visningsnavnet ditt",
-    "Chat with Riot Bot": "Chat med Riot Bot"
+    "Chat with Riot Bot": "Chat med Riot Bot",
+    "Email, name or Matrix ID": "Email, navn eller Matrix ID",
+    "Room upgrade confirmation": "Rom oppgradering konfirmasjon",
+    "Upgrading a room can be destructive and isn't always necessary.": "Oppgraderingen av et rom kan være destruktivt, og er ikke alltid nødvendig.",
+    "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Vennligst bekreft at du vil fortsette med oppgraderingen av dette rommet fra <oldVersion /> til <newVersion />.",
+    "Upgrade": "Oppgrader",
+    "Changes your display nickname in the current room only": "Endrer visningsnavnet ditt kun i det nåværende rommet",
+    "Changes your avatar in this current room only": "Endrer avataren din kun i det nåværende rommet"
 }
