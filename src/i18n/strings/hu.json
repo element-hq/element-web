@@ -1973,5 +1973,13 @@
     "Edited at %(date)s": "Szerkesztve: %(date)s",
     "Show hidden events in timeline": "Rejtett események megmutatása az idővonalon",
     "Add room": "Szoba hozzáadása",
-    "Your profile": "Profilod"
+    "Your profile": "Profilod",
+    "No homeserver URL provided": "Hiányzó matrix szerver URL",
+    "Unexpected error resolving homeserver configuration": "A matrix szerver konfiguráció betöltésekor ismeretlen hiba lépett fel",
+    "Edit message": "Üzenet szerkesztése",
+    "Unable to validate homeserver/identity server": "A matrix vagy azonosító szerver hitelesítése sikertelen",
+    "Sign in to your Matrix account on <underlinedServerName />": "Bejelentkezés a Matrix fiókba itt: <underlinedServerName />",
+    "Create your Matrix account on <underlinedServerName />": "Matrix fiók létrehozása itt: <underlinedServerName />",
+    "Your Matrix account on <underlinedServerName />": "A Matrix fiókod itt: <underlinedServerName />",
+    "Low bandwidth mode": "Alacsony sávszélesség mód"
 }

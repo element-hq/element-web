@@ -199,7 +199,7 @@
     "Drop File Here": "Upuść plik tutaj",
     "Drop here to tag %(section)s": "Upuść tutaj by oznaczyć %(section)s",
     "Ed25519 fingerprint": "Odcisk Ed25519",
-    "Edit": "Edycja",
+    "Edit": "Edytuj",
     "Email": "E-mail",
     "Email address": "Adres e-mail",
     "Email address (optional)": "Adres e-mail (opcjonalnie)",
@@ -861,7 +861,7 @@
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink> lub <firefoxLink>Firefox</firefoxLink> dla najlepszego doświadczenia.",
     "Wednesday": "Środa",
     "You cannot delete this message. (%(code)s)": "Nie możesz usunąć tej wiadomości. (%(code)s)",
-    "Quote": "Cytat",
+    "Quote": "Cytuj",
     "Failed to update keywords": "Nie udało się zaktualizować słów kluczowych",
     "Send logs": "Wyślij logi",
     "All messages": "Wszystkie wiadomości",
@@ -1441,5 +1441,8 @@
     "Spanner": "Klucz francuski",
     "Santa": "Mikołaj",
     "Gift": "Prezent",
-    "Hammer": "Młotek"
+    "Hammer": "Młotek",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "Grupuj i filtruj pokoje według niestandardowych znaczników (odśwież, aby zastosować zmiany)",
+    "Edit messages after they have been sent (refresh to apply changes)": "Edytuj wiadomości po ich wysłaniu (odśwież, aby zastosować zmiany)",
+    "React to messages with emoji (refresh to apply changes)": "Reaguj na wiadomości za pomocą emoji (odśwież, aby zastosować zmiany)"
 }
