@@ -1,3 +1,11 @@
+Changes in [1.2.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.1) (2019-05-31)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.2.0...v1.2.1)
+
+ * Upgrade to JS SDK 2.0.0 which fixes an error during key backup
+ * Native emoji require extra line-height for release
+   [\#3045](https://github.com/matrix-org/matrix-react-sdk/pull/3045)
+
 Changes in [1.2.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.0) (2019-05-29)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.2.0-rc.1...v1.2.0)
