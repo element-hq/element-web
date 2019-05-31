@@ -106,6 +106,9 @@ const TimelinePanel = React.createClass({
 
         // placeholder text to use if the timeline is empty
         empty: PropTypes.string,
+
+        // whether to show reactions for an event
+        showReactions: PropTypes.bool,
     },
 
     statics: {
@@ -204,11 +207,11 @@ const TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
-        MatrixClientPeg.get().on("Room.replaceEvent", this.onRoomReplaceEvent);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
+        MatrixClientPeg.get().on("Event.replaced", this.onEventReplaced);
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
@@ -283,11 +286,11 @@ const TimelinePanel = React.createClass({
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
-            client.removeListener("Room.replaceEvent", this.onRoomReplaceEvent);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
+            client.removeListener("Event.replaced", this.onEventReplaced);
             client.removeListener("sync", this.onSync);
         }
     },
@@ -405,7 +408,13 @@ const TimelinePanel = React.createClass({
             this.forceUpdate();
         }
         if (payload.action === "edit_event") {
-            this.setState({editEvent: payload.event});
+            this.setState({editEvent: payload.event}, () => {
+                if (payload.event && this.refs.messagePanel) {
+                    this.refs.messagePanel.scrollToEventIfNeeded(
+                        payload.event.getId(),
+                    );
+                }
+            });
         }
     },
 
@@ -507,7 +516,7 @@ const TimelinePanel = React.createClass({
         this.forceUpdate();
     },
 
-    onRoomReplaceEvent: function(replacedEvent, room) {
+    onEventReplaced: function(replacedEvent, room) {
         if (this.unmounted) return;
 
         // ignore events for other rooms
@@ -553,6 +562,9 @@ const TimelinePanel = React.createClass({
     },
 
     onEventDecrypted: function(ev) {
+        // Can be null for the notification timeline, etc.
+        if (!this.props.timelineSet.room) return;
+
         // Need to update as we don't display event tiles for events that
         // haven't yet been decrypted. The event will have just been updated
         // in place so we just need to re-render.
@@ -601,6 +613,8 @@ const TimelinePanel = React.createClass({
     },
 
     sendReadReceipt: function() {
+        if (SettingsStore.getValue("lowBandwidth")) return;
+
         if (!this.refs.messagePanel) return;
         if (!this.props.manageReadReceipts) return;
         // This happens on user_activity_end which is delayed, and it's
@@ -1261,6 +1275,7 @@ const TimelinePanel = React.createClass({
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
                 editEvent={this.state.editEvent}
+                showReactions={this.props.showReactions}
             />
         );
     },

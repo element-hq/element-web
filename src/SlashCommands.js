@@ -518,7 +518,7 @@ export const CommandMap = {
     unban: new Command({
         name: 'unban',
         args: '<user-id>',
-        description: _td('Unbans user with given id'),
+        description: _td('Unbans user with given ID'),
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+)$/);

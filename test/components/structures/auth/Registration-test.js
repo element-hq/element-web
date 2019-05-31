@@ -22,6 +22,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import sdk from 'matrix-react-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import * as TestUtils from '../../../test-utils';
+import {mkServerConfig} from "../../../test-utils";
 
 const Registration = sdk.getComponent(
     'structures.auth.Registration',
@@ -44,8 +45,7 @@ describe('Registration', function() {
 
     function render() {
         return ReactDOM.render(<Registration
-            defaultHsUrl="https://matrix.org"
-            defaultIsUrl="https://vector.im"
+            serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
             makeRegistrationUrl={() => {}}
             onLoggedIn={() => {}}
             onLoginClick={() => {}}

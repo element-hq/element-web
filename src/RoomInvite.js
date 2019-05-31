@@ -45,7 +45,7 @@ export function showStartChatInviteDialog() {
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
-        placeholder: _t("Email, name or matrix ID"),
+        placeholder: _t("Email, name or Matrix ID"),
         validAddressTypes: ['mx-user-id', 'email'],
         button: _t("Start Chat"),
         onFinished: _onStartChatFinished,
@@ -58,7 +58,7 @@ export function showRoomInviteDialog(roomId) {
         title: _t('Invite new room members'),
         description: _t('Who would you like to add to this room?'),
         button: _t('Send Invites'),
-        placeholder: _t("Email, name or matrix ID"),
+        placeholder: _t("Email, name or Matrix ID"),
         onFinished: (shouldInvite, addrs) => {
             _onRoomInviteFinished(roomId, shouldInvite, addrs);
         },

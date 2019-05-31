@@ -20,6 +20,9 @@ import PropTypes from 'prop-types';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
+import SdkConfig from "../../../SdkConfig";
 
 /*
  * A pure UI component which displays the HS and IS to use.
@@ -27,82 +30,119 @@ import { _t } from '../../../languageHandler';
 
 export default class ServerConfig extends React.PureComponent {
     static propTypes = {
-        onServerConfigChange: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
 
-        // default URLs are defined in config.json (or the hardcoded defaults)
-        // they are used if the user has not overridden them with a custom URL.
-        // In other words, if the custom URL is blank, the default is used.
-        defaultHsUrl: PropTypes.string, // e.g. https://matrix.org
-        defaultIsUrl: PropTypes.string, // e.g. https://vector.im
-
-        // custom URLs are explicitly provided by the user and override the
-        // default URLs.  The user enters them via the component's input fields,
-        // which is reflected on these properties whenever on..UrlChanged fires.
-        // They are persisted in localStorage by MatrixClientPeg, and so can
-        // override the default URLs when the component initially loads.
-        customHsUrl: PropTypes.string,
-        customIsUrl: PropTypes.string,
+        // The current configuration that the user is expecting to change.
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-    }
+
+        // Called after the component calls onServerConfigChange
+        onAfterSubmit: PropTypes.func,
+
+        // Optional text for the submit button. If falsey, no button will be shown.
+        submitText: PropTypes.string,
+
+        // Optional class for the submit button. Only applies if the submit button
+        // is to be rendered.
+        submitClass: PropTypes.string,
+    };
 
     static defaultProps = {
         onServerConfigChange: function() {},
-        customHsUrl: "",
-        customIsUrl: "",
         delayTimeMs: 0,
-    }
+    };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            hsUrl: props.customHsUrl,
-            isUrl: props.customIsUrl,
+            busy: false,
+            errorText: "",
+            hsUrl: props.serverConfig.hsUrl,
+            isUrl: props.serverConfig.isUrl,
         };
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.customHsUrl === this.state.hsUrl &&
-            newProps.customIsUrl === this.state.isUrl) return;
+        if (newProps.serverConfig.hsUrl === this.state.hsUrl &&
+            newProps.serverConfig.isUrl === this.state.isUrl) return;
+
+        this.validateAndApplyServer(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
+    }
+
+    async validateServer() {
+        // TODO: Do we want to support .well-known lookups here?
+        // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
+        // find their homeserver without demanding they use "https://matrix.org"
+        return this.validateAndApplyServer(this.state.hsUrl, this.state.isUrl);
+    }
+
+    async validateAndApplyServer(hsUrl, isUrl) {
+        // Always try and use the defaults first
+        const defaultConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
+        if (defaultConfig.hsUrl === hsUrl && defaultConfig.isUrl === isUrl) {
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(defaultConfig);
+            return defaultConfig;
+        }
 
         this.setState({
-            hsUrl: newProps.customHsUrl,
-            isUrl: newProps.customIsUrl,
+            hsUrl,
+            isUrl,
+            busy: true,
+            errorText: "",
         });
-        this.props.onServerConfigChange({
-            hsUrl: newProps.customHsUrl,
-            isUrl: newProps.customIsUrl,
-        });
+
+        try {
+            const result = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(result);
+            return result;
+        } catch (e) {
+            console.error(e);
+            let message = _t("Unable to validate homeserver/identity server");
+            if (e.translatedMessage) {
+                message = e.translatedMessage;
+            }
+            this.setState({
+                busy: false,
+                errorText: message,
+            });
+        }
     }
 
     onHomeserverBlur = (ev) => {
         this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            this.props.onServerConfigChange({
-                hsUrl: this.state.hsUrl,
-                isUrl: this.state.isUrl,
-            });
+            this.validateServer();
         });
-    }
+    };
 
     onHomeserverChange = (ev) => {
         const hsUrl = ev.target.value;
         this.setState({ hsUrl });
-    }
+    };
 
     onIdentityServerBlur = (ev) => {
         this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
-            this.props.onServerConfigChange({
-                hsUrl: this.state.hsUrl,
-                isUrl: this.state.isUrl,
-            });
+            this.validateServer();
         });
-    }
+    };
 
     onIdentityServerChange = (ev) => {
         const isUrl = ev.target.value;
         this.setState({ isUrl });
-    }
+    };
+
+    onSubmit = async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        await this.validateServer();
+
+        if (this.props.onAfterSubmit) {
+            this.props.onAfterSubmit();
+        }
+    };
 
     _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
@@ -114,10 +154,24 @@ export default class ServerConfig extends React.PureComponent {
     showHelpPopup = () => {
         const CustomServerDialog = sdk.getComponent('auth.CustomServerDialog');
         Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
-    }
+    };
 
     render() {
         const Field = sdk.getComponent('elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        const errorText = this.state.errorText
+            ? <span className='mx_ServerConfig_error'>{this.state.errorText}</span>
+            : null;
+
+        const submitButton = this.props.submitText
+            ? <AccessibleButton
+                  element="button"
+                  type="submit"
+                  className={this.props.submitClass}
+                  onClick={this.onSubmit}
+                  disabled={this.state.busy}>{this.props.submitText}</AccessibleButton>
+            : null;
 
         return (
             <div className="mx_ServerConfig">
@@ -127,22 +181,28 @@ export default class ServerConfig extends React.PureComponent {
                         { sub }
                     </a>,
                 })}
-                <div className="mx_ServerConfig_fields">
-                    <Field id="mx_ServerConfig_hsUrl"
-                        label={_t("Homeserver URL")}
-                        placeholder={this.props.defaultHsUrl}
-                        value={this.state.hsUrl}
-                        onBlur={this.onHomeserverBlur}
-                        onChange={this.onHomeserverChange}
-                    />
-                    <Field id="mx_ServerConfig_isUrl"
-                        label={_t("Identity Server URL")}
-                        placeholder={this.props.defaultIsUrl}
-                        value={this.state.isUrl}
-                        onBlur={this.onIdentityServerBlur}
-                        onChange={this.onIdentityServerChange}
-                    />
-                </div>
+                {errorText}
+                <form onSubmit={this.onSubmit} autoComplete={false} action={null}>
+                    <div className="mx_ServerConfig_fields">
+                        <Field id="mx_ServerConfig_hsUrl"
+                            label={_t("Homeserver URL")}
+                            placeholder={this.props.serverConfig.hsUrl}
+                            value={this.state.hsUrl}
+                            onBlur={this.onHomeserverBlur}
+                            onChange={this.onHomeserverChange}
+                            disabled={this.state.busy}
+                        />
+                        <Field id="mx_ServerConfig_isUrl"
+                            label={_t("Identity Server URL")}
+                            placeholder={this.props.serverConfig.isUrl}
+                            value={this.state.isUrl}
+                            onBlur={this.onIdentityServerBlur}
+                            onChange={this.onIdentityServerChange}
+                            disabled={this.state.busy}
+                        />
+                    </div>
+                    {submitButton}
+                </form>
             </div>
         );
     }

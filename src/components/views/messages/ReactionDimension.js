@@ -37,6 +37,7 @@ export default class ReactionDimension extends React.PureComponent {
 
         if (props.reactions) {
             props.reactions.on("Relations.add", this.onReactionsChange);
+            props.reactions.on("Relations.remove", this.onReactionsChange);
             props.reactions.on("Relations.redaction", this.onReactionsChange);
         }
     }
@@ -44,6 +45,7 @@ export default class ReactionDimension extends React.PureComponent {
     componentDidUpdate(prevProps) {
         if (prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on("Relations.add", this.onReactionsChange);
+            this.props.reactions.on("Relations.remove", this.onReactionsChange);
             this.props.reactions.on("Relations.redaction", this.onReactionsChange);
             this.onReactionsChange();
         }
@@ -53,6 +55,10 @@ export default class ReactionDimension extends React.PureComponent {
         if (this.props.reactions) {
             this.props.reactions.removeListener(
                 "Relations.add",
+                this.onReactionsChange,
+            );
+            this.props.reactions.removeListener(
+                "Relations.remove",
                 this.onReactionsChange,
             );
             this.props.reactions.removeListener(
@@ -82,7 +88,7 @@ export default class ReactionDimension extends React.PureComponent {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
-                return mxEvent.getContent()["m.relates_to"].key === option;
+                return mxEvent.getRelation().key === option;
             });
             if (!reactionForOption) {
                 continue;
@@ -107,7 +113,11 @@ export default class ReactionDimension extends React.PureComponent {
             return null;
         }
         const userId = MatrixClientPeg.get().getUserId();
-        return reactions.getAnnotationsBySender()[userId];
+        const myReactions = reactions.getAnnotationsBySender()[userId];
+        if (!myReactions) {
+            return null;
+        }
+        return [...myReactions.values()];
     }
 
     onOptionClick = (ev) => {
@@ -158,6 +168,7 @@ export default class ReactionDimension extends React.PureComponent {
 
         return <span className="mx_ReactionDimension"
             title={this.props.title}
+            aria-hidden={true}
         >
             {items}
         </span>;

@@ -361,7 +361,7 @@ async function _startCallApp(roomId, type) {
 
         Modal.createTrackedDialog('Could not connect to the integration server', '', ErrorDialog, {
             title: _t('Could not connect to the integration server'),
-            description: _t('A conference call could not be started because the intgrations server is not available'),
+            description: _t('A conference call could not be started because the integrations server is not available'),
         });
         return;
     }

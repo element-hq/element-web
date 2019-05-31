@@ -157,6 +157,9 @@ $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
 
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

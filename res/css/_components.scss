@@ -98,6 +98,7 @@
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
+@import "./views/elements/_TextWithTooltip.scss";
 @import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_ToolTipButton.scss";
 @import "./views/elements/_Tooltip.scss";
@@ -119,10 +120,12 @@
 @import "./views/messages/_ReactionDimension.scss";
 @import "./views/messages/_ReactionsRow.scss";
 @import "./views/messages/_ReactionsRowButton.scss";
+@import "./views/messages/_ReactionsRowButtonTooltip.scss";
 @import "./views/messages/_RoomAvatarEvent.scss";
 @import "./views/messages/_SenderProfile.scss";
 @import "./views/messages/_TextualEvent.scss";
 @import "./views/messages/_UnknownBody.scss";
+@import "./views/messages/_ViewSourceEvent.scss";
 @import "./views/room_settings/_AliasSettings.scss";
 @import "./views/room_settings/_ColorSettings.scss";
 @import "./views/rooms/_AppsDrawer.scss";

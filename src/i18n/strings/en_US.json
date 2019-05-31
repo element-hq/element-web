@@ -887,5 +887,8 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s changed their display name to %(displayName)s.",
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
-    "Cat": "Cat"
+    "Cat": "Cat",
+    "Sends the given message coloured as a rainbow": "Sends the given message colored as a rainbow",
+    "Sends the given emote coloured as a rainbow": "Sends the given emote colored as a rainbow",
+    "Unrecognised address": "Unrecognized address"
 }

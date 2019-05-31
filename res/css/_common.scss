@@ -32,6 +32,11 @@ body {
     margin: 0px;
 }
 
+pre, code {
+    font-family: $monospace-font-family;
+    font-size: 100% !important;
+}
+
 .error, .warning {
     color: $warning-color;
 }
@@ -108,6 +113,14 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 textarea {
     font-family: $font-family;
     color: $primary-fg-color;
+}
+
+// This is used to hide the standard outline added by browsers for
+// accessible (focusable) components. Not intended for buttons, but
+// should be used on things like focusable containers where the outline
+// is usually not helping anyone.
+.mx_HiddenFocusable {
+    outline: none;
 }
 
 // .mx_textinput is a container for a text input
@@ -445,15 +458,6 @@ textarea {
     background-color: $primary-bg-color;
 }
 
-.mx_emojione {
-    height: 1em;
-    vertical-align: middle;
-}
-
-.mx_emojione_selected {
-    background-color: $accent-color;
-}
-
 ::-moz-selection {
     background-color: $accent-color;
     color: $selection-fg-color;
@@ -557,4 +561,3 @@ textarea {
 .mx_Username_color8 {
     color: $username-variant8-color;
 }
-

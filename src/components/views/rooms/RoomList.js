@@ -750,6 +750,7 @@ module.exports = React.createClass({
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
+                addRoomLabel: _t("Start chat"),
             },
             {
                 list: this.state.lists['im.vector.fake.recent'],

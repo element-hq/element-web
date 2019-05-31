@@ -21,8 +21,8 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-
 import PasswordReset from "../../../PasswordReset";
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 // Phases
 // Show controls to configure server details
@@ -40,28 +40,14 @@ module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
-        // The default server name to use when the user hasn't specified
-        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
-        // via `.well-known` discovery. The server name is used instead of the
-        // HS URL when talking about "your account".
-        defaultServerName: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
-
-        defaultHsUrl: PropTypes.string,
-        defaultIsUrl: PropTypes.string,
-        customHsUrl: PropTypes.string,
-        customIsUrl: PropTypes.string,
-
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        onServerConfigChange: PropTypes.func.isRequired,
         onLoginClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
-            enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
-            enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
             phase: PHASE_FORGOT,
             email: "",
             password: "",
@@ -70,11 +56,11 @@ module.exports = React.createClass({
         };
     },
 
-    submitPasswordReset: function(hsUrl, identityUrl, email, password) {
+    submitPasswordReset: function(email, password) {
         this.setState({
             phase: PHASE_SENDING_EMAIL,
         });
-        this.reset = new PasswordReset(hsUrl, identityUrl);
+        this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
         this.reset.resetPassword(email, password).done(() => {
             this.setState({
                 phase: PHASE_EMAIL_SENT,
@@ -103,13 +89,6 @@ module.exports = React.createClass({
     onSubmitForm: function(ev) {
         ev.preventDefault();
 
-        // Don't allow the user to register if there's a discovery error
-        // Without this, the user could end up registering on the wrong homeserver.
-        if (this.props.defaultServerDiscoveryError) {
-            this.setState({errorText: this.props.defaultServerDiscoveryError});
-            return;
-        }
-
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
         } else if (!this.state.password || !this.state.password2) {
@@ -132,10 +111,7 @@ module.exports = React.createClass({
                 button: _t('Continue'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        this.submitPasswordReset(
-                            this.state.enteredHsUrl, this.state.enteredIsUrl,
-                            this.state.email, this.state.password,
-                        );
+                        this.submitPasswordReset(this.state.email, this.state.password);
                     }
                 },
             });
@@ -148,19 +124,7 @@ module.exports = React.createClass({
         });
     },
 
-    onServerConfigChange: function(config) {
-        const newState = {};
-        if (config.hsUrl !== undefined) {
-            newState.enteredHsUrl = config.hsUrl;
-        }
-        if (config.isUrl !== undefined) {
-            newState.enteredIsUrl = config.isUrl;
-        }
-        this.setState(newState);
-    },
-
-    onServerDetailsNextPhaseClick(ev) {
-        ev.stopPropagation();
+    async onServerDetailsNextPhaseClick() {
         this.setState({
             phase: PHASE_FORGOT,
         });
@@ -190,26 +154,19 @@ module.exports = React.createClass({
 
     renderServerDetails() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        return <div>
-            <ServerConfig
-                defaultHsUrl={this.props.defaultHsUrl}
-                defaultIsUrl={this.props.defaultIsUrl}
-                customHsUrl={this.state.enteredHsUrl}
-                customIsUrl={this.state.enteredIsUrl}
-                onServerConfigChange={this.onServerConfigChange}
-                delayTimeMs={0} />
-            <AccessibleButton className="mx_Login_submit"
-                onClick={this.onServerDetailsNextPhaseClick}
-            >
-                {_t("Next")}
-            </AccessibleButton>
-        </div>;
+        return <ServerConfig
+            serverConfig={this.props.serverConfig}
+            onServerConfigChange={this.props.onServerConfigChange}
+            delayTimeMs={0}
+            onAfterSubmit={this.onServerDetailsNextPhaseClick}
+            submitText={_t("Next")}
+            submitClass="mx_Login_submit"
+        />;
     },
 
     renderForgot() {
@@ -221,25 +178,22 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let yourMatrixAccountText = _t('Your Matrix account');
-        if (this.state.enteredHsUrl === this.props.defaultHsUrl && this.props.defaultServerName) {
-            yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
-                serverName: this.props.defaultServerName,
+        let yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            yourMatrixAccountText = _t('Your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.state.enteredHsUrl);
-                yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                errorText = <div className="mx_Login_error">{_t(
-                    "The homeserver URL %(hsUrl)s doesn't seem to be valid URL. Please " +
-                    "enter a valid URL including the protocol prefix.",
-                {
-                    hsUrl: this.state.enteredHsUrl,
-                })}</div>;
-            }
         }
 
         // If custom URLs are allowed, wire up the server details edit link.

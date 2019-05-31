@@ -147,7 +147,6 @@ module.exports = React.createClass({
 
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
-        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         let searchStatus = null;
         let cancelButton = null;
@@ -191,10 +190,10 @@ module.exports = React.createClass({
             roomName = this.props.room.name;
         }
 
-        const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
+        const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
         const name =
             <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                <EmojiText dir="auto" element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
+                <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>
                 { searchStatus }
             </div>;
 

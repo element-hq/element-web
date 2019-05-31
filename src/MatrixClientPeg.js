@@ -119,7 +119,7 @@ class MatrixClientPeg {
         // try to initialise e2e on the new client
         try {
             // check that we have a version of the js-sdk which includes initCrypto
-            if (this.matrixClient.initCrypto) {
+            if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
                 StorageManager.setCryptoInitialised(true);
             }
@@ -188,8 +188,7 @@ class MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             verificationMethods: [verificationMethods.SAS],
-            unstableClientRelationAggregation: aggregateRelations,
-            unstableClientRelationReplacements: enableEdits,
+            unstableClientRelationAggregation: aggregateRelations || enableEdits,
         };
 
         this.matrixClient = createMatrixClient(opts);

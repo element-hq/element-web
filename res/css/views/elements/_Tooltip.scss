@@ -74,3 +74,19 @@ limitations under the License.
         animation: mx_fadeout 0.1s forwards;
     }
 }
+
+.mx_Tooltip_timeline {
+    box-shadow: none;
+    background-color: $tooltip-timeline-bg-color;
+    color: $tooltip-timeline-fg-color;
+    text-align: center;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 6px 8px;
+
+    .mx_Tooltip_chevron::after {
+        border-right-color: $tooltip-timeline-bg-color;
+    }
+}

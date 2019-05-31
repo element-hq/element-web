@@ -19,7 +19,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
-import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import { _t } from '../../../languageHandler';
@@ -95,7 +94,6 @@ export default React.createClass({
     },
 
     render() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
         const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
@@ -117,7 +115,7 @@ export default React.createClass({
             />;
         }
 
-        const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
+        const nameElem = name || '';
 
         // Name + flair
         const nameFlair = <span>

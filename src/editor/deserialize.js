@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,48 +17,198 @@ limitations under the License.
 
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { PlainPart, UserPillPart, RoomPillPart, NewlinePart } from "./parts";
+import { walkDOMDepthFirst } from "./dom";
 
-function parseHtmlMessage(html) {
-    const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
-    // no nodes from parsing here should be inserted in the document,
-    // as scripts in event handlers, etc would be executed then.
-    // we're only taking text, so that is fine
-    const nodes = Array.from(new DOMParser().parseFromString(html, "text/html").body.childNodes);
-    const parts = nodes.map(n => {
-        switch (n.nodeType) {
-            case Node.TEXT_NODE:
-                return new PlainPart(n.nodeValue);
-            case Node.ELEMENT_NODE:
-                switch (n.nodeName) {
-                    case "MX-REPLY":
-                        return null;
-                    case "A": {
-                        const {href} = n;
-                        const pillMatch = REGEX_MATRIXTO.exec(href) || [];
-                        const resourceId = pillMatch[1]; // The room/user ID
-                        const prefix = pillMatch[2]; // The first character of prefix
-                        switch (prefix) {
-                            case "@": return new UserPillPart(resourceId, n.textContent);
-                            case "#": return new RoomPillPart(resourceId, n.textContent);
-                            default: return new PlainPart(n.textContent);
-                        }
-                    }
-                    case "BR":
-                        return new NewlinePart("\n");
-                    default:
-                        return new PlainPart(n.textContent);
-                }
-            default:
-                return null;
+const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+
+function parseLink(a, room) {
+    const {href} = a;
+    const pillMatch = REGEX_MATRIXTO.exec(href) || [];
+    const resourceId = pillMatch[1]; // The room/user ID
+    const prefix = pillMatch[2]; // The first character of prefix
+    switch (prefix) {
+        case "@":
+            return new UserPillPart(
+                resourceId,
+                a.textContent,
+                room.getMember(resourceId),
+            );
+        case "#":
+            return new RoomPillPart(resourceId);
+        default: {
+            if (href === a.textContent) {
+                return new PlainPart(a.textContent);
+            } else {
+                return new PlainPart(`[${a.textContent}](${href})`);
+            }
         }
-    }).filter(p => !!p);
+    }
+}
+
+function parseCodeBlock(n) {
+    const parts = [];
+    const preLines = ("```\n" + n.textContent + "```").split("\n");
+    preLines.forEach((l, i) => {
+        parts.push(new PlainPart(l));
+        if (i < preLines.length - 1) {
+            parts.push(new NewlinePart("\n"));
+        }
+    });
     return parts;
 }
 
-export function parseEvent(event) {
+function parseElement(n, room) {
+    switch (n.nodeName) {
+        case "A":
+            return parseLink(n, room);
+        case "BR":
+            return new NewlinePart("\n");
+        case "EM":
+            return new PlainPart(`*${n.textContent}*`);
+        case "STRONG":
+            return new PlainPart(`**${n.textContent}**`);
+        case "PRE":
+            return parseCodeBlock(n);
+        case "CODE":
+            return new PlainPart(`\`${n.textContent}\``);
+        case "DEL":
+            return new PlainPart(`<del>${n.textContent}</del>`);
+        case "LI":
+            if (n.parentElement.nodeName === "OL") {
+                return new PlainPart(` 1. `);
+            } else {
+                return new PlainPart(` - `);
+            }
+        default:
+            // don't textify block nodes we'll decend into
+            if (!checkDecendInto(n)) {
+                return new PlainPart(n.textContent);
+            }
+    }
+}
+
+function checkDecendInto(node) {
+    switch (node.nodeName) {
+        case "PRE":
+            // a code block is textified in parseCodeBlock
+            // as we don't want to preserve markup in it,
+            // so no need to decend into it
+            return false;
+        default:
+            return checkBlockNode(node);
+    }
+}
+
+function checkBlockNode(node) {
+    switch (node.nodeName) {
+        case "PRE":
+        case "BLOCKQUOTE":
+        case "DIV":
+        case "P":
+        case "UL":
+        case "OL":
+        case "LI":
+            return true;
+        default:
+            return false;
+    }
+}
+
+function checkIgnored(n) {
+    if (n.nodeType === Node.TEXT_NODE) {
+        // riot adds \n text nodes in a lot of places,
+        // which should be ignored
+        return n.nodeValue === "\n";
+    } else if (n.nodeType === Node.ELEMENT_NODE) {
+        return n.nodeName === "MX-REPLY";
+    }
+    return true;
+}
+
+function prefixQuoteLines(isFirstNode, parts) {
+    const PREFIX = "> ";
+    // a newline (to append a > to) wouldn't be added to parts for the first line
+    // if there was no content before the BLOCKQUOTE, so handle that
+    if (isFirstNode) {
+        parts.splice(0, 0, new PlainPart(PREFIX));
+    }
+    for (let i = 0; i < parts.length; i += 1) {
+        if (parts[i].type === "newline") {
+            parts.splice(i + 1, 0, new PlainPart(PREFIX));
+            i += 1;
+        }
+    }
+}
+
+function parseHtmlMessage(html, room) {
+    // no nodes from parsing here should be inserted in the document,
+    // as scripts in event handlers, etc would be executed then.
+    // we're only taking text, so that is fine
+    const rootNode = new DOMParser().parseFromString(html, "text/html").body;
+    const parts = [];
+    let lastNode;
+    let inQuote = false;
+
+    function onNodeEnter(n) {
+        if (checkIgnored(n)) {
+            return false;
+        }
+        if (n.nodeName === "BLOCKQUOTE") {
+            inQuote = true;
+        }
+
+        const newParts = [];
+        if (lastNode && (checkBlockNode(lastNode) || checkBlockNode(n))) {
+            newParts.push(new NewlinePart("\n"));
+        }
+
+        if (n.nodeType === Node.TEXT_NODE) {
+            newParts.push(new PlainPart(n.nodeValue));
+        } else if (n.nodeType === Node.ELEMENT_NODE) {
+            const parseResult = parseElement(n, room);
+            if (parseResult) {
+                if (Array.isArray(parseResult)) {
+                    newParts.push(...parseResult);
+                } else {
+                    newParts.push(parseResult);
+                }
+            }
+        }
+
+        if (newParts.length && inQuote) {
+            const isFirstPart = parts.length === 0;
+            prefixQuoteLines(isFirstPart, newParts);
+        }
+
+        parts.push(...newParts);
+
+        // extra newline after quote, only if there something behind it...
+        if (lastNode && lastNode.nodeName === "BLOCKQUOTE") {
+            parts.push(new NewlinePart("\n"));
+        }
+        lastNode = null;
+        return checkDecendInto(n);
+    }
+
+    function onNodeLeave(n) {
+        if (checkIgnored(n)) {
+            return;
+        }
+        if (n.nodeName === "BLOCKQUOTE") {
+            inQuote = false;
+        }
+        lastNode = n;
+    }
+
+    walkDOMDepthFirst(rootNode, onNodeEnter, onNodeLeave);
+
+    return parts;
+}
+
+export function parseEvent(event, room) {
     const content = event.getContent();
     if (content.format === "org.matrix.custom.html") {
-        return parseHtmlMessage(content.formatted_body || "");
+        return parseHtmlMessage(content.formatted_body || "", room);
     } else {
         const body = content.body || "";
         const lines = body.split("\n");

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,12 +61,13 @@ export function renderModel(editor, model) {
             let foundBR = false;
             let partNode = lineContainer.firstChild;
             while (partNode) {
+                const nextNode = partNode.nextSibling;
                 if (!foundBR && partNode.tagName === "BR") {
                     foundBR = true;
                 } else {
                     lineContainer.removeChild(partNode);
                 }
-                partNode = partNode.nextSibling;
+                partNode = nextNode;
             }
             if (!foundBR) {
                 lineContainer.appendChild(document.createElement("br"));
