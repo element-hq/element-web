@@ -1260,7 +1260,7 @@
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s heeft de gespreksadressen %(addedAddresses)s toegevoegd, en %(removedAddresses)s verwijderd.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s heeft %(address)s als hoofdadres voor dit gesprek ingesteld.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s heeft het hoofdadres voor dit gesprek verwijderd.",
-    "%(displayName)s is typing …": "%(displayName)s%(displayName)s is aan het typen…",
+    "%(displayName)s is typing …": "%(displayName)s is aan het typen…",
     "%(names)s and %(count)s others are typing …|other": "%(names)s en %(count)s anderen zijn aan het typen…",
     "%(names)s and %(count)s others are typing …|one": "%(names)s en nog iemand zijn aan het typen…",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s en %(lastPerson)s zijn aan het typen…",
