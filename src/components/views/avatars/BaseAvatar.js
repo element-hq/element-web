@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
 import sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -104,9 +105,13 @@ module.exports = React.createClass({
         // work out the full set of urls to try to load. This is formed like so:
         // imageUrls: [ props.url, props.urls, default image ]
 
-        const urls = props.urls || [];
-        if (props.url) {
-            urls.unshift(props.url); // put in urls[0]
+        let urls = [];
+        if (!SettingsStore.getValue("lowBandwidth")) {
+            urls = props.urls || [];
+
+            if (props.url) {
+                urls.unshift(props.url); // put in urls[0]
+            }
         }
 
         let defaultImageUrl = null;

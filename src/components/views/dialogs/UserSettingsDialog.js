@@ -28,6 +28,7 @@ import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
 import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import sdk from "../../../index";
+import SdkConfig from "../../../SdkConfig";
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
@@ -67,7 +68,7 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab />,
         ));
-        if (SettingsStore.getLabsFeatures().length > 0) {
+        if (SdkConfig.get()['showLabsSettings'] || SettingsStore.getLabsFeatures().length > 0) {
             tabs.push(new Tab(
                 _td("Labs"),
                 "mx_UserSettingsDialog_labsIcon",

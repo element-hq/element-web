@@ -613,6 +613,8 @@ const TimelinePanel = React.createClass({
     },
 
     sendReadReceipt: function() {
+        if (SettingsStore.getValue("lowBandwidth")) return;
+
         if (!this.refs.messagePanel) return;
         if (!this.props.manageReadReceipts) return;
         // This happens on user_activity_end which is delayed, and it's

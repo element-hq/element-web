@@ -85,7 +85,11 @@ const Notifier = {
             msg = '';
         }
 
-        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop') : null;
+        let avatarUrl = null;
+        if (ev.sender && !SettingsStore.getValue("lowBandwidth")) {
+            avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop');
+        }
+
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
