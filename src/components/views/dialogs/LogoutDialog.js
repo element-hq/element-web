@@ -39,7 +39,7 @@ export default class LogoutDialog extends React.Component {
         const shouldLoadBackupStatus = !lowBandwidth && !MatrixClientPeg.get().getKeyBackupEnabled();
 
         this.state = {
-            lowBandwidth: lowBandwidth,
+            shouldLoadBackupStatus: shouldLoadBackupStatus,
             loading: shouldLoadBackupStatus,
             backupInfo: null,
             error: null,
@@ -113,7 +113,7 @@ export default class LogoutDialog extends React.Component {
     }
 
     render() {
-        if (!this.state.lowBandwidth && !MatrixClientPeg.get().getKeyBackupEnabled()) {
+        if (this.state.shouldLoadBackupStatus) {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
             const description = <div>
