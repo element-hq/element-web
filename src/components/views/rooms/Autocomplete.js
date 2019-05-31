@@ -162,6 +162,10 @@ export default class Autocomplete extends React.Component {
         });
     }
 
+    hasSelection(): bool {
+        return this.countCompletions() > 0 && this.state.selectionOffset !== 0;
+    }
+
     countCompletions(): number {
         return this.state.completionList.length;
     }

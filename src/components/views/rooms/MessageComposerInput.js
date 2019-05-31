@@ -989,7 +989,7 @@ export default class MessageComposerInput extends React.Component {
             return change.insertText('\n');
         }
 
-        if (this.autocomplete.countCompletions() > 0) {
+        if (this.autocomplete.hasSelection()) {
             this.autocomplete.hide();
             ev.preventDefault();
             return true;
