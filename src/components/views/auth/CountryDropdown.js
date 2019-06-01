@@ -47,8 +47,9 @@ export default class CountryDropdown extends React.Component {
         this._getShortOption = this._getShortOption.bind(this);
 
         let defaultCountry = COUNTRIES[0];
-        if (SdkConfig.get()["defaultCountryCode"]) {
-            const country = COUNTRIES.find(c => c.iso2 === SdkConfig.get()["defaultCountryCode"]);
+        const defaultCountryCode = SdkConfig.get()["defaultCountryCode"];
+        if (defaultCountryCode) {
+            const country = COUNTRIES.find(c => c.iso2 === defaultCountryCode.toUpperCase());
             if (country) defaultCountry = country;
         }
 
