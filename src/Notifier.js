@@ -137,7 +137,7 @@ const Notifier = {
             let audioElement = selector;
             if (!selector) {
                 if (!sound) {
-                    console.error("Tried to play alert sound but missing #messageAudio");
+                    console.error("No audio element or sound to play for notification");
                     return;
                 }
                 audioElement = new Audio(sound.url);
