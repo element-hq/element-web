@@ -1974,5 +1974,6 @@
     "Invalid base_url for m.homeserver": "無效的 m.homeserver base_url",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "家伺服器 URL 似乎不是有效的 Matrix 家伺服器",
     "Invalid base_url for m.identity_server": "無效的 m.identity_server base_url",
-    "Identity server URL does not appear to be a valid identity server": "身份識別伺服器 URL 似乎不是有效的身份識別伺服器"
+    "Identity server URL does not appear to be a valid identity server": "身份識別伺服器 URL 似乎不是有效的身份識別伺服器",
+    "Low bandwidth mode": "低頻寬模式"
 }
