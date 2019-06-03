@@ -115,6 +115,18 @@ module.exports = React.createClass({
         // to manage its animations
         this._readReceiptMap = {};
 
+        // Track read receipts by user ID. For each user ID we've ever shown a
+        // a read receipt for, we store an object:
+        //   {
+        //       lastShownEventId,
+        //       receipt,
+        //   }
+        // so that we can always keep receipts displayed by reverting back to
+        // the last shown event for that user ID when needed. This may feel like
+        // it duplicates the receipt storage in the room, but at this layer, we
+        // are tracking _shown_ event IDs, which the JS SDK knows nothing about.
+        this._readReceiptsByUserId = {};
+
         // Remember the read marker ghost node so we can do the cleanup that
         // Velocity requires
         this._readMarkerGhostNode = null;
@@ -604,6 +616,7 @@ module.exports = React.createClass({
     // they are folded into the receipts of the last shown event.
     _getReadReceiptsByShownEvent: function() {
         const receiptsByEvent = {};
+        const receiptsByUserId = {};
 
         let lastShownEventId;
         for (const event of this.props.events) {
@@ -613,10 +626,37 @@ module.exports = React.createClass({
             if (!lastShownEventId) {
                 continue;
             }
+
             const existingReceipts = receiptsByEvent[lastShownEventId] || [];
             const newReceipts = this._getReadReceiptsForEvent(event);
             receiptsByEvent[lastShownEventId] = existingReceipts.concat(newReceipts);
+
+            // Record these receipts along with their last shown event ID for
+            // each associated user ID.
+            for (const receipt of newReceipts) {
+                receiptsByUserId[receipt.userId] = {
+                    lastShownEventId,
+                    receipt,
+                };
+            }
         }
+
+        // It's possible in some cases (for example, when a read receipt
+        // advances before we have paginated in the new event that it's marking
+        // received) that we can temporarily not have a matching event for
+        // someone which had one in the last. By looking through our previous
+        // mapping of receipts by user ID, we can cover recover any receipts
+        // that would have been lost by using the same event ID from last time.
+        for (const userId in this._readReceiptsByUserId) {
+            if (receiptsByUserId[userId]) {
+                continue;
+            }
+            const { lastShownEventId, receipt } = this._readReceiptsByUserId[userId];
+            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
+            receiptsByEvent[lastShownEventId] = existingReceipts.concat(receipt);
+            receiptsByUserId[userId] = { lastShownEventId, receipt };
+        }
+        this._readReceiptsByUserId = receiptsByUserId;
 
         // After grouping receipts by shown events, do another pass to sort each
         // receipt list.
