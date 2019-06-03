@@ -130,8 +130,18 @@ export default class IndicatorScrollbar extends React.Component {
             const yRetention = 1.0;
 
             if (Math.abs(e.deltaX) <= xyThreshold) {
+                // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
+                // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
+                // amount, which means the likely small area of content results in a small amount of
+                // movement - not what people expect. We pick arbitrary values for when to apply more
+                // scroll, and how much to apply. On Windows 10, Chrome scrolls 100 units whereas
+                // Firefox scrolls just 3 due to smooth scrolling.
+
+                const additionalScroll = e.deltaY < 0 ? -50 : 50;
+
                 // noinspection JSSuspiciousNameCombination
-                this._scrollElement.scrollLeft += e.deltaY * yRetention;
+                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
+                this._scrollElement.scrollLeft += val * yRetention;
             }
         }
     };
