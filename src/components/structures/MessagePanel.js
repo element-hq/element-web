@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/* global Velocity */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -622,6 +624,7 @@ module.exports = React.createClass({
         this._readMarkerGhostNode = ghostNode;
 
         if (ghostNode) {
+            // eslint-disable-next-line new-cap
             Velocity(ghostNode, {opacity: '0', width: '10%'},
                      {duration: 400, easing: 'easeInSine',
                       delay: 1000});

@@ -3,7 +3,6 @@
 src/component-index.js
 src/components/structures/BottomLeftMenu.js
 src/components/structures/CreateRoom.js
-src/components/structures/MessagePanel.js
 src/components/structures/RoomDirectory.js
 src/components/structures/RoomStatusBar.js
 src/components/structures/RoomView.js
