@@ -1883,5 +1883,6 @@
     "Invalid base_url for m.homeserver": "Ongeldige base_url voor m.homeserver",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "De thuisserver-URL lijkt geen geldige Matrix-thuisserver",
     "Invalid base_url for m.identity_server": "Ongeldige base_url voor m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lijkt geen geldige identiteitsserver"
+    "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lijkt geen geldige identiteitsserver",
+    "Low bandwidth mode": "Lagebandbreedtemodus"
 }
