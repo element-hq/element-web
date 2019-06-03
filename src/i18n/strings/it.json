@@ -1933,5 +1933,6 @@
     "Unable to validate homeserver/identity server": "Impossibile validare l'homeserver/il server di identità",
     "Sign in to your Matrix account on <underlinedServerName />": "Accedi al tuo account Matrix su <underlinedServerName />",
     "Create your Matrix account on <underlinedServerName />": "Crea il tuo account Matrix su <underlinedServerName />",
-    "Your Matrix account on <underlinedServerName />": "Il tuo account Matrix su <underlinedServerName />"
+    "Your Matrix account on <underlinedServerName />": "Il tuo account Matrix su <underlinedServerName />",
+    "Low bandwidth mode": "Modalità larghezza di banda bassa"
 }
