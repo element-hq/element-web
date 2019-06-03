@@ -819,6 +819,9 @@ module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
+    // No tile for replacement events since they update the original tile
+    if (e.isRelation("m.replace")) return false;
+
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
