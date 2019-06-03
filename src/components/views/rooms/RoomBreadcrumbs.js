@@ -99,10 +99,11 @@ export default class RoomBreadcrumbs extends React.Component {
 
             // XXX: slight hack in order to zero the notification count when a room
             // is read. Copied from RoomTile
-            case 'on_room_read':
+            case 'on_room_read': {
                 const room = MatrixClientPeg.get().getRoom(payload.roomId);
                 this._calculateRoomBadges(room, /*zero=*/true);
                 break;
+            }
         }
     }
 
