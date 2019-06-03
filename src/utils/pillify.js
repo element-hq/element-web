@@ -95,7 +95,7 @@ export function pillifyLinks(nodes, mxEvent) {
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes);
+            pillifyLinks(node.childNodes, mxEvent);
         }
 
         node = node.nextSibling;
