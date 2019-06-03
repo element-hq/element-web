@@ -26,7 +26,6 @@ import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsT
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import SettingsStore from '../../../settings/SettingsStore';
 import dis from "../../../dispatcher";
 
 export default class RoomSettingsDialog extends React.Component {
