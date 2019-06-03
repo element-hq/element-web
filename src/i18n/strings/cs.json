@@ -1890,5 +1890,14 @@
     "Invalid base_url for m.homeserver": "Neplatná base_url pro m.homeserver",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Na URL domovského serveru asi není funkční Matrix server",
     "Invalid base_url for m.identity_server": "Neplatná base_url pro m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "Na URL serveru identit asi není funkční Matrix server"
+    "Identity server URL does not appear to be a valid identity server": "Na URL serveru identit asi není funkční Matrix server",
+    "Custom Notification Sounds": "Vlastní zvuk notifikací",
+    "Show recently visited rooms above the room list": "Zobrazovat nedávno navštívené místnosti nad jejich seznamem",
+    "Low bandwidth mode": "Mód nízké spotřeby dat",
+    "Uploaded sound": "Zvuk nahrán",
+    "Sounds": "Zvuky",
+    "Notification sound": "Zvuk notifikace",
+    "Reset": "Resetovat",
+    "Set a new custom sound": "Nastavit vlastní zvuk",
+    "Browse": "Prohlížet"
 }
