@@ -520,13 +520,20 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (
+        let isInfoMessage = (
             eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
-        if (!tileHandler && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        // If we're showing hidden events in the timeline, we should use the
+        // source tile when there's no regular tile for an event and also for
+        // replace relations (which otherwise would display as a confusing
+        // duplicate of the thing they are replacing).
+        const useSource = !tileHandler || this.props.mxEvent.isRelation("m.replace");
+        if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
             tileHandler = "messages.ViewSourceEvent";
+            // Reuse info message avatar and sender profile styling
+            isInfoMessage = true;
         }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
