@@ -70,13 +70,11 @@ export default class RoomSettingsDialog extends React.Component {
             <RolesRoomSettingsTab roomId={this.props.roomId} />,
         ));
 
-        if (SettingsStore.isFeatureEnabled("feature_notification_sounds")) {
-            tabs.push(new Tab(
-                _td("Notifications"),
-                "mx_RoomSettingsDialog_rolesIcon",
-                <NotificationSettingsTab roomId={this.props.roomId} />,
-            ));
-        }
+        tabs.push(new Tab(
+            _td("Notifications"),
+            "mx_RoomSettingsDialog_rolesIcon",
+            <NotificationSettingsTab roomId={this.props.roomId} />,
+        ));
 
         tabs.push(new Tab(
             _td("Advanced"),

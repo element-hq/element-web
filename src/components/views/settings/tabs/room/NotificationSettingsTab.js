@@ -85,7 +85,7 @@ export default class NotificationsSettingsTab extends React.Component {
         if (!this.state.uploadedFile) {
             return;
         }
-        
+
         let type = this.state.uploadedFile.type;
         if (type === "video/ogg") {
             // XXX: I've observed browsers allowing users to pick a audio/ogg files,
@@ -149,7 +149,7 @@ export default class NotificationsSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <span className='mx_SettingsTab_subheading'>{_t("Sounds")}</span>
                     <div>
-                        <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br/>
+                        <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br />
                         <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
                                 {_t("Reset")}
                         </AccessibleButton>

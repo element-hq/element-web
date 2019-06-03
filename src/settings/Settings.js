@@ -126,12 +126,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_notification_sounds": {
-        isFeature: true,
-        displayName: _td("Custom Notification Sounds"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_reactions": {
         isFeature: true,
         displayName: _td("React to messages with emoji (refresh to apply changes)"),
