@@ -101,12 +101,6 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_room_breadcrumbs": {
-        isFeature: true,
-        displayName: _td("Show recent room avatars above the room list"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_tags": {
         isFeature: true,
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
@@ -367,6 +361,11 @@ export const SETTINGS = {
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        default: true,
+    },
+    "breadcrumbs": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show recently visited rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
