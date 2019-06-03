@@ -1245,7 +1245,7 @@
     "Sets the room name": "Stelt de gespreksnaam in",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s heeft dit gesprek geactualiseerd.",
     "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s heeft het gesprek toegankelijk gemaakt voor iedereen die de verwijzing kent.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s heeft het gesprek enkel op uitgenodiging toegankelijk gemaakt.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s heeft het gesprek enkel op uitnodiging toegankelijk gemaakt.",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s heeft de toegangsregel veranderd naar ‘%(rule)s’",
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s heeft gasten toegestaan het gesprek te betreden.",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s heeft gasten de toegang tot het gesprek ontzegd.",
