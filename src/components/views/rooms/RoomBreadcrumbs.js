@@ -96,6 +96,14 @@ export default class RoomBreadcrumbs extends React.Component {
             case 'view_room':
                 this._appendRoomId(payload.room_id);
                 break;
+
+            // XXX: slight hack in order to zero the notification count when a room
+            // is read. Copied from RoomTile
+            case 'on_room_read': {
+                const room = MatrixClientPeg.get().getRoom(payload.roomId);
+                this._calculateRoomBadges(room, /*zero=*/true);
+                break;
+            }
         }
     }
 
@@ -164,7 +172,7 @@ export default class RoomBreadcrumbs extends React.Component {
         });
     }
 
-    _calculateBadgesForRoom(room) {
+    _calculateBadgesForRoom(room, zero=false) {
         if (!room) return null;
 
         // Reset the notification variables for simplicity
@@ -173,6 +181,8 @@ export default class RoomBreadcrumbs extends React.Component {
             formattedCount: "0",
             showCount: false,
         };
+
+        if (zero) return roomModel;
 
         const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
         if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
@@ -195,14 +205,14 @@ export default class RoomBreadcrumbs extends React.Component {
         return roomModel;
     }
 
-    _calculateRoomBadges(room) {
+    _calculateRoomBadges(room, zero=false) {
         if (!room) return;
 
         const rooms = this.state.rooms.slice();
         const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
         if (!roomModel) return; // No applicable room, so don't do math on it
 
-        const badges = this._calculateBadgesForRoom(room);
+        const badges = this._calculateBadgesForRoom(room, zero);
         if (!badges) return; // No badges for some reason
 
         Object.assign(roomModel, badges);
