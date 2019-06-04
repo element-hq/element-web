@@ -1975,5 +1975,13 @@
     "Homeserver URL does not appear to be a valid Matrix homeserver": "家伺服器 URL 似乎不是有效的 Matrix 家伺服器",
     "Invalid base_url for m.identity_server": "無效的 m.identity_server base_url",
     "Identity server URL does not appear to be a valid identity server": "身份識別伺服器 URL 似乎不是有效的身份識別伺服器",
-    "Low bandwidth mode": "低頻寬模式"
+    "Low bandwidth mode": "低頻寬模式",
+    "Custom Notification Sounds": "自訂通知音效",
+    "Show recently visited rooms above the room list": "在聊天室清單上方顯示最近造訪的聊天室",
+    "Uploaded sound": "已上傳的音效",
+    "Sounds": "音效",
+    "Notification sound": "通知音效",
+    "Reset": "重設",
+    "Set a new custom sound": "設定新的自訂音效",
+    "Browse": "瀏覽"
 }
