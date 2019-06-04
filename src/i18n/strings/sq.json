@@ -1940,5 +1940,12 @@
     "You have %(count)s unread notifications in a prior version of this room.|other": "Keni %(count)s njoftime të palexuar në një version të mëparshëm të kësaj dhome.",
     "You have %(count)s unread notifications in a prior version of this room.|one": "Keni %(count)s njoftim të palexuar në një version të mëparshëm të kësaj dhome.",
     "Invalid base_url for m.identity_server": "Parametër base_url i i pavlefshëm për m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL-ja e shërbyesit të identiteteve s’duket të jetë një shërbyes i vlefshëm identitetesh"
+    "Identity server URL does not appear to be a valid identity server": "URL-ja e shërbyesit të identiteteve s’duket të jetë një shërbyes i vlefshëm identitetesh",
+    "Custom Notification Sounds": "Tinguj Vetjakë Njoftimesh",
+    "Show recently visited rooms above the room list": "Dhomat e vizituara së fundi shfaqi sipër listës së dhomave",
+    "Uploaded sound": "U ngarkua tingull",
+    "Sounds": "Tinguj",
+    "Notification sound": "Tingull njoftimi",
+    "Set a new custom sound": "Caktoni një tingull të ri vetjak",
+    "Browse": "Shfletoni"
 }
