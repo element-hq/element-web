@@ -207,6 +207,8 @@ const TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
+        // same event handler as Room.redaction as for both we just do forceUpdate
+        MatrixClientPeg.get().on("Room.redactionCancelled", this.onRoomRedaction);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
@@ -286,6 +288,7 @@ const TimelinePanel = React.createClass({
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
+            client.removeListener("Room.redactionCancelled", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
