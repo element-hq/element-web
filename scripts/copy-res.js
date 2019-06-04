@@ -38,11 +38,13 @@ const INCLUDE_LANGS = [
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
     {'value': 'sk', 'label': 'Slovenčina'},
+    {'value': 'sq', 'label': 'Shqip'},
     {'value': 'sr', 'label': 'српски'},
     {'value': 'sv', 'label': 'Svenska'},
     {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'th', 'label': 'ไทย'},
     {'value': 'tr', 'label': 'Türk'},
+    {'value': 'vls', 'label': 'West-Vlaams'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
 ];
