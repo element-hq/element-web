@@ -152,6 +152,11 @@ module.exports = React.createClass({
         // Velocity requires
         this._readMarkerGhostNode = null;
 
+        // Cache hidden events setting on mount since Settings is expensive to
+        // query, and we check this in a hot code path.
+        this._showHiddenEventsInTimeline =
+            SettingsStore.getValue("showHiddenEventsInTimeline");
+
         this._isMounted = true;
     },
 
@@ -292,7 +297,7 @@ module.exports = React.createClass({
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        if (this._showHiddenEventsInTimeline) {
             return true;
         }
 
