@@ -59,11 +59,6 @@ module.exports = React.createClass({
     propTypes: {
         onLoggedIn: PropTypes.func.isRequired,
 
-        // An error passed along from higher up explaining that something
-        // went wrong. May be replaced with a different error within the
-        // Login component.
-        errorText: PropTypes.string,
-
         // If true, the component will consider itself busy.
         busy: PropTypes.bool,
 
@@ -141,7 +136,7 @@ module.exports = React.createClass({
     },
 
     hasError: function() {
-        return this.state.errorText || this.props.errorText;
+        return this.state.errorText;
     },
 
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
@@ -515,7 +510,7 @@ module.exports = React.createClass({
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() ? <div className="mx_Login_loader"><Loader /></div> : null;
 
-        const errorText = this.state.errorText || this.props.errorText;
+        const errorText = this.state.errorText;
 
         let errorTextSection;
         if (errorText) {
