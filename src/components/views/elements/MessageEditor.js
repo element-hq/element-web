@@ -116,6 +116,10 @@ export default class MessageEditor extends React.Component {
                     autoComplete.onUpArrow(event); break;
                 case "ArrowDown":
                     autoComplete.onDownArrow(event); break;
+                case "ArrowLeft":
+                    autoComplete.onLeftArrow(event); break;
+                case "ArrowRight":
+                    autoComplete.onRightArrow(event); break;
                 case "Tab":
                     autoComplete.onTab(event); break;
                 case "Escape":

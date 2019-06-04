@@ -55,6 +55,22 @@ export default class AutocompleteWrapperModel {
         });
     }
 
+    onUpArrow() {
+        this._getAutocompleterComponent().moveSelection(-1);
+    }
+
+    onDownArrow() {
+        this._getAutocompleterComponent().moveSelection(+1);
+    }
+
+    onLeftArrow() {
+        this._getAutocompleterComponent().moveSelection(-1);
+    }
+
+    onRightArrow() {
+        this._getAutocompleterComponent().moveSelection(+1);
+    }
+
     onPartUpdate(part, offset) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
