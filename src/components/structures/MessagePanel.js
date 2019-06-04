@@ -115,16 +115,37 @@ module.exports = React.createClass({
         // to manage its animations
         this._readReceiptMap = {};
 
+        // Track read receipts by event ID. For each _shown_ event ID, we store
+        // the list of read receipts to display:
+        //   [
+        //       {
+        //           userId: string,
+        //           member: RoomMember,
+        //           ts: number,
+        //       },
+        //   ]
+        // This is recomputed on each render. It's only stored on the component
+        // for ease of passing the data around since it's computed in one pass
+        // over all events.
+        this._readReceiptsByEvent = {};
+
         // Track read receipts by user ID. For each user ID we've ever shown a
         // a read receipt for, we store an object:
         //   {
-        //       lastShownEventId,
-        //       receipt,
+        //       lastShownEventId: string,
+        //       receipt: {
+        //           userId: string,
+        //           member: RoomMember,
+        //           ts: number,
+        //       },
         //   }
         // so that we can always keep receipts displayed by reverting back to
         // the last shown event for that user ID when needed. This may feel like
         // it duplicates the receipt storage in the room, but at this layer, we
         // are tracking _shown_ event IDs, which the JS SDK knows nothing about.
+        // This is recomputed on each render, using the data from the previous
+        // render as our fallback for any user IDs we can't match a receipt to a
+        // displayed event in the current render cycle.
         this._readReceiptsByUserId = {};
 
         // Remember the read marker ghost node so we can do the cleanup that
