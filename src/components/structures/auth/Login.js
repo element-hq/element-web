@@ -83,6 +83,7 @@ module.exports = React.createClass({
             busy: false,
             errorText: null,
             loginIncorrect: false,
+            canTryLogin: true, // can we attempt to log in or are there validation errors?
 
             // used for preserving form values when changing homeserver
             username: "",
@@ -135,13 +136,9 @@ module.exports = React.createClass({
         return this.state.busy || this.props.busy;
     },
 
-    hasError: function() {
-        return this.state.errorText;
-    },
-
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         // Prevent people from submitting their password when something isn't right.
-        if (this.isBusy() || this.hasError()) return;
+        if (this.isBusy() || !this.state.canTryLogin) return;
 
         this.setState({
             busy: true,
@@ -236,6 +233,7 @@ module.exports = React.createClass({
             username: username,
             busy: doWellknownLookup, // unset later by the result of onServerConfigChange
             errorText: null,
+            canTryLogin: true,
         });
         if (doWellknownLookup) {
             const serverName = username.split(':').slice(1).join(':');
@@ -249,7 +247,7 @@ module.exports = React.createClass({
                 if (e.translatedMessage) {
                     message = e.translatedMessage;
                 }
-                this.setState({errorText: message, busy: false});
+                this.setState({errorText: message, busy: false, canTryLogin: false});
             }
         }
     },
@@ -265,14 +263,16 @@ module.exports = React.createClass({
     },
 
     onPhoneNumberBlur: function(phoneNumber) {
-        this.setState({
-            errorText: null,
-        });
-
         // Validate the phone number entered
         if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
             this.setState({
                 errorText: _t('The phone number entered looks invalid'),
+                canTryLogin: false,
+            });
+        } else {
+            this.setState({
+                errorText: null,
+                canTryLogin: true,
             });
         }
     },
@@ -343,6 +343,7 @@ module.exports = React.createClass({
             self.setState({
                 errorText: self._errorTextFromError(err),
                 loginIncorrect: false,
+                canTryLogin: false,
             });
         }).finally(function() {
             self.setState({
