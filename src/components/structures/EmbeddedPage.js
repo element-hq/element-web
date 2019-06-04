@@ -24,6 +24,8 @@ import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
+import dis from '../../dispatcher';
+import MatrixClientPeg from '../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
 import classnames from 'classnames';
 
@@ -82,19 +84,31 @@ export default class EmbeddedPage extends React.PureComponent {
                 this.setState({ page: body });
             },
         );
+
+        this._dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
         this._unmounted = true;
+        dis.unregister(this._dispatcherRef);
     }
 
+    onAction = (payload) => {
+        // HACK: Workaround for the context's MatrixClient not being set up at render time.
+        if (payload.action === 'client_started') {
+            this.forceUpdate();
+        }
+    };
+
     render() {
-        const client = this.context.matrixClient;
+        // HACK: Workaround for the context's MatrixClient not updating.
+        const client = this.context.matrixClient || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames({
             [className]: true,
             [`${className}_guest`]: isGuest,
+            [`${className}_loggedIn`]: !!client,
         });
 
         const content = <div className={`${className}_body`}
