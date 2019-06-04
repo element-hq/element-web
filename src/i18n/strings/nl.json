@@ -314,7 +314,7 @@
     "Markdown is disabled": "Markdown is uitgeschakeld",
     "Markdown is enabled": "Markdown is ingeschakeld",
     "matrix-react-sdk version:": "matrix-react-sdk-versie:",
-    "Message not sent due to unknown devices being present": "Bericht niet verstuurd doordat er een onbekende apparaten aanwezig zijn",
+    "Message not sent due to unknown devices being present": "Bericht niet verstuurd doordat er onbekende apparaten aanwezig zijn",
     "Missing room_id in request": "room_id ontbreekt in verzoek",
     "Missing user_id in request": "user_id ontbreekt in verzoek",
     "Mobile phone number": "Mobiele-telefoonnummer",
