@@ -41,6 +41,10 @@
     "Sign In": "Aanmelden",
     "Create Account": "Account aanmaken",
     "Need help?": "Hulp nodig?",
-    "Explore rooms": "Kamers ontdekken",
-    "Room Directory": "Gesprekscatalogus"
+    "Explore rooms": "Gesprekken ontdekken",
+    "Room Directory": "Gesprekscatalogus",
+    "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Bekijk de console voor details.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ongeldige configuratie: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
+    "Invalid configuration: no default server specified.": "Ongeldige configuratie: geen standaardserver opgegeven.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "De serverconfiguratie van deze Riot-instantie lijkt ongeldig. Als u de beheerder bent, gelieve dan de fout hieronder te corrigeren"
 }

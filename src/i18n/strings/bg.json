@@ -38,9 +38,12 @@
     "Co-ordination for Riot translators": "Координация за преводачи на Riot",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Може да настроите и собствен сървър за самоличност, но така няма да можете да каните потребители по имейл адрес или да бъдете поканени посредством вашия имейл адрес.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Може да използвате настройките за собствен сървър за да влезете в друг Matrix сървър, чрез указване на адреса му. Това Ви позволява да използвате Riot със съществуващ Matrix акаунт принадлежащ към друг сървър.",
-    "Sign In": "Вход",
+    "Sign In": "Вписване",
     "Create Account": "Създай акаунт",
     "Need help?": "Нужда от помощ?",
     "Explore rooms": "Открий стаи",
-    "Room Directory": "Директория със стаи"
+    "Room Directory": "Директория със стаи",
+    "Unexpected error preparing the app. See console for details.": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невалидна конфигурация: може да е указано само едно от: default_server_config, default_server_name, или default_hs_url.",
+    "Invalid configuration: no default server specified.": "Невалидна конфигурация: не е указан сървър по подразбиране."
 }

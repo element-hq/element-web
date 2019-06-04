@@ -42,5 +42,9 @@
     "Create Account": "Créer un compte",
     "Need help?": "Besoin d'aide ?",
     "Explore rooms": "Explorer les salons",
-    "Room Directory": "Répertoire de salons"
+    "Room Directory": "Répertoire de salons",
+    "Unexpected error preparing the app. See console for details.": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuration invalide : il ne faut spécifier qu’un des trois champs entre default_server_config, default_server_name et default_hs_url.",
+    "Invalid configuration: no default server specified.": "Configuration invalide : aucun serveur par défaut spécifié.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Cette installation de Riot semble avoir une configuration de serveur non valide. Si vous êtes l’administrateur, corrigez l’erreur ci-dessous"
 }

@@ -42,5 +42,6 @@
     "Room Directory": "Directori de sales",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Podeu emprar les opcions personalitzades del servidor per iniciar la sessió en altres servidors de Matrix especificant un URL de servidor personal diferent. Això us permet emprar el Riot amb un compte de Matrix existent en un servidor personal diferent.",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "També podeu establir un servidor d'identitat personalitzat, però no podreu convidar usuaris o ser convidats vosaltres mateixos per adreça de correu electrònic.",
-    "Sign In": "Inicia la sessió"
+    "Sign In": "Inicia la sessió",
+    "Invalid configuration: no default server specified.": "Configuració no vàlida: no s'ha especificat cap servidor per defecte."
 }

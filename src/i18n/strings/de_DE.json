@@ -37,10 +37,14 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Die benutzerdefinierten Server-Einstellungen kannst du verwenden, um dich auf anderen Matrix-Servern anzumelden, indem du eine abweichende Heimserver-URL eingibst.<br/>Somit ist es möglich, Riot mit einem bereits bestehendem Matrix-Benutzerkonto auf einem anderen Heimserver zu verwenden.<br/><br/>Außerdem kannst du einen benutzerdefinierten Identitätsserver eingeben. Allerdings kannst du in diesem Fall Benutzer nicht mehr per E-Mail-Adresse einladen und auch selbst nicht mehr per E-Mail-Adresse eingeladen werden.",
     "Co-ordination for Riot translators": "Koordination für Riot-Übersetzer",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kannst die erweiterte Serveroption nutzen um dich an einem anderen Matrixserver anzumelden, indem du eine andere Heimserver-URL angibst. Dies erlaubt dir, Riot mit einem existierenden Matrix-Konto auf einem anderen Heimserver zu nutzen.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kannst auch einen anderen Identitätsserver einstellen, allerdings kannst du dann andere Benutzer nicht mehr per E-Mail-Adresse einladen, ebenso wirst du selbst nicht mehr per E-Mail-Adresse eingeladen werden können.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Sie können auch einen benutzerdefinierten Identitätsserver festlegen, aber Sie können keine Benutzer per E-Mail-Adresse einladen oder selbst per E-Mail-Adresse eingeladen werden.",
     "Sign In": "Anmelden",
     "Create Account": "Konto erstellen",
     "Need help?": "Brauchst du Hilfe?",
     "Explore rooms": "Räume erkunden",
-    "Room Directory": "Raumverzeichnis"
+    "Room Directory": "Raumverzeichnis",
+    "Unexpected error preparing the app. See console for details.": "Unerwarteter Fehler bei der Vorbereitung der App. Siehe Konsole für Details.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ungültige Konfiguration: Es kann nur eine der Optionen default_server_config, default_server_name oder default_hs_url angegeben werden.",
+    "Invalid configuration: no default server specified.": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Diese Installation von Riot scheint eine ungültige Serverkonfiguration zu haben. Wenn Sie der Administrator sind, korrigieren Sie bitte den folgenden Fehler"
 }

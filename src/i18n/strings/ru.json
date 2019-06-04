@@ -38,9 +38,13 @@
     "Co-ordination for Riot translators": "Координационный чат для переводчиков Riot",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Вы можете изменить параметры для входа на другие Matrix серверы, указав другой URL.\nЭто позволит использовать Riot с учетной записью Matrix, существующей на другом сервере.",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Также можно изменить сервер идентификации, но без возможности приглашать (или быть приглашённым) по адресу электронной почты.",
-    "Sign In": "Вход",
+    "Sign In": "Войти в систему",
     "Create Account": "Создать аккаунт",
     "Need help?": "Помочь?",
     "Room Directory": "Каталог комнат",
-    "Explore rooms": "Исследовать комнаты"
+    "Explore rooms": "Исследовать комнаты",
+    "Unexpected error preparing the app. See console for details.": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Неверная конфигурация: может указывать только один из следующих параметров: default_server_config, default_server_name или default_hs_url.",
+    "Invalid configuration: no default server specified.": "Неверная конфигурация: сервер по умолчанию не указан.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Эта установка Riot, кажется, имеет неверную конфигурацию сервера. Если вы являетесь администратором, пожалуйста, исправьте ошибку ниже"
 }
