@@ -131,7 +131,7 @@ module.exports = React.createClass({
                 } catch (e) {
                     const code = e.errcode || e.statusCode;
                     // only show the dialog if failing for something other than a network error
-                    // (e.g. no errcode or statusCode) as that case the redaction end up in the
+                    // (e.g. no errcode or statusCode) as in that case the redactions end up in the
                     // detached queue and we show the room status bar to allow retry
                     if (typeof code !== "undefined") {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
