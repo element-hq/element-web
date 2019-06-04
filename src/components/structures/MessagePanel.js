@@ -52,6 +52,10 @@ module.exports = React.createClass({
         // ID of an event to highlight. If undefined, no event will be highlighted.
         highlightedEventId: PropTypes.string,
 
+        // The room these events are all in together, if any.
+        // (The notification panel won't have a room here, for example.)
+        room: PropTypes.object,
+
         // Should we show URL Previews
         showUrlPreview: PropTypes.bool,
 
@@ -615,7 +619,7 @@ module.exports = React.createClass({
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get list of read receipts, sorted most recent first
-        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        const { room } = this.props;
         if (!room) {
             return null;
         }
