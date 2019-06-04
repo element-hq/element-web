@@ -648,6 +648,7 @@ const TimelinePanel = React.createClass({
 
         const lastReadEventIndex = this._getLastDisplayedEventIndex({
             ignoreOwn: true,
+            allowEventsWithoutTiles: true,
         });
         if (lastReadEventIndex === null) {
             shouldSendRR = false;
@@ -1111,14 +1112,18 @@ const TimelinePanel = React.createClass({
         const ignoreOwn = opts.ignoreOwn || false;
         const ignoreEchoes = opts.ignoreEchoes || false;
         const allowPartial = opts.allowPartial || false;
+        const allowEventsWithoutTiles = opts.allowEventsWithoutTiles || false;
 
         const messagePanel = this.refs.messagePanel;
         if (messagePanel === undefined) return null;
 
+        const EventTile = sdk.getComponent('rooms.EventTile');
+
         const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
-        for (let i = this.state.events.length-1; i >= 0; --i) {
+        let lastDisplayedIndex = null;
+        for (let i = this.state.events.length - 1; i >= 0; --i) {
             const ev = this.state.events[i];
 
             if (ignoreOwn && ev.sender && ev.sender.userId == myUserId) {
@@ -1136,10 +1141,34 @@ const TimelinePanel = React.createClass({
             const boundingRect = node.getBoundingClientRect();
             if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
                 (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
-                return i;
+                lastDisplayedIndex = i;
+                break;
             }
         }
-        return null;
+
+        if (lastDisplayedIndex === null) {
+            return null;
+        }
+
+        // If events without tiles are allowed, then we walk forward from the
+        // the last displayed event and advance the index for any events without
+        // tiles that immediately follow it.
+        // XXX: We could track the last event without a tile after the last
+        // displayed event in the loop above so that we only do a single pass
+        // through the loop, which would be more efficient. Using two passes is
+        // easier to reason about, so let's start there and optimise later if
+        // needed.
+        if (allowEventsWithoutTiles) {
+            for (let i = lastDisplayedIndex + 1; i < this.state.events.length; i++) {
+                const ev = this.state.events[i];
+                if (EventTile.haveTileForEvent(ev)) {
+                    break;
+                }
+                lastDisplayedIndex = i;
+            }
+        }
+
+        return lastDisplayedIndex;
     },
 
     /**

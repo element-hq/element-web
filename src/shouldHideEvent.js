@@ -45,6 +45,8 @@ export default function shouldHideEvent(ev) {
 
     // Hide redacted events
     if (ev.isRedacted() && !isEnabled('showRedactions')) return true;
+
+    // Hide replacement events since they update the original tile
     if (ev.isRelation("m.replace")) return true;
 
     const eventDiff = memberEventDiff(ev);
