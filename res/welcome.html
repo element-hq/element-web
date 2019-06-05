@@ -149,6 +149,15 @@ h1::after {
     background-image: url('welcome/images/icon-room-directory.svg');
 }
 
+/*
+.mx_WelcomePage_loggedIn is applied by EmbeddedPage from the Welcome component
+If it is set on the page, we should show the buttons. Otherwise, we have to assume
+we don't have an account and should hide them. No account == no guest account either.
+ */
+.mx_WelcomePage:not(.mx_WelcomePage_loggedIn) .mx_WelcomePage_guestFunctions {
+    display: none;
+}
+
 </style>
 
 <div class="mx_Parent">
@@ -169,9 +178,9 @@ h1::after {
         <!-- The comments below are meant to be used by Ansible as a quick way
              to strip out the marked content when desired.
              See https://github.com/vector-im/riot-web/issues/8622.
-             TODO: Convert to config option if possible. -->
+             TODO: Strip out these comments and rely on the guest flag -->
         <!-- BEGIN Ansible: Remove these lines when guest access is disabled -->
-        <div class="mx_ButtonRow">
+        <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
             <div>
                 <div class="mx_ButtonWrapperText">_t("Need help?")</div>
                 <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconHelp">
