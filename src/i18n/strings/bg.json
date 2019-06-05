@@ -154,7 +154,7 @@
     "%(senderName)s invited %(targetName)s.": "%(senderName)s покани %(targetName)s.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s блокира %(targetName)s.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s смени своето име на %(displayName)s.",
-    "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s си сложи име %(displayName)s.",
+    "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s се преименува на %(displayName)s.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s премахна своето име (%(oldDisplayName)s).",
     "%(senderName)s removed their profile picture.": "%(senderName)s премахна своята профилна снимка.",
     "%(senderName)s changed their profile picture.": "%(senderName)s промени своята профилна снимка.",
