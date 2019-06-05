@@ -116,6 +116,7 @@ export default class ReactionsRow extends React.PureComponent {
             return <ReactionsRowButton
                 key={content}
                 content={content}
+                count={count}
                 mxEvent={mxEvent}
                 reactionEvents={events}
                 myReactionEvent={myReactionEvent}
