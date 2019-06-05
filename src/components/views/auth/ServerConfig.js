@@ -109,6 +109,8 @@ export default class ServerConfig extends React.PureComponent {
                 busy: false,
                 errorText: message,
             });
+
+            return null;
         }
     }
 
@@ -137,7 +139,8 @@ export default class ServerConfig extends React.PureComponent {
     onSubmit = async (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        await this.validateServer();
+        const result = await this.validateServer();
+        if (!result) return; // Do not continue.
 
         if (this.props.onAfterSubmit) {
             this.props.onAfterSubmit();
