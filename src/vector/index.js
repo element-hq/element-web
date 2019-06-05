@@ -368,20 +368,12 @@ async function loadApp() {
 
             let errorMessage = err.translatedMessage
                 || _t("Unexpected error preparing the app. See console for details.");
-            errorMessage = <span>
-                {_t(
-                    "This installation of Riot seems to have an invalid server configuration. " +
-                    "If you are the administrator, please correct the error below",
-                )}
-                <br />
-                <br />
-                {errorMessage}
-            </span>;
+            errorMessage = <span>{errorMessage}</span>;
 
             // Like the compatibility page, AWOOOOOGA at the user
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
             window.matrixChat = ReactDOM.render(
-                <GenericErrorPage message={errorMessage} />,
+                <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
                 document.getElementById('matrixchat'),
             );
         });
