@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from 'react';
 import {AutoDiscovery} from "matrix-js-sdk";
 import {_t, _td, newTranslatableError} from "../languageHandler";
 import {makeType} from "./TypeUtils";
@@ -56,19 +57,33 @@ export default class AutoDiscoveryUtils {
      * for the component, given the error.
      */
     static authComponentStateForError(err: Error): {serverIsAlive: boolean, serverDeadError: string} {
-        if (AutoDiscoveryUtils.isLivelinessError(err)) {
-            // TODO: TravisR - Copy from Nad
-            return {
-                serverIsAlive: false,
-                serverDeadError: _t("Server failed liveliness check"),
-            };
-        } else {
-            // TODO: TravisR - Copy from Nad
-            return {
-                serverIsAlive: false,
-                serverDeadError: _t("Server failed syntax check"),
-            };
+        let title = _t("Cannot reach homeserver");
+        let body = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
+        if (!AutoDiscoveryUtils.isLivelinessError(err)) {
+            title = _t("Your Riot is misconfigured");
+            body = _t(
+                "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.",
+                {}, {
+                    a: (sub) => {
+                        return <a
+                            href="https://github.com/vector-im/riot-web#configjson"
+                            target="_blank"
+                            rel="noopener"
+                        >{sub}</a>;
+                    }
+                },
+            );
         }
+
+        return {
+            serverIsAlive: false,
+            serverDeadError: (
+                <div>
+                    <strong>{title}</strong>
+                    <div>{body}</div>
+                </div>
+            ),
+        };
     }
 
     /**

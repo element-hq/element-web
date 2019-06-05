@@ -568,9 +568,8 @@ module.exports = React.createClass({
 
         let serverDeadSection;
         if (!this.state.serverIsAlive) {
-            // TODO: TravisR - Design from Nad
             serverDeadSection = (
-                <div className="mx_Login_error">
+                <div className="mx_Login_error mx_Login_serverError">
                     {this.state.serverDeadError}
                 </div>
             );
