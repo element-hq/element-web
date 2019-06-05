@@ -1889,7 +1889,7 @@
     "The user's homeserver does not support the version of the room.": "Сървърът на потребителя не поддържа версията на стаята.",
     "Edit messages after they have been sent (refresh to apply changes)": "Редактиране на съобщения след изпращането им (презаредете за да влезе в сила)",
     "React to messages with emoji (refresh to apply changes)": "Реакция към съобщения с емоджи (презаредете за да влезе в сила)",
-    "Sends the given emote coloured as a rainbow": "Изпрати дадения емотикон, оцветен като дъга",
+    "Sends the given emote coloured as a rainbow": "Изпраща дадения емотикон, оцветен като дъга",
     "Show hidden events in timeline": "Покажи скрити събития по времевата линия",
     "When rooms are upgraded": "Когато стаите се актуализират",
     "This device is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Това устройстовото <b>не архивира ключовете ви</b>, вие обаче имате съществуващ архив, от който можете да ги възстановите и към който да ги добавяте в бъдеще.",
