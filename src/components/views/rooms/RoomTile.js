@@ -91,6 +91,8 @@ module.exports = React.createClass({
     },
 
     _getStatusMessageUser() {
+        if (!MatrixClientPeg.get()) return null; // We've probably been logged out
+
         const selfId = MatrixClientPeg.get().getUserId();
         const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
         if (!otherMember) {
