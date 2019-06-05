@@ -81,7 +81,6 @@ export default class AutoDiscoveryUtils {
      */
     static async validateServerConfigWithStaticUrls(
         homeserverUrl: string, identityUrl: string, syntaxOnly = false): ValidatedServerConfig {
-
         if (!homeserverUrl) {
             throw newTranslatableError(_td("No homeserver URL provided"));
         }
@@ -126,7 +125,6 @@ export default class AutoDiscoveryUtils {
      */
     static buildValidatedConfigFromDiscovery(
         serverName: string, discoveryResult, syntaxOnly=false): ValidatedServerConfig {
-
         if (!discoveryResult || !discoveryResult["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
