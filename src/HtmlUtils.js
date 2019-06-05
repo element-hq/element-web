@@ -64,7 +64,7 @@ const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
  * need emojification.
  * unicodeToImage uses this function.
  */
-export function mayContainEmoji(str) {
+export function mightContainEmoji(str) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -74,7 +74,7 @@ export function mayContainEmoji(str) {
  * @return {Boolean}
  */
 export function isSingleEmoji(str) {
-    return mayContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
+    return mightContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
 }
 
 /**
@@ -438,7 +438,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = mayContainEmoji(isHtmlMessage ? formattedBody : content.body);
+        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : content.body);
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
