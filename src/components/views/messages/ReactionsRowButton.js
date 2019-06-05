@@ -27,6 +27,8 @@ export default class ReactionsRowButton extends React.PureComponent {
         mxEvent: PropTypes.object.isRequired,
         // The reaction content / key / emoji
         content: PropTypes.string.isRequired,
+        // The count of votes for this key
+        count: PropTypes.number.isRequired,
         // A Set of Martix reaction events for this key
         reactionEvents: PropTypes.object.isRequired,
         // A possible Matrix event if the current user has voted for this type
@@ -77,12 +79,7 @@ export default class ReactionsRowButton extends React.PureComponent {
     render() {
         const ReactionsRowButtonTooltip =
             sdk.getComponent('messages.ReactionsRowButtonTooltip');
-        const { content, reactionEvents, myReactionEvent } = this.props;
-
-        const count = reactionEvents.size;
-        if (!count) {
-            return null;
-        }
+        const { content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({
             mx_ReactionsRowButton: true,
