@@ -70,7 +70,7 @@ export default class AutoDiscoveryUtils {
                             target="_blank"
                             rel="noopener"
                         >{sub}</a>;
-                    }
+                    },
                 },
             );
         }
