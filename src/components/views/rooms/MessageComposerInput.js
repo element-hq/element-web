@@ -533,10 +533,8 @@ export default class MessageComposerInput extends React.Component {
                 // The first matched group includes just the matched plaintext emoji
                 const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emoticonMatch) {
-                    const data = EMOJIBASE.find(e => {
-                        if (!e.emoticon) return false;
-                        return e.emoticon.toLowerCase() === emoticonMatch[1].toLowerCase().replace("-", "");
-                    });
+                    const query = emoticonMatch[1].toLowerCase().replace("-", "");
+                    const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
 
                     // only perform replacement if we found a match, otherwise we would be not letting user type
                     if (data) {
