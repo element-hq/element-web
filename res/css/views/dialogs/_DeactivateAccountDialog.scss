@@ -22,7 +22,7 @@ limitations under the License.
     margin-top: 60px;
 }
 
-.mx_DeactivateAccountDialog .mx_DeactivateAccountDialog_input_section input {
+.mx_DeactivateAccountDialog .mx_DeactivateAccountDialog_input_section input[type=password] {
     width: 300px;
     border: 1px solid $accent-color;
     border-radius: 5px;
