@@ -67,7 +67,7 @@ module.exports = React.createClass({
         this._checkServerLiveliness(this.props.serverConfig);
     },
 
-    componentWillReceiveProps: async function(newProps) {
+    componentWillReceiveProps: function(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 

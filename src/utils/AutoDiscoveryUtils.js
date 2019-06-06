@@ -158,8 +158,12 @@ export default class AutoDiscoveryUtils {
             } // else the error is not related to syntax - continue anyways.
         }
 
+        // Note: In the cases where we rely on this pre-populated "https://vector.im" (namely
+        // lack of identity server provided by the discovery method), we intentionally do not
+        // validate it. We already know the IS is an IS, and this helps some off-the-grid usage
+        // of Riot.
+        let preferredIdentityUrl = "https://vector.im";
         const isResult = discoveryResult['m.identity_server'];
-        let preferredIdentityUrl = "https://vector.im"; // We already know this is an IS, so don't validate it.
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
             preferredIdentityUrl = isResult["base_url"];
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {

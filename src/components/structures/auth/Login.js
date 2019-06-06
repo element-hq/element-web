@@ -145,7 +145,7 @@ module.exports = React.createClass({
 
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         // Prevent people from submitting their password when something isn't right.
-        if (this.isBusy() || !this.state.canTryLogin) return;
+        if (this.isBusy()) return;
 
         this.setState({
             busy: true,
@@ -156,6 +156,7 @@ module.exports = React.createClass({
         this._loginLogic.loginViaPassword(
             username, phoneCountry, phoneNumber, password,
         ).then((data) => {
+            this.setState({serverIsAlive: true}); // it must be, we logged in.
             this.props.onLoggedIn(data);
         }, (error) => {
             if (this._unmounted) {
@@ -240,7 +241,7 @@ module.exports = React.createClass({
             username: username,
             busy: doWellknownLookup, // unset later by the result of onServerConfigChange
             errorText: null,
-            canTryLogin: this.state.serverIsAlive,
+            canTryLogin: true,
         });
         if (doWellknownLookup) {
             const serverName = username.split(':').slice(1).join(':');
@@ -259,7 +260,7 @@ module.exports = React.createClass({
                 let discoveryState = {};
                 if (AutoDiscoveryUtils.isLivelinessError(e)) {
                     errorText = this.state.errorText;
-                    discoveryState = this._stateForDiscoveryError(e);
+                    discoveryState = AutoDiscoveryUtils.authComponentStateForError(e);
                 }
 
                 this.setState({
@@ -291,7 +292,7 @@ module.exports = React.createClass({
         } else {
             this.setState({
                 errorText: null,
-                canTryLogin: this.state.serverIsAlive,
+                canTryLogin: true,
             });
         }
     },
@@ -314,13 +315,6 @@ module.exports = React.createClass({
         this.setState({
             phase: PHASE_SERVER_DETAILS,
         });
-    },
-
-    _stateForDiscoveryError: function(err) {
-        return {
-            canTryLogin: false,
-            ...AutoDiscoveryUtils.authComponentStateForError(err),
-        };
     },
 
     _initLoginLogic: async function(hsUrl, isUrl) {
@@ -349,12 +343,11 @@ module.exports = React.createClass({
         // Do a quick liveliness check on the URLs
         try {
             await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
-            this.setState({serverIsAlive: true, errorText: "", canTryLogin: true});
+            this.setState({serverIsAlive: true, errorText: ""});
         } catch (e) {
-            const discoveryState = this._stateForDiscoveryError(e);
             this.setState({
                 busy: false,
-                ...discoveryState,
+                ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
             return; // Server is dead - do not continue.
         }
@@ -529,7 +522,7 @@ module.exports = React.createClass({
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                serverConfig={this.props.serverConfig}
-               disableSubmit={this.isBusy() || !this.state.serverIsAlive}
+               disableSubmit={this.isBusy()}
             />
         );
     },
