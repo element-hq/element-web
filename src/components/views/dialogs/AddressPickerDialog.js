@@ -205,7 +205,7 @@ module.exports = React.createClass({
 
     onSelected: function(index) {
         const selectedList = this.state.selectedList.slice();
-        selectedList.push(this.state.suggestedList[index]);
+        selectedList.push(this._getFilteredSuggestions()[index]);
         this.setState({
             selectedList,
             suggestedList: [],
@@ -526,12 +526,7 @@ module.exports = React.createClass({
         });
     },
 
-    render: function() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AddressSelector = sdk.getComponent("elements.AddressSelector");
-        this.scrollElement = null;
-
+    _getFilteredSuggestions: function() {
         // map addressType => set of addresses to avoid O(n*m) operation
         const selectedAddresses = {};
         this.state.selectedList.forEach(({address, addressType}) => {
@@ -540,9 +535,16 @@ module.exports = React.createClass({
         });
 
         // Filter out any addresses in the above already selected addresses (matching both type and address)
-        const filteredSuggestedList = this.state.suggestedList.filter(({address, addressType}) => {
+        return this.state.suggestedList.filter(({address, addressType}) => {
             return !(selectedAddresses[addressType] && selectedAddresses[addressType].has(address));
         });
+    },
+
+    render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const AddressSelector = sdk.getComponent("elements.AddressSelector");
+        this.scrollElement = null;
 
         const query = [];
         // create the invite list
@@ -573,6 +575,8 @@ module.exports = React.createClass({
                 autoFocus={this.props.focus}>
             </textarea>,
         );
+
+        const filteredSuggestedList = this._getFilteredSuggestions();
 
         let error;
         let addressSelector;
