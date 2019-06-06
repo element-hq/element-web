@@ -54,6 +54,9 @@ module.exports = React.createClass({
         // If invited by 3rd party invite, the email address the invite was sent to
         invitedEmail: PropTypes.string,
 
+        // For third party invites, information passed about the room out-of-band
+        oobData: PropTypes.object,
+
         // A standard client/server API error object. If supplied, indicates that the
         // caller was unable to fetch details about the room for the given reason.
         error: PropTypes.object,
@@ -87,6 +90,16 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._checkInvitedEmail();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
+            this._checkInvitedEmail();
+        }
+    },
+
+    _checkInvitedEmail: function() {
         // If this is an invite and we've been told what email
         // address was invited, fetch the user's list of Threepids
         // so we can check them against the one that was invited
@@ -335,7 +348,7 @@ module.exports = React.createClass({
             }
             case MessageCase.Invite: {
                 const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
-                const avatar = <RoomAvatar room={this.props.room} />;
+                const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
 
                 const inviteMember = this._getInviteMember();
                 let inviterElement;
