@@ -325,10 +325,11 @@ const LoggedInView = React.createClass({
                     handled = true;
                 }
                 break;
-            case KeyCode.KEY_I:
+            case KeyCode.KEY_BACKTICK:
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
-                // will have to do.
+                // was previously chosen but conflicted with italics in
+                // composer, so CTRL+` it is
 
                 if (ctrlCmdOnly) {
                     dis.dispatch({
