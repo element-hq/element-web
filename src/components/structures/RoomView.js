@@ -1551,6 +1551,7 @@ module.exports = React.createClass({
                             joining={this.state.joining}
                             inviterName={inviterName}
                             invitedEmail={invitedEmail}
+                            oobData={this.props.oobData}
                             room={this.state.room}
                         />
                     </div>
@@ -1681,6 +1682,7 @@ module.exports = React.createClass({
                                 joining={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
+                                oobData={this.props.oobData}
                                 canPreview={this.state.canPeek}
                                 room={this.state.room}
                 />
