@@ -97,7 +97,7 @@ export default React.createClass({
             sessionId: this.props.sessionId,
             clientSecret: this.props.clientSecret,
             emailSid: this.props.emailSid,
-            requestEmailToken: this.props.requestEmailToken,
+            requestEmailToken: this._requestEmailToken,
         });
 
         this._authLogic.attemptAuth().then((result) => {
@@ -132,6 +132,19 @@ export default React.createClass({
 
         if (this._intervalId !== null) {
             clearInterval(this._intervalId);
+        }
+    },
+
+    _requestEmailToken: async function(...args) {
+        this.setState({
+            busy: true,
+        });
+        try {
+            return await this.props.requestEmailToken(...args);
+        } finally {
+            this.setState({
+                busy: false,
+            });
         }
     },
 
