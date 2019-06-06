@@ -21,3 +21,10 @@ limitations under the License.
 .mx_DeactivateAccountDialog .mx_DeactivateAccountDialog_input_section {
     margin-top: 60px;
 }
+
+.mx_DeactivateAccountDialog .mx_DeactivateAccountDialog_input_section input {
+    width: 300px;
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+    padding: 10px;
+}
