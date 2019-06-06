@@ -533,21 +533,26 @@ export default class MessageComposerInput extends React.Component {
                 // The first matched group includes just the matched plaintext emoji
                 const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emoticonMatch) {
-                    const data = EMOJIBASE.find(e => e.emoticon === emoticonMatch[1]);
-                    const unicodeEmoji = data ? data.unicode : '';
-
-                    const range = Range.create({
-                        anchor: {
-                            key: editorState.startText.key,
-                            offset: currentStartOffset - emoticonMatch[1].length - 1,
-                        },
-                        focus: {
-                            key: editorState.startText.key,
-                            offset: currentStartOffset - 1,
-                        },
+                    const data = EMOJIBASE.find(e => {
+                        if (!e.emoticon) return false;
+                        return e.emoticon.toLowerCase() === emoticonMatch[1].toLowerCase().replace("-", "");
                     });
-                    change = change.insertTextAtRange(range, unicodeEmoji);
-                    editorState = change.value;
+
+                    // only perform replacement if we found a match, otherwise we would be not letting user type
+                    if (data) {
+                        const range = Range.create({
+                            anchor: {
+                                key: editorState.startText.key,
+                                offset: currentStartOffset - emoticonMatch[1].length - 1,
+                            },
+                            focus: {
+                                key: editorState.startText.key,
+                                offset: currentStartOffset - 1,
+                            },
+                        });
+                        change = change.insertTextAtRange(range, data.unicode);
+                        editorState = change.value;
+                    }
                 }
             }
         }
