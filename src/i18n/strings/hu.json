@@ -1993,5 +1993,6 @@
     "Notification sound": "Értesítési hang",
     "Reset": "Visszaállít",
     "Set a new custom sound": "Új egyedi hang beállítása",
-    "Browse": "Böngész"
+    "Browse": "Böngész",
+    "Use lowercase letters, numbers, dashes and underscores only": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj"
 }
