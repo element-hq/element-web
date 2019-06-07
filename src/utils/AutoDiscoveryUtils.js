@@ -148,22 +148,16 @@ export default class AutoDiscoveryUtils {
         }
 
         const hsResult = discoveryResult['m.homeserver'];
-        if (hsResult.state !== AutoDiscovery.SUCCESS) {
-            console.error("Error processing homeserver config:", hsResult);
-            if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
-                    throw newTranslatableError(hsResult.error);
-                }
-                throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
-            } // else the error is not related to syntax - continue anyways.
-        }
+        const isResult = discoveryResult['m.identity_server'];
+
+        // Validate the identity server first because an invalid identity server causes
+        // and invalid homeserver, which may not be picked up correctly.
 
         // Note: In the cases where we rely on this pre-populated "https://vector.im" (namely
         // lack of identity server provided by the discovery method), we intentionally do not
         // validate it. We already know the IS is an IS, and this helps some off-the-grid usage
         // of Riot.
         let preferredIdentityUrl = "https://vector.im";
-        const isResult = discoveryResult['m.identity_server'];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
             preferredIdentityUrl = isResult["base_url"];
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
@@ -173,6 +167,24 @@ export default class AutoDiscoveryUtils {
                     throw newTranslatableError(isResult.error);
                 }
                 throw newTranslatableError(_td("Unexpected error resolving identity server configuration"));
+            } // else the error is not related to syntax - continue anyways.
+
+            // rewrite homeserver error if we don't care about problems
+            if (syntaxOnly) {
+                hsResult.error = AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER;
+
+                // Also use the user's supplied identity server if provided
+                if (isResult["base_url"]) preferredIdentityUrl = isResult["base_url"];
+            }
+        }
+
+        if (hsResult.state !== AutoDiscovery.SUCCESS) {
+            console.error("Error processing homeserver config:", hsResult);
+            if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
+                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
+                    throw newTranslatableError(hsResult.error);
+                }
+                throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
             } // else the error is not related to syntax - continue anyways.
         }
 
