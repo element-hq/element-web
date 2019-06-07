@@ -82,8 +82,10 @@ module.exports = React.createClass({
                 serverConfig.isUrl,
             );
             this.setState({serverIsAlive: true});
+            return true;
         } catch (e) {
             this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
+            return false;
         }
     },
 
@@ -117,10 +119,11 @@ module.exports = React.createClass({
         });
     },
 
-    onSubmitForm: function(ev) {
+    onSubmitForm: async function(ev) {
         ev.preventDefault();
 
-        if (!this.state.serverIsAlive) return;
+        const shouldBlockSubmit = await this._checkServerLiveliness(this.props.serverConfig);
+        if (shouldBlockSubmit) return;
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -293,7 +296,6 @@ module.exports = React.createClass({
                     className="mx_Login_submit"
                     type="submit"
                     value={_t('Send Reset Email')}
-                    disabled={!this.state.serverIsAlive}
                 />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
