@@ -41,5 +41,9 @@
     "Create Account": "Izveidot kontu",
     "Need help?": "Nepieciešama palīdzība?",
     "Explore rooms": "Atklāt istabas",
-    "Room Directory": "Istabu Katalogs"
+    "Room Directory": "Istabu Katalogs",
+    "Unexpected error preparing the app. See console for details.": "Negaidīta kļūda, sagatavojot lietotni. Sīkāku informāciju skatiet konsolē.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Šai Riot instalācijai ir nekorekta servera konfigurācija. Ja esat administrators, lūdzu, izlabojiet tālāk norādīto kļūdu",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Nederīga konfigurācija: var norādīt tikai vienu no default_server_config, default_server_name, vai default_hs_url.",
+    "Invalid configuration: no default server specified.": "Nekorekta konfigurācija: nav norādīts noklusējuma serveris."
 }
