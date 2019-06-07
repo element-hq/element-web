@@ -26,7 +26,7 @@ import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 // Phases
 // Show controls to configure server details
@@ -79,6 +79,13 @@ module.exports = React.createClass({
             // Phase of the overall registration dialog.
             phase: PHASE_REGISTRATION,
             flows: null,
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverDeadError: "",
         };
     },
 
@@ -152,6 +159,19 @@ module.exports = React.createClass({
             errorText: null,
         });
         if (!serverConfig) serverConfig = this.props.serverConfig;
+
+        // Do a liveliness check on the URLs
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                serverConfig.hsUrl,
+                serverConfig.isUrl,
+            );
+            this.setState({serverIsAlive: true});
+        } catch (e) {
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
+            return; // Server is dead - do not continue.
+        }
+
         const {hsUrl, isUrl} = serverConfig;
         this._matrixClient = Matrix.createClient({
             baseUrl: hsUrl,
@@ -447,6 +467,7 @@ module.exports = React.createClass({
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
+                canSubmit={this.state.serverIsAlive}
             />;
         }
     },
@@ -460,6 +481,15 @@ module.exports = React.createClass({
         const err = this.state.errorText;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
+        }
+
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            serverDeadSection = (
+                <div className="mx_Login_error mx_Login_serverError">
+                    {this.state.serverDeadError}
+                </div>
+            );
         }
 
         const signIn = <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
@@ -480,6 +510,7 @@ module.exports = React.createClass({
                 <AuthBody>
                     <h2>{ _t('Create your account') }</h2>
                     { errorText }
+                    { serverDeadSection }
                     { this.renderServerComponent() }
                     { this.renderRegisterComponent() }
                     { goBack }
