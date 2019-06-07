@@ -94,6 +94,13 @@ module.exports = React.createClass({
             phase: PHASE_LOGIN,
             // The current login flow, such as password, SSO, etc.
             currentFlow: "m.login.password",
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverDeadError: "",
         };
     },
 
@@ -138,7 +145,7 @@ module.exports = React.createClass({
 
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         // Prevent people from submitting their password when something isn't right.
-        if (this.isBusy() || !this.state.canTryLogin) return;
+        if (this.isBusy()) return;
 
         this.setState({
             busy: true,
@@ -149,6 +156,7 @@ module.exports = React.createClass({
         this._loginLogic.loginViaPassword(
             username, phoneCountry, phoneNumber, password,
         ).then((data) => {
+            this.setState({serverIsAlive: true}); // it must be, we logged in.
             this.props.onLoggedIn(data);
         }, (error) => {
             if (this._unmounted) {
@@ -247,7 +255,19 @@ module.exports = React.createClass({
                 if (e.translatedMessage) {
                     message = e.translatedMessage;
                 }
-                this.setState({errorText: message, busy: false, canTryLogin: false});
+
+                let errorText = message;
+                let discoveryState = {};
+                if (AutoDiscoveryUtils.isLivelinessError(e)) {
+                    errorText = this.state.errorText;
+                    discoveryState = AutoDiscoveryUtils.authComponentStateForError(e);
+                }
+
+                this.setState({
+                    busy: false,
+                    errorText,
+                    ...discoveryState,
+                });
             }
         }
     },
@@ -297,13 +317,18 @@ module.exports = React.createClass({
         });
     },
 
-    _initLoginLogic: function(hsUrl, isUrl) {
-        const self = this;
+    _initLoginLogic: async function(hsUrl, isUrl) {
         hsUrl = hsUrl || this.props.serverConfig.hsUrl;
         isUrl = isUrl || this.props.serverConfig.isUrl;
 
-        // TODO: TravisR - Only use this if the homeserver is the default homeserver
-        const fallbackHsUrl = this.props.fallbackHsUrl;
+        let isDefaultServer = false;
+        if (this.props.serverConfig.isDefault
+            && hsUrl === this.props.serverConfig.hsUrl
+            && isUrl === this.props.serverConfig.isUrl) {
+            isDefaultServer = true;
+        }
+
+        const fallbackHsUrl = isDefaultServer ? this.props.fallbackHsUrl : null;
 
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
@@ -314,6 +339,18 @@ module.exports = React.createClass({
             busy: true,
             loginIncorrect: false,
         });
+
+        // Do a quick liveliness check on the URLs
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            this.setState({serverIsAlive: true, errorText: ""});
+        } catch (e) {
+            this.setState({
+                busy: false,
+                ...AutoDiscoveryUtils.authComponentStateForError(e),
+            });
+            return; // Server is dead - do not continue.
+        }
 
         loginLogic.getFlows().then((flows) => {
             // look for a flow where we understand all of the steps.
@@ -339,14 +376,14 @@ module.exports = React.createClass({
                         "supported by this client.",
                 ),
             });
-        }, function(err) {
-            self.setState({
-                errorText: self._errorTextFromError(err),
+        }, (err) => {
+            this.setState({
+                errorText: this._errorTextFromError(err),
                 loginIncorrect: false,
                 canTryLogin: false,
             });
-        }).finally(function() {
-            self.setState({
+        }).finally(() => {
+            this.setState({
                 busy: false,
             });
         }).done();
@@ -522,6 +559,15 @@ module.exports = React.createClass({
             );
         }
 
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            serverDeadSection = (
+                <div className="mx_Login_error mx_Login_serverError">
+                    {this.state.serverDeadError}
+                </div>
+            );
+        }
+
         return (
             <AuthPage>
                 <AuthHeader />
@@ -531,6 +577,7 @@ module.exports = React.createClass({
                         {loader}
                     </h2>
                     { errorTextSection }
+                    { serverDeadSection }
                     { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
                     <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">

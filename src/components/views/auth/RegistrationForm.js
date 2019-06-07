@@ -53,11 +53,13 @@ module.exports = React.createClass({
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        canSubmit: PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             onValidationChange: console.error,
+            canSubmit: true,
         };
     },
 
@@ -79,6 +81,8 @@ module.exports = React.createClass({
 
     onSubmit: async function(ev) {
         ev.preventDefault();
+
+        if (!this.props.canSubmit) return;
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
@@ -540,7 +544,7 @@ module.exports = React.createClass({
         }
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
 
         return (

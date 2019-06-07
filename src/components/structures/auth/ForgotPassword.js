@@ -22,7 +22,7 @@ import sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 // Phases
 // Show controls to configure server details
@@ -53,7 +53,38 @@ module.exports = React.createClass({
             password: "",
             password2: "",
             errorText: null,
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverDeadError: "",
         };
+    },
+
+    componentWillMount: function() {
+        this._checkServerLiveliness(this.props.serverConfig);
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
+            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+
+        // Do a liveliness check on the new URLs
+        this._checkServerLiveliness(newProps.serverConfig);
+    },
+
+    _checkServerLiveliness: async function(serverConfig) {
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                serverConfig.hsUrl,
+                serverConfig.isUrl,
+            );
+            this.setState({serverIsAlive: true});
+        } catch (e) {
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
+        }
     },
 
     submitPasswordReset: function(email, password) {
@@ -86,8 +117,10 @@ module.exports = React.createClass({
         });
     },
 
-    onSubmitForm: function(ev) {
+    onSubmitForm: async function(ev) {
         ev.preventDefault();
+
+        await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -173,9 +206,18 @@ module.exports = React.createClass({
         const Field = sdk.getComponent('elements.Field');
 
         let errorText = null;
-        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        const err = this.state.errorText;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
+        }
+
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            serverDeadSection = (
+                <div className="mx_Login_error mx_Login_serverError">
+                    {this.state.serverDeadError}
+                </div>
+            );
         }
 
         let yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
@@ -207,11 +249,12 @@ module.exports = React.createClass({
         }
 
         return <div>
+            {errorText}
+            {serverDeadSection}
             <h3>
                 {yourMatrixAccountText}
                 {editLink}
             </h3>
-            {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
@@ -246,7 +289,11 @@ module.exports = React.createClass({
                     'A verification email will be sent to your inbox to confirm ' +
                     'setting your new password.',
                 )}</span>
-                <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
+                <input
+                    className="mx_Login_submit"
+                    type="submit"
+                    value={_t('Send Reset Email')}
+                />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                 {_t('Sign in instead')}

@@ -62,6 +62,11 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+.mx_Login_error.mx_Login_serverError {
+    text-align: left;
+    font-weight: normal;
+}
+
 .mx_Login_type_container {
     display: flex;
     align-items: center;
