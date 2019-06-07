@@ -1360,7 +1360,7 @@
     "Other users can invite you to rooms using your contact details": "Other users can invite you to rooms using your contact details",
     "Enter phone number (required on this homeserver)": "Enter phone number (required on this homeserver)",
     "Doesn't look like a valid phone number": "Doesn't look like a valid phone number",
-    "Use letters, numbers, dashes and underscores only": "Use letters, numbers, dashes and underscores only",
+    "Use lowercase letters, numbers, dashes and underscores only": "Use lowercase letters, numbers, dashes and underscores only",
     "Enter username": "Enter username",
     "Some characters not allowed": "Some characters not allowed",
     "Email (optional)": "Email (optional)",
