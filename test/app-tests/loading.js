@@ -240,6 +240,10 @@ describe('loading:', function() {
                 uriFragment: "#/room/!room:id",
             });
 
+            // Pass the liveliness checks
+            httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+            httpBackend.when("GET", "/api/v1").respond(200, {});
+
             Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
@@ -277,6 +281,10 @@ describe('loading:', function() {
                 uriFragment: "#/login",
             });
 
+            // Pass the liveliness checks
+            httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+            httpBackend.when("GET", "/api/v1").respond(200, {});
+
             return awaitLoginComponent(matrixChat).then(() => {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
@@ -285,8 +293,13 @@ describe('loading:', function() {
                 // the only outstanding request should be a GET /login
                 // (in particular there should be no /register request for
                 // guest registration).
+                const allowedRequests = [
+                    "/_matrix/client/r0/login",
+                    "/versions",
+                    "/api/v1",
+                ];
                 for (const req of httpBackend.requests) {
-                    if (req.method === 'GET' && req.path.endsWith('/_matrix/client/r0/login')) {
+                    if (req.method === 'GET' && allowedRequests.find(p => req.path.endsWith(p))) {
                         continue;
                     }
 
@@ -387,6 +400,10 @@ describe('loading:', function() {
             });
 
             it('shows a login view', function() {
+                // Pass the liveliness checks
+                httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+                httpBackend.when("GET", "/api/v1").respond(200, {});
+
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.auth.Login'),
@@ -395,8 +412,13 @@ describe('loading:', function() {
                 // the only outstanding request should be a GET /login
                 // (in particular there should be no /register request for
                 // guest registration, nor /sync, etc).
+                const allowedRequests = [
+                    "/_matrix/client/r0/login",
+                    "/versions",
+                    "/api/v1",
+                ];
                 for (const req of httpBackend.requests) {
-                    if (req.method === 'GET' && req.path.endsWith('/_matrix/client/r0/login')) {
+                    if (req.method === 'GET' && allowedRequests.find(p => req.path.endsWith(p))) {
                         continue;
                     }
 
@@ -405,6 +427,10 @@ describe('loading:', function() {
             });
 
             it('shows the homepage after login', function() {
+                // Pass the liveliness checks
+                httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+                httpBackend.when("GET", "/api/v1").respond(200, {});
+
                 return completeLogin(matrixChat).then(() => {
                     // we should see a home page, even though we previously had
                     // a stored mx_last_room_id

@@ -368,20 +368,12 @@ async function loadApp() {
 
             let errorMessage = err.translatedMessage
                 || _t("Unexpected error preparing the app. See console for details.");
-            errorMessage = <span>
-                {_t(
-                    "This installation of Riot seems to have an invalid server configuration. " +
-                    "If you are the administrator, please correct the error below",
-                )}
-                <br />
-                <br />
-                {errorMessage}
-            </span>;
+            errorMessage = <span>{errorMessage}</span>;
 
             // Like the compatibility page, AWOOOOOGA at the user
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
             window.matrixChat = ReactDOM.render(
-                <GenericErrorPage message={errorMessage} />,
+                <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
                 document.getElementById('matrixchat'),
             );
         });
@@ -465,6 +457,11 @@ async function verifyServerConfig() {
         // context of email validation. Because we don't respect them otherwise, we do not need
         // to parse or consider them here.
 
+        // Note: Although we throw all 3 possible configuration options through a .well-known-style
+        // verification, we do not care if the servers are online at this point. We do moderately
+        // care if they are syntactically correct though, so we shove them through the .well-known
+        // validators for that purpose.
+
         const config = SdkConfig.get();
         let wkConfig = config['default_server_config']; // overwritten later under some conditions
         const serverName = config['default_server_name'];
@@ -486,6 +483,10 @@ async function verifyServerConfig() {
 
         if (hsUrl) {
             console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
+            console.warn(
+                "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
+                "default_server_config instead.",
+            );
 
             wkConfig = {
                 "m.homeserver": {
@@ -507,10 +508,14 @@ async function verifyServerConfig() {
 
         if (serverName) {
             console.log("Config uses a default_server_name - doing .well-known lookup");
+            console.warn(
+                "DEPRECATED CONFIG OPTION: In the future, default_server_name will not be accepted. Please " +
+                "use default_server_config instead.",
+            );
             discoveryResult = await AutoDiscovery.findClientConfig(serverName);
         }
 
-        validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult);
+        validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
     } catch (e) {
         const {hsUrl, isUrl, userId} = Lifecycle.getLocalStorageSessionVars();
         if (hsUrl && userId) {
@@ -518,7 +523,7 @@ async function verifyServerConfig() {
             console.warn("A session was found - suppressing config error and using the session's homeserver");
 
             console.log("Using pre-existing hsUrl and isUrl: ", {hsUrl, isUrl});
-            validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);
         } else {
             // the user is not logged in, so scream
             throw e;
