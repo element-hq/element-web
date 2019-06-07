@@ -1934,5 +1934,13 @@
     "Sign in to your Matrix account on <underlinedServerName />": "Accedi al tuo account Matrix su <underlinedServerName />",
     "Create your Matrix account on <underlinedServerName />": "Crea il tuo account Matrix su <underlinedServerName />",
     "Your Matrix account on <underlinedServerName />": "Il tuo account Matrix su <underlinedServerName />",
-    "Low bandwidth mode": "Modalità larghezza di banda bassa"
+    "Low bandwidth mode": "Modalità larghezza di banda bassa",
+    "Custom Notification Sounds": "Suoni di notifica personalizzati",
+    "Show recently visited rooms above the room list": "Mostra le stanze visitate di recente sopra l'elenco stanze",
+    "Uploaded sound": "Suono inviato",
+    "Sounds": "Suoni",
+    "Notification sound": "Suoni di notifica",
+    "Reset": "Ripristina",
+    "Set a new custom sound": "Imposta un nuovo suono personalizzato",
+    "Browse": "Sfoglia"
 }
