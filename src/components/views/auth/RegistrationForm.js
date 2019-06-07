@@ -380,7 +380,7 @@ module.exports = React.createClass({
     },
 
     validateUsernameRules: withValidation({
-        description: () => _t("Use letters, numbers, dashes and underscores only"),
+        description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
         rules: [
             {
                 key: "required",
