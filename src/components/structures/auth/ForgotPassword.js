@@ -82,10 +82,8 @@ module.exports = React.createClass({
                 serverConfig.isUrl,
             );
             this.setState({serverIsAlive: true});
-            return true;
         } catch (e) {
             this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
-            return false;
         }
     },
 
@@ -122,8 +120,7 @@ module.exports = React.createClass({
     onSubmitForm: async function(ev) {
         ev.preventDefault();
 
-        const shouldBlockSubmit = await this._checkServerLiveliness(this.props.serverConfig);
-        if (shouldBlockSubmit) return;
+        await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
