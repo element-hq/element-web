@@ -1892,5 +1892,10 @@
     "Notification sound": "Meldingsgeluid",
     "Reset": "Opnieuw instellen",
     "Set a new custom sound": "Stel een nieuw aangepast geluid in",
-    "Browse": "Bladeren"
+    "Browse": "Bladeren",
+    "Cannot reach homeserver": "Kan thuisserver niet bereiken",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Zorg dat u een stabiele internetverbinding heeft, of neem contact op met de systeembeheerder",
+    "Your Riot is misconfigured": "Uw Riot is verkeerd geconfigureerd",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Vraag uw Riot-beheerder om <a>uw configuratie</a> na te kijken op onjuiste of duplicate items.",
+    "Unexpected error resolving identity server configuration": "Onverwachte fout bij het oplossen van de identiteitsserverconfiguratie"
 }
