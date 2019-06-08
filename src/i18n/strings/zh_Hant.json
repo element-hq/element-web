@@ -1988,5 +1988,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "請確定您有穩定的網路連線，或與伺服器管理員聯繫",
     "Your Riot is misconfigured": "您的 Riot 沒有設定好",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "請要求您的 Riot 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
-    "Unexpected error resolving identity server configuration": "解析身份識別伺服器設定時發生未預期的錯誤"
+    "Unexpected error resolving identity server configuration": "解析身份識別伺服器設定時發生未預期的錯誤",
+    "Use lowercase letters, numbers, dashes and underscores only": "僅能使用小寫字母、數字、破折號與底線"
 }
