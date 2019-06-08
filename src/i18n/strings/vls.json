@@ -1645,5 +1645,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Zorgt da j’e stabiele internetverbiendienge èt, of neem contact op met de systeembeheerder",
     "Your Riot is misconfigured": "Je Riot is verkeerd geconfigureerd gewist",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Vroagt an je Riot-beheerder van <a>je configuroatie</a> noa te kykn ip verkeerde of duplicoate items.",
-    "Unexpected error resolving identity server configuration": "Ounverwachte foute by ’t iplossn van d’identiteitsserverconfiguroatie"
+    "Unexpected error resolving identity server configuration": "Ounverwachte foute by ’t iplossn van d’identiteitsserverconfiguroatie",
+    "Use lowercase letters, numbers, dashes and underscores only": "Gebruukt alleene moa letters, cyfers, streeptjes en underscores"
 }
