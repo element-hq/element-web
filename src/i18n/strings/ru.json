@@ -1656,7 +1656,7 @@
     "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "%(senderDisplayName)s включено для %(newGroups)s и отключено для %(oldGroups)s в этой комнате.",
     "Once enabled, encryption cannot be disabled.": "После включения шифрование не может быть отключено.",
     "Some devices for this user are not trusted": "Некоторые устройства для этого пользователя не являются доверенными",
-    "Some devices in this encrypted room are not trusted": "Некоторые устройства в этой зашифрованной комнате не являются доверенными",
+    "Some devices in this encrypted room are not trusted": "Некоторые устройства в этой зашифрованной комнате являются недоверенными",
     "All devices for this user are trusted": "Все устройства для этого пользователя являются доверенными",
     "All devices in this encrypted room are trusted": "Все устройства в этой зашифрованной комнате являются доверенными",
     "inline-code": "встроенный код",
