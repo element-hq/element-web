@@ -1531,7 +1531,7 @@
     "Pin": "Кнопка",
     "Your homeserver does not support device management.": "Ваш сервер не поддерживает управление устройством.",
     "Your keys are being backed up (the first backup could take a few minutes).": "Выполняется резервная копия ключей  (первый раз это может занять несколько минут).",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Размер файла \"%(fileName)s\" превышает лимит загрузок текущего сервера",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Размер файла \"%(fileName)s\" превышает разрешённый предел для текущего сервера",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения",
     "Changes your display nickname in the current room only": "Изменяет ваш псевдоним только для текущей комнаты",
     "Gets or sets the room topic": "Читает или устанавливает тему комнаты",
@@ -1894,5 +1894,11 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Если вы не установили новый метод восстановления, злоумышленник может попытаться получить доступ к вашей учетной записи. Измените пароль учетной записи и сразу установите новый способ восстановления в настройках.",
     "This device has detected that your recovery passphrase and key for Secure Messages have been removed.": "Это устройство обнаружило, что ваш пароль восстановления и ключ для безопасных сообщений были удалены.",
     "If you did this accidentally, you can setup Secure Messages on this device which will re-encrypt this device's message history with a new recovery method.": "Если вы сделали это случайно, вы можете настроить безопасные сообщения на этом устройстве, которые будут повторно зашифровать историю сообщений этого устройства с новым методом восстановления.",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Если вы не удалили метод восстановления, злоумышленник может попытаться получить доступ к вашей учетной записи. Измените пароль учетной записи и сразу установите новый способ восстановления в настройках."
+    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Если вы не удалили метод восстановления, злоумышленник может попытаться получить доступ к вашей учетной записи. Измените пароль учетной записи и сразу установите новый способ восстановления в настройках.",
+    "Cannot reach homeserver": "Не удается связаться с сервером",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Убедитесь, что у вас есть стабильное подключение к интернету, или свяжитесь с администратором сервера",
+    "Your Riot is misconfigured": "Ваш Риот неправильно настроен",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Попросите администратора Riot проверить <a>конфигурационный файл</a > на наличие неправильных или повторяющихся записей.",
+    "Unexpected error resolving identity server configuration": "Неопределённая ошибка при разборе опции сервера идентификации",
+    "Use lowercase letters, numbers, dashes and underscores only": "Используйте только строчные буквы, цифры, тире и подчеркивания"
 }
