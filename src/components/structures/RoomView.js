@@ -1553,7 +1553,7 @@ module.exports = React.createClass({
                             inviterName={inviterName}
                             invitedEmail={invitedEmail}
                             oobData={this.props.oobData}
-                            signUrl={this.props.thirdPartyInvite.inviteSignUrl}
+                            signUrl={this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : null}
                             room={this.state.room}
                         />
                     </div>
