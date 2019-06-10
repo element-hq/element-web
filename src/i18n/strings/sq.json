@@ -1947,5 +1947,11 @@
     "Sounds": "Tinguj",
     "Notification sound": "Tingull njoftimi",
     "Set a new custom sound": "Caktoni një tingull të ri vetjak",
-    "Browse": "Shfletoni"
+    "Browse": "Shfletoni",
+    "Cannot reach homeserver": "S’kapet dot shërbyesi Home",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Sigurohuni se keni një lidhje të qëndrueshme internet, ose lidhuni me përgjegjësin e shërbyesit",
+    "Your Riot is misconfigured": "Riot-i juaj është i keqformësuar",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Kërkojini përgjegjësit të Riot-it tuaj të kontrollojë <a>formësimin tuaj</a> për zëra të pasaktë ose të përsëdytur.",
+    "Unexpected error resolving identity server configuration": "Gabim i papritur teksa ftillohej  formësimi i shërbyesit të identiteteve",
+    "Use lowercase letters, numbers, dashes and underscores only": "Përdorni vetëm shkronja të vogla, numra, vija ndarëse dhe nënvija"
 }

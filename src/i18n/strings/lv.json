@@ -1131,5 +1131,6 @@
     "e.g. <CurrentPageURL>": "piemēram <CurrentPageURL>",
     "Your device resolution": "Tavas iekārtas izšķirtspēja",
     "Sign In": "Ienākt",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Varat arī iestatīt pielāgotu identitātes serveri, bet jūs nevarēsiet uzaicināt lietotājus izmantojot e-pasta adresi, kā arī tikt uzaicināts pēc e-pasta adreses."
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Varat arī iestatīt pielāgotu identitātes serveri, bet jūs nevarēsiet uzaicināt lietotājus izmantojot e-pasta adresi, kā arī tikt uzaicināts pēc e-pasta adreses.",
+    "Whether or not you're logged in (we don't record your username)": "Esat vai neesat pieteicies (mēs nesaglabājam jūsu lietotājvārdu)"
 }

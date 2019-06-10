@@ -1899,5 +1899,11 @@
     "Notification sound": "Zvuk notifikace",
     "Reset": "Resetovat",
     "Set a new custom sound": "Nastavit vlastní zvuk",
-    "Browse": "Prohlížet"
+    "Browse": "Prohlížet",
+    "Cannot reach homeserver": "Nelze se připojit k domovskému serveru",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Ujistěte se, že máte stabilní internetové připojení. Případně problém řešte s administrátorem serveru",
+    "Your Riot is misconfigured": "Riot je špatně nakonfigurován",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Zeptejte se svého administrátora, jestli by vám nezkontrolovat <a>konfiguraci Riotu</a>, asi obsahuje chyby nebo duplicity.",
+    "Unexpected error resolving identity server configuration": "Chyba při hledání konfigurace serveru identity",
+    "Use lowercase letters, numbers, dashes and underscores only": "Používejte pouze malá písmena, čísla, pomlčky a podtržítka"
 }
