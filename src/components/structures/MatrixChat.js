@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017-2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -435,9 +436,15 @@ export default React.createClass({
                 break;
             case 'start_registration':
                 // This starts the full registration flow
+                if (payload.screenAfterLogin) {
+                    this._screenAfterLogin = payload.screenAfterLogin;
+                }
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
+                if (payload.screenAfterLogin) {
+                    this._screenAfterLogin = payload.screenAfterLogin;
+                }
                 this.setStateForNewView({
                     view: VIEWS.LOGIN,
                 });
