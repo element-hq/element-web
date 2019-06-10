@@ -23,6 +23,8 @@ import PropTypes from 'prop-types';
 
 import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
 
+import sdk from '../../index';
+
 export default React.createClass({
     displayName: 'InteractiveAuth',
 
@@ -90,7 +92,8 @@ export default React.createClass({
         this._unmounted = false;
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
-            doRequest: this._requestCallback,
+            doRequest: this.props.makeRequest,
+            setBusy: this._setBusy,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
             matrixClient: this.props.matrixClient,
@@ -165,27 +168,19 @@ export default React.createClass({
         });
     },
 
-    _requestCallback: function(auth, background) {
-        const makeRequestPromise = this.props.makeRequest(auth);
-
-        // if it's a background request, just do it: we don't want
-        // it to affect the state of our UI.
-        if (background) return makeRequestPromise;
-
-        // otherwise, manage the state of the spinner and error messages
-        this.setState({
-            busy: true,
-            errorText: null,
-            stageErrorText: null,
-        });
-        return makeRequestPromise.finally(() => {
-            if (this._unmounted) {
-                return;
-            }
+    _setBusy: function(busy) {
+        // if we've started doing stuff, reset the error messages
+        if (busy) {
+            this.setState({
+                busy: true,
+                errorText: null,
+                stageErrorText: null,
+            });
+        } else {
             this.setState({
                 busy: false,
             });
-        });
+        }
     },
 
     _setFocus: function() {
@@ -200,7 +195,14 @@ export default React.createClass({
 
     _renderCurrentStage: function() {
         const stage = this.state.authStage;
-        if (!stage) return null;
+        if (!stage) {
+            if (this.state.busy) {
+                const Loader = sdk.getComponent("elements.Spinner");
+                return <Loader />;
+            } else {
+                return null;
+            }
+        }
 
         const StageComponent = getEntryComponentForLoginType(stage);
         return (
