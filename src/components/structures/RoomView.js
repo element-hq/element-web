@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -1552,6 +1553,7 @@ module.exports = React.createClass({
                             inviterName={inviterName}
                             invitedEmail={invitedEmail}
                             oobData={this.props.oobData}
+                            signUrl={this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : null}
                             room={this.state.room}
                         />
                     </div>
