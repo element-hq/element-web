@@ -36,6 +36,20 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
+    componentDidMount() {
+        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+    }
+
+    componentWillUnmount() {
+        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+    }
+
+    onDecrypted = () => {
+        // When an event decrypts, it is likely to change the set of available
+        // actions, so we force an update to check again.
+        this.forceUpdate();
+    }
+
     onFocusChange = (focused) => {
         if (!this.props.onFocusChange) {
             return;
