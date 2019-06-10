@@ -71,7 +71,7 @@ export default class MessageActionBar extends React.PureComponent {
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         const x = buttonRect.right + window.pageXOffset;
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
+        const y = buttonRect.bottom + window.pageYOffset;
 
         const { getTile, getReplyThread } = this.props;
         const tile = getTile && getTile();
@@ -83,9 +83,10 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         createMenu(MessageContextMenu, {
-            chevronOffset: 10,
             mxEvent: this.props.mxEvent,
-            left: x,
+            chevronFace: "none",
+            // Align the right edge of the menu to the right edge of the button
+            right: window.innerWidth - x,
             top: y,
             permalinkCreator: this.props.permalinkCreator,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
