@@ -39,7 +39,11 @@ limitations under the License.
     z-index: 5001;
 }
 
-.mx_ContextualMenu.mx_ContextualMenu_right {
+.mx_ContextualMenu_right {
+    right: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_right {
     right: 8px;
 }
 
@@ -66,7 +70,11 @@ limitations under the License.
     right: 1px;
 }
 
-.mx_ContextualMenu.mx_ContextualMenu_left {
+.mx_ContextualMenu_left {
+    left: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_left {
     left: 8px;
 }
 
@@ -93,7 +101,11 @@ limitations under the License.
     left: 1px;
 }
 
-.mx_ContextualMenu.mx_ContextualMenu_top {
+.mx_ContextualMenu_top {
+    top: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_top {
     top: 8px;
 }
 
@@ -120,7 +132,11 @@ limitations under the License.
     top: 1px;
 }
 
-.mx_ContextualMenu.mx_ContextualMenu_bottom {
+.mx_ContextualMenu_bottom {
+    bottom: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_bottom {
     bottom: 8px;
 }
 

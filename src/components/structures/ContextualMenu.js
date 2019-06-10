@@ -183,11 +183,14 @@ export default class ContextualMenu extends React.Component {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            'mx_ContextualMenu_noChevron': chevronFace === 'none',
-            'mx_ContextualMenu_left': chevronFace === 'left',
-            'mx_ContextualMenu_right': chevronFace === 'right',
-            'mx_ContextualMenu_top': chevronFace === 'top',
-            'mx_ContextualMenu_bottom': chevronFace === 'bottom',
+            'mx_ContextualMenu_left': !hasChevron && position.left,
+            'mx_ContextualMenu_right': !hasChevron && position.right,
+            'mx_ContextualMenu_top': !hasChevron && position.top,
+            'mx_ContextualMenu_bottom': !hasChevron && position.bottom,
+            'mx_ContextualMenu_withChevron_left': chevronFace === 'left',
+            'mx_ContextualMenu_withChevron_right': chevronFace === 'right',
+            'mx_ContextualMenu_withChevron_top': chevronFace === 'top',
+            'mx_ContextualMenu_withChevron_bottom': chevronFace === 'bottom',
         });
 
         const menuStyle = {};
