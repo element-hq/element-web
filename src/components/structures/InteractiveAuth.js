@@ -92,7 +92,7 @@ export default React.createClass({
         this._unmounted = false;
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
-            doRequest: this.props.makeRequest,
+            doRequest: this._requestCallback,
             setBusy: this._setBusy,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
@@ -166,6 +166,13 @@ export default React.createClass({
         }, () => {
             if (oldStage != stageType) this._setFocus();
         });
+    },
+
+    _requestCallback: function(auth) {
+        // This wrapper just exists because the js-sdk passes a second
+        // 'busy' param for backwards compat. This throws the tests off
+        // so discard it here.
+        return this.props.makeRequest(auth);
     },
 
     _setBusy: function(busy) {
