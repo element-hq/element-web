@@ -93,7 +93,7 @@ export default React.createClass({
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
             doRequest: this._requestCallback,
-            setBusy: this._setBusy,
+            busyChanged: this._onBusyChanged,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
             matrixClient: this.props.matrixClient,
@@ -175,7 +175,7 @@ export default React.createClass({
         return this.props.makeRequest(auth);
     },
 
-    _setBusy: function(busy) {
+    _onBusyChanged: function(busy) {
         // if we've started doing stuff, reset the error messages
         if (busy) {
             this.setState({
