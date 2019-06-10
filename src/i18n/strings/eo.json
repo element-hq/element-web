@@ -45,5 +45,6 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Vi povas uzi proprajn servilajn elekteblojn por saluti aliajn servilojn de Matrix, donante alian hejmeservilan URL-on. Tio povigos vin uzi programon Riot kun jama konto de Matrix en alia hejmservilo.",
     "Unexpected error preparing the app. See console for details.": "Neatendida eraro okazis dum preparad de la aplikaĵo. Detalojn trovu en konzolo.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Nevalida agordo: vi povas specifi nur unu elekteblon el « default_server_config », « default_server_name », aŭ « default_hs_url ».",
-    "Invalid configuration: no default server specified.": "Nevalida agordo: neniu implicita servilo estas specifita."
+    "Invalid configuration: no default server specified.": "Nevalida agordo: neniu implicita servilo estas specifita.",
+    "Your Riot is misconfigured": "Via kliento Riot estas misagordita"
 }
