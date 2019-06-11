@@ -291,20 +291,12 @@ limitations under the License.
 }
 
 .mx_EventTile_spoiler_content {
-    background-color: black;
+    filter: blur(5px) saturate(0.1) sepia(1);
+    transition-duration: 0.5s;
 }
-
-.mx_EventTile_spoiler_content > span {
-    visibility: hidden;
-}
-
 
 .mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content {
-    background-color: initial;
-}
-
-.mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content > span {
-    visibility: visible;
+    filter: none;
 }
 
 /* End to end encryption stuff */

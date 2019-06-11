@@ -23,9 +23,7 @@ module.exports = React.createClass({
             <span className={"mx_EventTile_spoiler" + (this.state.visible ? " visible" : "")} onClick={this.toggleVisible.bind(this)}>
                 { reason }
                 &nbsp;
-                <span className="mx_EventTile_spoiler_content">
-                    <span dangerouslySetInnerHTML={{ __html: this.props.contentHtml }} />
-                </span>
+                <span className="mx_EventTile_spoiler_content" dangerouslySetInnerHTML={{ __html: this.props.contentHtml }} />
             </span>
         );
     }
