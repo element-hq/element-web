@@ -241,7 +241,7 @@ module.exports = React.createClass({
         const doWellknownLookup = username[0] === "@";
         this.setState({
             username: username,
-            busy: doWellknownLookup, // unset later by the result of onServerConfigChange
+            busy: doWellknownLookup,
             errorText: null,
             canTryLogin: true,
         });
@@ -250,6 +250,16 @@ module.exports = React.createClass({
             try {
                 const result = await AutoDiscoveryUtils.validateServerName(serverName);
                 this.props.onServerConfigChange(result);
+                // We'd like to rely on new props coming in via `onServerConfigChange`
+                // so that we know the servers have definitely updated before clearing
+                // the busy state. In the case of a full MXID that resolves to the same
+                // HS as Riot's default HS though, there may not be any server change.
+                // To avoid this trap, we clear busy here. For cases where the server
+                // actually has changed, `_initLoginLogic` will be called and manages
+                // busy state for its own liveness check.
+                this.setState({
+                    busy: false,
+                });
             } catch (e) {
                 console.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
 
