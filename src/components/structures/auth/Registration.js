@@ -486,7 +486,7 @@ module.exports = React.createClass({
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
-                canSubmit={this.state.serverIsAlive && !this.state.serverErrorIsFatal}
+                canSubmit={!this.state.serverErrorIsFatal}
             />;
         }
     },
