@@ -88,6 +88,10 @@ module.exports = React.createClass({
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
+
+            // Our matrix client - part of state because we can't render the UI auth
+            // component without it.
+            matrixClient: null,
         };
     },
 
@@ -159,6 +163,9 @@ module.exports = React.createClass({
     _replaceClient: async function(serverConfig) {
         this.setState({
             errorText: null,
+            // busy while we do liveness check (we need to avoid trying to render
+            // the UI auth component while we don't have a matrix client)
+            busy: true,
         });
         if (!serverConfig) serverConfig = this.props.serverConfig;
 
@@ -177,10 +184,13 @@ module.exports = React.createClass({
         }
 
         const {hsUrl, isUrl} = serverConfig;
-        this._matrixClient = Matrix.createClient({
-            baseUrl: hsUrl,
-            idBaseUrl: isUrl,
+        this.setState({
+            matrixClient: Matrix.createClient({
+                baseUrl: hsUrl,
+                idBaseUrl: isUrl,
+            }),
         });
+        this.setState({busy: false});
         try {
             await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
@@ -213,14 +223,14 @@ module.exports = React.createClass({
     },
 
     _requestEmailToken: function(emailAddress, clientSecret, sendAttempt, sessionId) {
-        return this._matrixClient.requestRegisterEmailToken(
+        return this.state.matrixClient.requestRegisterEmailToken(
             emailAddress,
             clientSecret,
             sendAttempt,
             this.props.makeRegistrationUrl({
                 client_secret: clientSecret,
-                hs_url: this._matrixClient.getHomeserverUrl(),
-                is_url: this._matrixClient.getIdentityServerUrl(),
+                hs_url: this.state.matrixClient.getHomeserverUrl(),
+                is_url: this.state.matrixClient.getIdentityServerUrl(),
                 session_id: sessionId,
             }),
         );
@@ -278,8 +288,8 @@ module.exports = React.createClass({
         const cli = await this.props.onLoggedIn({
             userId: response.user_id,
             deviceId: response.device_id,
-            homeserverUrl: this._matrixClient.getHomeserverUrl(),
-            identityServerUrl: this._matrixClient.getIdentityServerUrl(),
+            homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+            identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
             accessToken: response.access_token,
         });
 
@@ -348,7 +358,7 @@ module.exports = React.createClass({
             msisdn: true,
         } : {};
 
-        return this._matrixClient.register(
+        return this.state.matrixClient.register(
             this.state.formVals.username,
             this.state.formVals.password,
             undefined, // session id: included in the auth dict already
@@ -433,9 +443,9 @@ module.exports = React.createClass({
         const Spinner = sdk.getComponent('elements.Spinner');
         const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
 
-        if (this.state.doingUIAuth) {
+        if (this.state.matrixClient && this.state.doingUIAuth) {
             return <InteractiveAuth
-                matrixClient={this._matrixClient}
+                matrixClient={this.state.matrixClient}
                 makeRequest={this._makeRegisterRequest}
                 onAuthFinished={this._onUIAuthFinished}
                 inputs={this._getUIAuthInputs()}
