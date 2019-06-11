@@ -1543,5 +1543,9 @@
     "Rotate clockwise": "Turni laŭhorloĝe",
     "Edit message": "Redakti mesaĝon",
     "This room has already been upgraded.": "Ĉi tiu ĉambro jam gradaltiĝis.",
-    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <i>nestabilan</i>."
+    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <i>nestabilan</i>.",
+    "Your Riot is misconfigured": "Via kliento Riot estas misagordita",
+    "All devices for this user are trusted": "Ĉiuj aparatoj de tiu ĉi uzanto estas fidataj",
+    "All devices in this encrypted room are trusted": "Ĉiuj aparatoj en ĉi tiu ĉifrita ĉambro estas fidataj",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Via peto por havigo de ŝlosilo sendiĝis – bonvolu kontroli viajn aliajn aparatojn pro petoj."
 }
