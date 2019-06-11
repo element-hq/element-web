@@ -1989,5 +1989,15 @@
     "Notification sound": "Son de notification",
     "Reset": "Réinitialiser",
     "Set a new custom sound": "Définir un nouveau son personnalisé",
-    "Browse": "Parcourir"
+    "Browse": "Parcourir",
+    "Cannot reach homeserver": "Impossible de joindre le serveur d’accueil",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Vérifiez que vous avec une connexion internet stable ou contactez l’administrateur du serveur",
+    "Your Riot is misconfigured": "Votre Riot est mal configuré",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Demandez à votre administrateur Riot de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
+    "Unexpected error resolving identity server configuration": "Une erreur inattendue est survenue pendant la résolution de la configuration du serveur d’identité",
+    "Use lowercase letters, numbers, dashes and underscores only": "Utiliser uniquement des lettres, chiffres, traits d’union et tirets bas",
+    "Cannot reach identity server": "Impossible de joindre le serveur d’identité",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez vous inscrire, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez réinitialiser votre mot de passe, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez vous connecter, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur."
 }

@@ -1981,5 +1981,19 @@
     "Sign in to your Matrix account on <underlinedServerName />": "Bejelentkezés a Matrix fiókba itt: <underlinedServerName />",
     "Create your Matrix account on <underlinedServerName />": "Matrix fiók létrehozása itt: <underlinedServerName />",
     "Your Matrix account on <underlinedServerName />": "A Matrix fiókod itt: <underlinedServerName />",
-    "Low bandwidth mode": "Alacsony sávszélesség mód"
+    "Low bandwidth mode": "Alacsony sávszélesség mód",
+    "Cannot reach homeserver": "A matrix szerver elérhetetlen",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Legyen stabil az Internet elérésed vagy a szerver adminisztrátorával vedd fel a kapcsolatot",
+    "Your Riot is misconfigured": "A Riotod hibásan van beállítva",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Kérd meg a Riot adminisztrátorodat, hogy ellenőrizze a <a>beállításaidat</a> hibás vagy duplikált bejegyzéseket keresve.",
+    "Unexpected error resolving identity server configuration": "Az azonosítási szerver beállításainak feldolgozásánál váratlan hiba történt",
+    "Show recently visited rooms above the room list": "Legutóbb meglátogatott szobák megjelenítése a szobalista felett",
+    "Uploaded sound": "Feltöltött hang",
+    "Sounds": "Hangok",
+    "Notification sound": "Értesítési hang",
+    "Reset": "Visszaállít",
+    "Set a new custom sound": "Új egyedi hang beállítása",
+    "Browse": "Böngész",
+    "Use lowercase letters, numbers, dashes and underscores only": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj",
+    "Cannot reach identity server": "Az azonosítási szerver nem érhető el"
 }
