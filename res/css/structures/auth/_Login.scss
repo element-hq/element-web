@@ -67,6 +67,10 @@ limitations under the License.
     font-weight: normal;
 }
 
+.mx_Login_error.mx_Login_serverError.mx_Login_serverErrorNonFatal {
+    color: $orange-warning-color;
+}
+
 .mx_Login_type_container {
     display: flex;
     align-items: center;
