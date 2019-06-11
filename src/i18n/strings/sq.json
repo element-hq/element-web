@@ -46,5 +46,6 @@
     "Unexpected error preparing the app. See console for details.": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Formësim i pavlefshëm: mund të caktohet vetëm një prej default_server_config, default_server_name, ose default_hs_url.",
     "Invalid configuration: no default server specified.": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
-    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Ky instalim i Riot-it duket se ka një formësim të pavlefshëm për shërbyesin. Nëse jeni një përgjegjës, ju lutemi, ndreqni gabimin më poshtë"
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Ky instalim i Riot-it duket se ka një formësim të pavlefshëm për shërbyesin. Nëse jeni një përgjegjës, ju lutemi, ndreqni gabimin më poshtë",
+    "Your Riot is misconfigured": "Riot-i juaj është i keqformësuar"
 }

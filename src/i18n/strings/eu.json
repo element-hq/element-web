@@ -42,5 +42,8 @@
     "Create Account": "Sortu kontua",
     "Need help?": "Laguntza behar?",
     "Explore rooms": "Arakatu gelak",
-    "Room Directory": "Gelen direktorioa"
+    "Room Directory": "Gelen direktorioa",
+    "Unexpected error preparing the app. See console for details.": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan.",
+    "Your Riot is misconfigured": "Zure Riot gaizki konfiguratuta dago",
+    "Invalid configuration: no default server specified.": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu."
 }
