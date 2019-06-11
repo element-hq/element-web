@@ -11,7 +11,12 @@ module.exports = React.createClass({
         };
     },
 
-    toggleVisible() {
+    toggleVisible(e) {
+        if (!this.state.visible) {
+            // we are un-blurring, we don't want this click to propagate to potential child pills
+            e.preventDefault();
+            e.stopPropagation();
+        }
         this.setState({ visible: !this.state.visible });
     },
 
