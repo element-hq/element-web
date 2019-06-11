@@ -1994,5 +1994,6 @@
     "Reset": "Visszaállít",
     "Set a new custom sound": "Új egyedi hang beállítása",
     "Browse": "Böngész",
-    "Use lowercase letters, numbers, dashes and underscores only": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj"
+    "Use lowercase letters, numbers, dashes and underscores only": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj",
+    "Cannot reach identity server": "Az azonosítási szerver nem érhető el"
 }
