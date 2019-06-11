@@ -1989,5 +1989,11 @@
     "Notification sound": "Son de notification",
     "Reset": "Réinitialiser",
     "Set a new custom sound": "Définir un nouveau son personnalisé",
-    "Browse": "Parcourir"
+    "Browse": "Parcourir",
+    "Cannot reach homeserver": "Impossible de joindre le serveur d’accueil",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Vérifiez que vous avec une connexion internet stable ou contactez l’administrateur du serveur",
+    "Your Riot is misconfigured": "Votre Riot est mal configuré",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Demandez à votre administrateur Riot de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
+    "Unexpected error resolving identity server configuration": "Une erreur inattendue est survenue pendant la résolution de la configuration du serveur d’identité",
+    "Use lowercase letters, numbers, dashes and underscores only": "Utiliser uniquement des lettres, chiffres, traits d’union et tirets bas"
 }
