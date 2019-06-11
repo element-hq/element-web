@@ -27,6 +27,7 @@ import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from "classnames";
 
 // Phases
 // Show controls to configure server details
@@ -85,6 +86,7 @@ module.exports = React.createClass({
             // that we can render it differently, and override any other error the user may
             // be seeing.
             serverIsAlive: true,
+            serverErrorIsFatal: false,
             serverDeadError: "",
         };
     },
@@ -168,8 +170,10 @@ module.exports = React.createClass({
             );
             this.setState({serverIsAlive: true});
         } catch (e) {
-            this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
-            return; // Server is dead - do not continue.
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "register"));
+            if (this.state.serverErrorIsFatal) {
+                return; // Server is dead - do not continue.
+            }
         }
 
         const {hsUrl, isUrl} = serverConfig;
@@ -467,7 +471,7 @@ module.exports = React.createClass({
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
-                canSubmit={this.state.serverIsAlive}
+                canSubmit={this.state.serverIsAlive && !this.state.serverErrorIsFatal}
             />;
         }
     },
@@ -485,8 +489,13 @@ module.exports = React.createClass({
 
         let serverDeadSection;
         if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
+            });
             serverDeadSection = (
-                <div className="mx_Login_error mx_Login_serverError">
+                <div className={classes}>
                     {this.state.serverDeadError}
                 </div>
             );

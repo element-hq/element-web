@@ -20,7 +20,7 @@ import {_t, _td, newTranslatableError} from "../languageHandler";
 import {makeType} from "./TypeUtils";
 import SdkConfig from "../SdkConfig";
 
-const LIVLINESS_DISCOVERY_ERRORS = [
+const LIVELINESS_DISCOVERY_ERRORS = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
@@ -46,17 +46,18 @@ export default class AutoDiscoveryUtils {
      */
     static isLivelinessError(error: string|Error): boolean {
         if (!error) return false;
-        return !!LIVLINESS_DISCOVERY_ERRORS.find(e => e === error || e === error.message);
+        return !!LIVELINESS_DISCOVERY_ERRORS.find(e => e === error || e === error.message);
     }
 
     /**
      * Gets the common state for auth components (login, registration, forgot
      * password) for a given validation error.
      * @param {Error} err The error encountered.
-     * @returns {{serverDeadError: (string|*), serverIsAlive: boolean}} The state
-     * for the component, given the error.
+     * @param {string} pageName The page for which the error should be customized to. See
+     * implementation for known values.
+     * @returns {*} The state for the component, given the error.
      */
-    static authComponentStateForError(err: Error): {serverIsAlive: boolean, serverDeadError: string} {
+    static authComponentStateForError(err: Error, pageName="login"): Object {
         let title = _t("Cannot reach homeserver");
         let body = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
@@ -75,8 +76,38 @@ export default class AutoDiscoveryUtils {
             );
         }
 
+        let isFatalError = true;
+        const errorMessage = err.message ? err.message : err;
+        if (errorMessage === AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER) {
+            isFatalError = false;
+            title = _t("Cannot reach identity server");
+
+            // It's annoying having a ladder for the third word in the same sentence, but our translations
+            // don't make this easy to avoid.
+            if (pageName === "register") {
+                body = _t(
+                    "You can register, but some features will be unavailable until the identity server is " +
+                    "back online. If you keep seeing this warning, check your configuration or contact a server " +
+                    "admin.",
+                );
+            } else if (pageName === "reset_password") {
+                body = _t(
+                    "You can reset your password, but some features will be unavailable until the identity " +
+                    "server is back online. If you keep seeing this warning, check your configuration or contact " +
+                    "a server admin.",
+                );
+            } else {
+                body = _t(
+                    "You can log in, but some features will be unavailable until the identity server is " +
+                    "back online. If you keep seeing this warning, check your configuration or contact a server " +
+                    "admin.",
+                );
+            }
+        }
+
         return {
             serverIsAlive: false,
+            serverErrorIsFatal: isFatalError,
             serverDeadError: (
                 <div>
                     <strong>{title}</strong>

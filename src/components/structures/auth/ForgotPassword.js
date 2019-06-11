@@ -23,6 +23,7 @@ import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from 'classnames';
 
 // Phases
 // Show controls to configure server details
@@ -59,6 +60,7 @@ module.exports = React.createClass({
             // that we can render it differently, and override any other error the user may
             // be seeing.
             serverIsAlive: true,
+            serverErrorIsFatal: false,
             serverDeadError: "",
         };
     },
@@ -83,7 +85,7 @@ module.exports = React.createClass({
             );
             this.setState({serverIsAlive: true});
         } catch (e) {
-            this.setState(AutoDiscoveryUtils.authComponentStateForError(e));
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
         }
     },
 
@@ -120,6 +122,7 @@ module.exports = React.createClass({
     onSubmitForm: async function(ev) {
         ev.preventDefault();
 
+        // refresh the server errors, just in case the server came back online
         await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
@@ -213,8 +216,13 @@ module.exports = React.createClass({
 
         let serverDeadSection;
         if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
+            });
             serverDeadSection = (
-                <div className="mx_Login_error mx_Login_serverError">
+                <div className={classes}>
                     {this.state.serverDeadError}
                 </div>
             );

@@ -26,6 +26,7 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from "classnames";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -100,6 +101,7 @@ module.exports = React.createClass({
             // that we can render it differently, and override any other error the user may
             // be seeing.
             serverIsAlive: true,
+            serverErrorIsFatal: false,
             serverDeadError: "",
         };
     },
@@ -349,7 +351,9 @@ module.exports = React.createClass({
                 busy: false,
                 ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
-            return; // Server is dead - do not continue.
+            if (this.state.serverErrorIsFatal) {
+                return; // Server is dead - do not continue.
+            }
         }
 
         loginLogic.getFlows().then((flows) => {
@@ -561,8 +565,13 @@ module.exports = React.createClass({
 
         let serverDeadSection;
         if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
+            });
             serverDeadSection = (
-                <div className="mx_Login_error mx_Login_serverError">
+                <div className={classes}>
                     {this.state.serverDeadError}
                 </div>
             );
