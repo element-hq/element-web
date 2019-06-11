@@ -122,7 +122,7 @@ module.exports = React.createClass({
     onSubmitForm: async function(ev) {
         ev.preventDefault();
 
-        // refresh the server errors, just in case the server cam back online
+        // refresh the server errors, just in case the server came back online
         await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
