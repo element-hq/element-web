@@ -46,5 +46,6 @@
     "Unexpected error preparing the app. See console for details.": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért nézd meg a konzolt.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Érvénytelen konfiguráció: csak egyet lehet megadni a default_server_config, default_server_name és default_hs_url közül.",
     "Invalid configuration: no default server specified.": "Érvénytelen konfiguráció: nincs megadva alapértelmezett szerver.",
-    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "A telepített Riotnak úgy tűnik hibás a szerver beállítása. Ha te vagy az adminisztrátor, kérlek javítsd az alábbi hibát"
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "A telepített Riotnak úgy tűnik hibás a szerver beállítása. Ha te vagy az adminisztrátor, kérlek javítsd az alábbi hibát",
+    "Your Riot is misconfigured": "A Riotod hibásan van beállítva"
 }
