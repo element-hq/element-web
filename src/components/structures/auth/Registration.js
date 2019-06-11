@@ -177,7 +177,10 @@ module.exports = React.createClass({
             );
             this.setState({serverIsAlive: true});
         } catch (e) {
-            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "register"));
+            this.setState({
+                busy: false,
+                ...AutoDiscoveryUtils.authComponentStateForError(e, "register"),
+            });
             if (this.state.serverErrorIsFatal) {
                 return; // Server is dead - do not continue.
             }
@@ -455,6 +458,8 @@ module.exports = React.createClass({
                 emailSid={this.props.idSid}
                 poll={true}
             />;
+        } else if (!this.state.matrixClient && !this.state.busy) {
+            return null;
         } else if (this.state.busy || !this.state.flows) {
             return <div className="mx_AuthBody_spinner">
                 <Spinner />
