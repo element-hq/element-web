@@ -46,7 +46,8 @@ export function isContentActionable(mxEvent) {
 }
 
 export function canEditContent(mxEvent) {
-    return isContentActionable(mxEvent) &&
+    return mxEvent.status !== EventStatus.CANCELLED &&
+        mxEvent.getType() === 'm.room.message' &&
         mxEvent.getOriginalContent().msgtype === "m.text" &&
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
