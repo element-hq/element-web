@@ -51,7 +51,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import {ValidatedServerConfig} from "../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
@@ -676,7 +677,7 @@ export default React.createClass({
         });
     },
 
-    _startRegistration: function(params) {
+    _startRegistration: async function(params) {
         const newState = {
             view: VIEWS.REGISTER,
         };
@@ -689,10 +690,12 @@ export default React.createClass({
             params.is_url &&
             params.sid
         ) {
+            newState.serverConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                params.hs_url, params.is_url,
+            );
+
             newState.register_client_secret = params.client_secret;
             newState.register_session_id = params.session_id;
-            newState.register_hs_url = params.hs_url;
-            newState.register_is_url = params.is_url;
             newState.register_id_sid = params.sid;
         }
 
