@@ -64,7 +64,7 @@ export function canEditOwnEvent(mxEvent) {
 const MAX_JUMP_DISTANCE = 100;
 export function findEditableEvent(room, isForward, fromEventId = undefined) {
     const liveTimeline = room.getLiveTimeline();
-    const events = liveTimeline.getEvents();
+    const events = liveTimeline.getEvents().concat(room.getPendingEvents());
     const maxIdx = events.length - 1;
     const inc = isForward ? 1 : -1;
     const beginIdx = isForward ? 0 : maxIdx;
