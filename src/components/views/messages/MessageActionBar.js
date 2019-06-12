@@ -83,10 +83,6 @@ export default class MessageActionBar extends React.PureComponent {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         const buttonRect = ev.target.getBoundingClientRect();
 
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset;
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-
         const { getTile, getReplyThread } = this.props;
         const tile = getTile && getTile();
         const replyThread = getReplyThread && getReplyThread();
@@ -96,11 +92,9 @@ export default class MessageActionBar extends React.PureComponent {
             e2eInfoCallback = () => this.onCryptoClicked();
         }
 
-        createMenu(MessageContextMenu, {
-            chevronOffset: 10,
+        const menuOptions = {
             mxEvent: this.props.mxEvent,
-            left: x,
-            top: y,
+            chevronFace: "none",
             permalinkCreator: this.props.permalinkCreator,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
@@ -108,7 +102,23 @@ export default class MessageActionBar extends React.PureComponent {
             onFinished: () => {
                 this.onFocusChange(false);
             },
-        });
+        };
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const buttonRight = buttonRect.right + window.pageXOffset;
+        const buttonBottom = buttonRect.bottom + window.pageYOffset;
+        const buttonTop = buttonRect.top + window.pageYOffset;
+        // Align the right edge of the menu to the right edge of the button
+        menuOptions.right = window.innerWidth - buttonRight;
+        // Align the menu vertically on whichever side of the button has more
+        // space available.
+        if (buttonBottom < window.innerHeight / 2) {
+            menuOptions.top = buttonBottom;
+        } else {
+            menuOptions.bottom = window.innerHeight - buttonTop;
+        }
+
+        createMenu(MessageContextMenu, menuOptions);
 
         this.onFocusChange(true);
     }
