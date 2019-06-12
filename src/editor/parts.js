@@ -17,7 +17,6 @@ limitations under the License.
 
 import AutocompleteWrapperModel from "./autocomplete";
 import Avatar from "../Avatar";
-import MatrixClientPeg from "../MatrixClientPeg";
 
 class BasePart {
     constructor(text = "") {
