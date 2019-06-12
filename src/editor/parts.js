@@ -102,6 +102,10 @@ class BasePart {
     toString() {
         return `${this.type}(${this.text})`;
     }
+
+    serialize() {
+        return {type: this.type, text: this.text};
+    }
 }
 
 export class PlainPart extends BasePart {
@@ -233,13 +237,12 @@ export class NewlinePart extends BasePart {
 }
 
 export class RoomPillPart extends PillPart {
-    constructor(displayAlias) {
+    constructor(displayAlias, client) {
         super(displayAlias, displayAlias);
-        this._room = this._findRoomByAlias(displayAlias);
+        this._room = this._findRoomByAlias(displayAlias, client);
     }
 
-    _findRoomByAlias(alias) {
-        const client = MatrixClientPeg.get();
+    _findRoomByAlias(alias, client) {
         if (alias[0] === '#') {
             return client.getRooms().find((r) => {
                 return r.getAliases().includes(alias);
@@ -300,6 +303,12 @@ export class UserPillPart extends PillPart {
     get className() {
         return "mx_UserPill mx_Pill";
     }
+
+    serialize() {
+        const obj = super.serialize();
+        obj.userId = this.resourceId;
+        return obj;
+    }
 }
 
 
@@ -335,13 +344,16 @@ export class PillCandidatePart extends PlainPart {
 }
 
 export class PartCreator {
-    constructor(getAutocompleterComponent, updateQuery, room) {
+    constructor(getAutocompleterComponent, updateQuery, room, client) {
+        this._room = room;
+        this._client = client;
         this._autoCompleteCreator = (updateCallback) => {
             return new AutocompleteWrapperModel(
                 updateCallback,
                 getAutocompleterComponent,
                 updateQuery,
                 room,
+                client,
             );
         };
     }
@@ -361,6 +373,23 @@ export class PartCreator {
 
     createDefaultPart(text) {
         return new PlainPart(text);
+    }
+
+    deserializePart(part) {
+        switch (part.type) {
+            case "plain":
+                return new PlainPart(part.text);
+            case "newline":
+                return new NewlinePart(part.text);
+            case "pill-candidate":
+                return new PillCandidatePart(part.text, this._autoCompleteCreator);
+            case "room-pill":
+                return new RoomPillPart(part.text, this._client);
+            case "user-pill": {
+                const member = this._room.getMember(part.userId);
+                return new UserPillPart(part.userId, part.text, member);
+            }
+        }
     }
 }
 

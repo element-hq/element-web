@@ -73,7 +73,7 @@ export default class EditorModel {
     }
 
     serializeParts() {
-        return this._parts.map(({type, text}) => {return {type, text};});
+        return this._parts.map(p => p.serialize());
     }
 
     _diff(newValue, inputType, caret) {
