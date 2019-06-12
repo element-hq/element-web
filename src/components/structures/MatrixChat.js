@@ -219,6 +219,18 @@ export default React.createClass({
         return {serverConfig: props};
     },
 
+    getRegisterServerProperties() {
+        const props = this.getServerProperties();
+        if (this.state.register_hs_url) {
+            props.hsUrl = this.state.register_hs_url;
+        }
+        if (this.state.register_is_url) {
+            props.isUrl = this.state.register_is_url;
+        }
+
+        return {serverConfig: props};
+    },
+
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
@@ -1871,7 +1883,7 @@ export default React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
-                    {...this.getServerProperties()}
+                    {...this.getRegisterServerProperties()}
                 />
             );
         }
