@@ -517,7 +517,8 @@ module.exports = React.createClass({
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
 
-        const isEditing = this.props.editEvent && this.props.editEvent.getId() === mxEv.getId();
+        const isEditing = this.props.editState &&
+            this.props.editState.getEvent().getId() === mxEv.getId();
         // is this a continuation of the previous message?
         let continuation = false;
 
@@ -585,7 +586,7 @@ module.exports = React.createClass({
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
                     replacingEventId={mxEv.replacingEventId()}
-                    isEditing={isEditing}
+                    editState={isEditing && this.props.editState}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
