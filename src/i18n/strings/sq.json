@@ -1953,5 +1953,9 @@
     "Your Riot is misconfigured": "Riot-i juaj është i keqformësuar",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Kërkojini përgjegjësit të Riot-it tuaj të kontrollojë <a>formësimin tuaj</a> për zëra të pasaktë ose të përsëdytur.",
     "Unexpected error resolving identity server configuration": "Gabim i papritur teksa ftillohej  formësimi i shërbyesit të identiteteve",
-    "Use lowercase letters, numbers, dashes and underscores only": "Përdorni vetëm shkronja të vogla, numra, vija ndarëse dhe nënvija"
+    "Use lowercase letters, numbers, dashes and underscores only": "Përdorni vetëm shkronja të vogla, numra, vija ndarëse dhe nënvija",
+    "Cannot reach identity server": "S’kapet dot shërbyesi i identiteteve",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Mund të regjistroheni, por disa veçori do të jenë të papërdorshme, derisa shërbyesi i identiteteve të jetë sërish në linjë. Nëse vazhdoni ta shihni këtë sinjalizim, kontrolloni formësimin tuaj ose lidhuni me një përgjegjës të shërbyesit.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Mund të ricaktoni fjalëkalimin, por disa veçori do të jenë të papërdorshme, derisa shërbyesi i identiteteve të jetë sërish në linjë. Nëse vazhdoni ta shihni këtë sinjalizim, kontrolloni formësimin tuaj ose lidhuni me një përgjegjës të shërbyesit.",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Mund të bëni hyrjen, por disa veçori do të jenë të papërdorshme, derisa shërbyesi i identiteteve të jetë sërish në linjë. Nëse vazhdoni ta shihni këtë sinjalizim, kontrolloni formësimin tuaj ose lidhuni me një përgjegjës të shërbyesit."
 }
