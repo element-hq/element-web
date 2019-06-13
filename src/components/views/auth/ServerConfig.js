@@ -118,7 +118,6 @@ export default class ServerConfig extends React.PureComponent {
                     errorText: message,
                 });
 
-
                 return null;
             }
         }
