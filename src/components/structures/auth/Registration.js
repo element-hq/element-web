@@ -363,15 +363,12 @@ module.exports = React.createClass({
         });
     },
 
-    _makeRegisterRequest: function(auth, inhibitLogin) {
-        // default is to inhibit login if we're trying to register with an email address
-        // We do this so that the client that gets spawned when clicking on the email
-        // verification link doesn't get logged in (it can't choose different params
-        // because it doesn't have the password and it can only supply a complete
-        // set of parameters). If the original client is still around when the
-        // registration completes, it can resubmit with inhibitLogin=false to
-        // log itself in!
-        if (inhibitLogin === undefined) inhibitLogin = Boolean(this.state.formVals.email);
+    _makeRegisterRequest: function(auth) {
+        // We inhibit login if we're trying to register with an email address: this
+        // avoids a lot of complex race conditions that can occur if we try to log
+        // the user in one one or both of the tabs they might end up with after
+        // clicking the email link.
+        let inhibitLogin = Boolean(this.state.formVals.email);
 
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
