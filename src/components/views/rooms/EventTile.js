@@ -552,13 +552,14 @@ module.exports = withMatrixClient(React.createClass({
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
+        const isEditing = !!this.props.editState;
         const classes = classNames({
             mx_EventTile: true,
-            mx_EventTile_isEditing: this.props.isEditing,
+            mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
             mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
-            mx_EventTile_sending: isSending,
+            mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
             mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
@@ -632,7 +633,7 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
-        const actionBar = !this.props.isEditing ? <MessageActionBar
+        const actionBar = !isEditing ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
             permalinkCreator={this.props.permalinkCreator}
@@ -794,7 +795,7 @@ module.exports = withMatrixClient(React.createClass({
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            replacingEventId={this.props.replacingEventId}
-                                           isEditing={this.props.isEditing}
+                                           editState={this.props.editState}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}

@@ -18,12 +18,13 @@ limitations under the License.
 import {UserPillPart, RoomPillPart, PlainPart} from "./parts";
 
 export default class AutocompleteWrapperModel {
-    constructor(updateCallback, getAutocompleterComponent, updateQuery, room) {
+    constructor(updateCallback, getAutocompleterComponent, updateQuery, room, client) {
         this._updateCallback = updateCallback;
         this._getAutocompleterComponent = getAutocompleterComponent;
         this._updateQuery = updateQuery;
         this._query = null;
         this._room = room;
+        this._client = client;
     }
 
     onEscape(e) {
@@ -106,7 +107,7 @@ export default class AutocompleteWrapperModel {
             }
             case "#": {
                 const displayAlias = completion.completionId;
-                return new RoomPillPart(displayAlias);
+                return new RoomPillPart(displayAlias, this._client);
             }
             // also used for emoji completion
             default:

@@ -103,12 +103,6 @@ describe('InteractiveAuthDialog', function() {
                 password: "s3kr3t",
                 user: "@user:id",
             })).toBe(true);
-
-            // there should now be a spinner
-            ReactTestUtils.findRenderedComponentWithType(
-                dlg, sdk.getComponent('elements.Spinner'),
-            );
-
             // let the request complete
             return Promise.delay(1);
         }).then(() => {

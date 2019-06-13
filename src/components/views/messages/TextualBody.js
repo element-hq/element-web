@@ -90,7 +90,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._unmounted = false;
-        if (!this.props.isEditing) {
+        if (!this.props.editState) {
             this._applyFormatting();
         }
     },
@@ -131,8 +131,8 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(prevProps) {
-        if (!this.props.isEditing) {
-            const stoppedEditing = prevProps.isEditing && !this.props.isEditing;
+        if (!this.props.editState) {
+            const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
             if (messageWasEdited || stoppedEditing) {
                 this._applyFormatting();
@@ -153,7 +153,7 @@ module.exports = React.createClass({
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
-                nextProps.isEditing !== this.props.isEditing ||
+                nextProps.editState !== this.props.editState ||
                 nextState.links !== this.state.links ||
                 nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
@@ -469,9 +469,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if (this.props.isEditing) {
+        if (this.props.editState) {
             const MessageEditor = sdk.getComponent('elements.MessageEditor');
-            return <MessageEditor event={this.props.mxEvent} className="mx_EventTile_content" />;
+            return <MessageEditor editState={this.props.editState} className="mx_EventTile_content" />;
         }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
