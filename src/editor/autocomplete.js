@@ -43,17 +43,13 @@ export default class AutocompleteWrapperModel {
     async onTab(e) {
         const acComponent = this._getAutocompleterComponent();
 
-        if (acComponent.state.completionList.length === 0) {
+        if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
             // Select the first item by moving "down"
-            await acComponent.onDownArrow();
+            await acComponent.moveSelection(+1);
         } else {
-            if (e.shiftKey) {
-                await acComponent.onUpArrow();
-            } else {
-                await acComponent.onDownArrow();
-            }
+            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
         this._updateCallback({
             close: true,
@@ -61,11 +57,11 @@ export default class AutocompleteWrapperModel {
     }
 
     onUpArrow() {
-        this._getAutocompleterComponent().onUpArrow();
+        this._getAutocompleterComponent().moveSelection(-1);
     }
 
     onDownArrow() {
-        this._getAutocompleterComponent().onDownArrow();
+        this._getAutocompleterComponent().moveSelection(+1);
     }
 
     onPartUpdate(part, offset) {
