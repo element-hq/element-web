@@ -16,7 +16,7 @@ limitations under the License.
 
 /**
  * Used while editing, to pass the event, and to preserve editor state
- * from one editor instance to another the next when remounting the editor
+ * from one editor instance to another when remounting the editor
  * upon receiving the remote echo for an unsent event.
  */
 export default class EditorStateTransfer {
