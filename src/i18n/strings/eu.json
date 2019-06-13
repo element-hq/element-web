@@ -45,5 +45,6 @@
     "Room Directory": "Gelen direktorioa",
     "Unexpected error preparing the app. See console for details.": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan.",
     "Your Riot is misconfigured": "Zure Riot gaizki konfiguratuta dago",
-    "Invalid configuration: no default server specified.": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu."
+    "Invalid configuration: no default server specified.": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurazio baliogabea: default_server_config, default_server_name, edo default_hs_url bat bakarra zehaztu daiteke."
 }
