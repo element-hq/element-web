@@ -260,6 +260,13 @@ class RoomPillPart extends PillPart {
     }
 }
 
+class AtRoomPillPart extends RoomPillPart {
+    get type() {
+        return "at-room-pill";
+    }
+}
+
+
 class UserPillPart extends PillPart {
     constructor(userId, displayName, member) {
         super(userId, displayName);
@@ -400,6 +407,10 @@ export class PartCreator {
             room = this._client.getRoom(alias);
         }
         return new RoomPillPart(alias, room);
+    }
+
+    atRoomPill(text) {
+        return new AtRoomPillPart(text, this._room);
     }
 
     userPill(displayName, userId) {
