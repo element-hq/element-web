@@ -95,7 +95,11 @@ export default class AutocompleteWrapperModel {
         const firstChr = completionId && completionId[0];
         switch (firstChr) {
             case "@": {
-                return this._partCreator.userPill(text, completionId);
+                if (completionId === "@room") {
+                    return this._partCreator.atRoomPill(completionId);
+                } else {
+                    return this._partCreator.userPill(text, completionId);
+                }
             }
             case "#":
                 return this._partCreator.roomPill(completionId);
