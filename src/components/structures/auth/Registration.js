@@ -29,6 +29,7 @@ import * as ServerType from '../../views/auth/ServerTypeSelector';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 // Phases
 // Show controls to configure server details
@@ -286,6 +287,8 @@ module.exports = React.createClass({
             });
             return;
         }
+
+        MatrixClientPeg.setJustRegisteredUserId(response.user_id);
 
         const newState = {
             doingUIAuth: false,
