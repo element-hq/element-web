@@ -27,6 +27,10 @@ export default class EditorModel {
         this._updateCallback = updateCallback;
     }
 
+    clone() {
+        return new EditorModel(this._parts, this._partCreator, this._updateCallback);
+    }
+
     _insertPart(index, part) {
         this._parts.splice(index, 0, part);
         if (this._activePartIdx >= index) {
@@ -91,7 +95,7 @@ export default class EditorModel {
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
         if (diff.removed) {
-            removedOffsetDecrease = this._removeText(position, diff.removed.length);
+            removedOffsetDecrease = this.removeText(position, diff.removed.length);
         }
         let addedLen = 0;
         if (diff.added) {
@@ -177,7 +181,7 @@ export default class EditorModel {
      * @return {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
-    _removeText(pos, len) {
+    removeText(pos, len) {
         let {index, offset} = pos;
         let removedOffsetDecrease = 0;
         while (len > 0) {

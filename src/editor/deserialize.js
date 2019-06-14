@@ -207,12 +207,13 @@ function parseHtmlMessage(html, room, client) {
 
 export function parseEvent(event, room, client) {
     const content = event.getContent();
+    let parts;
     if (content.format === "org.matrix.custom.html") {
-        return parseHtmlMessage(content.formatted_body || "", room, client);
+        parts = parseHtmlMessage(content.formatted_body || "", room, client);
     } else {
         const body = content.body || "";
         const lines = body.split("\n");
-        const parts = lines.reduce((parts, line, i) => {
+        parts = lines.reduce((parts, line, i) => {
             const isLast = i === lines.length - 1;
             const text = new PlainPart(line);
             const newLine = !isLast && new NewlinePart("\n");
@@ -222,6 +223,9 @@ export function parseEvent(event, room, client) {
                 return parts.concat(text);
             }
         }, []);
-        return parts;
     }
+    if (content.msgtype === "m.emote") {
+        parts.unshift(new PlainPart("/me "));
+    }
+    return parts;
 }
