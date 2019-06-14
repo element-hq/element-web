@@ -20,6 +20,21 @@ import { walkDOMDepthFirst } from "./dom";
 
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
+function parseAtRoomMentions(text, partCreator) {
+    const ATROOM = "@room";
+    const parts = [];
+    text.split(ATROOM).forEach((textPart, i, arr) => {
+        if (textPart.length) {
+            parts.push(partCreator.plain(textPart));
+        }
+        const isLast = i === arr.length - 1;
+        if (!isLast) {
+            parts.push(partCreator.atRoomPill(ATROOM));
+        }
+    });
+    return parts;
+}
+
 function parseLink(a, partCreator) {
     const {href} = a;
     const pillMatch = REGEX_MATRIXTO.exec(href) || [];
@@ -158,7 +173,7 @@ function parseHtmlMessage(html, partCreator) {
         }
 
         if (n.nodeType === Node.TEXT_NODE) {
-            newParts.push(partCreator.plain(n.nodeValue));
+            newParts.push(...parseAtRoomMentions(n.nodeValue, partCreator));
         } else if (n.nodeType === Node.ELEMENT_NODE) {
             const parseResult = parseElement(n, partCreator);
             if (parseResult) {
@@ -210,13 +225,11 @@ export function parseEvent(event, partCreator) {
         const lines = body.split("\n");
         parts = lines.reduce((parts, line, i) => {
             const isLast = i === lines.length - 1;
-            const text = partCreator.plain(line);
-            const newLine = !isLast && partCreator.newline();
-            if (newLine) {
-                return parts.concat(text, newLine);
-            } else {
-                return parts.concat(text);
+            const newParts = parseAtRoomMentions(line, partCreator);
+            if (!isLast) {
+                newParts.push(partCreator.newline());
             }
+            return parts.concat(newParts);
         }, []);
     }
     if (content.msgtype === "m.emote") {
