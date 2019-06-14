@@ -214,7 +214,13 @@ module.exports = React.createClass({
                     // update the current node with one that's now taken its place
                     node = pillContainer;
                 }
-            } else if (node.nodeType === Node.TEXT_NODE) {
+            } else if (
+                node.nodeType === Node.TEXT_NODE &&
+                // as applying pills happens outside of react, make sure we're not doubly
+                // applying @room pills here, as a rerender with the same content won't touch the DOM
+                // to clear the pills from the last run of pillifyLinks
+                !node.parentElement.classList.contains("mx_AtRoomPill")
+            ) {
                 const Pill = sdk.getComponent('elements.Pill');
 
                 let currentTextNode = node;
