@@ -1191,9 +1191,14 @@ export default React.createClass({
                             return;
                         }
                     }
-                    // The user has just logged in after registering
+                    // We didn't rediret to the welcome user room, so show
+                    // the homepage.
                     dis.dispatch({action: 'view_home_page'});
                 });
+            } else {
+                // The user has just logged in after registering,
+                // so show the homepage.
+                dis.dispatch({action: 'view_home_page'});
             }
         } else {
             this._showScreenAfterLogin();
