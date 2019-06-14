@@ -376,6 +376,8 @@ export class PartCreator {
                 return this.plain(part.text);
             case "newline":
                 return this.newline();
+            case "at-room-pill":
+                return this.atRoomPill(part.text);
             case "pill-candidate":
                 return this.pillCandidate(part.text);
             case "room-pill":
