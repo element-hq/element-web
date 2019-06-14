@@ -1241,7 +1241,7 @@ export default class MessageComposerInput extends React.Component {
     selectHistory = async (up) => {
         const delta = up ? -1 : 1;
 
-        // True if we are not currently selecting history, but composing a messag
+        // True if we are not currently selecting history, but composing a message
         if (this.historyManager.currentIndex === this.historyManager.history.length) {
             // We can't go any further - there isn't any more history, so nop.
             if (!up) {
