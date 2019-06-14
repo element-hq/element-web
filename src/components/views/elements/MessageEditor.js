@@ -150,16 +150,28 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
+    _isEmote() {
+        const firstPart = this.model.parts[0];
+        return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
+    }
+
     _sendEdit = () => {
+        const isEmote = this._isEmote();
+        let model = this.model;
+        if (isEmote) {
+            // trim "/me "
+            model = model.clone();
+            model.removeText({index: 0, offset: 0}, 4);
+        }
         const newContent = {
-            "msgtype": "m.text",
-            "body": textSerialize(this.model),
+            "msgtype": isEmote ? "m.emote" : "m.text",
+            "body": textSerialize(model),
         };
         const contentBody = {
             msgtype: newContent.msgtype,
             body: ` * ${newContent.body}`,
         };
-        const formattedBody = htmlSerializeIfNeeded(this.model);
+        const formattedBody = htmlSerializeIfNeeded(model);
         if (formattedBody) {
             newContent.format = "org.matrix.custom.html";
             newContent.formatted_body = formattedBody;
