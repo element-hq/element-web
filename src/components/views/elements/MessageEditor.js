@@ -233,7 +233,7 @@ export default class MessageEditor extends React.Component {
             parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
         } else {
             // otherwise, parse the body of the event
-            parts = parseEvent(editState.getEvent(), room, this.context.matrixClient);
+            parts = parseEvent(editState.getEvent(), partCreator);
         }
 
         return new EditorModel(
