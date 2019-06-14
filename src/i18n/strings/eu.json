@@ -1959,5 +1959,8 @@
     "Riot failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "Riot-ek huts egin du zure hasiera-zerbitzariaren protokoloen zerrenda eskuratzean. Agian hasiera-zerbitzaria zaharregia da hirugarrengoen sareak onartzeko.",
     "Failed to get autodiscovery configuration from server": "Huts egin du aurkikuntza automatikoaren konfigurazioa zerbitzaritik eskuratzean",
     "Invalid base_url for m.homeserver": "Baliogabeko base_url  m.homeserver zerbitzariarentzat",
-    "Invalid base_url for m.identity_server": "Baliogabeko base_url m.identity_server zerbitzariarentzat"
+    "Invalid base_url for m.identity_server": "Baliogabeko base_url m.identity_server zerbitzariarentzat",
+    "<a>Log in</a> to your new account.": "<a>Hasi saioa</a> zure kontu berrian.",
+    "You can now close this window or <a>log in</a> to your new account.": "Itxi leiho hau edo <a>hasi saioa</a> zure kontu berrian.",
+    "Registration Successful": "Ongi erregistratuta"
 }
