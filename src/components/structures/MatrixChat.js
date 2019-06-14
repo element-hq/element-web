@@ -1192,7 +1192,7 @@ export default React.createClass({
      */
     _onLoggedIn: async function() {
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (true || MatrixClientPeg.currentUserIsJustRegistered()) {
+        if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
