@@ -676,6 +676,31 @@ export default class MessageComposerInput extends React.Component {
 
     onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
         this.suppressAutoComplete = false;
+        this.direction = '';
+
+        // Navigate autocomplete list with arrow keys
+        if (this.autocomplete.countCompletions() > 0) {
+            if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
+                switch (ev.keyCode) {
+                    case KeyCode.LEFT:
+                        this.autocomplete.moveSelection(-1);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.RIGHT:
+                        this.autocomplete.moveSelection(+1);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.UP:
+                        this.autocomplete.moveSelection(-1);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.DOWN:
+                        this.autocomplete.moveSelection(+1);
+                        ev.preventDefault();
+                        return true;
+                }
+            }
+        }
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
@@ -683,8 +708,6 @@ export default class MessageComposerInput extends React.Component {
             this.direction = 'Previous';
         } else if (ev.keyCode === KeyCode.RIGHT) {
             this.direction = 'Next';
-        } else {
-            this.direction = '';
         }
 
         switch (ev.keyCode) {
@@ -1181,45 +1204,36 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
-        if (e.ctrlKey || e.altKey || e.metaKey) {
-            return;
+        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
+
+        // Select history
+        const selection = this.state.editorState.selection;
+
+        // selection must be collapsed
+        if (!selection.isCollapsed) return;
+        const document = this.state.editorState.document;
+
+        // and we must be at the edge of the document (up=start, down=end)
+        if (up) {
+            if (!selection.anchor.isAtStartOfNode(document)) return;
+
+            if (!e.altKey) {
+                const editEvent = findEditableEvent(this.props.room, false);
+                if (editEvent) {
+                    // We're selecting history, so prevent the key event from doing anything else
+                    e.preventDefault();
+                    dis.dispatch({
+                        action: 'edit_event',
+                        event: editEvent,
+                    });
+                }
+                return;
+            }
         }
 
-        // Select history only if we are not currently auto-completing
-        if (this.autocomplete.state.completionList.length === 0) {
-            const selection = this.state.editorState.selection;
-
-            // selection must be collapsed
-            if (!selection.isCollapsed) return;
-            const document = this.state.editorState.document;
-
-            // and we must be at the edge of the document (up=start, down=end)
-            if (up) {
-                if (!selection.anchor.isAtStartOfNode(document)) return;
-
-                if (!e.shiftKey) {
-                    const editEvent = findEditableEvent(this.props.room, false);
-                    if (editEvent) {
-                        // We're selecting history, so prevent the key event from doing anything else
-                        e.preventDefault();
-                        dis.dispatch({
-                            action: 'edit_event',
-                            event: editEvent,
-                        });
-                    }
-                    return;
-                }
-            } else {
-                if (!selection.anchor.isAtEndOfNode(document)) return;
-            }
-
-            const selected = this.selectHistory(up);
-            if (selected) {
-                // We're selecting history, so prevent the key event from doing anything else
-                e.preventDefault();
-            }
-        } else {
-            this.moveAutocompleteSelection(up);
+        const selected = this.selectHistory(up);
+        if (selected) {
+            // We're selecting history, so prevent the key event from doing anything else
             e.preventDefault();
         }
     };
@@ -1277,21 +1291,17 @@ export default class MessageComposerInput extends React.Component {
             someCompletions: null,
         });
         e.preventDefault();
-        if (this.autocomplete.state.completionList.length === 0) {
+        if (this.autocomplete.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             const completionCount = await this.autocomplete.forceComplete();
             this.setState({
                 someCompletions: completionCount > 0,
             });
             // Select the first item by moving "down"
-            await this.moveAutocompleteSelection(false);
+            await this.autocomplete.moveSelection(+1);
         } else {
-            await this.moveAutocompleteSelection(e.shiftKey);
+            await this.autocomplete.moveSelection(e.shiftKey ? -1 : +1);
         }
-    };
-
-    moveAutocompleteSelection = (up) => {
-        up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
     onEscape = async (e) => {
