@@ -46,5 +46,6 @@
     "Unexpected error preparing the app. See console for details.": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невалидна конфигурация: може да е указано само едно от: default_server_config, default_server_name, или default_hs_url.",
     "Invalid configuration: no default server specified.": "Невалидна конфигурация: не е указан сървър по подразбиране.",
-    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Тази инсталация на Riot изглежда няма валидна конфигурация за сървър. Ако сте администраторът, моля поправете грешката по-долу"
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Тази инсталация на Riot изглежда няма валидна конфигурация за сървър. Ако сте администраторът, моля поправете грешката по-долу",
+    "Your Riot is misconfigured": "Riot не е конфигуриран правилно"
 }
