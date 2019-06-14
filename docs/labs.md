@@ -8,7 +8,7 @@ dropped. Ask in the room if you are unclear about any details here.**
 
 ## Render simple counters in room header
 
-Allows rendering of labelled counters above the message list.
+`feature_state_counters` allows rendering of labelled counters above the message list.
 
 Once enabled, send a custom state event to a room to set values:
 
@@ -41,5 +41,10 @@ and only portions have been implemented so far.
 accessible from the reaction/context bar when hovering a message.
 This feature is currently under active development,
 and only portions have been implemented so far.
+
+## Inline widgets
+
+`feature_inline_widgets` allows rendering and sending of inline widgets. Inline
+widgets are typically polls or rich embedded content in rooms.
 
 [#riot-web:matrix.org]: https://matrix.to/#/#riot-web:matrix.org
