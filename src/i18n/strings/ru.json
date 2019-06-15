@@ -1,5 +1,5 @@
 {
-    "Custom Server Options": "Выбор другого сервера",
+    "Custom Server Options": "Параметры другого сервера",
     "Dismiss": "Отклонить",
     "powered by Matrix": "основано на Matrix",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s с %(browserName)s на %(osName)s",
@@ -47,5 +47,5 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Неверная конфигурация: может указывать только один из следующих параметров: default_server_config, default_server_name или default_hs_url.",
     "Invalid configuration: no default server specified.": "Неверная конфигурация: сервер по умолчанию не указан.",
     "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Эта установка Riot, кажется, имеет неверную конфигурацию сервера. Если вы являетесь администратором, пожалуйста, исправьте ошибку ниже",
-    "Your Riot is misconfigured": "Твой Riot неправильно настроен"
+    "Your Riot is misconfigured": "Ваш Riot неправильно настроен"
 }
