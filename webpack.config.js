@@ -14,6 +14,7 @@ module.exports = {
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
 
         "mobileguide": "./src/vector/mobile_guide/index.js",
+        "inline-widget-wrapper": "./src/vector/inline_widget_wrapper/index.js",
 
         // CSS themes
         "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
@@ -178,7 +179,7 @@ module.exports = {
             // bottom of <head> or the bottom of <body>, and I'm a bit scared
             // about moving them.
             inject: false,
-            excludeChunks: ['mobileguide'],
+            excludeChunks: ['mobileguide', 'inline-widget-wrapper'],
             vars: {
                 og_image_url: og_image_url,
             },
@@ -187,6 +188,11 @@ module.exports = {
             template: './src/vector/mobile_guide/index.html',
             filename: 'mobile_guide/index.html',
             chunks: ['mobileguide'],
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/vector/inline_widget_wrapper/index.html',
+            filename: 'inline_widget_wrapper/index.html',
+            chunks: ['inline-widget-wrapper'],
         }),
     ],
     devtool: 'source-map',

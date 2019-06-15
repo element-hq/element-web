@@ -78,6 +78,8 @@
     "modernizr": "^3.6.0",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.0.tgz",
     "prop-types": "^15.6.2",
+    "querystring": "^0.2.0",
+    "random-string": "^0.2.0",
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
     "sanitize-html": "^1.19.1",
