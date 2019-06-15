@@ -1206,15 +1206,22 @@ export default class MessageComposerInput extends React.Component {
     onVerticalArrow = (e, up) => {
         if (e.ctrlKey || e.shiftKey || e.metaKey) return;
 
-        // Select history
-        const selection = this.state.editorState.selection;
+        if (e.altKey) {
+            // Try select composer history
+            const selected = this.selectHistory(up);
+            if (selected) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+            }
+        } else if (!e.altKey && up) {
+            // Try edit the latest message
+            const selection = this.state.editorState.selection;
 
-        // selection must be collapsed
-        if (!selection.isCollapsed) return;
-        const document = this.state.editorState.document;
+            // selection must be collapsed
+            if (!selection.isCollapsed) return;
+            const document = this.state.editorState.document;
 
-        // and we must be at the edge of the document (up=start, down=end)
-        if (up) {
+            // and we must be at the edge of the document (up=start, down=end)
             if (!selection.anchor.isAtStartOfNode(document)) return;
 
             if (!e.altKey) {
@@ -1227,14 +1234,7 @@ export default class MessageComposerInput extends React.Component {
                         event: editEvent,
                     });
                 }
-                return;
             }
-        }
-
-        const selected = this.selectHistory(up);
-        if (selected) {
-            // We're selecting history, so prevent the key event from doing anything else
-            e.preventDefault();
         }
     };
 
