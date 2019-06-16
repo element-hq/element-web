@@ -1249,6 +1249,7 @@
     "Upload files (%(current)s of %(total)s)": "Upload files (%(current)s of %(total)s)",
     "Upload files": "Upload files",
     "Upload": "Upload",
+    "Upload all": "Upload all",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",

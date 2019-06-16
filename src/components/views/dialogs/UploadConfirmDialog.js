@@ -49,6 +49,10 @@ export default class UploadConfirmDialog extends React.Component {
         this.props.onFinished(true);
     }
 
+    _onUploadAllClick = () => {
+        this.props.onFinished(true, true);
+    }
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -85,6 +89,13 @@ export default class UploadConfirmDialog extends React.Component {
             </div>;
         }
 
+        let uploadAllButton;
+        if (this.props.currentIndex + 1 < this.props.totalFiles) {
+            uploadAllButton = <button onClick={this._onUploadAllClick}>
+                {_t("Upload all")}
+            </button>;
+        }
+
         return (
             <BaseDialog className='mx_UploadConfirmDialog'
                 fixedWidth={false}
@@ -100,7 +111,9 @@ export default class UploadConfirmDialog extends React.Component {
                     hasCancel={false}
                     onPrimaryButtonClick={this._onUploadClick}
                     focus={true}
-                />
+                >
+                    {uploadAllButton}
+                </DialogButtons>
             </BaseDialog>
         );
     }
