@@ -1809,5 +1809,7 @@
     "Your Matrix account": "Dein Matrixkonto",
     "Your Matrix account on %(serverName)s": "Dein Matrixkonto auf %(serverName)s",
     "Show recent room avatars above the room list": "Zeige die letzten Avatare über der Raumliste an (neu laden um Änderungen zu übernehmen)",
-    "Email, name or Matrix ID": "E-Mail, Name oder Matrix-ID"
+    "Email, name or Matrix ID": "E-Mail, Name oder Matrix-ID",
+    "Name or Matrix ID": "Name oder Matrix ID",
+    "Your Riot is misconfigured": "Dein Riot ist falsch konfiguriert"
 }
