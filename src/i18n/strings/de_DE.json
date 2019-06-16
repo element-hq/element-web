@@ -46,5 +46,6 @@
     "Unexpected error preparing the app. See console for details.": "Unerwarteter Fehler bei der Vorbereitung der App. Siehe Konsole für Details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ungültige Konfiguration: Es kann nur eine der Optionen default_server_config, default_server_name oder default_hs_url angegeben werden.",
     "Invalid configuration: no default server specified.": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
-    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Diese Installation von Riot scheint eine ungültige Serverkonfiguration zu haben. Wenn Sie der Administrator sind, korrigieren Sie bitte den folgenden Fehler"
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Diese Installation von Riot scheint eine ungültige Serverkonfiguration zu haben. Wenn Sie der Administrator sind, korrigieren Sie bitte den folgenden Fehler",
+    "Your Riot is misconfigured": "Dein Riot ist falsch konfiguriert"
 }
