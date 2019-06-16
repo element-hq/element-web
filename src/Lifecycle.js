@@ -233,7 +233,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
             guest: true,
         }, true).then(() => true);
     }, (err) => {
-        console.error("Failed to register as guest: " + err + " " + err.data);
+        console.error("Failed to register as guest", err);
         return false;
     });
 }

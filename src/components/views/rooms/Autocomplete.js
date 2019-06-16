@@ -171,26 +171,13 @@ export default class Autocomplete extends React.Component {
     }
 
     // called from MessageComposerInput
-    onUpArrow(): ?Completion {
+    moveSelection(delta): ?Completion {
         const completionCount = this.countCompletions();
-        // completionCount + 1, since 0 means composer is selected
-        const selectionOffset = (completionCount + 1 + this.state.selectionOffset - 1)
-            % (completionCount + 1);
-        if (!completionCount) {
-            return null;
-        }
-        this.setSelection(selectionOffset);
-    }
+        if (completionCount === 0) return; // there are no items to move the selection through
 
-    // called from MessageComposerInput
-    onDownArrow(): ?Completion {
-        const completionCount = this.countCompletions();
-        // completionCount + 1, since 0 means composer is selected
-        const selectionOffset = (this.state.selectionOffset + 1) % (completionCount + 1);
-        if (!completionCount) {
-            return null;
-        }
-        this.setSelection(selectionOffset);
+        // Note: selectionOffset 0 represents the unsubstituted text, while 1 means first pill selected
+        const index = (this.state.selectionOffset + delta + completionCount + 1) % (completionCount + 1);
+        this.setSelection(index);
     }
 
     onEscape(e): boolean {

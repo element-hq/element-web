@@ -69,9 +69,11 @@ describe('Registration', function() {
 
         const root = render();
 
-        // Set non-empty flows to get past the loading spinner
+        // Set non-empty flow & matrixClient to get past the loading spinner
         root.setState({
             flows: [],
+            matrixClient: {},
+            busy: false,
         });
 
         const form = ReactTestUtils.findRenderedComponentWithType(

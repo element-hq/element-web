@@ -28,13 +28,14 @@ import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
 import {PartCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
-import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
+import EditorStateTransfer from '../../../utils/EditorStateTransfer';
+import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 
 export default class MessageEditor extends React.Component {
     static propTypes = {
         // the message event being edited
-        event: PropTypes.instanceOf(MatrixEvent).isRequired,
+        editState: PropTypes.instanceOf(EditorStateTransfer).isRequired,
     };
 
     static contextTypes = {
@@ -44,16 +45,7 @@ export default class MessageEditor extends React.Component {
     constructor(props, context) {
         super(props, context);
         const room = this._getRoom();
-        const partCreator = new PartCreator(
-            () => this._autocompleteRef,
-            query => this.setState({query}),
-            room,
-        );
-        this.model = new EditorModel(
-            parseEvent(this.props.event, room),
-            partCreator,
-            this._updateEditorState,
-        );
+        this.model = null;
         this.state = {
             autoComplete: null,
             room,
@@ -64,7 +56,7 @@ export default class MessageEditor extends React.Component {
     }
 
     _getRoom() {
-        return this.context.matrixClient.getRoom(this.props.event.getRoomId());
+        return this.context.matrixClient.getRoom(this.props.editState.getEvent().getRoomId());
     }
 
     _updateEditorState = (caret) => {
@@ -133,7 +125,7 @@ export default class MessageEditor extends React.Component {
             if (this._hasModifications || !this._isCaretAtStart()) {
                 return;
             }
-            const previousEvent = findEditableEvent(this._getRoom(), false, this.props.event.getId());
+            const previousEvent = findEditableEvent(this._getRoom(), false, this.props.editState.getEvent().getId());
             if (previousEvent) {
                 dis.dispatch({action: 'edit_event', event: previousEvent});
                 event.preventDefault();
@@ -142,7 +134,7 @@ export default class MessageEditor extends React.Component {
             if (this._hasModifications || !this._isCaretAtEnd()) {
                 return;
             }
-            const nextEvent = findEditableEvent(this._getRoom(), true, this.props.event.getId());
+            const nextEvent = findEditableEvent(this._getRoom(), true, this.props.editState.getEvent().getId());
             if (nextEvent) {
                 dis.dispatch({action: 'edit_event', event: nextEvent});
             } else {
@@ -158,16 +150,28 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
+    _isEmote() {
+        const firstPart = this.model.parts[0];
+        return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
+    }
+
     _sendEdit = () => {
+        const isEmote = this._isEmote();
+        let model = this.model;
+        if (isEmote) {
+            // trim "/me "
+            model = model.clone();
+            model.removeText({index: 0, offset: 0}, 4);
+        }
         const newContent = {
-            "msgtype": "m.text",
-            "body": textSerialize(this.model),
+            "msgtype": isEmote ? "m.emote" : "m.text",
+            "body": textSerialize(model),
         };
         const contentBody = {
             msgtype: newContent.msgtype,
             body: ` * ${newContent.body}`,
         };
-        const formattedBody = htmlSerializeIfNeeded(this.model);
+        const formattedBody = htmlSerializeIfNeeded(model);
         if (formattedBody) {
             newContent.format = "org.matrix.custom.html";
             newContent.formatted_body = formattedBody;
@@ -178,11 +182,11 @@ export default class MessageEditor extends React.Component {
             "m.new_content": newContent,
             "m.relates_to": {
                 "rel_type": "m.replace",
-                "event_id": this.props.event.getId(),
+                "event_id": this.props.editState.getEvent().getId(),
             },
         }, contentBody);
 
-        const roomId = this.props.event.getRoomId();
+        const roomId = this.props.editState.getEvent().getRoomId();
         this.context.matrixClient.sendMessage(roomId, content);
 
         dis.dispatch({action: "edit_event", event: null});
@@ -197,10 +201,61 @@ export default class MessageEditor extends React.Component {
         this.model.autoComplete.onComponentSelectionChange(completion);
     }
 
+    componentWillUnmount() {
+        const sel = document.getSelection();
+        const {caret} = getCaretOffsetAndText(this._editorRef, sel);
+        const parts = this.model.serializeParts();
+        this.props.editState.setEditorState(caret, parts);
+    }
+
     componentDidMount() {
+        this.model = this._createEditorModel();
+        // initial render of model
         this._updateEditorState();
-        setCaretPosition(this._editorRef, this.model, this.model.getPositionAtEnd());
+        // initial caret position
+        this._initializeCaret();
         this._editorRef.focus();
+    }
+
+    _createEditorModel() {
+        const {editState} = this.props;
+        const room = this._getRoom();
+        const partCreator = new PartCreator(
+            () => this._autocompleteRef,
+            query => this.setState({query}),
+            room,
+            this.context.matrixClient,
+        );
+        let parts;
+        if (editState.hasEditorState()) {
+            // if restoring state from a previous editor,
+            // restore serialized parts from the state
+            parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
+        } else {
+            // otherwise, parse the body of the event
+            parts = parseEvent(editState.getEvent(), room, this.context.matrixClient);
+        }
+
+        return new EditorModel(
+            parts,
+            partCreator,
+            this._updateEditorState,
+        );
+    }
+
+    _initializeCaret() {
+        const {editState} = this.props;
+        let caretPosition;
+        if (editState.hasEditorState()) {
+            // if restoring state from a previous editor,
+            // restore caret position from the state
+            const caret = editState.getCaret();
+            caretPosition = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
+        } else {
+            // otherwise, set it at the end
+            caretPosition = this.model.getPositionAtEnd();
+        }
+        setCaretPosition(this._editorRef, this.model, caretPosition);
     }
 
     render() {

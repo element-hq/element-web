@@ -35,9 +35,3 @@ limitations under the License.
 .mx_ExistingEmailAddress_confirmBtn {
     margin-right: 5px;
 }
-
-.mx_EmailAddresses_new .mx_Field input {
-    // Use 100% of the space available for the input, but don't let the 10px
-    // padding on either side of the input to push it out of alignment.
-    width: calc(100% - 20px);
-}

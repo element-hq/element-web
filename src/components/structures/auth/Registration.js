@@ -26,7 +26,10 @@ import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from "classnames";
+import * as Lifecycle from '../../../Lifecycle';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 // Phases
 // Show controls to configure server details
@@ -79,6 +82,21 @@ module.exports = React.createClass({
             // Phase of the overall registration dialog.
             phase: PHASE_REGISTRATION,
             flows: null,
+            // If set, we've registered but are not going to log
+            // the user in to their new account automatically.
+            completedNoSignin: false,
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverErrorIsFatal: false,
+            serverDeadError: "",
+
+            // Our matrix client - part of state because we can't render the UI auth
+            // component without it.
+            matrixClient: null,
         };
     },
 
@@ -150,13 +168,37 @@ module.exports = React.createClass({
     _replaceClient: async function(serverConfig) {
         this.setState({
             errorText: null,
+            // busy while we do liveness check (we need to avoid trying to render
+            // the UI auth component while we don't have a matrix client)
+            busy: true,
         });
         if (!serverConfig) serverConfig = this.props.serverConfig;
+
+        // Do a liveliness check on the URLs
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                serverConfig.hsUrl,
+                serverConfig.isUrl,
+            );
+            this.setState({serverIsAlive: true});
+        } catch (e) {
+            this.setState({
+                busy: false,
+                ...AutoDiscoveryUtils.authComponentStateForError(e, "register"),
+            });
+            if (this.state.serverErrorIsFatal) {
+                return; // Server is dead - do not continue.
+            }
+        }
+
         const {hsUrl, isUrl} = serverConfig;
-        this._matrixClient = Matrix.createClient({
-            baseUrl: hsUrl,
-            idBaseUrl: isUrl,
+        this.setState({
+            matrixClient: Matrix.createClient({
+                baseUrl: hsUrl,
+                idBaseUrl: isUrl,
+            }),
         });
+        this.setState({busy: false});
         try {
             await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
@@ -172,6 +214,7 @@ module.exports = React.createClass({
                     errorText: _t("Registration has been disabled on this homeserver."),
                 });
             } else {
+                console.log("Unable to query for supported registration methods.", e);
                 this.setState({
                     errorText: _t("Unable to query for supported registration methods."),
                 });
@@ -189,14 +232,14 @@ module.exports = React.createClass({
     },
 
     _requestEmailToken: function(emailAddress, clientSecret, sendAttempt, sessionId) {
-        return this._matrixClient.requestRegisterEmailToken(
+        return this.state.matrixClient.requestRegisterEmailToken(
             emailAddress,
             clientSecret,
             sendAttempt,
             this.props.makeRegistrationUrl({
                 client_secret: clientSecret,
-                hs_url: this._matrixClient.getHomeserverUrl(),
-                is_url: this._matrixClient.getIdentityServerUrl(),
+                hs_url: this.state.matrixClient.getHomeserverUrl(),
+                is_url: this.state.matrixClient.getIdentityServerUrl(),
                 session_id: sessionId,
             }),
         );
@@ -245,21 +288,29 @@ module.exports = React.createClass({
             return;
         }
 
-        this.setState({
-            // we're still busy until we get unmounted: don't show the registration form again
-            busy: true,
+        MatrixClientPeg.setJustRegisteredUserId(response.user_id);
+
+        const newState = {
             doingUIAuth: false,
-        });
+        };
+        if (response.access_token) {
+            const cli = await this.props.onLoggedIn({
+                userId: response.user_id,
+                deviceId: response.device_id,
+                homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                accessToken: response.access_token,
+            });
 
-        const cli = await this.props.onLoggedIn({
-            userId: response.user_id,
-            deviceId: response.device_id,
-            homeserverUrl: this._matrixClient.getHomeserverUrl(),
-            identityServerUrl: this._matrixClient.getIdentityServerUrl(),
-            accessToken: response.access_token,
-        });
+            this._setupPushers(cli);
+            // we're still busy until we get unmounted: don't show the registration form again
+            newState.busy = true;
+        } else {
+            newState.busy = false;
+            newState.completedNoSignin = true;
+        }
 
-        this._setupPushers(cli);
+        this.setState(newState);
     },
 
     _setupPushers: function(matrixClient) {
@@ -316,6 +367,12 @@ module.exports = React.createClass({
     },
 
     _makeRegisterRequest: function(auth) {
+        // We inhibit login if we're trying to register with an email address: this
+        // avoids a lot of complex race conditions that can occur if we try to log
+        // the user in one one or both of the tabs they might end up with after
+        // clicking the email link.
+        let inhibitLogin = Boolean(this.state.formVals.email);
+
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
         // session).
@@ -323,14 +380,17 @@ module.exports = React.createClass({
             email: true,
             msisdn: true,
         } : {};
+        // Likewise inhibitLogin
+        if (!this.state.formVals.password) inhibitLogin = null;
 
-        return this._matrixClient.register(
+        return this.state.matrixClient.register(
             this.state.formVals.username,
             this.state.formVals.password,
             undefined, // session id: included in the auth dict already
             auth,
             bindThreepids,
             null,
+            inhibitLogin,
         );
     },
 
@@ -340,6 +400,19 @@ module.exports = React.createClass({
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
         };
+    },
+
+    // Links to the login page shown after registration is completed are routed through this
+    // which checks the user hasn't already logged in somewhere else (perhaps we should do
+    // this more generally?)
+    _onLoginClickWithCheck: async function(ev) {
+        ev.preventDefault();
+
+        const sessionLoaded = await Lifecycle.loadSession({});
+        if (!sessionLoaded) {
+            // ok fine, there's still no session: really go to the login page
+            this.props.onLoginClick();
+        }
     },
 
     renderServerComponent() {
@@ -409,9 +482,9 @@ module.exports = React.createClass({
         const Spinner = sdk.getComponent('elements.Spinner');
         const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
 
-        if (this.state.doingUIAuth) {
+        if (this.state.matrixClient && this.state.doingUIAuth) {
             return <InteractiveAuth
-                matrixClient={this._matrixClient}
+                matrixClient={this.state.matrixClient}
                 makeRequest={this._makeRegisterRequest}
                 onAuthFinished={this._onUIAuthFinished}
                 inputs={this._getUIAuthInputs()}
@@ -421,6 +494,8 @@ module.exports = React.createClass({
                 emailSid={this.props.idSid}
                 poll={true}
             />;
+        } else if (!this.state.matrixClient && !this.state.busy) {
+            return null;
         } else if (this.state.busy || !this.state.flows) {
             return <div className="mx_AuthBody_spinner">
                 <Spinner />
@@ -447,6 +522,7 @@ module.exports = React.createClass({
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
+                canSubmit={!this.state.serverErrorIsFatal}
             />;
         }
     },
@@ -462,6 +538,20 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
+            });
+            serverDeadSection = (
+                <div className={classes}>
+                    {this.state.serverDeadError}
+                </div>
+            );
+        }
+
         const signIn = <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
             { _t('Sign in instead') }
         </a>;
@@ -474,16 +564,49 @@ module.exports = React.createClass({
             </a>;
         }
 
+        let body;
+        if (this.state.completedNoSignin) {
+            let regDoneText;
+            if (this.state.formVals.password) {
+                // We're the client that started the registration
+                regDoneText = _t(
+                    "<a>Log in</a> to your new account.", {},
+                    {
+                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                    },
+                );
+            } else {
+                // We're not the original client: the user probably got to us by clicking the
+                // email validation link. We can't offer a 'go straight to your account' link
+                // as we don't have the original creds.
+                regDoneText = _t(
+                    "You can now close this window or <a>log in</a> to your new account.", {},
+                    {
+                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                    },
+                );
+            }
+            body = <div>
+                <h2>{_t("Registration Successful")}</h2>
+                <h3>{ regDoneText }</h3>
+            </div>;
+        } else {
+            body = <div>
+                <h2>{ _t('Create your account') }</h2>
+                { errorText }
+                { serverDeadSection }
+                { this.renderServerComponent() }
+                { this.renderRegisterComponent() }
+                { goBack }
+                { signIn }
+            </div>;
+        }
+
         return (
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    <h2>{ _t('Create your account') }</h2>
-                    { errorText }
-                    { this.renderServerComponent() }
-                    { this.renderRegisterComponent() }
-                    { goBack }
-                    { signIn }
+                    { body }
                 </AuthBody>
             </AuthPage>
         );

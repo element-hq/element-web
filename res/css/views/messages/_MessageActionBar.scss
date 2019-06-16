@@ -26,6 +26,8 @@ limitations under the License.
     top: -18px;
     right: 8px;
     user-select: none;
+    // Ensure the action bar appears above over things, like the read marker.
+    z-index: 1;
 
     > * {
         display: inline-block;

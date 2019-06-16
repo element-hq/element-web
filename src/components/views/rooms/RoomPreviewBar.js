@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,6 +55,12 @@ module.exports = React.createClass({
         // If invited by 3rd party invite, the email address the invite was sent to
         invitedEmail: PropTypes.string,
 
+        // For third party invites, information passed about the room out-of-band
+        oobData: PropTypes.object,
+
+        // For third party invites, a URL for a 3pid invite signing service
+        signUrl: PropTypes.string,
+
         // A standard client/server API error object. If supplied, indicates that the
         // caller was unable to fetch details about the room for the given reason.
         error: PropTypes.object,
@@ -87,6 +94,16 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._checkInvitedEmail();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
+            this._checkInvitedEmail();
+        }
+    },
+
+    _checkInvitedEmail: function() {
         // If this is an invite and we've been told what email
         // address was invited, fetch the user's list of Threepids
         // so we can check them against the one that was invited
@@ -215,12 +232,25 @@ module.exports = React.createClass({
         return memberContent.membership === "invite" && memberContent.is_direct;
     },
 
+    _makeScreenAfterLogin() {
+        return {
+            screen: 'room',
+            params: {
+                email: this.props.invitedEmail,
+                signurl: this.props.signUrl,
+                room_name: this.props.oobData.room_name,
+                room_avatar_url: this.props.oobData.avatarUrl,
+                inviter_name: this.props.oobData.inviterName,
+            }
+        };
+    },
+
     onLoginClick: function() {
-        dis.dispatch({ action: 'start_login' });
+        dis.dispatch({ action: 'start_login', screenAfterLogin: this._makeScreenAfterLogin() });
     },
 
     onRegisterClick: function() {
-        dis.dispatch({ action: 'start_registration' });
+        dis.dispatch({ action: 'start_registration', screenAfterLogin: this._makeScreenAfterLogin() });
     },
 
     render: function() {
@@ -335,7 +365,7 @@ module.exports = React.createClass({
             }
             case MessageCase.Invite: {
                 const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
-                const avatar = <RoomAvatar room={this.props.room} />;
+                const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
 
                 const inviteMember = this._getInviteMember();
                 let inviterElement;

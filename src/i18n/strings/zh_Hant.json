@@ -1983,5 +1983,15 @@
     "Notification sound": "通知音效",
     "Reset": "重設",
     "Set a new custom sound": "設定新的自訂音效",
-    "Browse": "瀏覽"
+    "Browse": "瀏覽",
+    "Cannot reach homeserver": "無法存取家伺服器",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "請確定您有穩定的網路連線，或與伺服器管理員聯繫",
+    "Your Riot is misconfigured": "您的 Riot 沒有設定好",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "請要求您的 Riot 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
+    "Unexpected error resolving identity server configuration": "解析身份識別伺服器設定時發生未預期的錯誤",
+    "Use lowercase letters, numbers, dashes and underscores only": "僅能使用小寫字母、數字、破折號與底線",
+    "Cannot reach identity server": "無法連線至身份識別伺服器",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以註冊，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以重設密碼，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以登入，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。"
 }

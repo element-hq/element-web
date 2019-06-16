@@ -46,6 +46,8 @@ export default class EmbeddedPage extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this._dispatcherRef = null;
+
         this.state = {
             page: '',
         };
@@ -90,7 +92,7 @@ export default class EmbeddedPage extends React.PureComponent {
 
     componentWillUnmount() {
         this._unmounted = true;
-        dis.unregister(this._dispatcherRef);
+        if (this._dispatcherRef !== null) dis.unregister(this._dispatcherRef);
     }
 
     onAction = (payload) => {

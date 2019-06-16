@@ -35,8 +35,9 @@ $selection-fg-color: $primary-bg-color;
 
 $focus-brightness: 105%;
 
-// red warning colour
-$warning-color: $notice-primary-color;
+// warning colours
+$warning-color: $notice-primary-color; // red
+$orange-warning-color: #ff8d13; // used for true warnings
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;

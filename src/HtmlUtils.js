@@ -51,6 +51,7 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
+const SINGLE_EMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -63,8 +64,17 @@ const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
  * need emojification.
  * unicodeToImage uses this function.
  */
-export function containsEmoji(str) {
+export function mightContainEmoji(str) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
+}
+
+/**
+ * Returns true if the string definitely contains a single emoji.
+ * @param {String} str String to test
+ * @return {Boolean}
+ */
+export function isSingleEmoji(str) {
+    return mightContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
 }
 
 /**
@@ -428,7 +438,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : content.body);
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
