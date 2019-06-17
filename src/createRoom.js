@@ -30,12 +30,15 @@ import {getAddressType} from "./UserAddress";
  * @param {object=} opts parameters for creating the room
  * @param {string=} opts.dmUserId If specified, make this a DM room for this user and invite them
  * @param {object=} opts.createOpts set of options to pass to createRoom call.
+ * @param {bool=} opts.spinner True to show a modal spinner while the room is created.
+ *     Default: True
  *
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
 function createRoom(opts) {
     opts = opts || {};
+    if (opts.spinner === undefined) opts.spinner = true;
 
     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
     const Loader = sdk.getComponent("elements.Spinner");
@@ -87,11 +90,12 @@ function createRoom(opts) {
         },
     ];
 
-    const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+    let modal;
+    if (opts.spinner) modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
-        modal.close();
+        if (modal) modal.close();
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {

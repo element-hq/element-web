@@ -1159,6 +1159,7 @@ export default React.createClass({
                 dmUserId: this.props.config.welcomeUserId,
                 // Only view the welcome user if we're NOT looking at a room
                 andView: !this.state.currentRoomId,
+                spinner: false, // we're already showing one: we don't need another one
             });
             // This is a bit of a hack, but since the deduplication relies
             // on m.direct being up to date, we need to force a sync
