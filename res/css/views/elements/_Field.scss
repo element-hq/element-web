@@ -18,6 +18,8 @@ limitations under the License.
 
 .mx_Field {
     display: flex;
+    flex: 1;
+    min-width: 0;
     position: relative;
     margin: 1em 0;
     border-radius: 4px;
