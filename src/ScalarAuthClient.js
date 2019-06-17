@@ -29,6 +29,14 @@ class ScalarAuthClient {
         this.scalarToken = null;
     }
 
+    /**
+     * Determines if setting up a ScalarAuthClient is even possible
+     * @returns {boolean} true if possible, false otherwise.
+     */
+    static isPossible() {
+        return SdkConfig.get()['integrations_rest_url'] && SdkConfig.get()['integrations_ui_url'];
+    }
+
     connect() {
         return this.getScalarToken().then((tok) => {
             this.scalarToken = tok;
@@ -41,7 +49,8 @@ class ScalarAuthClient {
 
     // Returns a scalar_token string
     getScalarToken() {
-        const token = window.localStorage.getItem("mx_scalar_token");
+        let token = this.scalarToken;
+        if (!token) token = window.localStorage.getItem("mx_scalar_token");
 
         if (!token) {
             return this.registerForToken();

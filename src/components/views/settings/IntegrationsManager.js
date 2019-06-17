@@ -18,19 +18,67 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
+import ScalarAuthClient from '../../../ScalarAuthClient';
 
 export default class IntegrationsManager extends React.Component {
     static propTypes = {
-        // the source of the integration manager being embedded
-        src: PropTypes.string.isRequired,
+        // the room object where the integrations manager should be opened in
+        room: PropTypes.object.isRequired,
+
+        // the screen name to open
+        screen: PropTypes.string,
+
+        // the integration ID to open
+        integrationId: PropTypes.string,
 
         // callback when the manager is dismissed
         onFinished: PropTypes.func.isRequired,
     };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true,
+            configured: ScalarAuthClient.isPossible(),
+            connected: false, // true if a `src` is set and able to be connected to
+            src: null, // string for where to connect to
+        };
+    }
+
+    componentWillMount() {
+        if (!this.state.configured) return;
+
+        const scalarClient = new ScalarAuthClient();
+        scalarClient.connect().then(() => {
+            const hasCredentials = scalarClient.hasCredentials();
+            if (!hasCredentials) {
+                this.setState({
+                    connected: false,
+                    loading: false,
+                });
+            } else {
+                const src = scalarClient.getScalarInterfaceUrlForRoom(
+                    this.props.room,
+                    this.props.screen,
+                    this.props.integrationId,
+                );
+                this.setState({
+                    loading: false,
+                    connected: true,
+                    src: src,
+                });
+            }
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                loading: false,
+                connected: false,
+            });
+        })
+    }
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -57,6 +105,34 @@ export default class IntegrationsManager extends React.Component {
     };
 
     render() {
-        return <iframe src={ this.props.src }></iframe>;
+        if (!this.state.configured) {
+            return (
+                <div className='mx_IntegrationsManager_error'>
+                    <h3>{_t("No integrations server configured")}</h3>
+                    <p>{_t("This Riot instance does not have an integrations server configured.")}</p>
+                </div>
+            );
+        }
+
+        if (this.state.loading) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return (
+                <div className='mx_IntegrationsManager_loading'>
+                    <h3>{_t("Connecting to integrations server...")}</h3>
+                    <Spinner />
+                </div>
+            );
+        }
+
+        if (!this.state.connected) {
+            return (
+                <div className='mx_IntegrationsManager_error'>
+                    <h3>{_t("Cannot connect to integrations server")}</h3>
+                    <p>{_t("The integrations server is offline or it cannot reach your homeserver.")}</p>
+                </div>
+            );
+        }
+
+        return <iframe src={this.state.src}></iframe>;
     }
 }
