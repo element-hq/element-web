@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +20,13 @@ import SdkConfig from './SdkConfig';
 import ScalarMessaging from './ScalarMessaging';
 import ScalarAuthClient from './ScalarAuthClient';
 import RoomViewStore from './stores/RoomViewStore';
+import MatrixClientPeg from "./MatrixClientPeg";
 
 if (!global.mxIntegrationManager) {
   global.mxIntegrationManager = {};
 }
+
+// TODO: TravisR - What even is this?
 
 export default class IntegrationManager {
   static _init() {
@@ -62,16 +66,10 @@ export default class IntegrationManager {
       console.error("Scalar error", global.mxIntegrationManager);
       return;
     }
-    const integType = 'type_' + integName;
-    const src = (global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials()) ?
-      global.mxIntegrationManager.client.getScalarInterfaceUrlForRoom(
-        {roomId: RoomViewStore.getRoomId()},
-        integType,
-        integId,
-      ) :
-      null;
     Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-      src: src,
+      room: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
+      screen: 'type_' + integName,
+      integrationId: integId,
       onFinished: onFinished,
     }, "mx_IntegrationsManager");
   }
