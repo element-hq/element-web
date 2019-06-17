@@ -44,7 +44,7 @@ export default class IntegrationManager {
   }
 
   /**
-   * Launch the integrations manager on the stickers integration page
+   * Launch the integrations manager on the specified integration page
    * @param  {string} integName integration / widget type
    * @param  {string} integId   integration / widget ID
    * @param  {function} onFinished Callback to invoke on integration manager close
