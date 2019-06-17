@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,50 +15,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
+import dis from '../../../dispatcher';
 
-const React = require('react');
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const dis = require('../../../dispatcher');
+export default class IntegrationsManager extends React.Component {
+    static propTypes = {
+        // the source of the integration manager being embedded
+        src: PropTypes.string.isRequired,
 
-module.exports = React.createClass({
-    displayName: 'IntegrationsManager',
+        // callback when the manager is dismissed
+        onFinished: PropTypes.func.isRequired,
+    };
 
-    propTypes: {
-        src: React.PropTypes.string.isRequired, // the source of the integration manager being embedded
-        onFinished: React.PropTypes.func.isRequired, // callback when the lightbox is dismissed
-    },
-
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal
-    // dialog base class somehow, surely...
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    onKeyDown: function(ev) {
-        if (ev.keyCode == 27) { // escape
+    onKeyDown = (ev) => {
+        if (ev.keyCode === 27) { // escape
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();
         }
-    },
+    };
 
-    onAction: function(payload) {
+    onAction = (payload) => {
         if (payload.action === 'close_scalar') {
             this.props.onFinished();
         }
-    },
+    };
 
-    render: function() {
-        return (
-            <iframe src={ this.props.src }></iframe>
-        );
-    },
-});
+    render() {
+        return <iframe src={ this.props.src }></iframe>;
+    }
+}
