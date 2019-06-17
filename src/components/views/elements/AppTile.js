@@ -245,7 +245,7 @@ export default class AppTile extends React.Component {
             Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
                 room: this.props.room,
                 screen: 'type_' + this.props.type,
-                integrationId: this.props.id
+                integrationId: this.props.id,
             }, "mx_IntegrationsManager");
         }
     }

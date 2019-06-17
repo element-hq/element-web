@@ -21,7 +21,6 @@ import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';
-import AccessibleButton from './AccessibleButton';
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -47,7 +46,7 @@ export default class ManageIntegsButton extends React.Component {
                     title={_t("Manage Integrations")}
                     onClick={this.onManageIntegrations}
                 />
-            )
+            );
         }
 
         return integrationsButton;

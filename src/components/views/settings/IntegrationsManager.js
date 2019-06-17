@@ -77,7 +77,7 @@ export default class IntegrationsManager extends React.Component {
                 loading: false,
                 connected: false,
             });
-        })
+        });
     }
 
     componentDidMount() {
