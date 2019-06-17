@@ -26,8 +26,6 @@ export default {
             const audioinput = [];
             const videoinput = [];
 
-            if (devices.some((device) => !device.label)) return false;
-
             devices.forEach((device) => {
                 switch (device.kind) {
                     case 'audiooutput': audiooutput.push(device); break;

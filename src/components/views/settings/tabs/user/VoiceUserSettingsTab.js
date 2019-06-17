@@ -100,7 +100,17 @@ export default class VoiceUserSettingsTab extends React.Component {
     };
 
     _renderDeviceOptions(devices, category) {
-        return devices.map((d) => <option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
+        return devices.map((d) => {
+            let label = d.label;
+            if (!label) {
+                switch (d.kind) {
+                    case "audioinput": label = _t("Unnamed microphone"); break;
+                    case "audiooutput": label = _t("Unnamed audio output"); break;
+                    case "videoinput": label = _t("Unnamed camera"); break;
+                }
+            }
+            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{label}</option>);
+        });
     }
 
     render() {
