@@ -22,55 +22,22 @@ import ScalarAuthClient from './ScalarAuthClient';
 import RoomViewStore from './stores/RoomViewStore';
 import MatrixClientPeg from "./MatrixClientPeg";
 
-if (!global.mxIntegrationManager) {
-  global.mxIntegrationManager = {};
-}
-
-// TODO: TravisR - What even is this?
-
+// TODO: We should use this everywhere.
 export default class IntegrationManager {
-  static _init() {
-    if (!global.mxIntegrationManager.client || !global.mxIntegrationManager.connected) {
-      if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
-        ScalarMessaging.startListening();
-        global.mxIntegrationManager.client = new ScalarAuthClient();
-
-        return global.mxIntegrationManager.client.connect().then(() => {
-          global.mxIntegrationManager.connected = true;
-        }).catch((e) => {
-          console.error("Failed to connect to integrations server", e);
-          global.mxIntegrationManager.error = e;
-        });
-      } else {
-        console.error('Invalid integration manager config', SdkConfig.get());
-      }
+    /**
+     * Launch the integrations manager on the specified integration page
+     * @param  {string} integName integration / widget type
+     * @param  {string} integId   integration / widget ID
+     * @param  {function} onFinished Callback to invoke on integration manager close
+     */
+    static async open(integName, integId, onFinished) {
+        // The dialog will take care of scalar auth for us
+        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+            room: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
+            screen: 'type_' + integName,
+            integrationId: integId,
+            onFinished: onFinished,
+        }, "mx_IntegrationsManager");
     }
-  }
-
-  /**
-   * Launch the integrations manager on the specified integration page
-   * @param  {string} integName integration / widget type
-   * @param  {string} integId   integration / widget ID
-   * @param  {function} onFinished Callback to invoke on integration manager close
-   */
-  static async open(integName, integId, onFinished) {
-    await IntegrationManager._init();
-    if (global.mxIntegrationManager.client) {
-        await global.mxIntegrationManager.client.connect();
-    } else {
-        return;
-    }
-    const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-    if (global.mxIntegrationManager.error ||
-        !(global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials())) {
-      console.error("Scalar error", global.mxIntegrationManager);
-      return;
-    }
-    Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-      room: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
-      screen: 'type_' + integName,
-      integrationId: integId,
-      onFinished: onFinished,
-    }, "mx_IntegrationsManager");
-  }
 }
