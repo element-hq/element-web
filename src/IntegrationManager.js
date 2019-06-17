@@ -16,9 +16,6 @@ limitations under the License.
 */
 import Modal from './Modal';
 import sdk from './index';
-import SdkConfig from './SdkConfig';
-import ScalarMessaging from './ScalarMessaging';
-import ScalarAuthClient from './ScalarAuthClient';
 import RoomViewStore from './stores/RoomViewStore';
 import MatrixClientPeg from "./MatrixClientPeg";
 
