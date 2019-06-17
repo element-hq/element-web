@@ -30,6 +30,7 @@ limitations under the License.
 
 .mx_Login_submit:disabled {
     opacity: 0.3;
+    cursor: default;
 }
 
 .mx_AuthBody a.mx_Login_sso_link:link,

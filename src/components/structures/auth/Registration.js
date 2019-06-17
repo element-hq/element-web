@@ -180,7 +180,10 @@ module.exports = React.createClass({
                 serverConfig.hsUrl,
                 serverConfig.isUrl,
             );
-            this.setState({serverIsAlive: true});
+            this.setState({
+                serverIsAlive: true,
+                serverErrorIsFatal: false,
+            });
         } catch (e) {
             this.setState({
                 busy: false,
