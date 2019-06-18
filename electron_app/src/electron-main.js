@@ -295,7 +295,10 @@ app.on('ready', () => {
         console.log('No update_base_url is defined: auto update is disabled');
     }
 
-    const iconPath = `${__dirname}/../img/riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
+    // It's important to call `path.join` so we don't end up with the packaged
+    // asar in the final path.
+    const iconFile = `riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
+    const iconPath = path.join(__dirname, "..", "..", "img", iconFile);
 
     // Load the previous window state with fallback to defaults
     const mainWindowState = windowStateKeeper({
