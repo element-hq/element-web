@@ -266,7 +266,6 @@ class AtRoomPillPart extends RoomPillPart {
     }
 }
 
-
 class UserPillPart extends PillPart {
     constructor(userId, displayName, member) {
         super(userId, displayName);
