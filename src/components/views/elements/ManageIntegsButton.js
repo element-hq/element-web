@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,95 +18,34 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import classNames from 'classnames';
-import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
-import ScalarMessaging from '../../../ScalarMessaging';
 import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';
-import AccessibleButton from './AccessibleButton';
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            scalarError: null,
-        };
-
-        this.onManageIntegrations = this.onManageIntegrations.bind(this);
     }
 
-    componentWillMount() {
-        ScalarMessaging.startListening();
-        this.scalarClient = null;
-
-        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
-            this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
-                this.forceUpdate();
-            }, (err) => {
-                this.setState({scalarError: err});
-                console.error('Error whilst initialising scalarClient for ManageIntegsButton', err);
-            });
-        }
-    }
-
-    componentWillUnmount() {
-        ScalarMessaging.stopListening();
-    }
-
-    onManageIntegrations(ev) {
+    onManageIntegrations = (ev) => {
         ev.preventDefault();
-        if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
-            return;
-        }
+
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        this.scalarClient.connect().done(() => {
-            Modal.createDialog(IntegrationsManager, {
-                src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                    this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room) :
-                    null,
-            }, "mx_IntegrationsManager");
-        }, (err) => {
-            this.setState({scalarError: err});
-            console.error('Error ensuring a valid scalar_token exists', err);
-        });
-    }
+        Modal.createDialog(IntegrationsManager, {
+            room: this.props.room,
+        }, "mx_IntegrationsManager");
+    };
 
     render() {
         let integrationsButton = <div />;
-        let integrationsWarningTriangle = <div />;
-        let integrationsErrorPopup = <div />;
-        if (this.scalarClient !== null) {
-            const integrationsButtonClasses = classNames({
-                mx_RoomHeader_button: true,
-                mx_RoomHeader_manageIntegsButton: true,
-                mx_ManageIntegsButton_error: !!this.state.scalarError,
-            });
-
-            if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
-                integrationsWarningTriangle = <img
-                    src={require("../../../../res/img/warning.svg")}
-                    title={_t('Integrations Error')}
-                    width="17"
-                />;
-                // Popup shown when hovering over integrationsButton_error (via CSS)
-                integrationsErrorPopup = (
-                    <span className="mx_ManageIntegsButton_errorPopup">
-                        { _t('Could not connect to the integration server') }
-                    </span>
-                );
-            }
-
+        if (ScalarAuthClient.isPossible()) {
+            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             integrationsButton = (
-                <AccessibleButton className={integrationsButtonClasses}
+                <AccessibleButton
+                    className='mx_RoomHeader_button mx_RoomHeader_manageIntegsButton'
+                    title={_t("Manage Integrations")}
                     onClick={this.onManageIntegrations}
-                    title={_t('Manage Integrations')}
-                >
-                    { integrationsWarningTriangle }
-                    { integrationsErrorPopup }
-                </AccessibleButton>
+                />
             );
         }
 
