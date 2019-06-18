@@ -1206,39 +1206,42 @@ export default class MessageComposerInput extends React.Component {
     onVerticalArrow = (e, up) => {
         if (e.ctrlKey || e.shiftKey || e.metaKey) return;
 
-        if (e.altKey) {
+        // selection must be collapsed
+        const selection = this.state.editorState.selection;
+        if (!selection.isCollapsed) return;
+        // and we must be at the edge of the document (up=start, down=end)
+        const document = this.state.editorState.document;
+        if (up) {
+            if (!selection.anchor.isAtStartOfNode(document)) return;
+        } else {
+            if (!selection.anchor.isAtEndOfNode(document)) return;
+        }
+
+        const editingEnabled = SettingsStore.isFeatureEnabled("feature_message_editing");
+        const shouldSelectHistory = (editingEnabled && e.altKey) || !editingEnabled;
+        const shouldEditLastMessage = editingEnabled && !e.altKey && up;
+
+        if (shouldSelectHistory) {
             // Try select composer history
             const selected = this.selectHistory(up);
             if (selected) {
                 // We're selecting history, so prevent the key event from doing anything else
                 e.preventDefault();
             }
-        } else if (!e.altKey && up) {
-            // Try edit the latest message
-            const selection = this.state.editorState.selection;
-
-            // selection must be collapsed
-            if (!selection.isCollapsed) return;
-            const document = this.state.editorState.document;
-
-            // and we must be at the edge of the document (up=start, down=end)
-            if (!selection.anchor.isAtStartOfNode(document)) return;
-
-            if (!e.altKey) {
-                const editEvent = findEditableEvent(this.props.room, false);
-                if (editEvent) {
-                    // We're selecting history, so prevent the key event from doing anything else
-                    e.preventDefault();
-                    dis.dispatch({
-                        action: 'edit_event',
-                        event: editEvent,
-                    });
-                }
+        } else if (shouldEditLastMessage) {
+            const editEvent = findEditableEvent(this.props.room, false);
+            if (editEvent) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+                dis.dispatch({
+                    action: 'edit_event',
+                    event: editEvent,
+                });
             }
         }
     };
 
-    selectHistory = async (up) => {
+    selectHistory = (up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
