@@ -1,3 +1,11 @@
+Changes in [1.2.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.2.2-rc.2) (2019-06-18)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.2-rc.1...v1.2.2-rc.2)
+
+ * Update to react-sdk and js-sdk rc.2 for registration fixes,
+   redaction local echo fix and removing unnecessary calls
+   to the integration manager.
+
 Changes in [1.2.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.2.2-rc.1) (2019-06-12)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.1...v1.2.2-rc.1)
