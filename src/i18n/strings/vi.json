@@ -16,5 +16,7 @@
     "Get started with some tips from Riot Bot!": "Bắt đầu với các hướng dẫn từ Riot Bot!",
     "General discussion about Matrix and Riot": "Thảo luận chung về Matrix và Riot",
     "Discussion of all things Matrix!": "Thào luận về mọi vấn đề liên quan đến Matrix!",
-    "Riot/Web &amp; Desktop chat": "Riot/Web &amp; Desktop chat"
+    "Riot/Web &amp; Desktop chat": "Riot/Web &amp; Desktop chat",
+    "Unexpected error preparing the app. See console for details.": "Lỗi xảy ra trong lúc chuẩn bị app. Xem console log để biết chi tiết.",
+    "Your Riot is misconfigured": "Riot của bạn bị cấu hình sai"
 }
