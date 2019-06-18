@@ -97,6 +97,13 @@ module.exports = React.createClass({
             // Our matrix client - part of state because we can't render the UI auth
             // component without it.
             matrixClient: null,
+
+            // The user ID we've just registered
+            registeredUsername: null,
+
+            // if a different user ID to the one we just registered is logged in,
+            // this is the user ID that's logged in.
+            differentLoggedInUserId: null,
         };
     },
 
@@ -297,7 +304,25 @@ module.exports = React.createClass({
 
         const newState = {
             doingUIAuth: false,
+            registeredUsername: response.user_id,
         };
+
+        // The user came in through an email validation link. To avoid overwriting
+        // their session, check to make sure the session isn't someone else, and
+        // isn't a guest user since we'll usually have set a guest user session before
+        // starting the registration process. This isn't perfect since it's possible
+        // the user had a separate guest session they didn't actually mean to replace.
+        const sessionOwner = Lifecycle.getStoredSessionOwner();
+        const sessionIsGuest = Lifecycle.getStoredSessionIsGuest();
+        if (sessionOwner && !sessionIsGuest && sessionOwner !== response.userId) {
+            console.log(
+                `Found a session for ${sessionOwner} but ${response.userId} has just registered.`,
+            );
+            newState.differentLoggedInUserId = sessionOwner;
+        } else {
+            newState.differentLoggedInUserId = null;
+        }
+
         if (response.access_token) {
             const cli = await this.props.onLoggedIn({
                 userId: response.user_id,
@@ -538,6 +563,7 @@ module.exports = React.createClass({
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AuthPage = sdk.getComponent('auth.AuthPage');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let errorText;
         const err = this.state.errorText;
@@ -574,28 +600,41 @@ module.exports = React.createClass({
         let body;
         if (this.state.completedNoSignin) {
             let regDoneText;
-            if (this.state.formVals.password) {
+            if (this.state.differentLoggedInUserId) {
+                regDoneText = <div>
+                    <p>{_t(
+                        "Your new account (%(newAccountId)s) is registered, but you're already " +
+                        "logged into a different account (%(loggedInUserId)s).", {
+                            newAccountId: this.state.registeredUsername,
+                            loggedInUserId: this.state.differentLoggedInUserId,
+                        },
+                    )}</p>
+                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this._onLoginClickWithCheck}>
+                        {_t("Continue with previous account")}
+                    </AccessibleButton></p>
+                </div>;
+            } else if (this.state.formVals.password) {
                 // We're the client that started the registration
-                regDoneText = _t(
+                regDoneText = <h3>{_t(
                     "<a>Log in</a> to your new account.", {},
                     {
                         a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
                     },
-                );
+                )}</h3>;
             } else {
                 // We're not the original client: the user probably got to us by clicking the
                 // email validation link. We can't offer a 'go straight to your account' link
                 // as we don't have the original creds.
-                regDoneText = _t(
+                regDoneText = <h3>{_t(
                     "You can now close this window or <a>log in</a> to your new account.", {},
                     {
                         a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
                     },
-                );
+                )}</h3>;
             }
             body = <div>
                 <h2>{_t("Registration Successful")}</h2>
-                <h3>{ regDoneText }</h3>
+                { regDoneText }
             </div>;
         } else {
             body = <div>
