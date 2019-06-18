@@ -107,7 +107,7 @@ class BasePart {
     }
 }
 
-export class PlainPart extends BasePart {
+class PlainPart extends BasePart {
     acceptsInsertion(chr) {
         return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "\n";
     }
@@ -199,7 +199,7 @@ class PillPart extends BasePart {
     }
 }
 
-export class NewlinePart extends BasePart {
+class NewlinePart extends BasePart {
     acceptsInsertion(chr, i) {
         return (this.text.length + i) === 0 && chr === "\n";
     }
@@ -235,20 +235,10 @@ export class NewlinePart extends BasePart {
     }
 }
 
-export class RoomPillPart extends PillPart {
-    constructor(displayAlias, client) {
+class RoomPillPart extends PillPart {
+    constructor(displayAlias, room) {
         super(displayAlias, displayAlias);
-        this._room = this._findRoomByAlias(displayAlias, client);
-    }
-
-    _findRoomByAlias(alias, client) {
-        if (alias[0] === '#') {
-            return client.getRooms().find((r) => {
-                return r.getAliases().includes(alias);
-            });
-        } else {
-            return client.getRoom(alias);
-        }
+        this._room = room;
     }
 
     setAvatar(node) {
@@ -270,7 +260,13 @@ export class RoomPillPart extends PillPart {
     }
 }
 
-export class UserPillPart extends PillPart {
+class AtRoomPillPart extends RoomPillPart {
+    get type() {
+        return "at-room-pill";
+    }
+}
+
+class UserPillPart extends PillPart {
     constructor(userId, displayName, member) {
         super(userId, displayName);
         this._member = member;
@@ -311,7 +307,7 @@ export class UserPillPart extends PillPart {
 }
 
 
-export class PillCandidatePart extends PlainPart {
+class PillCandidatePart extends PlainPart {
     constructor(text, autoCompleteCreator) {
         super(text);
         this._autoCompleteCreator = autoCompleteCreator;
@@ -351,8 +347,7 @@ export class PartCreator {
                 updateCallback,
                 getAutocompleterComponent,
                 updateQuery,
-                room,
-                client,
+                this,
             );
         };
     }
@@ -362,7 +357,7 @@ export class PartCreator {
             case "#":
             case "@":
             case ":":
-                return new PillCandidatePart("", this._autoCompleteCreator);
+                return this.pillCandidate("");
             case "\n":
                 return new NewlinePart();
             default:
@@ -371,24 +366,57 @@ export class PartCreator {
     }
 
     createDefaultPart(text) {
-        return new PlainPart(text);
+        return this.plain(text);
     }
 
     deserializePart(part) {
         switch (part.type) {
             case "plain":
-                return new PlainPart(part.text);
+                return this.plain(part.text);
             case "newline":
-                return new NewlinePart(part.text);
+                return this.newline();
+            case "at-room-pill":
+                return this.atRoomPill(part.text);
             case "pill-candidate":
-                return new PillCandidatePart(part.text, this._autoCompleteCreator);
+                return this.pillCandidate(part.text);
             case "room-pill":
-                return new RoomPillPart(part.text, this._client);
-            case "user-pill": {
-                const member = this._room.getMember(part.userId);
-                return new UserPillPart(part.userId, part.text, member);
-            }
+                return this.roomPill(part.text);
+            case "user-pill":
+                return this.userPill(part.text, part.userId);
         }
+    }
+
+    plain(text) {
+        return new PlainPart(text);
+    }
+
+    newline() {
+        return new NewlinePart("\n");
+    }
+
+    pillCandidate(text) {
+        return new PillCandidatePart(text, this._autoCompleteCreator);
+    }
+
+    roomPill(alias) {
+        let room;
+        if (alias[0] === '#') {
+            room = this._client.getRooms().find((r) => {
+                return r.getAliases().includes(alias);
+            });
+        } else {
+            room = this._client.getRoom(alias);
+        }
+        return new RoomPillPart(alias, room);
+    }
+
+    atRoomPill(text) {
+        return new AtRoomPillPart(text, this._room);
+    }
+
+    userPill(displayName, userId) {
+        const member = this._room.getMember(userId);
+        return new UserPillPart(userId, displayName, member);
     }
 }
 

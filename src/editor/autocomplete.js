@@ -15,22 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {UserPillPart, RoomPillPart, PlainPart} from "./parts";
-
 export default class AutocompleteWrapperModel {
-    constructor(updateCallback, getAutocompleterComponent, updateQuery, room, client) {
+    constructor(updateCallback, getAutocompleterComponent, updateQuery, partCreator) {
         this._updateCallback = updateCallback;
         this._getAutocompleterComponent = getAutocompleterComponent;
         this._updateQuery = updateQuery;
+        this._partCreator = partCreator;
         this._query = null;
-        this._room = room;
-        this._client = client;
     }
 
     onEscape(e) {
         this._getAutocompleterComponent().onEscape(e);
         this._updateCallback({
-            replacePart: new PlainPart(this._queryPart.text),
+            replacePart: this._partCreator.plain(this._queryPart.text),
             caretOffset: this._queryOffset,
             close: true,
         });
@@ -93,21 +90,22 @@ export default class AutocompleteWrapperModel {
     }
 
     _partForCompletion(completion) {
-        const firstChr = completion.completionId && completion.completionId[0];
+        const {completionId} = completion;
+        const text = completion.completion;
+        const firstChr = completionId && completionId[0];
         switch (firstChr) {
             case "@": {
-                const displayName = completion.completion;
-                const userId = completion.completionId;
-                const member = this._room.getMember(userId);
-                return new UserPillPart(userId, displayName, member);
+                if (completionId === "@room") {
+                    return this._partCreator.atRoomPill(completionId);
+                } else {
+                    return this._partCreator.userPill(text, completionId);
+                }
             }
-            case "#": {
-                const displayAlias = completion.completionId;
-                return new RoomPillPart(displayAlias, this._client);
-            }
+            case "#":
+                return this._partCreator.roomPill(completionId);
             // also used for emoji completion
             default:
-                return new PlainPart(completion.completion);
+                return this._partCreator.plain(text);
         }
     }
 }
