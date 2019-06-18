@@ -104,6 +104,9 @@ export default class ServerConfig extends React.PureComponent {
 
             const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
             if (!stateForError.isFatalError) {
+                this.setState({
+                    busy: false,
+                });
                 // carry on anyway
                 const result = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);
                 this.props.onServerConfigChange(result);
