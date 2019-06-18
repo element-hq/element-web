@@ -101,16 +101,28 @@ export default class ServerConfig extends React.PureComponent {
             return result;
         } catch (e) {
             console.error(e);
-            let message = _t("Unable to validate homeserver/identity server");
-            if (e.translatedMessage) {
-                message = e.translatedMessage;
-            }
-            this.setState({
-                busy: false,
-                errorText: message,
-            });
 
-            return null;
+            const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
+            if (!stateForError.isFatalError) {
+                this.setState({
+                    busy: false,
+                });
+                // carry on anyway
+                const result = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);
+                this.props.onServerConfigChange(result);
+                return result;
+            } else {
+                let message = _t("Unable to validate homeserver/identity server");
+                if (e.translatedMessage) {
+                    message = e.translatedMessage;
+                }
+                this.setState({
+                    busy: false,
+                    errorText: message,
+                });
+
+                return null;
+            }
         }
     }
 

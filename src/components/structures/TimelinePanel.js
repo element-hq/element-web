@@ -35,6 +35,7 @@ const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
+import EditorStateTransfer from '../../utils/EditorStateTransfer';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -411,7 +412,8 @@ const TimelinePanel = React.createClass({
             this.forceUpdate();
         }
         if (payload.action === "edit_event") {
-            this.setState({editEvent: payload.event}, () => {
+            const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+            this.setState({editState}, () => {
                 if (payload.event && this.refs.messagePanel) {
                     this.refs.messagePanel.scrollToEventIfNeeded(
                         payload.event.getId(),
@@ -1306,7 +1308,7 @@ const TimelinePanel = React.createClass({
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editEvent={this.state.editEvent}
+                editState={this.state.editState}
                 showReactions={this.props.showReactions}
             />
         );

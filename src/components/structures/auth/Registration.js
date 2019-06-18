@@ -28,6 +28,8 @@ import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
+import * as Lifecycle from '../../../Lifecycle';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 // Phases
 // Show controls to configure server details
@@ -80,6 +82,9 @@ module.exports = React.createClass({
             // Phase of the overall registration dialog.
             phase: PHASE_REGISTRATION,
             flows: null,
+            // If set, we've registered but are not going to log
+            // the user in to their new account automatically.
+            completedNoSignin: false,
 
             // We perform liveliness checks later, but for now suppress the errors.
             // We also track the server dead errors independently of the regular errors so
@@ -163,6 +168,8 @@ module.exports = React.createClass({
     _replaceClient: async function(serverConfig) {
         this.setState({
             errorText: null,
+            serverDeadError: null,
+            serverErrorIsFatal: false,
             // busy while we do liveness check (we need to avoid trying to render
             // the UI auth component while we don't have a matrix client)
             busy: true,
@@ -175,7 +182,10 @@ module.exports = React.createClass({
                 serverConfig.hsUrl,
                 serverConfig.isUrl,
             );
-            this.setState({serverIsAlive: true});
+            this.setState({
+                serverIsAlive: true,
+                serverErrorIsFatal: false,
+            });
         } catch (e) {
             this.setState({
                 busy: false,
@@ -209,6 +219,7 @@ module.exports = React.createClass({
                     errorText: _t("Registration has been disabled on this homeserver."),
                 });
             } else {
+                console.log("Unable to query for supported registration methods.", e);
                 this.setState({
                     errorText: _t("Unable to query for supported registration methods."),
                 });
@@ -282,21 +293,29 @@ module.exports = React.createClass({
             return;
         }
 
-        this.setState({
-            // we're still busy until we get unmounted: don't show the registration form again
-            busy: true,
+        MatrixClientPeg.setJustRegisteredUserId(response.user_id);
+
+        const newState = {
             doingUIAuth: false,
-        });
+        };
+        if (response.access_token) {
+            const cli = await this.props.onLoggedIn({
+                userId: response.user_id,
+                deviceId: response.device_id,
+                homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                accessToken: response.access_token,
+            });
 
-        const cli = await this.props.onLoggedIn({
-            userId: response.user_id,
-            deviceId: response.device_id,
-            homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
-            identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
-            accessToken: response.access_token,
-        });
+            this._setupPushers(cli);
+            // we're still busy until we get unmounted: don't show the registration form again
+            newState.busy = true;
+        } else {
+            newState.busy = false;
+            newState.completedNoSignin = true;
+        }
 
-        this._setupPushers(cli);
+        this.setState(newState);
     },
 
     _setupPushers: function(matrixClient) {
@@ -353,6 +372,12 @@ module.exports = React.createClass({
     },
 
     _makeRegisterRequest: function(auth) {
+        // We inhibit login if we're trying to register with an email address: this
+        // avoids a lot of complex race conditions that can occur if we try to log
+        // the user in one one or both of the tabs they might end up with after
+        // clicking the email link.
+        let inhibitLogin = Boolean(this.state.formVals.email);
+
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
         // session).
@@ -360,6 +385,8 @@ module.exports = React.createClass({
             email: true,
             msisdn: true,
         } : {};
+        // Likewise inhibitLogin
+        if (!this.state.formVals.password) inhibitLogin = null;
 
         return this.state.matrixClient.register(
             this.state.formVals.username,
@@ -368,6 +395,7 @@ module.exports = React.createClass({
             auth,
             bindThreepids,
             null,
+            inhibitLogin,
         );
     },
 
@@ -377,6 +405,19 @@ module.exports = React.createClass({
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
         };
+    },
+
+    // Links to the login page shown after registration is completed are routed through this
+    // which checks the user hasn't already logged in somewhere else (perhaps we should do
+    // this more generally?)
+    _onLoginClickWithCheck: async function(ev) {
+        ev.preventDefault();
+
+        const sessionLoaded = await Lifecycle.loadSession({});
+        if (!sessionLoaded) {
+            // ok fine, there's still no session: really go to the login page
+            this.props.onLoginClick();
+        }
     },
 
     renderServerComponent() {
@@ -390,7 +431,9 @@ module.exports = React.createClass({
 
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
-        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
+        // (if there's a fatal server error, we need to show the full server
+        // config as the user may need to change servers to resolve the error).
+        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS && !this.state.serverErrorIsFatal) {
             return <div>
                 <ServerTypeSelector
                     selected={this.state.serverType}
@@ -528,17 +571,49 @@ module.exports = React.createClass({
             </a>;
         }
 
+        let body;
+        if (this.state.completedNoSignin) {
+            let regDoneText;
+            if (this.state.formVals.password) {
+                // We're the client that started the registration
+                regDoneText = _t(
+                    "<a>Log in</a> to your new account.", {},
+                    {
+                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                    },
+                );
+            } else {
+                // We're not the original client: the user probably got to us by clicking the
+                // email validation link. We can't offer a 'go straight to your account' link
+                // as we don't have the original creds.
+                regDoneText = _t(
+                    "You can now close this window or <a>log in</a> to your new account.", {},
+                    {
+                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                    },
+                );
+            }
+            body = <div>
+                <h2>{_t("Registration Successful")}</h2>
+                <h3>{ regDoneText }</h3>
+            </div>;
+        } else {
+            body = <div>
+                <h2>{ _t('Create your account') }</h2>
+                { errorText }
+                { serverDeadSection }
+                { this.renderServerComponent() }
+                { this.renderRegisterComponent() }
+                { goBack }
+                { signIn }
+            </div>;
+        }
+
         return (
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    <h2>{ _t('Create your account') }</h2>
-                    { errorText }
-                    { serverDeadSection }
-                    { this.renderServerComponent() }
-                    { this.renderRegisterComponent() }
-                    { goBack }
-                    { signIn }
+                    { body }
                 </AuthBody>
             </AuthPage>
         );

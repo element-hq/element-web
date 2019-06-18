@@ -21,7 +21,7 @@ import { walkDOMDepthFirst } from "./dom";
 
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
-function parseLink(a, room) {
+function parseLink(a, room, client) {
     const {href} = a;
     const pillMatch = REGEX_MATRIXTO.exec(href) || [];
     const resourceId = pillMatch[1]; // The room/user ID
@@ -34,7 +34,7 @@ function parseLink(a, room) {
                 room.getMember(resourceId),
             );
         case "#":
-            return new RoomPillPart(resourceId);
+            return new RoomPillPart(resourceId, client);
         default: {
             if (href === a.textContent) {
                 return new PlainPart(a.textContent);
@@ -57,10 +57,10 @@ function parseCodeBlock(n) {
     return parts;
 }
 
-function parseElement(n, room) {
+function parseElement(n, room, client) {
     switch (n.nodeName) {
         case "A":
-            return parseLink(n, room);
+            return parseLink(n, room, client);
         case "BR":
             return new NewlinePart("\n");
         case "EM":
@@ -140,7 +140,7 @@ function prefixQuoteLines(isFirstNode, parts) {
     }
 }
 
-function parseHtmlMessage(html, room) {
+function parseHtmlMessage(html, room, client) {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
@@ -165,7 +165,7 @@ function parseHtmlMessage(html, room) {
         if (n.nodeType === Node.TEXT_NODE) {
             newParts.push(new PlainPart(n.nodeValue));
         } else if (n.nodeType === Node.ELEMENT_NODE) {
-            const parseResult = parseElement(n, room);
+            const parseResult = parseElement(n, room, client);
             if (parseResult) {
                 if (Array.isArray(parseResult)) {
                     newParts.push(...parseResult);
@@ -205,14 +205,15 @@ function parseHtmlMessage(html, room) {
     return parts;
 }
 
-export function parseEvent(event, room) {
+export function parseEvent(event, room, client) {
     const content = event.getContent();
+    let parts;
     if (content.format === "org.matrix.custom.html") {
-        return parseHtmlMessage(content.formatted_body || "", room);
+        parts = parseHtmlMessage(content.formatted_body || "", room, client);
     } else {
         const body = content.body || "";
         const lines = body.split("\n");
-        const parts = lines.reduce((parts, line, i) => {
+        parts = lines.reduce((parts, line, i) => {
             const isLast = i === lines.length - 1;
             const text = new PlainPart(line);
             const newLine = !isLast && new NewlinePart("\n");
@@ -222,6 +223,9 @@ export function parseEvent(event, room) {
                 return parts.concat(text);
             }
         }, []);
-        return parts;
     }
+    if (content.msgtype === "m.emote") {
+        parts.unshift(new PlainPart("/me "));
+    }
+    return parts;
 }

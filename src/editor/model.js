@@ -27,6 +27,10 @@ export default class EditorModel {
         this._updateCallback = updateCallback;
     }
 
+    clone() {
+        return new EditorModel(this._parts, this._partCreator, this._updateCallback);
+    }
+
     _insertPart(index, part) {
         this._parts.splice(index, 0, part);
         if (this._activePartIdx >= index) {
@@ -73,7 +77,7 @@ export default class EditorModel {
     }
 
     serializeParts() {
-        return this._parts.map(({type, text}) => {return {type, text};});
+        return this._parts.map(p => p.serialize());
     }
 
     _diff(newValue, inputType, caret) {
@@ -88,10 +92,10 @@ export default class EditorModel {
 
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
-        const position = this._positionForOffset(diff.at, caret.atNodeEnd);
+        const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
         if (diff.removed) {
-            removedOffsetDecrease = this._removeText(position, diff.removed.length);
+            removedOffsetDecrease = this.removeText(position, diff.removed.length);
         }
         let addedLen = 0;
         if (diff.added) {
@@ -99,7 +103,7 @@ export default class EditorModel {
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
-        let newPosition = this._positionForOffset(caretOffset, true);
+        let newPosition = this.positionForOffset(caretOffset, true);
         newPosition = newPosition.skipUneditableParts(this._parts);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
@@ -177,7 +181,7 @@ export default class EditorModel {
      * @return {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
-    _removeText(pos, len) {
+    removeText(pos, len) {
         let {index, offset} = pos;
         let removedOffsetDecrease = 0;
         while (len > 0) {
@@ -248,7 +252,7 @@ export default class EditorModel {
         return addLen;
     }
 
-    _positionForOffset(totalOffset, atPartEnd) {
+    positionForOffset(totalOffset, atPartEnd) {
         let currentOffset = 0;
         const index = this._parts.findIndex(part => {
             const partLen = part.text.length;

@@ -23,7 +23,11 @@ limitations under the License.
     cursor: default !important;
 }
 
-.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button, .mx_DevTools_RoomStateExplorer_query {
+.mx_DevTools_RoomStateExplorer_query {
+    margin-bottom: 10px;
+}
+
+.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button {
     margin-bottom: 10px;
     width: 100%;
 }
@@ -75,7 +79,6 @@ limitations under the License.
     max-width: 684px;
     min-height: 250px;
     padding: 10px;
-    width: 100%;
 }
 
 .mx_DevTools_content .mx_Field_input {

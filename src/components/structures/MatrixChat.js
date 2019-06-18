@@ -51,7 +51,9 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import {ValidatedServerConfig} from "../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import DMRoomMap from '../../utils/DMRoomMap';
 
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
@@ -676,7 +678,7 @@ export default React.createClass({
         });
     },
 
-    _startRegistration: function(params) {
+    _startRegistration: async function(params) {
         const newState = {
             view: VIEWS.REGISTER,
         };
@@ -689,10 +691,12 @@ export default React.createClass({
             params.is_url &&
             params.sid
         ) {
+            newState.serverConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                params.hs_url, params.is_url,
+            );
+
             newState.register_client_secret = params.client_secret;
             newState.register_session_id = params.session_id;
-            newState.register_hs_url = params.hs_url;
-            newState.register_is_url = params.is_url;
             newState.register_id_sid = params.sid;
         }
 
@@ -884,6 +888,7 @@ export default React.createClass({
                     }
                     return;
                 }
+                MatrixClientPeg.setJustRegisteredUserId(credentials.user_id);
                 this.onRegistered(credentials);
             },
             onDifferentServerClicked: (ev) => {
@@ -1129,28 +1134,80 @@ export default React.createClass({
     },
 
     /**
+     * Starts a chat with the welcome user, if the user doesn't already have one
+     * @returns {string} The room ID of the new room, or null if no room was created
+     */
+    async _startWelcomeUserChat() {
+        // We can end up with multiple tabs post-registration where the user
+        // might then end up with a session and we don't want them all making
+        // a chat with the welcome user: try to de-dupe.
+        // We need to wait for the first sync to complete for this to
+        // work though.
+        let waitFor;
+        if (!this.firstSyncComplete) {
+            waitFor = this.firstSyncPromise.promise;
+        } else {
+            waitFor = Promise.resolve();
+        }
+        await waitFor;
+
+        const welcomeUserRooms = DMRoomMap.shared().getDMRoomsForUserId(
+            this.props.config.welcomeUserId,
+        );
+        if (welcomeUserRooms.length === 0) {
+            const roomId = await createRoom({
+                dmUserId: this.props.config.welcomeUserId,
+                // Only view the welcome user if we're NOT looking at a room
+                andView: !this.state.currentRoomId,
+                spinner: false, // we're already showing one: we don't need another one
+            });
+            // This is a bit of a hack, but since the deduplication relies
+            // on m.direct being up to date, we need to force a sync
+            // of the database, otherwise if the user goes to the other
+            // tab before the next save happens (a few minutes), the
+            // saved sync will be restored from the db and this code will
+            // run without the update to m.direct, making another welcome
+            // user room (it doesn't wait for new data from the server, just
+            // the saved sync to be loaded).
+            const saveWelcomeUser = (ev) => {
+                if (
+                    ev.getType() == 'm.direct' &&
+                    ev.getContent() &&
+                    ev.getContent()[this.props.config.welcomeUserId]
+                ) {
+                    MatrixClientPeg.get().store.save(true);
+                    MatrixClientPeg.get().removeListener(
+                        "accountData", saveWelcomeUser,
+                    );
+                }
+            };
+            MatrixClientPeg.get().on("accountData", saveWelcomeUser);
+
+            return roomId;
+        }
+        return null;
+    },
+
+    /**
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (this._is_registered) {
-            this._is_registered = false;
+        if (MatrixClientPeg.currentUserIsJustRegistered()) {
+            MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
-                const roomId = await createRoom({
-                    dmUserId: this.props.config.welcomeUserId,
-                    // Only view the welcome user if we're NOT looking at a room
-                    andView: !this.state.currentRoomId,
-                });
-                // if successful, return because we're already
-                // viewing the welcomeUserId room
-                // else, if failed, fall through to view_home_page
-                if (roomId) {
-                    return;
+                const welcomeUserRoom = await this._startWelcomeUserChat();
+                if (welcomeUserRoom === null) {
+                    // We didn't rediret to the welcome user room, so show
+                    // the homepage.
+                    dis.dispatch({action: 'view_home_page'});
                 }
+            } else {
+                // The user has just logged in after registering,
+                // so show the homepage.
+                dis.dispatch({action: 'view_home_page'});
             }
-            // The user has just logged in after registering
-            dis.dispatch({action: 'view_home_page'});
         } else {
             this._showScreenAfterLogin();
         }
@@ -1691,9 +1748,6 @@ export default React.createClass({
                 return MatrixClientPeg.get();
             }
         }
-        // XXX: This should be in state or ideally store(s) because we risk not
-        //      rendering the most up-to-date view of state otherwise.
-        this._is_registered = true;
         return Lifecycle.setLoggedIn(credentials);
     },
 
