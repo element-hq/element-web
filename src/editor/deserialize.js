@@ -27,7 +27,7 @@ function parseAtRoomMentions(text, partCreator) {
         if (textPart.length) {
             parts.push(partCreator.plain(textPart));
         }
-        // it's safe to never append @room after the last text
+        // it's safe to never append @room after the last textPart
         // as split will report an empty string at the end if
         // `text` ended in @room.
         const isLast = i === arr.length - 1;
