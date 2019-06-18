@@ -1962,5 +1962,6 @@
     "Invalid base_url for m.identity_server": "Baliogabeko base_url m.identity_server zerbitzariarentzat",
     "<a>Log in</a> to your new account.": "<a>Hasi saioa</a> zure kontu berrian.",
     "You can now close this window or <a>log in</a> to your new account.": "Itxi leiho hau edo <a>hasi saioa</a> zure kontu berrian.",
-    "Registration Successful": "Ongi erregistratuta"
+    "Registration Successful": "Ongi erregistratuta",
+    "Upload all": "Igo denak"
 }
