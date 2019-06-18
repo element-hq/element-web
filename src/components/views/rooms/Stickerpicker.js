@@ -68,7 +68,7 @@ export default class Stickerpicker extends React.Component {
 
     _acquireScalarClient() {
         if (this.scalarClient) return Promise.resolve(this.scalarClient);
-        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
+        if (ScalarAuthClient.isPossible()) {
             this.scalarClient = new ScalarAuthClient();
             return this.scalarClient.connect().then(() => {
                 this.forceUpdate();
@@ -348,7 +348,7 @@ export default class Stickerpicker extends React.Component {
     /**
      * Launch the integrations manager on the stickers integration page
      */
-    async _launchManageIntegrations() {
+    _launchManageIntegrations() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
 
         // The integrations manager will handle scalar auth for us.
