@@ -156,10 +156,10 @@
     "electronVersion": "4.2.4",
     "files": [
       "node_modules/**",
-      "src/**",
-      "img/**"
+      "src/**"
     ],
     "extraResources": [
+      { "from": "electron_app/img", "to": "img" },
       "webapp/**/*",
       "origin_migrator/**/*"
     ],
