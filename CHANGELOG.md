@@ -1,3 +1,50 @@
+Changes in [1.2.2-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.2-rc.2) (2019-06-18)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.2.2-rc.1...v1.2.2-rc.2)
+
+ * Defer scalar API calls until they are needed
+   [\#3115](https://github.com/matrix-org/matrix-react-sdk/pull/3115)
+ * Blend pending redactions
+   [\#3117](https://github.com/matrix-org/matrix-react-sdk/pull/3117)
+ * Keep old arrow-up behaviour when editing is not enabled
+   [\#3116](https://github.com/matrix-org/matrix-react-sdk/pull/3116)
+ * Restore Composer History under shift-up & down
+   [\#3098](https://github.com/matrix-org/matrix-react-sdk/pull/3098)
+ * Allow changing server if validation has failed
+   [\#3114](https://github.com/matrix-org/matrix-react-sdk/pull/3114)
+ * Add Upload All button to UploadConfirmDialog
+   [\#3109](https://github.com/matrix-org/matrix-react-sdk/pull/3109)
+ * Re-enable register button
+   [\#3112](https://github.com/matrix-org/matrix-react-sdk/pull/3112)
+ * keep mx_Field stretching
+   [\#3111](https://github.com/matrix-org/matrix-react-sdk/pull/3111)
+ * Fix double-spinner
+   [\#3107](https://github.com/matrix-org/matrix-react-sdk/pull/3107)
+ * Fix display of canonicalAlias in group room info
+   [\#3110](https://github.com/matrix-org/matrix-react-sdk/pull/3110)
+ * Fix welcome user
+   [\#3106](https://github.com/matrix-org/matrix-react-sdk/pull/3106)
+ * Support editing emote messages
+   [\#3105](https://github.com/matrix-org/matrix-react-sdk/pull/3105)
+ * Use flex: 1 for mx_Field to replace all the calc(100% - 20px) and more
+   [\#3104](https://github.com/matrix-org/matrix-react-sdk/pull/3104)
+ * Use overflow on MemberInfo name/mxid so that the back button stays
+   [\#3099](https://github.com/matrix-org/matrix-react-sdk/pull/3099)
+ * Allow changing servers on nonfatal errors
+   [\#3102](https://github.com/matrix-org/matrix-react-sdk/pull/3102)
+ * Simplify email registration
+   [\#3101](https://github.com/matrix-org/matrix-react-sdk/pull/3101)
+ * Allow arrow keys navigation in autocomplete list
+   [\#2966](https://github.com/matrix-org/matrix-react-sdk/pull/2966)
+ * Edit unsent messages
+   [\#3097](https://github.com/matrix-org/matrix-react-sdk/pull/3097)
+ * Fix registration with email + non-default HS
+   [\#3096](https://github.com/matrix-org/matrix-react-sdk/pull/3096)
+ * Raise action bar above read marker
+   [\#3095](https://github.com/matrix-org/matrix-react-sdk/pull/3095)
+ * Console log more helpfully
+   [\#3094](https://github.com/matrix-org/matrix-react-sdk/pull/3094)
+
 Changes in [1.2.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.2.2-rc.1) (2019-06-12)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.2.1...v1.2.2-rc.1)
