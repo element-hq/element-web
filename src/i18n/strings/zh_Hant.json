@@ -1996,5 +1996,6 @@
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以登入，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
     "<a>Log in</a> to your new account.": "<a>登入</a>到您的新帳號。",
     "You can now close this window or <a>log in</a> to your new account.": "您現在可以關閉此視窗或<a>登入</a>到您的新帳號了。",
-    "Registration Successful": "註冊成功"
+    "Registration Successful": "註冊成功",
+    "Upload all": "上傳全部"
 }
