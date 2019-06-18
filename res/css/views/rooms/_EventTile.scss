@@ -169,6 +169,9 @@ limitations under the License.
 .mx_EventTile_sending .mx_RoomPill {
     opacity: 0.5;
 }
+.mx_EventTile_sending.mx_EventTile_redacted .mx_UnknownBody {
+    opacity: 0.4;
+}
 
 .mx_EventTile_notSent {
     color: $event-notsent-color;
