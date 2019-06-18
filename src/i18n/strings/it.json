@@ -1953,5 +1953,9 @@
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Puoi accedere, ma alcune funzioni non saranno disponibili finchè il server identità non sarà tornato online. Se continui a vedere questo avviso, controlla la tua configurazione o contatta un amministratore del server.",
     "Unexpected error resolving identity server configuration": "Errore inaspettato risolvendo la configurazione del server identità",
     "Like or Dislike": "Piace o Non piace",
-    "Use lowercase letters, numbers, dashes and underscores only": "Usa solo minuscole, numeri, trattini e trattini bassi"
+    "Use lowercase letters, numbers, dashes and underscores only": "Usa solo minuscole, numeri, trattini e trattini bassi",
+    "Upload all": "Invia tutto",
+    "<a>Log in</a> to your new account.": "<a>Accedi</a> al tuo nuovo account.",
+    "You can now close this window or <a>log in</a> to your new account.": "Ora puoi chiudere questa finestra o <a>accedere</a> al tuo nuovo account.",
+    "Registration Successful": "Registrazione riuscita"
 }
