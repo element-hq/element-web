@@ -26,12 +26,12 @@ export const MUTE = 'mute';
 export const BADGE_STATES = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
 export const MENTION_BADGE_STATES = [...BADGE_STATES, MENTIONS_ONLY];
 
-function _shouldShowNotifBadge(roomNotifState) {
+export function shouldShowNotifBadge(roomNotifState) {
     const showBadgeInStates = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
     return showBadgeInStates.indexOf(roomNotifState) > -1;
 }
 
-function _shouldShowMentionBadge(roomNotifState) {
+export function shouldShowMentionBadge(roomNotifState) {
     return roomNotifState !== MUTE;
 }
 
@@ -41,8 +41,8 @@ export function aggregateNotificationCount(rooms) {
         const highlight = room.getUnreadNotificationCount('highlight') > 0;
         const notificationCount = room.getUnreadNotificationCount();
 
-        const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
-        const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+        const notifBadges = notificationCount > 0 && shouldShowNotifBadge(roomNotifState);
+        const mentionBadges = highlight && shouldShowMentionBadge(roomNotifState);
         const badges = notifBadges || mentionBadges;
 
         if (badges) {
@@ -60,8 +60,8 @@ export function getRoomHasBadge(room) {
     const highlight = room.getUnreadNotificationCount('highlight') > 0;
     const notificationCount = room.getUnreadNotificationCount();
 
-    const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
-    const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+    const notifBadges = notificationCount > 0 && shouldShowNotifBadge(roomNotifState);
+    const mentionBadges = highlight && shouldShowMentionBadge(roomNotifState);
 
     return notifBadges || mentionBadges;
 }
