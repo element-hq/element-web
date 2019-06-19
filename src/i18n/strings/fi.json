@@ -41,5 +41,9 @@
     "Create Account": "Luo tili",
     "Need help?": "Tarvitsetko apua?",
     "Explore rooms": "Etsi huoneita",
-    "Room Directory": "Huoneluettelo"
+    "Room Directory": "Huoneluettelo",
+    "Unexpected error preparing the app. See console for details.": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
+    "Your Riot is misconfigured": "Riotin asetukset ovat pielessä",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Virheellinen asetus. Vain yhden seuraavista voi määrittää: default_server_config, default_server_name, tai default_hs_url.",
+    "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty."
 }
