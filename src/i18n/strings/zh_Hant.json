@@ -1997,5 +1997,15 @@
     "<a>Log in</a> to your new account.": "<a>登入</a>到您的新帳號。",
     "You can now close this window or <a>log in</a> to your new account.": "您現在可以關閉此視窗或<a>登入</a>到您的新帳號了。",
     "Registration Successful": "註冊成功",
-    "Upload all": "上傳全部"
+    "Upload all": "上傳全部",
+    "No integrations server configured": "沒有設定好的整合伺服器",
+    "This Riot instance does not have an integrations server configured.": "這個 Riot 站台沒有設定整合伺服器。",
+    "Connecting to integrations server...": "正在連線到整合伺服器……",
+    "Cannot connect to integrations server": "無法連線到整合伺服器",
+    "The integrations server is offline or it cannot reach your homeserver.": "整合伺服器已離線或無法連線到您的家伺服器。",
+    "Unnamed microphone": "未命名的麥克風",
+    "Unnamed audio output": "未命名的音訊輸出",
+    "Unnamed camera": "未命名的攝影機",
+    "Failed to connect to integrations server": "連線到整合伺服器失敗",
+    "No integrations server is configured to manage stickers with": "未設定整合伺服器來管理貼圖"
 }
