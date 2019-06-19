@@ -1867,5 +1867,7 @@
     "Your Matrix account on <underlinedServerName />": "Matrix-tilisi palvelimella <underlinedServerName />",
     "Cannot reach homeserver": "Kotipalvelinta ei voida tavoittaa",
     "Your Riot is misconfigured": "Riotin asetukset ovat pielessä",
-    "Cannot reach identity server": "Identiteettipalvelinta ei voida tavoittaa"
+    "Cannot reach identity server": "Identiteettipalvelinta ei voida tavoittaa",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Varmista, että internet-yhteytesi on vakaa, tai ota yhteyttä palvelimen ylläpitäjään",
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Pyydä Riot-ylläpitäjääsi tarkistamaan, onko <a>asetuksissasi</a>virheellisiä tai toistettuja merkintöjä."
 }
