@@ -131,6 +131,16 @@ export default class MessageActionBar extends React.PureComponent {
         return SettingsStore.isFeatureEnabled("feature_message_editing");
     }
 
+    renderReactButton() {
+        if (!this.isReactionsEnabled()) {
+            return null;
+        }
+
+        return <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
+            title={_t("React")}
+        />;
+    }
+
     renderAgreeDimension() {
         if (!this.isReactionsEnabled()) {
             return null;
@@ -160,12 +170,14 @@ export default class MessageActionBar extends React.PureComponent {
     }
 
     render() {
+        let reactButton;
         let agreeDimensionReactionButtons;
         let likeDimensionReactionButtons;
         let replyButton;
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
+            reactButton = this.renderReactButton();
             agreeDimensionReactionButtons = this.renderAgreeDimension();
             likeDimensionReactionButtons = this.renderLikeDimension();
             replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
@@ -181,6 +193,7 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         return <div className="mx_MessageActionBar">
+            {reactButton}
             {agreeDimensionReactionButtons}
             {likeDimensionReactionButtons}
             {replyButton}
