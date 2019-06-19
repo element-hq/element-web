@@ -158,11 +158,11 @@ export default class EditorModel {
     }
 
     _mergeAdjacentParts(docPos) {
-        let prevPart = this._parts[0];
-        for (let i = 1; i < this._parts.length; ++i) {
+        let prevPart;
+        for (let i = 0; i < this._parts.length; ++i) {
             let part = this._parts[i];
             const isEmpty = !part.text.length;
-            const isMerged = !isEmpty && prevPart.merge(part);
+            const isMerged = !isEmpty && prevPart && prevPart.merge(part);
             if (isEmpty || isMerged) {
                 // remove empty or merged part
                 part = prevPart;
