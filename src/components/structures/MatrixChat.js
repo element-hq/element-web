@@ -1709,45 +1709,6 @@ export default React.createClass({
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
-        if (this.state.register_session_id) {
-            // The user came in through an email validation link. To avoid overwriting
-            // their session, check to make sure the session isn't someone else, and
-            // isn't a guest user since we'll usually have set a guest user session before
-            // starting the registration process. This isn't perfect since it's possible
-            // the user had a separate guest session they didn't actually mean to replace.
-            const sessionOwner = Lifecycle.getStoredSessionOwner();
-            const sessionIsGuest = Lifecycle.getStoredSessionIsGuest();
-            if (sessionOwner && !sessionIsGuest && sessionOwner !== credentials.userId) {
-                console.log(
-                    `Found a session for ${sessionOwner} but ${credentials.userId} is trying to verify their ` +
-                    `email address. Restoring the session for ${sessionOwner} with warning.`,
-                );
-                this._loadSession();
-
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                // N.B. first param is passed to piwik and so doesn't want i18n
-                Modal.createTrackedDialog('Existing session on register', '',
-                    QuestionDialog, {
-                    title: _t('You are logged in to another account'),
-                    description: _t(
-                        "Thank you for verifying your email! The account you're logged into here " +
-                        "(%(sessionUserId)s) appears to be different from the account you've verified an " +
-                        "email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, " +
-                        "please log out first.", {
-                            sessionUserId: sessionOwner,
-                            verifiedUserId: credentials.userId,
-
-                            // TODO: Fix translations to support reusing variables.
-                            // https://github.com/vector-im/riot-web/issues/9086
-                            verifiedUserId2: credentials.userId,
-                        },
-                    ),
-                    hasCancelButton: false,
-                });
-
-                return MatrixClientPeg.get();
-            }
-        }
         return Lifecycle.setLoggedIn(credentials);
     },
 
