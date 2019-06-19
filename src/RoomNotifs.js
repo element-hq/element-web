@@ -41,8 +41,8 @@ export function countRoomsWithNotif(rooms) {
         const highlight = room.getUnreadNotificationCount('highlight') > 0;
         const notificationCount = room.getUnreadNotificationCount();
 
-        const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
-        const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+        const notifBadges = notificationCount > 0 && shouldShowNotifBadge(roomNotifState);
+        const mentionBadges = highlight && shouldShowMentionBadge(roomNotifState);
         const isInvite = room.hasMembershipState(MatrixClientPeg.get().credentials.userId, 'invite');
         const badges = notifBadges || mentionBadges || isInvite;
 
