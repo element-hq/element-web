@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@ import React from 'react';
 import sdk from '../../../index';
 
 module.exports = React.createClass({
-    displayName: 'ToolTipButton',
+    displayName: 'TooltipButton',
 
     getInitialState: function() {
         return {
@@ -41,12 +42,12 @@ module.exports = React.createClass({
     render: function() {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         const tip = this.state.hover ? <Tooltip
-            className="mx_ToolTipButton_container"
-            tooltipClassName="mx_ToolTipButton_helpText"
+            className="mx_TooltipButton_container"
+            tooltipClassName="mx_TooltipButton_helpText"
             label={this.props.helpText}
         /> : <div />;
         return (
-            <div className="mx_ToolTipButton" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
+            <div className="mx_TooltipButton" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
                 ?
                 { tip }
             </div>
