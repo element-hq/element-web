@@ -35,6 +35,27 @@ function _shouldShowMentionBadge(roomNotifState) {
     return roomNotifState !== MUTE;
 }
 
+export function countRoomsWithNotif(rooms) {
+    return rooms.reduce((result, room, index) => {
+        const roomNotifState = getRoomNotifsState(room.roomId);
+        const highlight = room.getUnreadNotificationCount('highlight') > 0;
+        const notificationCount = room.getUnreadNotificationCount();
+
+        const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
+        const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+        const isInvite = room.hasMembershipState(MatrixClientPeg.get().credentials.userId, 'invite');
+        const badges = notifBadges || mentionBadges || isInvite;
+
+        if (badges) {
+            result.count++;
+            if (highlight) {
+                result.highlight = true;
+            }
+        }
+        return result;
+    }, {count: 0, highlight: false});
+}
+
 export function aggregateNotificationCount(rooms) {
     return rooms.reduce((result, room, index) => {
         const roomNotifState = getRoomNotifsState(room.roomId);
