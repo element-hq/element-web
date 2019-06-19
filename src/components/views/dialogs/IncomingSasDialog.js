@@ -46,6 +46,13 @@ export default class IncomingSasDialog extends React.Component {
         this._fetchOpponentProfile();
     }
 
+    componentWillMount() {
+        if (this.props.verifier.cancelled) {
+            console.log("Verifier was cancelled in the background.");
+            this.setState({phase: PHASE_CANCELLED});
+        }
+    }
+
     componentWillUnmount() {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
             this.props.verifier.cancel('User cancel');
