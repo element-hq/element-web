@@ -28,12 +28,11 @@ export const BADGE_STATES = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
 export const MENTION_BADGE_STATES = [...BADGE_STATES, MENTIONS_ONLY];
 
 export function shouldShowNotifBadge(roomNotifState) {
-    const showBadgeInStates = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
-    return showBadgeInStates.indexOf(roomNotifState) > -1;
+    return BADGE_STATES.includes(roomNotifState);
 }
 
 export function shouldShowMentionBadge(roomNotifState) {
-    return roomNotifState !== MUTE;
+    return MENTION_BADGE_STATES.includes(roomNotifState);
 }
 
 export function aggregateNotificationCount(rooms) {
