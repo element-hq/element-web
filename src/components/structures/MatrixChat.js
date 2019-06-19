@@ -1750,7 +1750,7 @@ export default React.createClass({
     },
 
     updateStatusIndicator: function(state, prevState) {
-        let notifCount = countRoomsWithNotif(MatrixClientPeg.get().getRooms()).count;
+        const notifCount = countRoomsWithNotif(MatrixClientPeg.get().getRooms()).count;
 
         if (PlatformPeg.get()) {
             PlatformPeg.get().setErrorStatus(state === 'ERROR');
