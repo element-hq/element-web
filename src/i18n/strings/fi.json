@@ -816,9 +816,9 @@
     "Unignored user": "Sallitut käyttäjät",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s tasolta %(fromPowerLevel)s tasolle %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s muutti %(powerLevelDiffText)s:n oikeustasoa.",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s pienoisohjelmaa muokannut %(senderName)s",
-    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s pienoisohjelman lisännyt %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s pienoisohjelman poistanut %(senderName)s",
+    "%(widgetName)s widget modified by %(senderName)s": "%(senderName)s muutti pienoisohjelmaa %(widgetName)s",
+    "%(widgetName)s widget added by %(senderName)s": "%(senderName)s lisäsi pienoisohjelman %(widgetName)s",
+    "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s poisti pienoisohjelman %(widgetName)s",
     "Send": "Lähetä",
     "Delete %(count)s devices|other": "Poista %(count)s laitetta",
     "Delete %(count)s devices|one": "Poista laite",
@@ -1864,5 +1864,8 @@
     "Create your Matrix account on <underlinedServerName />": "Luo Matrix-tili palvelimelle <underlinedServerName />",
     "Add room": "Lisää huone",
     "Your profile": "Oma profiilisi",
-    "Your Matrix account on <underlinedServerName />": "Matrix-tilisi palvelimella <underlinedServerName />"
+    "Your Matrix account on <underlinedServerName />": "Matrix-tilisi palvelimella <underlinedServerName />",
+    "Cannot reach homeserver": "Kotipalvelinta ei voida tavoittaa",
+    "Your Riot is misconfigured": "Riotin asetukset ovat pielessä",
+    "Cannot reach identity server": "Identiteettipalvelinta ei voida tavoittaa"
 }
