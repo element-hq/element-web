@@ -103,8 +103,7 @@ export default class EditorModel {
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
-        let newPosition = this.positionForOffset(caretOffset, true);
-        newPosition = newPosition.skipUneditableParts(this._parts);
+        const newPosition = this.positionForOffset(caretOffset, true);
         this._setActivePart(newPosition);
         this._updateCallback(newPosition);
     }
@@ -140,10 +139,9 @@ export default class EditorModel {
         let pos;
         if (replacePart) {
             this._replacePart(this._autoCompletePartIdx, replacePart);
-            let index = this._autoCompletePartIdx;
+            const index = this._autoCompletePartIdx;
             if (caretOffset === undefined) {
-                caretOffset = 0;
-                index += 1;
+                caretOffset = replacePart.text.length;
             }
             pos = new DocumentPosition(index, caretOffset);
         }
@@ -282,14 +280,5 @@ class DocumentPosition {
 
     get offset() {
         return this._offset;
-    }
-
-    skipUneditableParts(parts) {
-        const part = parts[this.index];
-        if (part && !part.canEdit) {
-            return new DocumentPosition(this.index + 1, 0);
-        } else {
-            return this;
-        }
     }
 }
