@@ -404,7 +404,7 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onCryptoClicked: function(e) {
+    onCryptoClick: function(e) {
         const event = this.props.mxEvent;
 
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
@@ -440,7 +440,7 @@ module.exports = withMatrixClient(React.createClass({
 
     _renderE2EPadlock: function() {
         const ev = this.props.mxEvent;
-        const props = {onClick: this.onCryptoClicked};
+        const props = {onClick: this.onCryptoClick};
 
         // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {

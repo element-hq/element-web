@@ -57,7 +57,7 @@ export default class MessageActionBar extends React.PureComponent {
         this.props.onFocusChange(focused);
     }
 
-    onCryptoClicked = () => {
+    onCryptoClick = () => {
         const event = this.props.mxEvent;
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
@@ -89,7 +89,7 @@ export default class MessageActionBar extends React.PureComponent {
 
         let e2eInfoCallback = null;
         if (this.props.mxEvent.isEncrypted()) {
-            e2eInfoCallback = () => this.onCryptoClicked();
+            e2eInfoCallback = () => this.onCryptoClick();
         }
 
         const menuOptions = {
