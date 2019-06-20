@@ -31,7 +31,7 @@ export default class VerificationCancelled extends React.Component {
                     "The other party cancelled the verification.",
                 )}</p>
                 <DialogButtons
-                    primaryButton={_t('Cancel')}
+                    primaryButton={_t('OK')}
                     hasCancel={false}
                     onPrimaryButtonClick={this.props.onDone}
                 />
