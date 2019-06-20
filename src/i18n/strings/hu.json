@@ -1995,5 +1995,22 @@
     "Set a new custom sound": "Új egyedi hang beállítása",
     "Browse": "Böngész",
     "Use lowercase letters, numbers, dashes and underscores only": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj",
-    "Cannot reach identity server": "Az azonosítási szerver nem érhető el"
+    "Cannot reach identity server": "Az azonosítási szerver nem érhető el",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tudsz regisztrálni, de néhány funkció nem lesz elérhető amíg az azonosítási szerver újra elérhető lesz. Ha ezt a figyelmeztetést folyamatosan látod, ellenőrizd a beállításokat vagy vedd fel a kapcsolatot a szerver adminisztrátorával.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "A jelszavadat újra beállíthatod, de néhány funkció nem lesz elérhető amíg az azonosítási szerver újra elérhető lesz. Ha ezt a figyelmeztetést folyamatosan látod, ellenőrizd a beállításokat vagy vedd fel a kapcsolatot a szerver adminisztrátorával.",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Beléphetsz, de néhány funkció nem lesz elérhető amíg az azonosítási szerver újra elérhető lesz. Ha ezt a figyelmeztetést folyamatosan látod, ellenőrizd a beállításokat vagy vedd fel a kapcsolatot a szerver adminisztrátorával.",
+    "<a>Log in</a> to your new account.": "<a>Belépés</a> az új fiókodba.",
+    "You can now close this window or <a>log in</a> to your new account.": "Ezt az ablakot bezárhatod vagy <a>beléphetsz</a> az új fiókodba.",
+    "Registration Successful": "Regisztráció sikeres",
+    "No integrations server configured": "Integrációs szerver nincs beállítva",
+    "This Riot instance does not have an integrations server configured.": "Ennek a Riot kliensnek nincs beállítva integrációs szerver.",
+    "Connecting to integrations server...": "Integrációs szerverhez csatlakozás...",
+    "Cannot connect to integrations server": "Az integrációs szerverhez nem lehet kapcsolódni",
+    "The integrations server is offline or it cannot reach your homeserver.": "Az integrációs szerver nem működik vagy nem tudja elérni a matrix szerveredet.",
+    "Unnamed microphone": "Név nélküli mikrofon",
+    "Unnamed audio output": "Név nélküli hang kimenet",
+    "Unnamed camera": "Név nélküli kamera",
+    "Failed to connect to integrations server": "Az integrációs szerverhez nem sikerült csatlakozni",
+    "No integrations server is configured to manage stickers with": "Nincs integrációs szerver konfigurálva amivel a matricákat lehetne kezelni",
+    "Upload all": "Mindet feltölt"
 }
