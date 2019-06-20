@@ -31,9 +31,12 @@ module.exports = React.createClass({
     render: function() {
         const brandingConfig = SdkConfig.get().branding;
         let links = [
-            {"text": "blog", "url": "https://medium.com/@RiotChat"},
-            {"text": "twitter", "url": "https://twitter.com/@RiotChat"},
-            {"text": "github", "url": "https://github.com/vector-im/riot-web"},
+            {"text": "Legifrance", "url": "https://www.legifrance.gouv.fr/"},
+            {"text": "Service-public", "url": "https://www.service-public.fr/"},
+            {"text": "Gouvernement", "url": "https://www.gouvernement.fr/"},
+            {"text": "OpenData", "url": "https://www.data.gouv.fr/fr/"},
+            {"text": "Mentions Légales", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344726"},
+            {"text": "Contact", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344725"},
         ];
 
         if (brandingConfig && brandingConfig.authFooterLinks) {
@@ -52,7 +55,6 @@ module.exports = React.createClass({
         return (
             <div className="mx_AuthFooter">
                 {authFooterLinks}
-                <a href="https://matrix.org" target="_blank" rel="noopener">{ _t('powered by Matrix') }</a>
             </div>
         );
     },
