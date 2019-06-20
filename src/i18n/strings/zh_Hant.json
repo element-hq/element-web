@@ -2007,5 +2007,8 @@
     "Unnamed audio output": "未命名的音訊輸出",
     "Unnamed camera": "未命名的攝影機",
     "Failed to connect to integrations server": "連線到整合伺服器失敗",
-    "No integrations server is configured to manage stickers with": "未設定整合伺服器來管理貼圖"
+    "No integrations server is configured to manage stickers with": "未設定整合伺服器來管理貼圖",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "您的新帳號 %(newAccountId)s 已註冊，但您已經登入到不同的帳號 (%(loggedInUserId)s)。",
+    "Continue with previous account": "使用先前的帳號繼續",
+    "Sign out of previous account": "登出先前的帳號"
 }
