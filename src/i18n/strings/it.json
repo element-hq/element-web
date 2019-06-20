@@ -1957,5 +1957,18 @@
     "Upload all": "Invia tutto",
     "<a>Log in</a> to your new account.": "<a>Accedi</a> al tuo nuovo account.",
     "You can now close this window or <a>log in</a> to your new account.": "Ora puoi chiudere questa finestra o <a>accedere</a> al tuo nuovo account.",
-    "Registration Successful": "Registrazione riuscita"
+    "Registration Successful": "Registrazione riuscita",
+    "No integrations server configured": "Nessun server di integrazione configurato",
+    "This Riot instance does not have an integrations server configured.": "Questa istanza di Riot non ha un server di integrazione configurato.",
+    "Connecting to integrations server...": "Connessione al server di integrazione...",
+    "Cannot connect to integrations server": "Impossibile connettersi al server di integrazione",
+    "The integrations server is offline or it cannot reach your homeserver.": "Il server di integrazione è offline o non può raggiungere il tuo homeserver.",
+    "Unnamed microphone": "Microfono senza nome",
+    "Unnamed audio output": "Uscita audio senza nome",
+    "Unnamed camera": "Fotocamera senza nome",
+    "Failed to connect to integrations server": "Connessione al server di integrazione fallita",
+    "No integrations server is configured to manage stickers with": "Nessun server di integrazione configurato con cui gestire gli adesivi",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Il tuo nuovo account (%(newAccountId)s) è registrato, ma hai già fatto l'accesso in un account diverso (%(loggedInUserId)s).",
+    "Continue with previous account": "Continua con l'account precedente",
+    "Sign out of previous account": "Disconnetti dall'account precedente"
 }
