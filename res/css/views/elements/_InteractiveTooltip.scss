@@ -39,79 +39,13 @@ limitations under the License.
     z-index: 5001;
 }
 
-.mx_InteractiveTooltip_right {
-    right: 0;
-}
-
-.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_right {
-    right: 8px;
-}
-
-.mx_InteractiveTooltip_chevron_right {
-    position: absolute;
-    right: -8px;
-    top: 0px;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-left: 8px solid $menu-bg-color;
-    border-bottom: 8px solid transparent;
-}
-
-.mx_InteractiveTooltip_chevron_right::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-left: 7px solid $menu-bg-color;
-    border-bottom: 7px solid transparent;
-    position: absolute;
-    top: -7px;
-    right: 1px;
-}
-
-.mx_InteractiveTooltip_left {
-    left: 0;
-}
-
-.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_left {
-    left: 8px;
-}
-
-.mx_InteractiveTooltip_chevron_left {
-    position: absolute;
-    left: -8px;
-    top: 0px;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-right: 8px solid $menu-bg-color;
-    border-bottom: 8px solid transparent;
-}
-
-.mx_InteractiveTooltip_chevron_left::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-right: 7px solid $menu-bg-color;
-    border-bottom: 7px solid transparent;
-    position: absolute;
-    top: -7px;
-    left: 1px;
-}
-
-.mx_InteractiveTooltip_top {
-    top: 0;
-}
-
 .mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_top {
     top: 8px;
 }
 
 .mx_InteractiveTooltip_chevron_top {
     position: absolute;
-    left: 0px;
+    left: calc(50% - 8px);
     top: -8px;
     width: 0;
     height: 0;
@@ -132,17 +66,13 @@ limitations under the License.
     top: 1px;
 }
 
-.mx_InteractiveTooltip_bottom {
-    bottom: 0;
-}
-
 .mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_bottom {
     bottom: 8px;
 }
 
 .mx_InteractiveTooltip_chevron_bottom {
     position: absolute;
-    left: 0px;
+    left: calc(50% - 8px);
     bottom: -8px;
     width: 0;
     height: 0;

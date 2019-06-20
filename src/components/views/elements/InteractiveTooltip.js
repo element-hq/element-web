@@ -33,21 +33,19 @@ function getOrCreateContainer() {
     return container;
 }
 
+/*
+ * This style of tooltip takes a `target` element's rect and centers the tooltip
+ * along one edge of the target.
+ */
 export default class InteractiveTooltip extends React.Component {
     propTypes: {
-        top: PropTypes.number,
-        bottom: PropTypes.number,
-        left: PropTypes.number,
-        right: PropTypes.number,
-        chevronOffset: PropTypes.number,
-        chevronFace: PropTypes.string, // top, bottom, left, right or none
+        // A DOMRect from the target element
+        targetRect: PropTypes.object.isRequired,
         // Function to be called on menu close
         onFinished: PropTypes.func,
-
         // If true, insert an invisible screen-sized element behind the
         // menu that when clicked will close it.
         hasBackground: PropTypes.bool,
-
         // The component to render as the context menu
         elementClass: PropTypes.element.isRequired,
         // on resize callback
@@ -56,58 +54,64 @@ export default class InteractiveTooltip extends React.Component {
         closeTooltip: PropTypes.func,
     };
 
+    constructor() {
+        super();
+
+        this.state = {
+            contentRect: null,
+        };
+    }
+
+    collectContentRect = (element) => {
+        // We don't need to clean up when unmounting, so ignore
+        if (!element) return;
+
+        this.setState({
+            contentRect: element.getBoundingClientRect(),
+        });
+    }
+
     render() {
+        const props = this.props;
+        const { targetRect } = props;
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const targetLeft = targetRect.left + window.pageXOffset;
+        const targetBottom = targetRect.bottom + window.pageYOffset;
+        const targetTop = targetRect.top + window.pageYOffset;
+
+        // Align the tooltip vertically on whichever side of the target has more
+        // space available.
         const position = {};
         let chevronFace = null;
-        const props = this.props;
-
-        if (props.top) {
-            position.top = props.top;
+        if (targetBottom < window.innerHeight / 2) {
+            position.top = targetBottom;
+            chevronFace = "top";
         } else {
-            position.bottom = props.bottom;
+            position.bottom = window.innerHeight - targetTop;
+            chevronFace = "bottom";
         }
 
-        if (props.left) {
-            position.left = props.left;
-            chevronFace = 'left';
-        } else {
-            position.right = props.right;
-            chevronFace = 'right';
-        }
+        // Center the tooltip horizontally with the target's center.
+        position.left = targetLeft + targetRect.width / 2;
 
-        const chevronOffset = {};
-        if (props.chevronFace) {
-            chevronFace = props.chevronFace;
-        }
-        const hasChevron = chevronFace && chevronFace !== "none";
-
-        if (chevronFace === 'top' || chevronFace === 'bottom') {
-            chevronOffset.left = props.chevronOffset;
-        } else {
-            chevronOffset.top = props.chevronOffset;
-        }
-
-        const chevron = hasChevron ?
-            <div style={chevronOffset} className={"mx_InteractiveTooltip_chevron_" + chevronFace} /> :
-            undefined;
-        const className = 'mx_InteractiveTooltip_wrapper';
+        const chevron = <div className={"mx_InteractiveTooltip_chevron_" + chevronFace} />;
 
         const menuClasses = classNames({
             'mx_InteractiveTooltip': true,
-            'mx_InteractiveTooltip_left': !hasChevron && position.left,
-            'mx_InteractiveTooltip_right': !hasChevron && position.right,
-            'mx_InteractiveTooltip_top': !hasChevron && position.top,
-            'mx_InteractiveTooltip_bottom': !hasChevron && position.bottom,
-            'mx_InteractiveTooltip_withChevron_left': chevronFace === 'left',
-            'mx_InteractiveTooltip_withChevron_right': chevronFace === 'right',
             'mx_InteractiveTooltip_withChevron_top': chevronFace === 'top',
             'mx_InteractiveTooltip_withChevron_bottom': chevronFace === 'bottom',
         });
 
+        const menuStyle = {};
+        if (this.state.contentRect) {
+            menuStyle.left = `-${this.state.contentRect.width / 2}px`;
+        }
+
         const ElementClass = props.elementClass;
 
-        return <div className={className} style={{...position}}>
-            <div className={menuClasses}>
+        return <div className="mx_InteractiveTooltip_wrapper" style={{...position}}>
+            <div className={menuClasses} style={menuStyle} ref={this.collectContentRect}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeTooltip} onResize={props.windowResize} />
             </div>
