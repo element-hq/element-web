@@ -33,25 +33,25 @@ function insertAfter(node, nodeToInsert) {
     }
 }
 
-// a caret node is an empty node that allows the caret to be place
+export const ZERO_WIDTH_SPACE = "\u200b";
+// a caret node is a node that allows the caret to be placed
 // where otherwise it wouldn't be possible
 // (e.g. next to a pill span without adjacent text node)
 function createCaretNode() {
     const span = document.createElement("span");
     span.className = "caret";
+    span.appendChild(document.createTextNode(ZERO_WIDTH_SPACE));
     return span;
 }
 
 function updateCaretNode(node) {
-    // ensure the caret node is empty
-    // otherwise they'll break everything
-    // as only things part of the model should have text in them
-    // browsers could end up typing in the caret node for any
-    // number of reasons, so revert this.
-    node.textContent = "";
+    // ensure the caret node contains only a zero-width space
+    if (node.textContent !== ZERO_WIDTH_SPACE) {
+        node.textContent = ZERO_WIDTH_SPACE;
+    }
 }
 
-function isCaretNode(node) {
+export function isCaretNode(node) {
     return node && node.tagName === "SPAN" && node.className === "caret";
 }
 
@@ -86,8 +86,8 @@ function reconcileLine(lineContainer, parts) {
 
         if (needsCaretNodeBefore(part, prevPart)) {
             if (isCaretNode(currentNode)) {
-                currentNode = currentNode.nextSibling;
                 updateCaretNode(currentNode);
+                currentNode = currentNode.nextSibling;
             } else {
                 lineContainer.insertBefore(createCaretNode(), currentNode);
             }
