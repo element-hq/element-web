@@ -30,17 +30,18 @@ limitations under the License.
 }
 
 .mx_InteractiveTooltip {
-    border-radius: 4px;
-    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
-    background-color: $menu-bg-color;
-    color: $primary-fg-color;
+    border-radius: 3px;
+    background-color: $interactive-tooltip-bg-color;
+    color: $interactive-tooltip-fg-color;
     position: absolute;
-    font-size: 14px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 6px;
     z-index: 5001;
 }
 
 .mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_top {
-    top: 8px;
+    top: 10px; // 8px chevron + 2px spacing
 }
 
 .mx_InteractiveTooltip_chevron_top {
@@ -50,24 +51,12 @@ limitations under the License.
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
-    border-bottom: 8px solid $menu-bg-color;
+    border-bottom: 8px solid $interactive-tooltip-bg-color;
     border-right: 8px solid transparent;
 }
 
-.mx_InteractiveTooltip_chevron_top::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-bottom: 7px solid $menu-bg-color;
-    border-right: 7px solid transparent;
-    position: absolute;
-    left: -7px;
-    top: 1px;
-}
-
 .mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_bottom {
-    bottom: 8px;
+    bottom: 10px; // 8px chevron + 2px spacing
 }
 
 .mx_InteractiveTooltip_chevron_bottom {
@@ -77,18 +66,6 @@ limitations under the License.
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
-    border-top: 8px solid $menu-bg-color;
+    border-top: 8px solid $interactive-tooltip-bg-color;
     border-right: 8px solid transparent;
-}
-
-.mx_InteractiveTooltip_chevron_bottom::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-top: 7px solid $menu-bg-color;
-    border-right: 7px solid transparent;
-    position: absolute;
-    left: -7px;
-    bottom: 1px;
 }
