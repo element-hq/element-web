@@ -576,6 +576,7 @@ module.exports = React.createClass({
         const scrollToken = mxEv.status ? undefined : eventId;
 
         const readReceipts = this._readReceiptsByEvent[eventId];
+        const editingEnabled = SettingsStore.isFeatureEnabled("feature_message_editing");
 
         ret.push(
             <li key={eventId}
@@ -585,7 +586,7 @@ module.exports = React.createClass({
                 <EventTile mxEvent={mxEv}
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
+                    replacingEventId={editingEnabled && mxEv.replacingEventId()}
                     editState={isEditing && this.props.editState}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}

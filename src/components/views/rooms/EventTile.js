@@ -829,7 +829,7 @@ module.exports.haveTileForEvent = function(e) {
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
     // No tile for replacement events since they update the original tile
-    if (e.isRelation("m.replace")) return false;
+    if (e.isRelation("m.replace") && SettingsStore.isFeatureEnabled("feature_message_editing")) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
