@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ZERO_WIDTH_SPACE, isCaretNode} from "./render";
+import {CARET_NODE_CHAR, isCaretNode} from "./render";
 
 export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
     let node = rootNode.firstChild;
@@ -57,7 +57,7 @@ export function getCaretOffsetAndText(editor, sel) {
 function getCaret(focusNode, focusNodeOffset, focusOffset) {
     let atNodeEnd = focusOffset === focusNode.textContent.length;
     if (focusNode.nodeType === Node.TEXT_NODE && isCaretNode(focusNode.parentElement)) {
-        const zwsIdx = focusNode.nodeValue.indexOf(ZERO_WIDTH_SPACE);
+        const zwsIdx = focusNode.nodeValue.indexOf(CARET_NODE_CHAR);
         if (zwsIdx !== -1 && zwsIdx < focusOffset) {
             focusOffset -= 1;
         }
@@ -120,7 +120,7 @@ function getTextNodeValue(node) {
         // typed in the caret node, so there is now something more in it than the ZWS
         // so filter out the ZWS, and take the typed text into account
         if (nodeText.length !== 1) {
-            return nodeText.replace(ZERO_WIDTH_SPACE, "");
+            return nodeText.replace(CARET_NODE_CHAR, "");
         } else {
             // only contains ZWS, which is ignored, so return emtpy string
             return "";

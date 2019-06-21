@@ -33,22 +33,25 @@ function insertAfter(node, nodeToInsert) {
     }
 }
 
-// this is a BOM marker actually
-export const ZERO_WIDTH_SPACE = "\ufeff";
+// Use a BOM marker for caret nodes.
+// On a first test, they seem to be filtered out when copying text out of the editor,
+// but this could be platform dependent.
+// As a precautionary measure, I chose the character that slate also uses.
+export const CARET_NODE_CHAR = "\ufeff";
 // a caret node is a node that allows the caret to be placed
 // where otherwise it wouldn't be possible
 // (e.g. next to a pill span without adjacent text node)
 function createCaretNode() {
     const span = document.createElement("span");
     span.className = "caretNode";
-    span.appendChild(document.createTextNode(ZERO_WIDTH_SPACE));
+    span.appendChild(document.createTextNode(CARET_NODE_CHAR));
     return span;
 }
 
 function updateCaretNode(node) {
     // ensure the caret node contains only a zero-width space
-    if (node.textContent !== ZERO_WIDTH_SPACE) {
-        node.textContent = ZERO_WIDTH_SPACE;
+    if (node.textContent !== CARET_NODE_CHAR) {
+        node.textContent = CARET_NODE_CHAR;
     }
 }
 
