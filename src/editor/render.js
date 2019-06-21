@@ -40,7 +40,7 @@ export const ZERO_WIDTH_SPACE = "\ufeff";
 // (e.g. next to a pill span without adjacent text node)
 function createCaretNode() {
     const span = document.createElement("span");
-    span.className = "caret";
+    span.className = "caretNode";
     span.appendChild(document.createTextNode(ZERO_WIDTH_SPACE));
     return span;
 }
@@ -53,7 +53,7 @@ function updateCaretNode(node) {
 }
 
 export function isCaretNode(node) {
-    return node && node.tagName === "SPAN" && node.className === "caret";
+    return node && node.tagName === "SPAN" && node.className === "caretNode";
 }
 
 function removeNextSiblings(node) {
