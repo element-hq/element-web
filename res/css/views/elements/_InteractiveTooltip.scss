@@ -55,6 +55,21 @@ limitations under the License.
     border-right: 8px solid transparent;
 }
 
+// Adapted from https://codyhouse.co/blog/post/css-rounded-triangles-with-clip-path
+// by Sebastiano Guerriero (@guerriero_se)
+@supports (clip-path: polygon(0% 0%, 100% 100%, 0% 100%)) {
+    .mx_InteractiveTooltip_chevron_top {
+        height: 16px;
+        width: 16px;
+        background-color: inherit;
+        border: none;
+        clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+        transform: rotate(135deg);
+        border-radius: 0 0 0 3px;
+        top: calc(-8px / 1.414); // sqrt(2) because of rotation
+    }
+}
+
 .mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_bottom {
     bottom: 10px; // 8px chevron + 2px spacing
 }
@@ -68,4 +83,19 @@ limitations under the License.
     border-left: 8px solid transparent;
     border-top: 8px solid $interactive-tooltip-bg-color;
     border-right: 8px solid transparent;
+}
+
+// Adapted from https://codyhouse.co/blog/post/css-rounded-triangles-with-clip-path
+// by Sebastiano Guerriero (@guerriero_se)
+@supports (clip-path: polygon(0% 0%, 100% 100%, 0% 100%)) {
+    .mx_InteractiveTooltip_chevron_bottom {
+        height: 16px;
+        width: 16px;
+        background-color: inherit;
+        border: none;
+        clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+        transform: rotate(-45deg);
+        border-radius: 0 0 0 3px;
+        bottom: calc(-8px / 1.414); // sqrt(2) because of rotation
+    }
 }
