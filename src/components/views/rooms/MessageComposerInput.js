@@ -682,14 +682,6 @@ export default class MessageComposerInput extends React.Component {
         if (this.autocomplete.countCompletions() > 0) {
             if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
                 switch (ev.keyCode) {
-                    case KeyCode.LEFT:
-                        this.autocomplete.moveSelection(-1);
-                        ev.preventDefault();
-                        return true;
-                    case KeyCode.RIGHT:
-                        this.autocomplete.moveSelection(+1);
-                        ev.preventDefault();
-                        return true;
                     case KeyCode.UP:
                         this.autocomplete.moveSelection(-1);
                         ev.preventDefault();
