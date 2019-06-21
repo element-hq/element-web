@@ -33,7 +33,8 @@ function insertAfter(node, nodeToInsert) {
     }
 }
 
-export const ZERO_WIDTH_SPACE = "\u200b";
+// this is a BOM marker actually
+export const ZERO_WIDTH_SPACE = "\ufeff";
 // a caret node is a node that allows the caret to be placed
 // where otherwise it wouldn't be possible
 // (e.g. next to a pill span without adjacent text node)
