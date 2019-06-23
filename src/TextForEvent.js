@@ -75,8 +75,8 @@ function textForMemberEvent(ev) {
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return _t('%(senderName)s set a profile picture.', {senderName});
                 } else {
-                    // suppress null rejoins
-                    return '';
+                    // This is a null rejoin, it will only be visible if the Labs option is enabled
+                    return _t("%(senderName)s made no change.", {senderName});
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
