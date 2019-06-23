@@ -373,7 +373,10 @@ module.exports = React.createClass({
 
     showRoom: function(room, room_alias) {
         this.props.onFinished();
-        const payload = {action: 'view_room'};
+        const payload = {
+            action: 'view_room',
+            auto_join: true,
+        };
         if (room) {
             // Don't let the user view a room they won't be able to either
             // peek or join: fail earlier so they don't have to click back
