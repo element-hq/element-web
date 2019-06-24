@@ -16,11 +16,7 @@ if [ -d $BASE_DIR/$SERVER_DIR ]; then
 fi
 
 cd $BASE_DIR
-
-mkdir -p installations/
-curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output synapse.zip
-unzip -q synapse.zip
-mv synapse-$SYNAPSE_BRANCH $SERVER_DIR
+mkdir -p $SERVER_DIR
 cd $SERVER_DIR
 virtualenv -p python3 env
 source env/bin/activate
@@ -37,7 +33,9 @@ python -m synapse.app.homeserver \
     --config-path homeserver.yaml \
     --generate-config \
     --report-stats=no
+pip install https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH
 # apply configuration
+pushd env/bin/
 cp -r $BASE_DIR/config-templates/$CONFIG_TEMPLATE/. ./
 
 # Hashes used instead of slashes because we'll get a value back from $(pwd) that'll be
@@ -49,3 +47,5 @@ sed -i.bak "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i.bak "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i.bak "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
 rm *.bak
+
+popd
