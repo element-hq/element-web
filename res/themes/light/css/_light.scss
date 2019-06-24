@@ -272,6 +272,9 @@ $reaction-row-button-selected-border-color: $accent-color;
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
+$interactive-tooltip-bg-color: #27303a;
+$interactive-tooltip-fg-color: #ffffff;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
