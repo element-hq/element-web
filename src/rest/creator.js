@@ -62,7 +62,7 @@ module.exports = class RestSessionCreator {
         const registerCmd = `./register_new_matrix_user ${registerArgs.join(' ')}`;
         const allCmds = [
             `cd ${this.synapseSubdir}`,
-            ". activate",
+            ". ./activate",
             registerCmd
         ].join(' && ');
 
