@@ -52,7 +52,7 @@ async function runTests() {
     }
 
     const restCreator = new RestSessionCreator(
-        'synapse/installations/consent',
+        'synapse/installations/consent/env/bin',
         hsUrl,
         __dirname
     );
