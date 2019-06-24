@@ -27,12 +27,6 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 
 pip install --upgrade setuptools
-pip install matrix-synapse[resources.consent]
-python -m synapse.app.homeserver \
-    --server-name localhost \
-    --config-path homeserver.yaml \
-    --generate-config \
-    --report-stats=no
 pip install https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH
 # apply configuration
 pushd env/bin/
@@ -49,3 +43,5 @@ sed -i.bak "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
 rm *.bak
 
 popd
+# generate signing keys for signing_key_path
+python -m synapse.app.homeserver --generate-keys --config-dir env/bin/ -c env/bin/homeserver.yaml
