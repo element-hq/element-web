@@ -41,10 +41,10 @@ export default class EditHistoryMessage extends React.Component {
 
     render() {
         const event = this.props.mxEvent;
-        const timestamp = formatTime(new Date(event.getTs()), true);
+        const timestamp = formatTime(new Date(event.getTs()), this.props.isTwelveHour);
         const content = event.event.content["m.new_content"] || event.event.content;
-        return <li className="edit" key={event.getId()}>
-            <strong>{timestamp}</strong>
+        return <li className="edit mx_EventTile_content">
+            <span className="mx_MessageTimestamp">{timestamp}</span>
             <p ref="content">{HtmlUtils.bodyToHtml(content)}</p>
         </li>;
     }

@@ -19,8 +19,8 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import sdk from "../../../index";
-import * as HtmlUtils from '../../../HtmlUtils';
-import {wantsDateSeparator, formatTime} from '../../../DateUtils';
+import {wantsDateSeparator} from '../../../DateUtils';
+import SettingsStore from '../../../settings/SettingsStore';
 
 export default class MessageEditHistoryDialog extends React.Component {
     static propTypes = {
@@ -28,7 +28,11 @@ export default class MessageEditHistoryDialog extends React.Component {
     };
 
     componentWillMount() {
-        this.setState({edits: [this.props.mxEvent], isLoading: true});
+        this.setState({
+            edits: [this.props.mxEvent],
+            isLoading: true,
+            isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
+        });
     }
 
     async componentDidMount() {
@@ -41,13 +45,8 @@ export default class MessageEditHistoryDialog extends React.Component {
         this.setState({edits, isLoading: false});
     }
 
-    _renderEdit(event) {
-        const timestamp = formatTime(new Date(event.getTs()), true);
-        const content = event.event.content["m.new_content"] || event.event.content;
-        return <li className="edit" key={event.getId()}><strong>{timestamp}</strong><p>{HtmlUtils.bodyToHtml(content)}</p></li>;
-    }
-
     _renderEdits() {
+        const EditHistoryMessage = sdk.getComponent('elements.EditHistoryMessage');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const nodes = [];
         let lastEvent;
@@ -55,7 +54,7 @@ export default class MessageEditHistoryDialog extends React.Component {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate(), e.getDate())) {
                 nodes.push(<li key={e.getTs() + "~"}><DateSeparator ts={e.getTs()} /></li>);
             }
-            nodes.push(this._renderEdit(e));
+            nodes.push(<EditHistoryMessage key={e.getId()} mxEvent={e} isTwelveHour={this.state.isTwelveHour} />);
             lastEvent = e;
         });
         return nodes;
