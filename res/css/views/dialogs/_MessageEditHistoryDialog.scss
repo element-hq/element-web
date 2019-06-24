@@ -16,17 +16,18 @@ limitations under the License.
 
 .mx_MessageEditHistoryDialog ul {
     list-style-type: none;
+    font-size: 14px;
 
     &>li.edit {
+        margin: 10px 0;
         display: flex;
 
-        &>strong {
-            flex: 0 0 100px;
-            font-weight: bold;
+        &>.mx_MessageTimestamp {
+            flex: 0 0 50px;
         }
 
         &>p {
-
+            margin: 0;
         }
 
     }
