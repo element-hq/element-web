@@ -33,25 +33,30 @@ function getOrCreateContainer() {
     return container;
 }
 
+function isInRect(x, y, rect, buffer = 10) {
+    const { top, right, bottom, left } = rect;
+
+    if (x < (left - buffer) || x > (right + buffer)) {
+        return false;
+    }
+
+    if (y < (top - buffer) || y > (bottom + buffer)) {
+        return false;
+    }
+
+    return true;
+}
+
 /*
- * This style of tooltip takes a `target` element's rect and centers the tooltip
- * along one edge of the target.
+ * This style of tooltip takes a "target" element as its child and centers the
+ * tooltip along one edge of the target.
  */
 export default class InteractiveTooltip extends React.Component {
     propTypes: {
-        // A DOMRect from the target element
-        targetRect: PropTypes.object.isRequired,
-        // Function to be called on menu close
-        onFinished: PropTypes.func,
-        // If true, insert an invisible screen-sized element behind the
-        // menu that when clicked will close it.
-        hasBackground: PropTypes.bool,
-        // The component to render as the context menu
-        elementClass: PropTypes.element.isRequired,
-        // on resize callback
-        windowResize: PropTypes.func,
-        // method to close menu
-        closeTooltip: PropTypes.func,
+        // Content to show in the tooltip
+        content: PropTypes.node.isRequired,
+        // Function to call when visibility of the tooltip changes
+        onVisibilityChange: PropTypes.func,
     };
 
     constructor() {
@@ -59,7 +64,18 @@ export default class InteractiveTooltip extends React.Component {
 
         this.state = {
             contentRect: null,
+            visible: false,
         };
+    }
+
+    componentDidUpdate() {
+        // Whenever this passthrough component updates, also render the tooltip
+        // in a separate DOM tree. This allows the tooltip content to participate
+        // the normal React rendering cycle: when this component re-renders, the
+        // tooltip content re-renders.
+        // Once we upgrade to React 16, this could be done a bit more naturally
+        // using the portals feature instead.
+        this.renderTooltip();
     }
 
     collectContentRect = (element) => {
@@ -71,9 +87,55 @@ export default class InteractiveTooltip extends React.Component {
         });
     }
 
-    render() {
-        const props = this.props;
-        const { targetRect } = props;
+    collectTarget = (element) => {
+        this.target = element;
+    }
+
+    onBackgroundClick = (ev) => {
+        this.hideTooltip();
+    }
+
+    onBackgroundMouseMove = (ev) => {
+        const { clientX: x, clientY: y } = ev;
+        const { contentRect } = this.state;
+        const targetRect = this.target.getBoundingClientRect();
+
+        if (!isInRect(x, y, contentRect) && !isInRect(x, y, targetRect)) {
+            this.hideTooltip();
+            return;
+        }
+    }
+
+    onTargetMouseOver = (ev) => {
+        this.showTooltip();
+    }
+
+    showTooltip() {
+        this.setState({
+            visible: true,
+        });
+        if (this.props.onVisibilityChange) {
+            this.props.onVisibilityChange(true);
+        }
+    }
+
+    hideTooltip() {
+        this.setState({
+            visible: false,
+        });
+        if (this.props.onVisibilityChange) {
+            this.props.onVisibilityChange(false);
+        }
+    }
+
+    renderTooltip() {
+        const { visible } = this.state;
+        if (!visible) {
+            ReactDOM.unmountComponentAtNode(getOrCreateContainer());
+            return null;
+        }
+
+        const targetRect = this.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         const targetLeft = targetRect.left + window.pageXOffset;
@@ -108,38 +170,29 @@ export default class InteractiveTooltip extends React.Component {
             menuStyle.left = `-${this.state.contentRect.width / 2}px`;
         }
 
-        const ElementClass = props.elementClass;
-
-        return <div className="mx_InteractiveTooltip_wrapper" style={{...position}}>
-            <div className={menuClasses} style={menuStyle} ref={this.collectContentRect}>
-                { chevron }
-                <ElementClass {...props} onFinished={props.closeTooltip} onResize={props.windowResize} />
+        const tooltip = <div className="mx_InteractiveTooltip_wrapper" style={{...position}}>
+            <div className="mx_ContextualMenu_background"
+                onMouseMove={this.onBackgroundMouseMove}
+                onClick={this.onBackgroundClick}
+            />
+            <div className={menuClasses}
+                style={menuStyle}
+                ref={this.collectContentRect}
+            >
+                {chevron}
+                {this.props.content}
             </div>
-            { props.hasBackground && <div className="mx_InteractiveTooltip_background"
-                                          onClick={props.closeTooltip} /> }
         </div>;
+
+        ReactDOM.render(tooltip, getOrCreateContainer());
     }
-}
 
-export function createTooltip(ElementClass, props, hasBackground=true) {
-    const closeTooltip = function(...args) {
-        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
-
-        if (props && props.onFinished) {
-            props.onFinished.apply(null, args);
-        }
-    };
-
-    // We only reference closeTooltip once per call to createTooltip
-    const menu = <InteractiveTooltip
-        hasBackground={hasBackground}
-        {...props}
-        elementClass={ElementClass}
-        closeTooltip={closeTooltip} // eslint-disable-line react/jsx-no-bind
-        windowResize={closeTooltip} // eslint-disable-line react/jsx-no-bind
-    />;
-
-    ReactDOM.render(menu, getOrCreateContainer());
-
-    return {close: closeTooltip};
+    render() {
+        // We use `cloneElement` here to append some props to the child content
+        // without using a wrapper element which could disrupt layout.
+        return React.cloneElement(this.props.children, {
+            ref: this.collectTarget,
+            onMouseOver: this.onTargetMouseOver,
+        });
+    }
 }
