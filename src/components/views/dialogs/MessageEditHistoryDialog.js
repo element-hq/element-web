@@ -28,21 +28,41 @@ export default class MessageEditHistoryDialog extends React.Component {
     };
 
     componentWillMount() {
+        this.loadMoreEdits = this.loadMoreEdits.bind(this);
         this.setState({
-            edits: [this.props.mxEvent],
+            events: [],
+            nextBatch: null,
             isLoading: true,
             isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
         });
     }
 
-    async componentDidMount() {
+    async loadMoreEdits(backwards) {
+        if (backwards || (!this.state.nextBatch && !this.state.isLoading)) {
+            // bail out on backwards as we only paginate in one direction
+            return false;
+        }
+        const opts = {token: this.state.nextBatch};
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
-        let edits = await MatrixClientPeg.get().
-            relations(roomId, eventId, "m.replace", "m.room.message");
-        edits = edits.slice().reverse();
-        edits.unshift(this.props.mxEvent);
-        this.setState({edits, isLoading: false});
+        const result = await MatrixClientPeg.get().relations(
+            roomId, eventId, "m.replace", "m.room.message", opts);
+        //console.log(`loadMoreEdits: got ${result.}`)
+        let resolve;
+        const promise = new Promise(r => resolve = r);
+        this.setState({
+            events: this.state.events.concat(result.events),
+            nextBatch: result.nextBatch,
+            isLoading: false,
+        }, () => {
+            const hasMoreResults = !!this.state.nextBatch;
+            resolve(hasMoreResults);
+        });
+        return promise;
+    }
+
+    componentDidMount() {
+        this.loadMoreEdits();
     }
 
     _renderEdits() {
@@ -50,7 +70,7 @@ export default class MessageEditHistoryDialog extends React.Component {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const nodes = [];
         let lastEvent;
-        this.state.edits.forEach(e => {
+        this.state.events.forEach(e => {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate(), e.getDate())) {
                 nodes.push(<li key={e.getTs() + "~"}><DateSeparator ts={e.getTs()} /></li>);
             }
@@ -61,18 +81,28 @@ export default class MessageEditHistoryDialog extends React.Component {
     }
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        let spinner;
-        const edits = this._renderEdits();
-        if (this.state.isLoading) {
+        let content;
+        if (this.state.error) {
+            content = this.state.error;
+        } else if (this.state.isLoading) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            spinner = <Spinner />;
+            content = <Spinner />;
+        } else {
+            const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+            content = (<ScrollPanel
+                className="mx_MessageEditHistoryDialog_scrollPanel"
+                onFillRequest={ this.loadMoreEdits }
+                stickyBottom={false}
+                startAtBottom={false}
+            >
+                <ul className="mx_MessageEditHistoryDialog_edits">{this._renderEdits()}</ul>
+            </ScrollPanel>);
         }
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_MessageEditHistoryDialog' hasCancel={true}
                         onFinished={this.props.onFinished} title={_t("Message edits")}>
-                <ul>{edits}</ul>
-                {spinner}
+                {content}
             </BaseDialog>
         );
     }

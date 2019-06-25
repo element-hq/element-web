@@ -15,6 +15,17 @@ limitations under the License.
 */
 
 .mx_MessageEditHistoryDialog ul {
+.mx_MessageEditHistoryDialog {
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+}
+
+.mx_MessageEditHistoryDialog_scrollPanel {
+    flex: 1 1 auto;
+}
+
+.mx_MessageEditHistoryDialog_edits {
     list-style-type: none;
     font-size: 14px;
 
