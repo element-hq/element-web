@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReactionTooltipButton {
-    font-size: 16px;
-    padding: 6px;
-    user-select: none;
-}
-
-.mx_ReactionTooltipButton_selected {
-    opacity: 0.4;
+.mx_ReactionsQuickTooltip {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
 }
