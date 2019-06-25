@@ -136,8 +136,13 @@ export default class MessageActionBar extends React.PureComponent {
             return null;
         }
 
-        return <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
-            title={_t("React")}
+        const ReactMessageAction = sdk.getComponent('messages.ReactMessageAction');
+        const { mxEvent, reactions } = this.props;
+
+        return <ReactMessageAction
+            mxEvent={mxEvent}
+            reactions={reactions}
+            onFocusChange={this.onFocusChange}
         />;
     }
 
