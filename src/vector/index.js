@@ -141,17 +141,8 @@ function onNewScreen(screen) {
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
 function makeRegistrationUrl(params) {
-    let url;
-    if (window.location.protocol === "vector:") {
-        url = 'https://riot.im/app/#/register';
-    } else {
-        url = (
-            window.location.protocol + '//' +
-            window.location.host +
-            window.location.pathname +
-            '#/register'
-        );
-    }
+    // Use hs_url instead of WebApp URL until the WebApp is ready to respond to '#/register'
+    let url = params.hs_url + '/' + '#/register';
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
