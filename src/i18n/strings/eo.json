@@ -36,7 +36,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s per %(browserName)s je %(osName)s",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Vi povas uzi proprajn servilajn elektojn por saluti aliajn servilojn de Matrix, per specifo de alia hejmservila URL.<br/>Tio permesas al vi uzi klienton Riot kun jama konto de Matrix en alia hejmservilo.<br/><br/>Vi ankaŭ povas agordi propran identigan servilon, sed vi ne povos inviti uzantojn per retpoŝtadreso, aŭ esti invitata per retpoŝtadreso mem.",
     "Co-ordination for Riot translators": "Kunordigo por tradukantoj de Riot",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Vi povas ankaŭ agordi propran identigan servilon, sed vi ne eblos inviti uzantojn per retpoŝtadresoj, nek eblos esti invitita per retpoŝtadreso.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Vi povas ankaŭ agordi propran identigan servilon, sed vi ne eblos inviti uzantojn per retpoŝtadresoj, nek tiel invitiĝi.",
     "Sign In": "Saluti",
     "Create Account": "Krei konton",
     "Need help?": "Ĉu vi bezonas helpon?",
