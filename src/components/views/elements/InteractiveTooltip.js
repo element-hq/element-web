@@ -35,16 +35,8 @@ function getOrCreateContainer() {
 
 function isInRect(x, y, rect, buffer = 10) {
     const { top, right, bottom, left } = rect;
-
-    if (x < (left - buffer) || x > (right + buffer)) {
-        return false;
-    }
-
-    if (y < (top - buffer) || y > (bottom + buffer)) {
-        return false;
-    }
-
-    return true;
+    return x >= (left - buffer) && x <= (right + buffer)
+        && y >= (top - buffer) && y <= (bottom + buffer);
 }
 
 /*
