@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import { unicodeToShortcode } from '../../../HtmlUtils';
 
 export default class ReactionsQuickTooltip extends React.PureComponent {
     static propTypes = {
@@ -38,6 +39,7 @@ export default class ReactionsQuickTooltip extends React.PureComponent {
         }
 
         this.state = {
+            hoveredItem: null,
             myReactions: this.getMyReactions(),
         };
     }
@@ -87,12 +89,22 @@ export default class ReactionsQuickTooltip extends React.PureComponent {
         return [...myReactions.values()];
     }
 
-    render() {
-        const { mxEvent } = this.props;
-        const { myReactions } = this.state;
-        const ReactionTooltipButton = sdk.getComponent('messages.ReactionTooltipButton');
+    onMouseOver = (ev) => {
+        const { key } = ev.target.dataset;
+        const item = this.items.find(({ content }) => content === key);
+        this.setState({
+            hoveredItem: item,
+        });
+    }
 
-        const items = [
+    onMouseOut = (ev) => {
+        this.setState({
+            hoveredItem: null,
+        });
+    }
+
+    get items() {
+        return [
             {
                 content: "👍",
                 title: _t("Agree"),
@@ -126,8 +138,14 @@ export default class ReactionsQuickTooltip extends React.PureComponent {
                 title: _t("Eyes"),
             },
         ];
+    }
 
-        const buttons = items.map(({ content, title }) => {
+    render() {
+        const { mxEvent } = this.props;
+        const { myReactions, hoveredItem } = this.state;
+        const ReactionTooltipButton = sdk.getComponent('messages.ReactionTooltipButton');
+
+        const buttons = this.items.map(({ content, title }) => {
             const myReactionEvent = myReactions && myReactions.find(mxEvent => {
                 if (mxEvent.isRedacted()) {
                     return false;
@@ -144,8 +162,34 @@ export default class ReactionsQuickTooltip extends React.PureComponent {
             />;
         });
 
-        return <div className="mx_ReactionsQuickTooltip">
-            {buttons}
+        let label = " "; // non-breaking space to keep layout the same when empty
+        if (hoveredItem) {
+            const { content, title } = hoveredItem;
+
+            let shortcodeLabel;
+            const shortcode = unicodeToShortcode(content);
+            if (shortcode) {
+                shortcodeLabel = <span className="mx_ReactionsQuickTooltip_shortcode">
+                    {shortcode}
+                </span>;
+            }
+
+            label = <div className="mx_ReactionsQuickTooltip_label">
+                <span className="mx_ReactionsQuickTooltip_title">
+                    {title}
+                </span>
+                {shortcodeLabel}
+            </div>;
+        }
+
+        return <div className="mx_ReactionsQuickTooltip"
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+        >
+            <div className="mx_ReactionsQuickTooltip_buttons">
+                {buttons}
+            </div>
+            {label}
         </div>;
     }
 }

@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReactionsQuickTooltip {
+.mx_ReactionsQuickTooltip_buttons {
     display: grid;
     grid-template-columns: repeat(4, auto);
+}
+
+.mx_ReactionsQuickTooltip_label {
+    text-align: center;
+}
+
+.mx_ReactionsQuickTooltip_shortcode {
+    padding-left: 6px;
+    opacity: 0.7;
 }

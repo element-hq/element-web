@@ -57,6 +57,7 @@ export default class ReactionTooltipButton extends React.PureComponent {
         });
 
         return <span className={classes}
+            data-key={content}
             title={this.props.title}
             aria-hidden={true}
             onClick={this.onClick}
