@@ -146,45 +146,13 @@ export default class MessageActionBar extends React.PureComponent {
         />;
     }
 
-    renderAgreeDimension() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        return <ReactionDimension
-            title={_t("Agree or Disagree")}
-            options={["👍", "👎"]}
-            reactions={this.props.reactions}
-            mxEvent={this.props.mxEvent}
-        />;
-    }
-
-    renderLikeDimension() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        return <ReactionDimension
-            title={_t("Like or Dislike")}
-            options={["🙂", "😔"]}
-            reactions={this.props.reactions}
-            mxEvent={this.props.mxEvent}
-        />;
-    }
-
     render() {
         let reactButton;
-        let agreeDimensionReactionButtons;
-        let likeDimensionReactionButtons;
         let replyButton;
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
             reactButton = this.renderReactButton();
-            agreeDimensionReactionButtons = this.renderAgreeDimension();
-            likeDimensionReactionButtons = this.renderLikeDimension();
             replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                 title={_t("Reply")}
                 onClick={this.onReplyClick}
@@ -199,8 +167,6 @@ export default class MessageActionBar extends React.PureComponent {
 
         return <div className="mx_MessageActionBar">
             {reactButton}
-            {agreeDimensionReactionButtons}
-            {likeDimensionReactionButtons}
             {replyButton}
             {editButton}
             <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
