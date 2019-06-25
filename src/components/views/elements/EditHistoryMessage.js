@@ -40,12 +40,23 @@ export default class EditHistoryMessage extends React.Component {
     }
 
     render() {
-        const event = this.props.mxEvent;
-        const timestamp = formatTime(new Date(event.getTs()), this.props.isTwelveHour);
-        const content = event.event.content["m.new_content"] || event.event.content;
+        const {mxEvent} = this.props;
+        const content = mxEvent.event.content["m.new_content"] || mxEvent.event.content;
+        const contentElements = HtmlUtils.bodyToHtml(content);
+        let contentContainer;
+        if (mxEvent.getContent().msgtype === "m.emote") {
+            const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+            contentContainer = (<p ref="content">*&nbsp;
+                <span className="mx_MEmoteBody_sender">{ name }</span>
+                &nbsp;{contentElements}
+            </p>);
+        } else {
+            contentContainer = (<p ref="content">{contentElements}</p>);
+        }
+        const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
         return <li className="edit mx_EventTile_content">
             <span className="mx_MessageTimestamp">{timestamp}</span>
-            <p ref="content">{HtmlUtils.bodyToHtml(content)}</p>
+            { contentContainer }
         </li>;
     }
 }
