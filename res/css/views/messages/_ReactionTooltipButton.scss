@@ -18,6 +18,11 @@ limitations under the License.
     font-size: 16px;
     padding: 6px;
     user-select: none;
+    transition: transform 0.25s;
+
+    &:hover {
+        transform: scale(1.2);
+    }
 }
 
 .mx_ReactionTooltipButton_selected {
