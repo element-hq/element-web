@@ -28,7 +28,6 @@ export default class MessageEditHistoryDialog extends React.Component {
     };
 
     componentWillMount() {
-        this.loadMoreEdits = this.loadMoreEdits.bind(this);
         this.setState({
             events: [],
             nextBatch: null,
@@ -37,7 +36,7 @@ export default class MessageEditHistoryDialog extends React.Component {
         });
     }
 
-    async loadMoreEdits(backwards) {
+    loadMoreEdits = async (backwards) => {
         if (backwards || (!this.state.nextBatch && !this.state.isLoading)) {
             // bail out on backwards as we only paginate in one direction
             return false;
