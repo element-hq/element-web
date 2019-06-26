@@ -97,20 +97,22 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomUpgradeWarningBar">
-                <div className="mx_RoomUpgradeWarningBar_header">
-                    {_t(
-                        "This room is running room version <roomVersion />, which this homeserver has " +
-                        "marked as <i>unstable</i>.",
-                        {},
-                        {
-                            "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
-                            "i": (sub) => <i>{sub}</i>,
-                        },
-                    )}
-                </div>
-                {doUpgradeWarnings}
-                <div className="mx_RoomUpgradeWarningBar_small">
-                    {_t("Only room administrators will see this warning")}
+                <div className="mx_RoomUpgradeWarningBar_wrapped">
+                    <div className="mx_RoomUpgradeWarningBar_header">
+                        {_t(
+                            "This room is running room version <roomVersion />, which this homeserver has " +
+                            "marked as <i>unstable</i>.",
+                            {},
+                            {
+                                "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
+                                "i": (sub) => <i>{sub}</i>,
+                            },
+                        )}
+                    </div>
+                    {doUpgradeWarnings}
+                    <div className="mx_RoomUpgradeWarningBar_small">
+                        {_t("Only room administrators will see this warning")}
+                    </div>
                 </div>
             </div>
         );

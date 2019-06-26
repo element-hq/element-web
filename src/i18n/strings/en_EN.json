@@ -1208,7 +1208,7 @@
     "The room upgrade could not be completed": "The room upgrade could not be completed",
     "Upgrade this room to version %(version)s": "Upgrade this room to version %(version)s",
     "Upgrade Room Version": "Upgrade Room Version",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:": "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:",
     "Create a new room with the same name, description and avatar": "Create a new room with the same name, description and avatar",
     "Update any local room aliases to point to the new room": "Update any local room aliases to point to the new room",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room",
