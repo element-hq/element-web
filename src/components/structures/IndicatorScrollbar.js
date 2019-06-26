@@ -131,15 +131,15 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
-            // whenever see horizontal scrolling, assume the user is on a trackpad
-            // for at least the next 15 minutes.
+            // whenever we see horizontal scrolling, assume the user is on a trackpad
+            // for at least the next 1 minute.
             const now = new Date().getTime();
             if (Math.abs(e.deltaX) > 0) {
                 this._likelyTrackpadUser = true;
-                this._checkAgainForTrackpad = now + (15 * 60 * 1000); // 15min
+                this._checkAgainForTrackpad = now + (1 * 60 * 1000);
             }
             else {
-                // if we haven't seen any horizontal scrolling for >15 minutes, assume
+                // if we haven't seen any horizontal scrolling for a while, assume
                 // the user might have plugged in a mousewheel
                 if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
                     this._likelyTrackpadUser = false;
@@ -164,7 +164,7 @@ export default class IndicatorScrollbar extends React.Component {
                 const additionalScroll = e.deltaY < 0 ? -50 : 50;
 
                 // noinspection JSSuspiciousNameCombination
-                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : 0;
+                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
                 this._scrollElement.scrollLeft += val * yRetention;
             }
         }
