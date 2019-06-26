@@ -835,6 +835,7 @@
     "Join the conversation with an account": "Join the conversation with an account",
     "Sign Up": "Sign Up",
     "Sign In": "Sign In",
+    "Loading room preview": "Loading room preview",
     "You were kicked from %(roomName)s by %(memberName)s": "You were kicked from %(roomName)s by %(memberName)s",
     "Reason: %(reason)s": "Reason: %(reason)s",
     "Forget this room": "Forget this room",

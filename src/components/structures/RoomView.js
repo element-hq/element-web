@@ -1523,6 +1523,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomPreviewBar
                             canPreview={false}
+                            previewLoading={this.state.peekLoading}
                             error={this.state.roomLoadError}
                             loading={loading}
                             joining={this.state.joining}
