@@ -137,8 +137,7 @@ export default class IndicatorScrollbar extends React.Component {
             if (Math.abs(e.deltaX) > 0) {
                 this._likelyTrackpadUser = true;
                 this._checkAgainForTrackpad = now + (1 * 60 * 1000);
-            }
-            else {
+            } else {
                 // if we haven't seen any horizontal scrolling for a while, assume
                 // the user might have plugged in a mousewheel
                 if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
