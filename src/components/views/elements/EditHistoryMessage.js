@@ -21,7 +21,7 @@ import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {pillifyLinks} from '../../../utils/pillify';
 
-export default class EditHistoryMessage extends React.Component {
+export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
         // the message event being edited
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,

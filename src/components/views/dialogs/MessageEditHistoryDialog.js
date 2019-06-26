@@ -22,7 +22,7 @@ import sdk from "../../../index";
 import {wantsDateSeparator} from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
 
-export default class MessageEditHistoryDialog extends React.Component {
+export default class MessageEditHistoryDialog extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
     };
