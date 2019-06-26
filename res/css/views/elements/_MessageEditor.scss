@@ -34,6 +34,10 @@ limitations under the License.
         max-height: 200px;
         overflow-x: auto;
 
+        &:focus {
+            border-color: $accent-color-50pct;
+        }
+
         span.mx_UserPill, span.mx_RoomPill {
             padding-left: 21px;
             position: relative;
