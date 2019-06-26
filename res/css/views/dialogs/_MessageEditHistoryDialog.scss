@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageEditHistoryDialog ul {
+.mx_MessageEditHistoryDialog .mx_Dialog_header > .mx_Dialog_title {
+    text-align: center;
+}
+
 .mx_MessageEditHistoryDialog {
     display: flex;
     flex-direction: column;
