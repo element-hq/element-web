@@ -28,23 +28,11 @@ limitations under the License.
 .mx_MessageEditHistoryDialog_edits {
     list-style-type: none;
     font-size: 14px;
+    padding: 0;
+    color: $primary-fg-color;
 
-    &>li.edit {
-        margin: 10px 0;
-        display: flex;
-
-        &>.mx_MessageTimestamp {
-            flex: 0 0 50px;
-        }
-
-        &>p {
-            margin: 0;
-        }
-
-    }
-
-    ul, ol {
-        list-style-type: circle;
+    .mx_EventTile_line, .mx_EventTile_content {
+        margin-right: 0px;
     }
 }
 
