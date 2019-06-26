@@ -1905,5 +1905,18 @@
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "U kunt zich aanmelden, maar sommige functies zullen pas beschikbaar zijn wanneer de identiteitsserver weer online is. Als u deze waarschuwing blijft zien, controleer dan uw configuratie of neem contact op met een systeembeheerder.",
     "<a>Log in</a> to your new account.": "<a>Meld u aan</a> met uw nieuwe account.",
     "You can now close this window or <a>log in</a> to your new account.": "U kunt dit venster nu sluiten, of <a>u aanmelden</a> met uw nieuwe account.",
-    "Registration Successful": "Registratie geslaagd"
+    "Registration Successful": "Registratie geslaagd",
+    "No integrations server configured": "Geen integratieserver geconfigureerd",
+    "This Riot instance does not have an integrations server configured.": "Deze Riot-instantie heeft geen integratieserver geconfigureerd.",
+    "Connecting to integrations server...": "Verbinden met integratieserver…",
+    "Cannot connect to integrations server": "Kan geen verbinding maken met integratieserver",
+    "The integrations server is offline or it cannot reach your homeserver.": "De integratieserver is offline of kan uw thuisserver niet bereiken.",
+    "Unnamed microphone": "Naamloze microfoon",
+    "Unnamed audio output": "Naamloze audio-uitvoer",
+    "Unnamed camera": "Naamloze camera",
+    "Failed to connect to integrations server": "Verbinden met integratieserver mislukt",
+    "No integrations server is configured to manage stickers with": "Er is geen integratieserver geconfigureerd om stickers mee te beheren",
+    "Upload all": "Alles uploaden",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Uw nieuwe account (%(newAccountId)s) is geregistreerd, maar u bent reeds aangemeld met een andere account (%(loggedInUserId)s).",
+    "Continue with previous account": "Doorgaan met vorige account"
 }
