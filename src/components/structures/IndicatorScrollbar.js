@@ -152,18 +152,6 @@ export default class IndicatorScrollbar extends React.Component {
                 return;
             }
 
-            // Every 15 minutes, start checking to Check for trackpad users every so often to messing with their scroll
-            // See https://github.com/vector-im/riot-web/issues/10005
-            const now = new Date().getTime();
-            if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
-                if (Math.abs(e.deltaX) > 0) {
-                    this._likelyTrackpadUser = true;
-                }
-                this._checkAgainForTrackpad = now + (15 * 60 * 1000); // 15min
-            }
-
-            if (this._likelyTrackpadUser) return;
-
             if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
 
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
