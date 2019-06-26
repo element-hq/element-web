@@ -117,7 +117,7 @@ function routeUrl(location) {
 }
 
 function onHashChange(ev) {
-    if (decodeURIComponent(window.location.hash) == lastLocationHashSet) {
+    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
         // we just set this: no need to route it!
         return;
     }
@@ -157,7 +157,7 @@ function makeRegistrationUrl(params) {
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
-        if (i == 0) {
+        if (i === 0) {
             url += '?';
         } else {
             url += '&';
@@ -375,7 +375,7 @@ function loadOlm() {
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version");
+        console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
             s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
