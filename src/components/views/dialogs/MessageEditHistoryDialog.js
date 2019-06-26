@@ -65,7 +65,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
     }
 
     _renderEdits() {
-        const EditHistoryMessage = sdk.getComponent('elements.EditHistoryMessage');
+        const EditHistoryMessage = sdk.getComponent('messages.EditHistoryMessage');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const nodes = [];
         let lastEvent;
