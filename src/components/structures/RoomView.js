@@ -1526,6 +1526,7 @@ module.exports = React.createClass({
                             error={this.state.roomLoadError}
                             loading={loading}
                             joining={this.state.joining}
+                            oobData={this.props.oobData}
                         />
                     </div>
                 );
