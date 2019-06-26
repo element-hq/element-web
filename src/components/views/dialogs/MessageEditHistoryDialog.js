@@ -42,7 +42,7 @@ export default class MessageEditHistoryDialog extends React.Component {
             // bail out on backwards as we only paginate in one direction
             return false;
         }
-        const opts = {token: this.state.nextBatch};
+        const opts = {from: this.state.nextBatch};
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
         const result = await MatrixClientPeg.get().relations(
