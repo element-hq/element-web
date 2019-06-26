@@ -27,13 +27,14 @@ export default class MessageEditHistoryDialog extends React.Component {
         mxEvent: PropTypes.object.isRequired,
     };
 
-    componentWillMount() {
-        this.setState({
+    constructor(props) {
+        super(props);
+        this.state = {
             events: [],
             nextBatch: null,
             isLoading: true,
             isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
-        });
+        };
     }
 
     loadMoreEdits = async (backwards) => {
