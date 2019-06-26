@@ -65,7 +65,7 @@ limitations under the License.
     align-items: center;
     margin-top: 5px;
 
-    height: 100%;
+    height: calc(100% - 5px);
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
     height: 40px;
