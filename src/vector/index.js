@@ -44,7 +44,6 @@ import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
 import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
 import Promise from 'bluebird';
-import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
