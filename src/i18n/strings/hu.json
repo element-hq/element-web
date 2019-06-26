@@ -2012,5 +2012,7 @@
     "Unnamed camera": "Név nélküli kamera",
     "Failed to connect to integrations server": "Az integrációs szerverhez nem sikerült csatlakozni",
     "No integrations server is configured to manage stickers with": "Nincs integrációs szerver konfigurálva amivel a matricákat lehetne kezelni",
-    "Upload all": "Mindet feltölt"
+    "Upload all": "Mindet feltölt",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Az új (%(newAccountId)s) fiókod elkészült, de jelenleg egy másik fiókba (%(loggedInUserId)s) vagy bejelentkezve.",
+    "Continue with previous account": "Folytatás az előző fiókkal"
 }

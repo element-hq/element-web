@@ -1963,5 +1963,17 @@
     "<a>Log in</a> to your new account.": "<a>Hasi saioa</a> zure kontu berrian.",
     "You can now close this window or <a>log in</a> to your new account.": "Itxi leiho hau edo <a>hasi saioa</a> zure kontu berrian.",
     "Registration Successful": "Ongi erregistratuta",
-    "Upload all": "Igo denak"
+    "Upload all": "Igo denak",
+    "No integrations server configured": "Ez da integrazio zerbitzaririk konfiguratu",
+    "This Riot instance does not have an integrations server configured.": "Riot instantzia honek ez du integrazio zerbitzaririk konfiguratuta.",
+    "Connecting to integrations server...": "Integrazioen zerbitzarira konektatzen...",
+    "Cannot connect to integrations server": "Ezin izan da integrazioen zerbitzarira konektatu",
+    "The integrations server is offline or it cannot reach your homeserver.": "Integrazioen zerbitzaria lineaz kanpo dago edo ezin du zure hasiera-zerbitzaria atzitu.",
+    "Unnamed microphone": "Izenik gabeko mikrofonoa",
+    "Unnamed audio output": "Izenik gabeko audio irteera",
+    "Unnamed camera": "Izenik gabeko kamera",
+    "Failed to connect to integrations server": "Huts egin du integrazioen zerbitzarira konektatzean",
+    "No integrations server is configured to manage stickers with": "Ez dago eranskailuak kudeatzeko integrazio-zerbitzaririk konfiguratuta",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Zure kontu berria (%(newAccountId)s) erregistratuta dago, baina dagoeneko saioa hasi duzu beste kontu batekin (%(loggedInUserId)s).",
+    "Continue with previous account": "Jarraitu aurreko kontuarekin"
 }
