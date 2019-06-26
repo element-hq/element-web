@@ -38,6 +38,8 @@ export default class IndicatorScrollbar extends React.Component {
         this.checkOverflow = this.checkOverflow.bind(this);
         this._scrollElement = null;
         this._autoHideScrollbar = null;
+        this._likelyTrackpadUser = null;
+        this._checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
         this.state = {
             leftIndicatorOffset: 0,
@@ -129,6 +131,16 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
+            // Check for trackpad users every so often to avoid boosting their scroll.
+            // See https://github.com/vector-im/riot-web/issues/10005
+            const now = new Date().getTime();
+            if (now >= this._checkAgainForTrackpad) {
+                this._likelyTrackpadUser = Math.abs(e.deltaX) > 0;
+                this._checkAgainForTrackpad = now + (15 * 60 * 1000); // 15min
+            }
+
+            const safeToBoost = !this._likelyTrackpadUser;
+
             if (Math.abs(e.deltaX) <= xyThreshold) {
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
                 // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
@@ -140,7 +152,7 @@ export default class IndicatorScrollbar extends React.Component {
                 const additionalScroll = e.deltaY < 0 ? -50 : 50;
 
                 // noinspection JSSuspiciousNameCombination
-                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
+                const val = Math.abs(e.deltaY) < 25 && safeToBoost ? (e.deltaY + additionalScroll) : e.deltaY;
                 this._scrollElement.scrollLeft += val * yRetention;
             }
         }
