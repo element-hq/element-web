@@ -27,10 +27,6 @@ export default class EditHistoryMessage extends React.PureComponent {
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     componentDidMount() {
         pillifyLinks(this.refs.content.children, this.props.mxEvent);
     }
