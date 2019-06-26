@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ limitations under the License.
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
 
@@ -42,6 +44,10 @@ export default class VectorBasePlatform extends BasePlatform {
         this.showUpdateCheck = false;
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+    }
+
+    async getConfig(): Promise<{}> {
+        return getVectorConfig();
     }
 
     getHumanReadableName(): string {
