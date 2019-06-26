@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageTimestamp {
-    color: $event-timestamp-color;
-    font-size: 10px;
+.mx_MessageEditHistoryDialog .mx_Dialog_header > .mx_Dialog_title {
+    text-align: center;
 }
+
+.mx_MessageEditHistoryDialog {
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+}
+
+.mx_MessageEditHistoryDialog_scrollPanel {
+    flex: 1 1 auto;
+}
+
+.mx_MessageEditHistoryDialog_edits {
+    list-style-type: none;
+    font-size: 14px;
+    padding: 0;
+    color: $primary-fg-color;
+
+    .mx_EventTile_line, .mx_EventTile_content {
+        margin-right: 0px;
+    }
+}
+
