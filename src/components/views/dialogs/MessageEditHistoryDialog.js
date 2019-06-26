@@ -47,7 +47,6 @@ export default class MessageEditHistoryDialog extends React.Component {
         const eventId = this.props.mxEvent.getId();
         const result = await MatrixClientPeg.get().relations(
             roomId, eventId, "m.replace", "m.room.message", opts);
-        //console.log(`loadMoreEdits: got ${result.}`)
         let resolve;
         const promise = new Promise(r => resolve = r);
         this.setState({
