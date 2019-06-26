@@ -18,6 +18,7 @@ import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
+import SettingsStore from "./settings/SettingsStore";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -74,9 +75,11 @@ function textForMemberEvent(ev) {
                     return _t('%(senderName)s changed their profile picture.', {senderName});
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return _t('%(senderName)s set a profile picture.', {senderName});
-                } else {
+                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
                     // This is a null rejoin, it will only be visible if the Labs option is enabled
                     return _t("%(senderName)s made no change.", {senderName});
+                } else {
+                    return "";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
