@@ -29,48 +29,64 @@ export default class VoiceUserSettingsTab extends React.Component {
         super();
 
         this.state = {
-            mediaDevices: null,
+            mediaDevices: false,
             activeAudioOutput: null,
             activeAudioInput: null,
             activeVideoInput: null,
         };
     }
 
-    componentWillMount(): void {
-        this._refreshMediaDevices();
+    async componentDidMount() {
+        const canSeeDeviceLabels = await CallMediaHandler.hasAnyLabeledDevices();
+        if (canSeeDeviceLabels) {
+            this._refreshMediaDevices();
+        }
     }
 
     _refreshMediaDevices = async (stream) => {
-        if (stream) {
-            // kill stream so that we don't leave it lingering around with webcam enabled etc
-            // as here we called gUM to ask user for permission to their device names only
-            stream.getTracks().forEach((track) => track.stop());
-        }
-
         this.setState({
             mediaDevices: await CallMediaHandler.getDevices(),
             activeAudioOutput: CallMediaHandler.getAudioOutput(),
             activeAudioInput: CallMediaHandler.getAudioInput(),
             activeVideoInput: CallMediaHandler.getVideoInput(),
         });
+        if (stream) {
+            // kill stream (after we've enumerated the devices, otherwise we'd get empty labels again)
+            // so that we don't leave it lingering around with webcam enabled etc
+            // as here we called gUM to ask user for permission to their device names only
+            stream.getTracks().forEach((track) => track.stop());
+        }
     };
 
-    _requestMediaPermissions = () => {
-        const getUserMedia = (
-            window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
-        );
-        if (getUserMedia) {
-            return getUserMedia.apply(window.navigator, [
-                { video: true, audio: true },
-                this._refreshMediaDevices,
-                function() {
-                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-                    Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
-                        title: _t('No media permissions'),
-                        description: _t('You may need to manually permit Riot to access your microphone/webcam'),
-                    });
-                },
-            ]);
+    _requestMediaPermissions = async () => {
+        let constraints;
+        let stream;
+        let error;
+        try {
+            constraints = {video: true, audio: true};
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+            // user likely doesn't have a webcam,
+            // we should still allow to select a microphone
+            if (err.name === "NotFoundError") {
+                constraints = { audio: true };
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraints);
+                } catch (err) {
+                    error = err;
+                }
+            } else {
+                error = err;
+            }
+        }
+        if (error) {
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+            Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
+                title: _t('No media permissions'),
+                description: _t('You may need to manually permit Riot to access your microphone/webcam'),
+            });
+        } else {
+            this._refreshMediaDevices(stream);
         }
     };
 
@@ -101,15 +117,7 @@ export default class VoiceUserSettingsTab extends React.Component {
 
     _renderDeviceOptions(devices, category) {
         return devices.map((d) => {
-            let label = d.label;
-            if (!label) {
-                switch (d.kind) {
-                    case "audioinput": label = _t("Unnamed microphone"); break;
-                    case "audiooutput": label = _t("Unnamed audio output"); break;
-                    case "videoinput": label = _t("Unnamed camera"); break;
-                }
-            }
-            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{label}</option>);
+            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
         });
     }
 
