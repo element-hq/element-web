@@ -62,11 +62,9 @@ import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import ComposerHistoryManager from "../../../ComposerHistoryManager";
-import TypingStore, {TYPING_SERVER_TIMEOUT} from "../../../stores/TypingStore";
+import TypingStore from "../../../stores/TypingStore";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
-
-const TYPING_USER_TIMEOUT = 10000;
 
 // the Slate node type to default to for unstyled text
 const DEFAULT_NODE = 'paragraph';
@@ -427,55 +425,11 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onTypingActivity() {
-        this.isTyping = true;
-        if (!this.userTypingTimer) {
-            this.sendTyping(true);
-        }
-        this.startUserTypingTimer();
-        this.startServerTypingTimer();
+        this.sendTyping(true);
     }
 
     onFinishedTyping() {
-        this.isTyping = false;
         this.sendTyping(false);
-        this.stopUserTypingTimer();
-        this.stopServerTypingTimer();
-    }
-
-    startUserTypingTimer() {
-        this.stopUserTypingTimer();
-        const self = this;
-        this.userTypingTimer = setTimeout(function() {
-            self.isTyping = false;
-            self.sendTyping(self.isTyping);
-            self.userTypingTimer = null;
-        }, TYPING_USER_TIMEOUT);
-    }
-
-    stopUserTypingTimer() {
-        if (this.userTypingTimer) {
-            clearTimeout(this.userTypingTimer);
-            this.userTypingTimer = null;
-        }
-    }
-
-    startServerTypingTimer() {
-        if (!this.serverTypingTimer) {
-            const self = this;
-            this.serverTypingTimer = setTimeout(function() {
-                if (self.isTyping) {
-                    self.sendTyping(self.isTyping);
-                    self.startServerTypingTimer();
-                }
-            }, TYPING_SERVER_TIMEOUT / 2);
-        }
-    }
-
-    stopServerTypingTimer() {
-        if (this.serverTypingTimer) {
-            clearTimeout(this.serverTypingTimer);
-            this.serverTypingTimer = null;
-        }
     }
 
     sendTyping(isTyping) {

@@ -18,7 +18,8 @@ import MatrixClientPeg from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import Timer from "../utils/Timer";
 
-export const TYPING_SERVER_TIMEOUT = 30000;
+const TYPING_USER_TIMEOUT = 10000;
+const TYPING_SERVER_TIMEOUT = 30000;
 
 /**
  * Tracks typing state for users.
@@ -40,7 +41,13 @@ export default class TypingStore {
      * MatrixClientPeg client changes.
      */
     reset() {
-        this._typingStates = {}; // roomId => { isTyping, Timer }
+        this._typingStates = {
+            // "roomId": {
+            //     isTyping: bool,     // Whether the user is typing or not
+            //     userTimer: Timer,   // Local timeout for "user has stopped typing"
+            //     serverTimer: Timer, // Maximum timeout for the typing state
+            // },
+        };
     }
 
     /**
@@ -61,20 +68,24 @@ export default class TypingStore {
         if (!currentTyping) {
             currentTyping = this._typingStates[roomId] = {
                 isTyping: isTyping,
-                timer: new Timer(TYPING_SERVER_TIMEOUT),
+                serverTimer: new Timer(TYPING_SERVER_TIMEOUT),
+                userTimer: new Timer(TYPING_USER_TIMEOUT),
             };
         }
 
         currentTyping.isTyping = isTyping;
 
         if (isTyping) {
-            currentTyping.timer.restart();
-            currentTyping.timer.finished().then(() => {
+            currentTyping.serverTimer.restart().finished().then(() => {
                 const currentTyping = this._typingStates[roomId];
                 if (currentTyping) currentTyping.isTyping = false;
 
                 // The server will (should) time us out on typing, so we don't
                 // need to advertise a stop of typing.
+            });
+
+            currentTyping.userTimer.restart().finished().then(() => {
+                this.setSelfTyping(roomId, false);
             });
         }
 
