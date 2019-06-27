@@ -1535,5 +1535,6 @@
     "Use a longer keyboard pattern with more turns": "Usa un patrón de tecleo más largo y con más vueltas",
     "Enable Community Filter Panel": "Habilitar el Panel de Filtro de Comunidad",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifica este usuario confirmando que los siguientes emojis aparecen en su pantalla.",
-    "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>": "La copia tiene una firma <validity>válida</validity> de un <device>dispositivo</device> <verify>no verificado</verify>"
+    "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>": "La copia tiene una firma <validity>válida</validity> de un <device>dispositivo</device> <verify>no verificado</verify>",
+    "Your Riot is misconfigured": "Riot tiene un error de configuración"
 }
