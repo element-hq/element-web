@@ -128,7 +128,6 @@ export default class VoiceUserSettingsTab extends React.Component {
         let speakerDropdown = null;
         let microphoneDropdown = null;
         let webcamDropdown = null;
-        console.log({mediaDevices: this.state.mediaDevices});
         if (this.state.mediaDevices === false) {
             requestButton = (
                 <div className='mx_VoiceUserSettingsTab_missingMediaPermissions'>
