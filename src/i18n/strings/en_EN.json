@@ -1,5 +1,6 @@
 {
-    "Your Riot configuration has invalid JSON in it. Please correct the problem and reload the page. The message from the parser is: %(message)s": "Your Riot configuration has invalid JSON in it. Please correct the problem and reload the page. The message from the parser is: %(message)s",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.",
+    "The message from the parser is: %(message)s": "The message from the parser is: %(message)s",
     "Invalid JSON": "Invalid JSON",
     "Your Riot is misconfigured": "Your Riot is misconfigured",
     "Unexpected error preparing the app. See console for details.": "Unexpected error preparing the app. See console for details.",

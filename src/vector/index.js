@@ -304,10 +304,21 @@ async function loadApp() {
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
     if (configSyntaxError) {
-        const errorMessage = _t(
-            "Your Riot configuration has invalid JSON in it. Please correct the problem and reload the page. " +
-            "The message from the parser is: %(message)s",
-            {message: configError.err.message || _t("Invalid JSON")},
+        const errorMessage = (
+            <div>
+                <p>
+                    {_t(
+                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
+                        "and reload the page.",
+                    )}
+                </p>
+                <p>
+                    {_t(
+                        "The message from the parser is: %(message)s",
+                        {message: configError.err.message || _t("Invalid JSON")},
+                    )}
+                </p>
+            </div>
         );
 
         const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
