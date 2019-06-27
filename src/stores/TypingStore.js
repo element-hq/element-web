@@ -39,7 +39,7 @@ export default class TypingStore {
      * MatrixClientPeg client changes.
      */
     reset() {
-        this._typingStates = {}; // roomId => { isTyping, expireMs }
+        this._typingStates = {}; // roomId => { isTyping, expireTs }
     }
 
     /**
@@ -60,7 +60,7 @@ export default class TypingStore {
         const now = new Date().getTime();
         this._typingStates[roomId] = {
             isTyping: isTyping,
-            expireMs: now + TYPING_SERVER_TIMEOUT,
+            expireTs: now + TYPING_SERVER_TIMEOUT,
         };
 
         if (isTyping) {
@@ -68,7 +68,7 @@ export default class TypingStore {
                 const currentTyping = this._typingStates[roomId];
                 const now = new Date().getTime();
 
-                if (currentTyping && currentTyping.expireMs >= now) {
+                if (currentTyping && currentTyping.expireTs >= now) {
                     currentTyping.isTyping = false;
                 }
             }, TYPING_SERVER_TIMEOUT);
