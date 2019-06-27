@@ -424,18 +424,6 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onTypingActivity() {
-        this.sendTyping(true);
-    }
-
-    onFinishedTyping() {
-        this.sendTyping(false);
-    }
-
-    sendTyping(isTyping) {
-        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, isTyping);
-    }
-
     onChange = (change: Change, originalEditorState?: Value) => {
         let editorState = change.value;
 
@@ -466,9 +454,9 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (Plain.serialize(editorState) !== '') {
-            this.onTypingActivity();
+            TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, true);
         } else {
-            this.onFinishedTyping();
+            TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, false);
         }
 
         if (editorState.startText !== null) {
