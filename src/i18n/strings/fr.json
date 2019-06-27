@@ -2016,5 +2016,14 @@
     "Upload all": "Tout envoyer",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Votre nouveau compte (%(newAccountId)s) est créé, mais vous êtes déjà connecté avec un autre compte (%(loggedInUserId)s).",
     "Continue with previous account": "Continuer avec le compte précédent",
-    "Sign out of previous account": "Se déconnecter du compte précédent"
+    "Sign out of previous account": "Se déconnecter du compte précédent",
+    "Agree": "D’accord",
+    "Disagree": "Pas d’accord",
+    "Happy": "Heureux",
+    "Party Popper": "Confettis",
+    "Confused": "Perdu",
+    "Eyes": "Yeux",
+    "Edited at %(date)s. Click to view edits.": "Édité à %(date)s. Cliquer pour voir les éditions.",
+    "Message edits": "Éditions du message",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "La mise à niveau de ce salon nécessite de fermer l’instance actuelle du salon et de créer un nouveau salon à la place. Pour fournir la meilleure expérience possible aux utilisateurs, nous allons :"
 }

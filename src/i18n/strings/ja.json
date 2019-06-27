@@ -82,8 +82,8 @@
     "Your language of choice": "選択した言語",
     "Which officially provided instance you are using, if any": "どの公式に提供されたインスタンスを利用していますか（もしあれば）",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "リッチテキストエディタのリッチテキストモードを利用しているか否か",
-    "Your homeserver's URL": "あなたのホームサーバのURL",
-    "Your identity server's URL": "あなたのアイデンティティサーバのURL",
+    "Your homeserver's URL": "あなたのホームサーバーのURL",
+    "Your identity server's URL": "あなたのアイデンティティサーバーの URL",
     "Analytics": "分析",
     "The information being sent to us to help make Riot.im better includes:": "Riot.imをよりよくするために私達に送信される情報は以下を含みます:",
     "Thursday": "木曜日",
@@ -1298,5 +1298,6 @@
     "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\" のような繰り返しは \"abc\" とほとんど変わらないくらい推測されやすいです",
     "Sequences like abc or 6543 are easy to guess": "abc や 6543 のような規則的な文字列は推測されやすいです",
     "Recent years are easy to guess": "最近の年号は推測されやすいです",
-    "Dates are often easy to guess": "たいていの日付は推測されやすいです"
+    "Dates are often easy to guess": "たいていの日付は推測されやすいです",
+    "Whether or not you're logged in (we don't record your username)": "ログインしているか否か（私たちはあなたのユーザー名を記録しません）"
 }
