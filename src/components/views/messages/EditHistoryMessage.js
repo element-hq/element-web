@@ -37,7 +37,8 @@ export default class EditHistoryMessage extends React.PureComponent {
 
     render() {
         const {mxEvent} = this.props;
-        const content = mxEvent.event.content["m.new_content"] || mxEvent.event.content;
+        const originalContent = mxEvent.getOriginalContent();
+        const content = originalContent["m.new_content"] || originalContent;
         const contentElements = HtmlUtils.bodyToHtml(content);
         let contentContainer;
         if (mxEvent.getContent().msgtype === "m.emote") {
