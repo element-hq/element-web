@@ -222,10 +222,17 @@ async function loadApp() {
 
     let configJson;
     let configError;
+    let configSyntaxError = false;
     try {
         configJson = await platform.getConfig();
     } catch (e) {
         configError = e;
+
+        if (e && e.err && e.err instanceof SyntaxError) {
+            console.error("SyntaxError loading config:", e);
+            configSyntaxError = true;
+            configJson = {}; // to prevent errors between here and loading CSS for the error box
+        }
     }
 
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
@@ -293,6 +300,33 @@ async function loadApp() {
                 a.disabled = true;
             }
         }
+    }
+
+    // Now that we've loaded the theme (CSS), display the config syntax error if needed.
+    if (configSyntaxError) {
+        const errorMessage = (
+            <div>
+                <p>
+                    {_t(
+                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
+                        "and reload the page.",
+                    )}
+                </p>
+                <p>
+                    {_t(
+                        "The message from the parser is: %(message)s",
+                        {message: configError.err.message || _t("Invalid JSON")},
+                    )}
+                </p>
+            </div>
+        );
+
+        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+        window.matrixChat = ReactDOM.render(
+            <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
+            document.getElementById('matrixchat'),
+        );
+        return;
     }
 
     const validBrowser = checkBrowserFeatures([
