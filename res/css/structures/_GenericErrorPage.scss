@@ -2,17 +2,15 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mx_GenericErrorPage_box {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    display: inline;
     width: 500px;
-    height: 125px;
+    min-height: 125px;
     border: 1px solid #f22;
     padding: 10px 10px 20px;
     background-color: #fcc;
