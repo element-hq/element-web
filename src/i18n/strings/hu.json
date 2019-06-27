@@ -2023,5 +2023,6 @@
     "Eyes": "Szem",
     "Edited at %(date)s. Click to view edits.": "Szerkesztve ekkor: %(date)s. A szerkesztések megtekintéséhez kattints.",
     "Message edits": "Üzenet szerkesztések",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "A szoba frissítéséhez be kell zárnod ezt a szobát és egy újat kell nyitnod e helyett. A szoba tagjainak a legjobb felhasználói élmény nyújtásához az alábbit fogjuk tenni:"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "A szoba frissítéséhez be kell zárnod ezt a szobát és egy újat kell nyitnod e helyett. A szoba tagjainak a legjobb felhasználói élmény nyújtásához az alábbit fogjuk tenni:",
+    "Loading room preview": "Szoba előnézetének a betöltése"
 }
