@@ -36,7 +36,11 @@ function onWindowOrNavigate(ev, target) {
 }
 
 function onLinkContextMenu(ev, params) {
-    const url = params.linkURL || params.srcURL;
+    let url = params.linkURL || params.srcURL;
+
+    if (url.startsWith('vector://vector/webapp')) {
+        url = "https://riot.im/app/" + url.substring(23);
+    }
 
     const popupMenu = new Menu();
     // No point trying to open blob: URLs in an external browser: it ain't gonna work.
