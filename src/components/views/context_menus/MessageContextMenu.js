@@ -90,6 +90,11 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onResendEditClick: function() {
+        Resend.resend(this.props.mxEvent.replacingEvent());
+        this.closeMenu();
+    },
+
     e2eInfoClicked: function() {
         this.props.e2eInfoCallback();
         this.closeMenu();
@@ -220,6 +225,8 @@ module.exports = React.createClass({
     render: function() {
         const mxEvent = this.props.mxEvent;
         const eventStatus = mxEvent.status;
+        const editEvent = mxEvent.replacingEvent();
+        const editStatus = editEvent && editEvent.status;
         let resendButton;
         let redactButton;
         let cancelButton;
@@ -238,6 +245,14 @@ module.exports = React.createClass({
             resendButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
                     { _t('Resend') }
+                </div>
+            );
+        }
+
+        if (editStatus === EventStatus.NOT_SENT) {
+            resendButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
+                    { _t('Resend edit') }
                 </div>
             );
         }
