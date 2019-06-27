@@ -1979,5 +1979,8 @@
     "Disagree": "Nuk Pajtohem",
     "Happy": "I kënaqur",
     "Confused": "Toruahumbur",
-    "Eyes": "Sy"
+    "Eyes": "Sy",
+    "Edited at %(date)s. Click to view edits.": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
+    "Message edits": "Përpunime mesazhi",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Përmirësimi i kësaj dhome lyp mbylljen e instancës së tanishme të dhomës dhe krijimin e një dhome të re në vend të saj. Për t’u dhënë anëtarëve të dhomës më të mirën, do të:"
 }
