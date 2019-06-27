@@ -1,8 +1,8 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2018 New Vector Ltd
+Copyright 2017, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -172,6 +172,9 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             migratingOrigin = true;
             await migrateFromOldOrigin();
             migratingOrigin = false;
+            break;
+        case 'getConfig':
+            ret = vectorConfig;
             break;
         default:
             mainWindow.webContents.send('ipcReply', {

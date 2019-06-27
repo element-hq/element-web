@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,7 +44,6 @@ import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
 import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
 import Promise from 'bluebird';
-import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
@@ -65,8 +65,6 @@ import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 import Olm from 'olm';
 
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
-
-import {getVectorConfig} from './getconfig';
 
 let lastLocationHashSet = null;
 
@@ -119,7 +117,7 @@ function routeUrl(location) {
 }
 
 function onHashChange(ev) {
-    if (decodeURIComponent(window.location.hash) == lastLocationHashSet) {
+    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
         // we just set this: no need to route it!
         return;
     }
@@ -159,7 +157,7 @@ function makeRegistrationUrl(params) {
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
-        if (i == 0) {
+        if (i === 0) {
             url += '?';
         } else {
             url += '&';
@@ -168,38 +166,6 @@ function makeRegistrationUrl(params) {
         url += k + '=' + encodeURIComponent(params[k]);
     }
     return url;
-}
-
-export function getConfig(configJsonFilename) {
-    return new Promise(function(resolve, reject) {
-        request(
-            { method: "GET", url: configJsonFilename },
-            (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
-                    // Lack of a config isn't an error, we should
-                    // just use the defaults.
-                    // Also treat a blank config as no config, assuming
-                    // the status code is 0, because we don't get 404s
-                    // from file: URIs so this is the only way we can
-                    // not fail if the file doesn't exist when loading
-                    // from a file:// URI.
-                    if (response) {
-                        if (response.status == 404 || (response.status == 0 && body == '')) {
-                            resolve({});
-                        }
-                    }
-                    reject({err: err, response: response});
-                    return;
-                }
-
-                // We parse the JSON ourselves rather than use the JSON
-                // parameter, since this throws a parse error on empty
-                // which breaks if there's no config.json and we're
-                // loading from the filesystem (see above).
-                resolve(JSON.parse(body));
-            },
-        );
-    });
 }
 
 function onTokenLoginCompleted() {
@@ -252,12 +218,12 @@ async function loadApp() {
         PlatformPeg.set(new WebPlatform());
     }
 
-    // Load the config file. First try to load up a domain-specific config of the
-    // form "config.$domain.json" and if that fails, fall back to config.json.
+    const platform = PlatformPeg.get();
+
     let configJson;
     let configError;
     try {
-        configJson = await getVectorConfig();
+        configJson = await platform.getConfig();
     } catch (e) {
         configError = e;
     }
@@ -342,7 +308,6 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser || acceptInvalidBrowser) {
-        const platform = PlatformPeg.get();
         platform.startUpdater();
 
         // Don't bother loading the app until the config is verified
@@ -410,7 +375,7 @@ function loadOlm() {
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version");
+        console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
             s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too

@@ -17,6 +17,8 @@ limitations under the License.
 import Promise from 'bluebird';
 import request from 'browser-request';
 
+// Load the config file. First try to load up a domain-specific config of the
+// form "config.$domain.json" and if that fails, fall back to config.json.
 export async function getVectorConfig(relativeLocation) {
     if (relativeLocation === undefined) relativeLocation = '';
     if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
