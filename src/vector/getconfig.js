@@ -34,7 +34,7 @@ export async function getVectorConfig(relativeLocation) {
     }
 }
 
-export function getConfig(configJsonFilename) {
+function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename },
