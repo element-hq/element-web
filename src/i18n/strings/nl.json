@@ -1918,5 +1918,15 @@
     "No integrations server is configured to manage stickers with": "Er is geen integratieserver geconfigureerd om stickers mee te beheren",
     "Upload all": "Alles uploaden",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Uw nieuwe account (%(newAccountId)s) is geregistreerd, maar u bent reeds aangemeld met een andere account (%(loggedInUserId)s).",
-    "Continue with previous account": "Doorgaan met vorige account"
+    "Continue with previous account": "Doorgaan met vorige account",
+    "Loading room preview": "Gespreksweergave wordt geladen",
+    "Agree": "Akkoord",
+    "Disagree": "Niet akkoord",
+    "Happy": "Blij",
+    "Party Popper": "Feest",
+    "Confused": "Verbaasd",
+    "Eyes": "Ogen",
+    "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
+    "Message edits": "Berichtbewerkingen",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bijwerken vereist dat u de huidige instantie ervan afsluit en in de plaats een nieuw gesprek aanmaakt. Om gespreksleden de best mogelijke ervaring te bieden, zullen we:"
 }
