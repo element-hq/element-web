@@ -16,6 +16,7 @@ limitations under the License.
 
 import MatrixClientPeg from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
+import Timer from "../utils/Timer";
 
 export const TYPING_SERVER_TIMEOUT = 30000;
 
@@ -39,7 +40,7 @@ export default class TypingStore {
      * MatrixClientPeg client changes.
      */
     reset() {
-        this._typingStates = {}; // roomId => { isTyping, expireTs }
+        this._typingStates = {}; // roomId => { isTyping, Timer }
     }
 
     /**
@@ -51,27 +52,30 @@ export default class TypingStore {
         if (!SettingsStore.getValue('sendTypingNotifications')) return;
         if (SettingsStore.getValue('lowBandwidth')) return;
 
-        const currentTyping = this._typingStates[roomId];
+        let currentTyping = this._typingStates[roomId];
         if ((!isTyping && !currentTyping) || (currentTyping && currentTyping.isTyping === isTyping)) {
             // No change in state, so don't do anything. We'll let the timer run its course.
             return;
         }
 
-        const now = new Date().getTime();
-        this._typingStates[roomId] = {
-            isTyping: isTyping,
-            expireTs: now + TYPING_SERVER_TIMEOUT,
-        };
+        if (!currentTyping) {
+            currentTyping = this._typingStates[roomId] = {
+                isTyping: isTyping,
+                timer: new Timer(TYPING_SERVER_TIMEOUT),
+            };
+        }
+
+        currentTyping.isTyping = isTyping;
 
         if (isTyping) {
-            setTimeout(() => {
+            currentTyping.timer.restart();
+            currentTyping.timer.finished().then(() => {
                 const currentTyping = this._typingStates[roomId];
-                const now = new Date().getTime();
+                if (currentTyping) currentTyping.isTyping = false;
 
-                if (currentTyping && currentTyping.expireTs >= now) {
-                    currentTyping.isTyping = false;
-                }
-            }, TYPING_SERVER_TIMEOUT);
+                // The server will (should) time us out on typing, so we don't
+                // need to advertise a stop of typing.
+            });
         }
 
         MatrixClientPeg.get().sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
