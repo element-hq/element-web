@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -61,10 +62,11 @@ import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import ComposerHistoryManager from "../../../ComposerHistoryManager";
+import TypingStore, {TYPING_SERVER_TIMEOUT} from "../../../stores/TypingStore";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
-const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
+const TYPING_USER_TIMEOUT = 10000;
 
 // the Slate node type to default to for unstyled text
 const DEFAULT_NODE = 'paragraph';
@@ -477,19 +479,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
-        if (!SettingsStore.getValue('sendTypingNotifications')) return;
-        if (SettingsStore.getValue('lowBandwidth')) return;
-        MatrixClientPeg.get().sendTyping(
-            this.props.room.roomId,
-            this.isTyping, TYPING_SERVER_TIMEOUT,
-        ).done();
-    }
-
-    refreshTyping() {
-        if (this.typingTimeout) {
-            clearTimeout(this.typingTimeout);
-            this.typingTimeout = null;
-        }
+        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, isTyping);
     }
 
     onChange = (change: Change, originalEditorState?: Value) => {
