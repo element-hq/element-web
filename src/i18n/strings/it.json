@@ -1970,5 +1970,14 @@
     "No integrations server is configured to manage stickers with": "Nessun server di integrazione configurato con cui gestire gli adesivi",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Il tuo nuovo account (%(newAccountId)s) è registrato, ma hai già fatto l'accesso in un account diverso (%(loggedInUserId)s).",
     "Continue with previous account": "Continua con l'account precedente",
-    "Sign out of previous account": "Disconnetti dall'account precedente"
+    "Sign out of previous account": "Disconnetti dall'account precedente",
+    "Agree": "D'accordo",
+    "Disagree": "Non d'accordo",
+    "Happy": "Felice",
+    "Party Popper": "Sparacoriandoli",
+    "Confused": "Confuso",
+    "Eyes": "Occhi",
+    "Edited at %(date)s. Click to view edits.": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
+    "Message edits": "Modifiche del messaggio",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Per aggiornare questa stanza devi chiudere l'istanza attuale e creare una nuova stanza al suo posto. Per offrire la migliore esperienza possibile ai membri della stanza:"
 }

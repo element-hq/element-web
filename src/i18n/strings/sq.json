@@ -1827,7 +1827,7 @@
     "Join the conversation with an account": "Merrni pjesë në bisedë me një llogari",
     "Sign Up": "Regjistrohuni",
     "Sign In": "Hyni",
-    "You were kicked from %(roomName)s by %(memberName)s": "Jeni përzënë prej %(roomName)s nga %(userName)s",
+    "You were kicked from %(roomName)s by %(memberName)s": "Jeni përzënë prej %(roomName)s nga %(memberName)s",
     "Reason: %(reason)s": "Arsye: %(reason)s",
     "Forget this room": "Harroje këtë dhomë",
     "Re-join": "Rihyni",
@@ -1838,7 +1838,7 @@
     "Do you want to join %(roomName)s?": "Doni të bëni pjesë te %(roomName)s?",
     "<userName/> invited you": "Ju ftoi <userName/>",
     "This room doesn't exist. Are you sure you're at the right place?": "S’ka dhomë të tillë. Jeni i sigurt se jeni në vendin e duhur?",
-    "This room has already been upgraded.": "Kjo dhomë është përmirësuar tashmë",
+    "This room has already been upgraded.": "Kjo dhomë është përmirësuar tashmë.",
     "Failed to revoke invite": "S’u arrit të shfuqizohej ftesa",
     "Revoke invite": "Shfuqizoje ftesën",
     "Invited by %(sender)s": "Ftuar nga %(sender)s",
@@ -1974,5 +1974,13 @@
     "Upload all": "Ngarkoji krejt",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Llogaria juaj e re (%(newAccountId)s) është e regjistruar, por jeni i futur në një tjetër llogari (%(loggedInUserId)s).",
     "Continue with previous account": "Vazhdoni me llogarinë e mëparshme",
-    "Sign out of previous account": "Dilni nga llogaria e mëparshme"
+    "Sign out of previous account": "Dilni nga llogaria e mëparshme",
+    "Agree": "Pajtohem",
+    "Disagree": "Nuk Pajtohem",
+    "Happy": "I kënaqur",
+    "Confused": "Toruahumbur",
+    "Eyes": "Sy",
+    "Edited at %(date)s. Click to view edits.": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
+    "Message edits": "Përpunime mesazhi",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Përmirësimi i kësaj dhome lyp mbylljen e instancës së tanishme të dhomës dhe krijimin e një dhome të re në vend të saj. Për t’u dhënë anëtarëve të dhomës më të mirën, do të:"
 }
