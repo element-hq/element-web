@@ -2010,5 +2010,14 @@
     "No integrations server is configured to manage stickers with": "未設定整合伺服器來管理貼圖",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "您的新帳號 %(newAccountId)s 已註冊，但您已經登入到不同的帳號 (%(loggedInUserId)s)。",
     "Continue with previous account": "使用先前的帳號繼續",
-    "Sign out of previous account": "登出先前的帳號"
+    "Sign out of previous account": "登出先前的帳號",
+    "Agree": "同意",
+    "Disagree": "不同意",
+    "Happy": "快樂",
+    "Party Popper": "禮花",
+    "Confused": "困惑",
+    "Eyes": "眼睛",
+    "Edited at %(date)s. Click to view edits.": "編輯於 %(date)s。點擊以檢視編輯。",
+    "Message edits": "訊息編輯",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要將其關閉並重新建立一個新的。為了給予聊天室成員最佳的體驗，我們將會："
 }
