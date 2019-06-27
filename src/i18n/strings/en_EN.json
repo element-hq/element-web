@@ -944,6 +944,7 @@
     "Party Popper": "Party Popper",
     "Confused": "Confused",
     "Eyes": "Eyes",
+    "Show all": "Show all",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",

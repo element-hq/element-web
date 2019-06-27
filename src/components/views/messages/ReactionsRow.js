@@ -18,9 +18,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
 import { isSingleEmoji } from '../../../HtmlUtils';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+
+// The maximum number of reactions to initially show on a message.
+const MAX_ITEMS_WHEN_LIMITED = 8;
 
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
@@ -41,6 +45,7 @@ export default class ReactionsRow extends React.PureComponent {
 
         this.state = {
             myReactions: this.getMyReactions(),
+            showAll: false,
         };
     }
 
@@ -94,16 +99,22 @@ export default class ReactionsRow extends React.PureComponent {
         return [...myReactions.values()];
     }
 
+    onShowAllClick = () => {
+        this.setState({
+            showAll: true,
+        });
+    }
+
     render() {
         const { mxEvent, reactions } = this.props;
-        const { myReactions } = this.state;
+        const { myReactions, showAll } = this.state;
 
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        const items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
+        let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
             if (!isSingleEmoji(content)) {
                 return null;
             }
@@ -125,10 +136,23 @@ export default class ReactionsRow extends React.PureComponent {
                 reactionEvents={events}
                 myReactionEvent={myReactionEvent}
             />;
-        });
+        }).filter(item => !!item);
+
+        let showAllLink;
+        if (items.length > MAX_ITEMS_WHEN_LIMITED && !showAll) {
+            items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
+            showAllLink = <a
+                className="mx_ReactionsRow_showAll"
+                href="#"
+                onClick={this.onShowAllClick}
+            >
+                {_t("Show all")}
+            </a>;
+        }
 
         return <div className="mx_ReactionsRow">
             {items}
+            {showAllLink}
         </div>;
     }
 }

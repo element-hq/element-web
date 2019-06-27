@@ -18,3 +18,17 @@ limitations under the License.
     margin: 6px 0;
     color: $primary-fg-color;
 }
+
+.mx_ReactionsRow_showAll {
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: top;
+
+    &:hover,
+    &:link,
+    &:visited {
+        color: $accent-color;
+    }
+}
