@@ -21,6 +21,10 @@ import classNames from 'classnames';
 
 const InteractiveTooltipContainerId = "mx_InteractiveTooltip_Container";
 
+// If the distance from tooltip to window edge is below this value, the tooltip
+// will flip around to the other side of the target.
+const MIN_SAFE_DISTANCE_TO_WINDOW_EDGE = 20;
+
 function getOrCreateContainer() {
     let container = document.getElementById(InteractiveTooltipContainerId);
 
@@ -121,7 +125,7 @@ export default class InteractiveTooltip extends React.Component {
     }
 
     renderTooltip() {
-        const { visible } = this.state;
+        const { contentRect, visible } = this.state;
         if (!visible) {
             ReactDOM.unmountComponentAtNode(getOrCreateContainer());
             return null;
@@ -134,11 +138,12 @@ export default class InteractiveTooltip extends React.Component {
         const targetBottom = targetRect.bottom + window.pageYOffset;
         const targetTop = targetRect.top + window.pageYOffset;
 
-        // Align the tooltip vertically on whichever side of the target has more
-        // space available.
+        // Place the tooltip above the target by default. If we find that the
+        // tooltip content would extend past the safe area towards the window
+        // edge, flip around to below the target.
         const position = {};
         let chevronFace = null;
-        if (targetBottom < window.innerHeight / 2) {
+        if (contentRect && (targetTop - contentRect.height <= MIN_SAFE_DISTANCE_TO_WINDOW_EDGE)) {
             position.top = targetBottom;
             chevronFace = "top";
         } else {
@@ -158,8 +163,8 @@ export default class InteractiveTooltip extends React.Component {
         });
 
         const menuStyle = {};
-        if (this.state.contentRect) {
-            menuStyle.left = `-${this.state.contentRect.width / 2}px`;
+        if (contentRect) {
+            menuStyle.left = `-${contentRect.width / 2}px`;
         }
 
         const tooltip = <div className="mx_InteractiveTooltip_wrapper" style={{...position}}>
