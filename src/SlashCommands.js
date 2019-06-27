@@ -34,7 +34,7 @@ import WidgetUtils from "./utils/WidgetUtils";
 import {textToHtmlRainbow} from "./utils/colour";
 import Promise from "bluebird";
 
-const requestSingleFileUpload = async () => {
+const singleMxcUpload = async () => {
     return new Promise((resolve) => {
         const fileSelector = document.createElement('input');
         fileSelector.setAttribute('type', 'file');
@@ -242,7 +242,7 @@ export const CommandMap = {
 
             let promise = Promise.resolve(args);
             if (!args) {
-                promise = requestSingleFileUpload();
+                promise = singleMxcUpload();
             }
 
             return success(promise.then((url) => {
@@ -263,7 +263,7 @@ export const CommandMap = {
         runFn: function(roomId, args) {
             let promise = Promise.resolve(args);
             if (!args) {
-                promise = requestSingleFileUpload();
+                promise = singleMxcUpload();
             }
 
             return success(promise.then((url) => {
