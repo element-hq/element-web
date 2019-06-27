@@ -66,6 +66,7 @@ module.exports = React.createClass({
         error: PropTypes.object,
 
         canPreview: PropTypes.bool,
+        previewLoading: PropTypes.bool,
         room: PropTypes.object,
 
         // When a spinner is present, a spinnerState can be specified to indicate the
@@ -254,6 +255,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const Spinner = sdk.getComponent('elements.Spinner');
+
         let showSpinner = false;
         let darkStyle = false;
         let title;
@@ -262,6 +265,7 @@ module.exports = React.createClass({
         let primaryActionLabel;
         let secondaryActionHandler;
         let secondaryActionLabel;
+        let footer;
 
         const messageCase = this._getMessageCase();
         switch (messageCase) {
@@ -287,6 +291,14 @@ module.exports = React.createClass({
                 primaryActionHandler = this.onRegisterClick;
                 secondaryActionLabel = _t("Sign In");
                 secondaryActionHandler = this.onLoginClick;
+                if (this.props.previewLoading) {
+                    footer = (
+                        <div>
+                            <Spinner w={20} h={20}/>
+                            {_t("Loading room preview")}
+                        </div>
+                    );
+                }
                 break;
             }
             case MessageCase.Kicked: {
@@ -433,7 +445,6 @@ module.exports = React.createClass({
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Spinner = sdk.getComponent('elements.Spinner');
 
         let subTitleElements;
         if (subTitle) {
@@ -483,6 +494,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
                     { primaryButton }
+                </div>
+                <div className="mx_RoomPreviewBar_footer">
+                    { footer }
                 </div>
             </div>
         );
