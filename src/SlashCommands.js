@@ -34,6 +34,26 @@ import WidgetUtils from "./utils/WidgetUtils";
 import {textToHtmlRainbow} from "./utils/colour";
 import Promise from "bluebird";
 
+const requestSingleFileUpload = async () => {
+    return new Promise((resolve) => {
+        const fileSelector = document.createElement('input');
+        fileSelector.setAttribute('type', 'file');
+        fileSelector.onchange = (ev) => {
+            const file = ev.target.files[0];
+
+            const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
+            Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
+                file,
+                onFinished: (shouldContinue) => {
+                    if (shouldContinue) resolve(MatrixClientPeg.get().uploadContent(file));
+                },
+            });
+        };
+
+        fileSelector.click();
+    });
+};
+
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
         this.command = '/' + name;
@@ -222,23 +242,7 @@ export const CommandMap = {
 
             let promise = Promise.resolve(args);
             if (!args) {
-                promise = new Promise((resolve) => {
-                    const fileSelector = document.createElement('input');
-                    fileSelector.setAttribute('type', 'file');
-                    fileSelector.onchange = (ev) => {
-                        const file = ev.target.files[0];
-
-                        const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
-                        Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
-                            file,
-                            onFinished: (shouldContinue) => {
-                                if (shouldContinue) resolve(cli.uploadContent(file));
-                            },
-                        });
-                    };
-
-                    fileSelector.click();
-                });
+                promise = requestSingleFileUpload();
             }
 
             return success(promise.then((url) => {
@@ -248,6 +252,22 @@ export const CommandMap = {
                     avatar_url: url,
                 };
                 return cli.sendStateEvent(roomId, 'm.room.member', content, userId);
+            }));
+        },
+    }),
+
+    myavatar: new Command({
+        name: 'myavatar',
+        args: '[<mxc_url>]',
+        description: _td('Changes your avatar in all rooms'),
+        runFn: function(roomId, args) {
+            let promise = Promise.resolve(args);
+            if (!args) {
+                promise = requestSingleFileUpload();
+            }
+
+            return success(promise.then((url) => {
+                return MatrixClientPeg.get().setAvatarUrl(url);
             }));
         },
     }),
