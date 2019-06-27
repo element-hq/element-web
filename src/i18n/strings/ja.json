@@ -7,7 +7,7 @@
     "Custom Server Options": "カスタムサーバのオプション",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "他のホームサーバのURLを指定することで、他のMatrixサーバにサインインするためにカスタムサーバのオプションを利用できます。<br/>これにより、他のホームサーバ上で既存のMatrixアカウントを用いてRiotを利用できます。<br/><br/>カスタムアイデンティティサーバを立てることもできますが、メールアドレスでユーザを招待する、または自身が招待されることはできません。",
     "Dismiss": "やめる",
-    "powered by Matrix": "Matrixによって動作しています",
+    "powered by Matrix": "Matrix の支援により活動しています。",
     "Riot Desktop on %(platformName)s": "%(platformName)s向けデスクトップ版Riot",
     "You need to be using HTTPS to place a screen-sharing call.": "画面共有通話を行うにはHTTPS通信を使う必要があります。",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "分散型の、暗号化された会話とコラボレーション。[matrix]で動作しています",
@@ -35,5 +35,13 @@
     "Contributing code to Matrix and Riot": "MatrixとRiotにコードを提供する",
     "Dev chat for the Riot/Web dev team": "Riot/Web開発者チームのための開発者チャット",
     "Dev chat for the Dendrite dev team": "Dendrite開発者チームのための開発者チャット",
-    "Co-ordination for Riot translators": "Riot 翻訳者による共同作業"
+    "Co-ordination for Riot translators": "Riot 翻訳者による共同作業",
+    "Unexpected error preparing the app. See console for details.": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
+    "Your Riot is misconfigured": "あなたの Riot は間違って設定されています。",
+    "Invalid configuration: no default server specified.": "不正な設定です：デフォルトのサーバーが設定されていません。",
+    "Sign In": "サインイン",
+    "Create Account": "アカウントを作成する",
+    "Need help?": "助けが必要ですか？",
+    "Explore rooms": "部屋を探索する",
+    "Room Directory": "部屋のディレクトリー"
 }
