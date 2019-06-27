@@ -1433,7 +1433,7 @@
     "User %(user_id)s may or may not exist": "Uzanto %(user_id)s eble ne ekzistas",
     "The user must be unbanned before they can be invited.": "Necesas malforbari ĉi tiun uzanton antaŭ ol ĝin inviti.",
     "The user's homeserver does not support the version of the room.": "Hejmservilo de ĉi tiu uzanto ne subtenas la version de la ĉambro.",
-    "No need for symbols, digits, or uppercase letters": "Ne necesas simboloj, cirefoj, aŭ majuskloj",
+    "No need for symbols, digits, or uppercase letters": "Ne necesas simboloj, ciferoj, aŭ majuskloj.",
     "Render simple counters in room header": "Bildigi simplajn kalkulilojn en la ĉapo de la fenestro",
     "Edit messages after they have been sent (refresh to apply changes)": "Redakti mesaĝojn senditajn (aktualigu por apliki ŝanĝojn)",
     "React to messages with emoji (refresh to apply changes)": "Reagi al mesaĝoj per bildsignoj (aktualigu por apliki ŝanĝojn)",
