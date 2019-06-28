@@ -2025,5 +2025,6 @@
     "Eyes": "Yeux",
     "Edited at %(date)s. Click to view edits.": "Édité à %(date)s. Cliquer pour voir les éditions.",
     "Message edits": "Éditions du message",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "La mise à niveau de ce salon nécessite de fermer l’instance actuelle du salon et de créer un nouveau salon à la place. Pour fournir la meilleure expérience possible aux utilisateurs, nous allons :"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "La mise à niveau de ce salon nécessite de fermer l’instance actuelle du salon et de créer un nouveau salon à la place. Pour fournir la meilleure expérience possible aux utilisateurs, nous allons :",
+    "Loading room preview": "Chargement de l’aperçu du salon"
 }
