@@ -131,17 +131,27 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
-            // Check for trackpad users every so often to avoid boosting their scroll.
-            // See https://github.com/vector-im/riot-web/issues/10005
+            // whenever we see horizontal scrolling, assume the user is on a trackpad
+            // for at least the next 1 minute.
             const now = new Date().getTime();
-            if (now >= this._checkAgainForTrackpad) {
-                this._likelyTrackpadUser = Math.abs(e.deltaX) > 0;
-                this._checkAgainForTrackpad = now + (15 * 60 * 1000); // 15min
+            if (Math.abs(e.deltaX) > 0) {
+                this._likelyTrackpadUser = true;
+                this._checkAgainForTrackpad = now + (1 * 60 * 1000);
+            } else {
+                // if we haven't seen any horizontal scrolling for a while, assume
+                // the user might have plugged in a mousewheel
+                if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
+                    this._likelyTrackpadUser = false;
+                }
             }
 
-            const safeToBoost = !this._likelyTrackpadUser;
+            // don't mess with the horizontal scroll for trackpad users
+            // See https://github.com/vector-im/riot-web/issues/10005
+            if (this._likelyTrackpadUser) {
+                return;
+            }
 
-            if (Math.abs(e.deltaX) <= xyThreshold) {
+            if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
                 // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
                 // amount, which means the likely small area of content results in a small amount of
@@ -152,7 +162,7 @@ export default class IndicatorScrollbar extends React.Component {
                 const additionalScroll = e.deltaY < 0 ? -50 : 50;
 
                 // noinspection JSSuspiciousNameCombination
-                const val = Math.abs(e.deltaY) < 25 && safeToBoost ? (e.deltaY + additionalScroll) : e.deltaY;
+                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
                 this._scrollElement.scrollLeft += val * yRetention;
             }
         }
