@@ -125,7 +125,7 @@ export default class KeyRequestHandler {
         };
 
         const KeyShareDialog = sdk.getComponent("dialogs.KeyShareDialog");
-        Modal.createTrackedDialog('Key Share', 'Process Next Request', KeyShareDialog, {
+        Modal.appendTrackedDialog('Key Share', 'Process Next Request', KeyShareDialog, {
             matrixClient: this._matrixClient,
             userId: userId,
             deviceId: deviceId,
