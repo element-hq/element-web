@@ -141,10 +141,10 @@ export default class ReactionsRow extends React.PureComponent {
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
         // more space than the button itself.
-        let showAllLink;
+        let showAllButton;
         if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
-            showAllLink = <a
+            showAllButton = <a
                 className="mx_ReactionsRow_showAll"
                 href="#"
                 onClick={this.onShowAllClick}
@@ -155,7 +155,7 @@ export default class ReactionsRow extends React.PureComponent {
 
         return <div className="mx_ReactionsRow">
             {items}
-            {showAllLink}
+            {showAllButton}
         </div>;
     }
 }
