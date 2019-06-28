@@ -21,7 +21,7 @@ released version of Riot:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See below for details.
+   as desired. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
@@ -52,9 +52,9 @@ on the client, Riot needs a way to supply the decrypted content from a separate
 origin to the one Riot is hosted on. This currently done with a 'cross origin
 renderer' which is a small piece of javascript hosted on a different domain.
 To avoid all Riot installs needing one of these to be set up, riot.im hosts
-one on usercontent.riot.im which is used by default. See 'config.json' if you'd
-like to host your own. https://github.com/vector-im/riot-web/issues/6173 tracks
-progress on replacing this with something better.
+one on usercontent.riot.im which is used by default.
+https://github.com/vector-im/riot-web/issues/6173 tracks progress on replacing
+this with something better.
 
 Building From Source
 ====================
@@ -91,7 +91,7 @@ guide](https://yarnpkg.com/docs/install/) if you do not have it already.
    develop branch. (Note that we don't reference the develop versions in git directly
    due to https://github.com/npm/npm/issues/3055.)
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it (see below for details).
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. `yarn dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -100,101 +100,6 @@ Note that `yarn dist` is not supported on Windows, so Windows users can run `yar
 which will build all the necessary files into the `webapp` directory. The version of Riot
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your webserver to actually serve up the app, which is entirely static content.
-
-config.json
-===========
-
-You can configure the app by copying `config.sample.json` to
-`config.json` and customising it:
-
-For a good example, see https://riot.im/develop/config.json.
-
-1. `default_server_config` sets the default homeserver and identity server URL for
-   Riot to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
-   with added support for a `server_name` under the `m.homeserver` section to display
-   a custom homeserver name. Alternatively, the config can contain a `default_server_name`
-   instead which is where Riot will go to get that same object, although this option is
-   deprecated - see the `.well-known` link above for more information on using this option. 
-   Note that the `default_server_name` is used to get a complete server configuration 
-   whereas the `server_name` in the `default_server_config` is for display purposes only.
-   * *Note*: The URLs can also be individually specified as `default_hs_url` and 
-     `default_is_url`, however these are deprecated. They are maintained for backwards
-     compatibility with older configurations. `default_is_url` is respected only
-     if `default_hs_url` is used.
-   * The identity server is used for verifying third party identifiers like emails
-     and phone numbers. It is not used to store your password or account information.
-     If not provided, the identity server defaults to vector.im unless `disable_identity_server`
-     is set to true in the config. Currently the only two public identity servers
-     are https://matrix.org and https://vector.im, however in future identity servers
-     will be decentralised.
-   * Riot will fail to load if a mix of `default_server_config`, `default_server_name`, or
-     `default_hs_url` is specified. When multiple sources are specified, it is unclear
-     which should take priority and therefore the application cannot continue.
-1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
-   in the `labs` section of settings.  The available optional experimental features vary from
-   release to release. Some of the available features are described in the Labs Feature section
-   of this README.
-1. `showLabsSettings`: Shows the "labs" tab of user settings even when no `features` are enabled
-   or present. Useful for getting at settings which may be otherwise hidden.
-1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
-   homeserver know what email template to use when talking to you.
-1. `branding`: Configures various branding and logo details, such as:
-    1. `welcomeBackgroundUrl`: An image to use as a wallpaper outside the app
-       during authentication flows
-    1. `authHeaderLogoUrl`: An logo image that is shown in the header during
-       authentication flows
-    1. `authFooterLinks`: a list of links to show in the authentication page footer:
-      `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
-1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
-   server is not Riot and normally not your homeserver either. The integration server settings
-   may be left blank to disable integrations.
-1. `integrations_rest_url`: URL to the REST interface for the integrations server.
-1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
-1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
-   https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
-   "Send Logs" within the application. Bug reports can be disabled by leaving the
-   `bug_report_endpoint_url` out of your config file.
-1. `roomDirectory`: config for the public room directory. This section is optional.
-1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
-   down list. Optional.
-1. `default_theme`: name of theme to use by default (e.g. 'light')
-1. `update_base_url` (electron app only): HTTPS URL to a web server to download
-   updates from. This should be the path to the directory containing `macos`
-   and `win32` (for update packages, not installer packages).
-1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
-   encrypted file attachments. This MUST be hosted on a completely separate domain to
-   anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
-   https://github.com/matrix-org/usercontent/blob/master/v1.html
-1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
-   option out of your config file. If you want to enable analytics, set `piwik` to be an object
-   containing the following properties:
-    1. `url`: The URL of the Piwik instance to use for collecting analytics
-    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
-    1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
-    1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
-1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
-1. `embeddedPages`: Configures the pages displayed in portions of Riot that
-   embed static files, such as:
-    1. `welcomeUrl`: Initial content shown on the outside of the app when not
-       logged in. Defaults to `welcome.html` supplied with Riot.
-    1. `homeUrl`: Content shown on the inside of the app when a specific room is
-       not selected. By default, no home page is configured. If one is set, a
-       button to access it will be shown in the top left menu.
-1. `defaultCountryCode`: The ISO 3166 alpha2 country code to use when showing
-   country selectors, like the phone number input on the registration page.
-   Defaults to `GB` if the given code is unknown or not provided.
-
-
-Note that `index.html` also has an og:image meta tag that is set to an image
-hosted on riot.im. This is the image used if links to your copy of Riot
-appear in some websites like Facebook, and indeed Riot itself. This has to be
-static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
-not possible for this to be an option in config.json. If you'd like to change
-it, you can build Riot as above, but run
-`RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`.
-Alternatively, you can edit the `og:image` meta tag in `index.html` directly
-each time you download a new version of Riot.
 
 Running as a Desktop app
 ========================
@@ -248,19 +153,8 @@ yarn global add nativefier
 nativefier https://riot.im/app/
 ```
 
-Desktop app configuration
-=========================
-
-To run multiple instances of the desktop app for different accounts, you can launch the executable with the `--profile` argument followed by a unique identifier, e.g `riot-web --profile Work` for it to run a separate profile and not interfere with the default one.
-
-Alternatively, a custom location for the profile data can be specified using the `--profile-dir` flag followed by the desired path.
-
-To change the config.json for the desktop app, create a config file which will be used to override values in the config which ships in the package:
-+ `%APPDATA%\$NAME\config.json` on Windows
-+ `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
-+ `~Library/Application Support/$NAME/config.json` on macOS
-
-In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
+The [configuration docs](docs/config.md#desktop-app-configuration) show how to
+override the desktop app's default settings if desired.
 
 Running from Docker
 ===================
@@ -297,6 +191,12 @@ docker build -t vectorim/riot-web:develop \
     --build-arg JS_SDK_BRANCH="develop" \
     .
 ```
+
+config.json
+===========
+
+Riot supports a variety of settings to configure default servers, behaviour, themes, etc.
+See the [configuration docs](docs/config.md) for more details.
 
 Labs Features
 =============
