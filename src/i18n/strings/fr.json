@@ -47,5 +47,8 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuration invalide : il ne faut spécifier qu’un des trois champs entre default_server_config, default_server_name et default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuration invalide : aucun serveur par défaut spécifié.",
     "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Cette installation de Riot semble avoir une configuration de serveur non valide. Si vous êtes l’administrateur, corrigez l’erreur ci-dessous",
-    "Your Riot is misconfigured": "Votre Riot est mal configuré"
+    "Your Riot is misconfigured": "Votre Riot est mal configuré",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Votre configuration de Riot contient du JSON non valide. Corrigez ce problème et rechargez la page.",
+    "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
+    "Invalid JSON": "JSON non valide"
 }
