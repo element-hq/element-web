@@ -20,5 +20,8 @@
     "Chat with Riot Bot": "Chattn me Riot-robot",
     "Explore rooms": "Gesprekkn ountdekkn",
     "Room Directory": "Gesprekscataloog",
-    "Your Riot is misconfigured": "Je Riot is verkeerd geconfigureerd gewist"
+    "Your Riot is misconfigured": "Je Riot is verkeerd geconfigureerd gewist",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Je Riot-configuroatie bevat oungeldigen JSON. Corrigeer ’t probleem en herload ’t blad.",
+    "The message from the parser is: %(message)s": "’t Bericht van de verwerker is: %(message)s",
+    "Invalid JSON": "Oungeldigen JSON"
 }
