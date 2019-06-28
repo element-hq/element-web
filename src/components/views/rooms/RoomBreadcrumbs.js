@@ -42,7 +42,7 @@ export default class RoomBreadcrumbs extends React.Component {
     componentWillMount() {
         this._dispatcherRef = dis.register(this.onAction);
 
-        let storedRooms = SettingsStore.getValue("breadcrumb_rooms");
+        const storedRooms = SettingsStore.getValue("breadcrumb_rooms");
         this._loadRoomIds(storedRooms || []);
 
         this._settingWatchRef = SettingsStore.watchSetting("breadcrumb_rooms", null, this.onBreadcrumbsChanged);
