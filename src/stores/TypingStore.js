@@ -76,17 +76,21 @@ export default class TypingStore {
         currentTyping.isTyping = isTyping;
 
         if (isTyping) {
-            currentTyping.serverTimer.restart().finished().then(() => {
-                const currentTyping = this._typingStates[roomId];
-                if (currentTyping) currentTyping.isTyping = false;
+            if (!currentTyping.serverTimer.isRunning()) {
+                currentTyping.serverTimer.restart().finished().then(() => {
+                    const currentTyping = this._typingStates[roomId];
+                    if (currentTyping) currentTyping.isTyping = false;
 
-                // The server will (should) time us out on typing, so we don't
-                // need to advertise a stop of typing.
-            });
+                    // The server will (should) time us out on typing, so we don't
+                    // need to advertise a stop of typing.
+                });
+            } else currentTyping.serverTimer.restart();
 
-            currentTyping.userTimer.restart().finished().then(() => {
-                this.setSelfTyping(roomId, false);
-            });
+            if (!currentTyping.userTimer.isRunning()) {
+                currentTyping.userTimer.restart().finished().then(() => {
+                    this.setSelfTyping(roomId, false);
+                });
+            } else currentTyping.userTimer.restart();
         }
 
         MatrixClientPeg.get().sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
