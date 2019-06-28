@@ -67,7 +67,7 @@ export default class AutoDiscoveryUtils {
                 {}, {
                     a: (sub) => {
                         return <a
-                            href="https://github.com/vector-im/riot-web#configjson"
+                            href="https://github.com/vector-im/riot-web/blob/master/docs/config.md"
                             target="_blank"
                             rel="noopener"
                         >{sub}</a>;
