@@ -1982,5 +1982,8 @@
     "Party Popper": "Jaia",
     "Confused": "Nahastuta",
     "Eyes": "Begiak",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Gela hau bertsio-berritzeak gelaren oraingo instantzia itzaliko du eta izen bereko beste gela berri bat sortuko du. Kideei esperientziarik onena emateko, hau egingo dugu:"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Gela hau bertsio-berritzeak gelaren oraingo instantzia itzaliko du eta izen bereko beste gela berri bat sortuko du. Kideei esperientziarik onena emateko, hau egingo dugu:",
+    "Loading room preview": "Gelaren aurrebista kargatzen",
+    "Edited at %(date)s. Click to view edits.": "Edizio data: %(date)s. Sakatu edizioak ikusteko.",
+    "Message edits": "Mezuaren edizioak"
 }
