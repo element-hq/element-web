@@ -192,6 +192,12 @@ docker build -t vectorim/riot-web:develop \
     .
 ```
 
+config.json
+===========
+
+Riot supports a variety of settings to configure default servers, behaviour, themes, etc.
+See the [configuration docs](docs/config.md) for more details.
+
 Labs Features
 =============
 
