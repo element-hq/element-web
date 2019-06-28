@@ -152,7 +152,6 @@ export default class IndicatorScrollbar extends React.Component {
             }
 
             if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
-
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
                 // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
                 // amount, which means the likely small area of content results in a small amount of
