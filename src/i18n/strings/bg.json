@@ -1998,5 +1998,14 @@
     "Upload all": "Качи всички",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Новият ви профил (%(newAccountId)s) е регистриран, но вече сте влезли с друг профил (%(loggedInUserId)s).",
     "Continue with previous account": "Продължи с предишния профил",
-    "Sign out of previous account": "Излез от предишния профил"
+    "Sign out of previous account": "Излез от предишния профил",
+    "Agree": "Съгласие",
+    "Disagree": "Несъгласие",
+    "Happy": "Щастлив",
+    "Party Popper": "Конфети",
+    "Confused": "Объркан",
+    "Eyes": "Очи",
+    "Edited at %(date)s. Click to view edits.": "Редактирано на %(date)s. Кликнете за да видите редакциите.",
+    "Message edits": "Редакции на съобщение",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:"
 }

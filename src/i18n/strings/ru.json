@@ -1714,7 +1714,7 @@
     "Like or Dislike": "Нравится или не нравится",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>отреагировал с %(shortName)s</reactedWith>",
     "Edited at %(date)s": "Под редакцией %(date)s",
-    "edited": "отредактированный",
+    "edited": "отредактировано",
     "Maximize apps": "Развернуть приложения",
     "Rotate Left": "Повернуть влево",
     "Rotate counter-clockwise": "Повернуть против часовой стрелки",
