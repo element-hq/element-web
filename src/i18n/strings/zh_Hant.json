@@ -2019,5 +2019,7 @@
     "Eyes": "眼睛",
     "Edited at %(date)s. Click to view edits.": "編輯於 %(date)s。點擊以檢視編輯。",
     "Message edits": "訊息編輯",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要將其關閉並重新建立一個新的。為了給予聊天室成員最佳的體驗，我們將會："
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要將其關閉並重新建立一個新的。為了給予聊天室成員最佳的體驗，我們將會：",
+    "Loading room preview": "正在載入聊天室預覽",
+    "Show all": "顯示全部"
 }
