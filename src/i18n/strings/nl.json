@@ -1898,5 +1898,12 @@
     "Your Riot is misconfigured": "Uw Riot is verkeerd geconfigureerd",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Vraag uw Riot-beheerder om <a>uw configuratie</a> na te kijken op onjuiste of duplicate items.",
     "Unexpected error resolving identity server configuration": "Onverwachte fout bij het oplossen van de identiteitsserverconfiguratie",
-    "Use lowercase letters, numbers, dashes and underscores only": "Gebruik enkel letters, cijfers, streepjes en underscores"
+    "Use lowercase letters, numbers, dashes and underscores only": "Gebruik enkel letters, cijfers, streepjes en underscores",
+    "Cannot reach identity server": "Kan identiteitsserver niet bereiken",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "U kunt zich registreren, maar sommige functies zullen pas beschikbaar zijn wanneer de identiteitsserver weer online is. Als u deze waarschuwing blijft zien, controleer dan uw configuratie of neem contact op met een serverbeheerder.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "U kunt uw wachtwoord opnieuw instellen, maar sommige functies zullen pas beschikbaar zijn wanneer de identiteitsserver weer online is. Als u deze waarschuwing blijft zien, controleer dan uw configuratie of neem contact op met een serverbeheerder.",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "U kunt zich aanmelden, maar sommige functies zullen pas beschikbaar zijn wanneer de identiteitsserver weer online is. Als u deze waarschuwing blijft zien, controleer dan uw configuratie of neem contact op met een systeembeheerder.",
+    "<a>Log in</a> to your new account.": "<a>Meld u aan</a> met uw nieuwe account.",
+    "You can now close this window or <a>log in</a> to your new account.": "U kunt dit venster nu sluiten, of <a>u aanmelden</a> met uw nieuwe account.",
+    "Registration Successful": "Registratie geslaagd"
 }

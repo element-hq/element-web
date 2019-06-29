@@ -72,7 +72,6 @@ limitations under the License.
     }
 
     .mx_Field input {
-        width: 100%;
         box-sizing: border-box;
     }
 
@@ -110,7 +109,6 @@ limitations under the License.
 
 .mx_AuthBody_fieldRow > .mx_Field {
     margin: 0 5px;
-    flex: 1;
 }
 
 .mx_AuthBody_fieldRow > .mx_Field:first-child {

@@ -1905,5 +1905,9 @@
     "Your Riot is misconfigured": "Riot je špatně nakonfigurován",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Zeptejte se svého administrátora, jestli by vám nezkontrolovat <a>konfiguraci Riotu</a>, asi obsahuje chyby nebo duplicity.",
     "Unexpected error resolving identity server configuration": "Chyba při hledání konfigurace serveru identity",
-    "Use lowercase letters, numbers, dashes and underscores only": "Používejte pouze malá písmena, čísla, pomlčky a podtržítka"
+    "Use lowercase letters, numbers, dashes and underscores only": "Používejte pouze malá písmena, čísla, pomlčky a podtržítka",
+    "Cannot reach identity server": "Nelze se připojit k serveru identity",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Můžete se zaregistrovat, ale některé funkce nebudou dostupné dokud nezačne server identity fungovat. Pokud se vám toto varování zobrazuje pořád, tak zkontrolujte svojí konfiguraci a nebo kontaktujte administrátora serveru.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Můžete si změnit heslo, ale některé funkce nebudou dostupné dokud nezačne server identity fungovat. Pokud se vám toto varování zobrazuje pořád, tak zkontrolujte svojí konfiguraci a nebo kontaktujte administrátora serveru.",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Můžete se přihlásit, ale některé funkce nebudou dostupné dokud nezačne server identity fungovat. Pokud se vám toto varování zobrazuje pořád, tak zkontrolujte svojí konfiguraci a nebo kontaktujte administrátora serveru."
 }

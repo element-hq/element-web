@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,14 +66,6 @@ module.exports = React.createClass({
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
             statusMessage: this._getStatusMessage(),
         });
-    },
-
-    _shouldShowNotifBadge: function() {
-        return RoomNotifs.BADGE_STATES.includes(this.state.notifState);
-    },
-
-    _shouldShowMentionBadge: function() {
-        return RoomNotifs.MENTION_BADGE_STATES.includes(this.state.notifState);
     },
 
     _isDirectMessageRoom: function(roomId) {
@@ -301,8 +294,8 @@ module.exports = React.createClass({
         const notificationCount = this.props.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
-        const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
-        const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
+        const notifBadges = notificationCount > 0 && RoomNotifs.shouldShowNotifBadge(this.state.notifState);
+        const mentionBadges = this.props.highlight && RoomNotifs.shouldShowMentionBadge(this.state.notifState);
         const badges = notifBadges || mentionBadges;
 
         let subtext = null;

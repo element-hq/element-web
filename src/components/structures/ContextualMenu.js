@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -48,7 +48,6 @@ export default class ContextualMenu extends React.Component {
         menuWidth: PropTypes.number,
         menuHeight: PropTypes.number,
         chevronOffset: PropTypes.number,
-        menuColour: PropTypes.string,
         chevronFace: PropTypes.string, // top, bottom, left, right or none
         // Function to be called on menu close
         onFinished: PropTypes.func,
@@ -157,25 +156,6 @@ export default class ContextualMenu extends React.Component {
             chevronOffset.top = Math.max(props.chevronOffset, props.chevronOffset + target - adjusted);
         }
 
-        // To override the default chevron colour, if it's been set
-        let chevronCSS = "";
-        if (props.menuColour) {
-            chevronCSS = `
-                .mx_ContextualMenu_chevron_left:after {
-                    border-right-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_right:after {
-                    border-left-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_top:after {
-                    border-left-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_bottom:after {
-                    border-left-color: ${props.menuColour};
-                }
-            `;
-        }
-
         const chevron = hasChevron ?
             <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} /> :
             undefined;
@@ -200,10 +180,6 @@ export default class ContextualMenu extends React.Component {
 
         if (props.menuHeight) {
             menuStyle.height = props.menuHeight;
-        }
-
-        if (props.menuColour) {
-            menuStyle["backgroundColor"] = props.menuColour;
         }
 
         if (!isNaN(Number(props.menuPaddingTop))) {
@@ -236,7 +212,6 @@ export default class ContextualMenu extends React.Component {
             </div>
             { props.hasBackground && <div className="mx_ContextualMenu_background" style={wrapperStyle}
                                           onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
-            <style>{ chevronCSS }</style>
         </div>;
     }
 }

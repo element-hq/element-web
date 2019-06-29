@@ -15,6 +15,137 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+export function needsCaretNodeBefore(part, prevPart) {
+    const isFirst = !prevPart || prevPart.type === "newline";
+    return !part.canEdit && (isFirst || !prevPart.canEdit);
+}
+
+export function needsCaretNodeAfter(part, isLastOfLine) {
+    return !part.canEdit && isLastOfLine;
+}
+
+function insertAfter(node, nodeToInsert) {
+    const next = node.nextSibling;
+    if (next) {
+        node.parentElement.insertBefore(nodeToInsert, next);
+    } else {
+        node.parentElement.appendChild(nodeToInsert);
+    }
+}
+
+// Use a BOM marker for caret nodes.
+// On a first test, they seem to be filtered out when copying text out of the editor,
+// but this could be platform dependent.
+// As a precautionary measure, I chose the character that slate also uses.
+export const CARET_NODE_CHAR = "\ufeff";
+// a caret node is a node that allows the caret to be placed
+// where otherwise it wouldn't be possible
+// (e.g. next to a pill span without adjacent text node)
+function createCaretNode() {
+    const span = document.createElement("span");
+    span.className = "caretNode";
+    span.appendChild(document.createTextNode(CARET_NODE_CHAR));
+    return span;
+}
+
+function updateCaretNode(node) {
+    // ensure the caret node contains only a zero-width space
+    if (node.textContent !== CARET_NODE_CHAR) {
+        node.textContent = CARET_NODE_CHAR;
+    }
+}
+
+export function isCaretNode(node) {
+    return node && node.tagName === "SPAN" && node.className === "caretNode";
+}
+
+function removeNextSiblings(node) {
+    if (!node) {
+        return;
+    }
+    node = node.nextSibling;
+    while (node) {
+        const removeNode = node;
+        node = node.nextSibling;
+        removeNode.remove();
+    }
+}
+
+function removeChildren(parent) {
+    const firstChild = parent.firstChild;
+    if (firstChild) {
+        removeNextSiblings(firstChild);
+        firstChild.remove();
+    }
+}
+
+function reconcileLine(lineContainer, parts) {
+    let currentNode;
+    let prevPart;
+    const lastPart = parts[parts.length - 1];
+
+    for (const part of parts) {
+        const isFirst = !prevPart;
+        currentNode = isFirst ? lineContainer.firstChild : currentNode.nextSibling;
+
+        if (needsCaretNodeBefore(part, prevPart)) {
+            if (isCaretNode(currentNode)) {
+                updateCaretNode(currentNode);
+                currentNode = currentNode.nextSibling;
+            } else {
+                lineContainer.insertBefore(createCaretNode(), currentNode);
+            }
+        }
+        // remove nodes until matching current part
+        while (currentNode && !part.canUpdateDOMNode(currentNode)) {
+            const nextNode = currentNode.nextSibling;
+            lineContainer.removeChild(currentNode);
+            currentNode = nextNode;
+        }
+        // update or insert node for current part
+        if (currentNode && part) {
+            part.updateDOMNode(currentNode);
+        } else if (part) {
+            currentNode = part.toDOMNode();
+            // hooks up nextSibling for next iteration
+            lineContainer.appendChild(currentNode);
+        }
+
+        if (needsCaretNodeAfter(part, part === lastPart)) {
+            if (isCaretNode(currentNode.nextSibling)) {
+                currentNode = currentNode.nextSibling;
+                updateCaretNode(currentNode);
+            } else {
+                const caretNode = createCaretNode();
+                insertAfter(currentNode, caretNode);
+                currentNode = caretNode;
+            }
+        }
+
+        prevPart = part;
+    }
+
+    removeNextSiblings(currentNode);
+}
+
+function reconcileEmptyLine(lineContainer) {
+    // empty div needs to have a BR in it to give it height
+    let foundBR = false;
+    let partNode = lineContainer.firstChild;
+    while (partNode) {
+        const nextNode = partNode.nextSibling;
+        if (!foundBR && partNode.tagName === "BR") {
+            foundBR = true;
+        } else {
+            partNode.remove();
+        }
+        partNode = nextNode;
+    }
+    if (!foundBR) {
+        lineContainer.appendChild(document.createElement("br"));
+    }
+}
+
 export function renderModel(editor, model) {
     const lines = model.parts.reduce((lines, part) => {
         if (part.type === "newline") {
@@ -25,8 +156,9 @@ export function renderModel(editor, model) {
         }
         return lines;
     }, [[]]);
-    // TODO: refactor this code, DRY it
     lines.forEach((parts, i) => {
+        // find first (and remove anything else) div without className
+        // (as browsers insert these in contenteditable) line container
         let lineContainer = editor.childNodes[i];
         while (lineContainer && (lineContainer.tagName !== "DIV" || !!lineContainer.className)) {
             editor.removeChild(lineContainer);
@@ -38,46 +170,14 @@ export function renderModel(editor, model) {
         }
 
         if (parts.length) {
-            parts.forEach((part, j) => {
-                let partNode = lineContainer.childNodes[j];
-                while (partNode && !part.canUpdateDOMNode(partNode)) {
-                    lineContainer.removeChild(partNode);
-                    partNode = lineContainer.childNodes[j];
-                }
-                if (partNode && part) {
-                    part.updateDOMNode(partNode);
-                } else if (part) {
-                    lineContainer.appendChild(part.toDOMNode());
-                }
-            });
-
-            let surplusElementCount = Math.max(0, lineContainer.childNodes.length - parts.length);
-            while (surplusElementCount) {
-                lineContainer.removeChild(lineContainer.lastChild);
-                --surplusElementCount;
-            }
+            reconcileLine(lineContainer, parts);
         } else {
-            // empty div needs to have a BR in it to give it height
-            let foundBR = false;
-            let partNode = lineContainer.firstChild;
-            while (partNode) {
-                const nextNode = partNode.nextSibling;
-                if (!foundBR && partNode.tagName === "BR") {
-                    foundBR = true;
-                } else {
-                    lineContainer.removeChild(partNode);
-                }
-                partNode = nextNode;
-            }
-            if (!foundBR) {
-                lineContainer.appendChild(document.createElement("br"));
-            }
-        }
-
-        let surplusElementCount = Math.max(0, editor.childNodes.length - lines.length);
-        while (surplusElementCount) {
-            editor.removeChild(editor.lastChild);
-            --surplusElementCount;
+            reconcileEmptyLine(lineContainer);
         }
     });
+    if (lines.length) {
+        removeNextSiblings(editor.children[lines.length]);
+    } else {
+        removeChildren(editor);
+    }
 }

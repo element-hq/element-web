@@ -1993,5 +1993,22 @@
     "Cannot reach identity server": "無法連線至身份識別伺服器",
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以註冊，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以重設密碼，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
-    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以登入，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。"
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "您可以登入，但有些功能在身份識別伺服器重新上線前會沒辦法運作。如果您一直看到這個警告，請檢查您的設定或聯絡伺服器管理員。",
+    "<a>Log in</a> to your new account.": "<a>登入</a>到您的新帳號。",
+    "You can now close this window or <a>log in</a> to your new account.": "您現在可以關閉此視窗或<a>登入</a>到您的新帳號了。",
+    "Registration Successful": "註冊成功",
+    "Upload all": "上傳全部",
+    "No integrations server configured": "沒有設定好的整合伺服器",
+    "This Riot instance does not have an integrations server configured.": "這個 Riot 站台沒有設定整合伺服器。",
+    "Connecting to integrations server...": "正在連線到整合伺服器……",
+    "Cannot connect to integrations server": "無法連線到整合伺服器",
+    "The integrations server is offline or it cannot reach your homeserver.": "整合伺服器已離線或無法連線到您的家伺服器。",
+    "Unnamed microphone": "未命名的麥克風",
+    "Unnamed audio output": "未命名的音訊輸出",
+    "Unnamed camera": "未命名的攝影機",
+    "Failed to connect to integrations server": "連線到整合伺服器失敗",
+    "No integrations server is configured to manage stickers with": "未設定整合伺服器來管理貼圖",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "您的新帳號 %(newAccountId)s 已註冊，但您已經登入到不同的帳號 (%(loggedInUserId)s)。",
+    "Continue with previous account": "使用先前的帳號繼續",
+    "Sign out of previous account": "登出先前的帳號"
 }

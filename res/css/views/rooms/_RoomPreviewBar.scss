@@ -39,6 +39,16 @@ limitations under the License.
         margin: 10px 10px 10px 0;
         flex: 0 0 auto;
     }
+
+    .mx_RoomPreviewBar_footer {
+        font-size: 12px;
+        line-height: 20px;
+
+        .mx_Spinner {
+            vertical-align: middle;
+            display: inline-block;
+        }
+    }
 }
 
 .mx_RoomPreviewBar_dark {

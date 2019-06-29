@@ -240,19 +240,13 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
+            // The dialog handles scalar auth for us
             const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            this._scalarClient.connect().done(() => {
-                const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room, 'type_' + this.props.type, this.props.id);
-                Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                    src: src,
-                }, "mx_IntegrationsManager");
-            }, (err) => {
-                this.setState({
-                    error: err.message,
-                });
-                console.error('Error ensuring a valid scalar_token exists', err);
-            });
+            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                room: this.props.room,
+                screen: 'type_' + this.props.type,
+                integrationId: this.props.id,
+            }, "mx_IntegrationsManager");
         }
     }
 

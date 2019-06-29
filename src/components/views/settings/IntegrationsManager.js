@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,50 +15,124 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
+import dis from '../../../dispatcher';
+import ScalarAuthClient from '../../../ScalarAuthClient';
 
-const React = require('react');
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const dis = require('../../../dispatcher');
+export default class IntegrationsManager extends React.Component {
+    static propTypes = {
+        // the room object where the integrations manager should be opened in
+        room: PropTypes.object.isRequired,
 
-module.exports = React.createClass({
-    displayName: 'IntegrationsManager',
+        // the screen name to open
+        screen: PropTypes.string,
 
-    propTypes: {
-        src: React.PropTypes.string.isRequired, // the source of the integration manager being embedded
-        onFinished: React.PropTypes.func.isRequired, // callback when the lightbox is dismissed
-    },
+        // the integration ID to open
+        integrationId: PropTypes.string,
 
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal
-    // dialog base class somehow, surely...
-    componentDidMount: function() {
+        // callback when the manager is dismissed
+        onFinished: PropTypes.func.isRequired,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true,
+            configured: ScalarAuthClient.isPossible(),
+            connected: false, // true if a `src` is set and able to be connected to
+            src: null, // string for where to connect to
+        };
+    }
+
+    componentWillMount() {
+        if (!this.state.configured) return;
+
+        const scalarClient = new ScalarAuthClient();
+        scalarClient.connect().then(() => {
+            const hasCredentials = scalarClient.hasCredentials();
+            if (!hasCredentials) {
+                this.setState({
+                    connected: false,
+                    loading: false,
+                });
+            } else {
+                const src = scalarClient.getScalarInterfaceUrlForRoom(
+                    this.props.room,
+                    this.props.screen,
+                    this.props.integrationId,
+                );
+                this.setState({
+                    loading: false,
+                    connected: true,
+                    src: src,
+                });
+            }
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                loading: false,
+                connected: false,
+            });
+        });
+    }
+
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    onKeyDown: function(ev) {
-        if (ev.keyCode == 27) { // escape
+    onKeyDown = (ev) => {
+        if (ev.keyCode === 27) { // escape
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();
         }
-    },
+    };
 
-    onAction: function(payload) {
+    onAction = (payload) => {
         if (payload.action === 'close_scalar') {
             this.props.onFinished();
         }
-    },
+    };
 
-    render: function() {
-        return (
-            <iframe src={ this.props.src }></iframe>
-        );
-    },
-});
+    render() {
+        if (!this.state.configured) {
+            return (
+                <div className='mx_IntegrationsManager_error'>
+                    <h3>{_t("No integrations server configured")}</h3>
+                    <p>{_t("This Riot instance does not have an integrations server configured.")}</p>
+                </div>
+            );
+        }
+
+        if (this.state.loading) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return (
+                <div className='mx_IntegrationsManager_loading'>
+                    <h3>{_t("Connecting to integrations server...")}</h3>
+                    <Spinner />
+                </div>
+            );
+        }
+
+        if (!this.state.connected) {
+            return (
+                <div className='mx_IntegrationsManager_error'>
+                    <h3>{_t("Cannot connect to integrations server")}</h3>
+                    <p>{_t("The integrations server is offline or it cannot reach your homeserver.")}</p>
+                </div>
+            );
+        }
+
+        return <iframe src={this.state.src}></iframe>;
+    }
+}

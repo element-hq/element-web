@@ -907,7 +907,7 @@
     "Enable email notifications": "Włącz powiadomienia e-mailowe",
     "Event Type": "Typ wydarzenia",
     "Download this file": "Pobierz plik",
-    "Pin Message": "Przypnij Wiadomość",
+    "Pin Message": "Przypnij wiadomość",
     "Failed to change settings": "Nie udało się zmienić ustawień",
     "View Community": "Pokaż społeczność",
     "%(count)s Members|one": "%(count)s Członek",
@@ -1461,5 +1461,9 @@
     "Developer options": "Opcje programistyczne",
     "Change main address for the room": "Zmienianie głównego adresu pokoju",
     "Modify widgets": "Modyfikowanie widżetów",
-    "Invite users": "Zapraszanie użytkowników"
+    "Invite users": "Zapraszanie użytkowników",
+    "There was an error joining the room": "Wystąpił błąd dołączając do pokoju",
+    "Joining room …": "Dołączanie do pokoju…",
+    "edited": "edytowane",
+    "Edit message": "Edytuj wiadomość"
 }

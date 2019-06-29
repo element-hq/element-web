@@ -51,6 +51,7 @@ interface MatrixClientCreds {
 class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
+        this._justRegisteredUserId = null;
 
         // These are the default options used when when the
         // client is started in 'start'. These can be altered
@@ -83,6 +84,31 @@ class MatrixClientPeg {
         this.matrixClient = null;
 
         MatrixActionCreators.stop();
+    }
+
+    /*
+     * If we've registered a user ID we set this to the ID of the
+     * user we've just registered. If they then go & log in, we
+     * can send them to the welcome user (obviously this doesn't
+     * guarentee they'll get a chat with the welcome user).
+     *
+     * @param {string} uid The user ID of the user we've just registered
+     */
+    setJustRegisteredUserId(uid) {
+        this._justRegisteredUserId = uid;
+    }
+
+    /*
+     * Returns true if the current user has just been registered by this
+     * client as determined by setJustRegisteredUserId()
+     *
+     * @returns {bool} True if user has just been registered
+     */
+    currentUserIsJustRegistered() {
+        return (
+            this.matrixClient &&
+            this.matrixClient.credentials.userId === this._justRegisteredUserId
+        );
     }
 
     /**

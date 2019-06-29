@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import {_t, _td} from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -53,6 +52,9 @@ export default class Stickerpicker extends React.Component {
         this.popoverWidth = 300;
         this.popoverHeight = 300;
 
+        // This is loaded by _acquireScalarClient on an as-needed basis.
+        this.scalarClient = null;
+
         this.state = {
             showStickers: false,
             imError: null,
@@ -63,14 +65,34 @@ export default class Stickerpicker extends React.Component {
         };
     }
 
-    _removeStickerpickerWidgets() {
+    _acquireScalarClient() {
+        if (this.scalarClient) return Promise.resolve(this.scalarClient);
+        if (ScalarAuthClient.isPossible()) {
+            this.scalarClient = new ScalarAuthClient();
+            return this.scalarClient.connect().then(() => {
+                this.forceUpdate();
+                return this.scalarClient;
+            }).catch((e) => {
+                this._imError(_td("Failed to connect to integrations server"), e);
+            });
+        } else {
+            this._imError(_td("No integrations server is configured to manage stickers with"));
+        }
+    }
+
+    async _removeStickerpickerWidgets() {
+        const scalarClient = await this._acquireScalarClient();
         console.warn('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
-            this.scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
-                console.warn('Assets disabled');
-            }).catch((err) => {
-                console.error('Failed to disable assets');
-            });
+            if (scalarClient) {
+                scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
+                    console.warn('Assets disabled');
+                }).catch((err) => {
+                    console.error('Failed to disable assets');
+                });
+            } else {
+                console.error("Cannot disable assets: no scalar client");
+            }
         } else {
             console.warn('No widget ID specified, not disabling assets');
         }
@@ -87,19 +109,7 @@ export default class Stickerpicker extends React.Component {
         // Close the sticker picker when the window resizes
         window.addEventListener('resize', this._onResize);
 
-        this.scalarClient = null;
-        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
-            this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().then(() => {
-                this.forceUpdate();
-            }).catch((e) => {
-                this._imError("Failed to connect to integrations server", e);
-            });
-        }
-
-        if (!this.state.imError) {
-            this.dispatcherRef = dis.register(this._onWidgetAction);
-        }
+        this.dispatcherRef = dis.register(this._onWidgetAction);
 
         // Track updates to widget state in account data
         MatrixClientPeg.get().on('accountData', this._updateWidget);
@@ -126,7 +136,7 @@ export default class Stickerpicker extends React.Component {
         console.error(errorMsg, e);
         this.setState({
             showStickers: false,
-            imError: errorMsg,
+            imError: _t(errorMsg),
         });
     }
 
@@ -339,22 +349,13 @@ export default class Stickerpicker extends React.Component {
      */
     _launchManageIntegrations() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        this.scalarClient.connect().done(() => {
-            const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room,
-                    'type_' + widgetType,
-                    this.state.widgetId,
-                ) :
-                null;
-            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                src: src,
-            }, "mx_IntegrationsManager");
-            this.setState({showStickers: false});
-        }, (err) => {
-            this.setState({imError: err});
-            console.error('Error ensuring a valid scalar_token exists', err);
-        });
+
+        // The integrations manager will handle scalar auth for us.
+        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+            room: this.props.room,
+            screen: `type_${widgetType}`,
+            integrationId: this.state.widgetId,
+        }, "mx_IntegrationsManager");
     }
 
     render() {

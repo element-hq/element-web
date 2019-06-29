@@ -34,9 +34,15 @@ export default class IncomingSasDialog extends React.Component {
     constructor(props) {
         super(props);
 
+        let phase = PHASE_START;
+        if (this.props.verifier.cancelled) {
+            console.log("Verifier was cancelled in the background.");
+            phase = PHASE_CANCELLED;
+        }
+
         this._showSasEvent = null;
         this.state = {
-            phase: PHASE_START,
+            phase: phase,
             sasVerified: false,
             opponentProfile: null,
             opponentProfileError: null,

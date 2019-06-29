@@ -24,6 +24,7 @@ export function mdSerialize(model) {
                 return html + "\n";
             case "plain":
             case "pill-candidate":
+            case "at-room-pill":
                 return html + part.text;
             case "room-pill":
             case "user-pill":
@@ -47,6 +48,7 @@ export function textSerialize(model) {
                 return text + "\n";
             case "plain":
             case "pill-candidate":
+            case "at-room-pill":
                 return text + part.text;
             case "room-pill":
             case "user-pill":
@@ -58,13 +60,11 @@ export function textSerialize(model) {
 export function requiresHtml(model) {
     return model.parts.some(part => {
         switch (part.type) {
-            case "newline":
-            case "plain":
-            case "pill-candidate":
-                return false;
             case "room-pill":
             case "user-pill":
                 return true;
+            default:
+                return false;
         }
     });
 }

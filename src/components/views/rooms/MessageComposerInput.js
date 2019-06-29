@@ -60,6 +60,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 import {findEditableEvent} from '../../../utils/EventUtils';
+import ComposerHistoryManager from "../../../ComposerHistoryManager";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -140,6 +141,7 @@ export default class MessageComposerInput extends React.Component {
 
     client: MatrixClient;
     autocomplete: Autocomplete;
+    historyManager: ComposerHistoryManager;
 
     constructor(props, context) {
         super(props, context);
@@ -329,6 +331,7 @@ export default class MessageComposerInput extends React.Component {
 
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
@@ -679,14 +682,6 @@ export default class MessageComposerInput extends React.Component {
         if (this.autocomplete.countCompletions() > 0) {
             if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
                 switch (ev.keyCode) {
-                    case KeyCode.LEFT:
-                        this.autocomplete.moveSelection(-1);
-                        ev.preventDefault();
-                        return true;
-                    case KeyCode.RIGHT:
-                        this.autocomplete.moveSelection(+1);
-                        ev.preventDefault();
-                        return true;
                     case KeyCode.UP:
                         this.autocomplete.moveSelection(-1);
                         ev.preventDefault();
@@ -1062,6 +1057,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (cmd) {
             if (!cmd.error) {
+                this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 }, ()=>{
@@ -1139,6 +1135,8 @@ export default class MessageComposerInput extends React.Component {
         let sendHtmlFn = ContentHelpers.makeHtmlMessage;
         let sendTextFn = ContentHelpers.makeTextMessage;
 
+        this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
+
         if (commandText && commandText.startsWith('/me')) {
             if (replyingToEv) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1198,19 +1196,31 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
-        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) return;
-
-        // Select history
-        const selection = this.state.editorState.selection;
+        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
 
         // selection must be collapsed
+        const selection = this.state.editorState.selection;
         if (!selection.isCollapsed) return;
-        const document = this.state.editorState.document;
-
         // and we must be at the edge of the document (up=start, down=end)
+        const document = this.state.editorState.document;
         if (up) {
             if (!selection.anchor.isAtStartOfNode(document)) return;
+        } else {
+            if (!selection.anchor.isAtEndOfNode(document)) return;
+        }
 
+        const editingEnabled = SettingsStore.isFeatureEnabled("feature_message_editing");
+        const shouldSelectHistory = (editingEnabled && e.altKey) || !editingEnabled;
+        const shouldEditLastMessage = editingEnabled && !e.altKey && up;
+
+        if (shouldSelectHistory) {
+            // Try select composer history
+            const selected = this.selectHistory(up);
+            if (selected) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+            }
+        } else if (shouldEditLastMessage) {
             const editEvent = findEditableEvent(this.props.room, false);
             if (editEvent) {
                 // We're selecting history, so prevent the key event from doing anything else
@@ -1221,6 +1231,54 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
         }
+    };
+
+    selectHistory = (up) => {
+        const delta = up ? -1 : 1;
+
+        // True if we are not currently selecting history, but composing a message
+        if (this.historyManager.currentIndex === this.historyManager.history.length) {
+            // We can't go any further - there isn't any more history, so nop.
+            if (!up) {
+                return;
+            }
+            this.setState({
+                currentlyComposedEditorState: this.state.editorState,
+            });
+        } else if (this.historyManager.currentIndex + delta === this.historyManager.history.length) {
+            // True when we return to the message being composed currently
+            this.setState({
+                editorState: this.state.currentlyComposedEditorState,
+            });
+            this.historyManager.currentIndex = this.historyManager.history.length;
+            return;
+        }
+
+        let editorState;
+        const historyItem = this.historyManager.getItem(delta);
+        if (!historyItem) return;
+
+        if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
+            editorState = this.richToMdEditorState(historyItem.value);
+        } else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
+            editorState = this.mdToRichEditorState(historyItem.value);
+        } else {
+            editorState = historyItem.value;
+        }
+
+        // Move selection to the end of the selected history
+        const change = editorState.change().moveToEndOfNode(editorState.document);
+
+        // We don't call this.onChange(change) now, as fixups on stuff like pills
+        // should already have been done and persisted in the history.
+        editorState = change.value;
+
+        this.suppressAutoComplete = true;
+
+        this.setState({ editorState }, ()=>{
+            this._editor.focus();
+        });
+        return true;
     };
 
     onTab = async (e) => {

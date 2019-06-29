@@ -14,29 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsTab_changePassword,
-.mx_GeneralUserSettingsTab_themeSection {
-    display: block;
-}
-
 .mx_GeneralUserSettingsTab_changePassword .mx_Field,
 .mx_GeneralUserSettingsTab_themeSection .mx_Field {
-    display: block;
     margin-right: 100px; // Align with the other fields on the page
-}
-
-.mx_GeneralUserSettingsTab_changePassword .mx_Field input {
-    display: block;
-    width: calc(100% - 20px); // subtract 10px padding on left and right
 }
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
     margin-top: 0;
-}
-
-.mx_GeneralUserSettingsTab_themeSection .mx_Field select {
-    display: block;
-    width: 100%;
 }
 
 .mx_GeneralUserSettingsTab_accountSection > .mx_EmailAddresses,

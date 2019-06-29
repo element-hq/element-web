@@ -81,14 +81,8 @@ export const PasswordAuthEntry = React.createClass({
 
     getInitialState: function() {
         return {
-            passwordValid: false,
+            password: "",
         };
-    },
-
-    focus: function() {
-        if (this.refs.passwordField) {
-            this.refs.passwordField.focus();
-        }
     },
 
     _onSubmit: function(e) {
@@ -98,23 +92,21 @@ export const PasswordAuthEntry = React.createClass({
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
             user: this.props.matrixClient.credentials.userId,
-            password: this.refs.passwordField.value,
+            password: this.state.password,
         });
     },
 
     _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
         this.setState({
-            passwordValid: Boolean(this.refs.passwordField.value),
+            password: ev.target.value,
         });
     },
 
     render: function() {
-        let passwordBoxClass = null;
-
-        if (this.props.errorText) {
-            passwordBoxClass = 'error';
-        }
+        const passwordBoxClass = classnames({
+            "error": this.props.errorText,
+        });
 
         let submitButtonOrSpinner;
         if (this.props.busy) {
@@ -124,7 +116,7 @@ export const PasswordAuthEntry = React.createClass({
             submitButtonOrSpinner = (
                 <input type="submit"
                     className="mx_Dialog_primary"
-                    disabled={!this.state.passwordValid}
+                    disabled={!this.state.password}
                 />
             );
         }
@@ -138,17 +130,21 @@ export const PasswordAuthEntry = React.createClass({
             );
         }
 
+        const Field = sdk.getComponent('elements.Field');
+
         return (
             <div>
                 <p>{ _t("To continue, please enter your password.") }</p>
-                <form onSubmit={this._onSubmit}>
-                    <label htmlFor="passwordField">{ _t("Password:") }</label>
-                    <input
-                        name="passwordField"
-                        ref="passwordField"
+                <form onSubmit={this._onSubmit} className="mx_InteractiveAuthEntryComponents_passwordSection">
+                    <Field
+                        id="mx_InteractiveAuthEntryComponents_password"
                         className={passwordBoxClass}
-                        onChange={this._onPasswordFieldChange}
                         type="password"
+                        name="passwordField"
+                        label={_t('Password')}
+                        autoFocus={true}
+                        value={this.state.password}
+                        onChange={this._onPasswordFieldChange}
                     />
                     <div className="mx_button_row">
                         { submitButtonOrSpinner }

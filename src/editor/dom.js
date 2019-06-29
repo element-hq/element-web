@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {CARET_NODE_CHAR, isCaretNode} from "./render";
+
 export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
     let node = rootNode.firstChild;
     while (node && node !== rootNode) {
@@ -38,27 +40,54 @@ export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback
 }
 
 export function getCaretOffsetAndText(editor, sel) {
-    let {focusNode} = sel;
-    const {focusOffset} = sel;
-    let caretOffset = focusOffset;
+    let {focusNode, focusOffset} = sel;
+    // sometimes focusNode is an element, and then focusOffset means
+    // the index of a child element ... - 1 🤷
+    if (focusNode.nodeType === Node.ELEMENT_NODE && focusOffset !== 0) {
+        focusNode = focusNode.childNodes[focusOffset - 1];
+        focusOffset = focusNode.textContent.length;
+    }
+    const {text, focusNodeOffset} = getTextAndFocusNodeOffset(editor, focusNode, focusOffset);
+    const caret = getCaret(focusNode, focusNodeOffset, focusOffset);
+    return {caret, text};
+}
+
+// gets the caret position details, ignoring and adjusting to
+// the ZWS if you're typing in a caret node
+function getCaret(focusNode, focusNodeOffset, focusOffset) {
+    let atNodeEnd = focusOffset === focusNode.textContent.length;
+    if (focusNode.nodeType === Node.TEXT_NODE && isCaretNode(focusNode.parentElement)) {
+        const zwsIdx = focusNode.nodeValue.indexOf(CARET_NODE_CHAR);
+        if (zwsIdx !== -1 && zwsIdx < focusOffset) {
+            focusOffset -= 1;
+        }
+        // if typing in a caret node, you're either typing before or after the ZWS.
+        // In both cases, you should be considered at node end because the ZWS is
+        // not included in the text here, and once the model is updated and rerendered,
+        // that caret node will be removed.
+        atNodeEnd = true;
+    }
+    return {offset: focusNodeOffset + focusOffset, atNodeEnd};
+}
+
+// gets the text of the editor as a string,
+// and the offset in characters where the focusNode starts in that string
+// all ZWS from caret nodes are filtered out
+function getTextAndFocusNodeOffset(editor, focusNode, focusOffset) {
+    let focusNodeOffset = 0;
     let foundCaret = false;
     let text = "";
 
-    if (focusNode.nodeType === Node.ELEMENT_NODE && focusOffset !== 0) {
-        focusNode = focusNode.childNodes[focusOffset - 1];
-        caretOffset = focusNode.textContent.length;
-    }
-
     function enterNodeCallback(node) {
-        const nodeText = node.nodeType === Node.TEXT_NODE && node.nodeValue;
         if (!foundCaret) {
             if (node === focusNode) {
                 foundCaret = true;
             }
         }
+        const nodeText = node.nodeType === Node.TEXT_NODE && getTextNodeValue(node);
         if (nodeText) {
             if (!foundCaret) {
-                caretOffset += nodeText.length;
+                focusNodeOffset += nodeText.length;
             }
             text += nodeText;
         }
@@ -73,14 +102,30 @@ export function getCaretOffsetAndText(editor, sel) {
         if (node.tagName === "DIV" && node.nextSibling && node.nextSibling.tagName === "DIV") {
             text += "\n";
             if (!foundCaret) {
-                caretOffset += 1;
+                focusNodeOffset += 1;
             }
         }
     }
 
     walkDOMDepthFirst(editor, enterNodeCallback, leaveNodeCallback);
 
-    const atNodeEnd = sel.focusOffset === sel.focusNode.textContent.length;
-    const caret = {atNodeEnd, offset: caretOffset};
-    return {caret, text};
+    return {text, focusNodeOffset};
+}
+
+// get text value of text node, ignoring ZWS if it's a caret node
+function getTextNodeValue(node) {
+    const nodeText = node.nodeValue;
+    // filter out ZWS for caret nodes
+    if (isCaretNode(node.parentElement)) {
+        // typed in the caret node, so there is now something more in it than the ZWS
+        // so filter out the ZWS, and take the typed text into account
+        if (nodeText.length !== 1) {
+            return nodeText.replace(CARET_NODE_CHAR, "");
+        } else {
+            // only contains ZWS, which is ignored, so return emtpy string
+            return "";
+        }
+    } else {
+        return nodeText;
+    }
 }

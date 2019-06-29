@@ -36,7 +36,7 @@ export default class DeactivateAccountDialog extends React.Component {
         this._onEraseFieldChange = this._onEraseFieldChange.bind(this);
 
         this.state = {
-            confirmButtonEnabled: false,
+            password: "",
             busy: false,
             shouldErase: false,
             errStr: null,
@@ -45,7 +45,7 @@ export default class DeactivateAccountDialog extends React.Component {
 
     _onPasswordFieldChange(ev) {
         this.setState({
-            confirmButtonEnabled: Boolean(ev.target.value),
+            password: ev.target.value,
         });
     }
 
@@ -104,7 +104,7 @@ export default class DeactivateAccountDialog extends React.Component {
         }
 
         const okLabel = this.state.busy ? <Loader /> : _t('Deactivate Account');
-        const okEnabled = this.state.confirmButtonEnabled && !this.state.busy;
+        const okEnabled = this.state.password && !this.state.busy;
 
         let cancelButton = null;
         if (!this.state.busy) {
@@ -112,6 +112,8 @@ export default class DeactivateAccountDialog extends React.Component {
                 { _t("Cancel") }
             </button>;
         }
+
+        const Field = sdk.getComponent('elements.Field');
 
         return (
             <BaseDialog className="mx_DeactivateAccountDialog"
@@ -167,10 +169,12 @@ export default class DeactivateAccountDialog extends React.Component {
                         </p>
 
                         <p>{ _t("To continue, please enter your password:") }</p>
-                        <input
+                        <Field
+                            id="mx_DeactivateAccountDialog_password"
                             type="password"
-                            placeholder={_t("password")}
+                            label={_t('Password')}
                             onChange={this._onPasswordFieldChange}
+                            value={this.state.password}
                             ref={(e) => {this._passwordField = e;}}
                             className={passwordBoxClass}
                         />

@@ -78,6 +78,14 @@ export default class MessageEditor extends React.Component {
         this.model.update(text, event.inputType, caret);
     }
 
+    _insertText(textToInsert, inputType = "insertText") {
+        const sel = document.getSelection();
+        const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
+        const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
+        caret.offset += textToInsert.length;
+        this.model.update(newText, inputType, caret);
+    }
+
     _isCaretAtStart() {
         const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
         return caret.offset === 0;
@@ -92,7 +100,7 @@ export default class MessageEditor extends React.Component {
         // insert newline on Shift+Enter
         if (event.shiftKey && event.key === "Enter") {
             event.preventDefault(); // just in case the browser does support this
-            document.execCommand("insertHTML", undefined, "\n");
+            this._insertText("\n");
             return;
         }
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
@@ -150,16 +158,28 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
+    _isEmote() {
+        const firstPart = this.model.parts[0];
+        return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
+    }
+
     _sendEdit = () => {
+        const isEmote = this._isEmote();
+        let model = this.model;
+        if (isEmote) {
+            // trim "/me "
+            model = model.clone();
+            model.removeText({index: 0, offset: 0}, 4);
+        }
         const newContent = {
-            "msgtype": "m.text",
-            "body": textSerialize(this.model),
+            "msgtype": isEmote ? "m.emote" : "m.text",
+            "body": textSerialize(model),
         };
         const contentBody = {
             msgtype: newContent.msgtype,
             body: ` * ${newContent.body}`,
         };
-        const formattedBody = htmlSerializeIfNeeded(this.model);
+        const formattedBody = htmlSerializeIfNeeded(model);
         if (formattedBody) {
             newContent.format = "org.matrix.custom.html";
             newContent.formatted_body = formattedBody;
@@ -232,7 +252,7 @@ export default class MessageEditor extends React.Component {
             parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
         } else {
             // otherwise, parse the body of the event
-            parts = parseEvent(editState.getEvent(), room, this.context.matrixClient);
+            parts = parseEvent(editState.getEvent(), partCreator);
         }
 
         return new EditorModel(

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -403,7 +404,7 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onCryptoClicked: function(e) {
+    onCryptoClick: function(e) {
         const event = this.props.mxEvent;
 
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
@@ -439,7 +440,7 @@ module.exports = withMatrixClient(React.createClass({
 
     _renderE2EPadlock: function() {
         const ev = this.props.mxEvent;
-        const props = {onClick: this.onCryptoClicked};
+        const props = {onClick: this.onCryptoClick};
 
         // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
@@ -670,13 +671,13 @@ module.exports = withMatrixClient(React.createClass({
                 {'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a>},
             );
 
-        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
+        const TooltipButton = sdk.getComponent('elements.TooltipButton');
         const keyRequestInfo = isEncryptionFailure ?
             <div className="mx_EventTile_keyRequestInfo">
                 <span className="mx_EventTile_keyRequestInfo_text">
                     { keyRequestInfoContent }
                 </span>
-                <ToolTipButton helpText={keyRequestHelpText} />
+                <TooltipButton helpText={keyRequestHelpText} />
             </div> : null;
 
         let reactionsRow;
@@ -828,7 +829,7 @@ module.exports.haveTileForEvent = function(e) {
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
     // No tile for replacement events since they update the original tile
-    if (e.isRelation("m.replace")) return false;
+    if (e.isRelation("m.replace") && SettingsStore.isFeatureEnabled("feature_message_editing")) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;

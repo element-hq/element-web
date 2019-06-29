@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -58,18 +59,6 @@ limitations under the License.
     border-bottom: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_right::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-left: 7px solid $menu-bg-color;
-    border-bottom: 7px solid transparent;
-    position: absolute;
-    top: -7px;
-    right: 1px;
-}
-
 .mx_ContextualMenu_left {
     left: 0;
 }
@@ -87,18 +76,6 @@ limitations under the License.
     border-top: 8px solid transparent;
     border-right: 8px solid $menu-bg-color;
     border-bottom: 8px solid transparent;
-}
-
-.mx_ContextualMenu_chevron_left::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-right: 7px solid $menu-bg-color;
-    border-bottom: 7px solid transparent;
-    position: absolute;
-    top: -7px;
-    left: 1px;
 }
 
 .mx_ContextualMenu_top {
@@ -120,18 +97,6 @@ limitations under the License.
     border-right: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_top::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-bottom: 7px solid $menu-bg-color;
-    border-right: 7px solid transparent;
-    position: absolute;
-    left: -7px;
-    top: 1px;
-}
-
 .mx_ContextualMenu_bottom {
     bottom: 0;
 }
@@ -149,24 +114,6 @@ limitations under the License.
     border-left: 8px solid transparent;
     border-top: 8px solid $menu-bg-color;
     border-right: 8px solid transparent;
-}
-
-.mx_ContextualMenu_chevron_bottom::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-top: 7px solid $menu-bg-color;
-    border-right: 7px solid transparent;
-    position: absolute;
-    left: -7px;
-    bottom: 1px;
-}
-
-.mx_ContextualMenu_field {
-    padding: 3px 6px 3px 6px;
-    cursor: pointer;
-    white-space: nowrap;
 }
 
 .mx_ContextualMenu_spinner {

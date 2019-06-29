@@ -38,6 +38,8 @@ export default class IndicatorScrollbar extends React.Component {
         this.checkOverflow = this.checkOverflow.bind(this);
         this._scrollElement = null;
         this._autoHideScrollbar = null;
+        this._likelyTrackpadUser = null;
+        this._checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
         this.state = {
             leftIndicatorOffset: 0,
@@ -129,7 +131,27 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
-            if (Math.abs(e.deltaX) <= xyThreshold) {
+            // whenever we see horizontal scrolling, assume the user is on a trackpad
+            // for at least the next 1 minute.
+            const now = new Date().getTime();
+            if (Math.abs(e.deltaX) > 0) {
+                this._likelyTrackpadUser = true;
+                this._checkAgainForTrackpad = now + (1 * 60 * 1000);
+            } else {
+                // if we haven't seen any horizontal scrolling for a while, assume
+                // the user might have plugged in a mousewheel
+                if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
+                    this._likelyTrackpadUser = false;
+                }
+            }
+
+            // don't mess with the horizontal scroll for trackpad users
+            // See https://github.com/vector-im/riot-web/issues/10005
+            if (this._likelyTrackpadUser) {
+                return;
+            }
+
+            if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
                 // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
                 // amount, which means the likely small area of content results in a small amount of

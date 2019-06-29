@@ -1999,5 +1999,22 @@
     "Cannot reach identity server": "Impossible de joindre le serveur d’identité",
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez vous inscrire, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez réinitialiser votre mot de passe, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
-    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez vous connecter, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur."
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Vous pouvez vous connecter, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
+    "<a>Log in</a> to your new account.": "<a>Connectez-vous</a> à votre nouveau compte.",
+    "You can now close this window or <a>log in</a> to your new account.": "Vous pouvez à présent fermer cette fenêtre ou <a>vous connecter</a> à votre nouveau compte.",
+    "Registration Successful": "Inscription réussie",
+    "No integrations server configured": "Aucun serveur d’intégrations configuré",
+    "This Riot instance does not have an integrations server configured.": "Cette instance de Riot n’a aucun serveur d’intégrations configuré.",
+    "Connecting to integrations server...": "Connexion au serveur d’intégrations…",
+    "Cannot connect to integrations server": "Impossible de se connecter au serveur d’intégrations",
+    "The integrations server is offline or it cannot reach your homeserver.": "Le serveur d’intégrations est hors ligne ou il ne peut pas joindre votre serveur d’accueil.",
+    "Unnamed microphone": "Microphone sans nom",
+    "Unnamed audio output": "Sortie audio sans nom",
+    "Unnamed camera": "Caméra sans nom",
+    "Failed to connect to integrations server": "Échec de la connexion au serveur d’intégrations",
+    "No integrations server is configured to manage stickers with": "Aucun serveur d’intégrations n’est configuré pour gérer les stickers",
+    "Upload all": "Tout envoyer",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Votre nouveau compte (%(newAccountId)s) est créé, mais vous êtes déjà connecté avec un autre compte (%(loggedInUserId)s).",
+    "Continue with previous account": "Continuer avec le compte précédent",
+    "Sign out of previous account": "Se déconnecter du compte précédent"
 }

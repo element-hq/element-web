@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ToolTipButton {
+.mx_TooltipButton {
     display: inline-block;
     width: 11px;
     height: 11px;
@@ -33,17 +34,17 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_ToolTipButton:hover {
+.mx_TooltipButton:hover {
     opacity: 1.0;
 }
 
-.mx_ToolTipButton_container {
+.mx_TooltipButton_container {
     position: relative;
     top: -18px;
     left: 4px;
 }
 
-.mx_ToolTipButton_helpText {
+.mx_TooltipButton_helpText {
     width: 400px;
     text-align: start;
     line-height: 17px !important;

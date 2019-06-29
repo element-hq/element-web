@@ -46,9 +46,12 @@ export function isContentActionable(mxEvent) {
 }
 
 export function canEditContent(mxEvent) {
-    return mxEvent.status !== EventStatus.CANCELLED &&
-        mxEvent.getType() === 'm.room.message' &&
-        mxEvent.getOriginalContent().msgtype === "m.text" &&
+    if (mxEvent.status === EventStatus.CANCELLED || mxEvent.getType() !== "m.room.message") {
+        return false;
+    }
+    const content = mxEvent.getOriginalContent();
+    const {msgtype} = content;
+    return (msgtype === "m.text" || msgtype === "m.emote") &&
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
 

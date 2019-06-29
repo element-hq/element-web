@@ -344,7 +344,7 @@ function _onAction(payload) {
 }
 
 async function _startCallApp(roomId, type) {
-    // check for a working intgrations manager. Technically we could put
+    // check for a working integrations manager. Technically we could put
     // the state event in anyway, but the resulting widget would then not
     // work for us. Better that the user knows before everyone else in the
     // room sees it.

@@ -1,0 +1,9 @@
+{
+    "This email address is already in use": "Email này hiện đã được sử dụng",
+    "This phone number is already in use": "Số điện thoại này hiện đã được sử dụng",
+    "Failed to verify email address: make sure you clicked the link in the email": "Xác thực email thất bại: hãy đảm bảo bạn nhấp đúng đường dẫn đã gửi vào email",
+    "The platform you're on": "Nền tảng bạn đang tham gia",
+    "The version of Riot.im": "Phiên bản của Riot.im",
+    "Your language of choice": "Ngôn ngữ bạn chọn",
+    "Your homeserver's URL": "Đường dẫn Homeserver của bạn"
+}

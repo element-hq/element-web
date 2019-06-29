@@ -292,16 +292,6 @@ const LoggedInView = React.createClass({
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
-            case KeyCode.UP:
-            case KeyCode.DOWN:
-                if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
-                    const action = ev.keyCode == KeyCode.UP ?
-                        'view_prev_room' : 'view_next_room';
-                    dis.dispatch({action: action});
-                    handled = true;
-                }
-                break;
-
             case KeyCode.PAGE_UP:
             case KeyCode.PAGE_DOWN:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {

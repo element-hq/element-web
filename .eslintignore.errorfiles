@@ -47,7 +47,6 @@ src/components/views/rooms/UserTile.js
 src/components/views/settings/ChangeAvatar.js
 src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js
-src/components/views/settings/IntegrationsManager.js
 src/components/views/settings/Notifications.js
 src/GroupAddressPicker.js
 src/HtmlUtils.js

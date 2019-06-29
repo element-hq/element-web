@@ -22,11 +22,6 @@ limitations under the License.
     flex-grow: 1;
 }
 
-.mx_ProfileSettings_controls .mx_Field #profileDisplayName,
-.mx_ProfileSettings_controls .mx_Field #profileTopic {
-    width: calc(100% - 20px); // subtract 10px padding on left and right
-}
-
 .mx_ProfileSettings_controls .mx_Field #profileTopic {
     height: 4em;
 }
