@@ -67,6 +67,10 @@ limitations under the License.
     background-color: $message-action-bar-fg-color;
 }
 
+.mx_MessageActionBar_reactButton::after {
+    mask-image: url('$(res)/img/react.svg');
+}
+
 .mx_MessageActionBar_replyButton::after {
     mask-image: url('$(res)/img/reply.svg');
 }

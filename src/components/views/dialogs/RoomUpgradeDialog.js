@@ -92,7 +92,7 @@ export default React.createClass({
                 <p>
                     {_t(
                         "Upgrading this room requires closing down the current " +
-                        "instance of the room and creating a new room it its place. " +
+                        "instance of the room and creating a new room in its place. " +
                         "To give room members the best possible experience, we will:",
                     )}
                 </p>

@@ -57,7 +57,7 @@ export default class MessageActionBar extends React.PureComponent {
         this.props.onFocusChange(focused);
     }
 
-    onCryptoClicked = () => {
+    onCryptoClick = () => {
         const event = this.props.mxEvent;
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
@@ -89,7 +89,7 @@ export default class MessageActionBar extends React.PureComponent {
 
         let e2eInfoCallback = null;
         if (this.props.mxEvent.isEncrypted()) {
-            e2eInfoCallback = () => this.onCryptoClicked();
+            e2eInfoCallback = () => this.onCryptoClick();
         }
 
         const menuOptions = {
@@ -131,43 +131,28 @@ export default class MessageActionBar extends React.PureComponent {
         return SettingsStore.isFeatureEnabled("feature_message_editing");
     }
 
-    renderAgreeDimension() {
+    renderReactButton() {
         if (!this.isReactionsEnabled()) {
             return null;
         }
 
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        return <ReactionDimension
-            title={_t("Agree or Disagree")}
-            options={["👍", "👎"]}
-            reactions={this.props.reactions}
-            mxEvent={this.props.mxEvent}
-        />;
-    }
+        const ReactMessageAction = sdk.getComponent('messages.ReactMessageAction');
+        const { mxEvent, reactions } = this.props;
 
-    renderLikeDimension() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        return <ReactionDimension
-            title={_t("Like or Dislike")}
-            options={["🙂", "😔"]}
-            reactions={this.props.reactions}
-            mxEvent={this.props.mxEvent}
+        return <ReactMessageAction
+            mxEvent={mxEvent}
+            reactions={reactions}
+            onFocusChange={this.onFocusChange}
         />;
     }
 
     render() {
-        let agreeDimensionReactionButtons;
-        let likeDimensionReactionButtons;
+        let reactButton;
         let replyButton;
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            agreeDimensionReactionButtons = this.renderAgreeDimension();
-            likeDimensionReactionButtons = this.renderLikeDimension();
+            reactButton = this.renderReactButton();
             replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                 title={_t("Reply")}
                 onClick={this.onReplyClick}
@@ -181,8 +166,7 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         return <div className="mx_MessageActionBar">
-            {agreeDimensionReactionButtons}
-            {likeDimensionReactionButtons}
+            {reactButton}
             {replyButton}
             {editButton}
             <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"

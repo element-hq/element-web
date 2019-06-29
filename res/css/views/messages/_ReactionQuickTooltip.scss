@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReactionsRow {
-    margin: 6px 0;
-    color: $primary-fg-color;
+.mx_ReactionsQuickTooltip_buttons {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
 }
 
-.mx_ReactionsRow_showAll {
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 600;
-    margin-left: 6px;
-    vertical-align: top;
+.mx_ReactionsQuickTooltip_label {
+    text-align: center;
+}
 
-    &:hover,
-    &:link,
-    &:visited {
-        color: $accent-color;
-    }
+.mx_ReactionsQuickTooltip_shortcode {
+    padding-left: 6px;
+    opacity: 0.7;
 }

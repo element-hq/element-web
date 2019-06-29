@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,22 +17,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import { isContentActionable } from '../../../utils/EventUtils';
-import { isSingleEmoji } from '../../../HtmlUtils';
+import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import { unicodeToShortcode } from '../../../HtmlUtils';
 
-// The maximum number of reactions to initially show on a message.
-const MAX_ITEMS_WHEN_LIMITED = 8;
-
-export default class ReactionsRow extends React.PureComponent {
+export default class ReactionsQuickTooltip extends React.PureComponent {
     static propTypes = {
-        // The event we're displaying reactions for
         mxEvent: PropTypes.object.isRequired,
         // The Relations model from the JS SDK for reactions to `mxEvent`
         reactions: PropTypes.object,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -44,8 +39,8 @@ export default class ReactionsRow extends React.PureComponent {
         }
 
         this.state = {
+            hoveredItem: null,
             myReactions: this.getMyReactions(),
-            showAll: false,
         };
     }
 
@@ -76,14 +71,9 @@ export default class ReactionsRow extends React.PureComponent {
     }
 
     onReactionsChange = () => {
-        // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
         });
-        // Using `forceUpdate` for the moment, since we know the overall set of reactions
-        // has changed (this is triggered by events for that purpose only) and
-        // `PureComponent`s shallow state / props compare would otherwise filter this out.
-        this.forceUpdate();
     }
 
     getMyReactions() {
@@ -99,63 +89,107 @@ export default class ReactionsRow extends React.PureComponent {
         return [...myReactions.values()];
     }
 
-    onShowAllClick = () => {
+    onMouseOver = (ev) => {
+        const { key } = ev.target.dataset;
+        const item = this.items.find(({ content }) => content === key);
         this.setState({
-            showAll: true,
+            hoveredItem: item,
         });
     }
 
+    onMouseOut = (ev) => {
+        this.setState({
+            hoveredItem: null,
+        });
+    }
+
+    get items() {
+        return [
+            {
+                content: "👍",
+                title: _t("Agree"),
+            },
+            {
+                content: "👎",
+                title: _t("Disagree"),
+            },
+            {
+                content: "😄",
+                title: _t("Happy"),
+            },
+            {
+                content: "🎉",
+                title: _t("Party Popper"),
+            },
+            {
+                content: "😕",
+                title: _t("Confused"),
+            },
+            {
+                content: "❤️",
+                title: _t("Heart"),
+            },
+            {
+                content: "🚀",
+                title: _t("Rocket"),
+            },
+            {
+                content: "👀",
+                title: _t("Eyes"),
+            },
+        ];
+    }
+
     render() {
-        const { mxEvent, reactions } = this.props;
-        const { myReactions, showAll } = this.state;
+        const { mxEvent } = this.props;
+        const { myReactions, hoveredItem } = this.state;
+        const ReactionTooltipButton = sdk.getComponent('messages.ReactionTooltipButton');
 
-        if (!reactions || !isContentActionable(mxEvent)) {
-            return null;
-        }
-
-        const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
-            if (!isSingleEmoji(content)) {
-                return null;
-            }
-            const count = events.size;
-            if (!count) {
-                return null;
-            }
+        const buttons = this.items.map(({ content, title }) => {
             const myReactionEvent = myReactions && myReactions.find(mxEvent => {
                 if (mxEvent.isRedacted()) {
                     return false;
                 }
                 return mxEvent.getRelation().key === content;
             });
-            return <ReactionsRowButton
+
+            return <ReactionTooltipButton
                 key={content}
                 content={content}
-                count={count}
+                title={title}
                 mxEvent={mxEvent}
-                reactionEvents={events}
                 myReactionEvent={myReactionEvent}
             />;
-        }).filter(item => !!item);
+        });
 
-        // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
-        // The "+ 1" ensure that the "show all" reveals something that takes up
-        // more space than the button itself.
-        let showAllButton;
-        if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
-            items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
-            showAllButton = <a
-                className="mx_ReactionsRow_showAll"
-                href="#"
-                onClick={this.onShowAllClick}
-            >
-                {_t("Show all")}
-            </a>;
+        let label = " "; // non-breaking space to keep layout the same when empty
+        if (hoveredItem) {
+            const { content, title } = hoveredItem;
+
+            let shortcodeLabel;
+            const shortcode = unicodeToShortcode(content);
+            if (shortcode) {
+                shortcodeLabel = <span className="mx_ReactionsQuickTooltip_shortcode">
+                    {shortcode}
+                </span>;
+            }
+
+            label = <div className="mx_ReactionsQuickTooltip_label">
+                <span className="mx_ReactionsQuickTooltip_title">
+                    {title}
+                </span>
+                {shortcodeLabel}
+            </div>;
         }
 
-        return <div className="mx_ReactionsRow">
-            {items}
-            {showAllButton}
+        return <div className="mx_ReactionsQuickTooltip"
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+        >
+            <div className="mx_ReactionsQuickTooltip_buttons">
+                {buttons}
+            </div>
+            {label}
         </div>;
     }
 }

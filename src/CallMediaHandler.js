@@ -18,6 +18,11 @@ import * as Matrix from 'matrix-js-sdk';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 export default {
+    hasAnyLabeledDevices: async function() {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        return devices.some(d => !!d.label);
+    },
+
     getDevices: function() {
         // Only needed for Electron atm, though should work in modern browsers
         // once permission has been granted to the webapp
