@@ -79,7 +79,6 @@ export function isSingleEmoji(str) {
     return mightContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
 }
 
-
 /**
  * Returns the shortcode for an emoji character.
  *
