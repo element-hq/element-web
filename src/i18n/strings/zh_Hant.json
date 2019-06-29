@@ -47,5 +47,8 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "無效的設定：只能指定 default_server_config、default_server_name 或 default_hs_url 其中之一。",
     "Invalid configuration: no default server specified.": "無效設定：未指定預設的伺服器。",
     "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "這個 Riot 安裝似乎有無效的伺服器設定。如果您是管理員，請在下方更正錯誤",
-    "Your Riot is misconfigured": "您的 Riot 沒有設定好"
+    "Your Riot is misconfigured": "您的 Riot 沒有設定好",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "您的 Riot 包含無效的 JSON。請修正問題並重新整理頁面。",
+    "The message from the parser is: %(message)s": "從解析器而來的訊息為：%(message)s",
+    "Invalid JSON": "無效的 JSON"
 }
