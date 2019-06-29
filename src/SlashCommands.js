@@ -45,7 +45,7 @@ const singleMxcUpload = async () => {
             Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
                 file,
                 onFinished: (shouldContinue) => {
-                    if (shouldContinue) resolve(MatrixClientPeg.get().uploadContent(file));
+                    resolve(shouldContinue ? MatrixClientPeg.get().uploadContent(file) : null);
                 },
             });
         };
@@ -246,6 +246,7 @@ export const CommandMap = {
             }
 
             return success(promise.then((url) => {
+                if (!url) return;
                 const ev = room.currentState.getStateEvents('m.room.member', userId);
                 const content = {
                     ...ev ? ev.getContent() : { membership: 'join' },
@@ -267,6 +268,7 @@ export const CommandMap = {
             }
 
             return success(promise.then((url) => {
+                if (!url) return;
                 return MatrixClientPeg.get().setAvatarUrl(url);
             }));
         },
