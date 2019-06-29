@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +27,6 @@ import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
-import escape from 'lodash/escape';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
 import url from 'url';
@@ -57,6 +57,8 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
+const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
+
 /*
  * Return true if the given string contains emoji
  * Uses a much, much simpler regex than emojibase's so will give false
@@ -77,6 +79,7 @@ export function isSingleEmoji(str) {
     return mightContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
 }
 
+
 /**
  * Returns the shortcode for an emoji character.
  *
@@ -84,7 +87,8 @@ export function isSingleEmoji(str) {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    const data = EMOJIBASE.find(e => e.unicode === char);
+    const emptyVariation = char + VARIATION_SELECTOR;
+    const data = EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
