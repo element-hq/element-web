@@ -189,10 +189,10 @@ export default class MessageEditor extends React.Component {
 
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
-        if (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
+        if (!this._hasModifications ||
+            (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
             oldContent["format"] === newContent["format"] &&
-            oldContent["formatted_body"] === newContent["formatted_body"]) {
-            console.log("skipping");
+            oldContent["formatted_body"] === newContent["formatted_body"])) {
             this._cancelEdit();
             return;
         }
