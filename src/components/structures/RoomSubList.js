@@ -238,7 +238,7 @@ const RoomSubList = React.createClass({
                 <AccessibleTooltipButton
                     onClick={ this.props.onAddRoom }
                     className="mx_RoomSubList_addRoom"
-                    tooltip={this.props.addRoomLabel || _t("Add room")}
+                    title={this.props.addRoomLabel || _t("Add room")}
                 />
             );
         }

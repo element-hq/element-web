@@ -24,7 +24,8 @@ import sdk from "../../../index";
 export default class AccessibleTooltipButton extends React.PureComponent {
     static propTypes = {
         ...AccessibleButton.propTypes,
-        tooltip: PropTypes.string.isRequired,
+        // The tooltip to render on hover
+        title: PropTypes.string.isRequired,
     };
 
     state = {
@@ -47,12 +48,12 @@ export default class AccessibleTooltipButton extends React.PureComponent {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        const {tooltip, ...props} = this.props;
+        const {title, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
             tooltipClassName="mx_AccessibleTooltipButton_tooltip"
-            label={tooltip}
+            label={title}
         /> : <div />;
         return (
             <AccessibleButton {...props} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
