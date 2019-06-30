@@ -1928,5 +1928,6 @@
     "Eyes": "Ogen",
     "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
     "Message edits": "Berichtbewerkingen",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bijwerken vereist dat u de huidige instantie ervan afsluit en in de plaats een nieuw gesprek aanmaakt. Om gespreksleden de best mogelijke ervaring te bieden, zullen we:"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bijwerken vereist dat u de huidige instantie ervan afsluit en in de plaats een nieuw gesprek aanmaakt. Om gespreksleden de best mogelijke ervaring te bieden, zullen we:",
+    "Show all": "Alles tonen"
 }
