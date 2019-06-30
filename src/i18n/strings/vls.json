@@ -1673,5 +1673,6 @@
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bywerkn vereist da je d’huudige instantie dervan ofsluut en in de plekke dervan e nieuw gesprek anmakt. Vo de gespreksleedn de best meuglike ervoarienge te biedn, goan me:",
     "Upload all": "Alles iploadn",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
-    "Continue with previous account": "Verdergoan me de vorigen account"
+    "Continue with previous account": "Verdergoan me de vorigen account",
+    "Show all": "Alles toogn"
 }
