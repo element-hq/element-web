@@ -42,19 +42,7 @@ export default class RoomBreadcrumbs extends React.Component {
     componentWillMount() {
         this._dispatcherRef = dis.register(this.onAction);
 
-        let storedRooms = SettingsStore.getValue("breadcrumb_rooms");
-        if (!storedRooms || !storedRooms.length) {
-            // Fallback to the rooms stored in localstorage for those who would have had this.
-            // TODO: Remove this after a bit - the feature was only on develop, so a few weeks should be plenty time.
-            const roomStr = localStorage.getItem("mx_breadcrumb_rooms");
-            if (roomStr) {
-                try {
-                    storedRooms = JSON.parse(roomStr);
-                } catch (e) {
-                    console.error("Failed to parse breadcrumbs:", e);
-                }
-            }
-        }
+        const storedRooms = SettingsStore.getValue("breadcrumb_rooms");
         this._loadRoomIds(storedRooms || []);
 
         this._settingWatchRef = SettingsStore.watchSetting("breadcrumb_rooms", null, this.onBreadcrumbsChanged);
