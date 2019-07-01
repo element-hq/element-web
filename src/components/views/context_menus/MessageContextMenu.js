@@ -100,6 +100,13 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onResendReactionsClick: function() {
+        for (const reaction of this._getUnsentReactions()) {
+            Resend.resend(reaction);
+        }
+        this.closeMenu();
+    },
+
     e2eInfoClicked: function() {
         this.props.e2eInfoCallback();
         this.closeMenu();
@@ -227,13 +234,28 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    _getUnsentReactions() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const eventId = this.props.mxEvent.getId();
+        return room.getPendingEvents().filter(e => {
+            const relation = e.getRelation();
+            return relation &&
+                relation.rel_type === "m.annotation" &&
+                relation.event_id === eventId &&
+                e.status === EventStatus.NOT_SENT;
+        });
+    },
+
     render: function() {
         const mxEvent = this.props.mxEvent;
         const eventStatus = mxEvent.status;
         const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
         const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
+        const unsentReactionsCount = this._getUnsentReactions().length;
         let resendButton;
         let resendEditButton;
+        let resendReactionsButton;
         let resendRedactionButton;
         let redactButton;
         let cancelButton;
@@ -260,6 +282,14 @@ module.exports = React.createClass({
             resendEditButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
                     { _t('Resend edit') }
+                </div>
+            );
+        }
+
+        if (unsentReactionsCount !== 0) {
+            resendReactionsButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
+                    { _t('Resend %(unsentCount)s reactions', {unsentCount: unsentReactionsCount}) }
                 </div>
             );
         }
