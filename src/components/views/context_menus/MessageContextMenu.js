@@ -233,6 +233,8 @@ module.exports = React.createClass({
         const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
         const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
         let resendButton;
+        let resendEditButton;
+        let resendRedactionButton;
         let redactButton;
         let cancelButton;
         let forwardButton;
@@ -255,7 +257,7 @@ module.exports = React.createClass({
         }
 
         if (editStatus === EventStatus.NOT_SENT) {
-            resendButton = (
+            resendEditButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
                     { _t('Resend edit') }
                 </div>
@@ -263,7 +265,7 @@ module.exports = React.createClass({
         }
 
         if (redactStatus === EventStatus.NOT_SENT) {
-            resendButton = (
+            resendRedactionButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendRedactionClick}>
                     { _t('Resend removal') }
                 </div>
@@ -380,6 +382,9 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageContextMenu">
                 { resendButton }
+                { resendEditButton }
+                { resendReactionsButton }
+                { resendRedactionButton }
                 { redactButton }
                 { cancelButton }
                 { forwardButton }
