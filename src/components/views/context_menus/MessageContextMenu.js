@@ -29,6 +29,10 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 
+function canCancel(eventStatus) {
+    return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
+}
+
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
 
@@ -165,7 +169,25 @@ module.exports = React.createClass({
     },
 
     onCancelSendClick: function() {
-        Resend.removeFromQueue(this.props.mxEvent);
+        const mxEvent = this.props.mxEvent;
+        const editEvent = mxEvent.replacingEvent();
+        const redactEvent = mxEvent.localRedactionEvent();
+        const pendingReactions = this._getPendingReactions();
+
+        if (editEvent && canCancel(editEvent.status)) {
+            Resend.removeFromQueue(editEvent);
+        }
+        if (redactEvent && canCancel(redactEvent.status)) {
+            Resend.removeFromQueue(redactEvent);
+        }
+        if (pendingReactions.length) {
+            for (const reaction of pendingReactions) {
+                Resend.removeFromQueue(reaction);
+            }
+        }
+        if (canCancel(mxEvent.status)) {
+            Resend.removeFromQueue(this.props.mxEvent);
+        }
         this.closeMenu();
     },
 
@@ -234,7 +256,7 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
-    _getUnsentReactions() {
+    _getReactions(filter) {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
@@ -243,8 +265,16 @@ module.exports = React.createClass({
             return relation &&
                 relation.rel_type === "m.annotation" &&
                 relation.event_id === eventId &&
-                e.status === EventStatus.NOT_SENT;
+                filter(e);
         });
+    },
+
+    _getPendingReactions() {
+        return this._getReactions(e => canCancel(e.status));
+    },
+
+    _getUnsentReactions() {
+        return this._getReactions(e => e.status === EventStatus.NOT_SENT);
     },
 
     render: function() {
@@ -253,6 +283,11 @@ module.exports = React.createClass({
         const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
         const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
         const unsentReactionsCount = this._getUnsentReactions().length;
+        const pendingReactionsCount = this._getPendingReactions().length;
+        const allowCancel = canCancel(mxEvent.status) ||
+            canCancel(editStatus) ||
+            canCancel(redactStatus) ||
+            pendingReactionsCount !== 0;
         let resendButton;
         let resendEditButton;
         let resendReactionsButton;
@@ -289,7 +324,7 @@ module.exports = React.createClass({
             if (unsentReactionsCount !== 0) {
                 resendReactionsButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
-                        { _t('Resend %(unsentCount)s reactions', {unsentCount: unsentReactionsCount}) }
+                        { _t('Resend %(unsentCount)s reaction(s)', {unsentCount: unsentReactionsCount}) }
                     </div>
                 );
             }
@@ -311,7 +346,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT) {
+        if (allowCancel) {
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     { _t('Cancel Sending') }
