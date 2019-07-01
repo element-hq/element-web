@@ -74,6 +74,10 @@ export default class InteractiveTooltip extends React.Component {
         this.renderTooltip();
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("mousemove", this.onMouseMove);
+    }
+
     collectContentRect = (element) => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
@@ -87,11 +91,7 @@ export default class InteractiveTooltip extends React.Component {
         this.target = element;
     }
 
-    onBackgroundClick = (ev) => {
-        this.hideTooltip();
-    }
-
-    onBackgroundMouseMove = (ev) => {
+    onMouseMove = (ev) => {
         const { clientX: x, clientY: y } = ev;
         const { contentRect } = this.state;
         const targetRect = this.target.getBoundingClientRect();
@@ -113,6 +113,7 @@ export default class InteractiveTooltip extends React.Component {
         if (this.props.onVisibilityChange) {
             this.props.onVisibilityChange(true);
         }
+        document.addEventListener("mousemove", this.onMouseMove);
     }
 
     hideTooltip() {
@@ -122,6 +123,7 @@ export default class InteractiveTooltip extends React.Component {
         if (this.props.onVisibilityChange) {
             this.props.onVisibilityChange(false);
         }
+        document.removeEventListener("mousemove", this.onMouseMove);
     }
 
     renderTooltip() {
@@ -168,10 +170,6 @@ export default class InteractiveTooltip extends React.Component {
         }
 
         const tooltip = <div className="mx_InteractiveTooltip_wrapper" style={{...position}}>
-            <div className="mx_ContextualMenu_background"
-                onMouseMove={this.onBackgroundMouseMove}
-                onClick={this.onBackgroundClick}
-            />
             <div className={menuClasses}
                 style={menuStyle}
                 ref={this.collectContentRect}
