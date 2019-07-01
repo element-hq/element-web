@@ -269,29 +269,30 @@ module.exports = React.createClass({
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
+        if (!mxEvent.isRedacted()) {
+            if (eventStatus === EventStatus.NOT_SENT) {
+                resendButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
+                        { _t('Resend') }
+                    </div>
+                );
+            }
 
-        if (eventStatus === EventStatus.NOT_SENT) {
-            resendButton = (
-                <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
-                    { _t('Resend') }
-                </div>
-            );
-        }
+            if (editStatus === EventStatus.NOT_SENT) {
+                resendEditButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
+                        { _t('Resend edit') }
+                    </div>
+                );
+            }
 
-        if (editStatus === EventStatus.NOT_SENT) {
-            resendEditButton = (
-                <div className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
-                    { _t('Resend edit') }
-                </div>
-            );
-        }
-
-        if (unsentReactionsCount !== 0) {
-            resendReactionsButton = (
-                <div className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
-                    { _t('Resend %(unsentCount)s reactions', {unsentCount: unsentReactionsCount}) }
-                </div>
-            );
+            if (unsentReactionsCount !== 0) {
+                resendReactionsButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
+                        { _t('Resend %(unsentCount)s reactions', {unsentCount: unsentReactionsCount}) }
+                    </div>
+                );
+            }
         }
 
         if (redactStatus === EventStatus.NOT_SENT) {
