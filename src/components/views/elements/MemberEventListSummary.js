@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
@@ -277,6 +277,11 @@ module.exports = React.createClass({
                     ? _t("%(severalUsers)schanged their avatar %(count)s times", { severalUsers: "", count: repeats })
                     : _t("%(oneUser)schanged their avatar %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "no_change":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)smade no changes %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)smade no changes %(count)s times", { oneUser: "", count: repeats });
+                break;
         }
 
         return res;
@@ -321,7 +326,7 @@ module.exports = React.createClass({
                         return 'changed_avatar';
                     }
                     // console.log("MELS ignoring duplicate membership join event");
-                    return null;
+                    return 'no_change';
                 } else {
                     return 'joined';
                 }
