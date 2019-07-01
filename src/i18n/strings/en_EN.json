@@ -1303,7 +1303,7 @@
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Resend": "Resend",
     "Resend edit": "Resend edit",
-    "Resend %(unsentCount)s reactions": "Resend %(unsentCount)s reactions",
+    "Resend %(unsentCount)s reaction(s)": "Resend %(unsentCount)s reaction(s)",
     "Resend removal": "Resend removal",
     "Cancel Sending": "Cancel Sending",
     "Forward Message": "Forward Message",
