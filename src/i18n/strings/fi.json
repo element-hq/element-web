@@ -28,7 +28,7 @@
     "Dev chat for the Riot/Web dev team": "Kehittäjäkeskustelu Riot/Web kehitystiimille",
     "Dev chat for the Dendrite dev team": "Kehittäjäkeskustelu Dendrite kehitystiimille",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrixissa on olemassa monia huoneita, jotka on linkitetty olemassa oleviin verkkoihin (Slack, IRC, Gitter yms.). Tutustu hakemistoon!",
-    "powered by Matrix": "Matrix",
+    "powered by Matrix": "moottorina Matrix",
     "Riot is not supported on mobile web. Install the app?": "Riot ei tue laitettasi. Asenna mobiilisovellus?",
     "Design and implementation of E2E in Matrix": "Matrix päästä-päähän salauksen suunnittelu ja implementointi",
     "Contributing code to Matrix and Riot": "Osallistu kehitystyöhön",
@@ -45,5 +45,8 @@
     "Unexpected error preparing the app. See console for details.": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
     "Your Riot is misconfigured": "Riotin asetukset ovat pielessä",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Virheellinen asetus. Vain yhden seuraavista voi määrittää: default_server_config, default_server_name, tai default_hs_url.",
-    "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty."
+    "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-asetuksissasi on virheellistä JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
+    "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
+    "Invalid JSON": "Virheellinen JSON"
 }
