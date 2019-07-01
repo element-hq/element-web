@@ -402,8 +402,9 @@ export const CommandMap = {
                         room_id: roomId,
                         opts: {
                             // These are passed down to the js-sdk's /join call
-                            server_name: viaServers,
+                            viaServers: viaServers,
                         },
+                        via_servers: viaServers, // for the rejoin button
                         auto_join: true,
                     });
                     return success();
@@ -444,10 +445,14 @@ export const CommandMap = {
                     }
 
                     if (viaServers) {
+                        // For the join
                         dispatch["opts"] = {
                             // These are passed down to the js-sdk's /join call
-                            server_name: viaServers,
+                            viaServers: viaServers,
                         };
+
+                        // For if the join fails (rejoin button)
+                        dispatch['via_servers'] = viaServers;
                     }
 
                     dis.dispatch(dispatch);
