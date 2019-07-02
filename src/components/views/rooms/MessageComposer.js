@@ -327,9 +327,9 @@ export default class MessageComposer extends React.Component {
             event_id: createEventId,
             room_id: replacementRoomId,
 
-            // Try to join via the server that sent the event. This converts $something:example.org
-            // into a server domain by splitting on colons and ignoring the first entry ("$something").
-            via_servers: [this.state.tombstone.getId().split(':').splice(1).join(':')],
+            // Try to join via the server that sent the event. This converts @something:example.org
+            // into a server domain by splitting on colons and ignoring the first entry ("@something").
+            via_servers: [this.state.tombstone.getSender().split(':').splice(1).join(':')],
         });
     }
 
