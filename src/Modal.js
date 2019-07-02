@@ -156,13 +156,75 @@ class ModalManager {
         return this.createDialog(...rest);
     }
 
+    appendTrackedDialog(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialog(...rest);
+    }
+
     createDialog(Element, ...rest) {
         return this.createDialogAsync(Promise.resolve(Element), ...rest);
+    }
+
+    appendDialog(Element, ...rest) {
+        return this.appendDialogAsync(Promise.resolve(Element), ...rest);
     }
 
     createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync(...rest);
+    }
+
+    appendTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialogAsync(...rest);
+    }
+
+    _buildModal(prom, props, className) {
+        const modal = {};
+
+        // never call this from onFinished() otherwise it will loop
+        const closeDialog = this._getCloseFn(modal, props);
+
+        // don't attempt to reuse the same AsyncWrapper for different dialogs,
+        // otherwise we'll get confused.
+        const modalCount = this._counter++;
+
+        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
+        // property set here so you can't close the dialog from a button click!
+        modal.elem = (
+            <AsyncWrapper key={modalCount} prom={prom} {...props}
+                          onFinished={closeDialog} />
+        );
+        modal.onFinished = props ? props.onFinished : null;
+        modal.className = className;
+
+        return {modal, closeDialog};
+    }
+
+    _getCloseFn(modal, props) {
+        return (...args) => {
+            if (props && props.onFinished) props.onFinished.apply(null, args);
+            const i = this._modals.indexOf(modal);
+            if (i >= 0) {
+                this._modals.splice(i, 1);
+            }
+
+            if (this._priorityModal === modal) {
+                this._priorityModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            if (this._staticModal === modal) {
+                this._staticModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            this._reRender();
+        };
     }
 
     /**
@@ -195,46 +257,7 @@ class ModalManager {
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const modal = {};
-
-        // never call this from onFinished() otherwise it will loop
-        //
-        const closeDialog = (...args) => {
-            if (props && props.onFinished) props.onFinished.apply(null, args);
-            const i = this._modals.indexOf(modal);
-            if (i >= 0) {
-                this._modals.splice(i, 1);
-            }
-
-            if (this._priorityModal === modal) {
-                this._priorityModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            if (this._staticModal === modal) {
-                this._staticModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            this._reRender();
-        };
-
-        // don't attempt to reuse the same AsyncWrapper for different dialogs,
-        // otherwise we'll get confused.
-        const modalCount = this._counter++;
-
-        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
-        // property set here so you can't close the dialog from a button click!
-        modal.elem = (
-            <AsyncWrapper key={modalCount} prom={prom} {...props}
-                onFinished={closeDialog} />
-        );
-        modal.onFinished = props ? props.onFinished : null;
-        modal.className = className;
+        const {modal, closeDialog} = this._buildModal(prom, props, className);
 
         if (isPriorityModal) {
             // XXX: This is destructive
@@ -246,6 +269,14 @@ class ModalManager {
             this._modals.unshift(modal);
         }
 
+        this._reRender();
+        return {close: closeDialog};
+    }
+
+    appendDialogAsync(prom, props, className) {
+        const {modal, closeDialog} = this._buildModal(prom, props, className);
+
+        this._modals.push(modal);
         this._reRender();
         return {close: closeDialog};
     }
