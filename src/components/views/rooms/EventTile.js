@@ -681,7 +681,7 @@ module.exports = withMatrixClient(React.createClass({
             </div> : null;
 
         let reactionsRow;
-        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (SettingsStore.isFeatureEnabled("feature_reactions") && !isRedacted) {
             const ReactionsRow = sdk.getComponent('messages.ReactionsRow');
             reactionsRow = <ReactionsRow
                 mxEvent={this.props.mxEvent}
