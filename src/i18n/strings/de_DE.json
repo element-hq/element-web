@@ -1830,5 +1830,6 @@
     "Unbans user with given ID": "Entbannt den Benutzer mit der angegebenen ID",
     "Sends the given message coloured as a rainbow": "Sendet die Nachricht in Regenbogenfarben",
     "Adds a custom widget by URL to the room": "Fügt ein Benutzer-Widget über eine URL zum Raum hinzu",
-    "Please supply a https:// or http:// widget URL": "Bitte gib eine https:// oder http:// Widget-URL an"
+    "Please supply a https:// or http:// widget URL": "Bitte gib eine https:// oder http:// Widget-URL an",
+    "Sends the given emote coloured as a rainbow": "Sended das Emoji in Regenbogenfarbe"
 }
