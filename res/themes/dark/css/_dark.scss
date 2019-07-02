@@ -121,6 +121,9 @@ $event-sending-color: $text-secondary-color;
 $event-redacted-fg-color: #606060;
 $event-redacted-border-color: #000000;
 
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: $event-selected-color;
+
 // event timestamp
 $event-timestamp-color: $text-secondary-color;
 
