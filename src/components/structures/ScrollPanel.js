@@ -214,6 +214,9 @@ module.exports = React.createClass({
     // after an update to the contents of the panel, check that the scroll is
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
+        if (this.unmounted) {
+            return;
+        }
         this._restoreSavedScrollState();
         this.checkFillState();
     },
