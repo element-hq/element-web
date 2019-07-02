@@ -1823,5 +1823,10 @@
     "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Achtung</b>: Ein Raum-Upgrade wird <i>die Mitglieder des Raumes nicht automatisch auf die neue Version migrieren.</i> Wir werden in der alten Raumversion einen Link zum neuen Raum posten - Raum-Mitglieder müssen dann auf diesen Link klicken um dem neuen Raum beizutreten.",
     "Replying With Files": "Mit Dateien antworten",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Momentan ist es nicht möglich mit einer Datei zu antworten. Möchtest Du die Datei hochladen ohne zu antworten?",
-    "The file '%(fileName)s' failed to upload.": "Die Datei \"%(fileName)s\" konnte nicht hochgeladen werden."
+    "The file '%(fileName)s' failed to upload.": "Die Datei \"%(fileName)s\" konnte nicht hochgeladen werden.",
+    "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Bitte bestätige, dass du mit dem Raum-Upgrade von <oldVersion /> auf <newVersion /> fortfahren möchtest.",
+    "Upgrade": "Upgrade",
+    "Changes your avatar in this current room only": "Ändert deinen Avatar für den diesen Raum",
+    "Unbans user with given ID": "Entbannt den Benutzer mit der angegebenen ID",
+    "Sends the given message coloured as a rainbow": "Sendet die Nachricht in Regenbogenfarbe"
 }
