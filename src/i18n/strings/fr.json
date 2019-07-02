@@ -2027,5 +2027,10 @@
     "Message edits": "Éditions du message",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "La mise à niveau de ce salon nécessite de fermer l’instance actuelle du salon et de créer un nouveau salon à la place. Pour fournir la meilleure expérience possible aux utilisateurs, nous allons :",
     "Loading room preview": "Chargement de l’aperçu du salon",
-    "Show all": "Tout afficher"
+    "Show all": "Tout afficher",
+    "%(senderName)s made no change.": "%(senderName)s n’a fait aucun changement.",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s n’a fait aucun changement %(count)s fois",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s n’ont fait aucun changement",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s n’a fait aucun changement %(count)s fois",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s n’a fait aucun changement"
 }
