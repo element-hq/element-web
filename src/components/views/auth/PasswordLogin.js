@@ -312,7 +312,6 @@ export default class PasswordLogin extends React.Component {
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Field
-                        className="mx_Login_type_dropdown"
                         id="mx_PasswordLogin_type"
                         element="select"
                         value={this.state.loginType}
