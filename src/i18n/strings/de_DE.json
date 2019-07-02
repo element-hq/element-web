@@ -1849,5 +1849,6 @@
     "React to messages with emoji (refresh to apply changes)": "Reagiere auf Nachrichten mit Emoji (Aktualisiere um Änderungen anzuwenden)",
     "Show recently visited rooms above the room list": "Zeige kürzlich besuchte Räume oberhalb der Raumliste",
     "Show hidden events in timeline": "Zeige versteckte Ereignisse in der Chronik",
-    "Low bandwidth mode": "Modus für niedrige Bandbreite"
+    "Low bandwidth mode": "Modus für niedrige Bandbreite",
+    "No integrations server configured": "Keine Integrations-Server konfiguriert"
 }
