@@ -1837,5 +1837,17 @@
     "Cannot reach homeserver": "Der Heimserver ist nicht erreichbar",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Stelle sicher, dass du eine stabile Internetverbindung hast oder wende dich an deinen Server-Administrator",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Wende dich an deinen Riot Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
-    "Unexpected error resolving identity server configuration": "Ein unerwarteter Fehler ist beim Laden der Identitätsserver-Konfiguration aufgetreten"
+    "Unexpected error resolving identity server configuration": "Ein unerwarteter Fehler ist beim Laden der Identitätsserver-Konfiguration aufgetreten",
+    "Cannot reach identity server": "Der Identitätsserver ist nicht erreichbar",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Du kannst dich registrieren, aber manche Funktionen werden nicht verfügbar sein bis der Identitätsserver wieder online ist. Wenn diese Warnmeldung weiterhin angezeigt wird, überprüfe deine Konfiguration oder kontaktiere deinen Server-Administrator.",
+    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Du kannst dein Passwort zurücksetzen, aber manche Funktionen werden nicht verfügbar sein bis der Identitätsserver wieder online ist. Wenn du diese Warnmeldung weiterin siehst, überprüfe deine Konfiguration oder kontaktiere deinen Server-Administrator",
+    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Du kannst dich einloggen, aber manche Funktionen werden nicht verfügbar sein bis der Identitätsserver wieder online ist. Wenn du diese Warnmeldung weiterhin siehst, überprüfe deine Konfiguration oder kontaktiere deinen Server-Administrator.",
+    "No homeserver URL provided": "Keine Heimserver-URL angegeben",
+    "Unexpected error resolving homeserver configuration": "Ein unerwarteter Fehler ist beim Laden der Heimserver-Konfiguration aufgetreten",
+    "The user's homeserver does not support the version of the room.": "Die Raumversion wird vom Heimserver des Benutzers nicht unterstützt.",
+    "Edit messages after they have been sent (refresh to apply changes)": "Bearbeite Nachrichten nachdem diese gesendet wurden (Aktualisiere um Änderungen anzuwenden)",
+    "React to messages with emoji (refresh to apply changes)": "Reagiere auf Nachrichten mit Emoji (Aktualisiere um Änderungen anzuwenden)",
+    "Show recently visited rooms above the room list": "Zeige kürzlich besuchte Räume oberhalb der Raumliste",
+    "Show hidden events in timeline": "Zeige versteckte Ereignisse in der Chronik",
+    "Low bandwidth mode": "Modus für niedrige Bandbreite"
 }
