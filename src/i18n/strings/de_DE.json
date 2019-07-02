@@ -1836,5 +1836,6 @@
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Raumbeitritt für %(targetDisplayName)s zurückgezogen",
     "Cannot reach homeserver": "Der Heimserver ist nicht erreichbar",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Stelle sicher, dass du eine stabile Internetverbindung hast oder wende dich an deinen Server-Administrator",
-    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Wende dich an deinen Riot admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen."
+    "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Wende dich an deinen Riot Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
+    "Unexpected error resolving identity server configuration": "Ein unerwarteter Fehler ist beim Laden der Identitätsserver-Konfiguration aufgetreten"
 }
