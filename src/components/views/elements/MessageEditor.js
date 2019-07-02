@@ -31,6 +31,7 @@ import {renderModel} from '../../../editor/render';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
+import {EventStatus} from 'matrix-js-sdk';
 
 export default class MessageEditor extends React.Component {
     static propTypes = {
@@ -195,10 +196,19 @@ export default class MessageEditor extends React.Component {
         }, contentBody);
 
         const roomId = this.props.editState.getEvent().getRoomId();
+        this._cancelPreviousPendingEdit();
         this.context.matrixClient.sendMessage(roomId, content);
 
         dis.dispatch({action: "edit_event", event: null});
         dis.dispatch({action: 'focus_composer'});
+    }
+
+    _cancelPreviousPendingEdit() {
+        const originalEvent = this.props.editState.getEvent();
+        const previousEdit = originalEvent.replacingEvent();
+        if (previousEdit.status === EventStatus.QUEUED || previousEdit.status === EventStatus.NOT_SENT) {
+            this.context.matrixClient.cancelPendingEvent(previousEdit);
+        }
     }
 
     _onAutoCompleteConfirm = (completion) => {
