@@ -206,7 +206,7 @@ export default class MessageEditor extends React.Component {
     _cancelPreviousPendingEdit() {
         const originalEvent = this.props.editState.getEvent();
         const previousEdit = originalEvent.replacingEvent();
-        if (previousEdit.status === EventStatus.QUEUED || previousEdit.status === EventStatus.NOT_SENT) {
+        if (previousEdit && (previousEdit.status === EventStatus.QUEUED || previousEdit.status === EventStatus.NOT_SENT)) {
             this.context.matrixClient.cancelPendingEvent(previousEdit);
         }
     }
