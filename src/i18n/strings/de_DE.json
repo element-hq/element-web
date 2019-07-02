@@ -1812,5 +1812,13 @@
     "Email, name or Matrix ID": "E-Mail, Name oder Matrix-ID",
     "Name or Matrix ID": "Name oder Matrix ID",
     "Your Riot is misconfigured": "Dein Riot ist falsch konfiguriert",
-    "You cannot modify widgets in this room.": "Du kannst in diesem Raum keine Widgets verändern"
+    "You cannot modify widgets in this room.": "Du kannst in diesem Raum keine Widgets verändern",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Ob du die 'Breadcrumbs' Funktion nutzt oder nicht (Avatare oberhalb der Raumliste).",
+    "A conference call could not be started because the integrations server is not available": "Ein Konferenzanruf konnte nicht gestartet werden, da der Integrationsserver nicht verfügbar ist",
+    "The server does not support the room version specified.": "Der Server unterstützt die angegebene Raumversion nicht.",
+    "Room upgrade confirmation": "Raum-Upgradebestätigung",
+    "Upgrading a room can be destructive and isn't always necessary.": "Ein Raum-Upgrade kann destruktiv sein und ist nicht immer notwendig.",
+    "Room upgrades are usually recommended when a room version is considered <i>unstable</i>. Unstable room versions might have bugs, missing features, or security vulnerabilities.": "Raum-Upgrades werden üblicherweise empfohlen, wenn eine Raum-Version <i>instabil</i> ist. Instabile Raum-Versionen können Bugs, fehlende Features oder Sicherheitslücken enthalten.",
+    "Room upgrades usually only affect <i>server-side</i> processing of the room. If you're having problems with your Riot client, please file an issue with <issueLink />.": "Raum-Upgrades betreffen überlicherweise nur <i>serverseitige</i> Datenverarbeitung des Raumes. Wenn du ein Problem mit deinem Riot-Client hast, dann erstelle bitte ein Issue mit <issueLink />.",
+    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Achtung</b>: Ein Raum-Upgrade wird <i>die Mitglieder des Raumes nicht automatisch auf die neue Version migrieren.</i> Wir werden in der alten Raumversion einen link zum neuen Raum posten - Raum-Mitglieder müssen dann auf diesen Link klicken um dem neuen Raum beizutreten."
 }
