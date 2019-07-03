@@ -921,7 +921,7 @@
     "A new version of Riot is available.": "Uusi Riot-versio on saatavilla.",
     "Couldn't load home page": "Kotisivun lataus epäonnistui",
     "Send Account Data": "Lähetä tilin tiedot",
-    "All notifications are currently disabled for all targets.": "Kaikki ilmoitukset on kytketty pois kaikilta kohteilta.",
+    "All notifications are currently disabled for all targets.": "Tällä hetkellä kaikki ilmoitukset on kytketty pois kaikilta kohteilta.",
     "Uploading report": "Ladataan raporttia",
     "Sunday": "Sunnuntai",
     "Failed to add tag %(tagName)s to room": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
