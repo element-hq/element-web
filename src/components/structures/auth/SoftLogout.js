@@ -35,7 +35,7 @@ export default class SoftLogout extends React.Component {
         const defaultServerConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
 
         const hsUrl = MatrixClientPeg.get().getHomeserverUrl();
-        const  domainName = hsUrl === defaultServerConfig.hsUrl
+        const domainName = hsUrl === defaultServerConfig.hsUrl
             ? defaultServerConfig.hsName
             : MatrixClientPeg.get().getHomeServerName();
 
