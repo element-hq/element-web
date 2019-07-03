@@ -34,6 +34,7 @@ import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
+import TypingStore from "./stores/TypingStore";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -505,6 +506,7 @@ async function startMatrixClient() {
 
     Notifier.start();
     UserActivity.sharedInstance().start();
+    TypingStore.sharedInstance().reset(); // just in case
     if (!SettingsStore.getValue("lowBandwidth")) {
         Presence.start();
     }
@@ -553,6 +555,7 @@ function _clearStorage() {
 export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.sharedInstance().stop();
+    TypingStore.sharedInstance().reset();
     Presence.stop();
     ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
