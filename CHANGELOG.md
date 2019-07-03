@@ -1,3 +1,26 @@
+Changes in [1.2.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.2.3-rc.1) (2019-07-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.2...v1.2.3-rc.1)
+
+ * Change update URL to match new host
+   [\#10247](https://github.com/vector-im/riot-web/pull/10247)
+ * Update from Weblate
+   [\#10219](https://github.com/vector-im/riot-web/pull/10219)
+ * Extract configuration docs to separate file
+   [\#10195](https://github.com/vector-im/riot-web/pull/10195)
+ * Add e2e/warning.svg to preload
+   [\#10197](https://github.com/vector-im/riot-web/pull/10197)
+ * Fix Electron vector: links
+   [\#10196](https://github.com/vector-im/riot-web/pull/10196)
+ * Display a red box of anger for config syntax errors
+   [\#10193](https://github.com/vector-im/riot-web/pull/10193)
+ * Move config-getting to VectorBasePlatform
+   [\#10181](https://github.com/vector-im/riot-web/pull/10181)
+ * Update from Weblate
+   [\#10124](https://github.com/vector-im/riot-web/pull/10124)
+ * Fix default Electron window and tray icons
+   [\#10097](https://github.com/vector-im/riot-web/pull/10097)
+
 Changes in [1.2.2](https://github.com/vector-im/riot-web/releases/tag/v1.2.2) (2019-06-19)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.2-rc.2...v1.2.2)
