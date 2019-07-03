@@ -2026,5 +2026,8 @@
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s 未做出變更 %(count)s 次",
     "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s 未做出變更",
     "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s 未做出變更 %(count)s 次",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s 未做出變更"
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s 未做出變更",
+    "Resend edit": "重新傳送編輯",
+    "Resend %(unsentCount)s reaction(s)": "重新傳送 %(unsentCount)s 反應",
+    "Resend removal": "重新傳送移除"
 }
