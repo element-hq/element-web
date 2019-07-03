@@ -196,10 +196,18 @@ $widget-menu-bar-bg-color: $secondary-accent-color;
 
 // ********************
 
+// both $event-highlight-bg-color and $room-warning-bg-color share this value,
+// so to not make their order dependent on who depends on who, have a shared value
+// defined before both
+$yellow-background: #fff8e3;
+
 // event tile lifecycle
 $event-encrypting-color: #abddbc;
 $event-sending-color: #ddd;
 $event-notsent-color: #f44;
+
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: $yellow-background;
 
 // event redaction
 $event-redacted-fg-color: #e2e2e2;
@@ -244,7 +252,7 @@ $togglesw-ball-color: #fff;
 
 $progressbar-color: #000;
 
-$room-warning-bg-color: #fff8e3;
+$room-warning-bg-color: $yellow-background;
 
 $memberstatus-placeholder-color: $roomtile-name-color;
 
