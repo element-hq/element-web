@@ -1634,7 +1634,7 @@
     "Other": "Muut",
     "Find other public servers or use a custom server": "Etsi muita julkisia palvelimia tai käytä mukautettua palvelinta",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Parhaan käyttökokemuksen saa <chromeLink>Chromella</chromeLink>, <firefoxLink>Firefoxilla</firefoxLink> tai <safariLink>Safarilla</safariLink>.",
-    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>Yhteisösivusi HTML</h1>\n<p>\n    Käytä pitkää kuvausta tutustuttaaksesi uudet yhteisösi jäsenet, tai jaa \n    yhteisölle tärkeitä <a href=\"foo\">linkkejä</a>\n</p>\n<p>\n    Voit jopa käyttää ”img”-tageja\n</p>\n",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML yhteisösi etusivulle</h1>\n<p>\n    Käytä pitkää kuvausta esitelläksesi yhteisön uusille jäsenille tai jakaaksesi tärkeitä\n    <a href=\"foo\">linkkejä</a>\n</p>\n<p>\n    Voit jopa käyttää 'img'-tageja\n</p>\n",
     "Unable to join community": "Yhteisöön liittyminen epäonnistui",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Olet tämän yhteisön ylläpitäjä. Et voi liittyä uudelleen ilman kutsua toiselta ylläpitäjältä.",
     "Unable to leave community": "Yhteisöstä poistuminen ei onnistu",
