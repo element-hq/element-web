@@ -1984,5 +1984,10 @@
     "Message edits": "Përpunime mesazhi",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Përmirësimi i kësaj dhome lyp mbylljen e instancës së tanishme të dhomës dhe krijimin e një dhome të re në vend të saj. Për t’u dhënë anëtarëve të dhomës më të mirën, do të:",
     "Loading room preview": "Po ngarkohet paraparje dhome",
-    "Show all": "Shfaqi krejt"
+    "Show all": "Shfaqi krejt",
+    "%(senderName)s made no change.": "%(senderName)s s’bëri ndryshime.",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s s’bënë ndryshime gjatë %(count)s herësh",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s s’bënë ndryshime",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)ss’bënë ndryshime gjatë %(count)s herësh",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)ss’bëri ndryshime"
 }

@@ -2021,5 +2021,10 @@
     "Message edits": "訊息編輯",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要將其關閉並重新建立一個新的。為了給予聊天室成員最佳的體驗，我們將會：",
     "Loading room preview": "正在載入聊天室預覽",
-    "Show all": "顯示全部"
+    "Show all": "顯示全部",
+    "%(senderName)s made no change.": "%(senderName)s 未做出變更。",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s 未做出變更 %(count)s 次",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s 未做出變更",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s 未做出變更 %(count)s 次",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s 未做出變更"
 }
