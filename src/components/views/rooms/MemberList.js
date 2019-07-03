@@ -392,33 +392,20 @@ module.exports = React.createClass({
         }
     },
 
-    _makeMemberTiles: function(members, membership) {
+    _makeMemberTiles: function(members) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
 
-        const memberList = members.map((m) => {
-            return (
-                <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this._showPresence} />
-            );
+        return members.map((m) => {
+            if (m.userId) {
+                // Is a Matrix invite
+                return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this._showPresence} />;
+            } else {
+                // Is a 3pid invite
+                return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
+                                   onClick={() => this._onPending3pidInviteClick(m)} />;
+            }
         });
-
-        // XXX: surely this is not the right home for this logic.
-        // Double XXX: Now it's really, really not the right home for this logic:
-        // we shouldn't even be passing in the 'membership' param to this function.
-        // Ew, ew, and ew.
-        // Triple XXX: This violates the size constraint, the output is expected/desired
-        // to be the same length as the members input array.
-        if (membership === "invite") {
-            const EntityTile = sdk.getComponent("rooms.EntityTile");
-            memberList.push(...this._getPending3PidInvites().map((e) => {
-                return <EntityTile key={e.getStateKey()}
-                    name={e.getContent().display_name}
-                    suppressOnHover={true}
-                    onClick={() => this._onPending3pidInviteClick(e)}
-                />;
-            }));
-        }
-
-        return memberList;
     },
 
     _getChildrenJoined: function(start, end) {
@@ -430,7 +417,12 @@ module.exports = React.createClass({
     },
 
     _getChildrenInvited: function(start, end) {
-        return this._makeMemberTiles(this.state.filteredInvitedMembers.slice(start, end), 'invite');
+        let targets = this.state.filteredInvitedMembers;
+        if (end > this.state.filteredInvitedMembers.length) {
+            targets = targets.concat(this._getPending3PidInvites());
+        }
+
+        return this._makeMemberTiles(targets.slice(start, end));
     },
 
     _getChildCountInvited: function() {
