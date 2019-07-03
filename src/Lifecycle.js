@@ -352,11 +352,14 @@ export function setLoggedIn(credentials) {
 async function _doSetLoggedIn(credentials, clearStorage) {
     credentials.guest = Boolean(credentials.guest);
 
+    const softLogout = isSoftLogout();
+
     console.log(
         "setLoggedIn: mxid: " + credentials.userId +
         " deviceId: " + credentials.deviceId +
         " guest: " + credentials.guest +
-        " hs: " + credentials.homeserverUrl,
+        " hs: " + credentials.homeserverUrl +
+        " softLogout: " + softLogout,
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -414,7 +417,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
 
     dis.dispatch({ action: 'on_logged_in' });
 
-    await startMatrixClient();
+    await startMatrixClient(/*startSyncing=*/!softLogout);
     return MatrixClientPeg.get();
 }
 
@@ -487,6 +490,25 @@ export function logout() {
     ).done();
 }
 
+export function softLogout() {
+    if (!MatrixClientPeg.get()) return;
+
+    // Track that we've detected and trapped a soft logout. This helps prevent other
+    // parts of the app from starting if there's no point (ie: don't sync if we've
+    // been soft logged out, despite having credentials and data for a MatrixClient).
+    localStorage.setItem("mx_soft_logout", "true");
+
+    _isLoggingOut = true; // to avoid repeated flags
+    stopMatrixClient(/*unsetClient=*/false);
+    dis.dispatch({action: 'on_client_not_viable'}); // generic version of on_logged_out
+
+    // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
+}
+
+export function isSoftLogout() {
+    return localStorage.getItem("mx_soft_logout") === "true";
+}
+
 export function isLoggingOut() {
     return _isLoggingOut;
 }
@@ -494,8 +516,10 @@ export function isLoggingOut() {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ * @param {boolean} startSyncing True (default) to actually start
+ * syncing the client.
  */
-async function startMatrixClient() {
+async function startMatrixClient(startSyncing=true) {
     console.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -513,11 +537,19 @@ async function startMatrixClient() {
     DMRoomMap.makeShared().start();
     ActiveWidgetStore.start();
 
-    await MatrixClientPeg.start();
+    if (startSyncing) {
+        await MatrixClientPeg.start();
+    } else {
+        console.warn("Caller requested only auxiliary services be started");
+    }
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
     dis.dispatch({action: 'client_started'});
+
+    if (isSoftLogout()) {
+        softLogout();
+    }
 }
 
 /*
@@ -551,8 +583,10 @@ function _clearStorage() {
 
 /**
  * Stop all the background processes related to the current client.
+ * @param {boolean} unsetClient True (default) to abandon the client
+ * on MatrixClientPeg after stopping.
  */
-export function stopMatrixClient() {
+export function stopMatrixClient(unsetClient=true) {
     Notifier.stop();
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
@@ -563,6 +597,9 @@ export function stopMatrixClient() {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
-        MatrixClientPeg.unset();
+
+        if (unsetClient) {
+            MatrixClientPeg.unset();
+        }
     }
 }

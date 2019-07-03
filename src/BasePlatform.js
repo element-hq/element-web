@@ -36,6 +36,7 @@ export default class BasePlatform {
 
     _onAction(payload: Object) {
         switch (payload.action) {
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this.setNotificationCount(0);
                 break;

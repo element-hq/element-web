@@ -261,6 +261,7 @@ class RoomListStore extends Store {
             //     console.log("!! Optimistic tag failure: ", payload);
             // }
             // break;
+            case 'on_client_not_viable':
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.

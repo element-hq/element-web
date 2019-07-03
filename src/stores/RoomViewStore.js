@@ -103,6 +103,7 @@ class RoomViewStore extends Store {
             case 'join_room_error':
                 this._joinRoomError(payload);
                 break;
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
                 break;

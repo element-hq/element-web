@@ -90,6 +90,10 @@ const VIEWS = {
 
     // we are logged in with an active matrix client.
     LOGGED_IN: 7,
+
+    // We are logged out (invalid token) but have our local state again. The user
+    // should log back in to rehydrate the client.
+    SOFT_LOGOUT: 8,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -432,6 +436,7 @@ export default React.createClass({
 
         switch (payload.action) {
             case 'logout':
+                console.log(payload);
                 Lifecycle.logout();
                 break;
             case 'require_registration':
@@ -615,7 +620,12 @@ export default React.createClass({
                 });
                 break;
             case 'on_logged_in':
-                this._onLoggedIn();
+                if (!Lifecycle.isSoftLogout()) {
+                    this._onLoggedIn();
+                }
+                break;
+            case 'on_client_not_viable':
+                this._onSoftLogout();
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -1259,6 +1269,22 @@ export default React.createClass({
     },
 
     /**
+     * Called when the session is softly logged out
+     */
+    _onSoftLogout: function() {
+        this.notifyNewScreen('soft_logout');
+        this.setStateForNewView({
+            view: VIEWS.SOFT_LOGOUT,
+            ready: false,
+            collapseLhs: false,
+            collapsedRhs: false,
+            currentRoomId: null,
+            page_type: PageTypes.RoomDirectory,
+        });
+        this._setPageSubtitle();
+    },
+
+    /**
      * Called just before the matrix client is started
      * (useful for setting listeners)
      */
@@ -1337,8 +1363,16 @@ export default React.createClass({
                 call: call,
             }, true);
         });
-        cli.on('Session.logged_out', function(call) {
+        cli.on('Session.logged_out', function(errObj) {
             if (Lifecycle.isLoggingOut()) return;
+
+            if (errObj.httpStatus === 401 && errObj.data && errObj.data['soft_logout']) {
+                console.warn("Soft logout issued by server - avoiding data deletion");
+                Lifecycle.softLogout();
+                dis.dispatch({actions: 'soft_logout'});
+                return;
+            }
+
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
@@ -1905,6 +1939,13 @@ export default React.createClass({
                     onServerConfigChange={this.onServerConfigChange}
                     {...this.getServerProperties()}
                 />
+            );
+        }
+
+        if (this.state.view === VIEWS.SOFT_LOGOUT) {
+            const SoftLogout = sdk.getComponent('structures.auth.SoftLogout');
+            return (
+                <SoftLogout />
             );
         }
 
