@@ -1979,5 +1979,15 @@
     "Eyes": "Occhi",
     "Edited at %(date)s. Click to view edits.": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
     "Message edits": "Modifiche del messaggio",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Per aggiornare questa stanza devi chiudere l'istanza attuale e creare una nuova stanza al suo posto. Per offrire la migliore esperienza possibile ai membri della stanza:"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Per aggiornare questa stanza devi chiudere l'istanza attuale e creare una nuova stanza al suo posto. Per offrire la migliore esperienza possibile ai membri della stanza:",
+    "%(senderName)s made no change.": "%(senderName)s non ha fatto modifiche.",
+    "Loading room preview": "Caricamento anteprima stanza",
+    "Show all": "Mostra tutto",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)snon hanno fatto modifiche %(count)s volte",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)snon hanno fatto modifiche",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)snon ha fatto modifiche %(count)s volte",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)snon ha fatto modifiche",
+    "Resend edit": "Reinvia la modifica",
+    "Resend %(unsentCount)s reaction(s)": "Reinvia %(unsentCount)s reazione/i",
+    "Resend removal": "Reinvia la rimozione"
 }

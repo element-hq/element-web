@@ -1929,5 +1929,10 @@
     "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
     "Message edits": "Berichtbewerkingen",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bijwerken vereist dat u de huidige instantie ervan afsluit en in de plaats een nieuw gesprek aanmaakt. Om gespreksleden de best mogelijke ervaring te bieden, zullen we:",
-    "Show all": "Alles tonen"
+    "Show all": "Alles tonen",
+    "%(senderName)s made no change.": "%(senderName)s heeft niets gewijzigd.",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s hebben %(count)s keer niets gewijzigd",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s hebben niets gewijzigd",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s heeft %(count)s keer niets gewijzigd",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s heeft niets gewijzigd"
 }
