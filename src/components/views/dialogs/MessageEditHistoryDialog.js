@@ -102,9 +102,9 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
                 </p>);
             } else {
                 content = (<p className="mx_MessageEditHistoryDialog_error">
-                    {_t("Could not reach your homeserver to fetch the edit history.")}
+                    {_t("Cannot reach homeserver")}
                     <br />
-                    {_t("Verify your internet connection or try again later.")}
+                    {_t("Ensure you have a stable internet connection, or get in touch with the server admin")}
                 </p>);
             }
         } else if (this.state.isLoading) {
