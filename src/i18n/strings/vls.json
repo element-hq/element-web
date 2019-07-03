@@ -1674,5 +1674,10 @@
     "Upload all": "Alles iploadn",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
     "Continue with previous account": "Verdergoan me de vorigen account",
-    "Show all": "Alles toogn"
+    "Show all": "Alles toogn",
+    "%(senderName)s made no change.": "%(senderName)s èn nietent gewyzigd.",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s èn nietent gewyzigd",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s è nietent gewyzigd"
 }

@@ -2007,5 +2007,12 @@
     "Eyes": "Очи",
     "Edited at %(date)s. Click to view edits.": "Редактирано на %(date)s. Кликнете за да видите редакциите.",
     "Message edits": "Редакции на съобщение",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:"
+    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:",
+    "%(senderName)s made no change.": "%(senderName)s не направи промяна.",
+    "Loading room preview": "Зареждане на прегледа на стаята",
+    "Show all": "Покажи всички",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sне направиха промени %(count)s пъти",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sне направиха промени",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sне направи промени %(count)s пъти",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sне направи промени"
 }
