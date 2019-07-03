@@ -2032,5 +2032,8 @@
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s n’a fait aucun changement %(count)s fois",
     "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s n’ont fait aucun changement",
     "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s n’a fait aucun changement %(count)s fois",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s n’a fait aucun changement"
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s n’a fait aucun changement",
+    "Resend edit": "Renvoyer l’édition",
+    "Resend %(unsentCount)s reaction(s)": "Renvoyer %(unsentCount)s réaction(s)",
+    "Resend removal": "Renvoyer la suppression"
 }
