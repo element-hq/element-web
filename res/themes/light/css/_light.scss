@@ -195,10 +195,12 @@ $panel-divider-color: #dee1f3;
 $widget-menu-bar-bg-color: $secondary-accent-color;
 
 // ********************
+
 // both $event-highlight-bg-color and $room-warning-bg-color share this value,
 // so to not make their order dependent on who depends on who, have a shared value
 // defined before both
 $yellow-background: #fff8e3;
+
 // event tile lifecycle
 $event-encrypting-color: #abddbc;
 $event-sending-color: #ddd;
