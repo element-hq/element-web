@@ -54,6 +54,10 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             result = await MatrixClientPeg.get().relations(
                 roomId, eventId, "m.replace", "m.room.message", opts);
         } catch (error) {
+            // log if the server returned an error
+            if (error.errcode) {
+                console.error("fetching /relations failed with error", error);
+            }
             this.setState({error}, () => reject(error));
             return promise;
         }
