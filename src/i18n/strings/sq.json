@@ -1989,5 +1989,8 @@
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s s’bënë ndryshime gjatë %(count)s herësh",
     "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s s’bënë ndryshime",
     "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)ss’bënë ndryshime gjatë %(count)s herësh",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)ss’bëri ndryshime"
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)ss’bëri ndryshime",
+    "Resend edit": "Ridërgoje përpunimin",
+    "Resend %(unsentCount)s reaction(s)": "Ridërgo %(unsentCount)s reagim(e)",
+    "Resend removal": "Ridërgo heqjen"
 }
