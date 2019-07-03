@@ -4513,15 +4513,15 @@ he@1.2.x:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-highlight.js@9.14.2:
-  version "9.14.2"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.14.2.tgz#efbfb22dc701406e4da406056ef8c2b70ebe5b26"
-  integrity sha512-Nc6YNECYpxyJABGYJAyw7dBAYbXEuIzwzkqoJnwbc1nIpCiN+3ioYf0XrBnLiyyG0JLuJhpPtt2iTSbXiKLoyA==
-
 highlight.js@^9.13.1:
   version "9.15.6"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.6.tgz#72d4d8d779ec066af9a17cb14360c3def0aa57c4"
   integrity sha512-zozTAWM1D6sozHo8kqhfYgsac+B+q0PmsjXeyDrYIHHcBN0zTVT66+s2GW1GZv7DbyaROdLXKdabwS/WqPyIdQ==
+
+highlight.js@^9.15.8:
+  version "9.15.8"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.8.tgz#f344fda123f36f1a65490e932cf90569e4999971"
+  integrity sha512-RrapkKQWwE+wKdF73VsOa2RQdIoO3mxwJ4P8mhbI6KYJUraUHRKM5w5zQQKXNk0xNL4UVRdulV9SBJcmzJNzVA==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -5835,10 +5835,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.0.1.tgz#e9691c7fc142793aa8cd79e92d45698bcc5da8c4"
-  integrity sha512-+yj9fBdIE65v1+46TL/eLQGohtNZGBEtOD1n3nTAVBMogyVb2bpUWnqTli0ghiOCG9MKq7tWi+G4bDBTABxuxA==
+matrix-js-sdk@2.1.0-rc.1:
+  version "2.1.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.1.0-rc.1.tgz#0eff1224c6877538df2ccdd8e5b65892473f646f"
+  integrity sha512-YXybCKTdY8aHKJnr/zl8TR1iEIL890RLrD3Wc3YNWdbIt0ldnrdedreZYMmDhuSVFWbLwx1q8QDHwLZJvUGCdQ==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5859,10 +5859,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.2.2.tgz#09e9eae3ec3b9ef324934b69275066c667fa8a1b"
-  integrity sha512-K7cBzturO5+4jWWnqtuqfqHrZXuq6ckyWY/UxbNbCdsvRsO4UZz7tGBy9QSEMKhiHkqkgCaOWfSjgFgjFmCrjQ==
+matrix-react-sdk@1.3.0-rc.1:
+  version "1.3.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.3.0-rc.1.tgz#7ed0dcce4bb5691c24dcf5139713d0101749a4ce"
+  integrity sha512-eukFfl848vF4G9KyhoXdC8Jci6xNF8/f6GaW2p8Lvl+gPERpVg0sgvaehduKYX00GGAgmA2dWf2MfJb7XTurRw==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5883,13 +5883,13 @@ matrix-react-sdk@1.2.2:
     gemini-scrollbar "github:matrix-org/gemini-scrollbar#b302279"
     gfm.css "^1.1.1"
     glob "^5.0.14"
-    highlight.js "9.14.2"
+    highlight.js "^9.15.8"
     is-ip "^2.0.0"
     isomorphic-fetch "^2.2.1"
     linkifyjs "^2.1.6"
     lodash "^4.13.1"
     lolex "2.3.2"
-    matrix-js-sdk "2.0.1"
+    matrix-js-sdk "2.1.0-rc.1"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
