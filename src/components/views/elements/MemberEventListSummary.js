@@ -313,6 +313,11 @@ module.exports = React.createClass({
      * if a transition is not recognised.
      */
     _getTransition: function(e) {
+        if (e.mxEvent.getType() === 'm.room.third_party_invite') {
+            // Handle 3pid invites the same as invites so they get bundled together
+            return 'invited';
+        }
+
         switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
@@ -427,9 +432,17 @@ module.exports = React.createClass({
                 userEvents[userId] = [];
                 if (e.target) avatarMembers.push(e.target);
             }
+
+            let displayName = userId;
+            if (e.getType() === 'm.room.third_party_invite') {
+                displayName = e.getContent().display_name;
+            } else if (e.target) {
+                displayName = e.target.name;
+            }
+
             userEvents[userId].push({
                 mxEvent: e,
-                displayName: (e.target ? e.target.name : null) || userId,
+                displayName,
                 index: index,
             });
         });
