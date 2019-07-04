@@ -255,6 +255,14 @@ export default React.createClass({
 
         // For PersistentElement
         this.state.resizeNotifier.on("middlePanelResized", this._dispatchTimelineResize);
+
+        // Force users to go through the soft logout page if they're soft logged out
+        if (Lifecycle.isSoftLogout()) {
+            // When the session loads it'll be detected as soft logged out and a dispatch
+            // will be sent out to say that, triggering this MatrixChat to show the soft
+            // logout page.
+            Lifecycle.loadSession({});
+        }
     },
 
     componentDidMount: function() {
