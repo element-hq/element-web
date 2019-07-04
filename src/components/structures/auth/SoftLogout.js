@@ -23,7 +23,7 @@ import Modal from '../../../Modal';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import Login, {sendLoginRequest} from "../../../Login";
+import {sendLoginRequest} from "../../../Login";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -86,6 +86,8 @@ export default class SoftLogout extends React.Component {
     };
 
     async _initLogin() {
+        // Note: we don't use the existing Login class because it is heavily flow-based. We don't
+        // care about login flows here, unless it is the single flow we support.
         const client = MatrixClientPeg.get();
         const loginViews = (await client.loginFlows()).flows.map(f => FLOWS_TO_VIEWS[f.type]);
 
@@ -153,7 +155,7 @@ export default class SoftLogout extends React.Component {
 
             let error = null;
             if (this.state.errorText) {
-                error = <span className='mx_Login_error'>{this.state.errorText}</span>
+                error = <span className='mx_Login_error'>{this.state.errorText}</span>;
             }
 
             return (
