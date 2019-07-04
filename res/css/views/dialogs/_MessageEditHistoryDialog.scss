@@ -28,6 +28,11 @@ limitations under the License.
     flex: 1 1 auto;
 }
 
+.mx_MessageEditHistoryDialog_error {
+    color: $warning-color;
+    text-align: center;
+}
+
 .mx_MessageEditHistoryDialog_edits {
     list-style-type: none;
     font-size: 14px;

@@ -30,6 +30,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            error: null,
             events: [],
             nextBatch: null,
             isLoading: true,
@@ -45,10 +46,21 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         const opts = {from: this.state.nextBatch};
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
-        const result = await MatrixClientPeg.get().relations(
-            roomId, eventId, "m.replace", "m.room.message", opts);
+        let result;
         let resolve;
-        const promise = new Promise(r => resolve = r);
+        let reject;
+        const promise = new Promise((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
+        try {
+            result = await MatrixClientPeg.get().relations(
+                roomId, eventId, "m.replace", "m.room.message", opts);
+        } catch (error) {
+            // log if the server returned an error
+            if (error.errcode) {
+                console.error("fetching /relations failed with error", error);
+            }
+            this.setState({error}, () => reject(error));
+            return promise;
+        }
         this.setState({
             events: this.state.events.concat(result.events),
             nextBatch: result.nextBatch,
@@ -82,7 +94,23 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
     render() {
         let content;
         if (this.state.error) {
-            content = this.state.error;
+            const {error} = this.state;
+            if (error.errcode === "M_UNRECOGNIZED") {
+                content = (<p className="mx_MessageEditHistoryDialog_error">
+                    {_t("Your homeserver doesn't seem to support this feature.")}
+                </p>);
+            } else if (error.errcode) {
+                // some kind of error from the homeserver
+                content = (<p className="mx_MessageEditHistoryDialog_error">
+                    {_t("Something went wrong!")}
+                </p>);
+            } else {
+                content = (<p className="mx_MessageEditHistoryDialog_error">
+                    {_t("Cannot reach homeserver")}
+                    <br />
+                    {_t("Ensure you have a stable internet connection, or get in touch with the server admin")}
+                </p>);
+            }
         } else if (this.state.isLoading) {
             const Spinner = sdk.getComponent("elements.Spinner");
             content = <Spinner />;
