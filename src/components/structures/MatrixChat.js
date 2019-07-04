@@ -436,7 +436,6 @@ export default React.createClass({
 
         switch (payload.action) {
             case 'logout':
-                console.log(payload);
                 Lifecycle.logout();
                 break;
             case 'require_registration':
@@ -1369,7 +1368,6 @@ export default React.createClass({
             if (errObj.httpStatus === 401 && errObj.data && errObj.data['soft_logout']) {
                 console.warn("Soft logout issued by server - avoiding data deletion");
                 Lifecycle.softLogout();
-                dis.dispatch({actions: 'soft_logout'});
                 return;
             }
 
