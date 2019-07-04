@@ -43,14 +43,15 @@ export default class ConfirmWipeDeviceDialog extends React.Component {
                 <div className='mx_ConfirmWipeDeviceDialog_content'>
                     <p>
                         {_t(
-                            "Deleting all data from this device is permanent. Encrypted messages will be lost " +
+                            "Clearing all data from this device is permanent. Encrypted messages will be lost " +
                             "unless their keys have been backed up.",
                         )}
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Delete everything")}
+                    primaryButton={_t("Clear all data")}
                     onPrimaryButtonClick={this._onConfirm}
+                    primaryButtonClass="danger"
                     cancelButton={_t("Cancel")}
                     onCancel={this._onDecline}
                 />

@@ -57,7 +57,9 @@ export default class SoftLogout extends React.Component {
         const userId = MatrixClientPeg.get().getUserId();
         const user = MatrixClientPeg.get().getUser(userId);
 
-        const displayName = user ? user.displayName : userId.substring(1).split(':')[0];
+        const displayName = user && user.displayName !== userId
+            ? user.displayName
+            : userId.substring(1).split(':')[0];
 
         this.state = {
             domainName,
@@ -216,32 +218,39 @@ export default class SoftLogout extends React.Component {
                     </h2>
                     <div>
                         {_t(
-                            "Your homeserver (%(domainName)s) admin has signed you out of your " +
-                            "account %(displayName)s (%(userId)s).",
+                            "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your " +
+                            "account <strong2>%(displayName)s (%(userId)s)</strong2>.",
                             {
                                 domainName: this.state.domainName,
                                 displayName: this.state.displayName,
                                 userId: this.state.userId,
                             },
+                            {
+                                // XXX: It's annoying that we can't just map <strong> to two things.
+                                // https://github.com/vector-im/riot-web/issues/9086
+                                'strong1': (val) => <strong>{val}</strong>,
+                                'strong2': (val) => <strong>{val}</strong>,
+                            },
                         )}
-                    </div>
-
-                    <h3>{_t("I don't want to sign in")}</h3>
-                    <div>
-                        {_t(
-                            "If this is a shared device, or you don't want to access your account " +
-                            "again from it, clear all data stored locally on this device.",
-                        )}
-                    </div>
-                    <div>
-                        <AccessibleButton onClick={this.onClearAll} kind="primary">
-                            {_t("Clear all data")}
-                        </AccessibleButton>
                     </div>
 
                     <h3>{_t("Sign in")}</h3>
                     <div>
                         {this._renderSignInSection()}
+                    </div>
+
+                    <h3>{_t("Clear personal data")}</h3>
+                    <p>
+                        {_t(
+                            "Warning: Your personal data (including encryption keys) is still stored " +
+                            "on this device. Clear it if you're finished using this device, or want to sign " +
+                            "in to another account.",
+                        )}
+                    </p>
+                    <div>
+                        <AccessibleButton onClick={this.onClearAll} kind="danger">
+                            {_t("Clear all data")}
+                        </AccessibleButton>
                     </div>
                 </AuthBody>
             </AuthPage>
