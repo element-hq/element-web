@@ -120,7 +120,7 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    async start() {
+    async assign() {
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
@@ -131,7 +131,7 @@ class MatrixClientPeg {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
                     this.matrixClient.store = new Matrix.MemoryStore({
-                      localStorage: global.localStorage,
+                        localStorage: global.localStorage,
                     });
                 } else {
                     console.error('Failed to start memory store!', err);
@@ -171,6 +171,12 @@ class MatrixClientPeg {
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
+
+        return opts;
+    }
+
+    async start() {
+        const opts = await this.assign();
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);

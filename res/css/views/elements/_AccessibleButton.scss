@@ -79,3 +79,22 @@ limitations under the License.
     color: $button-danger-disabled-fg-color;
     background-color: $button-danger-disabled-bg-color;
 }
+
+.mx_AccessibleButton_kind_link {
+    color: $button-link-fg-color;
+    background-color: $button-link-bg-color;
+}
+
+.mx_AccessibleButton_kind_link.mx_AccessibleButton_disabled {
+    opacity: 0.4;
+}
+
+.mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_link_sm {
+    padding: 5px 12px;
+    color: $button-link-fg-color;
+    background-color: $button-link-bg-color;
+}
+
+.mx_AccessibleButton_kind_link_sm.mx_AccessibleButton_disabled {
+    opacity: 0.4;
+}

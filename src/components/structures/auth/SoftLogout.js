@@ -23,6 +23,21 @@ import Modal from '../../../Modal';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import Login, {sendLoginRequest} from "../../../Login";
+
+const LOGIN_VIEW = {
+    LOADING: 1,
+    PASSWORD: 2,
+    CAS: 3, // SSO, but old
+    SSO: 4,
+    UNSUPPORTED: 5,
+};
+
+const FLOWS_TO_VIEWS = {
+    "m.login.password": LOGIN_VIEW.PASSWORD,
+    "m.login.cas": LOGIN_VIEW.CAS,
+    "m.login.sso": LOGIN_VIEW.SSO,
+};
 
 export default class SoftLogout extends React.Component {
     static propTypes = {
@@ -48,7 +63,14 @@ export default class SoftLogout extends React.Component {
             domainName,
             userId,
             displayName,
+            loginView: LOGIN_VIEW.LOADING,
+
+            busy: false,
+            password: "",
+            errorText: "",
         };
+
+        this._initLogin();
     }
 
     onClearAll = () => {
@@ -63,9 +85,119 @@ export default class SoftLogout extends React.Component {
         });
     };
 
-    onLogin = () => {
-        dis.dispatch({action: 'start_login'});
+    async _initLogin() {
+        const client = MatrixClientPeg.get();
+        const loginViews = (await client.loginFlows()).flows.map(f => FLOWS_TO_VIEWS[f.type]);
+
+        const chosenView = loginViews.filter(f => !!f)[0] || LOGIN_VIEW.UNSUPPORTED;
+        this.setState({loginView: chosenView});
+    }
+
+    onPasswordChange = (ev) => {
+        this.setState({password: ev.target.value});
     };
+
+    onForgotPassword = () => {
+        dis.dispatch({action: 'start_password_recovery'});
+    };
+
+    onPasswordLogin = async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        this.setState({busy: true});
+
+        const hsUrl = MatrixClientPeg.get().getHomeserverUrl();
+        const isUrl = MatrixClientPeg.get().getIdentityServerUrl();
+        const loginType = "m.login.password";
+        const loginParams = {
+            identifier: {
+                type: "m.id.user",
+                user: MatrixClientPeg.get().getUserId(),
+            },
+            password: this.state.password,
+            device_id: MatrixClientPeg.get().getDeviceId(),
+        };
+
+        let credentials = null;
+        try {
+            credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
+        } catch (e) {
+            let errorText = _t("Failed to re-authenticate due to a homeserver problem");
+            if (e.errcode === "M_FORBIDDEN" && (e.httpStatus === 401 || e.httpStatus === 403)) {
+                errorText = _t("Incorrect password");
+            }
+
+            this.setState({
+                busy: false,
+                errorText: errorText,
+            });
+            return;
+        }
+
+        Lifecycle.hydrateSession(credentials).catch((e) => {
+            console.error(e);
+            this.setState({busy: false, errorText: _t("Failed to re-authenticate")});
+        });
+    };
+
+    _renderSignInSection() {
+        if (this.state.loginView === LOGIN_VIEW.LOADING) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
+        }
+
+        if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
+            const Field = sdk.getComponent("elements.Field");
+            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+            let error = null;
+            if (this.state.errorText) {
+                error = <span className='mx_Login_error'>{this.state.errorText}</span>
+            }
+
+            return (
+                <form onSubmit={this.onPasswordLogin}>
+                    <p>{_t("Enter your password to sign in and regain access to your account.")}</p>
+                    {error}
+                    <Field
+                        id="softlogout_password"
+                        type="password"
+                        label={_t("Password")}
+                        onChange={this.onPasswordChange}
+                        value={this.state.password}
+                        disabled={this.state.busy}
+                    />
+                    <AccessibleButton
+                        onClick={this.onPasswordLogin}
+                        kind="primary"
+                        type="submit"
+                        disabled={this.state.busy}
+                    >
+                        {_t("Sign In")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onForgotPassword} kind="link">
+                        {_t("Forgotten your password?")}
+                    </AccessibleButton>
+                </form>
+            );
+        }
+
+        if (this.state.loginView === LOGIN_VIEW.SSO || this.state.loginView === LOGIN_VIEW.CAS) {
+            // TODO: TravisR - https://github.com/vector-im/riot-web/issues/10238
+            return <p>PLACEHOLDER</p>;
+        }
+
+        // Default: assume unsupported
+        return (
+            <p>
+                {_t(
+                    "Cannot re-authenticate with your account. Please contact your " +
+                    "homeserver admin for more information.",
+                )}
+            </p>
+        );
+    }
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
@@ -107,14 +239,7 @@ export default class SoftLogout extends React.Component {
 
                     <h3>{_t("Sign in")}</h3>
                     <div>
-                        {_t(
-                            "Sign in again to regain access to your account, or a different one.",
-                        )}
-                    </div>
-                    <div>
-                        <AccessibleButton onClick={this.onLogin} kind="primary">
-                            {_t("Sign in")}
-                        </AccessibleButton>
+                        {this._renderSignInSection()}
                     </div>
                 </AuthBody>
             </AuthPage>
