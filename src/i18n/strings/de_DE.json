@@ -1876,5 +1876,8 @@
     "Enter username": "Benutzername eingeben",
     "Add room": "Raum hinzufügen",
     "Your profile": "Dein Profil",
-    "Registration Successful": "Registrierung erfolgreich"
+    "Registration Successful": "Registrierung erfolgreich",
+    "Failed to revoke invite": "Einladung zurückziehen fehlgeschlagen",
+    "Revoke invite": "Einladung zurückziehen",
+    "Invited by %(sender)s": "Eingeladen von %(sender)s"
 }
