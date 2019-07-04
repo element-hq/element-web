@@ -442,6 +442,10 @@ export default React.createClass({
                 startAnyRegistrationFlow(payload);
                 break;
             case 'start_registration':
+                if (Lifecycle.isSoftLogout()) {
+                    this._onSoftLogout();
+                    break;
+                }
                 // This starts the full registration flow
                 if (payload.screenAfterLogin) {
                     this._screenAfterLogin = payload.screenAfterLogin;
@@ -449,6 +453,10 @@ export default React.createClass({
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
+                if (Lifecycle.isSoftLogout()) {
+                    this._onSoftLogout();
+                    break;
+                }
                 if (payload.screenAfterLogin) {
                     this._screenAfterLogin = payload.screenAfterLogin;
                 }
