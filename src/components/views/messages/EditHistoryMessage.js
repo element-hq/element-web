@@ -20,11 +20,16 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {pillifyLinks} from '../../../utils/pillify';
+import { _t } from '../../../languageHandler';
+import sdk from '../../../index';
 
 export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
         // the message event being edited
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,
+    };
+
+    _onRedactClick = async () => {
     };
 
     componentDidMount() {
@@ -33,6 +38,13 @@ export default class EditHistoryMessage extends React.PureComponent {
 
     componentDidUpdate() {
         pillifyLinks(this.refs.content.children, this.props.mxEvent);
+    }
+
+    _renderActionBar() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return (<div className="mx_MessageActionBar">
+            <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>{_t("Remove")}</AccessibleButton>
+        </div>);
     }
 
     render() {
@@ -55,6 +67,7 @@ export default class EditHistoryMessage extends React.PureComponent {
             <div className="mx_EventTile_line">
                 <span className="mx_MessageTimestamp">{timestamp}</span>
                 { contentContainer }
+                { this._renderActionBar() }
             </div>
         </li>;
     }
