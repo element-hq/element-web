@@ -96,24 +96,24 @@ class ScalarAuthClient {
 
     registerForToken() {
         // Get openid bearer token from the HS as the first part of our dance
-        return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
+        return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
-            return this.exchangeForScalarToken(token_object);
-        }).then((token_object) => {
-            window.localStorage.setItem("mx_scalar_token", token_object);
-            return token_object;
+            return this.exchangeForScalarToken(tokenObject);
+        }).then((tokenObject) => {
+            window.localStorage.setItem("mx_scalar_token", tokenObject);
+            return tokenObject;
         });
     }
 
-    exchangeForScalarToken(openid_token_object) {
-        const scalar_rest_url = SdkConfig.get().integrations_rest_url;
+    exchangeForScalarToken(openidTokenObject) {
+        const scalarRestUrl = SdkConfig.get().integrations_rest_url;
 
         return new Promise(function(resolve, reject) {
             request({
                 method: 'POST',
-                uri: scalar_rest_url+'/register',
+                uri: scalarRestUrl + '/register',
                 qs: {v: imApiVersion},
-                body: openid_token_object,
+                body: openidTokenObject,
                 json: true,
             }, (err, response, body) => {
                 if (err) {

@@ -66,7 +66,6 @@ src/rageshake/submit-rageshake.js
 src/ratelimitedfunc.js
 src/Roles.js
 src/Rooms.js
-src/ScalarAuthClient.js
 src/UiEffects.js
 src/Unread.js
 src/utils/DecryptFile.js
