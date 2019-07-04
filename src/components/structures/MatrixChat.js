@@ -1262,7 +1262,6 @@ export default React.createClass({
             collapseLhs: false,
             collapsedRhs: false,
             currentRoomId: null,
-            page_type: PageTypes.RoomDirectory,
         });
         this._setPageSubtitle();
     },
@@ -1278,7 +1277,6 @@ export default React.createClass({
             collapseLhs: false,
             collapsedRhs: false,
             currentRoomId: null,
-            page_type: PageTypes.RoomDirectory,
         });
         this._setPageSubtitle();
     },
