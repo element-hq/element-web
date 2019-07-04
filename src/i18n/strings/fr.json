@@ -2035,5 +2035,6 @@
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s n’a fait aucun changement",
     "Resend edit": "Renvoyer l’édition",
     "Resend %(unsentCount)s reaction(s)": "Renvoyer %(unsentCount)s réaction(s)",
-    "Resend removal": "Renvoyer la suppression"
+    "Resend removal": "Renvoyer la suppression",
+    "Your homeserver doesn't seem to support this feature.": "Il semble que votre serveur d’accueil ne prenne pas en charge cette fonctionnalité."
 }
