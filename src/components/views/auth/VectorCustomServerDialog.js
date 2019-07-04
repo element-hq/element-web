@@ -38,7 +38,7 @@ module.exports = React.createClass({
                     <p>{_t(
                         "You can use the custom server options to sign into other " +
                         "Matrix servers by specifying a different homeserver URL. This " +
-                        "allows you to use Riot with an existing Matrix account on a " +
+                        "allows you to use Tchap with an existing Matrix account on a " +
                         "different homeserver.",
                     )}</p>
                     <p>{_t(
