@@ -66,17 +66,8 @@ const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
  * need emojification.
  * unicodeToImage uses this function.
  */
-export function mightContainEmoji(str) {
+function mightContainEmoji(str) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
-}
-
-/**
- * Returns true if the string definitely contains a single emoji.
- * @param {String} str String to test
- * @return {Boolean}
- */
-export function isSingleEmoji(str) {
-    return mightContainEmoji(str) && SINGLE_EMOJI_REGEX.test(str);
 }
 
 /**

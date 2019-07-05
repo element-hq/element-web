@@ -101,7 +101,12 @@ export default class ReactionsRowButton extends React.PureComponent {
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
         >
-            {content} {count}
+            <span className="mx_ReactionsRowButton_content">
+                {content}
+            </span>
+            <span className="mx_ReactionsRowButton_count">
+                {count}
+            </span>
             {tooltip}
         </span>;
     }

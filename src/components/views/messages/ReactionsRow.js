@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
-import { isSingleEmoji } from '../../../HtmlUtils';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
 // The maximum number of reactions to initially show on a message.
@@ -115,9 +114,6 @@ export default class ReactionsRow extends React.PureComponent {
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
         let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
-            if (!isSingleEmoji(content)) {
-                return null;
-            }
             const count = events.size;
             if (!count) {
                 return null;
