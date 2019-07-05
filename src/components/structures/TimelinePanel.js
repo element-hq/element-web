@@ -141,6 +141,7 @@ const TimelinePanel = React.createClass({
 
         return {
             events: [],
+            liveEvents: [],
             timelineLoading: true, // track whether our room timeline is loading
 
             // canBackPaginate == false may mean:
@@ -322,9 +323,11 @@ const TimelinePanel = React.createClass({
 
             // We can now paginate in the unpaginated direction
             const canPaginateKey = (backwards) ? 'canBackPaginate' : 'canForwardPaginate';
+            const { events, liveEvents } = this._getEvents();
             this.setState({
                 [canPaginateKey]: true,
-                events: this._getEvents(),
+                events,
+                liveEvents,
             });
         }
     },
@@ -356,10 +359,12 @@ const TimelinePanel = React.createClass({
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
 
+            const { events, liveEvents } = this._getEvents();
             const newState = {
                 [paginatingKey]: false,
                 [canPaginateKey]: r,
-                events: this._getEvents(),
+                events,
+                liveEvents,
             };
 
             // moving the window in this direction may mean that we can now
@@ -453,15 +458,13 @@ const TimelinePanel = React.createClass({
         this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).done(() => {
             if (this.unmounted) { return; }
 
-            const events = this._timelineWindow.getEvents();
-            const lastEv = events[events.length-1];
+            const { events, liveEvents } = this._getEvents();
+            const lastLiveEvent = liveEvents[liveEvents.length - 1];
 
-            // if we're at the end of the live timeline, append the pending events
-            if (this.props.timelineSet.room && !this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-                events.push(...this.props.timelineSet.room.getPendingEvents());
-            }
-
-            const updatedState = {events: events};
+            const updatedState = {
+                events,
+                liveEvents,
+            };
 
             let callRMUpdated;
             if (this.props.manageReadMarkers) {
@@ -478,13 +481,13 @@ const TimelinePanel = React.createClass({
                 callRMUpdated = false;
                 if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
-                } else if (lastEv && this.getReadMarkerPosition() === 0) {
+                } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
 
-                    this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
+                    this._setReadMarker(lastLiveEvent.getId(), lastLiveEvent.getTs(), true);
                     updatedState.readMarkerVisible = false;
-                    updatedState.readMarkerEventId = lastEv.getId();
+                    updatedState.readMarkerEventId = lastLiveEvent.getId();
                     callRMUpdated = true;
                 }
             }
@@ -694,9 +697,12 @@ const TimelinePanel = React.createClass({
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
-                    ).catch(() => {
+                    ).catch((e) => {
+                        console.error(e);
                         this.lastRRSentEventId = undefined;
                     });
+                } else {
+                    console.error(e);
                 }
                 // it failed, so allow retries next time the user is active
                 this.lastRRSentEventId = undefined;
@@ -762,9 +768,9 @@ const TimelinePanel = React.createClass({
     _advanceReadMarkerPastMyEvents: function() {
         if (!this.props.manageReadMarkers) return;
 
-        // we call _timelineWindow.getEvents() rather than using
-        // this.state.events, because react batches the update to the latter, so it
-        // may not have been updated yet.
+        // we call `_timelineWindow.getEvents()` rather than using
+        // `this.state.liveEvents`, because React batches the update to the
+        // latter, so it may not have been updated yet.
         const events = this._timelineWindow.getEvents();
 
         // first find where the current RM is
@@ -1067,6 +1073,7 @@ const TimelinePanel = React.createClass({
         } else {
             this.setState({
                 events: [],
+                liveEvents: [],
                 canBackPaginate: false,
                 canForwardPaginate: false,
                 timelineLoading: true,
@@ -1086,21 +1093,26 @@ const TimelinePanel = React.createClass({
         // the results if so.
         if (this.unmounted) return;
 
-        this.setState({
-            events: this._getEvents(),
-        });
+        this.setState(this._getEvents());
     },
 
     // get the list of events from the timeline window and the pending event list
     _getEvents: function() {
         const events = this._timelineWindow.getEvents();
 
+        // Hold onto the live events separately. The read receipt and read marker
+        // should use this list, so that they don't advance into pending events.
+        const liveEvents = [...events];
+
         // if we're at the end of the live timeline, append the pending events
         if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             events.push(...this.props.timelineSet.getPendingEvents());
         }
 
-        return events;
+        return {
+            events,
+            liveEvents,
+        };
     },
 
     _indexForEventId: function(evId) {
@@ -1128,8 +1140,10 @@ const TimelinePanel = React.createClass({
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         let lastDisplayedIndex = null;
-        for (let i = this.state.events.length - 1; i >= 0; --i) {
-            const ev = this.state.events[i];
+        // Use `liveEvents` here because we don't want the read marker or read
+        // receipt to advance into pending events.
+        for (let i = this.state.liveEvents.length - 1; i >= 0; --i) {
+            const ev = this.state.liveEvents[i];
 
             if (ignoreOwn && ev.sender && ev.sender.userId == myUserId) {
                 continue;
@@ -1164,8 +1178,8 @@ const TimelinePanel = React.createClass({
         // easier to reason about, so let's start there and optimise later if
         // needed.
         if (allowEventsWithoutTiles) {
-            for (let i = lastDisplayedIndex + 1; i < this.state.events.length; i++) {
-                const ev = this.state.events[i];
+            for (let i = lastDisplayedIndex + 1; i < this.state.liveEvents.length; i++) {
+                const ev = this.state.liveEvents[i];
                 if (EventTile.haveTileForEvent(ev)) {
                     break;
                 }
