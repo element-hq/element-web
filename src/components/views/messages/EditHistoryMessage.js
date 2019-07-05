@@ -119,11 +119,13 @@ export default class EditHistoryMessage extends React.PureComponent {
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
-        return <li className={classes}>
-            <div className="mx_EventTile_line">
-                <span className="mx_MessageTimestamp">{timestamp}</span>
-                { contentContainer }
-                { this._renderActionBar() }
+        return <li>
+            <div className={classes}>
+                <div className="mx_EventTile_line">
+                    <span className="mx_MessageTimestamp">{timestamp}</span>
+                    { contentContainer }
+                    { this._renderActionBar() }
+                </div>
             </div>
         </li>;
     }
