@@ -86,6 +86,8 @@ export function isSingleEmoji(str) {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
+    // Check against both the char and the char with an empty variation selector appended because that's how
+    // emoji-base stores its base emojis which have variations. https://github.com/vector-im/riot-web/issues/9785
     const emptyVariation = char + VARIATION_SELECTOR;
     const data = EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
