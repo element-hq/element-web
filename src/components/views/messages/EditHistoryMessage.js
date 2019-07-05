@@ -59,6 +59,15 @@ export default class EditHistoryMessage extends React.PureComponent {
         }, 'mx_Dialog_confirmredact');
     };
 
+    _onViewSourceClick = () => {
+        const ViewSource = sdk.getComponent('structures.ViewSource');
+        Modal.createTrackedDialog('View Event Source', '', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
+            content: this.props.mxEvent.event,
+        }, 'mx_Dialog_viewsource');
+    };
+
     pillifyLinks() {
         // not present for redacted events
         if (this.refs.content) {
@@ -84,12 +93,19 @@ export default class EditHistoryMessage extends React.PureComponent {
     _renderActionBar() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         // hide the button when already redacted
-        if (this.props.mxEvent.isRedacted()) {
-            return null;
+        let redactButton;
+        if (!this.props.mxEvent.isRedacted()) {
+            redactButton = (<AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
+                {_t("Remove")}
+            </AccessibleButton>);
         }
+        const viewSourceButton = (<AccessibleButton onClick={this._onViewSourceClick}>
+                {_t("View Source")}
+            </AccessibleButton>);
         // disabled remove button when not allowed
         return (<div className="mx_MessageActionBar">
-            <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>{_t("Remove")}</AccessibleButton>
+            {redactButton}
+            {viewSourceButton}
         </div>);
     }
 
