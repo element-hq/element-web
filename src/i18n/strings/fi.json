@@ -49,7 +49,7 @@
     "%(senderName)s answered the call.": "%(senderName)s vastasi puheluun.",
     "An error has occurred.": "Tapahtui virhe.",
     "Anyone": "Kaikki",
-    "Anyone who knows the room's link, apart from guests": "Kaikki jotka tietävät huoneen osoitteen, paitsi vieraat",
+    "Anyone who knows the room's link, apart from guests": "Kaikki joilla on huoneen linkki, paitsi vieraat",
     "Anyone who knows the room's link, including guests": "Kaikki joilla on huoneen linkki, mukaan lukien vieraat",
     "Are you sure?": "Oletko varma?",
     "Are you sure you want to leave the room '%(roomName)s'?": "Oletko varma että haluat poistua huoneesta '%(roomName)s'?",
