@@ -38,9 +38,16 @@ export default class EditHistoryMessage extends React.PureComponent {
         const {userId} = cli.credentials;
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
+        if (event.localRedactionEvent()) {
+            event.localRedactionEvent().on("status", this._onAssociatedStatusChanged);
+        }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
-        this.state = {canRedact};
+        this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
     }
+
+    _onAssociatedStatusChanged = () => {
+        this.setState({sendStatus: this.props.mxEvent.getAssociatedStatus()});
+    };
 
     _onRedactClick = async () => {
         const event = this.props.mxEvent;
@@ -63,15 +70,24 @@ export default class EditHistoryMessage extends React.PureComponent {
         this.pillifyLinks();
     }
 
+    componentWillUnmount() {
+        const event = this.props.mxEvent;
+        if (event.localRedactionEvent()) {
+            event.localRedactionEvent().off("status", this._onAssociatedStatusChanged);
+        }
+    }
+
     componentDidUpdate() {
         this.pillifyLinks();
     }
 
     _renderActionBar() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        // hide the button when already redacted
         if (this.props.mxEvent.isRedacted()) {
             return null;
         }
+        // disabled remove button when not allowed
         return (<div className="mx_MessageActionBar">
             <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>{_t("Remove")}</AccessibleButton>
         </div>);
@@ -82,9 +98,8 @@ export default class EditHistoryMessage extends React.PureComponent {
         const originalContent = mxEvent.getOriginalContent();
         const content = originalContent["m.new_content"] || originalContent;
         const contentElements = HtmlUtils.bodyToHtml(content);
-        const isRedacted = this.props.mxEvent.isRedacted();
         let contentContainer;
-        if (isRedacted) {
+        if (mxEvent.isRedacted()) {
             const UnknownBody = sdk.getComponent('messages.UnknownBody');
             contentContainer = (<UnknownBody mxEvent={this.props.mxEvent} />);
         } else if (mxEvent.getContent().msgtype === "m.emote") {
@@ -97,13 +112,12 @@ export default class EditHistoryMessage extends React.PureComponent {
             contentContainer = (<div className="mx_EventTile_content" ref="content">{contentElements}</div>);
         }
         const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
-        const sendStatus = mxEvent.getAssociatedStatus();
-        const isSending = (['sending', 'queued', 'encrypting'].indexOf(sendStatus) !== -1);
+        const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
-            "mx_EventTile_redacted": isRedacted,
+            "mx_EventTile_redacted": mxEvent.isRedacted(),
             "mx_EventTile_sending": isSending,
-            "mx_EventTile_notSent": sendStatus === 'not_sent',
+            "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
         return <li className={classes}>
             <div className="mx_EventTile_line">
