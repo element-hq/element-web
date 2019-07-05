@@ -107,6 +107,10 @@ export default class InteractiveTooltip extends React.Component {
     }
 
     showTooltip() {
+        // Don't enter visible state if we haven't collected the target yet
+        if (!this.target) {
+            return;
+        }
         this.setState({
             visible: true,
         });
