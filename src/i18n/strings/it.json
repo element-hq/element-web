@@ -1997,5 +1997,8 @@
     "Your homeserver doesn't seem to support this feature.": "Il tuo homeserver non sembra supportare questa funzione.",
     "You're signed out": "Sei disconnesso",
     "Your homeserver (%(domainName)s) admin has signed you out of your account %(displayName)s (%(userId)s).": "L'admin del tuo homeserver (%(domainName)s) ti ha disconnesso dal tuo account %(displayName)s (%(userId)s).",
-    "I don't want to sign in": "Non voglio accedere"
+    "I don't want to sign in": "Non voglio accedere",
+    "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "Se questo è un dispositivo condiviso, o non vuoi più accedere al tuo account da questo, elimina tutti i dati memorizzati localmente in esso.",
+    "Clear all data": "Elimina tutti i dati",
+    "Sign in again to regain access to your account, or a different one.": "Accedi di nuovo per riavere accesso al tuo account, o ad uno diverso."
 }
