@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_ReactionsRowButton {
-    display: inline-block;
+    display: inline-flex;
     height: 20px;
     line-height: 21px;
     margin-right: 6px;
@@ -34,4 +34,12 @@ limitations under the License.
         background-color: $reaction-row-button-selected-bg-color;
         border-color: $reaction-row-button-selected-border-color;
     }
+}
+
+.mx_ReactionsRowButton_content {
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 4px;
 }
