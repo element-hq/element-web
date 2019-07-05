@@ -341,6 +341,25 @@ export function setLoggedIn(credentials) {
 }
 
 /**
+ * Hydrates an existing session by using the credentials provided. This will
+ * not clear any local storage, unlike setLoggedIn().
+ *
+ * Stops the existing Matrix client (without clearing its data) and starts a
+ * new one in its place. This additionally starts all other react-sdk services
+ * which use the new Matrix client.
+ *
+ * @param {MatrixClientCreds} credentials The credentials to use
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
+ */
+export function hydrateSession(credentials) {
+    stopMatrixClient();
+    localStorage.removeItem("mx_soft_logout");
+    _isLoggingOut = false;
+    return _doSetLoggedIn(credentials, false);
+}
+
+/**
  * fires on_logging_in, optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
  *
@@ -541,6 +560,7 @@ async function startMatrixClient(startSyncing=true) {
         await MatrixClientPeg.start();
     } else {
         console.warn("Caller requested only auxiliary services be started");
+        await MatrixClientPeg.assign();
     }
 
     // dispatch that we finished starting up to wire up any other bits
