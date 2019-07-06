@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "electron",
+            "request": "launch",
+            "name": "Launch Electron",
+            "appDir": "/home/tcd/hdd/gitcoin-bounties/riot-web/electron_app",
+            "sourceMaps": true
+        },
+        {
+            "name": "Debug Main Process",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}/electron_app",
+            "runtimeExecutable": "/home/tcd/.nvm/versions/node/v8.16.0/bin/electron",
+            "windows": {
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "args" : ["."],
+            "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch via NPM",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "electron"
+            ],
+            "port": 9229
+        }
+    ]
+}

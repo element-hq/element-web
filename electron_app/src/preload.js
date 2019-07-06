@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 const { ipcRenderer, webFrame } = require('electron');
-
 // expose ipcRenderer to the renderer process
+// const SpellCheck = require('./spell_check');
+const spellCheck = require("./spell-check");
 window.ipcRenderer = ipcRenderer;
 
 // Allow the fetch API to load resources from this
@@ -27,3 +28,4 @@ webFrame.registerURLSchemeAsPrivileged('vector', {
     secure: true,
     supportFetchAPI: true,
 });
+spellCheck(window);

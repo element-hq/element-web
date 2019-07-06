@@ -7,9 +7,18 @@
   "author": "New Vector Ltd.",
   "dependencies": {
     "auto-launch": "^5.0.1",
+    "electron-context-menu": "^0.13.0",
+    "electron-editor-context-menu": "^1.1.1",
     "electron-store": "^2.0.0",
     "electron-window-state": "^4.1.0",
+    "fs-extra": "^8.1.0",
+    "fs-jetpack": "^2.2.2",
+    "mem": "^5.1.1",
     "minimist": "^1.2.0",
-    "png-to-ico": "^1.0.2"
+    "os": "^0.1.1",
+    "os-locale": "^4.0.0",
+    "png-to-ico": "^1.0.2",
+    "semver": "^6.2.0",
+    "spellchecker": "^3.6.1"
   }
 }
