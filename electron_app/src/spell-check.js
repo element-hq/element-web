@@ -4,27 +4,17 @@ const jetpack = require('fs-jetpack');
 const spellchecker = require('spellchecker');
 const path = require('path');
 const mem = require('mem');
+
 this.enabledDictionaries = [];
 this.checker = null;
 
 const loadBundledDictionaries = async () => {
-	const embeddedDictionaries = spellchecker.getAvailableDictionaries();
-	let directory = null;
-    if (app.getAppPath().indexOf('app.asar') > -1) {
-		directory = jetpack.cwd(
-			app.getAppPath().replace('/app.asar', ''),
-			'dictionaries')
-	} else {
-		directory = jetpack.cwd(
-			app.getAppPath(),
-			'electron_app',
-			'dictionaries')
-	}
-	console.log('dir', directory.toString());
+    const embeddedDictionaries = spellchecker.getAvailableDictionaries();
+    const directory = jetpack.cwd(app.getAppPath(), app.getAppPath().endsWith('app.asar') ? '..' : './electron_app', 'dictionaries');
 	const found = await directory.findAsync({ matching: '*.{aff,dic}' });
 	const installedDictionaries = found.map((fileName) => path.basename(fileName, path.extname(fileName)));
 	this.dictionariesPath = directory.path();
-	this.dictionaries = Array.from(new Set([ ...embeddedDictionaries, ...installedDictionaries ])).sort();
+	this.dictionaries = Array.from(new Set([ ...embeddedDictionaries, ...installedDictionaries ])).sort().map(x => x.substring(0, 2));
 	this.isMultiLanguage = embeddedDictionaries.length > 0 && process.platform !== 'win32';
 };
 
@@ -73,8 +63,6 @@ const enable = (...dictionaries) => {
 		this.enabledDictionaries = [ dictionaries[0] ];
 	}
 
-	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(this.enabledDictionaries));
-
 	updateChecker();
 	return this.enabledDictionaries.length > 0;
 };
@@ -83,7 +71,6 @@ const disable = (...dictionaries) => {
 	dictionaries = filterDictionaries(dictionaries);
 
 	this.enabledDictionaries = this.enabledDictionaries.filter((dictionary) => !dictionaries.includes(dictionary));
-	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(this.enabledDictionaries));
 
 	updateChecker();
 };
@@ -91,30 +78,20 @@ const disable = (...dictionaries) => {
 const setDefaultEnabledDictionaries = () => {
 	const selectedDictionaries = (() => {
 		try {
-			const enabledDictionaries = JSON.parse(localStorage.getItem('spellcheckerDictionaries'));
-			return Array.isArray(enabledDictionaries) ? enabledDictionaries.map(String) : null;
+            const enabledDictionaries = [this.dictionaries[this.dictionaries.indexOf(this.window.navigator.language)]] || [];
+            return Array.isArray(enabledDictionaries) ? enabledDictionaries.map(String) : null;
 		} catch (error) {
 			console.error(error);
 			return null;
 		}
-	})();
-
-	if (selectedDictionaries) {
+    })();
+    if (selectedDictionaries) {
 		enable(...selectedDictionaries);
 		return;
 	}
 
-	const userLanguage = localStorage.getItem('userLanguage');
+	const userLanguage = this.window.navigator.language;
 	if (userLanguage && enable(this.userLanguage)) {
-		return;
-	}
-
-	const navigatorLanguage = navigator.language;
-	if (enable(navigatorLanguage)) {
-		return;
-	}
-
-	if (enable('en_US')) {
 		return;
 	}
 };
@@ -186,7 +163,6 @@ const getDictionariesSelectSubmenu = () => {
 
 const getCorrectionsSubmenu = (text) => {
 	const corrections = getCorrections(text);
-	console.log('corrections', corrections);
 	return [
 		...(corrections
 			? [
@@ -295,6 +271,7 @@ const showDictionaryFileSelector = () => {
 };
 
 module.exports = async (window) => {
+    this.window = window;
 	await loadBundledDictionaries();
 	setDefaultEnabledDictionaries();
 	window.addEventListener('contextmenu', (event) => {
