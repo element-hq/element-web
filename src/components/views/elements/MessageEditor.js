@@ -187,6 +187,17 @@ export default class MessageEditor extends React.Component {
             contentBody.format = newContent.format;
             contentBody.formatted_body = ` * ${newContent.formatted_body}`;
         }
+
+        // if nothing has changed then bail
+        const oldContent = this.props.editState.getEvent().getContent();
+        if (!this._hasModifications ||
+            (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
+            oldContent["format"] === newContent["format"] &&
+            oldContent["formatted_body"] === newContent["formatted_body"])) {
+            this._cancelEdit();
+            return;
+        }
+
         const content = Object.assign({
             "m.new_content": newContent,
             "m.relates_to": {
