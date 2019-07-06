@@ -234,6 +234,7 @@ export default class AliasSettings extends React.Component {
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
                 <EditableItemList
+                    id="newRoomAlias"
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}
                     newItem={this.state.newAlias}
