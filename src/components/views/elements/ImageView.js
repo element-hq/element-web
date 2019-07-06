@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,7 +61,7 @@ export default class ImageView extends React.Component {
     }
 
     onKeyDown = (ev) => {
-        if (ev.keyCode == 27) { // escape
+        if (ev.keyCode === 27) { // escape
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();
@@ -72,7 +73,6 @@ export default class ImageView extends React.Component {
         Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
-                const self = this;
                 MatrixClientPeg.get().redactEvent(
                     this.props.mxEvent.getRoomId(), this.props.mxEvent.getId(),
                 ).catch(function(e) {
@@ -153,32 +153,38 @@ export default class ImageView extends React.Component {
             size = filesize(this.props.fileSize);
         }
 
-        let size_res;
+        let sizeRes;
         if (size && res) {
-            size_res = size + ", " + res;
+            sizeRes = size + ", " + res;
         } else {
-            size_res = size || res;
+            sizeRes = size || res;
         }
 
+        let mayRedact = false;
         const showEventMeta = !!this.props.mxEvent;
 
         let eventMeta;
         if (showEventMeta) {
             // Figure out the sender, defaulting to mxid
             let sender = this.props.mxEvent.getSender();
-            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(this.props.mxEvent.getRoomId());
             if (room) {
+                mayRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
                 const member = room.getMember(sender);
                 if (member) sender = member.name;
             }
 
             eventMeta = (<div className="mx_ImageView_metadata">
-                { _t('Uploaded on %(date)s by %(user)s', {date: formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
+                { _t('Uploaded on %(date)s by %(user)s', {
+                    date: formatDate(new Date(this.props.mxEvent.getTs())),
+                    user: sender,
+                }) }
             </div>);
         }
 
         let eventRedact;
-        if (showEventMeta) {
+        if (mayRedact) {
             eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
                 { _t('Remove') }
             </div>);
@@ -213,7 +219,7 @@ export default class ImageView extends React.Component {
                             <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
                                         { _t('Download this file') }<br />
-                                         <span className="mx_ImageView_size">{ size_res }</span>
+                                         <span className="mx_ImageView_size">{ sizeRes }</span>
                                 </div>
                             </a>
                             { eventRedact }
