@@ -16,7 +16,6 @@ limitations under the License.
 
 const { ipcRenderer, webFrame, remote } = require('electron');
 const { Menu, getCurrentWindow, dialog } = remote;
-console.log('preload dialog', dialog);
 window.ipcRenderer = ipcRenderer;
 
 const standardMenus = [
