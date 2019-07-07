@@ -1,5 +1,4 @@
-const { BrowserWindow, webFrame, ipcMain, dialog } = require('electron');
-console.log('REMOTE', BrowserWindow);
+const { BrowserWindow, ipcMain, dialog } = require('electron');
 const { webContents, getCurrentWindow } = BrowserWindow;
 const jetpack = require('fs-jetpack');
 const spellchecker = require('spellchecker');
@@ -136,10 +135,11 @@ const installDictionaries = async (filePaths) => {
 const getDictionariesSelectSubmenu = () => {
 	return dictionaries
 		.map((entry) => {
+            console.log('enabledDicts', enabledDictionaries);
 			return {
 				label: entry,
 				type: 'checkbox',
-				checked: enabledDictionaries.includes(entry),
+				checked: enabledDictionaries === entry,
 				click: ({ checked }) => (checked ? enable(entry) : disable(entry)),
 			};
 		})
@@ -228,11 +228,25 @@ const showDictionaryFileSelector = () => {
 
 module.exports = async (context) => {
     app = context;
+    await loadBundledDictionaries();
 	ipcMain.on('spellcheck:getcontextmenu', (event, arg) => {
         event.sender.send('spellcheck:getcontextmenu:result', spellCheckMenu(arg));
     });
     ipcMain.on('spellcheck:setlanguage', (event, arg) => {
-        enable([arg]);
+        console.log('set language to', arg);
+        enable(arg);
+        event.sender.send('spellcheck:ready', { ready: true});
     });
-    await loadBundledDictionaries();
+    ipcMain.on('spellcheck:test', (event, arg) => {
+        event.returnValue = checker(arg);
+    });
+    ipcMain.on('spellcheck:ismisspeled', (event, arg) => {
+        event.returnValue = isCorrect(arg);
+    });
+    ipcMain.on('spellcheck:corrections', (event, arg) => {
+        event.returnValue = getCorrections(arg);
+    });
+    ipcMain.on('spellchecker:add', (event, arg) => {
+        console.log('customizing spellchecker is not supported yet');
+    });
 };

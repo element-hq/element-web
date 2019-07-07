@@ -71,14 +71,26 @@ window.addEventListener('contextmenu', (event) => {
         ipcRenderer.send('spellcheck:getcontextmenu', window.getSelection().toString());
     }
 });
-//TODO: build context menu
 
-// ipcRenderer.on('spellcheck: getcontextmenu', (event, arg) => {
-//     console.log('IPC', 'getcontextmenu', arg);
 
-// });
 ipcRenderer.send('spellcheck:setlanguage', window.navigator.language);
 ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
     const menu = Menu.buildFromTemplate(standardMenus.concat(arg));
         menu.popup({ window: getCurrentWindow() });
-})
+});
+ipcRenderer.on('spellcheck:ready', () => {
+    webFrame.setSpellCheckProvider(window.navigator.language, true, {
+        spellCheck(words, callback) {
+            return ipcRenderer.sendSync('spellcheck:test', words);
+        },
+        isMisspeled(text) {
+            return ipcRenderer.sendSync('spellcheck:ismissspelled', text);
+        },
+        getSuggestions(text) {
+            return ipcRenderer.sendSync('spellcheck:corrections', text);
+        },
+        add(text) {
+            ipcRenderer.sendSync('spellchecker:add', text);
+        },
+    });
+});
