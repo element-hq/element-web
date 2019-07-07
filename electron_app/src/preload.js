@@ -84,7 +84,7 @@ ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
 });
 ipcRenderer.on('spellcheck:ready', () => {
 	webFrame.setSpellCheckProvider(window.navigator.language, true, {
-		spellCheck(words, callback) {
+		spellCheck(words) {
 			return ipcRenderer.sendSync('spellcheck:test', words);
 		},
 		isMisspeled(text) {
