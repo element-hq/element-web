@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { BrowserWindow, ipcMain, dialog } = require('electron');
-const { webContents, getCurrentWindow } = BrowserWindow;
+const { BrowserWindow, ipcMain } = require('electron');
+const { webContents } = BrowserWindow;
 const jetpack = require('fs-jetpack');
 const spellchecker = require('spellchecker');
 const path = require('path');
@@ -107,18 +107,17 @@ const getCorrections = (text) => {
 	);
 };
 
-const installDictionaries = async (filePaths) => {
-	for (const filePath of filePaths) {
-		const name = filePath.basename(filePath, filePath.extname(filePath));
-		const basename = filePath.basename(filePath);
-		const newPath = filePath.join(dictionariesPath, basename);
+const installDictionary = async (filePath) => {
+    console.log('filePath', filePath);
+    const name = path.basename(filePath, path.extname(filePath));
+    const basename = path.basename(filePath);
+    const newPath = path.join(dictionariesPath, basename);
 
-		await jetpack.copyAsync(filePath, newPath);
+    await jetpack.copyAsync(filePath, newPath);
 
-		if (!dictionaries.includes(name)) {
-			dictionaries.push(name);
-		}
-	}
+    if (!dictionaries.includes(name)) {
+        dictionaries.push(name);
+    }
 };
 
 const getDictionariesSelectSubmenu = () => {
@@ -130,13 +129,7 @@ const getDictionariesSelectSubmenu = () => {
 				checked: enabledDictionaries[0] === entry,
 			};
 		})
-		.concat([
-			{ type: 'separator' },
-			{
-				label: 'Browse for language',
-				click: showDictionaryFileSelector,
-			},
-		]);
+		;
 };
 
 const getCorrectionsSubmenu = (text) => {
@@ -190,29 +183,6 @@ const spellCheckMenu = (textForSpellcheck) => {
 	];
 };
 
-const showDictionaryFileSelector = () => {
-	dialog.showOpenDialog(
-		getCurrentWindow(),
-		{
-			title: 'Load custom dictionary',
-			defaultPath: dictionariesPath,
-			filters: [
-				{ name: 'Dictionaries', extensions: ['aff', 'dic'] },
-				{ name: 'All files', extensions: ['*'] },
-			],
-			properties: ['openFile', 'multiSelections'],
-		},
-		async (filePaths) => {
-			try {
-				await installDictionaries(filePaths);
-			} catch (error) {
-				console.error(error);
-				dialog.showErrorBox('Cannot load dictionary', 'Message', { message: error.message });
-			}
-		},
-	);
-};
-
 module.exports = async (context) => {
 	app = context;
 	await loadBundledDictionaries();
@@ -239,5 +209,9 @@ module.exports = async (context) => {
 	});
 	ipcMain.on('spellchecker:add', (event, arg) => {
 		console.log('customizing spellchecker is not supported yet');
-	});
+    });
+    ipcMain.on('spellchecker:install', (event, arg) => {
+        console.log('open selector');
+        installDictionary(arg);
+    });
 };

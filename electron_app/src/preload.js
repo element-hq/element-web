@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 const { ipcRenderer, webFrame, remote } = require('electron');
-const { Menu, getCurrentWindow } = remote;
+const { Menu, getCurrentWindow, dialog } = remote;
+console.log('preload dialog', dialog);
 window.ipcRenderer = ipcRenderer;
 
 const standardMenus = [
@@ -54,6 +55,28 @@ const standardMenus = [
 	},
 ];
 
+const openDictionariesDialog = () => {
+    dialog.showOpenDialog(
+		null,
+		{
+			title: 'Load custom dictionary',
+			filters: [
+				{ name: 'Dictionaries', extensions: ['aff', 'dic'] },
+				{ name: 'All files', extensions: ['*'] },
+			],
+			properties: ['openFile'],
+		},
+		async (filePath) => {
+			try {
+				ipcRenderer.send('spellchecker:install', filePath[0]);
+			} catch (error) {
+				console.error(error);
+				dialog.showErrorBox('Cannot load dictionary', 'Message', { message: error.message });
+			}
+		},
+	);
+}
+
 // Allow the fetch API to load resources from this
 // protocol: this is necessary to load olm.wasm.
 // (Also mark it a secure although we've already
@@ -70,7 +93,6 @@ window.addEventListener('contextmenu', (event) => {
 	}
 });
 
-ipcRenderer.send('spellcheck:setlanguage', window.navigator.language);
 ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
 	arg[0].submenu = arg[0].submenu.map((x) => {
 		x.click = ({ checked }) =>
@@ -78,23 +100,30 @@ ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
 				? ipcRenderer.send('spellcheck:setlanguage', x.label)
 				: ipcRenderer.send('spellcheck:disablelanguage', x.label);
 		return x;
-	});
+	}).concat([
+        { type: 'separator' },
+        {
+            label: 'Browse for language',
+            click: () => {
+                openDictionariesDialog();
+            },
+        },
+    ]);
 	const menu = Menu.buildFromTemplate(standardMenus.concat(arg));
 	menu.popup({ window: getCurrentWindow() });
 });
-ipcRenderer.on('spellcheck:ready', () => {
-	webFrame.setSpellCheckProvider(window.navigator.language, true, {
-		spellCheck(words) {
-			return ipcRenderer.sendSync('spellcheck:test', words);
-		},
-		isMisspeled(text) {
-			return ipcRenderer.sendSync('spellcheck:ismissspelled', text);
-		},
-		getSuggestions(text) {
-			return ipcRenderer.sendSync('spellcheck:corrections', text);
-		},
-		add(text) {
-			ipcRenderer.sendSync('spellchecker:add', text);
-		},
-	});
+webFrame.setSpellCheckProvider(window.navigator.language, true, {
+    spellCheck(words) {
+        return ipcRenderer.sendSync('spellcheck:test', words);
+    },
+    isMisspeled(text) {
+        return ipcRenderer.sendSync('spellcheck:ismissspelled', text);
+    },
+    getSuggestions(text) {
+        return ipcRenderer.sendSync('spellcheck:corrections', text);
+    },
+    add(text) {
+        ipcRenderer.sendSync('spellchecker:add', text);
+    },
 });
+ipcRenderer.send('spellcheck:setlanguage', window.navigator.language);
