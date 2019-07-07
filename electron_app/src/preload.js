@@ -19,39 +19,39 @@ const { Menu, getCurrentWindow } = remote;
 window.ipcRenderer = ipcRenderer;
 
 const standardMenus = [
-    {
-        label: 'Undo',
-        role: 'undo',
-        accelerator: 'CommandOrControl+Z',
-    },
-    {
-        label: 'Redo',
-        role: 'redo',
-        accelerator: process.platform === 'win32' ? 'Control+Y' : 'CommandOrControl+Shift+Z',
-    },
-    {
-        type: 'separator',
-    },
-    {
-        label: 'Cut',
-        role: 'cut',
-        accelerator: 'CommandOrControl+X',
-    },
-    {
-        label: 'Copy',
-        role: 'copy',
-        accelerator: 'CommandOrControl+C',
-    },
-    {
-        label: 'Paste',
-        role: 'paste',
-        accelerator: 'CommandOrControl+V',
-    },
-    {
-        label: 'Select All',
-        role: 'selectall',
-        accelerator: 'CommandOrControl+A',
-    },
+	{
+		label: 'Undo',
+		role: 'undo',
+		accelerator: 'CommandOrControl+Z',
+	},
+	{
+		label: 'Redo',
+		role: 'redo',
+		accelerator: process.platform === 'win32' ? 'Control+Y' : 'CommandOrControl+Shift+Z',
+	},
+	{
+		type: 'separator',
+	},
+	{
+		label: 'Cut',
+		role: 'cut',
+		accelerator: 'CommandOrControl+X',
+	},
+	{
+		label: 'Copy',
+		role: 'copy',
+		accelerator: 'CommandOrControl+C',
+	},
+	{
+		label: 'Paste',
+		role: 'paste',
+		accelerator: 'CommandOrControl+V',
+	},
+	{
+		label: 'Select All',
+		role: 'selectall',
+		accelerator: 'CommandOrControl+A',
+	},
 ];
 
 // Allow the fetch API to load resources from this
@@ -59,38 +59,42 @@ const standardMenus = [
 // (Also mark it a secure although we've already
 // done this in the main process).
 webFrame.registerURLSchemeAsPrivileged('vector', {
-    secure: true,
-    supportFetchAPI: true,
+	secure: true,
+	supportFetchAPI: true,
 });
 
 window.addEventListener('contextmenu', (event) => {
-    if (event.target.isContentEditable) {
-        event.preventDefault();
-        //TODO: send event 'spellchec' to host with text
-
-        ipcRenderer.send('spellcheck:getcontextmenu', window.getSelection().toString());
-    }
+	if (event.target.isContentEditable) {
+		event.preventDefault();
+		ipcRenderer.send('spellcheck:getcontextmenu', window.getSelection().toString());
+	}
 });
-
 
 ipcRenderer.send('spellcheck:setlanguage', window.navigator.language);
 ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
-    const menu = Menu.buildFromTemplate(standardMenus.concat(arg));
-        menu.popup({ window: getCurrentWindow() });
+	arg[0].submenu = arg[0].submenu.map((x) => {
+		x.click = ({ checked }) =>
+			checked
+				? ipcRenderer.send('spellcheck:setlanguage', x.label)
+				: ipcRenderer.send('spellcheck:disablelanguage', x.label);
+		return x;
+	});
+	const menu = Menu.buildFromTemplate(standardMenus.concat(arg));
+	menu.popup({ window: getCurrentWindow() });
 });
 ipcRenderer.on('spellcheck:ready', () => {
-    webFrame.setSpellCheckProvider(window.navigator.language, true, {
-        spellCheck(words, callback) {
-            return ipcRenderer.sendSync('spellcheck:test', words);
-        },
-        isMisspeled(text) {
-            return ipcRenderer.sendSync('spellcheck:ismissspelled', text);
-        },
-        getSuggestions(text) {
-            return ipcRenderer.sendSync('spellcheck:corrections', text);
-        },
-        add(text) {
-            ipcRenderer.sendSync('spellchecker:add', text);
-        },
-    });
+	webFrame.setSpellCheckProvider(window.navigator.language, true, {
+		spellCheck(words, callback) {
+			return ipcRenderer.sendSync('spellcheck:test', words);
+		},
+		isMisspeled(text) {
+			return ipcRenderer.sendSync('spellcheck:ismissspelled', text);
+		},
+		getSuggestions(text) {
+			return ipcRenderer.sendSync('spellcheck:corrections', text);
+		},
+		add(text) {
+			ipcRenderer.sendSync('spellchecker:add', text);
+		},
+	});
 });

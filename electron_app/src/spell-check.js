@@ -1,3 +1,19 @@
+/*
+Copyright 2018 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 const { BrowserWindow, ipcMain, dialog } = require('electron');
 const { webContents, getCurrentWindow } = BrowserWindow;
 const jetpack = require('fs-jetpack');
@@ -10,7 +26,6 @@ let enabledDictionaries = [];
 let checker = null;
 let dictionariesPath = null;
 let dictionaries = null;
-let isMultiLanguage = null;
 
 const loadBundledDictionaries = async () => {
 	const embeddedDictionaries = spellchecker.getAvailableDictionaries();
@@ -25,76 +40,50 @@ const loadBundledDictionaries = async () => {
 	dictionaries = Array.from(new Set([...embeddedDictionaries, ...installedDictionaries]))
 		.sort()
 		.map((x) => x.substring(0, 2));
-	isMultiLanguage = embeddedDictionaries.length > 0 && process.platform !== 'win32';
 };
 
 const updateChecker = () => {
-	try {
-		if (enabledDictionaries.length === 0) {
-			checker = () => true;
-			return;
-		}
-
-		if (enabledDictionaries.length === 1) {
-			let enabled = false;
-			checker = mem((text) => {
-				if (!enabled) {
-					spellchecker.setDictionary(enabledDictionaries[0], dictionariesPath);
-					enabled = true;
-				}
-				return !spellchecker.isMisspelled(text);
-			});
-			return;
-		}
-
-		const singleDictionaryChecker = mem(
-			((dictionariesPath, dictionary, text) => {
-				spellchecker.setDictionary(dictionary, dictionariesPath);
-				return !spellchecker.isMisspelled(text);
-			}).bind(null, dictionariesPath),
-		);
-
-		checker = mem(
-			((dictionaries, text) => dictionaries.some((dictionary) => singleDictionaryChecker(dictionary, text))).bind(
-				null,
-				enabledDictionaries,
-			),
-		);
-	} finally {
-        // TODO: can't use it here, use IPC
-		// webFrame.setSpellCheckProvider('', false, { spellCheck: checker });
+	if (enabledDictionaries.length === 0) {
+		checker = () => true;
+		return;
 	}
+
+	if (enabledDictionaries.length === 1) {
+		let enabled = false;
+		checker = mem((text) => {
+			if (!enabled) {
+				spellchecker.setDictionary(enabledDictionaries[0], dictionariesPath);
+				enabled = true;
+			}
+			return !spellchecker.isMisspelled(text);
+		});
+		return;
+	}
+
+	const singleDictionaryChecker = mem(
+		((dictionariesPath, dictionary, text) => {
+			spellchecker.setDictionary(dictionary, dictionariesPath);
+			return !spellchecker.isMisspelled(text);
+		}).bind(null, dictionariesPath),
+	);
+
+	checker = mem(
+		((dictionaries, text) => dictionaries.some((dictionary) => singleDictionaryChecker(dictionary, text))).bind(
+			null,
+			enabledDictionaries,
+		),
+	);
 };
 
 const enable = (...dictionaries) => {
-	dictionaries = filterDictionaries(dictionaries);
-	if (isMultiLanguage) {
-		enabledDictionaries = [...enabledDictionaries, ...dictionaries];
-	} else {
-		enabledDictionaries = [dictionaries[0]];
-	}
-
+	enabledDictionaries = dictionaries;
 	updateChecker();
 	return enabledDictionaries.length > 0;
 };
 
 const disable = (...dictionaries) => {
-	dictionaries = filterDictionaries(dictionaries);
-
-	enabledDictionaries = enabledDictionaries.filter((dictionary) => !dictionaries.includes(dictionary));
-
+	enabledDictionaries = [];
 	updateChecker();
-};
-
-const filterDictionaries = (dictionaries) => {
-	return dictionaries
-		.flatMap((dictionary) => {
-			const matches = /^(\w+?)[-_](\w+)$/.exec(dictionary);
-			return matches
-				? [`${matches[1]}_${matches[2]}`, `${matches[1]}-${matches[2]}`, matches[1]]
-				: [dictionary];
-		})
-		.filter((dictionary) => dictionaries.includes(dictionary));
 };
 
 const isCorrect = (text) => {
@@ -135,12 +124,10 @@ const installDictionaries = async (filePaths) => {
 const getDictionariesSelectSubmenu = () => {
 	return dictionaries
 		.map((entry) => {
-            console.log('enabledDicts', enabledDictionaries);
 			return {
 				label: entry,
 				type: 'checkbox',
-				checked: enabledDictionaries === entry,
-				click: ({ checked }) => (checked ? enable(entry) : disable(entry)),
+				checked: enabledDictionaries[0] === entry,
 			};
 		})
 		.concat([
@@ -227,26 +214,30 @@ const showDictionaryFileSelector = () => {
 };
 
 module.exports = async (context) => {
-    app = context;
-    await loadBundledDictionaries();
+	app = context;
+	await loadBundledDictionaries();
 	ipcMain.on('spellcheck:getcontextmenu', (event, arg) => {
-        event.sender.send('spellcheck:getcontextmenu:result', spellCheckMenu(arg));
-    });
-    ipcMain.on('spellcheck:setlanguage', (event, arg) => {
-        console.log('set language to', arg);
-        enable(arg);
-        event.sender.send('spellcheck:ready', { ready: true});
-    });
-    ipcMain.on('spellcheck:test', (event, arg) => {
-        event.returnValue = checker(arg);
-    });
-    ipcMain.on('spellcheck:ismisspeled', (event, arg) => {
-        event.returnValue = isCorrect(arg);
-    });
-    ipcMain.on('spellcheck:corrections', (event, arg) => {
-        event.returnValue = getCorrections(arg);
-    });
-    ipcMain.on('spellchecker:add', (event, arg) => {
-        console.log('customizing spellchecker is not supported yet');
-    });
+		event.sender.send('spellcheck:getcontextmenu:result', spellCheckMenu(arg));
+	});
+	ipcMain.on('spellcheck:setlanguage', (event, arg) => {
+		console.log('set language to', arg);
+		enable(arg);
+		event.sender.send('spellcheck:ready', { ready: true });
+	});
+	ipcMain.on('spellcheck:disablelanguage', (event, arg) => {
+		console.log('disable language', arg);
+		disable(arg);
+	});
+	ipcMain.on('spellcheck:test', (event, arg) => {
+		event.returnValue = checker(arg);
+	});
+	ipcMain.on('spellcheck:ismisspeled', (event, arg) => {
+		event.returnValue = isCorrect(arg);
+	});
+	ipcMain.on('spellcheck:corrections', (event, arg) => {
+		event.returnValue = getCorrections(arg);
+	});
+	ipcMain.on('spellchecker:add', (event, arg) => {
+		console.log('customizing spellchecker is not supported yet');
+	});
 };
