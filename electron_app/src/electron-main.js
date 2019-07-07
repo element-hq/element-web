@@ -24,10 +24,11 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol} = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol, webFrame} = require('electron');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
 
+const spellCheck = require('./spell-check');
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
@@ -326,9 +327,10 @@ app.on('ready', () => {
             // share a context with the main page so we can give select
             // objects to the main page. The sandbox option isolates the
             // main page from the background script.
+            sandbox: true,
             contextIsolation: false,
             webgl: false,
-            nativeWindowOpen: true
+            nativeWindowOpen: true,
         },
     });
     mainWindow.loadURL('vector://vector/webapp/');
@@ -381,6 +383,7 @@ app.on('ready', () => {
     }
 
     webContentsHandler(mainWindow.webContents);
+    spellCheck(app);
 });
 
 app.on('window-all-closed', () => {

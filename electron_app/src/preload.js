@@ -14,10 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { ipcRenderer, webFrame } = require('electron');
-const spellCheck = require("./spell-check");
-// expose ipcRenderer to the renderer process
+const { ipcRenderer, webFrame, remote } = require('electron');
+const { Menu, getCurrentWindow } = remote;
 window.ipcRenderer = ipcRenderer;
+
+const standardMenus = [
+    {
+        label: 'Undo',
+        role: 'undo',
+        accelerator: 'CommandOrControl+Z',
+    },
+    {
+        label: 'Redo',
+        role: 'redo',
+        accelerator: process.platform === 'win32' ? 'Control+Y' : 'CommandOrControl+Shift+Z',
+    },
+    {
+        type: 'separator',
+    },
+    {
+        label: 'Cut',
+        role: 'cut',
+        accelerator: 'CommandOrControl+X',
+    },
+    {
+        label: 'Copy',
+        role: 'copy',
+        accelerator: 'CommandOrControl+C',
+    },
+    {
+        label: 'Paste',
+        role: 'paste',
+        accelerator: 'CommandOrControl+V',
+    },
+    {
+        label: 'Select All',
+        role: 'selectall',
+        accelerator: 'CommandOrControl+A',
+    },
+];
 
 // Allow the fetch API to load resources from this
 // protocol: this is necessary to load olm.wasm.
@@ -27,4 +62,23 @@ webFrame.registerURLSchemeAsPrivileged('vector', {
     secure: true,
     supportFetchAPI: true,
 });
-spellCheck(window);
+
+window.addEventListener('contextmenu', (event) => {
+    if (event.target.isContentEditable) {
+        event.preventDefault();
+        //TODO: send event 'spellchec' to host with text
+
+        ipcRenderer.send('spellcheck:getcontextmenu', window.getSelection().toString());
+    }
+});
+//TODO: build context menu
+
+// ipcRenderer.on('spellcheck: getcontextmenu', (event, arg) => {
+//     console.log('IPC', 'getcontextmenu', arg);
+
+// });
+ipcRenderer.send('spellcheck:setlanguage', window.navigator.language);
+ipcRenderer.on('spellcheck:getcontextmenu:result', (event, arg) => {
+    const menu = Menu.buildFromTemplate(standardMenus.concat(arg));
+        menu.popup({ window: getCurrentWindow() });
+})
