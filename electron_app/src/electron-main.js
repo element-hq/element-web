@@ -322,12 +322,12 @@ app.on('ready', () => {
         height: mainWindowState.height,
         webPreferences: {
             preload: preloadScript,
+            sandbox: true,
             nodeIntegration: false,
             // We don't use this: it's useful for the preload script to
             // share a context with the main page so we can give select
             // objects to the main page. The sandbox option isolates the
             // main page from the background script.
-            sandbox: true,
             contextIsolation: false,
             webgl: false,
             nativeWindowOpen: true,
