@@ -74,9 +74,7 @@ export default class SoftLogout extends React.Component {
 
     componentDidMount(): void {
         this._initLogin();
-    }
 
-    componentWillMount(): void {
         MatrixClientPeg.get().flagAllGroupSessionsForBackup().then(remaining => {
             this.setState({keyBackupNeeded: remaining > 0});
         });
