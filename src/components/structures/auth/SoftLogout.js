@@ -69,7 +69,9 @@ export default class SoftLogout extends React.Component {
             password: "",
             errorText: "",
         };
+    }
 
+    componentDidMount(): void {
         this._initLogin();
     }
 
