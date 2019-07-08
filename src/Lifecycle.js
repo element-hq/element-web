@@ -357,14 +357,15 @@ export function setLoggedIn(credentials) {
  */
 export function hydrateSession(credentials) {
     const oldUserId = MatrixClientPeg.get().getUserId();
+    const oldDeviceId = MatrixClientPeg.get().getDeviceId();
 
     stopMatrixClient(); // unsets MatrixClientPeg.get()
     localStorage.removeItem("mx_soft_logout");
     _isLoggingOut = false;
 
-    const overwrite = credentials.userId !== oldUserId;
+    const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
-        console.warn("Rehydrating the user's session with a different user's - clearing all data");
+        console.warn("Clearing all data: Old session belongs to a different user/device");
     }
 
     return _doSetLoggedIn(credentials, overwrite);
