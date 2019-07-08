@@ -2040,5 +2040,6 @@
     "I don't want to sign in": "我不想要登入",
     "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "如果這是共享的裝置，或您不想再從它存取存取您的帳號，請將儲存在此裝置上的所有資料清除。",
     "Clear all data": "清除所有資料",
-    "Sign in again to regain access to your account, or a different one.": "再次登入以重新取得對您帳號或其他帳號的存取權。"
+    "Sign in again to regain access to your account, or a different one.": "再次登入以重新取得對您帳號或其他帳號的存取權。",
+    "Removing…": "正在移除……"
 }
