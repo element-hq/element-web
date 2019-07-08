@@ -30,9 +30,9 @@ limitations under the License.
     z-index: 1;
 
     > * {
+        white-space: nowrap;
         display: inline-block;
         position: relative;
-        width: 27px;
         border: 1px solid $message-action-bar-border-color;
         margin-left: -1px;
 
@@ -53,6 +53,11 @@ limitations under the License.
             border-radius: 3px;
         }
     }
+}
+
+
+.mx_MessageActionBar_maskButton {
+    width: 27px;
 }
 
 .mx_MessageActionBar_maskButton::after {
