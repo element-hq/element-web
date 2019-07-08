@@ -1,3 +1,10 @@
+Changes in [1.2.3](https://github.com/vector-im/riot-web/releases/tag/v1.2.3) (2019-07-08)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.3-rc.1...v1.2.3)
+
+ * Upgrade to React SDK 1.3.0 and JS SDK 2.1.0
+ * JS SDK 2.1.0 includes a fix for an exception whilst syncing
+
 Changes in [1.2.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.2.3-rc.1) (2019-07-03)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.2...v1.2.3-rc.1)
