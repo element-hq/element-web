@@ -119,7 +119,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         const {mxEvent} = this.props;
         const originalContent = mxEvent.getOriginalContent();
         const content = originalContent["m.new_content"] || originalContent;
-        const contentElements = HtmlUtils.bodyToHtml(content);
+        const contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
         let contentContainer;
         if (mxEvent.isRedacted()) {
             const UnknownBody = sdk.getComponent('messages.UnknownBody');

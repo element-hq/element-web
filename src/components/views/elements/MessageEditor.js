@@ -33,6 +33,80 @@ import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 
+function _isReply(mxEvent) {
+    const relatesTo = mxEvent.getContent()["m.relates_to"];
+    const isReply = !!(relatesTo && relatesTo["m.in_reply_to"]);
+    return isReply;
+}
+
+function getHtmlReplyFallback(mxEvent) {
+    const html = mxEvent.getContent().formatted_body;
+    if (!html) {
+        return "";
+    }
+    const rootNode = new DOMParser().parseFromString(html, "text/html").body;
+    const mxReply = rootNode.querySelector("mx-reply");
+    return (mxReply && mxReply.outerHTML) || "";
+}
+
+function getTextReplyFallback(mxEvent) {
+    const body = mxEvent.getContent().body;
+    const lines = body.split("\n").map(l => l.trim());
+    if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
+        return `${lines[0]}\n\n`;
+    }
+    return "";
+}
+
+function _isEmote(model) {
+    const firstPart = model.parts[0];
+    return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
+}
+
+function createEditContent(model, editedEvent) {
+    const isEmote = _isEmote(model);
+    if (isEmote) {
+        // trim "/me "
+        model = model.clone();
+        model.removeText({index: 0, offset: 0}, 4);
+    }
+    const isReply = _isReply(editedEvent);
+    let plainPrefix = "";
+    let htmlPrefix = "";
+
+    if (isReply) {
+        plainPrefix = getTextReplyFallback(editedEvent);
+        htmlPrefix = getHtmlReplyFallback(editedEvent);
+    }
+
+    const body = textSerialize(model);
+
+    const newContent = {
+        "msgtype": isEmote ? "m.emote" : "m.text",
+        "body": plainPrefix + body,
+    };
+    const contentBody = {
+        msgtype: newContent.msgtype,
+        body: `${plainPrefix} * ${body}`,
+    };
+
+    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: isReply});
+    if (formattedBody) {
+        newContent.format = "org.matrix.custom.html";
+        newContent.formatted_body = htmlPrefix + formattedBody;
+        contentBody.format = newContent.format;
+        contentBody.formatted_body = `${htmlPrefix} * ${formattedBody}`;
+    }
+
+    return Object.assign({
+        "m.new_content": newContent,
+        "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": editedEvent.getId(),
+        },
+    }, contentBody);
+}
+
 export default class MessageEditor extends React.Component {
     static propTypes = {
         // the message event being edited
@@ -53,7 +127,7 @@ export default class MessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
-        this._hasModifications = false;
+        this._modifiedFlag = false;
     }
 
     _getRoom() {
@@ -73,7 +147,7 @@ export default class MessageEditor extends React.Component {
     }
 
     _onInput = (event) => {
-        this._hasModifications = true;
+        this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.model.update(text, event.inputType, caret);
@@ -131,7 +205,7 @@ export default class MessageEditor extends React.Component {
         } else if (event.key === "Escape") {
             this._cancelEdit();
         } else if (event.key === "ArrowUp") {
-            if (this._hasModifications || !this._isCaretAtStart()) {
+            if (this._modifiedFlag || !this._isCaretAtStart()) {
                 return;
             }
             const previousEvent = findEditableEvent(this._getRoom(), false, this.props.editState.getEvent().getId());
@@ -140,7 +214,7 @@ export default class MessageEditor extends React.Component {
                 event.preventDefault();
             }
         } else if (event.key === "ArrowDown") {
-            if (this._hasModifications || !this._isCaretAtEnd()) {
+            if (this._modifiedFlag || !this._isCaretAtEnd()) {
                 return;
             }
             const nextEvent = findEditableEvent(this._getRoom(), true, this.props.editState.getEvent().getId());
@@ -159,56 +233,28 @@ export default class MessageEditor extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
-    _isEmote() {
-        const firstPart = this.model.parts[0];
-        return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
-    }
-
-    _sendEdit = () => {
-        const isEmote = this._isEmote();
-        let model = this.model;
-        if (isEmote) {
-            // trim "/me "
-            model = model.clone();
-            model.removeText({index: 0, offset: 0}, 4);
-        }
-        const newContent = {
-            "msgtype": isEmote ? "m.emote" : "m.text",
-            "body": textSerialize(model),
-        };
-        const contentBody = {
-            msgtype: newContent.msgtype,
-            body: ` * ${newContent.body}`,
-        };
-        const formattedBody = htmlSerializeIfNeeded(model);
-        if (formattedBody) {
-            newContent.format = "org.matrix.custom.html";
-            newContent.formatted_body = formattedBody;
-            contentBody.format = newContent.format;
-            contentBody.formatted_body = ` * ${newContent.formatted_body}`;
-        }
-
+    _hasModifications(newContent) {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
-        if (!this._hasModifications ||
+        if (!this._modifiedFlag ||
             (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
             oldContent["format"] === newContent["format"] &&
             oldContent["formatted_body"] === newContent["formatted_body"])) {
-            this._cancelEdit();
+            return false;
+        }
+        return true;
+    }
+
+    _sendEdit = () => {
+        const editedEvent = this.props.editState.getEvent();
+        const editContent = createEditContent(this.model, editedEvent);
+        const newContent = editContent["m.new_content"];
+        if (!this._hasModifications(newContent)) {
             return;
         }
-
-        const content = Object.assign({
-            "m.new_content": newContent,
-            "m.relates_to": {
-                "rel_type": "m.replace",
-                "event_id": this.props.editState.getEvent().getId(),
-            },
-        }, contentBody);
-
-        const roomId = this.props.editState.getEvent().getRoomId();
+        const roomId = editedEvent.getRoomId();
         this._cancelPreviousPendingEdit();
-        this.context.matrixClient.sendMessage(roomId, content);
+        this.context.matrixClient.sendMessage(roomId, editContent);
 
         dis.dispatch({action: "edit_event", event: null});
         dis.dispatch({action: 'focus_composer'});
