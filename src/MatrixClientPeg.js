@@ -201,13 +201,6 @@ class MatrixClientPeg {
         return matches[1];
     }
 
-    /**
-     * @deprecated Use getHomeserverName() instead (correct spelling)
-     */
-    getHomeServerName() {
-        return this.getHomeserverName();
-    }
-
     _createClient(creds: MatrixClientCreds) {
         const aggregateRelations = SettingsStore.isFeatureEnabled("feature_reactions");
         const enableEdits = SettingsStore.isFeatureEnabled("feature_message_editing");
