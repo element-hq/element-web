@@ -54,14 +54,14 @@ export default class EditHistoryMessage extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const ConfirmAndWaitRedactDialog = sdk.getComponent("dialogs.ConfirmAndWaitRedactDialog");
 
-        Modal.createTrackedDialog('Confirm Redact Dialog from edit history', '', ConfirmAndWaitRedactDialog, {
+        Modal.createTrackedDialog('Confirm Redact Dialog', 'Edit history', ConfirmAndWaitRedactDialog, {
             redact: () => cli.redactEvent(event.getRoomId(), event.getId()),
         }, 'mx_Dialog_confirmredact');
     };
 
     _onViewSourceClick = () => {
         const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createTrackedDialog('View Event Source', '', ViewSource, {
+        Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
             roomId: this.props.mxEvent.getRoomId(),
             eventId: this.props.mxEvent.getId(),
             content: this.props.mxEvent.event,
