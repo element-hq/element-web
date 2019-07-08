@@ -73,15 +73,18 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent {
             } else {
                 const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
                 const Spinner = sdk.getComponent('elements.Spinner');
-                return (<BaseDialog
-                    onFinished={this.props.onFinished}
-                    hasCancel={false}
-                    title={_t("Removing…")}><Spinner /></BaseDialog>
+                return (
+                    <BaseDialog
+                        onFinished={this.props.onFinished}
+                        hasCancel={false}
+                        title={_t("Removing…")}>
+                        <Spinner />
+                    </BaseDialog>
                 );
             }
         } else {
             const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-            return (<ConfirmRedactDialog onFinished={this.onParentFinished} />);
+            return <ConfirmRedactDialog onFinished={this.onParentFinished} />;
         }
     }
 }

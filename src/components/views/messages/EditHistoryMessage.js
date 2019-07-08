@@ -95,18 +95,24 @@ export default class EditHistoryMessage extends React.PureComponent {
         // hide the button when already redacted
         let redactButton;
         if (!this.props.mxEvent.isRedacted()) {
-            redactButton = (<AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
-                {_t("Remove")}
-            </AccessibleButton>);
+            redactButton = (
+                <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
+                    {_t("Remove")}
+                </AccessibleButton>
+            );
         }
-        const viewSourceButton = (<AccessibleButton onClick={this._onViewSourceClick}>
+        const viewSourceButton = (
+            <AccessibleButton onClick={this._onViewSourceClick}>
                 {_t("View Source")}
-            </AccessibleButton>);
+            </AccessibleButton>
+        );
         // disabled remove button when not allowed
-        return (<div className="mx_MessageActionBar">
-            {redactButton}
-            {viewSourceButton}
-        </div>);
+        return (
+            <div className="mx_MessageActionBar">
+                {redactButton}
+                {viewSourceButton}
+            </div>
+        );
     }
 
     render() {
@@ -117,15 +123,17 @@ export default class EditHistoryMessage extends React.PureComponent {
         let contentContainer;
         if (mxEvent.isRedacted()) {
             const UnknownBody = sdk.getComponent('messages.UnknownBody');
-            contentContainer = (<UnknownBody mxEvent={this.props.mxEvent} />);
+            contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
         } else if (mxEvent.getContent().msgtype === "m.emote") {
             const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
-            contentContainer = (<div className="mx_EventTile_content" ref="content">*&nbsp;
-                <span className="mx_MEmoteBody_sender">{ name }</span>
-                &nbsp;{contentElements}
-            </div>);
+            contentContainer = (
+                <div className="mx_EventTile_content" ref="content">*&nbsp;
+                    <span className="mx_MEmoteBody_sender">{ name }</span>
+                    &nbsp;{contentElements}
+                </div>
+            );
         } else {
-            contentContainer = (<div className="mx_EventTile_content" ref="content">{contentElements}</div>);
+            contentContainer = <div className="mx_EventTile_content" ref="content">{contentElements}</div>;
         }
         const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
@@ -135,14 +143,16 @@ export default class EditHistoryMessage extends React.PureComponent {
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
-        return <li>
-            <div className={classes}>
-                <div className="mx_EventTile_line">
-                    <span className="mx_MessageTimestamp">{timestamp}</span>
-                    { contentContainer }
-                    { this._renderActionBar() }
+        return (
+            <li>
+                <div className={classes}>
+                    <div className="mx_EventTile_line">
+                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        { contentContainer }
+                        { this._renderActionBar() }
+                    </div>
                 </div>
-            </div>
-        </li>;
+            </li>
+        );
     }
 }
