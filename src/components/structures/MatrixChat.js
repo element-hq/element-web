@@ -283,29 +283,32 @@ export default React.createClass({
         }
 
         // the first thing to do is to try the token params in the query-string
-        Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
-            if (loggedIn) {
-                this.props.onTokenLoginCompleted();
+        // if the session isn't soft logged out (ie: is a clean session being logged in)
+        if (!Lifecycle.isSoftLogout()) {
+            Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
+                if (loggedIn) {
+                    this.props.onTokenLoginCompleted();
 
-                // don't do anything else until the page reloads - just stay in
-                // the 'loading' state.
-                return;
-            }
+                    // don't do anything else until the page reloads - just stay in
+                    // the 'loading' state.
+                    return;
+                }
 
-            // if the user has followed a login or register link, don't reanimate
-            // the old creds, but rather go straight to the relevant page
-            const firstScreen = this._screenAfterLogin ?
-                this._screenAfterLogin.screen : null;
+                // if the user has followed a login or register link, don't reanimate
+                // the old creds, but rather go straight to the relevant page
+                const firstScreen = this._screenAfterLogin ?
+                    this._screenAfterLogin.screen : null;
 
-            if (firstScreen === 'login' ||
+                if (firstScreen === 'login' ||
                     firstScreen === 'register' ||
                     firstScreen === 'forgot_password') {
-                this._showScreenAfterLogin();
-                return;
-            }
+                    this._showScreenAfterLogin();
+                    return;
+                }
 
-            return this._loadSession();
-        });
+                return this._loadSession();
+            });
+        }
 
         if (SettingsStore.getValue("showCookieBar")) {
             this.setState({
@@ -1250,10 +1253,7 @@ export default React.createClass({
             this._screenAfterLogin = null;
         } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
             // Before defaulting to directory, show the last viewed room
-            dis.dispatch({
-                action: 'view_room',
-                room_id: localStorage.getItem('mx_last_room_id'),
-            });
+            this._viewLastRoom();
         } else {
             if (MatrixClientPeg.get().isGuest()) {
                 dis.dispatch({action: 'view_welcome_page'});
@@ -1265,6 +1265,13 @@ export default React.createClass({
                 });
             }
         }
+    },
+
+    _viewLastRoom: function() {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: localStorage.getItem('mx_last_room_id'),
+        });
     },
 
     /**
@@ -1565,6 +1572,17 @@ export default React.createClass({
                 action: 'start_password_recovery',
                 params: params,
             });
+        } else if (screen === 'soft_logout') {
+            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId()) {
+                // Logged in - visit a room
+                this._viewLastRoom();
+            } else {
+                // Ultimately triggers soft_logout if needed
+                dis.dispatch({
+                    action: 'start_login',
+                    params: params,
+                });
+            }
         } else if (screen == 'new') {
             dis.dispatch({
                 action: 'view_create_room',
@@ -1957,7 +1975,10 @@ export default React.createClass({
         if (this.state.view === VIEWS.SOFT_LOGOUT) {
             const SoftLogout = sdk.getComponent('structures.auth.SoftLogout');
             return (
-                <SoftLogout />
+                <SoftLogout
+                    realQueryParams={this.props.realQueryParams}
+                    onTokenLoginCompleted={this.props.onTokenLoginCompleted}
+                />
             );
         }
 
