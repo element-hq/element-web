@@ -90,7 +90,7 @@ function createEditContent(model, editedEvent) {
         body: `${plainPrefix} * ${body}`,
     };
 
-    const formattedBody = htmlSerializeIfNeeded(model, /*forceHtml=*/ isReply);
+    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: isReply});
     if (formattedBody) {
         newContent.format = "org.matrix.custom.html";
         newContent.formatted_body = htmlPrefix + formattedBody;
