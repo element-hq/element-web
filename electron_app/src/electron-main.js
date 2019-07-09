@@ -322,8 +322,9 @@ app.on('ready', () => {
         height: mainWindowState.height,
         webPreferences: {
             preload: preloadScript,
-            sandbox: true,
             nodeIntegration: false,
+            sandbox: true,
+            enableRemoteModule: true,
             // We don't use this: it's useful for the preload script to
             // share a context with the main page so we can give select
             // objects to the main page. The sandbox option isolates the
