@@ -30,6 +30,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            originalEvent: null,
             error: null,
             events: [],
             nextBatch: null,
@@ -66,6 +67,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         const newEvents = result.events;
         this._locallyRedactEventsIfNeeded(newEvents);
         this.setState({
+            originalEvent: this.state.originalEvent || result.originalEvent,
             events: this.state.events.concat(newEvents),
             nextBatch: result.nextBatch,
             isLoading: false,
@@ -100,7 +102,12 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const nodes = [];
         let lastEvent;
-        this.state.events.forEach(e => {
+        let allEvents = this.state.events;
+        // append original event when we've done last pagination
+        if (this.state.originalEvent && !this.state.nextBatch) {
+            allEvents = allEvents.concat(this.state.originalEvent);
+        }
+        allEvents.forEach(e => {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate(), e.getDate())) {
                 nodes.push(<li key={e.getTs() + "~"}><DateSeparator ts={e.getTs()} /></li>);
             }
