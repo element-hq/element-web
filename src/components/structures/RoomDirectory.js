@@ -145,7 +145,7 @@ module.exports = React.createClass({
         // too. If it's changed, appending to the list will corrupt it.
         const my_next_batch = this.nextBatch;
         const opts = {limit: 20};
-        if (my_server != MatrixClientPeg.getHomeServerName()) {
+        if (my_server != MatrixClientPeg.getHomeserverName()) {
             opts.server = my_server;
         }
         if (this.state.instanceId) {
