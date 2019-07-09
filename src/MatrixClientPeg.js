@@ -199,7 +199,7 @@ class MatrixClientPeg {
      * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
      */
-    getHomeServerName() {
+    getHomeserverName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");

@@ -88,6 +88,7 @@ export class EditableItem extends React.Component {
 
 export default class EditableItemList extends React.Component {
     static propTypes = {
+        id: PropTypes.string.isRequired,
         items: PropTypes.arrayOf(PropTypes.string).isRequired,
         itemsLabel: PropTypes.string,
         noItemsLabel: PropTypes.string,
@@ -121,10 +122,8 @@ export default class EditableItemList extends React.Component {
         return (
             <form onSubmit={this._onItemAdded} autoComplete={false}
                   noValidate={true} className="mx_EditableItemList_newItem">
-                <Field id="newEmailAddress" label={this.props.placeholder}
-                       type="text" autoComplete="off" value={this.props.newItem}
-                       onChange={this._onNewItemChanged}
-                />
+                <Field id={`mx_EditableItemList_new_${this.props.id}`} label={this.props.placeholder} type="text"
+                       autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged} />
                 <AccessibleButton onClick={this._onItemAdded} kind="primary">
                     {_t("Add")}
                 </AccessibleButton>
@@ -135,11 +134,11 @@ export default class EditableItemList extends React.Component {
     render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
-                return <li>{item}</li>;
+                return <li key={item}>{item}</li>;
             }
 
             return <EditableItem
-                key={index}
+                key={item}
                 index={index}
                 value={item}
                 onRemove={this._onItemRemoved}

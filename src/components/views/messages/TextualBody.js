@@ -364,11 +364,11 @@ module.exports = React.createClass({
         let editedTooltip;
         if (this.state.editedMarkerHovered) {
             const Tooltip = sdk.getComponent('elements.Tooltip');
-            const editEvent = this.props.mxEvent.replacingEvent();
-            const date = editEvent && formatDate(editEvent.getDate());
+            const date = this.props.mxEvent.replacingEventDate();
+            const dateString = date && formatDate(date);
             editedTooltip = <Tooltip
                 tooltipClassName="mx_Tooltip_timeline"
-                label={_t("Edited at %(date)s. Click to view edits.", {date})}
+                label={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
             />;
         }
         return (

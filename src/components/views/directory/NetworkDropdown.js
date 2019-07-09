@@ -37,7 +37,7 @@ export default class NetworkDropdown extends React.Component {
 
         this.inputTextBox = null;
 
-        const server = MatrixClientPeg.getHomeServerName();
+        const server = MatrixClientPeg.getHomeserverName();
         this.state = {
             expanded: false,
             selectedServer: server,
@@ -138,8 +138,8 @@ export default class NetworkDropdown extends React.Component {
             servers = servers.concat(roomDirectory.servers);
         }
 
-        if (!servers.includes(MatrixClientPeg.getHomeServerName())) {
-            servers.unshift(MatrixClientPeg.getHomeServerName());
+        if (!servers.includes(MatrixClientPeg.getHomeserverName())) {
+            servers.unshift(MatrixClientPeg.getHomeserverName());
         }
 
         // For our own HS, we can use the instance_ids given in the third party protocols
@@ -148,7 +148,7 @@ export default class NetworkDropdown extends React.Component {
         // we can only show the default room list.
         for (const server of servers) {
             options.push(this._makeMenuOption(server, null, true));
-            if (server === MatrixClientPeg.getHomeServerName()) {
+            if (server === MatrixClientPeg.getHomeserverName()) {
                 options.push(this._makeMenuOption(server, null, false));
                 if (this.props.protocols) {
                     for (const proto of Object.keys(this.props.protocols)) {
