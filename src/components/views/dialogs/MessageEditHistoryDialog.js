@@ -46,12 +46,13 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         const opts = {from: this.state.nextBatch};
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
+        const client = MatrixClientPeg.get();
         let result;
         let resolve;
         let reject;
         const promise = new Promise((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
         try {
-            result = await MatrixClientPeg.get().relations(
+            result = await client.relations(
                 roomId, eventId, "m.replace", "m.room.message", opts);
         } catch (error) {
             // log if the server returned an error
@@ -61,8 +62,11 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             this.setState({error}, () => reject(error));
             return promise;
         }
+
+        const newEvents = result.events;
+        this._locallyRedactEventsIfNeeded(newEvents);
         this.setState({
-            events: this.state.events.concat(result.events),
+            events: this.state.events.concat(newEvents),
             nextBatch: result.nextBatch,
             isLoading: false,
         }, () => {
@@ -70,6 +74,21 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             resolve(hasMoreResults);
         });
         return promise;
+    }
+
+    _locallyRedactEventsIfNeeded(newEvents) {
+        const roomId = this.props.mxEvent.getRoomId();
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(roomId);
+        const pendingEvents = room.getPendingEvents();
+        for (const e of newEvents) {
+            const pendingRedaction = pendingEvents.find(pe => {
+                return pe.getType() === "m.room.redaction" && pe.getAssociatedId() === e.getId();
+            });
+            if (pendingRedaction) {
+                e.markLocallyRedacted(pendingRedaction);
+            }
+        }
     }
 
     componentDidMount() {

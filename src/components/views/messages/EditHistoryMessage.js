@@ -20,6 +20,11 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {pillifyLinks} from '../../../utils/pillify';
+import { _t } from '../../../languageHandler';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
+import classNames from 'classnames';
 
 export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
@@ -27,35 +32,130 @@ export default class EditHistoryMessage extends React.PureComponent {
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,
     };
 
+    constructor(props) {
+        super(props);
+        const cli = MatrixClientPeg.get();
+        const {userId} = cli.credentials;
+        const event = this.props.mxEvent;
+        const room = cli.getRoom(event.getRoomId());
+        if (event.localRedactionEvent()) {
+            event.localRedactionEvent().on("status", this._onAssociatedStatusChanged);
+        }
+        const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
+        this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
+    }
+
+    _onAssociatedStatusChanged = () => {
+        this.setState({sendStatus: this.props.mxEvent.getAssociatedStatus()});
+    };
+
+    _onRedactClick = async () => {
+        const event = this.props.mxEvent;
+        const cli = MatrixClientPeg.get();
+        const ConfirmAndWaitRedactDialog = sdk.getComponent("dialogs.ConfirmAndWaitRedactDialog");
+
+        Modal.createTrackedDialog('Confirm Redact Dialog', 'Edit history', ConfirmAndWaitRedactDialog, {
+            redact: () => cli.redactEvent(event.getRoomId(), event.getId()),
+        }, 'mx_Dialog_confirmredact');
+    };
+
+    _onViewSourceClick = () => {
+        const ViewSource = sdk.getComponent('structures.ViewSource');
+        Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
+            content: this.props.mxEvent.event,
+        }, 'mx_Dialog_viewsource');
+    };
+
+    pillifyLinks() {
+        // not present for redacted events
+        if (this.refs.content) {
+            pillifyLinks(this.refs.content.children, this.props.mxEvent);
+        }
+    }
+
     componentDidMount() {
-        pillifyLinks(this.refs.content.children, this.props.mxEvent);
+        this.pillifyLinks();
+    }
+
+    componentWillUnmount() {
+        const event = this.props.mxEvent;
+        if (event.localRedactionEvent()) {
+            event.localRedactionEvent().off("status", this._onAssociatedStatusChanged);
+        }
     }
 
     componentDidUpdate() {
-        pillifyLinks(this.refs.content.children, this.props.mxEvent);
+        this.pillifyLinks();
+    }
+
+    _renderActionBar() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        // hide the button when already redacted
+        let redactButton;
+        if (!this.props.mxEvent.isRedacted()) {
+            redactButton = (
+                <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
+                    {_t("Remove")}
+                </AccessibleButton>
+            );
+        }
+        const viewSourceButton = (
+            <AccessibleButton onClick={this._onViewSourceClick}>
+                {_t("View Source")}
+            </AccessibleButton>
+        );
+        // disabled remove button when not allowed
+        return (
+            <div className="mx_MessageActionBar">
+                {redactButton}
+                {viewSourceButton}
+            </div>
+        );
     }
 
     render() {
         const {mxEvent} = this.props;
         const originalContent = mxEvent.getOriginalContent();
         const content = originalContent["m.new_content"] || originalContent;
-        const contentElements = HtmlUtils.bodyToHtml(content);
         let contentContainer;
-        if (mxEvent.getContent().msgtype === "m.emote") {
-            const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
-            contentContainer = (<div className="mx_EventTile_content" ref="content">*&nbsp;
-                <span className="mx_MEmoteBody_sender">{ name }</span>
-                &nbsp;{contentElements}
-            </div>);
+        if (mxEvent.isRedacted()) {
+            const UnknownBody = sdk.getComponent('messages.UnknownBody');
+            contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
         } else {
-            contentContainer = (<div className="mx_EventTile_content" ref="content">{contentElements}</div>);
+            const contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+            if (mxEvent.getContent().msgtype === "m.emote") {
+                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+                contentContainer = (
+                    <div className="mx_EventTile_content" ref="content">*&nbsp;
+                        <span className="mx_MEmoteBody_sender">{ name }</span>
+                        &nbsp;{contentElements}
+                    </div>
+                );
+            } else {
+                contentContainer = <div className="mx_EventTile_content" ref="content">{contentElements}</div>;
+            }
         }
+
         const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
-        return <li className="mx_EventTile">
-            <div className="mx_EventTile_line">
-                <span className="mx_MessageTimestamp">{timestamp}</span>
-                { contentContainer }
-            </div>
-        </li>;
+        const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
+        const classes = classNames({
+            "mx_EventTile": true,
+            "mx_EventTile_redacted": mxEvent.isRedacted(),
+            "mx_EventTile_sending": isSending,
+            "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
+        });
+        return (
+            <li>
+                <div className={classes}>
+                    <div className="mx_EventTile_line">
+                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        { contentContainer }
+                        { this._renderActionBar() }
+                    </div>
+                </div>
+            </li>
+        );
     }
 }

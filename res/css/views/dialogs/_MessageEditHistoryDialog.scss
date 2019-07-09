@@ -42,5 +42,10 @@ limitations under the License.
     .mx_EventTile_line, .mx_EventTile_content {
         margin-right: 0px;
     }
+
+    .mx_MessageActionBar .mx_AccessibleButton {
+        font-size: 10px;
+        padding: 0 8px;
+    }
 }
 
