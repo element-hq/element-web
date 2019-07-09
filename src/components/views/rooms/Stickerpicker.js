@@ -25,6 +25,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import PersistedElement from "../elements/PersistedElement";
+import { showIntegrationsManager } from '../../../integrations/integrations';
 
 const widgetType = 'm.stickerpicker';
 
@@ -348,14 +349,11 @@ export default class Stickerpicker extends React.Component {
      * Launch the integrations manager on the stickers integration page
      */
     _launchManageIntegrations() {
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-
-        // The integrations manager will handle scalar auth for us.
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+        showIntegrationsManager({
             room: this.props.room,
             screen: `type_${widgetType}`,
             integrationId: this.state.widgetId,
-        }, "mx_IntegrationsManager");
+        });
     }
 
     render() {
