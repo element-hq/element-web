@@ -153,6 +153,7 @@
     "source-map-loader": "^0.2.3",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.9.0",
     "walk": "^2.3.9",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1"
