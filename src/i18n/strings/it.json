@@ -1989,5 +1989,16 @@
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)snon ha fatto modifiche",
     "Resend edit": "Reinvia la modifica",
     "Resend %(unsentCount)s reaction(s)": "Reinvia %(unsentCount)s reazione/i",
-    "Resend removal": "Reinvia la rimozione"
+    "Resend removal": "Reinvia la rimozione",
+    "Changes your avatar in all rooms": "Cambia il tuo avatar in tutte le stanze",
+    "Clear all data on this device?": "Eliminare tutti i dati in questo dispositivo?",
+    "Deleting all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "L'eliminazione dei dati dal dispositivo è permanente. I messaggi cifrati verranno persi a meno che non si sia fatto un backup delle loro chiavi.",
+    "Delete everything": "Elimina tutto",
+    "Your homeserver doesn't seem to support this feature.": "Il tuo homeserver non sembra supportare questa funzione.",
+    "You're signed out": "Sei disconnesso",
+    "Your homeserver (%(domainName)s) admin has signed you out of your account %(displayName)s (%(userId)s).": "L'admin del tuo homeserver (%(domainName)s) ti ha disconnesso dal tuo account %(displayName)s (%(userId)s).",
+    "I don't want to sign in": "Non voglio accedere",
+    "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "Se questo è un dispositivo condiviso, o non vuoi più accedere al tuo account da questo, elimina tutti i dati memorizzati localmente in esso.",
+    "Clear all data": "Elimina tutti i dati",
+    "Sign in again to regain access to your account, or a different one.": "Accedi di nuovo per riavere accesso al tuo account, o ad uno diverso."
 }
