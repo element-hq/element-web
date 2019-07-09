@@ -1,6 +1,7 @@
 /*
 Copyright 2017 MTRNord and Cooperative EITA
 Copyright 2017 Vector Creations Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -351,6 +352,40 @@ export function normalizeLanguageKey(language) {
 
 export function getCurrentLanguage() {
     return counterpart.getLocale();
+}
+
+/**
+ * Given a list of language codes, pick the most appropriate one
+ * given the current language (ie. getCurrentLanguage())
+ * English is assumed to be a reasonable default.
+ *
+ * @param {string[]} langs List of language codes to pick from
+ * @returns {string} The most appropriate language code from langs
+ */
+export function pickBestLanguage(langs) {
+    const currentLang = getCurrentLanguage();
+    const normalisedLangs = langs.map(normalizeLanguageKey);
+
+    {
+        // Best is an exact match
+        const currentLangIndex = normalisedLangs.indexOf(currentLang);
+        if (currentLangIndex > -1) return langs[currentLangIndex];
+    }
+
+    {
+        // Failing that, a different dialect of the same lnguage
+        const closeLangIndex = normalisedLangs.find((l) => l.substr(0,2) === currentLang.substr(0,2));
+        if (closeLangIndex > -1) return langs[closeLangIndex];
+    }
+
+    {
+        // Neither of those? Try an english variant.
+        const enIndex = normalisedLangs.find((l) => l.startsWith('en'));
+        if (enIndex > -1) return langs[enIndex];
+    }
+
+    // if nothing else, use the first
+    return langs[0];
 }
 
 function getLangsJson() {

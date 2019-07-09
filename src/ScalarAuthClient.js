@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,13 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import SettingsStore from "./settings/SettingsStore";
+import { Service, presentTermsForServices, TermsNotSignedError } from './Terms';
 const request = require('browser-request');
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require('./MatrixClientPeg');
+
+import * as Matrix from 'matrix-js-sdk';
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -55,23 +59,11 @@ class ScalarAuthClient {
         if (!token) {
             return this.registerForToken();
         } else {
-            return this.validateToken(token).then(userId => {
-                const me = MatrixClientPeg.get().getUserId();
-                if (userId !== me) {
-                    throw new Error("Scalar token is owned by someone else: " + me);
-                }
-                return token;
-            }).catch(err => {
-                console.error(err);
-
-                // Something went wrong - try to get a new token.
-                console.warn("Registering for new scalar token");
-                return this.registerForToken();
-            });
+            return this._checkToken(token);
         }
     }
 
-    validateToken(token) {
+    _getAccountName(token) {
         const url = SdkConfig.get().integrations_rest_url + "/account";
 
         return new Promise(function(resolve, reject) {
@@ -83,8 +75,10 @@ class ScalarAuthClient {
             }, (err, response, body) => {
                 if (err) {
                     reject(err);
+                } else if (body && body.errcode === 'M_TERMS_NOT_SIGNED') {
+                    reject(new TermsNotSignedError());
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(body);
                 } else if (!body || !body.user_id) {
                     reject(new Error("Missing user_id in response"));
                 } else {
@@ -94,11 +88,35 @@ class ScalarAuthClient {
         });
     }
 
+    _checkToken(token) {
+        return this._getAccountName(token).then(userId => {
+            const me = MatrixClientPeg.get().getUserId();
+            if (userId !== me) {
+                throw new Error("Scalar token is owned by someone else: " + me);
+            }
+            return token;
+        }).catch((e) => {
+            if (e instanceof TermsNotSignedError) {
+                console.log("Integrations manager requires new terms to be agreed to");
+                return presentTermsForServices([new Service(
+                    Matrix.SERVICETYPES.IM,
+                    SdkConfig.get().integrations_rest_url,
+                    token,
+                )]).then(() => {
+                    return token;
+                });
+            }
+        });
+    }
+
     registerForToken() {
         // Get openid bearer token from the HS as the first part of our dance
         return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
             return this.exchangeForScalarToken(tokenObject);
+        }).then((tokenObject) => {
+            // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
+            return this._checkToken(tokenObject);
         }).then((tokenObject) => {
             window.localStorage.setItem("mx_scalar_token", tokenObject);
             return tokenObject;

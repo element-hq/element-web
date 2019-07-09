@@ -29,6 +29,7 @@ import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import { showIntegrationsManager } from '../../../integrations/integrations';
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -127,11 +128,10 @@ module.exports = React.createClass({
     },
 
     _launchManageIntegrations: function() {
-        const IntegrationsManager = sdk.getComponent('views.settings.IntegrationsManager');
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+        showIntegrationsManager({
             room: this.props.room,
             screen: 'add_integ',
-        }, 'mx_IntegrationsManager');
+        });
     },
 
     onClickAddWidget: function(e) {
