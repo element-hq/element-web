@@ -119,22 +119,25 @@ export default class EditHistoryMessage extends React.PureComponent {
         const {mxEvent} = this.props;
         const originalContent = mxEvent.getOriginalContent();
         const content = originalContent["m.new_content"] || originalContent;
-        const contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
         let contentContainer;
         if (mxEvent.isRedacted()) {
             const UnknownBody = sdk.getComponent('messages.UnknownBody');
             contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
-        } else if (mxEvent.getContent().msgtype === "m.emote") {
-            const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
-            contentContainer = (
-                <div className="mx_EventTile_content" ref="content">*&nbsp;
-                    <span className="mx_MEmoteBody_sender">{ name }</span>
-                    &nbsp;{contentElements}
-                </div>
-            );
         } else {
-            contentContainer = <div className="mx_EventTile_content" ref="content">{contentElements}</div>;
+            const contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+            if (mxEvent.getContent().msgtype === "m.emote") {
+                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+                contentContainer = (
+                    <div className="mx_EventTile_content" ref="content">*&nbsp;
+                        <span className="mx_MEmoteBody_sender">{ name }</span>
+                        &nbsp;{contentElements}
+                    </div>
+                );
+            } else {
+                contentContainer = <div className="mx_EventTile_content" ref="content">{contentElements}</div>;
+            }
         }
+
         const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
