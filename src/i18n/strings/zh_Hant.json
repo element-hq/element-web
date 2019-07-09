@@ -2029,5 +2029,17 @@
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s 未做出變更",
     "Resend edit": "重新傳送編輯",
     "Resend %(unsentCount)s reaction(s)": "重新傳送 %(unsentCount)s 反應",
-    "Resend removal": "重新傳送移除"
+    "Resend removal": "重新傳送移除",
+    "Your homeserver doesn't seem to support this feature.": "您的家伺服器似乎並不支援此功能。",
+    "Changes your avatar in all rooms": "在所有聊天室變更您的大頭貼",
+    "Clear all data on this device?": "清除此裝置上所有的資料？",
+    "Deleting all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "正在永久刪除此裝置上的所有資料。已加密的訊息將會遺失，除非它們的金鑰已被備份。",
+    "Delete everything": "刪除所有東西",
+    "You're signed out": "您已登出",
+    "Your homeserver (%(domainName)s) admin has signed you out of your account %(displayName)s (%(userId)s).": "您的家伺服器 (%(domainName)s) 管理員已將您登出您的帳號 %(displayName)s (%(userId)s)。",
+    "I don't want to sign in": "我不想要登入",
+    "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "如果這是共享的裝置，或您不想再從它存取存取您的帳號，請將儲存在此裝置上的所有資料清除。",
+    "Clear all data": "清除所有資料",
+    "Sign in again to regain access to your account, or a different one.": "再次登入以重新取得對您帳號或其他帳號的存取權。",
+    "Removing…": "正在移除……"
 }
