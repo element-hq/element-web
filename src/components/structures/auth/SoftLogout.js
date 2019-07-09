@@ -64,6 +64,7 @@ export default class SoftLogout extends React.Component {
             userId,
             displayName,
             loginView: LOGIN_VIEW.LOADING,
+            keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
 
             busy: false,
             password: "",
@@ -73,6 +74,10 @@ export default class SoftLogout extends React.Component {
 
     componentDidMount(): void {
         this._initLogin();
+
+        MatrixClientPeg.get().flagAllGroupSessionsForBackup().then(remaining => {
+            this.setState({keyBackupNeeded: remaining > 0});
+        });
     }
 
     onClearAll = () => {
@@ -160,9 +165,16 @@ export default class SoftLogout extends React.Component {
                 error = <span className='mx_Login_error'>{this.state.errorText}</span>;
             }
 
+            let introText = _t("Enter your password to sign in and regain access to your account.");
+            if (this.state.keyBackupNeeded) {
+                introText = _t(
+                    "Regain access your account and recover encryption keys stored on this device. " +
+                    "Without them, you won’t be able to read all of your secure messages on any device.");
+            }
+
             return (
                 <form onSubmit={this.onPasswordLogin}>
-                    <p>{_t("Enter your password to sign in and regain access to your account.")}</p>
+                    <p>{introText}</p>
                     {error}
                     <Field
                         id="softlogout_password"
