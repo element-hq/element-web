@@ -348,15 +348,27 @@ export function setLoggedIn(credentials) {
  * new one in its place. This additionally starts all other react-sdk services
  * which use the new Matrix client.
  *
+ * If the credentials belong to a different user from the session already stored,
+ * the old session will be cleared automatically.
+ *
  * @param {MatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 export function hydrateSession(credentials) {
-    stopMatrixClient();
+    const oldUserId = MatrixClientPeg.get().getUserId();
+    const oldDeviceId = MatrixClientPeg.get().getDeviceId();
+
+    stopMatrixClient(); // unsets MatrixClientPeg.get()
     localStorage.removeItem("mx_soft_logout");
     _isLoggingOut = false;
-    return _doSetLoggedIn(credentials, false);
+
+    const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
+    if (overwrite) {
+        console.warn("Clearing all data: Old session belongs to a different user/device");
+    }
+
+    return _doSetLoggedIn(credentials, overwrite);
 }
 
 /**
