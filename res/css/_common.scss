@@ -209,25 +209,25 @@ textarea {
 
 /* Expand thumbs on hoverover */
 .gm-scrollbar {
-    border-radius: 5px ! important;
+    border-radius: 5px !important;
 }
 .gm-scrollbar.-vertical {
     width: 6px;
-    transition: width 120ms ease-out ! important;
+    transition: width 120ms ease-out !important;
 }
 .gm-scrollbar.-vertical:hover,
 .gm-scrollbar.-vertical:active {
     width: 8px;
-    transition: width 120ms ease-out ! important;
+    transition: width 120ms ease-out !important;
 }
 .gm-scrollbar.-horizontal {
     height: 6px;
-    transition: height 120ms ease-out ! important;
+    transition: height 120ms ease-out !important;
 }
 .gm-scrollbar.-horizontal:hover,
 .gm-scrollbar.-horizontal:active {
     height: 8px;
-    transition: height 120ms ease-out ! important;
+    transition: height 120ms ease-out !important;
 }
 
 // These are magic constants which are excluded from tinting, to let themes
@@ -390,7 +390,7 @@ textarea {
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -407,7 +407,7 @@ textarea {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
     min-width: 156px;

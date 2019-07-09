@@ -33,7 +33,7 @@
 }
 
 .mx_UserPill_selected {
-    background-color: $accent-color ! important;
+    background-color: $accent-color !important;
 }
 
 /* More specific to override `.markdown-body a` color */
@@ -79,7 +79,7 @@
 
 .mx_Markdown_ITALIC {
     font-style: italic;
-/*
+    /*
     // interestingly, *not* using the explicit italic font
     // variant seems yield better results.
 
@@ -87,7 +87,7 @@
     // https://github.com/google/fonts/issues/1726
     transform: skewX(-14deg);
     display: inline-block;
-*/
+    */
 }
 
 .mx_Markdown_CODE {
