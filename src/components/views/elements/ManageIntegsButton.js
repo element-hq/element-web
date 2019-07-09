@@ -19,7 +19,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
-import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';
 import { showIntegrationsManager } from '../../../integrations/integrations';
 

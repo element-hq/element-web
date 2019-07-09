@@ -19,8 +19,6 @@ import URL from 'url';
 import dis from './dispatcher';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
-import sdk from "./index";
-import Modal from "./Modal";
 import MatrixClientPeg from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import { showIntegrationsManager } from './integrations/integrations';

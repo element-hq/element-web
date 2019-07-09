@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 
 export default class IntegrationsManager extends React.Component {
     static propTypes = {

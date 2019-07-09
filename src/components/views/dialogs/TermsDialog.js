@@ -108,7 +108,6 @@ export default class TermsDialog extends React.Component {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
         const rows = [];
         for (const termsWithService of this.props.termsWithServices) {

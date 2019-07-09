@@ -17,7 +17,6 @@ import React from 'react';
 import {_t, _td} from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Modal from '../../../Modal';
 import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
