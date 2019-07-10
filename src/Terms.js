@@ -64,6 +64,25 @@ export async function startTermsFlow(services, interactionCallback) {
         (s) => MatrixClientPeg.get().getTerms(s.serviceType, s.baseUrl, s.accessToken),
     );
 
+    /*
+     * a /terms response looks like:
+     * {
+     *     "policies": {
+     *         "terms_of_service": {
+     *             "version": "2.0",
+     *              "en": {
+     *                 "name": "Terms of Service",
+     *                 "url": "https://example.org/somewhere/terms-2.0-en.html"
+     *             },
+     *             "fr": {
+     *                 "name": "Conditions d'utilisation",
+     *                 "url": "https://example.org/somewhere/terms-2.0-fr.html"
+     *             }
+     *         }
+     *     }
+     * }
+     */
+
     const terms = await Promise.all(termsPromises);
     const policiesAndServicePairs = terms.map((t, i) => { return { 'service': services[i], 'policies': t.policies }; });
 
