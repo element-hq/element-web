@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
@@ -24,6 +25,7 @@ import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
+import url from 'url';
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -41,7 +43,11 @@ const FLOWS_TO_VIEWS = {
 
 export default class SoftLogout extends React.Component {
     static propTypes = {
-        // Nothing.
+        // Query parameters from MatrixChat
+        realQueryParams: PropTypes.object, // {homeserver, identityServer, loginToken}
+
+        // Called when the SSO login completes
+        onTokenLoginCompleted: PropTypes.func,
     };
 
     constructor() {
@@ -67,6 +73,7 @@ export default class SoftLogout extends React.Component {
             displayName,
             loginView: LOGIN_VIEW.LOADING,
             keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
+            ssoUrl: null,
 
             busy: false,
             password: "",
@@ -75,6 +82,12 @@ export default class SoftLogout extends React.Component {
     }
 
     componentDidMount(): void {
+        // We've ended up here when we don't need to - navigate to login
+        if (!Lifecycle.isSoftLogout()) {
+            dis.dispatch({action: "on_logged_in"});
+            return;
+        }
+
         this._initLogin();
 
         MatrixClientPeg.get().flagAllGroupSessionsForBackup().then(remaining => {
@@ -95,6 +108,14 @@ export default class SoftLogout extends React.Component {
     };
 
     async _initLogin() {
+        const queryParams = this.props.realQueryParams;
+        const hasAllParams = queryParams && queryParams['homeserver'] && queryParams['loginToken'];
+        if (hasAllParams) {
+            this.setState({loginView: LOGIN_VIEW.LOADING});
+            this.trySsoLogin();
+            return;
+        }
+
         // Note: we don't use the existing Login class because it is heavily flow-based. We don't
         // care about login flows here, unless it is the single flow we support.
         const client = MatrixClientPeg.get();
@@ -102,6 +123,18 @@ export default class SoftLogout extends React.Component {
 
         const chosenView = loginViews.filter(f => !!f)[0] || LOGIN_VIEW.UNSUPPORTED;
         this.setState({loginView: chosenView});
+
+        if (chosenView === LOGIN_VIEW.CAS || chosenView === LOGIN_VIEW.SSO) {
+            const client = MatrixClientPeg.get();
+
+            const appUrl = url.parse(window.location.href, true);
+            appUrl.hash = ""; // Clear #/soft_logout off the URL
+            appUrl.query["homeserver"] = client.getHomeserverUrl();
+            appUrl.query["identityServer"] = client.getIdentityServerUrl();
+
+            const ssoUrl = client.getSsoLoginUrl(url.format(appUrl), chosenView === LOGIN_VIEW.CAS ? "cas" : "sso");
+            this.setState({ssoUrl});
+        }
     }
 
     onPasswordChange = (ev) => {
@@ -152,10 +185,53 @@ export default class SoftLogout extends React.Component {
         });
     };
 
+    async trySsoLogin() {
+        this.setState({busy: true});
+
+        const hsUrl = this.props.realQueryParams['homeserver'];
+        const isUrl = this.props.realQueryParams['identityServer'] || MatrixClientPeg.get().getIdentityServerUrl();
+        const loginType = "m.login.token";
+        const loginParams = {
+            token: this.props.realQueryParams['loginToken'],
+            device_id: MatrixClientPeg.get().getDeviceId(),
+        };
+
+        let credentials = null;
+        try {
+            credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
+        } catch (e) {
+            console.error(e);
+            this.setState({busy: false, loginView: LOGIN_VIEW.UNSUPPORTED});
+            return;
+        }
+
+        Lifecycle.hydrateSession(credentials).then(() => {
+            if (this.props.onTokenLoginCompleted) this.props.onTokenLoginCompleted();
+        }).catch((e) => {
+            console.error(e);
+            this.setState({busy: false, loginView: LOGIN_VIEW.UNSUPPORTED});
+        });
+    }
+
+    onSsoLogin = async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        this.setState({busy: true});
+        window.location.href = this.state.ssoUrl;
+    };
+
     _renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
+        }
+
+        let introText = null; // null is translated to something area specific in this function
+        if (this.state.keyBackupNeeded) {
+            introText = _t(
+                "Regain access to your account and recover encryption keys stored on this device. " +
+                "Without them, you won’t be able to read all of your secure messages on any device.");
         }
 
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
@@ -167,12 +243,9 @@ export default class SoftLogout extends React.Component {
                 error = <span className='mx_Login_error'>{this.state.errorText}</span>;
             }
 
-            let introText = _t("Enter your password to sign in and regain access to your account.");
-            if (this.state.keyBackupNeeded) {
-                introText = _t(
-                    "Regain access your account and recover encryption keys stored on this device. " +
-                    "Without them, you won’t be able to read all of your secure messages on any device.");
-            }
+            if (!introText) {
+                introText = _t("Enter your password to sign in and regain access to your account.");
+            } // else we already have a message and should use it (key backup warning)
 
             return (
                 <form onSubmit={this.onPasswordLogin}>
@@ -202,15 +275,27 @@ export default class SoftLogout extends React.Component {
         }
 
         if (this.state.loginView === LOGIN_VIEW.SSO || this.state.loginView === LOGIN_VIEW.CAS) {
-            // TODO: TravisR - https://github.com/vector-im/riot-web/issues/10238
-            return <p>PLACEHOLDER</p>;
+            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+            if (!introText) {
+                introText = _t("Sign in and regain access to your account.");
+            } // else we already have a message and should use it (key backup warning)
+
+            return (
+                <div>
+                    <p>{introText}</p>
+                    <AccessibleButton kind='primary' onClick={this.onSsoLogin}>
+                        {_t('Sign in with single sign-on')}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
-        // Default: assume unsupported
+        // Default: assume unsupported/error
         return (
             <p>
                 {_t(
-                    "Cannot re-authenticate with your account. Please contact your " +
+                    "You cannot sign in to your account. Please contact your " +
                     "homeserver admin for more information.",
                 )}
             </p>
