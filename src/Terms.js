@@ -42,7 +42,7 @@ export class Service {
 /**
  * Present a popup to the user prompting them to agree to terms and conditions
  *
- * @param {Service[]} services Object with keys 'servicetype', 'baseurl', '
+ * @param {Service[]} services Object with keys 'serviceType', 'baseUrl', 'accessToken'
  * @param {function} dialogTermsInteractionCallback Function called with an array of:
  *     { service: {Service}, terms: {terms response from API} }
  *     Must return a Promise which resolves with a list of URLs of documents agreed to
