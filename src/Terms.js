@@ -121,7 +121,7 @@ function dialogTermsInteractionCallback(termsWithServices) {
         const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");
 
         Modal.createTrackedDialog('Terms of Service', '', TermsDialog, {
-            termsWithServices: termsWithServices,
+            termsWithServices,
             onFinished: (done, agreedUrls) => {
                 if (!done) {
                     reject(new TermsNotSignedError());
