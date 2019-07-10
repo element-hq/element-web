@@ -24,7 +24,7 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol, webFrame} = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol} = require('electron');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
 
@@ -331,7 +331,6 @@ app.on('ready', () => {
             // main page from the background script.
             contextIsolation: false,
             webgl: false,
-            nativeWindowOpen: true,
         },
     });
     mainWindow.loadURL('vector://vector/webapp/');
