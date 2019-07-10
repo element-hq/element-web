@@ -93,7 +93,7 @@ export default class TermsDialog extends React.Component {
                 </div>;
             case Matrix.SERVICE_TYPES.IM:
                 return <div>
-                    {_t("Use Bots, bridges, widgets and sticker packs")}
+                    {_t("Use bots, bridges, widgets and sticker packs")}
                     {docName !== null ? <br /> : ''}
                     {docName !== null ? '('+docName+')' : ''}
                 </div>;
