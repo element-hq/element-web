@@ -24,7 +24,7 @@ export class TermsNotSignedError extends Error {}
 
 /**
  * Class representing a service that may have terms & conditions that
- * require agreement fro mthe user before the user can use that service.
+ * require agreement from the user before the user can use that service.
  */
 export class Service {
     /**
