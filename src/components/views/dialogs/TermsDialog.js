@@ -191,7 +191,6 @@ export default class TermsDialog extends React.PureComponent {
                     hasCancel={true}
                     onCancel={this._onCancelClick}
                     onPrimaryButtonClick={this._onNextClick}
-                    focus={true}
                     primaryDisabled={!enableSubmit}
                 />
             </BaseDialog>
