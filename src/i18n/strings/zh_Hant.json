@@ -2041,5 +2041,15 @@
     "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "如果這是共享的裝置，或您不想再從它存取存取您的帳號，請將儲存在此裝置上的所有資料清除。",
     "Clear all data": "清除所有資料",
     "Sign in again to regain access to your account, or a different one.": "再次登入以重新取得對您帳號或其他帳號的存取權。",
-    "Removing…": "正在移除……"
+    "Removing…": "正在移除……",
+    "Clearing all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "清除從此裝置而來的所有資料將會是永久的。已加密的訊息將會遺失，除非它們的金鑰已備份。",
+    "Failed to re-authenticate due to a homeserver problem": "因為家伺服器的問題，所以重新驗證失敗",
+    "Failed to re-authenticate": "重新驗證失敗",
+    "Enter your password to sign in and regain access to your account.": "輸入您的密碼以登入並取回對您帳號的控制權。",
+    "Regain access your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "取回對您帳號的控制權，並復原儲存在此裝置中的加密金鑰。沒有它們，您就無法在任何裝置上讀取您所有的安全訊息。",
+    "Forgotten your password?": "忘記您的密碼了？",
+    "Cannot re-authenticate with your account. Please contact your homeserver admin for more information.": "無法重新驗證您的帳號。請聯絡您的家伺服器管理員以取得更多資訊。",
+    "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.": "您的家伺服器 (<strong1>%(domainName)s</strong1>) 管理員已將您登出您的帳號 <strong2>%(displayName)s (%(userId)s)</strong2>。",
+    "Clear personal data": "清除個人資料",
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "警告：您的個人資料（包含加密金鑰）仍儲存在此裝置上。如果您已不想要使用此裝置，或是想要登入其他帳號的話，就將其清除吧。"
 }
