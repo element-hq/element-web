@@ -2047,5 +2047,15 @@
     "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "S’il s’agit d’un appareil partagé, ou si vous ne voulez pas accéder à nouveau à votre compte depuis cet appareil, supprimez toutes les données enregistrées localement sur cet appareil.",
     "Clear all data": "Supprimer toutes les données",
     "Sign in again to regain access to your account, or a different one.": "Reconnectez-vous pour accéder à nouveau à votre compte ou à un autre compte.",
-    "Removing…": "Suppression…"
+    "Removing…": "Suppression…",
+    "Clearing all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "La suppression de toutes les données sur cet appareil est permanente. Les messages chiffrés seront perdus à moins que leurs clés n’aient été sauvegardées.",
+    "Failed to re-authenticate due to a homeserver problem": "Échec de la ré-authentification à cause d’un problème du serveur d’accueil",
+    "Failed to re-authenticate": "Échec de la ré-authentification",
+    "Enter your password to sign in and regain access to your account.": "Saisissez votre mot de passe pour vous connecter et ré-accéder à votre compte.",
+    "Regain access your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "Ré-accédez à votre compte et récupérez les clés de chiffrement stockées sur cet appareil. Sans elles, vous ne pourrez pas lire tous vos messages sécurisés sur n’importe quel appareil.",
+    "Forgotten your password?": "Mot de passe oublié ?",
+    "Cannot re-authenticate with your account. Please contact your homeserver admin for more information.": "Impossible de vous ré-authentifier à votre compte. Contactez l’administrateur de votre serveur d’accueil pour plus d’informations.",
+    "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.": "L’administrateur de votre serveur d’accueil (<strong1>%(domainName)s</strong1>) vous a déconnecté de votre compte <strong2>%(displayName)s (%(userId)s)</strong2>.",
+    "Clear personal data": "Supprimer les données personnelles",
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Attention : Vos données personnelles (y compris vos clés de chiffrement) sont toujours stockées sur cet appareil. Supprimez-les si vous n’utilisez plus cet appareil ou si vous voulez vous connecter avec un autre compte."
 }
