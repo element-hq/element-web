@@ -1573,7 +1573,7 @@ export default React.createClass({
                 params: params,
             });
         } else if (screen === 'soft_logout') {
-            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId()) {
+            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId() && !Lifecycle.isSoftLogout()) {
                 // Logged in - visit a room
                 this._viewLastRoom();
             } else {
