@@ -43,9 +43,6 @@ export class Service {
  * Present a popup to the user prompting them to agree to terms and conditions
  *
  * @param {Service[]} services Object with keys 'serviceType', 'baseUrl', 'accessToken'
- * @param {function} dialogTermsInteractionCallback Function called with an array of:
- *     { service: {Service}, terms: {terms response from API} }
- *     Must return a Promise which resolves with a list of URLs of documents agreed to
  * @returns {Promise} resolves when the user agreed to all necessary terms or rejects
  *     if they cancel.
  */
@@ -53,6 +50,15 @@ export function presentTermsForServices(services) {
     return startTermsFlow(services, dialogTermsInteractionCallback);
 }
 
+/*
+ * Start a flow where the user is presented with terms & conditions for some services
+ *
+ * @param {function} interactionCallback Function called with an array of:
+ *     { service: {Service}, terms: {terms response from API} }
+ *     Must return a Promise which resolves with a list of URLs of documents agreed to
+ * @returns {Promise} resolves when the user agreed to all necessary terms or rejects
+ *     if they cancel.
+ */
 export async function startTermsFlow(services, interactionCallback) {
     const termsPromises = services.map(
         (s) => MatrixClientPeg.get().getTerms(s.serviceType, s.baseUrl, s.accessToken),
