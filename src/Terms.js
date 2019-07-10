@@ -94,7 +94,7 @@ export async function startTermsFlow(services, interactionCallback) {
         // (one URL may be used for multiple services)
         // Not a particularly efficient loop but probably fine given the numbers involved
         const urlsForService = agreedUrls.filter((url) => {
-            for (const terms of Object.values(termsAndService.terms)) {
+            for (const policy of Object.values(policiesAndService)) {
                 for (const lang of Object.keys(terms)) {
                     if (lang === 'version') continue;
                     if (terms[lang].url === url) return true;
