@@ -228,6 +228,13 @@ export default class SoftLogout extends React.Component {
             return <Spinner />;
         }
 
+        let introText = null; // null is translated to something area specific in this function
+        if (this.state.keyBackupNeeded) {
+            introText = _t(
+                "Regain access to your account and recover encryption keys stored on this device. " +
+                "Without them, you won’t be able to read all of your secure messages on any device.");
+        }
+
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
             const Field = sdk.getComponent("elements.Field");
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -237,12 +244,9 @@ export default class SoftLogout extends React.Component {
                 error = <span className='mx_Login_error'>{this.state.errorText}</span>;
             }
 
-            let introText = _t("Enter your password to sign in and regain access to your account.");
-            if (this.state.keyBackupNeeded) {
-                introText = _t(
-                    "Regain access your account and recover encryption keys stored on this device. " +
-                    "Without them, you won’t be able to read all of your secure messages on any device.");
-            }
+            if (!introText) {
+                introText = _t("Enter your password to sign in and regain access to your account.");
+            } // else we already have a message and should use it (key backup warning)
 
             return (
                 <form onSubmit={this.onPasswordLogin}>
@@ -273,18 +277,26 @@ export default class SoftLogout extends React.Component {
 
         if (this.state.loginView === LOGIN_VIEW.SSO || this.state.loginView === LOGIN_VIEW.CAS) {
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+            if (!introText) {
+                introText = _t("Sign in and regain access to your account.");
+            } // else we already have a message and should use it (key backup warning)
+
             return (
-                <AccessibleButton kind='primary' onClick={this.onSsoLogin}>
-                    {_t('Sign in with single sign-on')}
-                </AccessibleButton>
+                <div>
+                    <p>{introText}</p>
+                    <AccessibleButton kind='primary' onClick={this.onSsoLogin}>
+                        {_t('Sign in with single sign-on')}
+                    </AccessibleButton>
+                </div>
             );
         }
 
-        // Default: assume unsupported
+        // Default: assume unsupported/error
         return (
             <p>
                 {_t(
-                    "Cannot re-authenticate with your account. Please contact your " +
+                    "You cannot sign in to your account. Please contact your " +
                     "homeserver admin for more information.",
                 )}
             </p>
