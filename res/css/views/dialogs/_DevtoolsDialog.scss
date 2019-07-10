@@ -135,6 +135,7 @@ limitations under the License.
     }
 }
 
+/* stylelint-disable no-descending-specificity */
 .mx_DevTools_tgl-flip {
     + .mx_DevTools_tgl-btn {
         padding: 2px;
@@ -189,3 +190,4 @@ limitations under the License.
         }
     }
 }
+/* stylelint-enable no-descending-specificity */

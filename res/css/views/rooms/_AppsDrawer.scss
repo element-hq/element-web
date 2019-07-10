@@ -42,7 +42,6 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AddWidget_button {
     order: 2;
     cursor: pointer;
-    padding-right: 12px;
     padding: 0;
     margin: 5px auto 5px auto;
     color: $accent-color;
@@ -270,7 +269,6 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppIconTile_image {
     padding: 10px;
-    width: 75%;
     max-width: 100px;
     max-height: 100px;
     width: auto;

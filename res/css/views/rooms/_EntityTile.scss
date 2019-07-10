@@ -85,10 +85,6 @@ limitations under the License.
     overflow: hidden;
 }
 
-.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_EntityTile_name {
-    font-size: 13px;
-}
-
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
     font-style: italic;
     color: $primary-fg-color;
@@ -114,6 +110,10 @@ limitations under the License.
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
 .mx_EntityTile_unknown .mx_EntityTile_name {
     opacity: 0.25;
+}
+
+.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_EntityTile_name {
+    font-size: 13px;
 }
 
 .mx_EntityTile_subtext {
