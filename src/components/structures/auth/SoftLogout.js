@@ -108,10 +108,9 @@ export default class SoftLogout extends React.Component {
     };
 
     async _initLogin() {
-        const requiredQueryParams = ['homeserver', 'loginToken'];
-        const hasAllParams = requiredQueryParams
-            .filter(p => Object.keys(this.props.realQueryParams).includes(p)).length === requiredQueryParams.length;
-        if (this.props.realQueryParams && hasAllParams) {
+        const queryParams = this.props.realQueryParams;
+        const hasAllParams = queryParams && queryParams['homeserver'] && queryParams['loginToken'];
+        if (hasAllParams) {
             this.setState({loginView: LOGIN_VIEW.LOADING});
             this.trySsoLogin();
             return;
