@@ -196,7 +196,7 @@ if (!gotLock) {
 }
 
 const launcher = new AutoLaunch({
-    name: vectorConfig.brand || 'Riot',
+    name: vectorConfig.brand || 'Tchap',
     isHidden: true,
     mac: {
         useLaunchAgent: true,
@@ -295,7 +295,7 @@ app.on('ready', () => {
         console.log('No update_base_url is defined: auto update is disabled');
     }
 
-    const iconPath = `${__dirname}/../img/riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
+    const iconPath = `${__dirname}/../img/tchap.${process.platform === 'win32' ? 'ico' : 'png'}`;
 
     // Load the previous window state with fallback to defaults
     const mainWindowState = windowStateKeeper({
@@ -336,7 +336,7 @@ app.on('ready', () => {
     // Create trayIcon icon
     tray.create({
         icon_path: iconPath,
-        brand: vectorConfig.brand || 'Riot',
+        brand: vectorConfig.brand || 'Tchap',
     });
 
     mainWindow.once('ready-to-show', () => {
@@ -409,4 +409,4 @@ app.on('second-instance', (ev, commandLine, workingDirectory) => {
 // installer uses for the shortcut icon.
 // This makes notifications work on windows 8.1 (and is
 // a noop on other platforms).
-app.setAppUserModelId('com.squirrel.riot-web.Riot');
+app.setAppUserModelId('com.squirrel.tchap-web.Tchap');
