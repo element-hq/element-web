@@ -50,7 +50,7 @@ export function presentTermsForServices(services) {
     return startTermsFlow(services, dialogTermsInteractionCallback);
 }
 
-/*
+/**
  * Start a flow where the user is presented with terms & conditions for some services
  *
  * @param {function} interactionCallback Function called with an array of:
