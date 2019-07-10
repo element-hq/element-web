@@ -100,15 +100,14 @@ function textForMemberEvent(ev) {
                 }
             } else if (prevContent.membership === "ban") {
                 return _t('%(senderName)s unbanned %(targetName)s.', {senderName, targetName});
-            } else if (prevContent.membership === "join") {
-                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             } else if (prevContent.membership === "invite") {
                 return _t('%(senderName)s withdrew %(targetName)s\'s invitation.', {
                     senderName,
                     targetName,
                 }) + ' ' + reason;
             } else {
-                return _t('%(targetName)s left the room.', {targetName});
+                // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             }
     }
 }

@@ -345,8 +345,8 @@ module.exports = React.createClass({
                 switch (e.mxEvent.getPrevContent().membership) {
                     case 'invite': return 'invite_withdrawal';
                     case 'ban': return 'unbanned';
-                    case 'join': return 'kicked';
-                    default: return 'left';
+                    // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                    default: return 'kicked';
                 }
             default: return null;
         }
