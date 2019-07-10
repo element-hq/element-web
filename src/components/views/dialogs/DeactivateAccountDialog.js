@@ -64,13 +64,13 @@ export default class DeactivateAccountDialog extends React.Component {
             const auth = {
                 type: 'm.login.password',
                 user: MatrixClientPeg.get().credentials.userId,
-                password: this._passwordField.value,
+                password: this.state.password,
             };
             await MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase);
         } catch (err) {
             let errStr = _t('Unknown error');
             // https://matrix.org/jira/browse/SYN-744
-            if (err.httpStatus == 401 || err.httpStatus == 403) {
+            if (err.httpStatus === 401 || err.httpStatus === 403) {
                 errStr = _t('Incorrect password');
                 Velocity(this._passwordField, "callout.shake", 300);
             }
