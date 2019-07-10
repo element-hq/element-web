@@ -22,12 +22,22 @@ import { TermsNotSignedError } from '../Terms';
 export async function showIntegrationsManager(opts) {
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
 
+    let props = {};
+    if (ScalarAuthClient.isPossible()) {
+        props.loading = true;
+    } else {
+        props.configured = false;
+    }
+
     const close = Modal.createTrackedDialog(
-        'Integrations Manager', '', IntegrationsManager, { loading: true }, "mx_IntegrationsManager",
+        'Integrations Manager', '', IntegrationsManager, props, "mx_IntegrationsManager",
     ).close;
 
+    if (!ScalarAuthClient.isPossible()) {
+        return;
+    }
+
     const scalarClient = new ScalarAuthClient();
-    let props;
     try {
         await scalarClient.connect();
         if (!scalarClient.hasCredentials()) {
