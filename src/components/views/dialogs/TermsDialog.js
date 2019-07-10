@@ -22,7 +22,7 @@ import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import Matrix from 'matrix-js-sdk';
 
-class TermsCheckbox extends React.Component {
+class TermsCheckbox extends React.PureComponent {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         url: PropTypes.string.isRequired,
@@ -41,7 +41,7 @@ class TermsCheckbox extends React.Component {
     }
 }
 
-export default class TermsDialog extends React.Component {
+export default class TermsDialog extends React.PureComponent {
     static propTypes = {
         /**
          * Array of TermsWithService
