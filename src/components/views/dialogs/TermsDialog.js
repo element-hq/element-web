@@ -44,9 +44,10 @@ class TermsCheckbox extends React.PureComponent {
 export default class TermsDialog extends React.PureComponent {
     static propTypes = {
         /**
-         * Array of TermsWithService
+         * Array of [Service, terms] pairs, where terms is the response from the
+         * /terms endpoint for that service
          */
-        termsWithServices: PropTypes.arrayOf(PropTypes.object).isRequired,
+        policiesAndServicePairs: PropTypes.arrayOf(PropTypes.object).isRequired,
 
         /**
          * Called with:
@@ -101,8 +102,9 @@ export default class TermsDialog extends React.PureComponent {
     }
 
     _onTermsCheckboxChange = (url, checked) => {
-        this.state.agreedUrls[url] = checked;
-        this.setState({agreedUrls: this.state.agreedUrls});
+        this.setState({
+            agreedUrls: Object.assign({}, this.state.agreedUrls, { [url]: checked }),
+        });
     }
 
     render() {
@@ -110,19 +112,19 @@ export default class TermsDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         const rows = [];
-        for (const termsWithService of this.props.termsWithServices) {
-            const parsedBaseUrl = url.parse(termsWithService.service.baseUrl);
+        for (const policiesAndService of this.props.policiesAndServicePairs) {
+            const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);
 
-            const termsValues = Object.values(termsWithService.terms);
+            const termsValues = Object.values(policiesAndService.policies);
             for (let i = 0; i < termsValues.length; ++i) {
                 const termDoc = termsValues[i];
                 const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== 'version'));
                 let serviceName;
                 if (i === 0) {
-                    serviceName = this._nameForServiceType(termsWithService.service.serviceType, parsedBaseUrl.host);
+                    serviceName = this._nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
                 }
                 const summary = this._summaryForServiceType(
-                    termsWithService.service.serviceType,
+                    policiesAndService.service.serviceType,
                     termsValues.length > 1 ? termDoc[termsLang].name : null,
                 );
 
@@ -144,9 +146,9 @@ export default class TermsDialog extends React.PureComponent {
         // if all the documents for at least one service have been checked, we can enable
         // the submit button
         let enableSubmit = false;
-        for (const termsWithService of this.props.termsWithServices) {
+        for (const policiesAndService of this.props.policiesAndServicePairs) {
             let docsAgreedForService = 0;
-            for (const terms of Object.values(termsWithService.terms)) {
+            for (const terms of Object.values(policiesAndService.policies)) {
                 let docAgreed = false;
                 for (const lang of Object.keys(terms)) {
                     if (lang === 'version') continue;
@@ -159,7 +161,7 @@ export default class TermsDialog extends React.PureComponent {
                     ++docsAgreedForService;
                 }
             }
-            if (docsAgreedForService === Object.keys(termsWithService.terms).length) {
+            if (docsAgreedForService === Object.keys(policiesAndService.policies).length) {
                 enableSubmit = true;
                 break;
             }

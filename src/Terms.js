@@ -86,18 +86,18 @@ export async function startTermsFlow(services, interactionCallback) {
     const terms = await Promise.all(termsPromises);
     const policiesAndServicePairs = terms.map((t, i) => { return { 'service': services[i], 'policies': t.policies }; });
 
-    const agreedUrls = await interactionCallback(termsAndServices);
+    const agreedUrls = await interactionCallback(policiesAndServicePairs);
     console.log("User has agreed to URLs", agreedUrls);
 
-    const agreePromises = termsAndServices.map((termsAndService) => {
+    const agreePromises = policiesAndServicePairs.map((policiesAndService) => {
         // filter the agreed URL list for ones that are actually for this service
         // (one URL may be used for multiple services)
         // Not a particularly efficient loop but probably fine given the numbers involved
         const urlsForService = agreedUrls.filter((url) => {
-            for (const policy of Object.values(policiesAndService)) {
-                for (const lang of Object.keys(terms)) {
+            for (const policy of Object.values(policiesAndService.policies)) {
+                for (const lang of Object.keys(policy)) {
                     if (lang === 'version') continue;
-                    if (terms[lang].url === url) return true;
+                    if (policy[lang].url === url) return true;
                 }
             }
             return false;
@@ -106,22 +106,22 @@ export async function startTermsFlow(services, interactionCallback) {
         if (urlsForService.length === 0) return Promise.resolve();
 
         return MatrixClientPeg.get().agreeToTerms(
-            termsAndService.service.serviceType,
-            termsAndService.service.baseUrl,
-            termsAndService.service.accessToken,
+            policiesAndService.service.serviceType,
+            policiesAndService.service.baseUrl,
+            policiesAndService.service.accessToken,
             urlsForService,
         );
     });
     return Promise.all(agreePromises);
 }
 
-function dialogTermsInteractionCallback(termsWithServices) {
+function dialogTermsInteractionCallback(policiesAndServicePairs) {
     return new Promise((resolve, reject) => {
-        console.log("Terms that need agreement", termsWithServices);
+        console.log("Terms that need agreement", policiesAndServicePairs);
         const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");
 
         Modal.createTrackedDialog('Terms of Service', '', TermsDialog, {
-            termsWithServices,
+            policiesAndServicePairs,
             onFinished: (done, agreedUrls) => {
                 if (!done) {
                     reject(new TermsNotSignedError());
