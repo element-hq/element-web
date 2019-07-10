@@ -59,7 +59,7 @@ export async function startTermsFlow(services, interactionCallback) {
     );
 
     const terms = await Promise.all(termsPromises);
-    const termsAndServices = terms.map((t, i) => { return { 'service': services[i], 'terms': t.policies }; });
+    const policiesAndServicePairs = terms.map((t, i) => { return { 'service': services[i], 'policies': t.policies }; });
 
     const agreedUrls = await interactionCallback(termsAndServices);
     console.log("User has agreed to URLs", agreedUrls);
