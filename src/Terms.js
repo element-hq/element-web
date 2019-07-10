@@ -28,7 +28,7 @@ export class TermsNotSignedError extends Error {}
  */
 export class Service {
     /**
-     * @param {MatrixClient.SERVICETYPES} serviceType The type of service
+     * @param {MatrixClient.SERVICE_TYPES} serviceType The type of service
      * @param {string} baseUrl The Base URL of the service (ie. before '/_matrix')
      * @param {string} accessToken The user's access token for the service
      */

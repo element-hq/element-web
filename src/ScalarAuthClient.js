@@ -99,7 +99,7 @@ class ScalarAuthClient {
             if (e instanceof TermsNotSignedError) {
                 console.log("Integrations manager requires new terms to be agreed to");
                 return presentTermsForServices([new Service(
-                    Matrix.SERVICETYPES.IM,
+                    Matrix.SERVICE_TYPES.IM,
                     SdkConfig.get().integrations_rest_url,
                     token,
                 )]).then(() => {

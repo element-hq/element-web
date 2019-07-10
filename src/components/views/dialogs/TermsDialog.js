@@ -74,16 +74,16 @@ export default class TermsDialog extends React.Component {
 
     _nameForServiceType(serviceType, host) {
         switch (serviceType) {
-            case Matrix.SERVICETYPES.IS:
+            case Matrix.SERVICE_TYPES.IS:
                 return <div>{_t("Identity Server")}<br />({host})</div>;
-            case Matrix.SERVICETYPES.IM:
+            case Matrix.SERVICE_TYPES.IM:
                 return <div>{_t("Integrations Manager")}<br />({host})</div>;
         }
     }
 
     _summaryForServiceType(serviceType, docName) {
         switch (serviceType) {
-            case Matrix.SERVICETYPES.IS:
+            case Matrix.SERVICE_TYPES.IS:
                 return <div>
                     {_t("Find others by phone or email")}
                     <br />
@@ -91,7 +91,7 @@ export default class TermsDialog extends React.Component {
                     {docName !== null ? <br /> : ''}
                     {docName !== null ? '('+docName+')' : ''}
                 </div>;
-            case Matrix.SERVICETYPES.IM:
+            case Matrix.SERVICE_TYPES.IM:
                 return <div>
                     {_t("Use Bots, bridges, widgets and sticker packs")}
                     {docName !== null ? <br /> : ''}
