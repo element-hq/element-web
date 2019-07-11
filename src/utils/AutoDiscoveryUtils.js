@@ -18,7 +18,6 @@ import React from 'react';
 import {AutoDiscovery} from "matrix-js-sdk";
 import {_t, _td, newTranslatableError} from "../languageHandler";
 import {makeType} from "./TypeUtils";
-import SdkConfig from "../SdkConfig";
 
 const LIVELINESS_DISCOVERY_ERRORS = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
