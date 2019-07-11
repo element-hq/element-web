@@ -47,7 +47,12 @@ export default class TermsDialog extends React.PureComponent {
          * Array of [Service, terms] pairs, where terms is the response from the
          * /terms endpoint for that service
          */
-        policiesAndServicePairs: PropTypes.arrayOf(PropTypes.object).isRequired,
+        policiesAndServicePairs: PropTypes.array.isRequired,
+
+        /**
+         * urls that the user has already agreed to
+         */
+        agreedUrls: PropTypes.arrayOf(PropTypes.string),
 
         /**
          * Called with:
@@ -57,12 +62,15 @@ export default class TermsDialog extends React.PureComponent {
         onFinished: PropTypes.func.isRequired,
     }
 
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             // url -> boolean
             agreedUrls: {},
         };
+        for (const url of props.agreedUrls) {
+            this.state.agreedUrls[url] = true;
+        }
     }
 
     _onCancelClick = () => {

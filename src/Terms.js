@@ -53,8 +53,10 @@ export function presentTermsForServices(services) {
 /**
  * Start a flow where the user is presented with terms & conditions for some services
  *
- * @param {function} interactionCallback Function called with an array of:
- *     { service: {Service}, terms: {terms response from API} }
+ * @param {Service[]} services Object with keys 'serviceType', 'baseUrl', 'accessToken'
+ * @param {function} interactionCallback Function called with:
+ *      * an array of { service: {Service}, terms: {terms response from API} }
+ *      * an array of URLs the user has already agreed to
  *     Must return a Promise which resolves with a list of URLs of documents agreed to
  * @returns {Promise} resolves when the user agreed to all necessary terms or rejects
  *     if they cancel.
@@ -86,14 +88,57 @@ export async function startTermsFlow(services, interactionCallback) {
     const terms = await Promise.all(termsPromises);
     const policiesAndServicePairs = terms.map((t, i) => { return { 'service': services[i], 'policies': t.policies }; });
 
-    const agreedUrls = await interactionCallback(policiesAndServicePairs);
-    console.log("User has agreed to URLs", agreedUrls);
+    // fetch the set of agreed policy URLs from account data
+    const currentAcceptedTerms = await MatrixClientPeg.get().getAccountData('m.accepted_terms');
+    let agreedUrlSet;
+    if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
+        agreedUrlSet = new Set();
+    } else {
+        agreedUrlSet = new Set(currentAcceptedTerms.getContent().accepted);
+    }
+
+    // remove any policies the user has already agreed to and any services where
+    // they've already agreed to all the policies
+    // NB. it could be nicer to show the user stuff they've already agreed to,
+    // but then they'd assume they can un-check the boxes to un-agree to a policy,
+    // but that is not a thing the API supports, so probably best to just show
+    // things they've not agreed to yet.
+    const unagreedPoliciesAndServicePairs = [];
+    for (const {service, policies} of policiesAndServicePairs) {
+        const unagreedPolicies = {};
+        for (const [policyName, policy] of Object.entries(policies)) {
+            let policyAgreed = false;
+            for (const lang of Object.keys(policy)) {
+                if (lang === 'version') continue;
+                if (agreedUrlSet.has(policy[lang].url)) {
+                    policyAgreed = true;
+                    break;
+                }
+            }
+            if (!policyAgreed) unagreedPolicies[policyName] = policy;
+        }
+        if (Object.keys(unagreedPolicies).length > 0) {
+            unagreedPoliciesAndServicePairs.push({service, policies: unagreedPolicies});
+        }
+    }
+
+    // if there's anything left to agree to, prompt the user
+    if (unagreedPoliciesAndServicePairs.length > 0) {
+        const newlyAgreedUrls = await interactionCallback(unagreedPoliciesAndServicePairs, Array.from(agreedUrlSet));
+        console.log("User has agreed to URLs", newlyAgreedUrls);
+        agreedUrlSet = new Set(newlyAgreedUrls);
+    } else {
+        console.log("User has already agreed to all required policies");
+    }
+
+    const newAcceptedTerms = { accepted: Array.from(agreedUrlSet) };
+    await MatrixClientPeg.get().setAccountData('m.accepted_terms', newAcceptedTerms);
 
     const agreePromises = policiesAndServicePairs.map((policiesAndService) => {
         // filter the agreed URL list for ones that are actually for this service
         // (one URL may be used for multiple services)
         // Not a particularly efficient loop but probably fine given the numbers involved
-        const urlsForService = agreedUrls.filter((url) => {
+        const urlsForService = Array.from(agreedUrlSet).filter((url) => {
             for (const policy of Object.values(policiesAndService.policies)) {
                 for (const lang of Object.keys(policy)) {
                     if (lang === 'version') continue;
@@ -115,13 +160,14 @@ export async function startTermsFlow(services, interactionCallback) {
     return Promise.all(agreePromises);
 }
 
-function dialogTermsInteractionCallback(policiesAndServicePairs) {
+function dialogTermsInteractionCallback(policiesAndServicePairs, agreedUrls) {
     return new Promise((resolve, reject) => {
         console.log("Terms that need agreement", policiesAndServicePairs);
         const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");
 
         Modal.createTrackedDialog('Terms of Service', '', TermsDialog, {
             policiesAndServicePairs,
+            agreedUrls,
             onFinished: (done, agreedUrls) => {
                 if (!done) {
                     reject(new TermsNotSignedError());
