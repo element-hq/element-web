@@ -96,7 +96,7 @@ export const PasswordAuthEntry = React.createClass({
             user: this.props.matrixClient.credentials.userId,
             identifier: {
                 type: "m.id.user",
-                user: this.props.matrixClient.getUserId(),
+                user: this.props.matrixClient.credentials.userId,
             },
             password: this.state.password,
         });

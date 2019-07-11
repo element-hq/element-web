@@ -97,11 +97,10 @@ describe('InteractiveAuthDialog', function() {
             ReactTestUtils.Simulate.submit(formNode, {});
 
             expect(doRequest.callCount).toEqual(1);
-            expect(doRequest.calledWithExactly({
+            expect(doRequest.calledWithMatch({
                 session: "sess",
                 type: "m.login.password",
                 password: "s3kr3t",
-                user: "@user:id", // TODO: Remove this. See https://github.com/vector-im/riot-web/issues/10312
                 identifier: {
                     type: "m.id.user",
                     user: "@user:id",
