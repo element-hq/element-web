@@ -44,7 +44,7 @@ class TermsCheckbox extends React.PureComponent {
 export default class TermsDialog extends React.PureComponent {
     static propTypes = {
         /**
-         * Array of [Service, terms] pairs, where terms is the response from the
+         * Array of [Service, policies] pairs, where policies is the response from the
          * /terms endpoint for that service
          */
         policiesAndServicePairs: PropTypes.array.isRequired,
