@@ -1595,7 +1595,6 @@
     "Sign in and regain access to your account.": "Sign in and regain access to your account.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "You cannot sign in to your account. Please contact your homeserver admin for more information.",
     "You're signed out": "You're signed out",
-    "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.": "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.",
     "Clear personal data": "Clear personal data",
     "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.",
     "Commands": "Commands",
