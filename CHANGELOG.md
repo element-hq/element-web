@@ -1,3 +1,12 @@
+Changes in [1.2.4](https://github.com/vector-im/riot-web/releases/tag/v1.2.4) (2019-07-11)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.3...v1.2.4)
+
+ * Upgrade to React SDK 1.3.1 and JS SDK 2.1.1
+ * Upgrade lodash dependencies
+ * JS SDK 2.1.1 includes a fix for ephemeral event processing
+ * React SDK 1.3.1 includes a fix for account deactivation
+
 Changes in [1.2.3](https://github.com/vector-im/riot-web/releases/tag/v1.2.3) (2019-07-08)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.3-rc.1...v1.2.3)
