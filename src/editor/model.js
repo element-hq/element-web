@@ -97,24 +97,26 @@ export default class EditorModel {
         if (diff.removed) {
             removedOffsetDecrease = this.removeText(position, diff.removed.length);
         }
+        const canOpenAutoComplete = inputType !== "insertFromPaste" && inputType !== "insertFromDrop";
         let addedLen = 0;
         if (diff.added) {
-            addedLen = this._addText(position, diff.added);
+            // these shouldn't trigger auto-complete, you just want to append a piece of text
+            addedLen = this._addText(position, diff.added, {validate: canOpenAutoComplete});
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         const newPosition = this.positionForOffset(caretOffset, true);
-        this._setActivePart(newPosition);
+        this._setActivePart(newPosition, canOpenAutoComplete);
         this._updateCallback(newPosition);
     }
 
-    _setActivePart(pos) {
+    _setActivePart(pos, canOpenAutoComplete) {
         const {index} = pos;
         const part = this._parts[index];
         if (part) {
             if (index !== this._activePartIdx) {
                 this._activePartIdx = index;
-                if (this._activePartIdx !== this._autoCompletePartIdx) {
+                if (canOpenAutoComplete && this._activePartIdx !== this._autoCompletePartIdx) {
                     // else try to create one
                     const ac = part.createAutoComplete(this._onAutoComplete);
                     if (ac) {
@@ -220,14 +222,16 @@ export default class EditorModel {
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    _addText(pos, str) {
+    _addText(pos, str, {validate=true}) {
         let {index} = pos;
         const {offset} = pos;
         let addLen = str.length;
         const part = this._parts[index];
         if (part) {
             if (part.canEdit) {
-                if (part.insertAll(offset, str)) {
+                if (validate && part.validateAndInsert(offset, str)) {
+                    str = null;
+                } else if (!validate && part.insert(offset, str)) {
                     str = null;
                 } else {
                     const splitPart = part.split(offset);
@@ -243,7 +247,12 @@ export default class EditorModel {
         }
         while (str) {
             const newPart = this._partCreator.createPartForInput(str);
-            str = newPart.appendUntilRejected(str);
+            if (validate) {
+                str = newPart.appendUntilRejected(str);
+            } else {
+                newPart.insert(0, str);
+                str = null;
+            }
             this._insertPart(index, newPart);
             index += 1;
         }
