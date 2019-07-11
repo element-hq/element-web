@@ -321,15 +321,22 @@ export default class MessageComposer extends React.Component {
             const createEvent = replacementRoom.currentState.getStateEvents('m.room.create', '');
             if (createEvent && createEvent.getId()) createEventId = createEvent.getId();
         }
+
+        const viaServers = [this.state.tombstone.getSender().split(':').splice(1).join(':')];
         dis.dispatch({
             action: 'view_room',
             highlighted: true,
             event_id: createEventId,
             room_id: replacementRoomId,
+            auto_join: true,
 
             // Try to join via the server that sent the event. This converts @something:example.org
             // into a server domain by splitting on colons and ignoring the first entry ("@something").
-            via_servers: [this.state.tombstone.getSender().split(':').splice(1).join(':')],
+            via_servers: viaServers,
+            opts: {
+                // These are passed down to the js-sdk's /join call
+                viaServers: viaServers,
+            },
         });
     }
 
