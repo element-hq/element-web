@@ -1,3 +1,12 @@
+Changes in [1.3.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.3.1) (2019-07-11)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.3.0...v1.3.1)
+
+ * Fix account deactivation
+   [\#3201](https://github.com/matrix-org/matrix-react-sdk/pull/3201)
+ * Upgrade lodash dependencies
+ * Upgrade to JS SDK 2.1.1
+
 Changes in [1.3.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.3.0) (2019-07-08)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.3.0-rc.1...v1.3.0)
