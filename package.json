@@ -40,6 +40,7 @@
     "rethemendex": "res/css/rethemendex.sh",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
+    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "build": "yarn reskindex && yarn start:init",
     "build:watch": "babel src -w --skip-initial-build -d lib --source-maps --copy-files",
     "emoji-data-strip": "node scripts/emoji-data-strip.js",
