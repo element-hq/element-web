@@ -36,12 +36,13 @@ limitations under the License.
     &::before {
         content: '';
         position: absolute;
-        // tooltip overhang + action bar + action bar offset from event
-        width: calc(48px + 100% + 8px);
+        // tooltip safe mousing area + tooltip overhang +
+        // action bar + action bar offset from event
+        width: calc(10px + 48px + 100% + 8px);
         // safe area + action bar
         height: calc(20px + 100%);
         top: -20px;
-        left: -48px;
+        left: -58px;
         z-index: -1;
         cursor: initial;
     }
