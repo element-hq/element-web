@@ -26,12 +26,17 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
+import PropTypes from "prop-types";
 const PlatformPeg = require("../../../../../PlatformPeg");
 const sdk = require('../../../../..');
 const Modal = require("../../../../../Modal");
 const dis = require("../../../../../dispatcher");
 
 export default class GeneralUserSettingsTab extends React.Component {
+    static propTypes = {
+        closeSettingsFn: PropTypes.func.isRequired,
+    };
+
     constructor() {
         super();
 
@@ -87,7 +92,11 @@ export default class GeneralUserSettingsTab extends React.Component {
     };
 
     _onDeactivateClicked = () => {
-        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {});
+        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {
+            onFinished: (success) => {
+                if (success) this.props.closeSettingsFn();
+            },
+        });
     };
 
     _renderProfileSection() {
