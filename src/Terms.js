@@ -63,7 +63,7 @@ export function presentTermsForServices(services) {
  */
 export async function startTermsFlow(services, interactionCallback) {
     const termsPromises = services.map(
-        (s) => MatrixClientPeg.get().getTerms(s.serviceType, s.baseUrl, s.accessToken),
+        (s) => MatrixClientPeg.get().getTerms(s.serviceType, s.baseUrl),
     );
 
     /*
