@@ -104,7 +104,6 @@ describe('joining a room', function() {
                     hsName: "TEST_ENVIRONMENT",
                     hsNameIsDifferent: false, // yes, we lie
                     isUrl: IS_URL,
-                    identityEnabled: true,
                 }),
             };
 

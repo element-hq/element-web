@@ -20,10 +20,10 @@ For a good example, see https://riot.im/develop/config.json.
      if `default_hs_url` is used.
    * The identity server is used for verifying third party identifiers like emails
      and phone numbers. It is not used to store your password or account information.
-     If not provided, the identity server defaults to vector.im unless `disable_identity_server`
-     is set to true in the config. Currently the only two public identity servers
-     are https://matrix.org and https://vector.im, however in future identity servers
-     will be decentralised.
+     If not provided, the identity server defaults to vector.im. Currently the only 
+     two public identity servers are https://matrix.org and https://vector.im, however 
+     in future identity servers will be decentralised. In the future it will be possible
+     to disable the identity server functionality.
    * Riot will fail to load if a mix of `default_server_config`, `default_server_name`, or
      `default_hs_url` is specified. When multiple sources are specified, it is unclear
      which should take priority and therefore the application cannot continue.

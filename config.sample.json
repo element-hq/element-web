@@ -8,7 +8,6 @@
             "base_url": "https://vector.im"
         }
     },
-    "disable_identity_server": false,
     "disable_custom_urls": false,
     "disable_guests": false,
     "disable_login_language_selector": false,
