@@ -244,6 +244,10 @@ export default class EditorModel {
                 addLen += part.text.length - offset;
                 index += 1;
             }
+        } else if (index < 0) {
+            // if position was not found (index: -1, as happens for empty editor)
+            // reset it to insert as first part
+            index = 0;
         }
         while (str) {
             const newPart = this._partCreator.createPartForInput(str);
