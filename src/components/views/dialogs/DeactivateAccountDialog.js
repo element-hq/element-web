@@ -63,7 +63,13 @@ export default class DeactivateAccountDialog extends React.Component {
             // for this endpoint. In reality it could be any UI auth.
             const auth = {
                 type: 'm.login.password',
+                // TODO: Remove `user` once servers support proper UIA
+                // See https://github.com/vector-im/riot-web/issues/10312
                 user: MatrixClientPeg.get().credentials.userId,
+                identifier: {
+                    type: "m.id.user",
+                    user: MatrixClientPeg.get().credentials.userId,
+                },
                 password: this.state.password,
             };
             await MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase);
