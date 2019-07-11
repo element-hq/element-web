@@ -24,7 +24,6 @@ import { stubClient } from './test-utils';
 
 describe('ScalarAuthClient', function() {
     let clientSandbox;
-    let sac;
 
     beforeEach(function() {
         sinon.stub(window.localStorage, 'getItem').withArgs('mx_scalar_token').returns('brokentoken');
