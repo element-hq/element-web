@@ -1992,5 +1992,16 @@
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)ss’bëri ndryshime",
     "Resend edit": "Ridërgoje përpunimin",
     "Resend %(unsentCount)s reaction(s)": "Ridërgo %(unsentCount)s reagim(e)",
-    "Resend removal": "Ridërgo heqjen"
+    "Resend removal": "Ridërgo heqjen",
+    "Changes your avatar in all rooms": "Ndryshon avatarin tuaj në krejt dhomat",
+    "Clear all data on this device?": "Të spastrohen krejt të dhënat në këtë pajisje?",
+    "Deleting all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Fshirja e krejt të dhënave prej kësaj pajisje është e përhershme. Mesazhet e fshehtëzuar do të humbin, veç në mos qofshin kopjeruajtur kyçet e tyre.",
+    "Delete everything": "Fshi gjithçka",
+    "Your homeserver doesn't seem to support this feature.": "Shërbyesi juaj Home nuk duket se e mbulon këtë veçori.",
+    "You're signed out": "Keni bërë dalje",
+    "Your homeserver (%(domainName)s) admin has signed you out of your account %(displayName)s (%(userId)s).": "Përgjegjësi i shërbyesit tuaj Home (%(domainName)s) ka bërë daljen tuaj nga llogaria juaj %(displayName)s (%(userId)s).",
+    "I don't want to sign in": "S’dua të bëj hyrjen",
+    "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "Nëse kjo është një pajisje e përbashkët me të tjerë, ose nëse s’doni të hyni në llogarinë tuaj që prej saj, spastroni krejt të dhënat e depozituara lokalisht në këtë pajisje.",
+    "Clear all data": "Spastro krejt të dhënat",
+    "Sign in again to regain access to your account, or a different one.": "Ribëni hyrjen që të mund të ripërdorni llogarinë tuaj, ose një tjetër."
 }
