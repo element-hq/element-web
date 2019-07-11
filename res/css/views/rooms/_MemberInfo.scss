@@ -82,9 +82,6 @@ limitations under the License.
     display: block;
 }
 
-.mx_MemberInfo_avatar .mx_BaseAvatar {
-}
-
 .mx_MemberInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
     cursor: zoom-in;
 }
@@ -126,7 +123,7 @@ limitations under the License.
 }
 
 .mx_MemberInfo_createRoom_label {
-    width: initial ! important;
+    width: initial !important;
     cursor: pointer;
 }
 

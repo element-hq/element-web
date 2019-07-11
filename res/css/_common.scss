@@ -104,15 +104,15 @@ input[type=text], input[type=password], textarea {
     color: $primary-fg-color;
 }
 
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    outline: none;
-    box-shadow: none;
-}
-
 /* Required by Firefox */
 textarea {
     font-family: $font-family;
     color: $primary-fg-color;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 // This is used to hide the standard outline added by browsers for
@@ -129,6 +129,13 @@ textarea {
 // appear to be part of the input
 
 .mx_Dialog, .mx_MatrixChat {
+    .mx_textinput > input[type=text],
+    .mx_textinput > input[type=search] {
+        border: none;
+        flex: 1;
+        color: $primary-fg-color;
+    }
+
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
@@ -147,13 +154,6 @@ textarea {
     .mx_textinput {
         display: flex;
         align-items: center;
-
-        > input[type=text],
-        > input[type=search] {
-            border: none;
-            flex: 1;
-            color: $primary-fg-color;
-        }
     }
 
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
@@ -166,9 +166,7 @@ textarea {
 /*** panels ***/
 .dark-panel {
     background-color: $dark-panel-bg-color;
-}
 
-.dark-panel {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
@@ -209,25 +207,25 @@ textarea {
 
 /* Expand thumbs on hoverover */
 .gm-scrollbar {
-    border-radius: 5px ! important;
+    border-radius: 5px !important;
 }
 .gm-scrollbar.-vertical {
     width: 6px;
-    transition: width 120ms ease-out ! important;
+    transition: width 120ms ease-out !important;
 }
 .gm-scrollbar.-vertical:hover,
 .gm-scrollbar.-vertical:active {
     width: 8px;
-    transition: width 120ms ease-out ! important;
+    transition: width 120ms ease-out !important;
 }
 .gm-scrollbar.-horizontal {
     height: 6px;
-    transition: height 120ms ease-out ! important;
+    transition: height 120ms ease-out !important;
 }
 .gm-scrollbar.-horizontal:hover,
 .gm-scrollbar.-horizontal:active {
     height: 8px;
-    transition: height 120ms ease-out ! important;
+    transition: height 120ms ease-out !important;
 }
 
 // These are magic constants which are excluded from tinting, to let themes
@@ -269,14 +267,6 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-/* Spinner Dialog overide */
-.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
-    width: auto;
-    border-radius: 8px;
-    padding: 0px;
-    box-shadow: none;
 }
 
 .mx_Dialog {
@@ -390,7 +380,7 @@ textarea {
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -407,7 +397,7 @@ textarea {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
     min-width: 156px;
@@ -423,6 +413,14 @@ textarea {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
+}
+
+/* Spinner Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
+    width: auto;
+    border-radius: 8px;
+    padding: 0px;
+    box-shadow: none;
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class

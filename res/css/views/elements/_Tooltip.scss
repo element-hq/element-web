@@ -36,8 +36,8 @@ limitations under the License.
     border-bottom: 7px solid transparent;
 }
 
-.mx_Tooltip_chevron:after {
-    content:'';
+.mx_Tooltip_chevron::after {
+    content: '';
     width: 0;
     height: 0;
     border-top: 6px solid transparent;

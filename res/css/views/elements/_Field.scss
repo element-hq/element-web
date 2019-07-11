@@ -110,12 +110,12 @@ limitations under the License.
     max-width: calc(100% - 20px); // 100% of parent minus margin and padding
 }
 
+.mx_Field_labelAlwaysTopLeft label,
+.mx_Field select + label, /* Always show a select's label on top to not collide with the value */,
 .mx_Field input:focus + label,
 .mx_Field input:not(:placeholder-shown) + label,
 .mx_Field textarea:focus + label,
-.mx_Field textarea:not(:placeholder-shown) + label,
-.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
-.mx_Field_labelAlwaysTopLeft label {
+.mx_Field textarea:not(:placeholder-shown) + label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
@@ -144,6 +144,9 @@ limitations under the License.
     color: $greyed-fg-color;
 }
 
+/* Ordering this block by specificity would require breaking it up into several
+   chunks, which seems like it would be more confusing to read. */
+/* stylelint-disable no-descending-specificity */
 .mx_Field_valid {
     &.mx_Field,
     &.mx_Field:focus-within {
@@ -167,6 +170,7 @@ limitations under the License.
         color: $input-invalid-border-color;
     }
 }
+/* stylelint-enable no-descending-specificity */
 
 .mx_Field_tooltip {
     margin-top: -12px;

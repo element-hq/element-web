@@ -122,8 +122,29 @@ limitations under the License.
 
 /* HACK to override line-height which is already marked important elsewhere */
 .mx_EventTile_bigEmoji.mx_EventTile_bigEmoji {
-    font-size: 48px ! important;
-    line-height: 57px ! important;
+    font-size: 48px !important;
+    line-height: 57px !important;
+}
+
+.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
+    visibility: visible;
+}
+
+.mx_EventTile_selected > div > a > .mx_MessageTimestamp {
+    left: 3px;
+    width: auto;
+}
+
+// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
+.mx_EventTile_last > div > a > .mx_MessageTimestamp,
+.mx_EventTile:hover > div > a > .mx_MessageTimestamp,
+.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp {
+    visibility: visible;
+}
+
+.mx_EventTile:hover .mx_MessageActionBar,
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar {
+    visibility: visible;
 }
 
 /* this is used for the tile for the event which is selected via the URL.
@@ -135,9 +156,17 @@ limitations under the License.
     background-color: $event-selected-color;
 }
 
+.mx_EventTile_highlight,
+.mx_EventTile_highlight .markdown-body {
+    color: $event-highlight-fg-color;
+
+    .mx_EventTile_line {
+        background-color: $event-highlight-bg-color;
+    }
+}
+
 .mx_EventTile:hover .mx_EventTile_line,
-.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line
-{
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line {
     background-color: $event-selected-color;
 }
 
@@ -156,7 +185,7 @@ limitations under the License.
 }
 
 .mx_EventTile_encrypting {
-    color: $event-encrypting-color ! important;
+    color: $event-encrypting-color !important;
 }
 
 .mx_EventTile_sending {
@@ -166,14 +195,6 @@ limitations under the License.
 .mx_EventTile_sending .mx_UserPill,
 .mx_EventTile_sending .mx_RoomPill {
     opacity: 0.5;
-}
-.mx_EventTile_sending.mx_EventTile_redacted .mx_UnknownBody {
-    opacity: 0.4;
-}
-
-div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
-    --lozenge-color: $event-notsent-color !important;
-    --lozenge-border-color: $event-notsent-color !important;
 }
 
 .mx_EventTile_notSent {
@@ -185,28 +206,27 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     --lozenge-color: $event-redacted-fg-color;
     --lozenge-border-color: $event-redacted-border-color;
     display: block;
-    width: 100%;
     height: 22px;
     width: 250px;
     border-radius: 11px;
-    background: repeating-linear-gradient(
-        -45deg,
-        var(--lozenge-color),
-        var(--lozenge-color) 3px,
-        transparent 3px,
-        transparent 6px
-    );
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            var(--lozenge-color),
+            var(--lozenge-color) 3px,
+            transparent 3px,
+            transparent 6px
+        );
     box-shadow: 0px 0px 3px var(--lozenge-border-color) inset;
 }
 
-.mx_EventTile_highlight,
-.mx_EventTile_highlight .markdown-body
-{
-    color: $event-highlight-fg-color;
+.mx_EventTile_sending.mx_EventTile_redacted .mx_UnknownBody {
+    opacity: 0.4;
+}
 
-    .mx_EventTile_line {
-        background-color: $event-highlight-bg-color;
-    }
+div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
+    --lozenge-color: $event-notsent-color;
+    --lozenge-border-color: $event-notsent-color;
 }
 
 .mx_EventTile_contextual {
@@ -229,27 +249,6 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 .mx_EventTile_msgOption a {
     text-decoration: none;
-}
-
-// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
-.mx_EventTile_last > div > a > .mx_MessageTimestamp,
-.mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp {
-    visibility: visible;
-}
-
-.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
-    visibility: visible;
-}
-
-.mx_EventTile_selected > div > a > .mx_MessageTimestamp {
-    left: 3px;
-    width: auto;
-}
-
-.mx_EventTile:hover .mx_MessageActionBar,
-.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar {
-    visibility: visible;
 }
 
 .mx_EventTile_readAvatars {
@@ -295,11 +294,6 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 /* De-zalgoing */
 .mx_EventTile_body {
     overflow-y: hidden;
-}
-
-/* End to end encryption stuff */
-.mx_EventTile:hover .mx_EventTile_e2eIcon {
-    opacity: 1;
 }
 
 .mx_EventTile_e2eIcon {
@@ -368,22 +362,31 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     padding-left: 5px;
 }
 
+.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
+    padding-left: 78px;
+}
+
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
     padding-left: 60px;
 }
 
-.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line,
+.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
+    border-left: $e2e-verified-color 5px solid;
+}
+
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
+    border-left: $e2e-unverified-color 5px solid;
+}
+
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line {
     padding-left: 78px;
 }
 
-.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
-    border-left: $e2e-verified-color 5px solid;
-}
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
-    border-left: $e2e-unverified-color 5px solid;
+/* End to end encryption stuff */
+.mx_EventTile:hover .mx_EventTile_e2eIcon {
+    opacity: 1;
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
@@ -392,12 +395,6 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     left: 3px;
     width: auto;
 }
-
-/*
-.mx_EventTile_verified .mx_EventTile_e2eIcon {
-    display: none;
-}
-*/
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > .mx_EventTile_e2eIcon,
@@ -417,35 +414,40 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 /* Various markdown overrides */
 
+.mx_EventTile_body pre {
+    border: 1px solid transparent;
+}
+
 .mx_EventTile_content .markdown-body {
-    font-family: inherit ! important;
-    white-space: normal ! important;
-    line-height: inherit ! important;
+    font-family: inherit !important;
+    white-space: normal !important;
+    line-height: inherit !important;
     color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
     font-size: 14px;
-}
 
-/* have to use overlay rather than auto otherwise Linux and Windows
-   Chrome gets very confused about vertical spacing:
-   https://github.com/vector-im/vector-web/issues/754
-*/
-.mx_EventTile_content .markdown-body pre {
-    overflow-x: overlay;
-    overflow-y: visible;
-    max-height: 30vh;
-}
-
-.mx_EventTile_content .markdown-body code {
-    // deliberate constants as we're behind an invert filter
-    background-color: #f8f8f8;
-}
-
-.mx_EventTile_content .markdown-body {
     pre, code {
-        font-family: $monospace-font-family ! important;
+        font-family: $monospace-font-family !important;
         // deliberate constants as we're behind an invert filter
         color: #333;
     }
+
+    pre {
+        // have to use overlay rather than auto otherwise Linux and Windows
+        // Chrome gets very confused about vertical spacing:
+        // https://github.com/vector-im/vector-web/issues/754
+        overflow-x: overlay;
+        overflow-y: visible;
+        max-height: 30vh;
+    }
+
+    code {
+        // deliberate constants as we're behind an invert filter
+        background-color: #f8f8f8;
+    }
+}
+
+.mx_EventTile:hover .mx_EventTile_body pre {
+    border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
 .mx_EventTile_pre_container {
@@ -466,17 +468,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     background-image: url($copy-button-url);
 }
 
-.mx_EventTile_body pre {
-    border: 1px solid transparent;
-}
-
-.mx_EventTile:hover .mx_EventTile_body pre
-{
-    border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
-}
-
-.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton
-{
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton {
     visibility: visible;
 }
 
@@ -485,19 +477,17 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 .mx_EventTile_content .markdown-body h3,
 .mx_EventTile_content .markdown-body h4,
 .mx_EventTile_content .markdown-body h5,
-.mx_EventTile_content .markdown-body h6
-{
-    font-family: inherit ! important;
+.mx_EventTile_content .markdown-body h6 {
+    font-family: inherit !important;
     color: inherit;
 }
 
 
 /* Make h1 and h2 the same size as h3. */
 .mx_EventTile_content .markdown-body h1,
-.mx_EventTile_content .markdown-body h2
-{
+.mx_EventTile_content .markdown-body h2 {
     font-size: 1.5em;
-    border-bottom: none ! important; // override GFM
+    border-bottom: none !important; // override GFM
 }
 
 .mx_EventTile_content .markdown-body a {
@@ -506,7 +496,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 }
 
 .mx_EventTile_content .markdown-body .hljs {
-    display: inline ! important;
+    display: inline !important;
 }
 
 /*
@@ -523,6 +513,9 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 /* end of overrides */
 
+/* Ordering this block by specificity would require breaking it up into several
+   chunks, which seems like it would be more confusing to read. */
+/* stylelint-disable no-descending-specificity */
 .mx_MatrixChat_useCompactLayout {
     .mx_EventTile {
         padding-top: 4px;
@@ -595,8 +588,9 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     }
 
     .mx_EventTile_content .markdown-body {
-      p, ul, ol, dl, blockquote, pre, table {
-        margin-bottom: 4px; // 1/4 of the non-compact margin-bottom
-      }
+        p, ul, ol, dl, blockquote, pre, table {
+            margin-bottom: 4px; // 1/4 of the non-compact margin-bottom
+        }
     }
 }
+/* stylelint-enable no-descending-specificity */

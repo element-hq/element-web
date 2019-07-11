@@ -105,7 +105,7 @@ limitations under the License.
     margin: auto;
 }
 
-.mx_ProfileSettings_avatarOverlayImg:before {
+.mx_ProfileSettings_avatarOverlayImg::before {
     background-color: $settings-profile-overlay-placeholder-fg-color;
     mask: url("$(res)/img/feather-customised/upload.svg");
     mask-repeat: no-repeat;
@@ -119,7 +119,7 @@ limitations under the License.
     right: 0;
 }
 
-.mx_ProfileSettings_avatar:hover .mx_ProfileSettings_avatarOverlayImg:before {
+.mx_ProfileSettings_avatar:hover .mx_ProfileSettings_avatarOverlayImg::before {
     background-color: $settings-profile-overlay-fg-color !important;
 }
 

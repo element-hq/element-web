@@ -32,7 +32,7 @@ limitations under the License.
 }
 
 /* hide resize handles next to collapsed / empty sublists */
-.mx_RoomList .mx_RoomSubList:not(.mx_RoomSubList_nonEmpty) + .mx_ResizeHandle  {
+.mx_RoomList .mx_RoomSubList:not(.mx_RoomSubList_nonEmpty) + .mx_ResizeHandle {
     display: none;
 }
 

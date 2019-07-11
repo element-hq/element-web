@@ -78,6 +78,14 @@ limitations under the License.
         display: none;
     }
 
+    .mx_IndicatorScrollbar_leftOverflowIndicator {
+        background: linear-gradient(to left, $panel-gradient);
+    }
+
+    .mx_IndicatorScrollbar_rightOverflowIndicator {
+        background: linear-gradient(to right, $panel-gradient);
+    }
+
     &.mx_IndicatorScrollbar_leftOverflow .mx_IndicatorScrollbar_leftOverflowIndicator,
     &.mx_IndicatorScrollbar_rightOverflow .mx_IndicatorScrollbar_rightOverflowIndicator {
         position: absolute;
@@ -88,13 +96,4 @@ limitations under the License.
         pointer-events: none;
         z-index: 100;
     }
-
-    .mx_IndicatorScrollbar_leftOverflowIndicator {
-        background: linear-gradient(to left, $panel-gradient);
-    }
-
-    .mx_IndicatorScrollbar_rightOverflowIndicator {
-        background: linear-gradient(to right, $panel-gradient);
-    }
 }
-
