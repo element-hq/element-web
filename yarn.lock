@@ -5717,10 +5717,15 @@ lodash.union@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
 
-lodash@^4.0.0, lodash@^4.1.1, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.5.0:
+lodash@^4.0.0, lodash@^4.1.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.5.0:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+
+lodash@^4.17.14:
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
+  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
 log4js@^3.0.0:
   version "3.0.6"
@@ -5835,10 +5840,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.1.0.tgz#a8192d700e4d96028cdb64f3453935292e76faaf"
-  integrity sha512-fVgqxp9rrcGhQ9cnU2WW3KJCOIn/WJu/G2tTgWEtzeDkUl22JXiB6iYfrJO7XF8nm8W5DbJVtxWRRnV8BvWatQ==
+matrix-js-sdk@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.1.1.tgz#c4d9ed81e18e2c2fce9fff168fdf41f37c390b6a"
+  integrity sha512-dpVuwrQjOJn8eqtP9TRoSX6WIbdZG7+RCmqkJtfvpjB+iNgtDhodIWfrNearSBhJYezipUFu9nrt9akKfWBXxQ==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5859,10 +5864,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.3.0.tgz#ff4c8caef298a3396bf06329e476148d8325aa8b"
-  integrity sha512-ZQZuJHI0r9L7GkXtGU2a6HW4LotQwnIFo/K2c6KyCQhbuhX2HdtRdoHOXGxU69VB8VmwltwCKwVWUTiLhIsb5w==
+matrix-react-sdk@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.3.1.tgz#47bcb451684e09c7306db9751000e4c5af713bb7"
+  integrity sha512-qQ9O7sBkcTWbUUkv82fSZVXyXVNkL9WJkWqrAlzTUzf8pzVENqtKunQeDbrfzuYan2bHre+ot14KFwSkywOhcw==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5887,9 +5892,9 @@ matrix-react-sdk@1.3.0:
     is-ip "^2.0.0"
     isomorphic-fetch "^2.2.1"
     linkifyjs "^2.1.6"
-    lodash "^4.13.1"
+    lodash "^4.17.14"
     lolex "2.3.2"
-    matrix-js-sdk "2.1.0"
+    matrix-js-sdk "2.1.1"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
