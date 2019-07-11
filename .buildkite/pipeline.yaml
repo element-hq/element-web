@@ -44,3 +44,12 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:10"
+
+  - label: "🌐 i18n"
+    command:
+      # Do the things needed to actually run the i18n stuff
+      - "yarn install"
+      - "yarn diff-i18n"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
