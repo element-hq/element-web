@@ -51,7 +51,7 @@ class ScalarAuthClient {
         return this.scalarToken != null; // undef or null
     }
 
-    // Returns a scalar_token string
+    // Returns a promise that resolves to a scalar_token string
     getScalarToken() {
         let token = this.scalarToken;
         if (!token) token = window.localStorage.getItem("mx_scalar_token");
@@ -59,7 +59,9 @@ class ScalarAuthClient {
         if (!token) {
             return this.registerForToken();
         } else {
-            return this._checkToken(token);
+            return this._checkToken(token).catch(() => {
+                return this.registerForToken();
+            });
         }
     }
 
@@ -105,6 +107,8 @@ class ScalarAuthClient {
                 )]).then(() => {
                     return token;
                 });
+            } else {
+                throw e;
             }
         });
     }
