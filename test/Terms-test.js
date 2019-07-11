@@ -97,7 +97,7 @@ describe('Terms', function() {
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
-            [ "http://example.com/one" ],
+            ["http://example.com/one"],
         )).toBeTruthy();
     });
 
@@ -132,7 +132,7 @@ describe('Terms', function() {
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
-            [ "http://example.com/one", "http://example.com/two" ],
+            ["http://example.com/one", "http://example.com/two"],
         )).toBeTruthy();
     });
 
@@ -182,13 +182,13 @@ describe('Terms', function() {
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
-            [ "http://example.com/one" ],
+            ["http://example.com/one"],
         )).toBeTruthy();
         expect(MatrixClientPeg.get().agreeToTerms.calledWith(
             Matrix.SERVICE_TYPES.IM,
             'https://imtwo.test',
             'a token token',
-            [ "http://example.com/two" ],
+            ["http://example.com/two"],
         )).toBeTruthy();
     });
 });
