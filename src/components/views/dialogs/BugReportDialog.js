@@ -50,6 +50,13 @@ export default class BugReportDialog extends React.Component {
     }
 
     _onSubmit(ev) {
+        if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
+            this.setState({
+                err: _t("Please enter an issue URL to help us analyse the problem."),
+            });
+            return;
+        }
+
         const userText =
             (this.state.text.length > 0 ? this.state.text + '\n\n': '') + 'Issue: ' +
             (this.state.issueUrl.length > 0 ? this.state.issueUrl : 'No issue link given');
@@ -93,7 +100,7 @@ export default class BugReportDialog extends React.Component {
         this.setState({ issueUrl: ev.target.value });
     }
 
-   _onSendLogsChange(ev) {
+    _onSendLogsChange(ev) {
         this.setState({ sendLogs: ev.target.checked });
     }
 
