@@ -83,7 +83,7 @@ export default class DeactivateAccountDialog extends React.Component {
 
         Analytics.trackEvent('Account', 'Deactivate Account');
         Lifecycle.onLoggedOut();
-        this.props.onFinished(false);
+        this.props.onFinished(true);
     }
 
     _onCancel() {
