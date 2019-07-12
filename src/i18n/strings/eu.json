@@ -1986,5 +1986,22 @@
     "Loading room preview": "Gelaren aurrebista kargatzen",
     "Edited at %(date)s. Click to view edits.": "Edizio data: %(date)s. Sakatu edizioak ikusteko.",
     "Message edits": "Mezuaren edizioak",
-    "Show all": "Erakutsi denak"
+    "Show all": "Erakutsi denak",
+    "Changes your avatar in all rooms": "Aldatu zure abatarra gela guztietan",
+    "%(senderName)s made no change.": "%(senderName)s erabiltzaileak ez du aldaketarik egin.",
+    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin %(count)s aldiz",
+    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin",
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin",
+    "Removing…": "Kentzen…",
+    "Clear all data on this device?": "Garbitu gailu honi buruzko datu guztiak?",
+    "Clear all data": "Garbitu datu guztiak",
+    "Your homeserver doesn't seem to support this feature.": "Antza zure hasiera-zerbitzariak ez du ezaugarri hau onartzen.",
+    "Resend edit": "Birbidali edizioa",
+    "Resend %(unsentCount)s reaction(s)": "Birbidali %(unsentCount)s erreakzio",
+    "Resend removal": "Birbidali kentzeko agindua",
+    "Forgotten your password?": "Pasahitza ahaztu duzu?",
+    "Sign in and regain access to your account.": "Hasi saioa eta berreskuratu zure kontua.",
+    "You're signed out": "Saioa amaitu duzu",
+    "Clear personal data": "Garbitu datu pertsonalak"
 }
