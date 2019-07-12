@@ -219,6 +219,9 @@ export default class EditorModel {
      * inserts `str` into the model at `pos`.
      * @param {Object} pos
      * @param {string} str
+     * @param {Object} options
+     * @param {bool} options.validate Whether characters will be validated by the part.
+     *                                Validating allows the inserted text to be parsed according to the part rules.
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
