@@ -36,6 +36,7 @@ const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
+import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 
 const PAGINATE_SIZE = 20;
@@ -1140,55 +1141,70 @@ const TimelinePanel = React.createClass({
         const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
-        let lastDisplayedIndex = null;
+        const isNodeInView = (node) => {
+            if (node) {
+                const boundingRect = node.getBoundingClientRect();
+                if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
+                    (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        // if allowEventsWithoutTiles is enabled, we keep track
+        // of how many of the adjacent events were invisible (because no tile)
+        // but should have the read receipt moved past, so
+        // we can include those once we find the last displayed (visible) event.
+        // The counter is cleared when we ignore an event we don't want
+        // to send a read receipt for (our own events, local echos)
+        let adjacentInvisibleEventCount = 0;
         // Use `liveEvents` here because we don't want the read marker or read
         // receipt to advance into pending events.
         for (let i = this.state.liveEvents.length - 1; i >= 0; --i) {
             const ev = this.state.liveEvents[i];
 
-            if (ignoreOwn && ev.sender && ev.sender.userId == myUserId) {
-                continue;
-            }
-
-            // local echoes have a fake event ID
-            if (ignoreEchoes && ev.status) {
-                continue;
-            }
-
             const node = messagePanel.getNodeForEventId(ev.getId());
-            if (!node) continue;
+            const isInView = isNodeInView(node);
 
-            const boundingRect = node.getBoundingClientRect();
-            if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
-                (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
-                lastDisplayedIndex = i;
-                break;
-            }
-        }
-
-        if (lastDisplayedIndex === null) {
-            return null;
-        }
-
-        // If events without tiles are allowed, then we walk forward from the
-        // the last displayed event and advance the index for any events without
-        // tiles that immediately follow it.
-        // XXX: We could track the last event without a tile after the last
-        // displayed event in the loop above so that we only do a single pass
-        // through the loop, which would be more efficient. Using two passes is
-        // easier to reason about, so let's start there and optimise later if
-        // needed.
-        if (allowEventsWithoutTiles) {
-            for (let i = lastDisplayedIndex + 1; i < this.state.liveEvents.length; i++) {
-                const ev = this.state.liveEvents[i];
-                if (EventTile.haveTileForEvent(ev)) {
-                    break;
+            // the event at i + adjacentInvisibleEventCount should
+            // not be ignored, and it considered the first in view (at the bottom)
+            // because  i is the first one in view and the adjacent ones are invisible,
+            // so return this without further ado.
+            if (isInView && adjacentInvisibleEventCount !== 0) {
+                return i + adjacentInvisibleEventCount;
+            } else {
+                if (node && !isInView) {
+                    // has node but not in view, so adjacent invisible events don't count
+                    adjacentInvisibleEventCount = 0;
                 }
-                lastDisplayedIndex = i;
+
+                const shouldIgnore = (ignoreEchoes && ev.status) || // local echo
+                    (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
+                const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
+
+                if (allowEventsWithoutTiles && (isWithoutTile || !node)) {
+                    // don't start counting if the event should be ignored,
+                    // but continue counting if we were already so the offset
+                    // to the previous invisble event that didn't need to be ignored
+                    // doesn't get messed up
+                    if (!shouldIgnore || (shouldIgnore && adjacentInvisibleEventCount !== 0)) {
+                        ++adjacentInvisibleEventCount;
+                    }
+                    continue;
+                }
+
+                if (shouldIgnore) {
+                    continue;
+                }
+
+                if (isInView) {
+                    return i;
+                }
             }
         }
 
-        return lastDisplayedIndex;
+        return null;
     },
 
     /**
