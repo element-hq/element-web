@@ -44,3 +44,14 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:10"
+
+  - label: "🌐 i18n"
+    command:
+      - "echo '--- Fetching Dependencies'"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
+      - "yarn install"
+      - "echo '+++ Testing i18n output'"
+      - "yarn diff-i18n"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
