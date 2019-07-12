@@ -1,3 +1,10 @@
+Changes in [1.3.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.2) (2019-07-12)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.1...v1.3.0-rc.2)
+
+ * Upgrade to React SDK 1.4.0-rc.2 and JS SDK 2.2.0-rc.2
+ * Fix regression from Riot 1.3.0-rc.1 when listing devices in user settings
+
 Changes in [1.3.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.1) (2019-07-12)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.4...v1.3.0-rc.1)
