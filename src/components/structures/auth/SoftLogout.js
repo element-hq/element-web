@@ -21,8 +21,6 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
-import SdkConfig from "../../../SdkConfig";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import url from 'url';
@@ -53,24 +51,7 @@ export default class SoftLogout extends React.Component {
     constructor() {
         super();
 
-        const defaultServerConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
-
-        const hsUrl = MatrixClientPeg.get().getHomeserverUrl();
-        const domainName = hsUrl === defaultServerConfig.hsUrl
-            ? defaultServerConfig.hsName
-            : MatrixClientPeg.getHomeserverName();
-
-        const userId = MatrixClientPeg.get().getUserId();
-        const user = MatrixClientPeg.get().getUser(userId);
-
-        const displayName = user && user.displayName !== userId
-            ? user.displayName
-            : userId.substring(1).split(':')[0];
-
         this.state = {
-            domainName,
-            userId,
-            displayName,
             loginView: LOGIN_VIEW.LOADING,
             keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
             ssoUrl: null,
@@ -315,23 +296,6 @@ export default class SoftLogout extends React.Component {
                     <h2>
                         {_t("You're signed out")}
                     </h2>
-                    <div>
-                        {_t(
-                            "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your " +
-                            "account <strong2>%(displayName)s (%(userId)s)</strong2>.",
-                            {
-                                domainName: this.state.domainName,
-                                displayName: this.state.displayName,
-                                userId: this.state.userId,
-                            },
-                            {
-                                // XXX: It's annoying that we can't just map <strong> to two things.
-                                // https://github.com/vector-im/riot-web/issues/9086
-                                'strong1': (val) => <strong>{val}</strong>,
-                                'strong2': (val) => <strong>{val}</strong>,
-                            },
-                        )}
-                    </div>
 
                     <h3>{_t("Sign in")}</h3>
                     <div>
