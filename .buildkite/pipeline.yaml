@@ -85,6 +85,16 @@ steps:
           image: "node:10"
           propagate-environment: true
 
+  - label: "🌐 i18n"
+    command:
+      - "echo '--- Fetching Dependencies'"
+      - "yarn install"
+      - "echo '+++ Testing i18n output'"
+      - "yarn diff-i18n"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
   - wait
  
   - label: "🐴 Trigger riot-web"
