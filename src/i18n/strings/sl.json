@@ -1,1 +1,21 @@
-{}
+{
+    "Riot Desktop on %(platformName)s": "Namizni Riot za %(platformName)s",
+    "Unknown device": "Neznana naprava",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s s %(browserName)s na %(osName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "Za klic s skupno rabo zaslona potrebujete HTTPS.",
+    "powered by Matrix": "poganja Matrix",
+    "Custom Server Options": "Možnosti strežnika po meri",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Možnosti strežnika po meri lahko uporabite za prijavo v druge Matrix strežnike, s tem da podate drug URL domačega strežnika. To vam omogoča, da uporabljate Riot z obstoječim Matrix računom na drugem strežniku.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Nastavite lahko tudi strežnik za identiteto po meri, vendar ne boste mogli povabiti uporabnikov prek e-pošte, prav tako pa vas ne bodo mogli povabiti drugi.",
+    "Dismiss": "Opusti",
+    "Welcome to Riot.im": "Dobrodošli v Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizirano šifrirano sporočanje &amp; sodelovanje s pomočjo [matrix]",
+    "Sign In": "Prijava",
+    "Create Account": "Registracija",
+    "Need help?": "Potrebujete pomoč?",
+    "Chat with Riot Bot": "Klepetajte z Riot Botom",
+    "Explore rooms": "Raziščite sobe",
+    "Room Directory": "Imenik sob",
+    "Search the room directory": "Preiščite imenik sob",
+    "Get started with some tips from Riot Bot!": "Začnite z nekaterimi nasveti Riot Bota!"
+}

@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -121,6 +122,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
+    async getConfig(): Promise<{}> {
+        return this._ipcCall('getConfig');
+    }
+
     async onUpdateDownloaded(ev, updateInfo) {
         dis.dispatch({
             action: 'new_version',
@@ -161,14 +166,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
 
         // Notifications in Electron use the HTML5 notification API
-        const notification = new global.Notification(
-            title,
-            {
-                body: msg,
-                icon: avatarUrl,
-                silent: true, // we play our own sounds
-            },
-        );
+        const notifBody = {
+            body: msg,
+            silent: true, // we play our own sounds
+        };
+        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        const notification = new global.Notification(title, notifBody);
 
         notification.onclick = () => {
             dis.dispatch({

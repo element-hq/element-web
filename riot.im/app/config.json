@@ -1,5 +1,4 @@
 {
-    "update_base_url": "https://packages.riot.im/desktop/update/",
     "default_hs_url": "https://matrix.org",
     "default_is_url": "https://vector.im",
     "brand": "Riot",
@@ -7,17 +6,12 @@
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
         "https://scalar-staging.vector.im/api",
-        "https://scalar-staging.riot.im/scalar/api",
-        "https://scalar.vector.im/api"
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
     ],
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "welcomeUserId": "@riot-bot:matrix.org",
-    "roomDirectory": {
-        "servers": [
-            "matrix.org"
-        ]
-    },
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
@@ -31,10 +25,24 @@
     },
     "features": {
         "feature_lazyloading": "enable",
-        "feature_reactions": "enable",
-        "feature_message_editing": "enable"
+        "feature_room_breadcrumbs": "labs"
+    },
+    "roomDirectory": {
+        "servers": [
+            "matrix.org"
+        ]
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false
-    }
+    },
+    "terms_and_conditions_links": [
+        {
+            "url": "https://riot.im/privacy",
+            "text": "Privacy Policy"
+        },
+        {
+            "url": "https://matrix.org/docs/guides/riot_im_cookie_policy",
+            "text": "Cookie Policy"
+        }
+    ]
 }

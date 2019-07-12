@@ -71,12 +71,12 @@ module.exports = {
                 },
             },
             {
-                test: /\.(gif|png|svg|ttf|xml|ico)$/,
+                test: /\.(gif|png|svg|ttf|woff|woff2|xml|ico)$/,
                 // Use a content-based hash in the name so that we can set a long cache
                 // lifetime for assets while still delivering changes quickly.
                 oneOf: [
                     {
-                        // Images referenced in CSS files
+                        // Assets referenced in CSS files
                         issuer: /\.(scss|css)$/,
                         loader: 'file-loader',
                         options: {
@@ -92,11 +92,15 @@ module.exports = {
                         },
                     },
                     {
-                        // Images referenced in HTML and JS files
+                        // Assets referenced in HTML and JS files
                         loader: 'file-loader',
                         options: {
                             name: '[name].[hash:7].[ext]',
                             outputPath: getImgOutputPath,
+                            publicPath: function(url, resourcePath) {
+                                const outputPath = getImgOutputPath(url, resourcePath);
+                                return toPublicPath(outputPath);
+                            },
                         },
                     },
                 ],

@@ -23,6 +23,9 @@ cp config.sample.json webapp/
 mkdir -p dist
 cp -r webapp riot-$version
 
+# Just in case you have a local config, remove it before packaging
+rm riot-$version/config.json || true
+
 # if $version looks like semver with leading v, strip it before writing to file
 if [[ ${version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-.+)?$ ]]; then
     echo ${version:1} > riot-$version/version

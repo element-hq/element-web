@@ -37,10 +37,13 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви можете використовувати параметри користувача сервера для входа на другі сервера Matrix, вказав другий URL-адресу домашнього сервера. <br/>Це дозволяє використовувати Riot з обліковим записом Matrix який існує на другому домашньому сервері.<br/><br/>Окрім цього, можливо встановити ідентифікаційний сервер користувача, але ви не зможете запросити других користувачів та бути запрошенному  використовуючи адресу електронної пошти.",
     "Co-ordination for Riot translators": "Координаційний чат для перекладачів Riot",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Ви можете використати власні параметри сервера для входу в інші Matrix сервери, вказавши інший URL. Це дозволить використовувати Riot з наявним обліковим записом Matrix на іншому сервері.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви також можете встановити власний сервер ідентифікації, але Ви не зможете запрошувати користувачів або бути запрошеним за адресою електронної пошти.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви також можете встановити власний сервер ідентифікації, але Ви не зможете запрошувати користувачів (або бути запрошеним самому) за адресою електронної пошти.",
     "Need help?": "Допомогти?",
     "Sign In": "Вхід",
     "Create Account": "Створити аккаунт",
     "Explore rooms": "Дослідити кімнати",
-    "Room Directory": "Каталог кімнат"
+    "Room Directory": "Каталог кімнат",
+    "Unexpected error preparing the app. See console for details.": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невірна конфігурація: можна вказати лише default_server_config, default_server_name або default_hs_url.",
+    "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням."
 }

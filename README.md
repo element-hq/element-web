@@ -21,24 +21,18 @@ released version of Riot:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See below for details.
+   as desired. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Riot!
 
-Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot.asc .
+Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
+at https://packages.riot.im/riot-release-key.asc.
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
-### Desktop Installation for Debian Stretch
-
-1. Add the repository to your sources.list using either of the following two options:
-  - Directly to sources.list: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
-  - As a separate entry in sources.list.d: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
-2. Add the gpg signing key for the riot repository: `curl -s https://riot.im/packages/debian/repo-key.asc | sudo apt-key add -`
-3. Update your package lists: `sudo apt-get update`
-4. Install Riot: `sudo apt-get install riot-web`
+To install Riot as a desktop application, see [Running as a desktop
+app](#running-as-a-desktop-app) below.
 
 Important Security Note
 =======================
@@ -58,9 +52,9 @@ on the client, Riot needs a way to supply the decrypted content from a separate
 origin to the one Riot is hosted on. This currently done with a 'cross origin
 renderer' which is a small piece of javascript hosted on a different domain.
 To avoid all Riot installs needing one of these to be set up, riot.im hosts
-one on usercontent.riot.im which is used by default. See 'config.json' if you'd
-like to host your own. https://github.com/vector-im/riot-web/issues/6173 tracks
-progress on replacing this with something better.
+one on usercontent.riot.im which is used by default.
+https://github.com/vector-im/riot-web/issues/6173 tracks progress on replacing
+this with something better.
 
 Building From Source
 ====================
@@ -97,7 +91,7 @@ guide](https://yarnpkg.com/docs/install/) if you do not have it already.
    develop branch. (Note that we don't reference the develop versions in git directly
    due to https://github.com/npm/npm/issues/3055.)
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it (see below for details).
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. `yarn dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -107,108 +101,24 @@ which will build all the necessary files into the `webapp` directory. The versio
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your webserver to actually serve up the app, which is entirely static content.
 
-config.json
-===========
-
-You can configure the app by copying `config.sample.json` to
-`config.json` and customising it:
-
-For a good example, see https://riot.im/develop/config.json.
-
-1. `default_server_name` sets the default server name to use for authentication.
-   This will trigger Riot to ask
-   `https://<server_name>/.well-known/matrix/client` for the homeserver and
-   identity server URLs to use. This is the recommended approach for setting a
-   default server. However, it is also possible to use the following to directly
-   configure each of the URLs:
-   * `default_hs_url` sets the default homeserver URL.
-   * `default_is_url` sets the default identity server URL (this is the server used
-      for verifying third party identifiers like email addresses). If this is blank,
-      registering with an email address, adding an email address to your account,
-      or inviting users via email address will not work.  Matrix identity servers are
-      very simple web services which map third party identifiers (currently only email
-      addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
-      for more details.  Currently the only public matrix identity servers are https://matrix.org
-      and https://vector.im.  In the future, identity servers will be decentralised.
-   * Riot will report an error if you accidentally configure both `default_server_name` _and_ `default_hs_url` since it's unclear which should take priority.
-1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
-   in the `labs` section of settings.  The available optional experimental features vary from
-   release to release.
-1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
-   homeserver know what email template to use when talking to you.
-1. `branding`: Configures various branding and logo details, such as:
-    1. `welcomeBackgroundUrl`: An image to use as a wallpaper outside the app
-       during authentication flows
-    1. `authHeaderLogoUrl`: An logo image that is shown in the header during
-       authentication flows
-    1. `authFooterLinks`: a list of links to show in the authentication page footer:
-      `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
-1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
-   server is not Riot and normally not your homeserver either. The integration server settings
-   may be left blank to disable integrations.
-1. `integrations_rest_url`: URL to the REST interface for the integrations server.
-1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
-1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
-   https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
-   "Send Logs" within the application. Bug reports can be disabled by leaving the
-   `bug_report_endpoint_url` out of your config file.
-1. `roomDirectory`: config for the public room directory. This section is optional.
-1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
-   down list. Optional.
-1. `default_theme`: name of theme to use by default (e.g. 'light')
-1. `update_base_url` (electron app only): HTTPS URL to a web server to download
-   updates from. This should be the path to the directory containing `macos`
-   and `win32` (for update packages, not installer packages).
-1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
-   encrypted file attachments. This MUST be hosted on a completely separate domain to
-   anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
-   https://github.com/matrix-org/usercontent/blob/master/v1.html
-1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
-   option out of your config file. If you want to enable analytics, set `piwik` to be an object
-   containing the following properties:
-    1. `url`: The URL of the Piwik instance to use for collecting analytics
-    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
-    1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
-    1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
-1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
-1. `embeddedPages`: Configures the pages displayed in portions of Riot that
-   embed static files, such as:
-    1. `welcomeUrl`: Initial content shown on the outside of the app when not
-       logged in. Defaults to `welcome.html` supplied with Riot.
-    1. `homeUrl`: Content shown on the inside of the app when a specific room is
-       not selected. By default, no home page is configured. If one is set, a
-       button to access it will be shown in the top left menu.
-
-
-Note that `index.html` also has an og:image meta tag that is set to an image
-hosted on riot.im. This is the image used if links to your copy of Riot
-appear in some websites like Facebook, and indeed Riot itself. This has to be
-static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
-not possible for this to be an option in config.json. If you'd like to change
-it, you can build Riot as above, but run
-`RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`.
-Alternatively, you can edit the `og:image` meta tag in `index.html` directly
-each time you download a new version of Riot.
-
 Running as a Desktop app
 ========================
 
-Riot can also be run as a desktop app, wrapped in electron. You can download a
-pre-built version from https://riot.im/desktop.html or, if you prefer,
-build it yourself. Requires Electron >=1.6.0.
+Riot can also be run as a desktop app, wrapped in Electron. You can download a
+pre-built version from https://riot.im/download/desktop/ or, if you prefer,
+build it yourself.
 
-To run as a desktop app:
+To build it yourself, follow the instructions below.
 
 1. Follow the instructions in 'Building From Source' above, but run
    `yarn build` instead of `yarn dist` (since we don't need the tarball).
-2. Install electron and run it:
+2. Install Electron and run it:
 
    ```bash
    yarn electron
    ```
 
-To build packages, use electron-builder. This is configured to output:
+To build packages, use `electron-builder`. This is configured to output:
  * `dmg` + `zip` for macOS
  * `exe` + `nupkg` for Windows
  * `deb` for Linux
@@ -220,19 +130,18 @@ for dependencies required for building packages for various platforms.
 
 The only platform that can build packages for all three platforms is macOS:
 ```bash
-brew install wine --without-x11
 brew install mono
-brew install gnu-tar
 yarn install
 yarn build:electron
 ```
 
-For other packages, use electron-builder manually. For example, to build a package
-for 64 bit Linux:
+For other packages, use `electron-builder` manually. For example, to build a
+package for 64 bit Linux:
 
  1. Follow the instructions in 'Building From Source' above
  2. `node_modules/.bin/build -l --x64`
 
+<<<<<<< HEAD
 All electron packages go into `electron_app/dist/`.
 
 Electron Specific Features
@@ -241,11 +150,13 @@ Electron Specific Features
 The electron version of Riot contains some features that are only possible from electron rather than within a browser window. This includes the "Push-to-Talk" feature, which allows you to toggle your microphone during a call even if Riot is not in focus.
 
 This requires the use of a native node module called [iohook](https://github.com/matrix-org/iohook/). Native node modules are written in C, and by default during the build of Riot the compiled binaries will be downloaded from npm. If you would like to build this module from source yourself, please read [Compiling iohook](docs/native_node_modules.md#compiling-iohook).
+=======
+All Electron packages go into `electron_app/dist/`
+>>>>>>> develop
 
-Many thanks to @aviraldg for the initial work on the electron integration.
+Many thanks to @aviraldg for the initial work on the Electron integration.
 
 Other options for running as a desktop app:
- * https://github.com/krisak/vector-electron-desktop
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
@@ -253,17 +164,50 @@ yarn global add nativefier
 nativefier https://riot.im/app/
 ```
 
-Desktop app configuration
-=========================
+The [configuration docs](docs/config.md#desktop-app-configuration) show how to
+override the desktop app's default settings if desired.
 
-To run multiple instances of the desktop app for different accounts, you can launch the executable with the `--profile` argument followed by a unique identifier, e.g `riot-web --profile Work` for it to run a separate profile and not interfere with the default one.
+Running from Docker
+===================
 
-To change the config.json for the desktop app, create a config file which will be used to override values in the config which ships in the package:
-+ `%APPDATA%\$NAME\config.json` on Windows
-+ `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
-+ `~Library/Application Support/$NAME/config.json` on macOS
+The Docker image can be used to serve riot-web as a web server. The easiest way to use 
+it is to use the prebuilt image:
+```bash
+docker run -p 80:80 vectorim/riot-web
+``` 
 
-In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
+To supply your own custom `config.json`, map a volume to `/app/config.json`. For example, 
+if your custom config was located at `/etc/riot-web/config.json` then your Docker command
+would be:
+```bash
+docker run -p 80:80 -v /etc/riot-web/config.json:/app/config.json vectorim/riot-web
+```
+
+To build the image yourself:
+```bash
+git clone https://github.com/vector-im/riot-web.git riot-web
+cd riot-web
+git checkout master
+docker build -t vectorim/riot-web .
+```
+
+If you're building a custom branch, or want to use the develop branch, check out the appropriate
+riot-web branch and then run:
+```bash
+docker build -t vectorim/riot-web:develop \
+    --build-arg USE_CUSTOM_SDKS=true \
+    --build-arg REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git" \
+    --build-arg REACT_SDK_BRANCH="develop" \
+    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
+    --build-arg JS_SDK_BRANCH="develop" \
+    .
+```
+
+config.json
+===========
+
+Riot supports a variety of settings to configure default servers, behaviour, themes, etc.
+See the [configuration docs](docs/config.md) for more details.
 
 Labs Features
 =============

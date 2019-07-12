@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ limitations under the License.
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
 
@@ -39,20 +41,35 @@ export default class VectorBasePlatform extends BasePlatform {
     constructor() {
         super();
 
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animation every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this.favicon = new Favico({animation: 'none'});
         this.showUpdateCheck = false;
-        this._updateFavicon();
-
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
+    async getConfig(): Promise<{}> {
+        return getVectorConfig();
+    }
+
     getHumanReadableName(): string {
         return 'Vector Base Platform'; // no translation required: only used for analytics
+    }
+
+    /**
+     * Delay creating the `Favico` instance until first use (on the first notification) as
+     * it uses canvas, which can trigger a permission prompt in Firefox's resist
+     * fingerprinting mode.
+     * See https://github.com/vector-im/riot-web/issues/9605.
+     */
+    get favicon() {
+        if (this._favicon) {
+            return this._favicon;
+        }
+        // The 'animations' are really low framerate and look terrible.
+        // Also it re-starts the animation every time you set the badge,
+        // and we set the state each time, even if the value hasn't changed,
+        // so we'd need to fix that if enabling the animation.
+        this._favicon = new Favico({ animation: 'none' });
+        return this._favicon;
     }
 
     _updateFavicon() {
