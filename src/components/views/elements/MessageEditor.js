@@ -280,6 +280,7 @@ export default class MessageEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        this._editorRef.removeEventListener("input", this._onInput, true);
         const sel = document.getSelection();
         const {caret} = getCaretOffsetAndText(this._editorRef, sel);
         const parts = this.model.serializeParts();
@@ -292,6 +293,9 @@ export default class MessageEditor extends React.Component {
         this._updateEditorState();
         // initial caret position
         this._initializeCaret();
+        // attach input listener by hand so React doesn't proxy the events,
+        // as the proxied event doesn't support inputType, which we need.
+        this._editorRef.addEventListener("input", this._onInput, true);
         this._editorRef.focus();
     }
 
@@ -359,7 +363,6 @@ export default class MessageEditor extends React.Component {
                     className="mx_MessageEditor_editor"
                     contentEditable="true"
                     tabIndex="1"
-                    onInput={this._onInput}
                     onKeyDown={this._onKeyDown}
                     ref={ref => this._editorRef = ref}
                     aria-label={_t("Edit message")}
