@@ -15,12 +15,12 @@
   },
   "cmake-js": {
     "runtime": "electron",
-    "runtimeVersion": "4.1.3"
+    "runtimeVersion": "4.2.6"
   },
   "supportedTargets": [
     [
       "electron",
-      "4.1.3",
+      "4.2.6",
       "69"
     ]
   ]
