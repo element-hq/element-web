@@ -1,3 +1,15 @@
+Changes in [1.3.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.1) (2019-07-12)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.4...v1.3.0-rc.1)
+
+ * Upgrade to React SDK 1.4.0-rc.1 and JS SDK 2.2.0-rc.1
+ * Update from Weblate
+   [\#10328](https://github.com/vector-im/riot-web/pull/10328)
+ * Upgrade dependencies
+   [\#10308](https://github.com/vector-im/riot-web/pull/10308)
+ * Upgrade dependencies
+   [\#10260](https://github.com/vector-im/riot-web/pull/10260)
+
 Changes in [1.2.4](https://github.com/vector-im/riot-web/releases/tag/v1.2.4) (2019-07-11)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.2.3...v1.2.4)
