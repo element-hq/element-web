@@ -546,11 +546,21 @@ const onMessage = function(event) {
     // This means the URL could contain a path (like /develop) and still be used
     // to validate event origins, which do not specify paths.
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-    //
-    // All strings start with the empty string, so for sanity return if the length
-    // of the event origin is 0.
-    const url = SdkConfig.get().integrations_ui_url;
-    if (event.origin.length === 0 || !url.startsWith(event.origin + '/')) {
+    let configUrl;
+    try {
+        configUrl = new URL(SdkConfig.get().integrations_ui_url);
+    } catch (e) {
+        // No integrations UI URL, ignore silently.
+        return;
+    }
+    let eventOriginUrl;
+    try {
+        eventOriginUrl = new URL(event.origin);
+    } catch (e) {
+        console.warn(`Message from IM with unparsable origin ${event.origin} ignored`);
+        return;
+    }
+    if (configUrl.origin !== eventOriginUrl.origin) {
         console.warn(`Message from IM with invalid origin ${event.origin} ignored`);
         return;
     }
