@@ -153,7 +153,6 @@ describe('loading:', function() {
                 hsName: "TEST_ENVIRONMENT",
                 hsNameIsDifferent: false, // yes, we lie
                 isUrl: DEFAULT_IS_URL,
-                identityEnabled: true,
             }),
             embeddedPages: {
                 homeUrl: 'data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==',
