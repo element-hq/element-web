@@ -1,3 +1,11 @@
+Changes in [1.4.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.2) (2019-07-12)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.1...v1.4.0-rc.2)
+
+ * Upgrade to JS SDK 2.2.0-rc.2 to fix regresion in listing devices
+ * Remove misleading text about admins logging people out from soft logout
+   [\#3215](https://github.com/matrix-org/matrix-react-sdk/pull/3215)
+
 Changes in [1.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.1) (2019-07-12)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.3.1...v1.4.0-rc.1)
