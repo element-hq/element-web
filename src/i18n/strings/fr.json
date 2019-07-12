@@ -2061,5 +2061,6 @@
     "Regain access to your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "Ré-accédez à votre compte et récupérez les clés de chiffrement stockées sur cet appareil. Sans elles, vous ne pourrez pas lire tous les messages sécurisés sur tous les appareils.",
     "Sign in and regain access to your account.": "Connectez-vous et ré-accédez à votre compte.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Vous ne pouvez pas vous connecter à votre compte. Contactez l’administrateur de votre serveur d’accueil pour plus d’informations.",
-    "Please tell us what went wrong or, better, a github issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème."
+    "Please tell us what went wrong or, better, a github issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème.",
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème."
 }
