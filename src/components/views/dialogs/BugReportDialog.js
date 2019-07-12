@@ -52,7 +52,7 @@ export default class BugReportDialog extends React.Component {
     _onSubmit(ev) {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
             this.setState({
-                err: _t("Please tell us what went wrong or, better, a github issue that describes the problem."),
+                err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
             });
             return;
         }
