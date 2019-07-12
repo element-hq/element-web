@@ -39,7 +39,6 @@ export const TYPES = {
             hsName: "matrix.org",
             hsNameIsDifferent: false,
             isUrl: "https://vector.im",
-            identityEnabled: true,
         }),
     },
     PREMIUM: {

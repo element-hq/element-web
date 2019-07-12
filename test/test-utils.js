@@ -268,7 +268,6 @@ export function mkServerConfig(hsUrl, isUrl) {
         hsName: "TEST_ENVIRONMENT",
         hsNameIsDifferent: false, // yes, we lie
         isUrl,
-        identityEnabled: true,
     });
 }
 
