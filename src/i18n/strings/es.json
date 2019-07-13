@@ -1546,5 +1546,5 @@
     "The server does not support the room version specified.": "El servidor no soporta la versión de sala especificada.",
     "Name or Matrix ID": "Nombre o identificador (ID) Matrix ",
     "Email, name or Matrix ID": "Correo, nombre o identificador (ID) Matrix.",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Anteponer ¯\\_(ツ)_/¯ en mensajes de texto plano."
+    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Pone ¯\\_(ツ)_/¯ al principio de un mensaje de texto."
 }
