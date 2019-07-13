@@ -1547,5 +1547,8 @@
     "Name or Matrix ID": "Nombre o identificador (ID) Matrix ",
     "Email, name or Matrix ID": "Correo, nombre o identificador (ID) Matrix.",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Pone ¯\\_(ツ)_/¯ al principio de un mensaje de texto.",
-    "Upgrading a room can be destructive and isn't always necessary.": "Actualizar una sala podría dañarla y no siempre es necesario."
+    "Upgrading a room can be destructive and isn't always necessary.": "Actualizar una sala podría dañarla y no siempre es necesario.",
+    "Room upgrades are usually recommended when a room version is considered <i>unstable</i>. Unstable room versions might have bugs, missing features, or security vulnerabilities.": "Se recomienda actualizar una sala cuando su versión es considerada <i>inestable</i>. Las versiones de sala inestables pueden tener bugs, menos funcionalidades o problemas de seguridad.",
+    "Room upgrades usually only affect <i>server-side</i> processing of the room. If you're having problems with your Riot client, please file an issue with <issueLink />.": "Las actualizaciones de sala normalmente sólo afectan a la sala en el lado del servidor. Si tienes problema con tu cliente, por favor comunica el problema en <issueLink />.",
+    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Aviso</b>: Actualizar una sala <i>no migrará automáticamente a sus miembros a la nueva versión de la sala. </i> Incluiremos un enlace a la nueva sala en la versión antigüa de la misma - los miembros tendrán que seguir ese enlace para unirse a la nueva sala."
 }
