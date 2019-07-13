@@ -1557,5 +1557,11 @@
     "Changes your avatar in this current room only": "Cambia tu avatar sólo en la sala actual",
     "Changes your avatar in all rooms": "Cambia tu avatar en todas las salas",
     "Unbans user with given ID": "Desbloquea el usuario con ese ID",
-    "%(senderName)s made no change.": "%(senderName)s no hizo ningún cambio."
+    "%(senderName)s made no change.": "%(senderName)s no hizo ningún cambio.",
+    "Sends the given message coloured as a rainbow": "Envía el mensaje coloreado como un arcoiris",
+    "Sends the given emote coloured as a rainbow": "Envía el emoji coloreado como un arcoiris",
+    "%(senderDisplayName)s enabled flair for %(groups)s in this room.": "%(senderDisplayName)s ha habilitado las insignias para %(groups)s en esta sala.",
+    "%(senderDisplayName)s disabled flair for %(groups)s in this room.": "%(senderDisplayName)s ha deshabilitado las insignias para %(groups)s en esta sala.",
+    "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "%(senderDisplayName)s ha habilitado las insignias para %(newGroups)s y las ha deshabilitado para %(oldGroups)s en esta sala.",
+    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s ha eliminado la invitación para que %(targetDisplayName)s se una a la sala."
 }
