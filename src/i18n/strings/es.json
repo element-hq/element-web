@@ -1536,5 +1536,7 @@
     "Enable Community Filter Panel": "Habilitar el Panel de Filtro de Comunidad",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifica este usuario confirmando que los siguientes emojis aparecen en su pantalla.",
     "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>": "La copia tiene una firma <validity>válida</validity> de un <device>dispositivo</device> <verify>no verificado</verify>",
-    "Your Riot is misconfigured": "Riot tiene un error de configuración"
+    "Your Riot is misconfigured": "Riot tiene un error de configuración",
+    "Whether or not you're logged in (we don't record your username)": "Hayas o no iniciado sesión (no guardamos tu nombre de usuario)",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Uses o no los 'breadcrumbs' (iconos sobre la lista de salas)"
 }
