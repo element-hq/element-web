@@ -1587,5 +1587,6 @@
     "Got It": "Entendido",
     "Scissors": "Tijeras",
     "No integrations server configured": "No se ha configurado servidor de integraciones",
-    "This Riot instance does not have an integrations server configured.": "Esta instancia de Riot no tiene servidor de integraciones configurado."
+    "This Riot instance does not have an integrations server configured.": "Esta instancia de Riot no tiene servidor de integraciones configurado.",
+    "Connecting to integrations server...": "Conectando al servidor de integraciones..."
 }
