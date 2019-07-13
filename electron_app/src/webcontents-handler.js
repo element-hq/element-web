@@ -1,15 +1,13 @@
-const {clipboard, nativeImage, Menu, MenuItem, shell, dialog} = require('electron');
+const { clipboard, nativeImage, Menu, MenuItem, shell, dialog } = require('electron');
 const url = require('url');
 const fs = require('fs');
 const request = require('request');
 
-const MAILTO_PREFIX = "mailto:";
+const spellCheck = require('./spell-check');
+const MAILTO_PREFIX = 'mailto:';
+const PERMITTED_URL_SCHEMES = ['http:', 'https:', MAILTO_PREFIX];
 
-const PERMITTED_URL_SCHEMES = [
-    'http:',
-    'https:',
-    MAILTO_PREFIX,
-];
+let spellCheckInstance = null;
 
 function safeOpenURL(target) {
     // openExternal passes the target to open/start/xdg-open,
@@ -39,32 +37,36 @@ function onLinkContextMenu(ev, params) {
     let url = params.linkURL || params.srcURL;
 
     if (url.startsWith('vector://vector/webapp')) {
-        url = "https://riot.im/app/" + url.substring(23);
+        url = 'https://riot.im/app/' + url.substring(23);
     }
 
     const popupMenu = new Menu();
     // No point trying to open blob: URLs in an external browser: it ain't gonna work.
     if (!url.startsWith('blob:')) {
-        popupMenu.append(new MenuItem({
-            label: url,
-            click() {
-                safeOpenURL(url);
-            },
-        }));
+        popupMenu.append(
+            new MenuItem({
+                label: url,
+                click() {
+                    safeOpenURL(url);
+                },
+            }),
+        );
     }
 
     let addSaveAs = false;
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
-        popupMenu.append(new MenuItem({
-            label: 'Copy image',
-            click() {
-                if (url.startsWith('data:')) {
-                    clipboard.writeImage(nativeImage.createFromDataURL(url));
-                } else {
-                    ev.sender.copyImageAt(params.x, params.y);
-                }
-            },
-        }));
+        popupMenu.append(
+            new MenuItem({
+                label: 'Copy image',
+                click() {
+                    if (url.startsWith('data:')) {
+                        clipboard.writeImage(nativeImage.createFromDataURL(url));
+                    } else {
+                        ev.sender.copyImageAt(params.x, params.y);
+                    }
+                },
+            }),
+        );
 
         // We want the link to be ordered below the copy stuff, but don't want to duplicate
         // the `if` statement, so use a flag.
@@ -75,49 +77,55 @@ function onLinkContextMenu(ev, params) {
     if (!url.startsWith('blob:')) {
         // Special-case e-mail URLs to strip the `mailto:` like modern browsers do
         if (url.startsWith(MAILTO_PREFIX)) {
-            popupMenu.append(new MenuItem({
-                label: 'Copy email address',
-                click() {
-                    clipboard.writeText(url.substr(MAILTO_PREFIX.length));
-                },
-            }));
+            popupMenu.append(
+                new MenuItem({
+                    label: 'Copy email address',
+                    click() {
+                        clipboard.writeText(url.substr(MAILTO_PREFIX.length));
+                    },
+                }),
+            );
         } else {
-            popupMenu.append(new MenuItem({
-                label: 'Copy link address',
-                click() {
-                    clipboard.writeText(url);
-                },
-            }));
+            popupMenu.append(
+                new MenuItem({
+                    label: 'Copy link address',
+                    click() {
+                        clipboard.writeText(url);
+                    },
+                }),
+            );
         }
     }
 
     if (addSaveAs) {
-        popupMenu.append(new MenuItem({
-            label: 'Save image as...',
-            click() {
-                const targetFileName = params.titleText || "image.png";
-                const filePath = dialog.showSaveDialog({
-                    defaultPath: targetFileName,
-                });
-
-                if (!filePath) return; // user cancelled dialog
-
-                try {
-                    if (url.startsWith("data:")) {
-                        fs.writeFileSync(filePath, nativeImage.createFromDataURL(url));
-                    } else {
-                        request.get(url).pipe(fs.createWriteStream(filePath));
-                    }
-                } catch (err) {
-                    console.error(err);
-                    dialog.showMessageBox({
-                        type: "error",
-                        title: "Failed to save image",
-                        message: "The image failed to save",
+        popupMenu.append(
+            new MenuItem({
+                label: 'Save image as...',
+                click() {
+                    const targetFileName = params.titleText || 'image.png';
+                    const filePath = dialog.showSaveDialog({
+                        defaultPath: targetFileName,
                     });
-                }
-            },
-        }));
+
+                    if (!filePath) return; // user cancelled dialog
+
+                    try {
+                        if (url.startsWith('data:')) {
+                            fs.writeFileSync(filePath, nativeImage.createFromDataURL(url));
+                        } else {
+                            request.get(url).pipe(fs.createWriteStream(filePath));
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        dialog.showMessageBox({
+                            type: 'error',
+                            title: 'Failed to save image',
+                            message: 'The image failed to save',
+                        });
+                    }
+                },
+            }),
+        );
     }
 
     // popup() requires an options object even for no options
@@ -126,31 +134,56 @@ function onLinkContextMenu(ev, params) {
 }
 
 function _CutCopyPasteSelectContextMenus(params) {
-    return [{
-        role: 'cut',
-        enabled: params.editFlags.canCut,
-    }, {
-        role: 'copy',
-        enabled: params.editFlags.canCopy,
-    }, {
-        role: 'paste',
-        enabled: params.editFlags.canPaste,
-    }, {
-        role: 'pasteandmatchstyle',
-        enabled: params.editFlags.canPaste,
-    }, {
-        role: 'selectall',
-        enabled: params.editFlags.canSelectAll,
-    }];
+    return [
+        {
+            role: 'cut',
+            enabled: params.editFlags.canCut,
+        },
+        {
+            role: 'copy',
+            enabled: params.editFlags.canCopy,
+        },
+        {
+            role: 'paste',
+            enabled: params.editFlags.canPaste,
+        },
+        {
+            role: 'pasteandmatchstyle',
+            enabled: params.editFlags.canPaste,
+        },
+        {
+            role: 'selectall',
+            enabled: params.editFlags.canSelectAll,
+        },
+    ];
 }
 
 function onSelectedContextMenu(ev, params) {
     const items = _CutCopyPasteSelectContextMenus(params);
+    items.push({
+        label: 'Spell checking',
+        submenu: spellcheckContextMenus(params.selectionText),
+    });
     const popupMenu = Menu.buildFromTemplate(items);
-
     // popup() requires an options object even for no options
     popupMenu.popup({});
     ev.preventDefault();
+}
+
+function spellcheckContextMenus(selection) {
+    const result = spellCheckInstance.getCorrections(selection);
+    console.log(result);
+    let menu = [];
+    if (result.misspeled) {
+        menu = menu.concat(spellCheckInstance.getCorrections());
+    }
+
+    menu = menu.concat(spellCheckInstance.getLanguages().map((lng) => {
+        return {
+            label: lng,
+        };
+    }));
+    return menu;
 }
 
 function onEditableContextMenu(ev, params) {
@@ -167,8 +200,12 @@ function onEditableContextMenu(ev, params) {
     ev.preventDefault();
 }
 
+function setupSpellcheck() {
+    spellCheckInstance = spellCheck();
+}
 
 module.exports = (webContents) => {
+    webContents.on('dom-ready', setupSpellcheck);
     webContents.on('new-window', onWindowOrNavigate);
     // XXX: The below now does absolutely nothing because of
     // https://github.com/electron/electron/issues/8841

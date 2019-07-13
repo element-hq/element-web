@@ -19,6 +19,6 @@
     "os-locale": "^4.0.0",
     "png-to-ico": "^1.0.2",
     "semver": "^6.2.0",
-    "spellchecker": "^3.6.1"
+    "simple-spellchecker": "^0.9.9"
   }
 }
