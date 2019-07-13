@@ -1584,5 +1584,7 @@
     "Show recently visited rooms above the room list": "Mostrar salas visitadas recientemente sobre la lista de salas",
     "Show hidden events in timeline": "Mostrar eventos ocultos en la línea del tiempo.",
     "Low bandwidth mode": "Modo de ancho de banda bajo",
-    "Got It": "Entendido"
+    "Got It": "Entendido",
+    "Scissors": "Tijeras",
+    "No integrations server configured": "No se han configurado integraciones en el servidor"
 }
