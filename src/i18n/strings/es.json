@@ -1567,5 +1567,6 @@
     "Cannot reach homeserver": "No se puede conectar con el servidor",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Asegúrate de tener conexión a internet, o contacta con el administrador del servidor.",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Solicita al administrador de Riot que compruebe tu <i>configuración</i> por si hubiera errores o entradas duplicadas.",
-    "Cannot reach identity server": "No se puede conectar con el servidor de identidad"
+    "Cannot reach identity server": "No se puede conectar con el servidor de identidad",
+    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Te puedes registrar, pero algunas funcionalidades no estarán disponibles hasta que la conexión con el servidor de identidad sea posible. Si sigues viendo este aviso, comprueba tu configuración o contacta con el administrador."
 }
