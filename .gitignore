@@ -22,3 +22,4 @@ electron/pub
 /src/component-index.js
 /.tmp
 .vscode/
+electron_app/yarn-error.log
