@@ -1586,5 +1586,6 @@
     "Low bandwidth mode": "Modo de ancho de banda bajo",
     "Got It": "Entendido",
     "Scissors": "Tijeras",
-    "No integrations server configured": "No se ha configurado servidor de integraciones"
+    "No integrations server configured": "No se ha configurado servidor de integraciones",
+    "This Riot instance does not have an integrations server configured.": "Esta instancia de Riot no tiene integraciones configuradas en el servidor."
 }
