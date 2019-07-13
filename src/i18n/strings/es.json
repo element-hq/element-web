@@ -1555,5 +1555,6 @@
     "Upgrade": "Actualizar",
     "Changes your display nickname in the current room only": "Cambia tu apodo sólo en la sala actual",
     "Changes your avatar in this current room only": "Cambia tu avatar sólo en la sala actual",
-    "Changes your avatar in all rooms": "Cambia tu avatar en todas las salas"
+    "Changes your avatar in all rooms": "Cambia tu avatar en todas las salas",
+    "Unbans user with given ID": "Desbloquear usuario con ese ID"
 }
