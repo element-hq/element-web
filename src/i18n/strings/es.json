@@ -1553,6 +1553,7 @@
     "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Aviso</b>: Actualizar una sala <i>no migrará automáticamente a sus miembros a la nueva versión de la sala.</i> Incluiremos un enlace a la nueva sala en la versión antigüa de la misma - los miembros tendrán que seguir ese enlace para unirse a la nueva sala.",
     "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Por favor confirma que quieres continuar con la actualización de la sala de <oldVersion /> a <newVersion />.",
     "Upgrade": "Actualizar",
-    "Changes your display nickname in the current room only": "Cambia el apodo mostrado sólo en la sala actual",
-    "Changes your avatar in this current room only": "Cambiar el avatar sólo en la sala actual"
+    "Changes your display nickname in the current room only": "Cambia tu apodo sólo en la sala actual",
+    "Changes your avatar in this current room only": "Cambia tu avatar sólo en la sala actual",
+    "Changes your avatar in all rooms": "Cambia tu avatar en todas las salas"
 }
