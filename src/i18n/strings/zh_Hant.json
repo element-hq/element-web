@@ -1631,7 +1631,7 @@
     "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s 讓此聊天室對知道連結的人公開。",
     "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s 讓聊天室變成僅限邀請。",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s 變更加入規則為 %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s 已允許訪克加入聊天室。",
+    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s 已允許訪客加入聊天室。",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s 已避免訪客加入聊天室。",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s 變更了訪客存取權限為 %(rule)s",
     "Group & filter rooms by custom tags (refresh to apply changes)": "透過自訂標籤過濾群組與聊天室（重新整理以套用變更）",
