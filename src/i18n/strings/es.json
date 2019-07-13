@@ -1540,5 +1540,5 @@
     "Whether or not you're logged in (we don't record your username)": "Hayas o no iniciado sesión (no guardamos tu nombre de usuario)",
     "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Uses o no los 'breadcrumbs' (iconos sobre la lista de salas)",
     "A conference call could not be started because the integrations server is not available": "No se puede iniciar la llamada porque no hay servidor de integraciones disponible.",
-    "Replying With Files": "Respondiendo con ficheros"
+    "Replying With Files": "Respondiendo con archivos"
 }
