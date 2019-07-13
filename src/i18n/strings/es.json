@@ -1576,5 +1576,6 @@
     "Unexpected error resolving identity server configuration": "Error inesperado en la configuración del servidor de identidad",
     "User %(userId)s is already in the room": "El usuario %(userId)s ya está en la sala",
     "The user must be unbanned before they can be invited.": "El usuario debe ser desbloqueado antes de poder ser invitado.",
-    "The user's homeserver does not support the version of the room.": "El servidor del usuario no soporta la versión de la sala."
+    "The user's homeserver does not support the version of the room.": "El servidor del usuario no soporta la versión de la sala.",
+    "Edit messages after they have been sent (refresh to apply changes)": "Editar mensajes después de que se hayan enviado (refrescar para aplicar cambios)"
 }
