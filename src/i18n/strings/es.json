@@ -1575,5 +1575,5 @@
     "Unexpected error resolving homeserver configuration": "Error inesperado en la configuración del servidor",
     "Unexpected error resolving identity server configuration": "Error inesperado en la configuración del servidor de identidad",
     "User %(userId)s is already in the room": "El usuario %(userId)s ya está en la sala",
-    "The user must be unbanned before they can be invited.": "El usuario debe ser desbloqueado antes para poder ser invitado."
+    "The user must be unbanned before they can be invited.": "El usuario debe ser desbloqueado antes de poder ser invitado."
 }
