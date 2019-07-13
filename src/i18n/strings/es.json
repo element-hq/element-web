@@ -1577,5 +1577,8 @@
     "User %(userId)s is already in the room": "El usuario %(userId)s ya está en la sala",
     "The user must be unbanned before they can be invited.": "El usuario debe ser desbloqueado antes de poder ser invitado.",
     "The user's homeserver does not support the version of the room.": "El servidor del usuario no soporta la versión de la sala.",
-    "Edit messages after they have been sent (refresh to apply changes)": "Editar mensajes después de enviados (refrescar para aplicar cambios)"
+    "Edit messages after they have been sent (refresh to apply changes)": "Editar mensajes después de enviados (refrescar para aplicar cambios)",
+    "React to messages with emoji (refresh to apply changes)": "Reaccionar a mensajes con emojis (refrescar para aplicar cambios)",
+    "Show read receipts sent by other users": "Mostrar las confirmaciones de lectura de otros usuarios.",
+    "Order rooms in the room list by most important first instead of most recent": "Ordenar las sala en la lista por la más importante en vez de la más actual"
 }
