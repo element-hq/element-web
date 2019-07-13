@@ -1541,5 +1541,5 @@
     "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Uses o no los 'breadcrumbs' (iconos sobre la lista de salas)",
     "A conference call could not be started because the integrations server is not available": "No se puede iniciar la llamada porque no hay servidor de integraciones disponible.",
     "Replying With Files": "Respondiendo con archivos",
-    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "En este momento no es posible responder con un fichero. Te gustaría subir el fichero sin responder?"
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "En este momento no es posible responder con un archivo. ¿Te gustaría subir el archivo sin responder?"
 }
