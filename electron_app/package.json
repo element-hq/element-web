@@ -7,11 +7,9 @@
   "author": "New Vector Ltd.",
   "dependencies": {
     "auto-launch": "^5.0.1",
-    "electron-editor-context-menu": "^1.1.1",
     "electron-store": "^2.0.0",
     "electron-window-state": "^4.1.0",
     "minimist": "^1.2.0",
-    "png-to-ico": "^1.0.2",
     "simple-spellchecker": "^0.9.9"
   }
 }
