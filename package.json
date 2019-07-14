@@ -163,10 +163,6 @@
         "from": "electron_app/img",
         "to": "img"
       },
-      {
-        "from": "electron_app/dictionaries",
-        "to": "dictionaries"
-      },
       "webapp/**/*",
       "origin_migrator/**/*"
     ],
