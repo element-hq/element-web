@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 const { ipcRenderer, webFrame } = require('electron');
+
+// expose ipcRenderer to the renderer process
 window.ipcRenderer = ipcRenderer;
 
 const language = (process.env.LANG || process.env.LANGUAGE || process.env.LC_ALL || process.env.LC_MESSAGES)
