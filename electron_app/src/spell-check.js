@@ -17,11 +17,11 @@ limitations under the License.
 const { ipcMain } = require('electron');
 const spellchecker = require('simple-spellchecker');
 
-let enabledDictionaries = [];
+let enabledDictionary = null;
 let checker = null;
-
-// those languages I found in library. I didn't found method to get available language,
-// so we should keep those in sync
+let enabled = false;
+// those languages I found in library. I didn't found method to get available languages,
+// so we should keep those in sync or find better way
 const dictionaries = [
     'de-DE',
     'en-GB',
@@ -39,12 +39,11 @@ const dictionaries = [
 
 const updateChecker = async () => {
     return new Promise((resolve, reject) => {
-        if (enabledDictionaries.length === 0) {
+        if (enabledDictionary === null) {
             checker = () => true;
             resolve();
-        }
-        if (enabledDictionaries.length === 1) {
-            spellchecker.getDictionary(enabledDictionaries[0], function(err, dict) {
+        } else {
+            spellchecker.getDictionary(enabledDictionary, function(err, dict) {
                 if (err) {
                     reject(err);
                 } else {
@@ -56,24 +55,19 @@ const updateChecker = async () => {
     });
 };
 
-const enable = async (...dictionaries) => {
-    enabledDictionaries = dictionaries;
+const enable = async (dictionary) => {
+    enabledDictionary = dictionary;
     await updateChecker();
-    console.log('checker updated', enabledDictionaries);
-    return enabledDictionaries.length > 0;
+    enabled = true;
 };
 
-const disable = async (...dictionaries) => {
-    enabledDictionaries = [];
-    await updateChecker();
+const disable = () => {
+    enabled = false;
+    enabledDictionary = [];
+    updateChecker();
 };
 
 module.exports = () => {
-    ipcMain.on('spellcheck:setlanguage', async (event, arg) => {
-        console.log('enable language', arg);
-        await enable(arg);
-        event.sender.send('spellcheck:ready', { ready: true });
-    });
     ipcMain.on('spellcheck:disablelanguage', (event, arg) => {
         disable(arg);
     });
@@ -81,23 +75,30 @@ module.exports = () => {
         if (checker) {
             event.returnValue = checker.spellCheck(arg);
         } else {
-            console.error('checker not ready, mocking');
             event.returnValue = false;
         }
     });
     ipcMain.on('spellcheck:ismisspeled', (event, arg) => {
-        console.log('misspeled', arg, checker.isMisspelled(arg));
-        event.returnValue = checker.isMisspelled(arg);
-    });
-    ipcMain.on('spellcheck:corrections', (event, arg) => {
-        event.returnValue = checker.checkAndSuggest(arg);
+        if (enabled) {
+            event.returnValue = checker.checkAndSuggest(arg).misspelled;
+        }
     });
     return {
         getLanguages: () => {
             return dictionaries;
         },
-        getCorrections: (selection) => {
-            return checker.checkAndSuggest(selection);
+        isMisspelled: (selection) => {
+            return enabled ? checker.checkAndSuggest(selection) : null;
+        },
+        getCurrentLanguage: () => {
+            return enabledDictionary;
+        },
+        setLanguage: async (lng) => {
+            await enable(lng);
+        },
+        disable: () => {
+            console.log('disable spell check');
+            disable();
         },
     };
 };

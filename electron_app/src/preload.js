@@ -17,10 +17,7 @@ limitations under the License.
 const { ipcRenderer, webFrame } = require('electron');
 window.ipcRenderer = ipcRenderer;
 
-
-
-const env = process.env;
-const language = (env.LANG || env.LANGUAGE || env.LC_ALL || env.LC_MESSAGES)
+const language = (process.env.LANG || process.env.LANGUAGE || process.env.LC_ALL || process.env.LC_MESSAGES)
     .split('.')[0]
     .replace('_', '-');
 
@@ -34,12 +31,9 @@ webFrame.registerURLSchemeAsPrivileged('vector', {
 });
 
 
-ipcRenderer.on('spellcheck:ready', () => {
-    webFrame.setSpellCheckProvider(language, false, {
-        spellCheck(words) {
-            const result = ipcRenderer.sendSync('spellcheck:ismisspeled', words);
-            return result;
-        },
-    });
+webFrame.setSpellCheckProvider(language, false, {
+    spellCheck(words) {
+        const result = ipcRenderer.sendSync('spellcheck:ismisspeled', words);
+        return !result;
+    },
 });
-ipcRenderer.send('spellcheck:setlanguage', language);

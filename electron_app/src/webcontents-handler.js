@@ -8,6 +8,11 @@ const MAILTO_PREFIX = 'mailto:';
 const PERMITTED_URL_SCHEMES = ['http:', 'https:', MAILTO_PREFIX];
 
 let spellCheckInstance = null;
+const language = (process.env.LANG || process.env.LANGUAGE || process.env.LC_ALL || process.env.LC_MESSAGES)
+    .split('.')[0]
+    .replace('_', '-');
+
+let webContentsInstance = null;
 
 function safeOpenURL(target) {
     // openExternal passes the target to open/start/xdg-open,
@@ -159,11 +164,13 @@ function _CutCopyPasteSelectContextMenus(params) {
 }
 
 function onSelectedContextMenu(ev, params) {
-    const items = _CutCopyPasteSelectContextMenus(params);
-    items.push({
-        label: 'Spell checking',
-        submenu: spellcheckContextMenus(params.selectionText),
-    });
+    let items = _CutCopyPasteSelectContextMenus(params);
+    items = items.concat([
+        {type: 'separator'},
+        {
+            label: 'Spell checking',
+            submenu: spellcheckContextMenus(params.selectionText),
+        }]);
     const popupMenu = Menu.buildFromTemplate(items);
     // popup() requires an options object even for no options
     popupMenu.popup({});
@@ -171,16 +178,32 @@ function onSelectedContextMenu(ev, params) {
 }
 
 function spellcheckContextMenus(selection) {
-    const result = spellCheckInstance.getCorrections(selection);
-    console.log(result);
+    const result = spellCheckInstance.isMisspelled(selection);
     let menu = [];
-    if (result.misspeled) {
-        menu = menu.concat(spellCheckInstance.getCorrections());
+    if (result && result.misspelled) {
+        menu = menu.concat(result.suggestions.map((suggestion) => {
+            return {
+                label: suggestion,
+                click: () => webContentsInstance.getFocusedWebContents().replaceMisspelling(suggestion),
+            };
+        }));
+        if (result.suggestions.length === 0) {
+            menu.push({
+                label: 'No spelling suggestions',
+                enabled: false,
+            });
+        }
+        menu.push({type: 'separator'});
     }
 
     menu = menu.concat(spellCheckInstance.getLanguages().map((lng) => {
         return {
             label: lng,
+            type: 'checkbox',
+            checked: lng === spellCheckInstance.getCurrentLanguage(),
+            click: ({ checked }) => {
+                checked ? spellCheckInstance.setLanguage(lng) : spellCheckInstance.disable();
+            },
         };
     }));
     return menu;
@@ -202,9 +225,11 @@ function onEditableContextMenu(ev, params) {
 
 function setupSpellcheck() {
     spellCheckInstance = spellCheck();
+    spellCheckInstance.setLanguage(language);
 }
 
 module.exports = (webContents) => {
+    webContentsInstance = webContents;
     webContents.on('dom-ready', setupSpellcheck);
     webContents.on('new-window', onWindowOrNavigate);
     // XXX: The below now does absolutely nothing because of
