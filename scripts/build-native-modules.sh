@@ -25,6 +25,7 @@ case "$OSTYPE" in
   darwin*)
     echo "Found MacOS"
     ostype="darwin"
+    ;;
   msys*)
     echo "Windows is unsupported at this time"
     ;;
