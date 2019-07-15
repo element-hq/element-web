@@ -1880,5 +1880,7 @@
     "Failed to revoke invite": "Einladung zurückziehen fehlgeschlagen",
     "Revoke invite": "Einladung zurückziehen",
     "Invited by %(sender)s": "Eingeladen von %(sender)s",
-    "Changes your avatar in all rooms": "Verändert dein Profilbild in allen Räumen"
+    "Changes your avatar in all rooms": "Verändert dein Profilbild in allen Räumen",
+    "This device is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Dieses Gerät <b>speichert deine Schlüssel nicht</b>, aber du hast ein bestehendes Backup, welches du wiederherstellen kannst um fortzufahren.",
+    "Backup has an <validity>invalid</validity> signature from this device": "Backup hat eine <validity>ungültige</validity> Signatur von diesem Gerät."
 }
