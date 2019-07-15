@@ -149,6 +149,7 @@ module.exports = React.createClass({
         if (!this.state.serverIsAlive) {
             this.setState({busy: true});
             // Do a quick liveliness check on the URLs
+            let aliveAgain = true;
             try {
                 await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                     this.props.serverConfig.hsUrl,
@@ -156,17 +157,16 @@ module.exports = React.createClass({
                 );
                 this.setState({serverIsAlive: true, errorText: ""});
             } catch (e) {
+                const componentState = AutoDiscoveryUtils.authComponentStateForError(e);
                 this.setState({
                     busy: false,
-                    ...AutoDiscoveryUtils.authComponentStateForError(e),
+                    ...componentState,
                 });
-                if (this.state.serverErrorIsFatal) {
-                    return; // Server is dead - do not continue.
-                }
+                aliveAgain = !componentState.serverErrorIsFatal;
             }
 
             // Prevent people from submitting their password when something isn't right.
-            if (!this.state.serverIsAlive) {
+            if (!aliveAgain) {
                 return;
             }
         }
