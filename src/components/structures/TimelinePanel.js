@@ -1172,34 +1172,33 @@ const TimelinePanel = React.createClass({
             // return the index of the first invisible event.
             if (isInView && adjacentInvisibleEventCount !== 0) {
                 return i + adjacentInvisibleEventCount;
-            } else {
-                if (node && !isInView) {
-                    // has node but not in view, so reset adjacent invisible events
-                    adjacentInvisibleEventCount = 0;
-                }
+            }
+            if (node && !isInView) {
+                // has node but not in view, so reset adjacent invisible events
+                adjacentInvisibleEventCount = 0;
+            }
 
-                const shouldIgnore = (ignoreEchoes && ev.status) || // local echo
-                    (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-                const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
+            const shouldIgnore = (ignoreEchoes && ev.status) || // local echo
+                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
+            const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
 
-                if (allowEventsWithoutTiles && (isWithoutTile || !node)) {
-                    // don't start counting if the event should be ignored,
-                    // but continue counting if we were already so the offset
-                    // to the previous invisble event that didn't need to be ignored
-                    // doesn't get messed up
-                    if (!shouldIgnore || (shouldIgnore && adjacentInvisibleEventCount !== 0)) {
-                        ++adjacentInvisibleEventCount;
-                    }
-                    continue;
+            if (allowEventsWithoutTiles && (isWithoutTile || !node)) {
+                // don't start counting if the event should be ignored,
+                // but continue counting if we were already so the offset
+                // to the previous invisble event that didn't need to be ignored
+                // doesn't get messed up
+                if (!shouldIgnore || (shouldIgnore && adjacentInvisibleEventCount !== 0)) {
+                    ++adjacentInvisibleEventCount;
                 }
+                continue;
+            }
 
-                if (shouldIgnore) {
-                    continue;
-                }
+            if (shouldIgnore) {
+                continue;
+            }
 
-                if (isInView) {
-                    return i;
-                }
+            if (isInView) {
+                return i;
             }
         }
 
