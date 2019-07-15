@@ -59,7 +59,11 @@ class ScalarAuthClient {
         if (!token) {
             return this.registerForToken();
         } else {
-            return this._checkToken(token).catch(() => {
+            return this._checkToken(token).catch((e) => {
+                if (e instanceof TermsNotSignedError) {
+                    // retrying won't help this
+                    throw e;
+                }
                 return this.registerForToken();
             });
         }
