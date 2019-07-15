@@ -333,6 +333,22 @@ const LoggedInView = React.createClass({
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
+        } else {
+            const targetTag = ev.target.tagName;
+            const focusedOnInputControl = targetTag === "INPUT" ||
+                targetTag === "TEXTAREA" ||
+                targetTag === "SELECT" ||
+                ev.target.getAttribute("contenteditable");
+            // we don't check for buttons that have focus here,
+            // because they should be using AccessibleButton which
+            // calls stopPropagation on space or enter keydown, so
+            // that keydown event would never get here.
+            if (!focusedOnInputControl) {
+                dis.dispatch({action: 'focus_composer'}, true);
+                ev.stopPropagation();
+                // we should *not* preventDefault() here as
+                // that would prevent typing in the now-focussed composer
+            }
         }
     },
 
