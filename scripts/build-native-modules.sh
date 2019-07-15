@@ -1,6 +1,7 @@
 #!/bin/bash
 # 
-# Builds and installs native node modules
+# Builds and installs native node modules. This script must be run from riot-web's
+# root
 #
 # Dependencies
 #
@@ -19,7 +20,7 @@
 #   Windows:
 #   - unsupported
 
-set -ex
+set -e
 
 usage() {
   echo "Usage: $0 -e <electron_version> -a <electron_abi> [-i] [-I]"
@@ -33,7 +34,7 @@ usage() {
   echo "I: Same as -i, but just output the node module in the current directory"
 }
 
-while getopts "e:a:i" opt; do
+while getopts "e:a:i:I" opt; do
   case $opt in
     e)
       electron_version=$OPTARG
@@ -67,7 +68,7 @@ if [ -z ${electron_abi+x} ]; then
   exit 1
 fi
 
-if [ -z ${iohook+x} ] || [ -z ${iohook_export+x} ]; then
+if [ -z ${iohook+x} ] && [ -z ${iohook_export+x} ]; then
   echo "Please specify a module to build"
   usage
   exit 1
@@ -80,7 +81,7 @@ case "$OSTYPE" in
     ostype="darwin"
     ;;
   msys*)
-    if [ -z ${iohook+x} ] || [ -z ${iohook_export+x} ]; then
+    if ! [ -z ${iohook+x} ] || ! [ -z ${iohook_export+x} ]; then
       echo "Building iohook on Windows is unsupported at this time"
       exit 1
     fi
@@ -102,34 +103,41 @@ else
   osarch="32"
 fi
 
-# Get dependencies
-echo "Getting dependencies..."
-yarn
+if ! [ -z ${iohook+x} ] || ! [ -z ${iohook_export+x} ]; then
+  # Get dependencies
+  echo "Getting dependencies..."
+  yarn
 
-# Riot currently does not install the correct electron version, so collect it
-# manually
-yarn add electron@v$electron_version
+  # Riot currently does not install the correct electron version, so collect it
+  # manually
+  yarn add electron@v$electron_version
 
-# Build iohook
-echo "Building iohook..."
-cd electron_app
+  # Build iohook
+  echo "Building iohook..."
+  cd electron_app
 
-# iohook attempts to download a pre-built package for node ABI v72, which does
-# not exist
-yarn || echo "Ignoring broken pre-build packages"
-cd node_modules
-rm -rf iohook
-git clone https://github.com/matrix-org/iohook
-cd iohook
-npm i || echo "Ignoring broken pre-build packages"
-rm -rf builds/*
-npm run build # This builds libuiohook
-node build.js --runtime electron --version $electron_version --abi $abi --no-upload # Builds the module for the current OS/node version
+  # iohook attempts to download a pre-built package for node ABI v72, which does
+  # not exist
+  yarn || echo "Ignoring broken pre-build packages"
+  cd node_modules
+  rm -rf iohook
+  git clone https://github.com/matrix-org/iohook
+  cd iohook
+  npm i || echo "Ignoring broken pre-build packages"
+  rm -rf builds/*
+  npm run build # This builds libuiohook
+  node build.js --runtime electron --version $electron_version --abi $abi --no-upload # Builds the module for the current OS/node version
 
-# Install
-echo "Installing built package"
-folder="electron-v$abi-$ostype-x$osarch"
-mkdir -p builds/$folder/build/Release
-cp build/Release/iohook.node builds/$folder/build/Release/
+  if [ -z ${iohook_export} ]; then
+    # Install
+    echo "Installing built package"
+    folder="electron-v$abi-$ostype-x$osarch"
+    mkdir -p builds/$folder/build/Release
+    cp build/Release/iohook.node builds/$folder/build/Release/
+  else
+    # Just export
+    cp build/Release/iohook.node ../../../iohook.node
+  fi
+fi
 
 echo "Done!"
