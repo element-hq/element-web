@@ -66,6 +66,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunchSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
+            autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
         };
     }
 
@@ -98,6 +99,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
     };
 
     _onAutocompleteDelayChange = (e) => {
+        this.setState({autocompleteDelay: e.target.value});
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
@@ -139,7 +141,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     {minimizeToTrayOption}
                     {autoLaunchOption}
                     <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
-                           value={SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10)}
+                           value={this.state.autocompleteDelay}
                            onChange={this._onAutocompleteDelayChange} />
                 </div>
             </div>
