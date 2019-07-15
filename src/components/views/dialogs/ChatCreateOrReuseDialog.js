@@ -52,7 +52,12 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         const tiles = [];
         for (const roomId of dmRooms) {
             const room = client.getRoom(roomId);
-            if (room) {
+            if (room && room.getMyMembership() === "join") {
+                const member = room.getMember(this.props.userId);
+                if (!member || member.membership !== "join") {
+                    continue;
+                }
+
                 const isInvite = room.getMyMembership() === "invite";
                 const highlight = room.getUnreadNotificationCount('highlight') > 0 || isInvite;
                 tiles.push(
