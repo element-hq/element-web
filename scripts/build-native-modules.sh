@@ -46,6 +46,7 @@ fi
 
 # Get dependencies
 echo "Getting dependencies..."
+yarn
 
 # Riot currently does not install the correct electron version, so collect it
 # manually
@@ -65,7 +66,7 @@ cd iohook
 npm i || echo "Ignoring broken pre-build packages"
 rm -rf builds/*
 npm run build
-node build.js —-runtime electron -—version $electron_version —-abi $abi -—no-upload
+node build.js --runtime electron --version $electron_version --abi $abi --no-upload
 
 # Install
 echo "Installing built package"
