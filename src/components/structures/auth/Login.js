@@ -145,9 +145,31 @@ module.exports = React.createClass({
         return this.state.busy || this.props.busy;
     },
 
-    onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
-        // Prevent people from submitting their password when something isn't right.
-        if (this.isBusy()) return;
+    onPasswordLogin: async function(username, phoneCountry, phoneNumber, password) {
+        if (!this.state.serverIsAlive) {
+            this.setState({busy: true});
+            // Do a quick liveliness check on the URLs
+            let aliveAgain = true;
+            try {
+                await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                    this.props.serverConfig.hsUrl,
+                    this.props.serverConfig.isUrl,
+                );
+                this.setState({serverIsAlive: true, errorText: ""});
+            } catch (e) {
+                const componentState = AutoDiscoveryUtils.authComponentStateForError(e);
+                this.setState({
+                    busy: false,
+                    ...componentState,
+                });
+                aliveAgain = !componentState.serverErrorIsFatal;
+            }
+
+            // Prevent people from submitting their password when something isn't right.
+            if (!aliveAgain) {
+                return;
+            }
+        }
 
         this.setState({
             busy: true,
