@@ -103,6 +103,10 @@ else
   osarch="32"
 fi
 
+# Clean
+echo "Cleaning build files..."
+yarn clean
+
 if ! [ -z ${iohook+x} ] || ! [ -z ${iohook_export+x} ]; then
   # Get dependencies
   echo "Getting dependencies..."
