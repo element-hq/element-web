@@ -65,10 +65,6 @@ export async function getUnknownDevicesForRoom(matrixClient, room) {
     return unknownDevices;
 }
 
-function focusComposer() {
-    dis.dispatch({action: 'focus_composer'});
-}
-
 /**
  * Show the UnknownDeviceDialog for a given room. The dialog will inform the user
  * that messages they sent to this room have not been sent due to unknown devices
@@ -90,7 +86,6 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
             sendAnywayLabel: _t("Send anyway"),
             sendLabel: _t("Send"),
             onSend: onSendClicked,
-            onFinished: focusComposer,
         }, 'mx_Dialog_unknownDevice');
     });
 }
