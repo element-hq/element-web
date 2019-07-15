@@ -1153,11 +1153,11 @@ const TimelinePanel = React.createClass({
         };
 
         // if allowEventsWithoutTiles is enabled, we keep track
-        // of how many of the adjacent events were invisible (because no tile)
-        // but should have the read receipt moved past, so
+        // of how many of the adjacent events didn't have a tile
+        // but should have the read receipt moved past them, so
         // we can include those once we find the last displayed (visible) event.
-        // The counter is cleared when we ignore an event we don't want
-        // to send a read receipt for (our own events, local echos)
+        // The counter is not started for events we don't want
+        // to send a read receipt for (our own events, local echos).
         let adjacentInvisibleEventCount = 0;
         // Use `liveEvents` here because we don't want the read marker or read
         // receipt to advance into pending events.
@@ -1167,15 +1167,14 @@ const TimelinePanel = React.createClass({
             const node = messagePanel.getNodeForEventId(ev.getId());
             const isInView = isNodeInView(node);
 
-            // the event at i + adjacentInvisibleEventCount should
-            // not be ignored, and it considered the first in view (at the bottom)
-            // because  i is the first one in view and the adjacent ones are invisible,
-            // so return this without further ado.
+            // when we've reached the first visible event, and the previous
+            // events were all invisible (with the first one not being ignored),
+            // return the index of the first invisible event.
             if (isInView && adjacentInvisibleEventCount !== 0) {
                 return i + adjacentInvisibleEventCount;
             } else {
                 if (node && !isInView) {
-                    // has node but not in view, so adjacent invisible events don't count
+                    // has node but not in view, so reset adjacent invisible events
                     adjacentInvisibleEventCount = 0;
                 }
 
