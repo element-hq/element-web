@@ -25,16 +25,20 @@ set -e
 usage() {
   echo "Usage: $0 -e <electron_version> -a <electron_abi> [-i] [-I]"
   echo
-  echo "version: Electron version to use. Ex: 4.2.6"
-  echo
-  echo "electron_abi: ABI of the chosen electron version."
-  echo "Electron v4.2.6's ABI is 69"
-  echo
-  echo "i: Build the iohook native node module for Push-to-Talk functionality"
-  echo "I: Same as -i, but just output the node module in the current directory"
+  echo "version:"
+  echo "  Electron version to use"
+  echo "  Ex: 4.2.6"
+  echo "electron_abi:"
+  echo "  ABI of the chosen electron version"
+  echo "  Electron v4.2.6's ABI is 69"
+  echo "i:"
+  echo "  Build the iohook native node module for Push-to-Talk functionality"
+  echo "  and install it"
+  echo "I:"
+  echo "  Same as -i, but just output the node module in the current directory"
 }
 
-while getopts "e:a:i:I" opt; do
+while getopts "e:a:iI" opt; do
   case $opt in
     e)
       electron_version=$OPTARG
