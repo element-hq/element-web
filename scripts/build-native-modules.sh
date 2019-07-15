@@ -1,24 +1,77 @@
 #!/bin/bash
 # 
-# Builds and installs iohook for Push-to-Talk functionality
+# Builds and installs native node modules
 #
 # Dependencies
 #
-# Common:
-# - npm, yarn
+# iohook
+#   Common:
+#   - npm, yarn
 # 
-# Linux:
-# - apt install build-essentials cmake
+#   Linux:
+#   - apt install build-essentials cmake
 #
-# MacOS:
-# - Xcode developer tools
-# - brew
-# - brew install cmake automake libtool pkg-config
+#   MacOS:
+#   - Xcode developer tools
+#   - brew
+#   - brew install cmake automake libtool pkg-config
+#
+#   Windows:
+#   - unsupported
 
 set -ex
 
-electron_version="4.2.6"
-abi="69"
+usage() {
+  echo "Usage: $0 -e <electron_version> -a <electron_abi> [-i] [-I]"
+  echo
+  echo "version: Electron version to use. Ex: 4.2.6"
+  echo
+  echo "electron_abi: ABI of the chosen electron version."
+  echo "Electron v4.2.6's ABI is 69"
+  echo
+  echo "i: Build the iohook native node module for Push-to-Talk functionality"
+  echo "I: Same as -i, but just output the node module in the current directory"
+}
+
+while getopts "e:a:i" opt; do
+  case $opt in
+    e)
+      electron_version=$OPTARG
+      ;;
+    a)
+      electron_abi=$OPTARG
+      ;;
+    i)
+      iohook=1
+      ;;
+    I)
+      iohook_export=1
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      exit
+      ;;
+  esac
+done
+
+if [ -z ${electron_version+x} ]; then
+  echo "No Electron version supplied"
+  usage
+  exit 1
+fi
+
+if [ -z ${electron_abi+x} ]; then
+  echo "No Electron ABI supplied"
+  usage
+  exit 1
+fi
+
+if [ -z ${iohook+x} ] || [ -z ${iohook_export+x} ]; then
+  echo "Please specify a module to build"
+  usage
+  exit 1
+fi
 
 echo "Detecting OS..."
 case "$OSTYPE" in
@@ -27,7 +80,11 @@ case "$OSTYPE" in
     ostype="darwin"
     ;;
   msys*)
-    echo "Windows is unsupported at this time"
+    if [ -z ${iohook+x} ] || [ -z ${iohook_export+x} ]; then
+      echo "Building iohook on Windows is unsupported at this time"
+      exit 1
+    fi
+    ostype="win"
     ;;
   *)
     echo "Found Linux."
@@ -66,8 +123,8 @@ git clone https://github.com/matrix-org/iohook
 cd iohook
 npm i || echo "Ignoring broken pre-build packages"
 rm -rf builds/*
-npm run build
-node build.js --runtime electron --version $electron_version --abi $abi --no-upload
+npm run build # This builds libuiohook
+node build.js --runtime electron --version $electron_version --abi $abi --no-upload # Builds the module for the current OS/node version
 
 # Install
 echo "Installing built package"
