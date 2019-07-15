@@ -1,3 +1,10 @@
+Changes in [1.3.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.3) (2019-07-15)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.2...v1.3.0-rc.3)
+
+ * Update to react-sdk rc.3 to fix a bug where a room admin could generate a room
+   that would cause Riot to error, and some stuck notifications.
+
 Changes in [1.3.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.2) (2019-07-12)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.1...v1.3.0-rc.2)
