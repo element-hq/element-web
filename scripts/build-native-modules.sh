@@ -36,6 +36,7 @@ case "$OSTYPE" in
 esac
 
 echo "Detecting architecture..."
+MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == "x86_64" ]; then
   echo "Found 64 bit..."
   osarch="64"
