@@ -305,7 +305,7 @@ module.exports = React.createClass({
                 const {memberName, reason} = this._getKickOrBanInfo();
                 title = _t("You were kicked from %(roomName)s by %(memberName)s",
                     {memberName, roomName: this._roomName()});
-                subTitle = _t("Reason: %(reason)s", {reason});
+                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
 
                 if (this._joinRule() === "invite") {
                     primaryActionLabel = _t("Forget this room");
@@ -322,7 +322,7 @@ module.exports = React.createClass({
                 const {memberName, reason} = this._getKickOrBanInfo();
                 title = _t("You were banned from %(roomName)s by %(memberName)s",
                     {memberName, roomName: this._roomName()});
-                subTitle = _t("Reason: %(reason)s", {reason});
+                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
                 primaryActionLabel = _t("Forget this room");
                 primaryActionHandler = this.props.onForgetClick;
                 break;
