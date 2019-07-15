@@ -1879,5 +1879,6 @@
     "Registration Successful": "Registrierung erfolgreich",
     "Failed to revoke invite": "Einladung zurückziehen fehlgeschlagen",
     "Revoke invite": "Einladung zurückziehen",
-    "Invited by %(sender)s": "Eingeladen von %(sender)s"
+    "Invited by %(sender)s": "Eingeladen von %(sender)s",
+    "Changes your avatar in all rooms": "Verändert dein Profilbild in allen Räumen"
 }
