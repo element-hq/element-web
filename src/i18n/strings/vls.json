@@ -749,7 +749,7 @@
     "Send an encrypted message…": "Verstuurt e versleuterd bericht…",
     "Send a message (unencrypted)…": "Verstuurt een bericht (ounversleuterd)…",
     "Markdown is disabled": "Markdown is uutgeschoakeld",
-    "Hide Text Formatting Toolbar": "Tekstipmoakwerkbalk verbergn",
+    "Hide Text Formatting Toolbar": "Tekstipmoakwerkbalk wegsteekn",
     "The conversation continues here.": "’t Gesprek goat hier verder.",
     "This room has been replaced and is no longer active.": "Dit gesprek is vervangn gewist en is nie langer actief.",
     "You do not have permission to post to this room": "J’èt geen toestemmienge voor in dit gesprek te postn",
@@ -1679,5 +1679,17 @@
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
     "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s èn nietent gewyzigd",
     "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s è nietent gewyzigd"
+    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s è nietent gewyzigd",
+    "Changes your avatar in all rooms": "Verandert jen avatar in alle gesprekkn",
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Vertelt uus wuk dat der verkeerd is geloopn, of nog beter, makt e foutmeldienge an ip GitHub woarin da je 't probleem beschryft.",
+    "Removing…": "Bezig me te verwydern…",
+    "Clear all data on this device?": "Alle gegeevns ip dit toestel wissn?",
+    "Clearing all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Gewiste gegeevns kunn nie weregehoald wirdn. Versleuterde berichtn goan verloorn goan, tenzy dad hunder sleuters geback-upt gewist zyn.",
+    "Clear all data": "Alle gegeevns wissn",
+    "Your homeserver doesn't seem to support this feature.": "Je thuusserver biedt geen oundersteunienge vo deze functie.",
+    "Resend edit": "Bewerkienge herverstuurn",
+    "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s reactie(s) herverstuurn",
+    "Resend removal": "Verwyderienge herverstuurn",
+    "Failed to re-authenticate due to a homeserver problem": "’t Heranmeldn is mislukt omwille van e probleem me de thuusserver",
+    "Failed to re-authenticate": "’t Heranmeldn is mislukt"
 }
