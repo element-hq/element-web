@@ -747,6 +747,7 @@ const TimelinePanel = React.createClass({
         const lastDisplayedIndex = this._getLastDisplayedEventIndex({
             allowPartial: true,
             ignoreEchoes: true,
+            allowEventsWithoutTiles: true,
         });
 
         if (lastDisplayedIndex === null) {
