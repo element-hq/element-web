@@ -22,7 +22,6 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
-import SettingsStore from '../../../settings/SettingsStore';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 
 export default class MessageActionBar extends React.PureComponent {
@@ -123,15 +122,7 @@ export default class MessageActionBar extends React.PureComponent {
         this.onFocusChange(true);
     }
 
-    isReactionsEnabled() {
-        return SettingsStore.isFeatureEnabled("feature_reactions");
-    }
-
     renderReactButton() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
         const ReactMessageAction = sdk.getComponent('messages.ReactMessageAction');
         const { mxEvent, reactions } = this.props;
 
