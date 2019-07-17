@@ -546,20 +546,29 @@ const onMessage = function(event) {
     // This means the URL could contain a path (like /develop) and still be used
     // to validate event origins, which do not specify paths.
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-    //
-    // All strings start with the empty string, so for sanity return if the length
-    // of the event origin is 0.
-    //
+    let configUrl;
+    try {
+        configUrl = new URL(SdkConfig.get().integrations_ui_url);
+    } catch (e) {
+        // No integrations UI URL, ignore silently.
+        return;
+    }
+    let eventOriginUrl;
+    try {
+        eventOriginUrl = new URL(event.origin);
+    } catch (e) {
+        return;
+    }
     // TODO -- Scalar postMessage API should be namespaced with event.data.api field
     // Fix following "if" statement to respond only to specific API messages.
-    const url = SdkConfig.get().integrations_ui_url;
     if (
-        event.origin.length === 0 ||
-        !url.startsWith(event.origin + '/') ||
+        configUrl.origin !== eventOriginUrl.origin ||
         !event.data.action ||
         event.data.api // Ignore messages with specific API set
     ) {
-        return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+        // don't log this - debugging APIs and browser add-ons like to spam
+        // postMessage which floods the log otherwise
+        return;
     }
 
     if (event.data.action === "close_scalar") {
