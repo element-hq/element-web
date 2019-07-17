@@ -557,20 +557,18 @@ const onMessage = function(event) {
     try {
         eventOriginUrl = new URL(event.origin);
     } catch (e) {
-        console.warn(`Message from IM with unparsable origin ${event.origin} ignored`);
-        return;
-    }
-    if (configUrl.origin !== eventOriginUrl.origin) {
-        console.warn(`Message from IM with invalid origin ${event.origin} ignored`);
         return;
     }
     // TODO -- Scalar postMessage API should be namespaced with event.data.api field
     // Fix following "if" statement to respond only to specific API messages.
     if (
+        configUrl.origin !== eventOriginUrl.origin ||
         !event.data.action ||
         event.data.api // Ignore messages with specific API set
     ) {
-        return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+        // don't log this - debugging APIs and browser add-ons like to spam
+        // postMessage which floods the log otherwise
+        return;
     }
 
     if (event.data.action === "close_scalar") {
