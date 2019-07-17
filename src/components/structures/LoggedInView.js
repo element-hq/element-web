@@ -374,12 +374,11 @@ const LoggedInView = React.createClass({
             const focusedOnInputControl = targetTag === "INPUT" ||
                 targetTag === "TEXTAREA" ||
                 targetTag === "SELECT" ||
-                ev.target.getAttribute("contenteditable");
-            // we don't check for buttons that have focus here,
-            // because they should be using AccessibleButton which
-            // calls stopPropagation on space or enter keydown, so
-            // that keydown event would never get here.
-            if (!focusedOnInputControl) {
+                !!ev.target.getAttribute("contenteditable");
+            const isClickShortcut = ev.target !== document.body &&
+                (ev.key === "Space" || ev.key === "Enter");
+
+            if (!focusedOnInputControl && !isClickShortcut) {
                 dis.dispatch({action: 'focus_composer'}, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
