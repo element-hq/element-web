@@ -1141,9 +1141,8 @@ export default class MessageComposerInput extends React.Component {
             if (!selection.anchor.isAtEndOfNode(document)) return;
         }
 
-        const editingEnabled = SettingsStore.isFeatureEnabled("feature_message_editing");
-        const shouldSelectHistory = (editingEnabled && e.altKey) || !editingEnabled;
-        const shouldEditLastMessage = editingEnabled && !e.altKey && up && !RoomViewStore.getQuotingEvent();
+        const shouldSelectHistory = e.altKey;
+        const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
 
         if (shouldSelectHistory) {
             // Try select composer history
