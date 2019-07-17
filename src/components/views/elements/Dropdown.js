@@ -48,7 +48,7 @@ class MenuOption extends React.Component {
         });
 
         return <div className={optClasses}
-            onClick={this._onClick} onKeyPress={this._onKeyPress}
+            onClick={this._onClick}
             onMouseEnter={this._onMouseEnter}
         >
             { this.props.children }
