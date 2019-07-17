@@ -37,10 +37,53 @@ function getOrCreateContainer() {
     return container;
 }
 
-function isInRect(x, y, rect, buffer = 10) {
+function isInRect(x, y, rect, { buffer = 0 } = {}) {
     const { top, right, bottom, left } = rect;
     return x >= (left - buffer) && x <= (right + buffer)
         && y >= (top - buffer) && y <= (bottom + buffer);
+}
+
+/**
+ * Returns the positive slope of the diagonal of the rect.
+ *
+ * @param {DOMRect} rect
+ * @return {integer}
+ */
+function getDiagonalSlope(rect) {
+    const { top, right, bottom, left } = rect;
+    return (bottom - top) / (right - left);
+}
+
+function isInUpperLeftHalf(x, y, rect) {
+    const { bottom, left } = rect;
+    // Negative slope because Y values grow downwards and for this case, the
+    // diagonal goes from larger to smaller Y values.
+    const diagonalSlope = getDiagonalSlope(rect) * -1;
+    return isInRect(x, y, rect) && (y <= bottom + diagonalSlope * (x - left));
+}
+
+function isInLowerRightHalf(x, y, rect) {
+    const { bottom, left } = rect;
+    // Negative slope because Y values grow downwards and for this case, the
+    // diagonal goes from larger to smaller Y values.
+    const diagonalSlope = getDiagonalSlope(rect) * -1;
+    return isInRect(x, y, rect) && (y >= bottom + diagonalSlope * (x - left));
+}
+
+function isInUpperRightHalf(x, y, rect) {
+    const { top, left } = rect;
+    // Positive slope because Y values grow downwards and for this case, the
+    // diagonal goes from smaller to larger Y values.
+    const diagonalSlope = getDiagonalSlope(rect) * 1;
+    return isInRect(x, y, rect) && (y <= top + diagonalSlope * (x - left));
+}
+
+function isInLowerLeftHalf(x, y, rect) {
+    const { top, left } = rect;
+    // Positive slope because Y values grow downwards and for this case, the
+    // diagonal goes from smaller to larger Y values.
+    const diagonalSlope = getDiagonalSlope(rect) * 1;
+    return isInRect(x, y, rect) && (y >= top + diagonalSlope * (x - left));
 }
 
 /*
@@ -91,15 +134,99 @@ export default class InteractiveTooltip extends React.Component {
         this.target = element;
     }
 
+    canTooltipFitAboveTarget() {
+        const { contentRect } = this.state;
+        const targetRect = this.target.getBoundingClientRect();
+        const targetTop = targetRect.top + window.pageYOffset;
+        return (
+            !contentRect ||
+            (targetTop - contentRect.height > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE)
+        );
+    }
+
     onMouseMove = (ev) => {
         const { clientX: x, clientY: y } = ev;
         const { contentRect } = this.state;
         const targetRect = this.target.getBoundingClientRect();
 
-        if (!isInRect(x, y, contentRect) && !isInRect(x, y, targetRect)) {
-            this.hideTooltip();
+        // When moving the mouse from the target to the tooltip, we create a
+        // safe area that includes the tooltip, the target, and the trapezoid
+        // ABCD between them:
+        //                            ┌───────────┐
+        //                            │           │
+        //                            │           │
+        //                          A └───E───F───┘ B
+        //                                  V
+        //                                 ┌─┐
+        //                                 │ │
+        //                                C└─┘D
+        //
+        // As long as the mouse remains inside the safe area, the tooltip will
+        // stay open.
+        const buffer = 10;
+        if (
+            isInRect(x, y, contentRect, { buffer }) ||
+            isInRect(x, y, targetRect)
+        ) {
             return;
         }
+        if (this.canTooltipFitAboveTarget()) {
+            const trapezoidLeft = {
+                top: contentRect.bottom,
+                right: targetRect.left,
+                bottom: targetRect.bottom,
+                left: contentRect.left - buffer,
+            };
+            const trapezoidCenter = {
+                top: contentRect.bottom,
+                right: targetRect.right,
+                bottom: targetRect.bottom,
+                left: targetRect.left,
+            };
+            const trapezoidRight = {
+                top: contentRect.bottom,
+                right: contentRect.right + buffer,
+                bottom: targetRect.bottom,
+                left: targetRect.right,
+            };
+
+            if (
+                isInUpperRightHalf(x, y, trapezoidLeft) ||
+                isInRect(x, y, trapezoidCenter) ||
+                isInUpperLeftHalf(x, y, trapezoidRight)
+            ) {
+                return;
+            }
+        } else {
+            const trapezoidLeft = {
+                top: targetRect.top,
+                right: targetRect.left,
+                bottom: contentRect.top,
+                left: contentRect.left - buffer,
+            };
+            const trapezoidCenter = {
+                top: targetRect.top,
+                right: targetRect.right,
+                bottom: contentRect.top,
+                left: targetRect.left,
+            };
+            const trapezoidRight = {
+                top: targetRect.top,
+                right: contentRect.right + buffer,
+                bottom: contentRect.top,
+                left: targetRect.right,
+            };
+
+            if (
+                isInLowerRightHalf(x, y, trapezoidLeft) ||
+                isInRect(x, y, trapezoidCenter) ||
+                isInLowerLeftHalf(x, y, trapezoidRight)
+            ) {
+                return;
+            }
+        }
+
+        this.hideTooltip();
     }
 
     onTargetMouseOver = (ev) => {
@@ -149,12 +276,12 @@ export default class InteractiveTooltip extends React.Component {
         // edge, flip around to below the target.
         const position = {};
         let chevronFace = null;
-        if (contentRect && (targetTop - contentRect.height <= MIN_SAFE_DISTANCE_TO_WINDOW_EDGE)) {
-            position.top = targetBottom;
-            chevronFace = "top";
-        } else {
+        if (this.canTooltipFitAboveTarget()) {
             position.bottom = window.innerHeight - targetTop;
             chevronFace = "bottom";
+        } else {
+            position.top = targetBottom;
+            chevronFace = "top";
         }
 
         // Center the tooltip horizontally with the target's center.
