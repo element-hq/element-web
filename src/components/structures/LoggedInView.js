@@ -106,7 +106,7 @@ const LoggedInView = React.createClass({
 
         CallMediaHandler.loadDevices();
 
-        document.addEventListener('keydown', this._onKeyDown);
+        document.addEventListener('keydown', this._onNativeKeyDown, false);
 
         this._sessionStore = sessionStore;
         this._sessionStoreToken = this._sessionStore.addListener(
@@ -136,7 +136,7 @@ const LoggedInView = React.createClass({
     },
 
     componentWillUnmount: function() {
-        document.removeEventListener('keydown', this._onKeyDown);
+        document.removeEventListener('keydown', this._onNativeKeyDown, false);
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
@@ -272,6 +272,42 @@ const LoggedInView = React.createClass({
         });
     },
 
+    /*
+    SOME HACKERY BELOW:
+    React optimizes event handlers, by always attaching only 1 handler to the document for a given type.
+    It then internally determines the order in which React event handlers should be called,
+    emulating the capture and bubbling phases the DOM also has.
+
+    But, as the native handler for React is always attached on the document,
+    it will always run last for bubbling (first for capturing) handlers,
+    and thus React basically has its own event phases, and will always run
+    after (before for capturing) any native other event handlers (as they tend to be attached last).
+
+    So ideally one wouldn't mix React and native event handlers to have bubbling working as expected,
+    but we do need a native event handler here on the document,
+    to get keydown events when there is no focused element (target=body).
+
+    We also do need bubbling here to give child components a chance to call `stopPropagation()`,
+    for keydown events it can handle itself, and shouldn't be redirected to the composer.
+
+    So we listen with React on this component to get any events on focused elements, and get bubbling working as expected.
+    We also listen with a native listener on the document to get keydown events when no element is focused.
+    Bubbling is irrelevant here as the target is the body element.
+    */
+    _onReactKeyDown: function(ev) {
+        // events caught while bubbling up on the root element
+        // of this component, so something must be focused.
+        this._onKeyDown(ev);
+    },
+
+    _onNativeKeyDown: function(ev) {
+        // only pass this if there is no focused element.
+        // if there is, _onKeyDown will be called by the
+        // react keydown handler that respects the react bubbling order.
+        if (ev.target === document.body) {
+            this._onKeyDown(ev);
+        }
+    },
 
     _onKeyDown: function(ev) {
             /*
@@ -560,7 +596,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
+            <div onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
