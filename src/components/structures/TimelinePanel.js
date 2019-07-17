@@ -738,14 +738,8 @@ const TimelinePanel = React.createClass({
         // move the RM to *after* the message at the bottom of the screen. This
         // avoids a problem whereby we never advance the RM if there is a huge
         // message which doesn't fit on the screen.
-        //
-        // But ignore local echoes for this - they have a temporary event ID
-        // and we'll get confused when their ID changes and we can't figure out
-        // where the RM is pointing to. The read marker will be invisible for
-        // now anyway, so this doesn't really matter.
         const lastDisplayedIndex = this._getLastDisplayedEventIndex({
             allowPartial: true,
-            ignoreEchoes: true,
         });
 
         if (lastDisplayedIndex === null) {
@@ -1128,7 +1122,6 @@ const TimelinePanel = React.createClass({
     _getLastDisplayedEventIndex: function(opts) {
         opts = opts || {};
         const ignoreOwn = opts.ignoreOwn || false;
-        const ignoreEchoes = opts.ignoreEchoes || false;
         const allowPartial = opts.allowPartial || false;
 
         const messagePanel = this.refs.messagePanel;
@@ -1175,7 +1168,7 @@ const TimelinePanel = React.createClass({
                 adjacentInvisibleEventCount = 0;
             }
 
-            const shouldIgnore = (ignoreEchoes && ev.status) || // local echo
+            const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
             const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
 
