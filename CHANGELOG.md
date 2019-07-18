@@ -1,3 +1,12 @@
+Changes in [1.3.0](https://github.com/vector-im/riot-web/releases/tag/v1.3.0) (2019-07-18)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.3...v1.3.0)
+
+ * Upgrade to React SDK 1.4.0 and JS SDK 2.2.0
+ * Message editing and reactions features enabled
+ * Remove edits and reactions feature flags from docs and config
+   [\#10365](https://github.com/vector-im/riot-web/pull/10365)
+
 Changes in [1.3.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.3.0-rc.3) (2019-07-15)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.2...v1.3.0-rc.3)
