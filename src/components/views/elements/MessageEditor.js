@@ -222,7 +222,6 @@ export default class MessageEditor extends React.Component {
                 dis.dispatch({action: 'edit_event', event: nextEvent});
             } else {
                 dis.dispatch({action: 'edit_event', event: null});
-                dis.dispatch({action: 'focus_composer'});
             }
             event.preventDefault();
         }
@@ -230,7 +229,6 @@ export default class MessageEditor extends React.Component {
 
     _cancelEdit = () => {
         dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
     }
 
     _hasModifications(newContent) {
@@ -257,7 +255,6 @@ export default class MessageEditor extends React.Component {
         this.context.matrixClient.sendMessage(roomId, editContent);
 
         dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
     }
 
     _cancelPreviousPendingEdit() {

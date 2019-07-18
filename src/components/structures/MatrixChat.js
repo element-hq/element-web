@@ -268,8 +268,6 @@ export default React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
 
-        this.focusComposer = false;
-
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
         if (this.onAliasClick) {
@@ -361,10 +359,6 @@ export default React.createClass({
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
             Analytics.trackPageChange(durationMs);
-        }
-        if (this.focusComposer) {
-            dis.dispatch({action: 'focus_composer'});
-            this.focusComposer = false;
         }
     },
 
@@ -793,8 +787,6 @@ export default React.createClass({
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomInfo) {
-        this.focusComposer = true;
-
         const newState = {
             view: VIEWS.LOGGED_IN,
             currentRoomId: roomInfo.room_id || null,
@@ -1368,7 +1360,6 @@ export default React.createClass({
             self.firstSyncComplete = true;
             self.firstSyncPromise.resolve();
 
-            dis.dispatch({action: 'focus_composer'});
             self.setState({
                 ready: true,
                 showNotifierToolbar: Notifier.shouldShowToolbar(),
