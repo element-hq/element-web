@@ -1,3 +1,19 @@
+Changes in [1.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0) (2019-07-18)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.3...v1.4.0)
+
+ * Upgrade to JS SDK 2.2.0
+ * Don't show remove button for original event in edit history
+   [\#3236](https://github.com/matrix-org/matrix-react-sdk/pull/3236)
+ * Remove feature flags for reactions and edits
+   [\#3234](https://github.com/matrix-org/matrix-react-sdk/pull/3234)
+ * Enable reactions and edits by default
+   [\#3232](https://github.com/matrix-org/matrix-react-sdk/pull/3232)
+ * Improve interactive tooltip safe mousing area
+   [\#3231](https://github.com/matrix-org/matrix-react-sdk/pull/3231)
+ * Add a previous event safe area around action bar
+   [\#3230](https://github.com/matrix-org/matrix-react-sdk/pull/3230)
+
 Changes in [1.4.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.3) (2019-07-15)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.2...v1.4.0-rc.3)
