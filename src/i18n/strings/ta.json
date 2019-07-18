@@ -144,5 +144,22 @@
     "Couldn't load home page": "முதற்பக்கத்தை நிரலேற்ற முடியவில்லை",
     "Register": "பதிவு செய்",
     "Rooms": "அறைகள்",
-    "Add rooms to this community": "அறைகளை இந்த சமூகத்தில் சேர்க்கவும்"
+    "Add rooms to this community": "அறைகளை இந்த சமூகத்தில் சேர்க்கவும்",
+    "This email address is already in use": "இந்த மின் அஞ்சல் முகவரி ஏற்கனவே பயன்பாட்டில் உள்ளது",
+    "This phone number is already in use": "இந்த தொலைபேசி எண் ஏற்கனவே பயன்பாட்டில் உள்ளது",
+    "Failed to verify email address: make sure you clicked the link in the email": "மின்னஞ்சல் முகவரியைச் சரிபார்க்கத் தவறிவிட்டது: மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்துள்ளீர்கள் என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்",
+    "The platform you're on": "நீங்கள் இருக்கும் தளம்",
+    "The version of Riot.im": "Riot.im இன் பதிப்பு",
+    "Whether or not you're logged in (we don't record your username)": "நீங்கள் உள்நுழைந்திருந்தாலும் இல்லாவிட்டாலும் (உங்கள் பயனர்பெயரை நாங்கள் பதிவு செய்ய மாட்டோம்)",
+    "Your language of choice": "நீங்கள் விரும்பும் மொழி",
+    "Which officially provided instance you are using, if any": "நீங்கள் பயன்படுத்தும் அதிகாரப்பூர்வமாக வழங்கப்பட்ட உதாரணம் ஏதேனும் இருந்தால்",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "பணக்கார உரை எடிட்டரின் ரிச்ச்டெக்ஸ்ட் பயன்முறையைப் பயன்படுத்துகிறீர்களா இல்லையா",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "நீங்கள் 'breadcrumbs' அம்சத்தைப் பயன்படுத்துகிறீர்களோ இல்லையோ (அறை பட்டியலுக்கு மேலே உள்ள அவதாரங்கள்)",
+    "Your homeserver's URL": "உங்கள் வீட்டு சேவையகத்தின் URL",
+    "Your identity server's URL": "உங்கள் அடையாள சர்வரின் URL",
+    "e.g. %(exampleValue)s": "உதாரணமாக %(exampleValue)s",
+    "Every page you use in the app": "பயன்பாட்டில் நீங்கள் பயன்படுத்தும் ஒவ்வொரு பக்கமும்",
+    "Your Riot is misconfigured": "உங்கள் Riot தவறாக உள்ளமைக்கப்பட்டுள்ளது",
+    "Sign In": "உள்நுழைக",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "நீங்கள் தனிப்பயன் அடையாள சேவையகத்தையும் அமைக்கலாம், ஆனால் நீங்கள் மின்னஞ்சல் முகவரி மூலம் பயனர்களை அழைக்க முடியாது, அல்லது மின்னஞ்சல் முகவரியால் உங்களை அழைக்க முடியாது."
 }
