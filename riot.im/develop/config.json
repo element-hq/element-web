@@ -26,8 +26,7 @@
         "feature_sas": "labs",
         "feature_room_breadcrumbs": "labs",
         "feature_state_counters": "labs",
-        "feature_reactions": "enable",
-        "feature_message_editing": "enable"
+        "feature_reactions": "enable"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
