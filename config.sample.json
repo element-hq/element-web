@@ -22,9 +22,7 @@
     "showLabsSettings": false,
     "features": {
         "feature_groups": "labs",
-        "feature_pinning": "labs",
-        "feature_reactions": "labs",
-        "feature_message_editing": "labs"
+        "feature_pinning": "labs"
     },
     "default_federate": true,
     "default_theme": "light",
