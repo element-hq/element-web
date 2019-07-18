@@ -208,9 +208,6 @@ class MatrixClientPeg {
     }
 
     _createClient(creds: MatrixClientCreds) {
-        const aggregateRelations = SettingsStore.isFeatureEnabled("feature_reactions");
-        const enableEdits = SettingsStore.isFeatureEnabled("feature_message_editing");
-
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -220,7 +217,7 @@ class MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             verificationMethods: [verificationMethods.SAS],
-            unstableClientRelationAggregation: aggregateRelations || enableEdits,
+            unstableClientRelationAggregation: true,
         };
 
         this.matrixClient = createMatrixClient(opts);

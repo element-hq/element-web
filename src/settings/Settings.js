@@ -114,18 +114,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_message_editing": {
-        isFeature: true,
-        displayName: _td("Edit messages after they have been sent (refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-    },
-    "feature_reactions": {
-        isFeature: true,
-        displayName: _td("React to messages with emoji (refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
