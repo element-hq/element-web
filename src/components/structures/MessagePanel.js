@@ -110,7 +110,6 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this._editingEnabled = SettingsStore.isFeatureEnabled("feature_message_editing");
         // the event after which we put a visible unread marker on the last
         // render cycle; null if readMarkerVisible was false or the RM was
         // suppressed (eg because it was at the end of the timeline)
@@ -586,7 +585,7 @@ module.exports = React.createClass({
                 <EventTile mxEvent={mxEv}
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
-                    replacingEventId={this._editingEnabled && mxEv.replacingEventId()}
+                    replacingEventId={mxEv.replacingEventId()}
                     editState={isEditing && this.props.editState}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}
