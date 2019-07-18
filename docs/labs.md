@@ -29,10 +29,4 @@ Once enabled, send a custom state event to a room to set values:
 
 That's it. Now should see your new counter under the header.
 
-## Reactions
-
-`feature_reactions` allows reacting to messages with emoji and displaying
-reactions from other people. This feature is currently under active development,
-and only portions have been implemented so far.
-
 [#riot-web:matrix.org]: https://matrix.to/#/#riot-web:matrix.org
