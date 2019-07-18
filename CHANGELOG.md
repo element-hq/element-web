@@ -1,3 +1,112 @@
+Changes in [1.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0) (2019-07-18)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.3...v1.4.0)
+
+ * Upgrade to JS SDK 2.2.0
+ * Don't show remove button for original event in edit history
+   [\#3236](https://github.com/matrix-org/matrix-react-sdk/pull/3236)
+ * Remove feature flags for reactions and edits
+   [\#3234](https://github.com/matrix-org/matrix-react-sdk/pull/3234)
+ * Enable reactions and edits by default
+   [\#3232](https://github.com/matrix-org/matrix-react-sdk/pull/3232)
+ * Improve interactive tooltip safe mousing area
+   [\#3231](https://github.com/matrix-org/matrix-react-sdk/pull/3231)
+ * Add a previous event safe area around action bar
+   [\#3230](https://github.com/matrix-org/matrix-react-sdk/pull/3230)
+
+Changes in [1.4.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.3) (2019-07-15)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.2...v1.4.0-rc.3)
+
+ * Check content and content.users in power levels
+   [\#3223](https://github.com/matrix-org/matrix-react-sdk/pull/3223)
+ * Take adjacent invisible events into account for read receipt, even if any
+   but first should be ignored.
+   [\#3222](https://github.com/matrix-org/matrix-react-sdk/pull/3222)
+
+Changes in [1.4.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.2) (2019-07-12)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0-rc.1...v1.4.0-rc.2)
+
+ * Upgrade to JS SDK 2.2.0-rc.2 to fix regresion in listing devices
+ * Remove misleading text about admins logging people out from soft logout
+   [\#3215](https://github.com/matrix-org/matrix-react-sdk/pull/3215)
+
+Changes in [1.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.4.0-rc.1) (2019-07-12)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.3.1...v1.4.0-rc.1)
+
+ * Update from Weblate
+   [\#3214](https://github.com/matrix-org/matrix-react-sdk/pull/3214)
+ * Prevent autocomplete on paste, and verserev-ing text before and after :
+   [\#3210](https://github.com/matrix-org/matrix-react-sdk/pull/3210)
+ * Close settings after deactivating
+   [\#3212](https://github.com/matrix-org/matrix-react-sdk/pull/3212)
+ * Require an issue URL (or notes) on rageshakes
+   [\#3207](https://github.com/matrix-org/matrix-react-sdk/pull/3207)
+ * Use r0 media endpoints for group tests
+   [\#3202](https://github.com/matrix-org/matrix-react-sdk/pull/3202)
+ * Fix field styling regression
+   [\#3204](https://github.com/matrix-org/matrix-react-sdk/pull/3204)
+ * Upgrade dependencies
+   [\#3203](https://github.com/matrix-org/matrix-react-sdk/pull/3203)
+ * Show anything other than ban/invite -> leave as a kick
+   [\#3198](https://github.com/matrix-org/matrix-react-sdk/pull/3198)
+ * Run stylelint on all SCSS files
+   [\#3200](https://github.com/matrix-org/matrix-react-sdk/pull/3200)
+ * Show original event in edit history
+   [\#3195](https://github.com/matrix-org/matrix-react-sdk/pull/3195)
+ * Use the state variable for the password when deactivating
+   [\#3201](https://github.com/matrix-org/matrix-react-sdk/pull/3201)
+ * Support SSO for rehydrating a soft-logged-out session.
+   [\#3197](https://github.com/matrix-org/matrix-react-sdk/pull/3197)
+ * Change highlight colour on dark theme
+   [\#3196](https://github.com/matrix-org/matrix-react-sdk/pull/3196)
+ *  Dress up the soft logout page to look like the design
+   [\#3190](https://github.com/matrix-org/matrix-react-sdk/pull/3190)
+ * Overwrite the old session if the new creds are for a different user
+   [\#3189](https://github.com/matrix-org/matrix-react-sdk/pull/3189)
+ * Fix React crash when using a non-default homeserver on soft logout
+   [\#3188](https://github.com/matrix-org/matrix-react-sdk/pull/3188)
+ *  Change soft logout rehydrate text if there's pending key backups
+   [\#3187](https://github.com/matrix-org/matrix-react-sdk/pull/3187)
+ * Ask for the user's password to rehydrate their soft logged out session
+   [\#3182](https://github.com/matrix-org/matrix-react-sdk/pull/3182)
+ * Don't try to call bodyToHtml with an empty content
+   [\#3194](https://github.com/matrix-org/matrix-react-sdk/pull/3194)
+ * Take server-side aggregation into account for timestamp on (edited) tooltip
+   [\#3193](https://github.com/matrix-org/matrix-react-sdk/pull/3193)
+ * Fix some React errors
+   [\#3164](https://github.com/matrix-org/matrix-react-sdk/pull/3164)
+ * Preserve reply fallback on edit
+   [\#3192](https://github.com/matrix-org/matrix-react-sdk/pull/3192)
+ * Don't show Remove button in ImageView if can't redact, delint ImageView
+   [\#3191](https://github.com/matrix-org/matrix-react-sdk/pull/3191)
+ * Edit history actions
+   [\#3180](https://github.com/matrix-org/matrix-react-sdk/pull/3180)
+ * Don't allow editing via up-arrow when Replying
+   [\#3183](https://github.com/matrix-org/matrix-react-sdk/pull/3183)
+ * If oldContent matches newContent, skip sending the edit
+   [\#3103](https://github.com/matrix-org/matrix-react-sdk/pull/3103)
+ * Track live events in timeline and use for read receipts and read markers
+   [\#3184](https://github.com/matrix-org/matrix-react-sdk/pull/3184)
+ * Upgrade dependencies
+   [\#3179](https://github.com/matrix-org/matrix-react-sdk/pull/3179)
+ * Allow diplayed reaction values to contain anything
+   [\#3186](https://github.com/matrix-org/matrix-react-sdk/pull/3186)
+ * Fix interactive tooltip null target error
+   [\#3185](https://github.com/matrix-org/matrix-react-sdk/pull/3185)
+ * Require that users go to the soft logout page if they're soft logged out
+   [\#3181](https://github.com/matrix-org/matrix-react-sdk/pull/3181)
+ * Emojibase data includes blank variations, accept these when searching
+   [\#3163](https://github.com/matrix-org/matrix-react-sdk/pull/3163)
+ * Implement basic soft logout handling
+   [\#3177](https://github.com/matrix-org/matrix-react-sdk/pull/3177)
+ * De-lint ScalarAuthClient
+   [\#3178](https://github.com/matrix-org/matrix-react-sdk/pull/3178)
+ * show /relations error in edit history dialog
+   [\#3174](https://github.com/matrix-org/matrix-react-sdk/pull/3174)
+
 Changes in [1.3.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.3.1) (2019-07-11)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.3.0...v1.3.1)
