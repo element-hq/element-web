@@ -658,7 +658,6 @@ const TimelinePanel = React.createClass({
 
         const lastReadEventIndex = this._getLastDisplayedEventIndex({
             ignoreOwn: true,
-            allowEventsWithoutTiles: true,
         });
         if (lastReadEventIndex === null) {
             shouldSendRR = false;
@@ -739,14 +738,8 @@ const TimelinePanel = React.createClass({
         // move the RM to *after* the message at the bottom of the screen. This
         // avoids a problem whereby we never advance the RM if there is a huge
         // message which doesn't fit on the screen.
-        //
-        // But ignore local echoes for this - they have a temporary event ID
-        // and we'll get confused when their ID changes and we can't figure out
-        // where the RM is pointing to. The read marker will be invisible for
-        // now anyway, so this doesn't really matter.
         const lastDisplayedIndex = this._getLastDisplayedEventIndex({
             allowPartial: true,
-            ignoreEchoes: true,
         });
 
         if (lastDisplayedIndex === null) {
@@ -1129,9 +1122,7 @@ const TimelinePanel = React.createClass({
     _getLastDisplayedEventIndex: function(opts) {
         opts = opts || {};
         const ignoreOwn = opts.ignoreOwn || false;
-        const ignoreEchoes = opts.ignoreEchoes || false;
         const allowPartial = opts.allowPartial || false;
-        const allowEventsWithoutTiles = opts.allowEventsWithoutTiles || false;
 
         const messagePanel = this.refs.messagePanel;
         if (messagePanel === undefined) return null;
@@ -1152,8 +1143,7 @@ const TimelinePanel = React.createClass({
             return false;
         };
 
-        // if allowEventsWithoutTiles is enabled, we keep track
-        // of how many of the adjacent events didn't have a tile
+        // We keep track of how many of the adjacent events didn't have a tile
         // but should have the read receipt moved past them, so
         // we can include those once we find the last displayed (visible) event.
         // The counter is not started for events we don't want
@@ -1178,11 +1168,11 @@ const TimelinePanel = React.createClass({
                 adjacentInvisibleEventCount = 0;
             }
 
-            const shouldIgnore = (ignoreEchoes && ev.status) || // local echo
+            const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
             const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
 
-            if (allowEventsWithoutTiles && (isWithoutTile || !node)) {
+            if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
                 // but continue counting if we were already so the offset
                 // to the previous invisble event that didn't need to be ignored
