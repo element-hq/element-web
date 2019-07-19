@@ -108,7 +108,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             allEvents = allEvents.concat(this.state.originalEvent);
         }
         const baseEventId = this.props.mxEvent.getId();
-        allEvents.forEach(e => {
+        allEvents.forEach((e, i) => {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate(), e.getDate())) {
                 nodes.push(<li key={e.getTs() + "~"}><DateSeparator ts={e.getTs()} /></li>);
             }
@@ -116,6 +116,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             nodes.push((
                 <EditHistoryMessage
                     key={e.getId()}
+                    previousEdit={!isBaseEvent && allEvents[i + 1]}
                     isBaseEvent={isBaseEvent}
                     mxEvent={e}
                     isTwelveHour={this.state.isTwelveHour}

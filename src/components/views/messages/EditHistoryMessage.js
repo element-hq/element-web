@@ -25,6 +25,17 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
+import DiffMatchPatch from 'diff-match-patch';
+
+function getReplacedContent(event) {
+    const originalContent = event.getOriginalContent();
+    return originalContent["m.new_content"] || originalContent;
+}
+
+function isPlainMessage(event) {
+    const content = getReplacedContent(event);
+    return content.msgtype === "m.text" && !content.format;
+}
 
 export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
@@ -115,16 +126,36 @@ export default class EditHistoryMessage extends React.PureComponent {
         );
     }
 
+    _diffIt(oldBody, newBody) {
+        const dpm = new DiffMatchPatch();
+        const diff = dpm.diff_main(oldBody, newBody);
+        dpm.diff_cleanupSemantic(diff);
+        return diff.map(([modifier, text], i) => {
+            // not using del and ins tags here as del is used for strikethrough
+            if (modifier < 0) {
+                return (<span className="mx_EditHistoryMessage_deletion" key={i}>{text}</span>);
+            } else if (modifier > 0) {
+                return (<span className="mx_EditHistoryMessage_insertion" key={i}>{text}</span>);
+            } else {
+                return text;
+            }
+        });
+    }
+
     render() {
         const {mxEvent} = this.props;
-        const originalContent = mxEvent.getOriginalContent();
-        const content = originalContent["m.new_content"] || originalContent;
+        const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
             const UnknownBody = sdk.getComponent('messages.UnknownBody');
             contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
         } else {
-            const contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+            let contentElements;
+            if (isPlainMessage(mxEvent) && this.props.previousEdit && isPlainMessage(this.props.previousEdit)) {
+                contentElements = this._diffIt(getReplacedContent(this.props.previousEdit).body, content.body);
+            } else {
+                contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+            }
             if (mxEvent.getContent().msgtype === "m.emote") {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 contentContainer = (
