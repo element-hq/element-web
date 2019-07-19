@@ -126,7 +126,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         );
     }
 
-    _diffIt(oldBody, newBody) {
+    _renderBodyDiff(oldBody, newBody) {
         const dpm = new DiffMatchPatch();
         const diff = dpm.diff_main(oldBody, newBody);
         dpm.diff_cleanupSemantic(diff);
@@ -152,7 +152,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         } else {
             let contentElements;
             if (isPlainMessage(mxEvent) && this.props.previousEdit && isPlainMessage(this.props.previousEdit)) {
-                contentElements = this._diffIt(getReplacedContent(this.props.previousEdit).body, content.body);
+                contentElements = this._renderBodyDiff(getReplacedContent(this.props.previousEdit).body, content.body);
             } else {
                 contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
             }
