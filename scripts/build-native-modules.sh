@@ -134,12 +134,12 @@ if ! [ -z ${iohook+x} ] || ! [ -z ${iohook_export+x} ]; then
   npm i || echo "Ignoring broken pre-build packages"
   rm -rf builds/*
   npm run build # This builds libuiohook
-  node build.js --runtime electron --version $electron_version --abi $abi --no-upload # Builds the module for the current OS/node version
+  node build.js --runtime electron --version $electron_version --abi $electron_abi --no-upload # Builds the module for the current OS/node version
 
   if [ -z ${iohook_export} ]; then
     # Install
     echo "Installing built package"
-    folder="electron-v$abi-$ostype-x$osarch"
+    folder="electron-v$electron_abi-$ostype-x$osarch"
     mkdir -p builds/$folder/build/Release
     cp build/Release/iohook.node builds/$folder/build/Release/
   else
