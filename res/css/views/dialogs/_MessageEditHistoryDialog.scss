@@ -39,6 +39,20 @@ limitations under the License.
     padding: 0;
     color: $primary-fg-color;
 
+    span.mx_EditHistoryMessage_deletion, span.mx_EditHistoryMessage_insertion {
+        padding: 0px 2px;
+    }
+
+    span.mx_EditHistoryMessage_deletion {
+        color: rgb(255, 76, 85);
+        background-color: rgba(255, 76, 85, 0.1);
+    }
+
+    span.mx_EditHistoryMessage_insertion {
+        color: rgb(26, 169, 123);
+        background-color: rgba(26, 169, 123, 0.1);
+    }
+
     .mx_EventTile_line, .mx_EventTile_content {
         margin-right: 0px;
     }
