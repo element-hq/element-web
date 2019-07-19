@@ -326,11 +326,12 @@ const LoggedInView = React.createClass({
 
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
+        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
 
         switch (ev.keyCode) {
             case KeyCode.PAGE_UP:
             case KeyCode.PAGE_DOWN:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                if (!hasModifier) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
@@ -369,7 +370,7 @@ const LoggedInView = React.createClass({
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
-        } else {
+        } else if (!hasModifier) {
             const targetTag = ev.target.tagName;
             const focusedOnInputControl = targetTag === "INPUT" ||
                 targetTag === "TEXTAREA" ||
