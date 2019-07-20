@@ -122,7 +122,7 @@
     "%(targetName)s joined the room.": "%(targetName)s venis en la ĉambro.",
     "VoIP conference finished.": "Rettelefona voko finiĝis.",
     "%(targetName)s rejected the invitation.": "%(targetName)s rifuzis la inviton.",
-    "%(targetName)s left the room.": "%(targetName)s forlasis la ĉambro.",
+    "%(targetName)s left the room.": "%(targetName)s forlasis la ĉambron.",
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s malbaris uzanton %(targetName)s.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s forpelis uzanton %(targetName)s.",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s nuligis inviton por %(targetName)s.",
@@ -1901,5 +1901,6 @@
     "Starting backup...": "Komencanta savkopion…",
     "Create Key Backup": "Krei savkopion de ŝlosiloj",
     "Unable to create key backup": "Ne povas krei savkopion de ŝlosiloj",
-    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Sen agordo de Sekura rehavo de mesaĝoj, vi perdos vian sekuran historion de mesaĝoj per adiaŭo."
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Sen agordo de Sekura rehavo de mesaĝoj, vi perdos vian sekuran historion de mesaĝoj per adiaŭo.",
+    "Bulk options": "Amasaj opcioj"
 }
