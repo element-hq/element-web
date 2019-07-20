@@ -1904,5 +1904,7 @@
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Sen agordo de Sekura rehavo de mesaĝoj, vi perdos vian sekuran historion de mesaĝoj per adiaŭo.",
     "Bulk options": "Amasaj elektebloj",
     "Your Modular server": "Via Modular-servilo",
-    "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Enigu la lokon de via Modular-hejmservilo. Ĝi povas uzi vian propran domajnan nomon aŭ esti subdomajno de <a>modular.im</a>."
+    "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Enigu la lokon de via Modular-hejmservilo. Ĝi povas uzi vian propran domajnan nomon aŭ esti subdomajno de <a>modular.im</a>.",
+    "Invalid base_url for m.homeserver": "Nevalida base_url por m.homeserver",
+    "Invalid base_url for m.identity_server": "Nevalida base_url por m.identity_server"
 }
