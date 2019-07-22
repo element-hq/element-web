@@ -139,7 +139,10 @@ export default class AppTile extends React.Component {
     }
 
     componentWillMount() {
-        this.setScalarToken();
+        // Only fetch IM token on mount if we're showing and have permission to load
+        if (this.props.show && this.state.hasPermissionToLoad) {
+            this.setScalarToken();
+        }
     }
 
     componentDidMount() {
@@ -164,8 +167,6 @@ export default class AppTile extends React.Component {
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
-        this.setState({initialising: true});
-
         if (!WidgetUtils.isScalarUrl(this.props.url)) {
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
@@ -214,11 +215,20 @@ export default class AppTile extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
             this._getNewState(nextProps);
-            this.setScalarToken();
-        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
-            this.setState({
-                loading: true,
-            });
+            // Fetch IM token for new URL if we're showing and have permission to load
+            if (this.props.show && this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
+        } else if (nextProps.show && !this.props.show) {
+            if (this.props.waitForIframeLoad) {
+                this.setState({
+                    loading: true,
+                });
+            }
+            // Fetch IM token now that we're showing if we already have permission to load
+            if (this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
         } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
@@ -410,6 +420,8 @@ export default class AppTile extends React.Component {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
         this.setState({hasPermissionToLoad: true});
+        // Now that we have permission, fetch the IM token
+        this.setScalarToken();
     }
 
     _revokeWidgetPermission() {
@@ -525,13 +537,24 @@ export default class AppTile extends React.Component {
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
-            if (this.state.initialising) {
+            if (!this.state.hasPermissionToLoad) {
+                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+                appTileBody = (
+                    <div className={appTileBodyClass}>
+                        <AppPermission
+                            isRoomEncrypted={isRoomEncrypted}
+                            url={this.state.widgetUrl}
+                            onPermissionGranted={this._grantWidgetPermission}
+                        />
+                    </div>
+                );
+            } else if (this.state.initialising) {
                 appTileBody = (
                     <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                         { loadingElement }
                     </div>
                 );
-            } else if (this.state.hasPermissionToLoad == true) {
+            } else {
                 if (this.isMixedContent()) {
                     appTileBody = (
                         <div className={appTileBodyClass}>
@@ -571,17 +594,6 @@ export default class AppTile extends React.Component {
                         </div>;
                     }
                 }
-            } else {
-                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-                appTileBody = (
-                    <div className={appTileBodyClass}>
-                        <AppPermission
-                            isRoomEncrypted={isRoomEncrypted}
-                            url={this.state.widgetUrl}
-                            onPermissionGranted={this._grantWidgetPermission}
-                        />
-                    </div>
-                );
             }
         }
 
