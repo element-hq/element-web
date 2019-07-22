@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import url from 'url';
 import Promise from 'bluebird';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, presentTermsForServices, TermsNotSignedError } from './Terms';
@@ -104,9 +105,15 @@ class ScalarAuthClient {
         }).catch((e) => {
             if (e instanceof TermsNotSignedError) {
                 console.log("Integrations manager requires new terms to be agreed to");
+                // The terms endpoints are new and so live on standard _matrix prefixes,
+                // but IM rest urls are currently configured with paths, so remove the
+                // path from the base URL before passing it to the js-sdk
+                const parsedImRestUrl = url.parse(SdkConfig.get().integrations_rest_url);
+                parsedImRestUrl.path = '';
+                parsedImRestUrl.pathname = '';
                 return presentTermsForServices([new Service(
                     Matrix.SERVICE_TYPES.IM,
-                    SdkConfig.get().integrations_rest_url,
+                    parsedImRestUrl.format(),
                     token,
                 )]).then(() => {
                     return token;
