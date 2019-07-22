@@ -124,7 +124,7 @@ export async function startTermsFlow(services, interactionCallback) {
 
     // if there's anything left to agree to, prompt the user
     if (unagreedPoliciesAndServicePairs.length > 0) {
-        const newlyAgreedUrls = await interactionCallback(unagreedPoliciesAndServicePairs, Array.from(agreedUrlSet));
+        const newlyAgreedUrls = await interactionCallback(unagreedPoliciesAndServicePairs, [...agreedUrlSet]);
         console.log("User has agreed to URLs", newlyAgreedUrls);
         agreedUrlSet = new Set(newlyAgreedUrls);
     } else {
