@@ -55,7 +55,7 @@ export function presentTermsForServices(services) {
  *
  * @param {Service[]} services Object with keys 'serviceType', 'baseUrl', 'accessToken'
  * @param {function} interactionCallback Function called with:
- *      * an array of { service: {Service}, terms: {terms response from API} }
+ *      * an array of { service: {Service}, policies: {terms response from API} }
  *      * an array of URLs the user has already agreed to
  *     Must return a Promise which resolves with a list of URLs of documents agreed to
  * @returns {Promise} resolves when the user agreed to all necessary terms or rejects
