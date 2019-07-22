@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { ipcRenderer, webFrame } = require('electron');
+const { ipcRenderer } = require('electron');
 
 // expose ipcRenderer to the renderer process
 window.ipcRenderer = ipcRenderer;
-
-// Allow the fetch API to load resources from this
-// protocol: this is necessary to load olm.wasm.
-// (Also mark it a secure although we've already
-// done this in the main process).
-webFrame.registerURLSchemeAsPrivileged('vector', {
-    secure: true,
-    supportFetchAPI: true,
-});
