@@ -123,9 +123,9 @@ export default class TermsDialog extends React.PureComponent {
         for (const policiesAndService of this.props.policiesAndServicePairs) {
             const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);
 
-            const PolicyValues = Object.values(policiesAndService.policies);
-            for (let i = 0; i < PolicyValues.length; ++i) {
-                const termDoc = PolicyValues[i];
+            const policyValues = Object.values(policiesAndService.policies);
+            for (let i = 0; i < policyValues.length; ++i) {
+                const termDoc = policyValues[i];
                 const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== 'version'));
                 let serviceName;
                 if (i === 0) {
@@ -133,7 +133,7 @@ export default class TermsDialog extends React.PureComponent {
                 }
                 const summary = this._summaryForServiceType(
                     policiesAndService.service.serviceType,
-                    PolicyValues.length > 1 ? termDoc[termsLang].name : null,
+                    policyValues.length > 1 ? termDoc[termsLang].name : null,
                 );
 
                 rows.push(<tr key={termDoc[termsLang].url}>
