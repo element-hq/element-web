@@ -17,6 +17,7 @@ limitations under the License.
 
 import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { walkDOMDepthFirst } from "./dom";
+import { checkBlockNode } from "../HtmlUtils";
 
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
@@ -115,21 +116,6 @@ function checkDecendInto(node) {
             return false;
         default:
             return checkBlockNode(node);
-    }
-}
-
-function checkBlockNode(node) {
-    switch (node.nodeName) {
-        case "PRE":
-        case "BLOCKQUOTE":
-        case "DIV":
-        case "P":
-        case "UL":
-        case "OL":
-        case "LI":
-            return true;
-        default:
-            return false;
     }
 }
 
