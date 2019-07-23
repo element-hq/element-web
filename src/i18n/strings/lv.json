@@ -1132,5 +1132,17 @@
     "Your device resolution": "Tavas iekārtas izšķirtspēja",
     "Sign In": "Ienākt",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Varat arī iestatīt pielāgotu identitātes serveri, bet jūs nevarēsiet uzaicināt lietotājus izmantojot e-pasta adresi, kā arī tikt uzaicināts pēc e-pasta adreses.",
-    "Whether or not you're logged in (we don't record your username)": "Esat vai neesat pieteicies (mēs nesaglabājam jūsu lietotājvārdu)"
+    "Whether or not you're logged in (we don't record your username)": "Esat vai neesat pieteicies (mēs nesaglabājam jūsu lietotājvārdu)",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Neatkarīgi no tā, vai izmantojat funkciju \"breadcrumbs\" (avatari virs istabu saraksta)",
+    "Every page you use in the app": "Katra lapa, ko lietojat lietotnē",
+    "Your User Agent": "Jūsu lietotāja aģents",
+    "A conference call could not be started because the integrations server is not available": "Konferences zvanu nevarēja sākt, jo integrācijas serveris nav pieejams",
+    "Call in Progress": "Notiek zvans",
+    "A call is currently being placed!": "Pašlaik notiek saruna!",
+    "A call is already in progress!": "Zvans jau notiek!",
+    "Permission Required": "Nepieciešama atļauja",
+    "You do not have permission to start a conference call in this room": "Šajā istabā nav atļaujas sākt konferences zvanu",
+    "Replying With Files": "Atbildot ar failiem",
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Šobrīd nav iespējams atbildēt ar failu. Vai vēlaties augšupielādēt šo failu, neatbildot?",
+    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts"
 }
