@@ -135,10 +135,12 @@ module.exports = React.createClass({
 
     _onResendAllClick: function() {
         Resend.resendUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onCancelAllClick: function() {
         Resend.cancelUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onShowDevicesClick: function() {
