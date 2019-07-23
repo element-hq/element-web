@@ -288,6 +288,9 @@ const LoggedInView = React.createClass({
             element = element.parentElement;
         }
         if (!canReceiveInput) {
+            // refocusing during a paste event will make the
+            // paste end up in the newly focused element,
+            // so dispatch synchronously before paste happens
             dis.dispatch({action: 'focus_composer'}, true);
         }
     },
@@ -395,6 +398,7 @@ const LoggedInView = React.createClass({
                 (ev.key === "Space" || ev.key === "Enter");
 
             if (!isClickShortcut && !canElementReceiveInput(ev.target)) {
+                // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
