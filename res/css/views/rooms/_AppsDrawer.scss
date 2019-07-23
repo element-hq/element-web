@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -310,7 +311,7 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarningText {
-    max-width: 400px;
+    max-width: 90%;
     margin: 10px auto 10px auto;
     color: $primary-fg-color;
 }
@@ -321,7 +322,12 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarningTextURL {
+    display: inline-block;
+    max-width: 100%;
     color: $accent-color;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mx_AppPermissionButton {

@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,7 +68,10 @@ export default class AppPermission extends React.Component {
                     <img src={require("../../../../res/img/feather-customised/warning-triangle.svg")} alt={_t('Warning!')} />
                 </div>
                 <div className='mx_AppPermissionWarningText'>
-                    <span className='mx_AppPermissionWarningTextLabel'>{ _t('Do you want to load widget from URL:') }</span> <span className='mx_AppPermissionWarningTextURL'>{ this.state.curlBase }</span>
+                    <span className='mx_AppPermissionWarningTextLabel'>{_t('Do you want to load widget from URL:')}</span>
+                    <span className='mx_AppPermissionWarningTextURL'
+                        title={this.state.curlBase}
+                    >{this.state.curlBase}</span>
                     { e2eWarningText }
                     { cookieWarning }
                 </div>
