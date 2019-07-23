@@ -108,6 +108,17 @@ class ScalarAuthClient {
                 // The terms endpoints are new and so live on standard _matrix prefixes,
                 // but IM rest urls are currently configured with paths, so remove the
                 // path from the base URL before passing it to the js-sdk
+
+                // We continue to use the full URL for the calls done by
+                // matrix-react-sdk, but the standard terms API called
+                // by the js-sdk lives on the standard _matrix path. This means we
+                // don't support running IMs on a non-root path, but it's the only
+                // realistic way of transitioning to _matrix paths since configs in
+                // the wild contain bits of the API path.
+
+                // Once we've fully transitioned to _matrix URLs, we can give people
+                // a grace period to update their configs, then use the rest url as
+                // a regular base url.
                 const parsedImRestUrl = url.parse(SdkConfig.get().integrations_rest_url);
                 parsedImRestUrl.path = '';
                 parsedImRestUrl.pathname = '';
