@@ -18,7 +18,7 @@ limitations under the License.
 import url from 'url';
 import Promise from 'bluebird';
 import SettingsStore from "./settings/SettingsStore";
-import { Service, presentTermsForServices, TermsNotSignedError } from './Terms';
+import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 const request = require('browser-request');
 
 const SdkConfig = require('./SdkConfig');
@@ -32,6 +32,9 @@ const imApiVersion = "1.1";
 class ScalarAuthClient {
     constructor() {
         this.scalarToken = null;
+        // `undefined` to allow `startTermsFlow` to fallback to a default
+        // callback if this is unset.
+        this.termsInteractionCallback = undefined;
     }
 
     /**
@@ -40,6 +43,10 @@ class ScalarAuthClient {
      */
     static isPossible() {
         return SdkConfig.get()['integrations_rest_url'] && SdkConfig.get()['integrations_ui_url'];
+    }
+
+    setTermsInteractionCallback(callback) {
+        this.termsInteractionCallback = callback;
     }
 
     connect() {
@@ -122,11 +129,11 @@ class ScalarAuthClient {
                 const parsedImRestUrl = url.parse(SdkConfig.get().integrations_rest_url);
                 parsedImRestUrl.path = '';
                 parsedImRestUrl.pathname = '';
-                return presentTermsForServices([new Service(
+                return startTermsFlow([new Service(
                     Matrix.SERVICE_TYPES.IM,
                     parsedImRestUrl.format(),
                     token,
-                )]).then(() => {
+                )], this.termsInteractionCallback).then(() => {
                     return token;
                 });
             } else {
