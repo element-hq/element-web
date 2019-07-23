@@ -42,6 +42,13 @@ import {Resizer, CollapseDistributor} from '../../resizer';
 // NB. this is just for server notices rather than pinned messages in general.
 const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
+function canElementReceiveInput(el) {
+    return el.tagName === "INPUT" ||
+        el.tagName === "TEXTAREA" ||
+        el.tagName === "SELECT" ||
+        !!el.getAttribute("contenteditable");
+}
+
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
  * determined by the page_type property.
@@ -272,6 +279,22 @@ const LoggedInView = React.createClass({
         });
     },
 
+    _onPaste: function(ev) {
+        let canReceiveInput = false;
+        let element = ev.target;
+        // test for all parents because the target can be a child of a contenteditable element
+        while (!canReceiveInput && element) {
+            canReceiveInput = canElementReceiveInput(element);
+            element = element.parentElement;
+        }
+        if (!canReceiveInput) {
+            // refocusing during a paste event will make the
+            // paste end up in the newly focused element,
+            // so dispatch synchronously before paste happens
+            dis.dispatch({action: 'focus_composer'}, true);
+        }
+    },
+
     /*
     SOME HACKERY BELOW:
     React optimizes event handlers, by always attaching only 1 handler to the document for a given type.
@@ -371,15 +394,11 @@ const LoggedInView = React.createClass({
             ev.stopPropagation();
             ev.preventDefault();
         } else if (!hasModifier) {
-            const targetTag = ev.target.tagName;
-            const focusedOnInputControl = targetTag === "INPUT" ||
-                targetTag === "TEXTAREA" ||
-                targetTag === "SELECT" ||
-                !!ev.target.getAttribute("contenteditable");
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === "Space" || ev.key === "Enter");
 
-            if (!focusedOnInputControl && !isClickShortcut) {
+            if (!isClickShortcut && !canElementReceiveInput(ev.target)) {
+                // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
@@ -596,7 +615,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
+            <div onPaste={this._onPaste} onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
