@@ -19,8 +19,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
-import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';
+import { showIntegrationsManager } from '../../../integrations/integrations';
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -30,10 +30,7 @@ export default class ManageIntegsButton extends React.Component {
     onManageIntegrations = (ev) => {
         ev.preventDefault();
 
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        Modal.createDialog(IntegrationsManager, {
-            room: this.props.room,
-        }, "mx_IntegrationsManager");
+        showIntegrationsManager({ room: this.props.room });
     };
 
     render() {

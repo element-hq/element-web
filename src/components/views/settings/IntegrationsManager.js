@@ -20,64 +20,29 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 
 export default class IntegrationsManager extends React.Component {
     static propTypes = {
-        // the room object where the integrations manager should be opened in
-        room: PropTypes.object.isRequired,
+        // false to display an error saying that there is no integrations manager configured
+        configured: PropTypes.bool.isRequired,
 
-        // the screen name to open
-        screen: PropTypes.string,
+        // false to display an error saying that we couldn't connect to the integrations manager
+        connected: PropTypes.bool.isRequired,
 
-        // the integration ID to open
-        integrationId: PropTypes.string,
+        // true to display a loading spinner
+        loading: PropTypes.bool.isRequired,
+
+        // The source URL to load
+        url: PropTypes.string,
 
         // callback when the manager is dismissed
         onFinished: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            loading: true,
-            configured: ScalarAuthClient.isPossible(),
-            connected: false, // true if a `src` is set and able to be connected to
-            src: null, // string for where to connect to
-        };
-    }
-
-    componentWillMount() {
-        if (!this.state.configured) return;
-
-        const scalarClient = new ScalarAuthClient();
-        scalarClient.connect().then(() => {
-            const hasCredentials = scalarClient.hasCredentials();
-            if (!hasCredentials) {
-                this.setState({
-                    connected: false,
-                    loading: false,
-                });
-            } else {
-                const src = scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room,
-                    this.props.screen,
-                    this.props.integrationId,
-                );
-                this.setState({
-                    loading: false,
-                    connected: true,
-                    src: src,
-                });
-            }
-        }).catch(err => {
-            console.error(err);
-            this.setState({
-                loading: false,
-                connected: false,
-            });
-        });
+    static defaultProps = {
+        configured: true,
+        connected: true,
+        loading: false,
     }
 
     componentDidMount() {
@@ -105,7 +70,7 @@ export default class IntegrationsManager extends React.Component {
     };
 
     render() {
-        if (!this.state.configured) {
+        if (!this.props.configured) {
             return (
                 <div className='mx_IntegrationsManager_error'>
                     <h3>{_t("No integrations server configured")}</h3>
@@ -114,7 +79,7 @@ export default class IntegrationsManager extends React.Component {
             );
         }
 
-        if (this.state.loading) {
+        if (this.props.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (
                 <div className='mx_IntegrationsManager_loading'>
@@ -124,7 +89,7 @@ export default class IntegrationsManager extends React.Component {
             );
         }
 
-        if (!this.state.connected) {
+        if (!this.props.connected) {
             return (
                 <div className='mx_IntegrationsManager_error'>
                     <h3>{_t("Cannot connect to integrations server")}</h3>
@@ -133,6 +98,6 @@ export default class IntegrationsManager extends React.Component {
             );
         }
 
-        return <iframe src={this.state.src}></iframe>;
+        return <iframe src={this.props.url}></iframe>;
     }
 }

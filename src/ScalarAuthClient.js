@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import url from 'url';
 import Promise from 'bluebird';
 import SettingsStore from "./settings/SettingsStore";
+import { Service, presentTermsForServices, TermsNotSignedError } from './Terms';
 const request = require('browser-request');
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require('./MatrixClientPeg');
+
+import * as Matrix from 'matrix-js-sdk';
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -47,7 +52,7 @@ class ScalarAuthClient {
         return this.scalarToken != null; // undef or null
     }
 
-    // Returns a scalar_token string
+    // Returns a promise that resolves to a scalar_token string
     getScalarToken() {
         let token = this.scalarToken;
         if (!token) token = window.localStorage.getItem("mx_scalar_token");
@@ -55,23 +60,17 @@ class ScalarAuthClient {
         if (!token) {
             return this.registerForToken();
         } else {
-            return this.validateToken(token).then(userId => {
-                const me = MatrixClientPeg.get().getUserId();
-                if (userId !== me) {
-                    throw new Error("Scalar token is owned by someone else: " + me);
+            return this._checkToken(token).catch((e) => {
+                if (e instanceof TermsNotSignedError) {
+                    // retrying won't help this
+                    throw e;
                 }
-                return token;
-            }).catch(err => {
-                console.error(err);
-
-                // Something went wrong - try to get a new token.
-                console.warn("Registering for new scalar token");
                 return this.registerForToken();
             });
         }
     }
 
-    validateToken(token) {
+    _getAccountName(token) {
         const url = SdkConfig.get().integrations_rest_url + "/account";
 
         return new Promise(function(resolve, reject) {
@@ -83,8 +82,10 @@ class ScalarAuthClient {
             }, (err, response, body) => {
                 if (err) {
                     reject(err);
+                } else if (body && body.errcode === 'M_TERMS_NOT_SIGNED') {
+                    reject(new TermsNotSignedError());
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(body);
                 } else if (!body || !body.user_id) {
                     reject(new Error("Missing user_id in response"));
                 } else {
@@ -94,11 +95,54 @@ class ScalarAuthClient {
         });
     }
 
+    _checkToken(token) {
+        return this._getAccountName(token).then(userId => {
+            const me = MatrixClientPeg.get().getUserId();
+            if (userId !== me) {
+                throw new Error("Scalar token is owned by someone else: " + me);
+            }
+            return token;
+        }).catch((e) => {
+            if (e instanceof TermsNotSignedError) {
+                console.log("Integrations manager requires new terms to be agreed to");
+                // The terms endpoints are new and so live on standard _matrix prefixes,
+                // but IM rest urls are currently configured with paths, so remove the
+                // path from the base URL before passing it to the js-sdk
+
+                // We continue to use the full URL for the calls done by
+                // matrix-react-sdk, but the standard terms API called
+                // by the js-sdk lives on the standard _matrix path. This means we
+                // don't support running IMs on a non-root path, but it's the only
+                // realistic way of transitioning to _matrix paths since configs in
+                // the wild contain bits of the API path.
+
+                // Once we've fully transitioned to _matrix URLs, we can give people
+                // a grace period to update their configs, then use the rest url as
+                // a regular base url.
+                const parsedImRestUrl = url.parse(SdkConfig.get().integrations_rest_url);
+                parsedImRestUrl.path = '';
+                parsedImRestUrl.pathname = '';
+                return presentTermsForServices([new Service(
+                    Matrix.SERVICE_TYPES.IM,
+                    parsedImRestUrl.format(),
+                    token,
+                )]).then(() => {
+                    return token;
+                });
+            } else {
+                throw e;
+            }
+        });
+    }
+
     registerForToken() {
         // Get openid bearer token from the HS as the first part of our dance
         return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
             return this.exchangeForScalarToken(tokenObject);
+        }).then((tokenObject) => {
+            // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
+            return this._checkToken(tokenObject);
         }).then((tokenObject) => {
             window.localStorage.setItem("mx_scalar_token", tokenObject);
             return tokenObject;

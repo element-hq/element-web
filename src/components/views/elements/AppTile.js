@@ -35,6 +35,7 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
+import { showIntegrationsManager } from '../../../integrations/integrations';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -250,13 +251,11 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            // The dialog handles scalar auth for us
-            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+            showIntegrationsManager({
                 room: this.props.room,
                 screen: 'type_' + this.props.type,
                 integrationId: this.props.id,
-            }, "mx_IntegrationsManager");
+            });
         }
     }
 

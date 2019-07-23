@@ -1,6 +1,7 @@
 /*
 Copyright 2018 New Vector Ltd
 Copyright 2019 Travis Ralston
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
@@ -19,10 +20,9 @@ import URL from 'url';
 import dis from './dispatcher';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
-import sdk from "./index";
-import Modal from "./Modal";
 import MatrixClientPeg from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
+import { showIntegrationsManager } from './integrations/integrations';
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -193,13 +193,11 @@ export default class FromWidgetPostMessageApi {
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;
 
-            // The dialog will take care of scalar auth for us
-            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+            showIntegrationsManager({
                 room: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
                 screen: 'type_' + integType,
                 integrationId: integId,
-            }, "mx_IntegrationsManager");
+            });
         } else if (action === 'set_always_on_screen') {
             // This is a new message: there is no reason to support the deprecated widgetData here
             const data = event.data.data;
