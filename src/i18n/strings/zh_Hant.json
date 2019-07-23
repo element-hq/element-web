@@ -2055,5 +2055,15 @@
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "請告訴我們發生了什麼錯誤，或更好的是，在 GitHub 上建立描述問題的議題。",
     "Regain access to your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "取回對您的帳號的控制權，並復原儲存在此裝置上的加密金鑰。沒有它們，您就無法在任何裝置上讀取您所有的安全訊息。",
     "Sign in and regain access to your account.": "登入並取回對您帳號的控制權。",
-    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "您無法登入到您的帳號。請聯絡您的家伺服器管理員以取得更多資訊。"
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "您無法登入到您的帳號。請聯絡您的家伺服器管理員以取得更多資訊。",
+    "Identity Server": "身份識別伺服器",
+    "Integrations Manager": "整合管理員",
+    "Find others by phone or email": "透過電話或電子郵件尋找其他人",
+    "Be found by phone or email": "透過電話或電子郵件找到",
+    "Use bots, bridges, widgets and sticker packs": "使用機器人、橋接、小工具與貼紙包",
+    "Terms of Service": "服務條款",
+    "To continue you need to accept the Terms of this service.": "要繼續，您必須接受本服務條款。",
+    "Service": "服務",
+    "Summary": "摘要",
+    "Terms": "條款"
 }
