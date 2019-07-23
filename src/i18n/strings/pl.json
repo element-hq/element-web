@@ -1412,7 +1412,7 @@
     "Room Addresses": "Adresy pokoju",
     "Change room avatar": "Zmień awatar pokoju",
     "Change room name": "Zmień nazwę pokoju",
-    "Change permissions": "Zmieniać uprawnienia",
+    "Change permissions": "Zmienianie uprawnień",
     "Change topic": "Zmienianie tematu",
     "Default role": "Domyślna rola",
     "Send messages": "Wysyłanie wiadomości",
@@ -1470,5 +1470,14 @@
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "W tej chwili odpowiadanie plikiem nie jest możliwe. Czy chcesz przesłać ten plik bez odpowiadania?",
     "Help & About": "Pomoc i o aplikacji",
     "<b>Save it</b> on a USB key or backup drive": "<b>Zapisz</b> w pamięci USB lub na dysku kopii zapasowej",
-    "Eyes": "Oczy"
+    "Eyes": "Oczy",
+    "Show recently visited rooms above the room list": "Pokaż ostatnio odwiedzone pokoje nad listą pokoi",
+    "General": "Ogólne",
+    "Sounds": "Dźwięki",
+    "Notification sound": "Dźwięk powiadomień",
+    "Set a new custom sound": "Ustaw nowy niestandardowy dźwięk",
+    "Browse": "Przeglądaj",
+    "Once enabled, encryption cannot be disabled.": "Po włączeniu szyfrowanie nie może zostać wyłączone.",
+    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "Aby uniknąć duplikowania problemów, prosimy najpierw <existingIssuesLink>przejrzeć istniejące problemy</existingIssuesLink> (i dodać +1) lub <newIssueLink>utworzyć nowy problem</newIssueLink>, jeżeli nie możesz go znaleźć.",
+    "Go back": "Wróć"
 }
