@@ -17,7 +17,7 @@ limitations under the License.
 import sdk from "../index";
 import ScalarAuthClient from '../ScalarAuthClient';
 import Modal from '../Modal';
-import { TermsNotSignedError } from '../Terms';
+import { TermsNotSignedError, dialogTermsInteractionCallback } from '../Terms';
 
 export async function showIntegrationsManager(opts) {
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
@@ -38,6 +38,7 @@ export async function showIntegrationsManager(opts) {
     }
 
     const scalarClient = new ScalarAuthClient();
+    scalarClient.setTermsInteractionCallback(integrationsTermsInteractionCallback);
     try {
         await scalarClient.connect();
         if (!scalarClient.hasCredentials()) {
@@ -62,4 +63,17 @@ export async function showIntegrationsManager(opts) {
     }
     close();
     Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, props, "mx_IntegrationsManager");
+}
+
+/*
+ * To avoid visual glitching of two modals stacking briefly, we customise the
+ * terms dialog sizing when it will appear for the integrations manager so that
+ * it gets the same basic size as the IM's own modal.
+ */
+function integrationsTermsInteractionCallback(policiesAndServicePairs, agreedUrls) {
+    return dialogTermsInteractionCallback(
+        policiesAndServicePairs,
+        agreedUrls,
+        "mx_TermsDialog_forIntegrationsManager",
+    );
 }

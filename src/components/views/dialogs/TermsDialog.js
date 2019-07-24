@@ -176,7 +176,7 @@ export default class TermsDialog extends React.PureComponent {
         }
 
         return (
-            <BaseDialog className='mx_TermsDialog'
+            <BaseDialog
                 fixedWidth={false}
                 onFinished={this._onCancelClick}
                 title={_t("Terms of Service")}
