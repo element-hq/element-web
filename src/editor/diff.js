@@ -52,6 +52,13 @@ export function diffDeletion(oldStr, newStr) {
     return {at: firstDiffIdx, removed: oldStr.substr(firstDiffIdx, amount)};
 }
 
+/**
+ * Calculates which string was added and removed around the caret position
+ * @param {String} oldValue the previous value
+ * @param {String} newValue the new value
+ * @param {Number} caretPosition the position of the caret after `newValue` was applied.
+ * @return {object}
+ */
 export function diffAtCaret(oldValue, newValue, caretPosition) {
     const diffLen = newValue.length - oldValue.length;
     const caretPositionBeforeInput = caretPosition - diffLen;

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import {diffDeletion} from "../../src/editor/diff";
+import {diffDeletion, diffAtCaret} from "../../src/editor/diff";
 
 describe('editor/diff', function() {
     describe('diffDeletion', function() {
@@ -43,6 +43,80 @@ describe('editor/diff', function() {
             const diff = diffDeletion("hello", "hell");
             expect(diff.at).toBe(4);
             expect(diff.removed).toBe("o");
+        });
+    });
+    describe('diffAtCaret', function() {
+        it('insert at start', function() {
+            const diff = diffAtCaret("world", "hello world", 6);
+            expect(diff.at).toBe(0);
+            expect(diff.added).toBe("hello ");
+            expect(diff.removed).toBeFalsy();
+        });
+        it('insert at end', function() {
+            const diff = diffAtCaret("hello", "hello world", 11);
+            expect(diff.at).toBe(5);
+            expect(diff.added).toBe(" world");
+            expect(diff.removed).toBeFalsy();
+        });
+        it('insert in middle', function() {
+            const diff = diffAtCaret("hello world", "hello cruel world", 12);
+            expect(diff.at).toBe(6);
+            expect(diff.added).toBe("cruel ");
+            expect(diff.removed).toBeFalsy();
+        });
+        it('replace at start', function() {
+            const diff = diffAtCaret("morning, world!", "afternoon, world!", 9);
+            expect(diff.at).toBe(0);
+            expect(diff.removed).toBe("morning");
+            expect(diff.added).toBe("afternoon");
+        });
+        it('replace at end', function() {
+            const diff = diffAtCaret("morning, world!", "morning, mars?", 14);
+            expect(diff.at).toBe(9);
+            expect(diff.removed).toBe("world!");
+            expect(diff.added).toBe("mars?");
+        });
+        it('replace in middle', function() {
+            const diff = diffAtCaret("morning, blue planet", "morning, red planet", 12);
+            expect(diff.at).toBe(9);
+            expect(diff.removed).toBe("blue");
+            expect(diff.added).toBe("red");
+        });
+        it('remove at start of string', function() {
+            const diff = diffAtCaret("hello", "ello", 0);
+            expect(diff.at).toBe(0);
+            expect(diff.removed).toBe("h");
+            expect(diff.added).toBeFalsy();
+        });
+        it('removing whole string', function() {
+            const diff = diffAtCaret("hello", "", 0);
+            expect(diff.at).toBe(0);
+            expect(diff.removed).toBe("hello");
+            expect(diff.added).toBeFalsy();
+        });
+        it('remove in middle of string', function() {
+            const diff = diffAtCaret("hello", "hllo", 1);
+            expect(diff.at).toBe(1);
+            expect(diff.removed).toBe("e");
+            expect(diff.added).toBeFalsy();
+        });
+        it('forwards remove in middle of string', function() {
+            const diff = diffAtCaret("hello", "hell", 4);
+            expect(diff.at).toBe(4);
+            expect(diff.removed).toBe("o");
+            expect(diff.added).toBeFalsy();
+        });
+        it('forwards remove in middle of string with duplicate character', function() {
+            const diff = diffAtCaret("hello", "helo", 3);
+            expect(diff.at).toBe(3);
+            expect(diff.removed).toBe("l");
+            expect(diff.added).toBeFalsy();
+        });
+        it('remove at end of string', function() {
+            const diff = diffAtCaret("hello", "hell", 4);
+            expect(diff.at).toBe(4);
+            expect(diff.removed).toBe("o");
+            expect(diff.added).toBeFalsy();
         });
     });
 });
