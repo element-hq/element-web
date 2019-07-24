@@ -468,7 +468,7 @@ export function bodyToHtml(content, highlights, opts={}) {
                     // their username
                     (
                         content.formatted_body == undefined ||
-		                !content.formatted_body.includes("https://matrix.to/")
+                        !content.formatted_body.includes("https://matrix.to/")
                     );
     }
 
@@ -512,4 +512,39 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  */
 export function linkifyAndSanitizeHtml(dirtyHtml) {
     return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
+}
+
+/**
+ * Returns if a node is a block element or not.
+ * Only takes html nodes into account that are allowed in matrix messages.
+ *
+ * @param {Node} node
+ * @returns {bool}
+ */
+export function checkBlockNode(node) {
+    switch (node.nodeName) {
+        case "H1":
+        case "H2":
+        case "H3":
+        case "H4":
+        case "H5":
+        case "H6":
+        case "PRE":
+        case "BLOCKQUOTE":
+        case "DIV":
+        case "P":
+        case "UL":
+        case "OL":
+        case "LI":
+        case "HR":
+        case "TABLE":
+        case "THEAD":
+        case "TBODY":
+        case "TR":
+        case "TH":
+        case "TD":
+            return true;
+        default:
+            return false;
+    }
 }

@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
+import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {pillifyLinks} from '../../../utils/pillify';
@@ -25,16 +26,10 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
-import DiffMatchPatch from 'diff-match-patch';
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
     return originalContent["m.new_content"] || originalContent;
-}
-
-function isPlainMessage(event) {
-    const content = getReplacedContent(event);
-    return content.msgtype === "m.text" && !content.format;
 }
 
 export default class EditHistoryMessage extends React.PureComponent {
@@ -128,22 +123,6 @@ export default class EditHistoryMessage extends React.PureComponent {
         );
     }
 
-    _renderBodyDiff(oldBody, newBody) {
-        const dpm = new DiffMatchPatch();
-        const diff = dpm.diff_main(oldBody, newBody);
-        dpm.diff_cleanupSemantic(diff);
-        return diff.map(([modifier, text], i) => {
-            // not using del and ins tags here as del is used for strikethrough
-            if (modifier < 0) {
-                return (<span className="mx_EditHistoryMessage_deletion" key={i}>{text}</span>);
-            } else if (modifier > 0) {
-                return (<span className="mx_EditHistoryMessage_insertion" key={i}>{text}</span>);
-            } else {
-                return text;
-            }
-        });
-    }
-
     render() {
         const {mxEvent} = this.props;
         const content = getReplacedContent(mxEvent);
@@ -153,8 +132,8 @@ export default class EditHistoryMessage extends React.PureComponent {
             contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
-            if (isPlainMessage(mxEvent) && this.props.previousEdit && isPlainMessage(this.props.previousEdit)) {
-                contentElements = this._renderBodyDiff(getReplacedContent(this.props.previousEdit).body, content.body);
+            if (this.props.previousEdit) {
+                contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
                 contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
             }
