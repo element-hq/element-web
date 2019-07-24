@@ -443,7 +443,7 @@ module.exports = React.createClass({
             });
             if (this._cancelThreepidLookup) this._cancelThreepidLookup();
             if (addrType === 'email') {
-                this._lookupThreepid(addrType, query).done();
+                this._lookupThreepid(addrType, query);
             }
         }
         this.setState({
@@ -498,7 +498,7 @@ module.exports = React.createClass({
         return hasError ? null : selectedList;
     },
 
-    _lookupThreepid: function(medium, address) {
+    _lookupThreepid: async function(medium, address) {
         let cancelled = false;
         // Note that we can't safely remove this after we're done
         // because we don't know that it's the same one, so we just
@@ -509,28 +509,29 @@ module.exports = React.createClass({
         };
 
         // wait a bit to let the user finish typing
-        return Promise.delay(500).then(() => {
-            if (cancelled) return null;
-            return MatrixClientPeg.get().lookupThreePid(medium, address);
-        }).then((res) => {
-            if (res === null || !res.mxid) return null;
-            if (cancelled) return null;
+        await Promise.delay(500);
+        if (cancelled) return null;
 
-            return MatrixClientPeg.get().getProfileInfo(res.mxid);
-        }).then((res) => {
-            if (res === null) return null;
-            if (cancelled) return null;
+        try {
+            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address);
+            if (cancelled || lookup === null || !lookup.mxid) return null;
+
+            const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
+            if (cancelled || profile === null) return null;
+
             this.setState({
                 suggestedList: [{
                     // a UserAddressType
                     addressType: medium,
                     address: address,
-                    displayName: res.displayname,
-                    avatarMxc: res.avatar_url,
+                    displayName: profile.displayname,
+                    avatarMxc: profile.avatar_url,
                     isKnown: true,
                 }],
             });
-        });
+        } catch (e) {
+            console.error(e);
+        }
     },
 
     _getFilteredSuggestions: function() {
