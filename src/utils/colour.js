@@ -56,7 +56,7 @@ export function hueToRGB(h, s, l) {
 export function textToHtmlRainbow(str) {
     const frequency = 360 / str.length;
 
-    return str.split("").map((c, i) => {
+    return Array.from(str).map((c, i) => {
         const [r, g, b] = hueToRGB(i * frequency, 1.0, 0.5);
         return '<font color="#' +
             r.toString(16).padStart(2, "0") +
