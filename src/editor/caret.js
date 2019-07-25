@@ -40,7 +40,7 @@ export function setCaretPosition(editor, model, caretPosition) {
     sel.addRange(range);
 }
 
-function getLineAndNodePosition(model, caretPosition) {
+export function getLineAndNodePosition(model, caretPosition) {
     const {parts} = model;
     const partIndex = caretPosition.index;
     const lineResult = findNodeInLineForPart(parts, partIndex);
