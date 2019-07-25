@@ -149,6 +149,25 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("room-pill");
             expect(model.parts[1].text).toBe("#someroom");
         });
+        it('typing in middle of non-editable part appends', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([
+                pc.plain("try "),
+                pc.roomPill("#someroom"),
+                pc.plain("?"),
+            ], pc, renderer);
+            model.update("try #some perhapsroom?", "insertText", {offset: 17, atNodeEnd: false});
+            expect(renderer.caret.index).toBe(2);
+            expect(renderer.caret.offset).toBe(8);
+            expect(model.parts.length).toBe(3);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("try ");
+            expect(model.parts[1].type).toBe("room-pill");
+            expect(model.parts[1].text).toBe("#someroom");
+            expect(model.parts[2].type).toBe("plain");
+            expect(model.parts[2].text).toBe(" perhaps?");
+        });
         it('remove non-editable part with backspace', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
