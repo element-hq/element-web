@@ -2000,5 +2000,17 @@
     "I don't want to sign in": "Non voglio accedere",
     "If this is a shared device, or you don't want to access your account again from it, clear all data stored locally on this device.": "Se questo è un dispositivo condiviso, o non vuoi più accedere al tuo account da questo, elimina tutti i dati memorizzati localmente in esso.",
     "Clear all data": "Elimina tutti i dati",
-    "Sign in again to regain access to your account, or a different one.": "Accedi di nuovo per riavere accesso al tuo account, o ad uno diverso."
+    "Sign in again to regain access to your account, or a different one.": "Accedi di nuovo per riavere accesso al tuo account, o ad uno diverso.",
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Per favore dicci cos'è andato storto, o meglio, crea una segnalazione su GitHub che descriva il problema.",
+    "Removing…": "Rimozione…",
+    "Clearing all data from this device is permanent. Encrypted messages will be lost unless their keys have been backed up.": "L'eliminazione di tutti i dati dal dispositivo è permanente. I messaggi cifrati andranno persi a meno che non si abbia un backup delle loro chiavi.",
+    "Failed to re-authenticate due to a homeserver problem": "Riautenticazione fallita per un problema dell'homeserver",
+    "Failed to re-authenticate": "Riautenticazione fallita",
+    "Regain access to your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "Ottieni l'accesso al tuo account e ripristina le chiavi di cifratura salvate nel dispositivo. Senza di esse, non potrai leggere tutti i tuoi messaggi sicuri su qualsiasi dispositivo.",
+    "Enter your password to sign in and regain access to your account.": "Inserisci la tua password per accedere ed ottenere l'accesso al tuo account.",
+    "Forgotten your password?": "Hai dimenticato la password?",
+    "Sign in and regain access to your account.": "Accedi ed ottieni l'accesso al tuo account.",
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Non puoi accedere al tuo account. Contatta l'admin del tuo homeserver per maggiori informazioni.",
+    "Clear personal data": "Elimina dati personali",
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Attenzione: i tuoi dati personali (incluse le chiavi di cifratura) sono ancora in questo dispositivo. Eliminali se hai finito di usare il dispositivo o se vuoi accedere ad un altro account."
 }
