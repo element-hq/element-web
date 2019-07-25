@@ -132,6 +132,44 @@ describe('editor/model', function() {
             expect(model.parts[1].text).toBe("\n");
         });
     });
+    describe('non-editable part manipulation', function() {
+        it('typing at start of non-editable part prepends', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([
+                pc.plain("try "),
+                pc.roomPill("#someroom"),
+            ], pc, renderer);
+            model.update("try foo#someroom", "insertText", {offset: 7, atNodeEnd: false});
+            expect(renderer.caret.index).toBe(0);
+            expect(renderer.caret.offset).toBe(7);
+            expect(model.parts.length).toBe(2);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("try foo");
+            expect(model.parts[1].type).toBe("room-pill");
+            expect(model.parts[1].text).toBe("#someroom");
+        });
+        it('remove non-editable part with backspace', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
+            model.update("#someroo", "deleteContentBackward", {offset: 8, atNodeEnd: true});
+            expect(renderer.count).toBe(1);
+            expect(renderer.caret.index).toBe(-1);
+            expect(renderer.caret.offset).toBe(0);
+            expect(model.parts.length).toBe(0);
+        });
+        it('remove non-editable part with delete', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
+            model.update("someroom", "deleteContentForward", {offset: 0, atNodeEnd: false});
+            expect(renderer.count).toBe(1);
+            expect(renderer.caret.index).toBe(-1);
+            expect(renderer.caret.offset).toBe(0);
+            expect(model.parts.length).toBe(0);
+        });
+    });
     describe('auto-complete', function() {
         it('insert user pill', function() {
             const renderer = createRenderer();
