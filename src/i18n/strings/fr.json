@@ -2062,5 +2062,15 @@
     "Sign in and regain access to your account.": "Connectez-vous et ré-accédez à votre compte.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Vous ne pouvez pas vous connecter à votre compte. Contactez l’administrateur de votre serveur d’accueil pour plus d’informations.",
     "Please tell us what went wrong or, better, a github issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème.",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème."
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème.",
+    "Identity Server": "Serveur d’identité",
+    "Integrations Manager": "Gestionnaire d’intégrations",
+    "Find others by phone or email": "Trouver d’autres personnes par téléphone ou e-mail",
+    "Be found by phone or email": "Être trouvé(e) par téléphone ou e-mail",
+    "Use bots, bridges, widgets and sticker packs": "Utiliser des robots, des passerelles, des widgets ou des packs de stickers",
+    "Terms of Service": "Conditions de service",
+    "To continue you need to accept the Terms of this service.": "Pour continuer vous devez accepter les conditions de ce service.",
+    "Service": "Service",
+    "Summary": "Résumé",
+    "Terms": "Conditions"
 }
