@@ -457,6 +457,7 @@ module.exports = React.createClass({
     _addAddressesToList: function(addressTexts) {
         const selectedList = this.state.selectedList.slice();
 
+        let hasError = false;
         addressTexts.forEach((addressText) => {
             addressText = addressText.trim();
             const addrType = getAddressType(addressText);
@@ -467,8 +468,7 @@ module.exports = React.createClass({
             };
 
             if (!this.props.validAddressTypes.includes(addrType)) {
-                this.setState({ error: true });
-                return null;
+                hasError = true;
             } else if (addrType === 'mx-user-id') {
                 const user = MatrixClientPeg.get().getUser(addrObj.address);
                 if (user) {
@@ -492,9 +492,10 @@ module.exports = React.createClass({
             selectedList,
             suggestedList: [],
             query: "",
+            error: hasError ? true : this.state.error,
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-        return selectedList;
+        return hasError ? null : selectedList;
     },
 
     _lookupThreepid: function(medium, address) {
