@@ -2051,5 +2051,16 @@
     "You're signed out": "Kijelentkeztél",
     "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.": "A <strong1>%(domainName)s</strong1> matrix szerver adminisztrátora kiléptetett téged ebből a fiókból: <strong2>%(displayName)s (%(userId)s)</strong2>.",
     "Clear personal data": "Személyes adatok törlése",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva. Ha az eszközt nem használod tovább vagy másik fiókba szeretnél bejelentkezni, töröld őket."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva. Ha az eszközt nem használod tovább vagy másik fiókba szeretnél bejelentkezni, töröld őket.",
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Kérlek mond el nekünk mi az ami nem működött, vagy még jobb, ha egy GitHub jegyben leírod a problémát.",
+    "Identity Server": "Azonosítási szerver",
+    "Integrations Manager": "Integrációs menedzser",
+    "Find others by phone or email": "Keress meg másokat telefonszám vagy e-mail cím alapján",
+    "Be found by phone or email": "Legyél megtalálható telefonszámmal vagy e-mail címmel",
+    "Use bots, bridges, widgets and sticker packs": "Használj botokoat, hidakat, kisalkalmazásokat és matricákat",
+    "Terms of Service": "Felhasználási feltételek",
+    "To continue you need to accept the Terms of this service.": "A továbblépéshez el kell fogadnod a Felhasználási feltételeket.",
+    "Service": "Szolgáltatás",
+    "Summary": "Összefoglaló",
+    "Terms": "Feltételek"
 }
