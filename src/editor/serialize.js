@@ -56,15 +56,3 @@ export function textSerialize(model) {
         }
     }, "");
 }
-
-export function requiresHtml(model) {
-    return model.parts.some(part => {
-        switch (part.type) {
-            case "room-pill":
-            case "user-pill":
-                return true;
-            default:
-                return false;
-        }
-    });
-}
