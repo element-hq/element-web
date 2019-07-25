@@ -187,7 +187,7 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("pill-candidate");
             expect(model.parts[1].text).toBe("@a");
 
-            model.autoComplete.tryComplete();
+            model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
             expect(renderer.caret.index).toBe(1);
@@ -215,7 +215,7 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("pill-candidate");
             expect(model.parts[1].text).toBe("#r");
 
-            model.autoComplete.tryComplete();
+            model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
             expect(renderer.caret.index).toBe(1);
@@ -226,6 +226,56 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("room-pill");
             expect(model.parts[1].text).toBe("#riot-dev");
         });
-        // paste circumvents AC
+
+        it('type after inserting pill', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{resourceId: "#riot-dev"}]);
+            const model = new EditorModel([pc.plain("hello ")], pc, renderer);
+
+            model.update("hello #r", "insertText", {offset: 8, atNodeEnd: true});
+            model.autoComplete.tryComplete(); // see MockAutoComplete
+            model.update("hello #riot-dev!!", "insertText", {offset: 17, atNodeEnd: true});
+
+            expect(renderer.count).toBe(3);
+            expect(renderer.caret.index).toBe(2);
+            expect(renderer.caret.offset).toBe(2);
+            expect(model.parts.length).toBe(3);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("hello ");
+            expect(model.parts[1].type).toBe("room-pill");
+            expect(model.parts[1].text).toBe("#riot-dev");
+            expect(model.parts[2].type).toBe("plain");
+            expect(model.parts[2].text).toBe("!!");
+        });
+
+        it('pasting text does not trigger auto-complete', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{resourceId: "#define-room"}]);
+            const model = new EditorModel([pc.plain("try ")], pc, renderer);
+
+            model.update("try #define", "insertFromPaste", {offset: 11, atNodeEnd: true});
+
+            expect(model.autoComplete).toBeFalsy();
+            expect(renderer.caret.index).toBe(0);
+            expect(renderer.caret.offset).toBe(11);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("try #define");
+        });
+
+        it('dropping text does not trigger auto-complete', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{resourceId: "#define-room"}]);
+            const model = new EditorModel([pc.plain("try ")], pc, renderer);
+
+            model.update("try #define", "insertFromDrop", {offset: 11, atNodeEnd: true});
+
+            expect(model.autoComplete).toBeFalsy();
+            expect(renderer.caret.index).toBe(0);
+            expect(renderer.caret.offset).toBe(11);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("try #define");
+        });
     });
 });
