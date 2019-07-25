@@ -29,8 +29,7 @@ For a good example, see https://riot.im/develop/config.json.
      which should take priority and therefore the application cannot continue.
 1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
    in the `labs` section of settings.  The available optional experimental features vary from
-   release to release. Some of the available features are described in the Labs Feature section
-   of this README.
+   release to release. The available features are described in [labs.md](labs.md).
 1. `showLabsSettings`: Shows the "labs" tab of user settings even when no `features` are enabled
    or present. Useful for getting at settings which may be otherwise hidden.
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
