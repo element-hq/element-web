@@ -117,6 +117,8 @@ describe('editor/model', function() {
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello world");
         });
+    });
+    describe('handling line breaks', function() {
         it('insert new line into existing document', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
@@ -130,6 +132,52 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("hello");
             expect(model.parts[1].type).toBe("newline");
             expect(model.parts[1].text).toBe("\n");
+        });
+        it('insert multiple new lines into existing document', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("hello")], pc, renderer);
+            model.update("hello\n\n\nworld!", "insertText", {offset: 14, atNodeEnd: true});
+            expect(renderer.count).toBe(1);
+            expect(renderer.caret.index).toBe(4);
+            expect(renderer.caret.offset).toBe(6);
+            expect(model.parts.length).toBe(5);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("hello");
+            expect(model.parts[1].type).toBe("newline");
+            expect(model.parts[1].text).toBe("\n");
+            expect(model.parts[2].type).toBe("newline");
+            expect(model.parts[2].text).toBe("\n");
+            expect(model.parts[3].type).toBe("newline");
+            expect(model.parts[3].text).toBe("\n");
+            expect(model.parts[4].type).toBe("plain");
+            expect(model.parts[4].text).toBe("world!");
+        });
+        it('type in empty line', function() {
+            const renderer = createRenderer();
+            const pc = createPartCreator();
+            const model = new EditorModel([
+                pc.plain("hello"),
+                pc.newline(),
+                pc.newline(),
+                pc.plain("world"),
+            ], pc, renderer);
+            model.update("hello\nwarm\nworld", "insertText", {offset: 10, atNodeEnd: true});
+            console.log(model.serializeParts());
+            expect(renderer.count).toBe(1);
+            expect(renderer.caret.index).toBe(2);
+            expect(renderer.caret.offset).toBe(4);
+            expect(model.parts.length).toBe(5);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("hello");
+            expect(model.parts[1].type).toBe("newline");
+            expect(model.parts[1].text).toBe("\n");
+            expect(model.parts[2].type).toBe("plain");
+            expect(model.parts[2].text).toBe("warm");
+            expect(model.parts[3].type).toBe("newline");
+            expect(model.parts[3].text).toBe("\n");
+            expect(model.parts[4].type).toBe("plain");
+            expect(model.parts[4].text).toBe("world");
         });
     });
     describe('non-editable part manipulation', function() {
