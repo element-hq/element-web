@@ -513,7 +513,13 @@ module.exports = React.createClass({
         if (cancelled) return null;
 
         try {
-            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address);
+            const hsAccountToken = await MatrixClientPeg.get().getOpenIdToken();
+            if (cancelled) return null;
+
+            const isAccountToken = await MatrixClientPeg.get().registerWithIdentityServer(hsAccountToken);
+            if (cancelled) return null;
+
+            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address, undefined, isAccountToken);
             if (cancelled || lookup === null || !lookup.mxid) return null;
 
             const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
