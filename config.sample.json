@@ -20,8 +20,10 @@
     "defaultCountryCode": "GB",
     "showLabsSettings": false,
     "features": {
-        "feature_groups": "labs",
-        "feature_pinning": "labs"
+        "feature_pinning": "labs",
+        "feature_custom_status": "labs",
+        "feature_custom_tags": "labs",
+        "feature_state_counters": "labs"
     },
     "default_federate": true,
     "default_theme": "light",
