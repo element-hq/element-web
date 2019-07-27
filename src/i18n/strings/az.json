@@ -9,5 +9,10 @@
     "Create Account": "Hesab Aç",
     "Need help?": "Kömək lazımdır?",
     "Chat with Riot Bot": "Riot Bot-la söhbət edin",
-    "Explore rooms": "Otaqları kəşf edin"
+    "Explore rooms": "Otaqları kəşf edin",
+    "Your Riot is misconfigured": "Riot yanlış quraşdırılıb",
+    "Unexpected error preparing the app. See console for details.": "Proqramı başladarkən gözlənilməz xəta. Ətraflı məlumat üçün konsola baxın.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: default_server_config, default_server_name, və ya default_hs_url-dən yalnız birini təyin etməlisiniz.",
+    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib.",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s"
 }
