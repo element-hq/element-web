@@ -2011,5 +2011,15 @@
     "Regain access to your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "Berreskuratu zure kontura sarbidea eta gailu honetan gordetako zifratze gakoak. Hauek gabe, ezin izango dituzu zure mezu seguruak irakurri beste gailuetatik.",
     "Enter your password to sign in and regain access to your account.": "Sartu zure pasahitza saioa hasteko eta berreskuratu zure kontura sarbidea.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Ezin duzu zure kontuan saioa hasi. Jarri kontaktuan zure hasiera zerbitzariko administratzailearekin informazio gehiagorako.",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Abisua: Zure datu pertsonalak (zure zifratze gakoak barne) gailu honetan gordeko dira. Garbitu ezazu gailu hau erabiltzen bukatu duzunean edo beste kontu bat erabili nahi duzunean."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Abisua: Zure datu pertsonalak (zure zifratze gakoak barne) gailu honetan gordeko dira. Garbitu ezazu gailu hau erabiltzen bukatu duzunean edo beste kontu bat erabili nahi duzunean.",
+    "Identity Server": "Identitate zerbitzaria",
+    "Integrations Manager": "Integrazio-kudeatzailea",
+    "Find others by phone or email": "Aurkitu besteak telefonoa edo e-maila erabiliz",
+    "Be found by phone or email": "Izan telefonoa edo e-maila erabiliz aurkigarria",
+    "Use bots, bridges, widgets and sticker packs": "Erabili botak, zubiak, trepetak eta eranskailu multzoak",
+    "Terms of Service": "Erabilera baldintzak",
+    "To continue you need to accept the Terms of this service.": "Jarraitzeko zerbitzu honen baldintzak onartu behar dituzu.",
+    "Service": "Zerbitzua",
+    "Summary": "Laburpena",
+    "Terms": "Baldintzak"
 }
