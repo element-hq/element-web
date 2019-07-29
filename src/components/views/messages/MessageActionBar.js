@@ -37,10 +37,14 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
-    state = {
-        canReact: true,
-        canReply: true,
-    };
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            canReact: true,
+            canReply: true,
+        };
+    }
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
@@ -65,7 +69,7 @@ export default class MessageActionBar extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         if (room) {
-            const me = cli.credentials.userId;
+            const me = cli.getUserId();
             const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
             const canReply = room.maySendMessage();
 
