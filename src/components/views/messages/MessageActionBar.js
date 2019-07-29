@@ -46,6 +46,7 @@ export default class MessageActionBar extends React.PureComponent {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         if (room) {
+            console.log("DEBUG", room);
             room.on("RoomMember.powerLevel", this.onPermissionsChange);
             room.on("RoomMember.membership", this.onPermissionsChange);
             this.onPermissionsChange();
