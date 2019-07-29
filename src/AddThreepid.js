@@ -108,19 +108,19 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    haveMsisdnToken(token) {
-        return MatrixClientPeg.get().submitMsisdnToken(
+    async haveMsisdnToken(token) {
+        const result = await MatrixClientPeg.get().submitMsisdnToken(
             this.sessionId, this.clientSecret, token,
-        ).then((result) => {
-            if (result.errcode) {
-                throw result;
-            }
-            const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
-            return MatrixClientPeg.get().addThreePid({
-                sid: this.sessionId,
-                client_secret: this.clientSecret,
-                id_server: identityServerDomain,
-            }, this.bind);
-        });
+        );
+        if (result.errcode) {
+            throw result;
+        }
+
+        const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
+        return MatrixClientPeg.get().addThreePid({
+            sid: this.sessionId,
+            client_secret: this.clientSecret,
+            id_server: identityServerDomain,
+        }, this.bind);
     }
 }
