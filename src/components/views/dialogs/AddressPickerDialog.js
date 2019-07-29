@@ -520,7 +520,12 @@ module.exports = React.createClass({
             const isAccessToken = await authClient.getAccessToken();
             if (cancelled) return null;
 
-            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address, undefined, isAccessToken);
+            const lookup = await MatrixClientPeg.get().lookupThreePid(
+                medium,
+                address,
+                undefined /* callback */,
+                isAccessToken,
+            );
             if (cancelled || lookup === null || !lookup.mxid) return null;
 
             const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);

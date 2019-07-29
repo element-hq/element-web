@@ -25,6 +25,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -111,8 +112,13 @@ module.exports = React.createClass({
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
             try {
+                const authClient = new IdentityAuthClient();
+                const isAccessToken = await authClient.getAccessToken();
                 const result = await MatrixClientPeg.get().lookupThreePid(
-                    'email', this.props.invitedEmail,
+                    'email',
+                    this.props.invitedEmail,
+                    undefined /* callback */,
+                    isAccessToken,
                 );
                 this.setState({invitedEmailMxid: result.mxid});
             } catch (err) {
