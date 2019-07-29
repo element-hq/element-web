@@ -45,26 +45,32 @@ export default class MessageActionBar extends React.PureComponent {
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        room.on("RoomMember.powerLevel", this.onPermissionsChange);
-        room.on("RoomMember.membership", this.onPermissionsChange);
-        this.onPermissionsChange();
+        if (room) {
+            room.on("RoomMember.powerLevel", this.onPermissionsChange);
+            room.on("RoomMember.membership", this.onPermissionsChange);
+            this.onPermissionsChange();
+        }
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        room.removeListener("RoomMember.powerLevel", this.onPermissionsChange);
-        room.removeListener("RoomMember.membership", this.onPermissionsChange);
+        if (room) {
+            room.removeListener("RoomMember.powerLevel", this.onPermissionsChange);
+            room.removeListener("RoomMember.membership", this.onPermissionsChange);
+        }
     }
 
     onPermissionsChange() {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        const me = cli.credentials.userId;
-        const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
-        const canReply = room.maySendMessage();
+        if (room) {
+            const me = cli.credentials.userId;
+            const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
+            const canReply = room.maySendMessage();
 
-        this.setState({canReact, canReply});
+            this.setState({canReact, canReply});
+        }
     }
 
     onDecrypted = () => {
