@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -35,26 +37,48 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
+    state = {
+        canReact: true,
+        canReply: true,
+    };
+
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        room.on("RoomMember.powerLevel", this.onPermissionsChange);
+        room.on("RoomMember.membership", this.onPermissionsChange);
+        this.onPermissionsChange();
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        room.removeListener("RoomMember.powerLevel", this.onPermissionsChange);
+        room.removeListener("RoomMember.membership", this.onPermissionsChange);
+    }
+
+    onPermissionsChange() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const me = cli.credentials.userId;
+        const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
+        const canReply = room.maySendMessage();
+
+        this.setState({canReact, canReply});
     }
 
     onDecrypted = () => {
         // When an event decrypts, it is likely to change the set of available
         // actions, so we force an update to check again.
         this.forceUpdate();
-    }
+    };
 
     onFocusChange = (focused) => {
         if (!this.props.onFocusChange) {
             return;
         }
         this.props.onFocusChange(focused);
-    }
+    };
 
     onCryptoClick = () => {
         const event = this.props.mxEvent;
@@ -62,21 +86,21 @@ export default class MessageActionBar extends React.PureComponent {
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
             {event},
         );
-    }
+    };
 
     onReplyClick = (ev) => {
         dis.dispatch({
             action: 'reply_to_event',
             event: this.props.mxEvent,
         });
-    }
+    };
 
     onEditClick = (ev) => {
         dis.dispatch({
             action: 'edit_event',
             event: this.props.mxEvent,
         });
-    }
+    };
 
     onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
@@ -120,7 +144,7 @@ export default class MessageActionBar extends React.PureComponent {
         createMenu(MessageContextMenu, menuOptions);
 
         this.onFocusChange(true);
-    }
+    };
 
     renderReactButton() {
         const ReactMessageAction = sdk.getComponent('messages.ReactMessageAction');
@@ -139,11 +163,15 @@ export default class MessageActionBar extends React.PureComponent {
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            reactButton = this.renderReactButton();
-            replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
-                title={_t("Reply")}
-                onClick={this.onReplyClick}
-            />;
+            if (this.state.canReact) {
+                reactButton = this.renderReactButton();
+            }
+            if (this.state.canReply) {
+                replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                    title={_t("Reply")}
+                    onClick={this.onReplyClick}
+                />;
+            }
         }
         if (canEditContent(this.props.mxEvent)) {
             editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
