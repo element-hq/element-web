@@ -1661,5 +1661,8 @@
     "Upload %(count)s other files|other": "Ladda upp %(count)s andra filer",
     "Upload %(count)s other files|one": "Ladda upp %(count)s annan fil",
     "Cancel All": "Avbryt alla",
-    "Upload Error": "Uppladdningsfel"
+    "Upload Error": "Uppladdningsfel",
+    "Name or Matrix ID": "Namn eller Martix-ID",
+    "Email, name or Matrix ID": "Email, namn, eller Matrix-ID",
+    "Your Riot is misconfigured": "Riot är felkonfigurerat"
 }
