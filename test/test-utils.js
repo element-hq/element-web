@@ -259,6 +259,8 @@ export function mkStubRoom(roomId = null) {
             },
         },
         setBlacklistUnverifiedDevices: sinon.stub(),
+        on: sinon.stub(),
+        removeListener: sinon.stub(),
     };
 }
 
