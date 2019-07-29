@@ -809,6 +809,38 @@ export const CommandMap = {
             return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
         },
     }),
+
+    help: new Command({
+        name: "help",
+        description: _td("Displays list of commands with usages and descriptions"),
+        runFn: function() {
+            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+            Modal.createTrackedDialog('Slash Commands', 'Help', InfoDialog, {
+                title: _t("Command Help"),
+                description: <table>
+                    <thead>
+                        <tr>
+                            <td>{_t("Command")}</td>
+                            <td>{_t("Arguments")}</td>
+                            <td>{_t("Description")}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        Object.values(CommandMap).map(cmd => {
+                            return <tr key={cmd.command}>
+                                <td>{cmd.command}</td>
+                                <td>{cmd.args}</td>
+                                <td>{cmd.description}</td>
+                            </tr>;
+                        })
+                    }
+                    </tbody>
+                </table>,
+            });
+            return success();
+        },
+    }),
 };
 /* eslint-enable babel/no-invalid-this */
 
