@@ -251,6 +251,8 @@ export function mkStubRoom(roomId = null) {
             getStateEvents: sinon.stub(),
             mayClientSendStateEvent: sinon.stub().returns(true),
             maySendStateEvent: sinon.stub().returns(true),
+            maySendEvent: sinon.stub().returns(true),
+            maySendMessage: sinon.stub().returns(true),
             members: [],
         },
         tags: {
