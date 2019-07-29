@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018, 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -102,7 +103,7 @@ module.exports = React.createClass({
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local selectedList
         if (this.refs.textinput.value !== '') {
-            selectedList = this._addInputToList();
+            selectedList = this._addAddressesToList([this.refs.textinput.value]);
             if (selectedList === null) return;
         }
         this.props.onFinished(true, selectedList);
@@ -140,12 +141,12 @@ module.exports = React.createClass({
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addInputToList();
+                this._addAddressesToList([this.refs.textinput.value]);
             }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            this._addInputToList();
+            this._addAddressesToList([this.refs.textinput.value]);
         }
     },
 
@@ -453,42 +454,48 @@ module.exports = React.createClass({
         });
     },
 
-    _addInputToList: function() {
-        const addressText = this.refs.textinput.value.trim();
-        const addrType = getAddressType(addressText);
-        const addrObj = {
-            addressType: addrType,
-            address: addressText,
-            isKnown: false,
-        };
-        if (!this.props.validAddressTypes.includes(addrType)) {
-            this.setState({ error: true });
-            return null;
-        } else if (addrType === 'mx-user-id') {
-            const user = MatrixClientPeg.get().getUser(addrObj.address);
-            if (user) {
-                addrObj.displayName = user.displayName;
-                addrObj.avatarMxc = user.avatarUrl;
-                addrObj.isKnown = true;
-            }
-        } else if (addrType === 'mx-room-id') {
-            const room = MatrixClientPeg.get().getRoom(addrObj.address);
-            if (room) {
-                addrObj.displayName = room.name;
-                addrObj.avatarMxc = room.avatarUrl;
-                addrObj.isKnown = true;
-            }
-        }
-
+    _addAddressesToList: function(addressTexts) {
         const selectedList = this.state.selectedList.slice();
-        selectedList.push(addrObj);
+
+        let hasError = false;
+        addressTexts.forEach((addressText) => {
+            addressText = addressText.trim();
+            const addrType = getAddressType(addressText);
+            const addrObj = {
+                addressType: addrType,
+                address: addressText,
+                isKnown: false,
+            };
+
+            if (!this.props.validAddressTypes.includes(addrType)) {
+                hasError = true;
+            } else if (addrType === 'mx-user-id') {
+                const user = MatrixClientPeg.get().getUser(addrObj.address);
+                if (user) {
+                    addrObj.displayName = user.displayName;
+                    addrObj.avatarMxc = user.avatarUrl;
+                    addrObj.isKnown = true;
+                }
+            } else if (addrType === 'mx-room-id') {
+                const room = MatrixClientPeg.get().getRoom(addrObj.address);
+                if (room) {
+                    addrObj.displayName = room.name;
+                    addrObj.avatarMxc = room.avatarUrl;
+                    addrObj.isKnown = true;
+                }
+            }
+
+            selectedList.push(addrObj);
+        });
+
         this.setState({
             selectedList,
             suggestedList: [],
             query: "",
+            error: hasError ? true : this.state.error,
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-        return selectedList;
+        return hasError ? null : selectedList;
     },
 
     _lookupThreepid: function(medium, address) {
@@ -540,6 +547,14 @@ module.exports = React.createClass({
         });
     },
 
+    _onPaste: function(e) {
+        // Prevent the text being pasted into the textarea
+        e.preventDefault();
+        const text = e.clipboardData.getData("text");
+        // Process it as a list of addresses to add instead
+        this._addAddressesToList(text.split(/[\s,]+/));
+    },
+
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -564,7 +579,9 @@ module.exports = React.createClass({
 
         // Add the query at the end
         query.push(
-            <textarea key={this.state.selectedList.length}
+            <textarea
+                key={this.state.selectedList.length}
+                onPaste={this._onPaste}
                 rows="1"
                 id="textinput"
                 ref="textinput"
