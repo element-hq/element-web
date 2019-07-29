@@ -1130,17 +1130,6 @@ export default class MessageComposerInput extends React.Component {
     onVerticalArrow = (e, up) => {
         if (e.ctrlKey || e.shiftKey || e.metaKey) return;
 
-        // selection must be collapsed
-        const selection = this.state.editorState.selection;
-        if (!selection.isCollapsed) return;
-        // and we must be at the edge of the document (up=start, down=end)
-        const document = this.state.editorState.document;
-        if (up) {
-            if (!selection.anchor.isAtStartOfNode(document)) return;
-        } else {
-            if (!selection.anchor.isAtEndOfNode(document)) return;
-        }
-
         const shouldSelectHistory = e.altKey;
         const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
 
@@ -1152,6 +1141,17 @@ export default class MessageComposerInput extends React.Component {
                 e.preventDefault();
             }
         } else if (shouldEditLastMessage) {
+            // selection must be collapsed
+            const selection = this.state.editorState.selection;
+            if (!selection.isCollapsed) return;
+            // and we must be at the edge of the document (up=start, down=end)
+            const document = this.state.editorState.document;
+            if (up) {
+                if (!selection.anchor.isAtStartOfNode(document)) return;
+            } else {
+                if (!selection.anchor.isAtEndOfNode(document)) return;
+            }
+
             const editEvent = findEditableEvent(this.props.room, false);
             if (editEvent) {
                 // We're selecting history, so prevent the key event from doing anything else
