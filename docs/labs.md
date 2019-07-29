@@ -45,3 +45,8 @@ Once enabled, send a custom state event to a room to set values:
 ```
 
 That's it. Now should see your new counter under the header.
+
+## Immutable DMs (`feature_immutable_dms`)
+
+Immutable DMs mean you have exactly one direct message with another user, ensuring
+you don't accidentally confuse the other person or yourself.
