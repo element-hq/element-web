@@ -837,6 +837,7 @@ export const CommandMap = {
                     }
                     </tbody>
                 </table>,
+                hasCloseX: true,
             });
             return success();
         },
