@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018, 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,13 +19,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
-import * as Email from "../../../email";
+import * as Email from '../../../email';
+import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -513,13 +516,11 @@ module.exports = React.createClass({
         if (cancelled) return null;
 
         try {
-            const hsAccountToken = await MatrixClientPeg.get().getOpenIdToken();
+            const authClient = new IdentityAuthClient();
+            const isAccessToken = await authClient.getAccessToken();
             if (cancelled) return null;
 
-            const isAccountToken = await MatrixClientPeg.get().registerWithIdentityServer(hsAccountToken);
-            if (cancelled) return null;
-
-            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address, undefined, isAccountToken);
+            const lookup = await MatrixClientPeg.get().lookupThreePid(medium, address, undefined, isAccessToken);
             if (cancelled || lookup === null || !lookup.mxid) return null;
 
             const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
