@@ -548,9 +548,11 @@ module.exports = React.createClass({
     },
 
     _onPaste: function(e) {
-        const text = e.clipboardData.getData("text");
-        this._addAddressesToList(text.split(/[\s,]+/));
+        // Prevent the text being pasted into the textarea
         e.preventDefault();
+        const text = e.clipboardData.getData("text");
+        // Process it as a list of addresses to add instead
+        this._addAddressesToList(text.split(/[\s,]+/));
     },
 
     render: function() {
