@@ -117,7 +117,8 @@ class BasePart {
     }
 }
 
-class PlainPart extends BasePart {
+// exported for unit tests, should otherwise only be used through PartCreator
+export class PlainPart extends BasePart {
     acceptsInsertion(chr) {
         return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "\n";
     }
@@ -348,18 +349,24 @@ class PillCandidatePart extends PlainPart {
     }
 }
 
-export class PartCreator {
-    constructor(getAutocompleterComponent, updateQuery, room, client) {
-        this._room = room;
-        this._client = client;
-        this._autoCompleteCreator = (updateCallback) => {
+export function autoCompleteCreator(updateQuery, getAutocompleterComponent) {
+    return (partCreator) => {
+        return (updateCallback) => {
             return new AutocompleteWrapperModel(
                 updateCallback,
                 getAutocompleterComponent,
                 updateQuery,
-                this,
+                partCreator,
             );
         };
+    };
+}
+
+export class PartCreator {
+    constructor(autoCompleteCreator, room, client) {
+        this._room = room;
+        this._client = client;
+        this._autoCompleteCreator = autoCompleteCreator(this);
     }
 
     createPartForInput(input) {

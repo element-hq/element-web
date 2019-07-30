@@ -26,7 +26,7 @@ import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import Autocomplete from '../rooms/Autocomplete';
-import {PartCreator} from '../../../editor/parts';
+import {PartCreator, autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
@@ -303,8 +303,7 @@ export default class MessageEditor extends React.Component {
         const {editState} = this.props;
         const room = this._getRoom();
         const partCreator = new PartCreator(
-            () => this._autocompleteRef,
-            query => this.setState({query}),
+            autoCompleteCreator(() => this._autocompleteRef, query => this.setState({query})),
             room,
             this.context.matrixClient,
         );
