@@ -77,6 +77,7 @@ export default class IdentityAuthClient {
             if (err.cors === "rejected" || err.httpStatus === 404) {
                 // Assume IS only supports deprecated v1 API for now
                 // TODO: Remove this path once v2 is only supported version
+                // See https://github.com/vector-im/riot-web/issues/10443
                 console.warn("IS doesn't support v2 auth");
                 this.authEnabled = false;
             }
