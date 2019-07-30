@@ -57,7 +57,13 @@ export default class IdentityAuthClient {
     }
 
     _checkToken(token) {
-        // TODO: Test current API token via /account endpoint
+        // TODO: Test current API token via `/account` endpoint
+        // At the moment, Sydent doesn't implement `/account`, so we can't use
+        // that yet. We could try a lookup for a null address perhaps...?
+        // In any case, we should ensure the token in `localStorage` is cleared
+        // appropriately. We already clear storage on sign out, but we'll need
+        // additional clearing when changing ISes in settings as part of future
+        // privacy work.
     }
 
     async registerForToken() {
