@@ -25,6 +25,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -104,21 +105,26 @@ module.exports = React.createClass({
         }
     },
 
-    _checkInvitedEmail: function() {
+    _checkInvitedEmail: async function() {
         // If this is an invite and we've been told what email
         // address was invited, fetch the user's list of Threepids
         // so we can check them against the one that was invited
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
-            MatrixClientPeg.get().lookupThreePid(
-                'email', this.props.invitedEmail,
-            ).finally(() => {
-                this.setState({busy: false});
-            }).done((result) => {
+            try {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                const result = await MatrixClientPeg.get().lookupThreePid(
+                    'email',
+                    this.props.invitedEmail,
+                    undefined /* callback */,
+                    identityAccessToken,
+                );
                 this.setState({invitedEmailMxid: result.mxid});
-            }, (err) => {
+            } catch (err) {
                 this.setState({threePidFetchError: err});
-            });
+            }
+            this.setState({busy: false});
         }
     },
 

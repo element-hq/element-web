@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018, 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,13 +19,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
-import * as Email from "../../../email";
+import * as Email from '../../../email';
+import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -71,12 +74,11 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            error: false,
-
+            // Whether to show an error message because of an invalid address
+            invalidAddressError: false,
             // List of UserAddressType objects representing
             // the list of addresses we're going to invite
             selectedList: [],
-
             // Whether a search is ongoing
             busy: false,
             // An error message generated during the user directory search
@@ -443,12 +445,12 @@ module.exports = React.createClass({
             });
             if (this._cancelThreepidLookup) this._cancelThreepidLookup();
             if (addrType === 'email') {
-                this._lookupThreepid(addrType, query).done();
+                this._lookupThreepid(addrType, query);
             }
         }
         this.setState({
             suggestedList,
-            error: false,
+            invalidAddressError: false,
         }, () => {
             if (this.addressSelector) this.addressSelector.moveSelectionTop();
         });
@@ -492,13 +494,13 @@ module.exports = React.createClass({
             selectedList,
             suggestedList: [],
             query: "",
-            error: hasError ? true : this.state.error,
+            invalidAddressError: hasError ? true : this.state.invalidAddressError,
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return hasError ? null : selectedList;
     },
 
-    _lookupThreepid: function(medium, address) {
+    _lookupThreepid: async function(medium, address) {
         let cancelled = false;
         // Note that we can't safely remove this after we're done
         // because we don't know that it's the same one, so we just
@@ -509,28 +511,41 @@ module.exports = React.createClass({
         };
 
         // wait a bit to let the user finish typing
-        return Promise.delay(500).then(() => {
-            if (cancelled) return null;
-            return MatrixClientPeg.get().lookupThreePid(medium, address);
-        }).then((res) => {
-            if (res === null || !res.mxid) return null;
+        await Promise.delay(500);
+        if (cancelled) return null;
+
+        try {
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken();
             if (cancelled) return null;
 
-            return MatrixClientPeg.get().getProfileInfo(res.mxid);
-        }).then((res) => {
-            if (res === null) return null;
-            if (cancelled) return null;
+            const lookup = await MatrixClientPeg.get().lookupThreePid(
+                medium,
+                address,
+                undefined /* callback */,
+                identityAccessToken,
+            );
+            if (cancelled || lookup === null || !lookup.mxid) return null;
+
+            const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
+            if (cancelled || profile === null) return null;
+
             this.setState({
                 suggestedList: [{
                     // a UserAddressType
                     addressType: medium,
                     address: address,
-                    displayName: res.displayname,
-                    avatarMxc: res.avatar_url,
+                    displayName: profile.displayname,
+                    avatarMxc: profile.avatar_url,
                     isKnown: true,
                 }],
             });
-        });
+        } catch (e) {
+            console.error(e);
+            this.setState({
+                searchError: _t('Something went wrong!'),
+            });
+        }
     },
 
     _getFilteredSuggestions: function() {
@@ -597,7 +612,7 @@ module.exports = React.createClass({
 
         let error;
         let addressSelector;
-        if (this.state.error) {
+        if (this.state.invalidAddressError) {
             const validTypeDescriptions = this.props.validAddressTypes.map((t) => _t(addressTypeName[t]));
             error = <div className="mx_AddressPickerDialog_error">
                 { _t("You have entered an invalid address.") }
