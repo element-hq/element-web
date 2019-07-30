@@ -74,12 +74,11 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            error: false,
-
+            // Whether to show an error message because of an invalid address
+            invalidAddressError: false,
             // List of UserAddressType objects representing
             // the list of addresses we're going to invite
             selectedList: [],
-
             // Whether a search is ongoing
             busy: false,
             // An error message generated during the user directory search
@@ -451,7 +450,7 @@ module.exports = React.createClass({
         }
         this.setState({
             suggestedList,
-            error: false,
+            invalidAddressError: false,
         }, () => {
             if (this.addressSelector) this.addressSelector.moveSelectionTop();
         });
@@ -495,7 +494,7 @@ module.exports = React.createClass({
             selectedList,
             suggestedList: [],
             query: "",
-            error: hasError ? true : this.state.error,
+            invalidAddressError: hasError ? true : this.state.invalidAddressError,
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return hasError ? null : selectedList;
@@ -543,6 +542,9 @@ module.exports = React.createClass({
             });
         } catch (e) {
             console.error(e);
+            this.setState({
+                searchError: _t('Something went wrong!'),
+            });
         }
     },
 
@@ -610,7 +612,7 @@ module.exports = React.createClass({
 
         let error;
         let addressSelector;
-        if (this.state.error) {
+        if (this.state.invalidAddressError) {
             const validTypeDescriptions = this.props.validAddressTypes.map((t) => _t(addressTypeName[t]));
             error = <div className="mx_AddressPickerDialog_error">
                 { _t("You have entered an invalid address.") }
