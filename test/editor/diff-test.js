@@ -19,30 +19,54 @@ import {diffDeletion, diffAtCaret} from "../../src/editor/diff";
 
 describe('editor/diff', function() {
     describe('diffDeletion', function() {
-        it('at start of string', function() {
-            const diff = diffDeletion("hello", "ello");
-            expect(diff.at).toBe(0);
-            expect(diff.removed).toBe("h");
+        describe('with a single character removed', function() {
+            it('at start of string', function() {
+                const diff = diffDeletion("hello", "ello");
+                expect(diff.at).toBe(0);
+                expect(diff.removed).toBe("h");
+            });
+            it('in middle of string', function() {
+                const diff = diffDeletion("hello", "hllo");
+                expect(diff.at).toBe(1);
+                expect(diff.removed).toBe("e");
+            });
+            it('in middle of string with duplicate character', function() {
+                const diff = diffDeletion("hello", "helo");
+                expect(diff.at).toBe(3);
+                expect(diff.removed).toBe("l");
+            });
+            it('at end of string', function() {
+                const diff = diffDeletion("hello", "hell");
+                expect(diff.at).toBe(4);
+                expect(diff.removed).toBe("o");
+            });
         });
-        it('removing whole string', function() {
-            const diff = diffDeletion("hello", "");
-            expect(diff.at).toBe(0);
-            expect(diff.removed).toBe("hello");
-        });
-        it('in middle of string', function() {
-            const diff = diffDeletion("hello", "hllo");
-            expect(diff.at).toBe(1);
-            expect(diff.removed).toBe("e");
-        });
-        it('in middle of string with duplicate character', function() {
-            const diff = diffDeletion("hello", "helo");
-            expect(diff.at).toBe(3);
-            expect(diff.removed).toBe("l");
-        });
-        it('at end of string', function() {
-            const diff = diffDeletion("hello", "hell");
-            expect(diff.at).toBe(4);
-            expect(diff.removed).toBe("o");
+        describe('with a multiple removed', function() {
+            it('at start of string', function() {
+                const diff = diffDeletion("hello", "llo");
+                expect(diff.at).toBe(0);
+                expect(diff.removed).toBe("he");
+            });
+            it('removing whole string', function() {
+                const diff = diffDeletion("hello", "");
+                expect(diff.at).toBe(0);
+                expect(diff.removed).toBe("hello");
+            });
+            it('in middle of string', function() {
+                const diff = diffDeletion("hello", "hlo");
+                expect(diff.at).toBe(1);
+                expect(diff.removed).toBe("el");
+            });
+            it('in middle of string with duplicate character', function() {
+                const diff = diffDeletion("hello", "heo");
+                expect(diff.at).toBe(2);
+                expect(diff.removed).toBe("ll");
+            });
+            it('at end of string', function() {
+                const diff = diffDeletion("hello", "hel");
+                expect(diff.at).toBe(3);
+                expect(diff.removed).toBe("lo");
+            });
         });
     });
     describe('diffAtCaret', function() {
