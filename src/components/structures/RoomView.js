@@ -27,8 +27,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
-import filesize from 'filesize';
 import classNames from 'classnames';
+import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../matrix-to';
 
@@ -64,6 +64,12 @@ if (DEBUG) {
     debuglog = console.log.bind(console);
 }
 
+const RoomContext = PropTypes.shape({
+    canReact: PropTypes.bool.isRequired,
+    canReply: PropTypes.bool.isRequired,
+    room: PropTypes.instanceOf(Room),
+});
+
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
@@ -88,7 +94,7 @@ module.exports = React.createClass({
         //  * name (string) The room's name
         //  * avatarUrl (string) The mxc:// avatar URL for the room
         //  * inviterName (string) The display name of the person who
-        //  *                      invited us tovthe room
+        //  *                      invited us to the room
         oobData: PropTypes.object,
 
         // is the RightPanel collapsed?
@@ -156,6 +162,24 @@ module.exports = React.createClass({
             // We load this later by asking the js-sdk to suggest a version for us.
             // This object is the result of Room#getRecommendedVersion()
             upgradeRecommendation: null,
+
+            canReact: false,
+            canReply: false,
+        };
+    },
+
+    childContextTypes: {
+        room: RoomContext,
+    },
+
+    getChildContext: function() {
+        const {canReact, canReply, room} = this.state;
+        return {
+            room: {
+                canReact,
+                canReply,
+                room,
+            },
         };
     },
 
@@ -165,6 +189,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
@@ -672,6 +697,7 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
+        this._updatePermissions(room);
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -795,6 +821,15 @@ module.exports = React.createClass({
         }
     },
 
+    onRoomStateEvents: function(ev, state) {
+        // ignore if we don't have a room yet
+        if (!this.state.room || this.state.room.roomId !== state.roomId) {
+            return;
+        }
+
+        this._updatePermissions(this.state.room);
+    },
+
     onRoomStateMember: function(ev, state, member) {
         // ignore if we don't have a room yet
         if (!this.state.room) {
@@ -813,6 +848,17 @@ module.exports = React.createClass({
         if (room.roomId === this.state.roomId) {
             this.forceUpdate();
             this._loadMembersIfJoined(room);
+            this._updatePermissions(room);
+        }
+    },
+
+    _updatePermissions: function(room) {
+        if (room) {
+            const me = MatrixClientPeg.get().getUserId();
+            const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
+            const canReply = room.maySendMessage();
+
+            this.setState({canReact, canReply});
         }
     },
 
@@ -1916,3 +1962,5 @@ module.exports = React.createClass({
         );
     },
 });
+
+module.exports.RoomContext = RoomContext;
