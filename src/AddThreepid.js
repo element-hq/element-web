@@ -111,12 +111,12 @@ export default class AddThreepid {
      */
     async haveMsisdnToken(msisdnToken) {
         const authClient = new IdentityAuthClient();
-        const isAccessToken = await authClient.getAccessToken();
+        const identityAccessToken = await authClient.getAccessToken();
         const result = await MatrixClientPeg.get().submitMsisdnToken(
             this.sessionId,
             this.clientSecret,
             msisdnToken,
-            isAccessToken,
+            identityAccessToken,
         );
         if (result.errcode) {
             throw result;

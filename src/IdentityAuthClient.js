@@ -63,10 +63,10 @@ export default class IdentityAuthClient {
     async registerForToken() {
         try {
             const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
-            const { access_token: isAccessToken } =
+            const { access_token: identityAccessToken } =
                 await MatrixClientPeg.get().registerWithIdentityServer(hsOpenIdToken);
-            await this._checkToken(isAccessToken);
-            return isAccessToken;
+            await this._checkToken(identityAccessToken);
+            return identityAccessToken;
         } catch (err) {
             if (err.cors === "rejected" || err.httpStatus === 404) {
                 // Assume IS only supports deprecated v1 API for now

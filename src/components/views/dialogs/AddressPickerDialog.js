@@ -517,14 +517,14 @@ module.exports = React.createClass({
 
         try {
             const authClient = new IdentityAuthClient();
-            const isAccessToken = await authClient.getAccessToken();
+            const identityAccessToken = await authClient.getAccessToken();
             if (cancelled) return null;
 
             const lookup = await MatrixClientPeg.get().lookupThreePid(
                 medium,
                 address,
                 undefined /* callback */,
-                isAccessToken,
+                identityAccessToken,
             );
             if (cancelled || lookup === null || !lookup.mxid) return null;
 

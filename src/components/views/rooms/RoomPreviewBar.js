@@ -113,12 +113,12 @@ module.exports = React.createClass({
             this.setState({busy: true});
             try {
                 const authClient = new IdentityAuthClient();
-                const isAccessToken = await authClient.getAccessToken();
+                const identityAccessToken = await authClient.getAccessToken();
                 const result = await MatrixClientPeg.get().lookupThreePid(
                     'email',
                     this.props.invitedEmail,
                     undefined /* callback */,
-                    isAccessToken,
+                    identityAccessToken,
                 );
                 this.setState({invitedEmailMxid: result.mxid});
             } catch (err) {
