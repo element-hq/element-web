@@ -18,5 +18,17 @@
     "Discussion of all things Matrix!": "Thào luận về mọi vấn đề liên quan đến Matrix!",
     "Riot/Web &amp; Desktop chat": "Riot/Web &amp; Desktop chat",
     "Unexpected error preparing the app. See console for details.": "Lỗi xảy ra trong lúc chuẩn bị app. Xem console log để biết chi tiết.",
-    "Your Riot is misconfigured": "Riot của bạn bị cấu hình sai"
+    "Your Riot is misconfigured": "Hệ thống Riot của bạn bị thiết lập sai",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Riot của bạn chứa JSON không hợp lệ. Bạn hãy sửa lỗi và tải lại trang.",
+    "The message from the parser is: %(message)s": "Nội dung tin là: %(message)s",
+    "Invalid JSON": "JSON không hợp lệ",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Thiết lập không hợp lệ: chỉ có thể điền một trong số default_server_config, default_server_name, hoặc default_hs_url.",
+    "Invalid configuration: no default server specified.": "Cấu hình không hợp lệ: máy chủ mặc định không được thiết lập.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Bạn có thể sử dụng lựa chọn máy chủ khác để đăng nhập vào máy chủ Matrix bằng cách nhập đường dẫn máy chủ riêng. Cách này giúp bạn sử dụng Riot với máy chủ riêng của bạn.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Bạn có thể sử dụng máy chủ định danh riêng, nhưng bạn sẽ không thể mời người dùng bằng email, hoặc được mời bằng email của bạn.",
+    "Sign In": "Đăng nhập",
+    "Create Account": "Tạo tài khoản",
+    "Need help?": "Cần hỗ trợ?",
+    "Explore rooms": "Khám phá phòng chat",
+    "Room Directory": "Danh mục phòng"
 }

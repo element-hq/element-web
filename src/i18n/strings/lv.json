@@ -45,5 +45,9 @@
     "Unexpected error preparing the app. See console for details.": "Negaidīta kļūda, sagatavojot lietotni. Sīkāku informāciju skatiet konsolē.",
     "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Šai Riot instalācijai ir nekorekta servera konfigurācija. Ja esat administrators, lūdzu, izlabojiet tālāk norādīto kļūdu",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Nederīga konfigurācija: var norādīt tikai vienu no default_server_config, default_server_name, vai default_hs_url.",
-    "Invalid configuration: no default server specified.": "Nekorekta konfigurācija: nav norādīts noklusējuma serveris."
+    "Invalid configuration: no default server specified.": "Nekorekta konfigurācija: nav norādīts noklusējuma serveris.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsu Riot konfigurācijā ir nederīgs JSON. Lūdzu, izlabojiet problēmu un ielādējiet lapu atkārtoti.",
+    "The message from the parser is: %(message)s": "Ziņojums no parsētāja ir: %(message)s",
+    "Invalid JSON": "Nederīgs JSON",
+    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts"
 }

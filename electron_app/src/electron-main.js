@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 Copyright 2017, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -211,7 +211,14 @@ const launcher = new AutoLaunch({
 // work.
 // Also mark it as secure (ie. accessing resources from this
 // protocol and HTTPS won't trigger mixed content warnings).
-protocol.registerStandardSchemes(['vector'], {secure: true});
+protocol.registerSchemesAsPrivileged([{
+    scheme: 'vector',
+    privileges: {
+        standard: true,
+        secure: true,
+        supportFetchAPI: true,
+    },
+}]);
 
 app.on('ready', () => {
     if (argv['devtools']) {

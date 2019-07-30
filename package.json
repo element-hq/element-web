@@ -30,6 +30,7 @@
     "reskindex:watch": "reskindex -h src/header -w",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
+    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:compile": "yarn reskindex && babel --source-maps -d lib src",
@@ -44,7 +45,7 @@
     "build": "yarn build:js-sdk && yarn build:react-sdk && yarn reskindex && yarn build:res && yarn build:bundle",
     "build:dev": "yarn build:js-sdk && yarn build:react-sdk && yarn reskindex && yarn build:res && yarn build:bundle:dev",
     "dist": "scripts/package.sh",
-    "install:electron": "install-app-deps",
+    "install:electron": "electron-builder install-app-deps",
     "electron": "yarn install:electron && electron .",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
@@ -153,7 +154,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "4.2.6",
+    "electronVersion": "5.0.7",
     "files": [
       "node_modules/**",
       "src/**"
