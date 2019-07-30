@@ -349,7 +349,7 @@ class PillCandidatePart extends PlainPart {
     }
 }
 
-export function autoCompleteCreator(updateQuery, getAutocompleterComponent) {
+export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
     return (partCreator) => {
         return (updateCallback) => {
             return new AutocompleteWrapperModel(
