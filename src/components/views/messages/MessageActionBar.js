@@ -145,12 +145,10 @@ export default class MessageActionBar extends React.PureComponent {
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            // `context` can be null in tests that use a subtree of components
-            // that don't create the context.
-            if (!this.context || !this.context.room || this.context.room.canReact) {
+            if (this.context.room.canReact) {
                 reactButton = this.renderReactButton();
             }
-            if (!this.context || !this.context.room || this.context.room.canReply) {
+            if (this.context.room.canReply) {
                 replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}
                     onClick={this.onReplyClick}
