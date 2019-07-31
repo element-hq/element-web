@@ -1,5 +1,6 @@
 /*
  Copyright 2016 Aviral Dasgupta
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import request from 'browser-request';
 import { _t } from '../../../languageHandler';
@@ -99,7 +101,7 @@ export default class ChangelogDialog extends React.Component {
 }
 
 ChangelogDialog.propTypes = {
-    version: React.PropTypes.string.isRequired,
-    newVersion: React.PropTypes.string.isRequired,
-    onFinished: React.PropTypes.func.isRequired,
+    version: PropTypes.string.isRequired,
+    newVersion: PropTypes.string.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };
