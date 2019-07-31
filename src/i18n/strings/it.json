@@ -2012,5 +2012,15 @@
     "Sign in and regain access to your account.": "Accedi ed ottieni l'accesso al tuo account.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Non puoi accedere al tuo account. Contatta l'admin del tuo homeserver per maggiori informazioni.",
     "Clear personal data": "Elimina dati personali",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Attenzione: i tuoi dati personali (incluse le chiavi di cifratura) sono ancora in questo dispositivo. Eliminali se hai finito di usare il dispositivo o se vuoi accedere ad un altro account."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Attenzione: i tuoi dati personali (incluse le chiavi di cifratura) sono ancora in questo dispositivo. Eliminali se hai finito di usare il dispositivo o se vuoi accedere ad un altro account.",
+    "Identity Server": "Server identità",
+    "Integrations Manager": "Gestore integrazioni",
+    "Find others by phone or email": "Trova altri per telefono o email",
+    "Be found by phone or email": "Trovato per telefono o email",
+    "Use bots, bridges, widgets and sticker packs": "Usa bot, bridge, widget e pacchetti di adesivi",
+    "Terms of Service": "Condizioni di servizio",
+    "To continue you need to accept the Terms of this service.": "Per continuare devi accettare le Condizioni di questo servizio.",
+    "Service": "Servizio",
+    "Summary": "Sommario",
+    "Terms": "Condizioni"
 }
