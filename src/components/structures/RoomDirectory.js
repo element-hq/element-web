@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ const sdk = require('../../index');
 const dis = require('../../dispatcher');
 
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
@@ -41,8 +43,8 @@ module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
-        config: React.PropTypes.object,
-        onFinished: React.PropTypes.func.isRequired,
+        config: PropTypes.object,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -65,7 +67,7 @@ module.exports = React.createClass({
     },
 
     childContextTypes: {
-        matrixClient: React.PropTypes.object,
+        matrixClient: PropTypes.object,
     },
 
     getChildContext: function() {

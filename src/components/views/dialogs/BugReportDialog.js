@@ -1,6 +1,7 @@
 /*
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -200,5 +202,5 @@ export default class BugReportDialog extends React.Component {
 }
 
 BugReportDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

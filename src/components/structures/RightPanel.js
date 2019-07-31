@@ -3,6 +3,7 @@ Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,9 +31,9 @@ import GroupStore from '../../stores/GroupStore';
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {
-            roomId: React.PropTypes.string, // if showing panels for a given room, this is set
-            groupId: React.PropTypes.string, // if showing panels for a given group, this is set
-            user: React.PropTypes.object,
+            roomId: PropTypes.string, // if showing panels for a given room, this is set
+            groupId: PropTypes.string, // if showing panels for a given group, this is set
+            user: PropTypes.object,
         };
     }
 

@@ -17,7 +17,8 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 
@@ -30,19 +31,19 @@ import { _t } from '../../../languageHandler';
 
 export default class ImageView extends React.Component {
     static propTypes = {
-        src: React.PropTypes.string.isRequired, // the source of the image being displayed
-        name: React.PropTypes.string, // the main title ('name') for the image
-        link: React.PropTypes.string, // the link (if any) applied to the name of the image
-        width: React.PropTypes.number, // width of the image src in pixels
-        height: React.PropTypes.number, // height of the image src in pixels
-        fileSize: React.PropTypes.number, // size of the image src in bytes
-        onFinished: React.PropTypes.func.isRequired, // callback when the lightbox is dismissed
+        src: PropTypes.string.isRequired, // the source of the image being displayed
+        name: PropTypes.string, // the main title ('name') for the image
+        link: PropTypes.string, // the link (if any) applied to the name of the image
+        width: PropTypes.number, // width of the image src in pixels
+        height: PropTypes.number, // height of the image src in pixels
+        fileSize: PropTypes.number, // size of the image src in bytes
+        onFinished: PropTypes.func.isRequired, // callback when the lightbox is dismissed
 
         // the event (if any) that the Image is displaying. Used for event-specific stuff like
         // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
         // properties above, which let us use lightboxes to display images which aren't associated
         // with events.
-        mxEvent: React.PropTypes.object,
+        mxEvent: PropTypes.object,
     };
 
     constructor(props) {
