@@ -476,5 +476,7 @@
     "Opens the Developer Tools dialog": "Geliştirici Alətlər dialoqunu açır",
     "Adds a custom widget by URL to the room": "Otağa URL tərəfindən xüsusi bir widjet əlavə edir",
     "You cannot modify widgets in this room.": "Bu otaqda vidjetləri dəyişdirə bilməzsiniz.",
-    "Verifies a user, device, and pubkey tuple": "Bir istifadəçini, cihazı və publik açarı yoxlayır"
+    "Verifies a user, device, and pubkey tuple": "Bir istifadəçini, cihazı və publik açarı yoxlayır",
+    "Unknown (user, device) pair:": "Naməlum (istifadəçi, cihaz) qoşulma:",
+    "Verified key": "Təsdiqlənmiş açar"
 }
