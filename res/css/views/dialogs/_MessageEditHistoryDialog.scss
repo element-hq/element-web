@@ -46,11 +46,13 @@ limitations under the License.
     .mx_EditHistoryMessage_deletion {
         color: rgb(255, 76, 85);
         background-color: rgba(255, 76, 85, 0.1);
+        text-decoration: line-through;
     }
 
     .mx_EditHistoryMessage_insertion {
         color: rgb(26, 169, 123);
         background-color: rgba(26, 169, 123, 0.1);
+        text-decoration: underline;
     }
 
     .mx_EventTile_line, .mx_EventTile_content {
