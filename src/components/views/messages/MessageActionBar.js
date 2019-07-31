@@ -24,7 +24,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {RoomContext} from "../../structures/RoomView";
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -37,44 +37,16 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {
-            canReact: true,
-            canReply: true,
-        };
-    }
+    static contextTypes = {
+        room: RoomContext,
+    };
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        if (room) {
-            room.on("RoomMember.powerLevel", this.onPermissionsChange);
-            room.on("RoomMember.membership", this.onPermissionsChange);
-            this.onPermissionsChange();
-        }
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        if (room) {
-            room.removeListener("RoomMember.powerLevel", this.onPermissionsChange);
-            room.removeListener("RoomMember.membership", this.onPermissionsChange);
-        }
-    }
-
-    onPermissionsChange() {
-        const cli = MatrixClientPeg.get();
-        const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        if (room) {
-            const me = cli.getUserId();
-            const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
-            const canReply = room.maySendMessage();
-
-            this.setState({canReact, canReply});
-        }
     }
 
     onDecrypted = () => {
@@ -173,10 +145,10 @@ export default class MessageActionBar extends React.PureComponent {
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            if (this.state.canReact) {
+            if (this.context.room.canReact) {
                 reactButton = this.renderReactButton();
             }
-            if (this.state.canReply) {
+            if (this.context.room.canReply) {
                 replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}
                     onClick={this.onReplyClick}

@@ -219,6 +219,32 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
     }
 }
 
+function routeIsEqual(r1, r2) {
+    return r1.length === r2.length && !r1.some((e, i) => e !== r2[i]);
+}
+
+// workaround for https://github.com/fiduswriter/diffDOM/issues/90
+function filterCancelingOutDiffs(originalDiffActions) {
+    const diffActions = originalDiffActions.slice();
+
+    for (let i = 0; i < diffActions.length; ++i) {
+        const diff = diffActions[i];
+        if (diff.action === "removeTextElement") {
+            const nextDiff = diffActions[i + 1];
+            const cancelsOut = nextDiff &&
+                nextDiff.action === "addTextElement" &&
+                nextDiff.text === diff.text &&
+                routeIsEqual(nextDiff.route, diff.route);
+
+            if (cancelsOut) {
+                diffActions.splice(i, 2);
+            }
+        }
+    }
+
+    return diffActions;
+}
+
 /**
  * Renders a message with the changes made in an edit shown visually.
  * @param {object} originalContent the content for the base message
@@ -233,7 +259,9 @@ export function editBodyDiffToHtml(originalContent, editContent) {
     // diffActions is an array of objects with at least a `action` and `route`
     // property. `action` tells us what the diff object changes, and `route` where.
     // `route` is a path on the DOM tree expressed as an array of indices.
-    const diffActions = dd.diff(originalBody, editBody);
+    const originaldiffActions = dd.diff(originalBody, editBody);
+    // work around https://github.com/fiduswriter/diffDOM/issues/90
+    const diffActions = filterCancelingOutDiffs(originaldiffActions);
     // for diffing text fragments
     const diffMathPatch = new DiffMatchPatch();
     // parse the base html message as a DOM tree, to which we'll apply the differences found.

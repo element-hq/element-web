@@ -42,11 +42,16 @@ const room = new Matrix.Room();
 const WrappedMessagePanel = React.createClass({
     childContextTypes: {
         matrixClient: PropTypes.object,
+        room: PropTypes.object,
     },
 
     getChildContext: function() {
         return {
             matrixClient: client,
+            room: {
+                canReact: true,
+                canReply: true,
+            },
         };
     },
 
