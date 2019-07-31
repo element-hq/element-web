@@ -1,3 +1,30 @@
+Changes in [1.3.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.1-rc.1) (2019-07-31)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0...v1.3.1-rc.1)
+
+ * Upgrade to JS SDK 2.3.0-rc.1 and React SDK 1.5.0-rc.1
+ * Update from Weblate
+   [\#10436](https://github.com/vector-im/riot-web/pull/10436)
+ * Describe our existing features better in documentation
+   [\#10418](https://github.com/vector-im/riot-web/pull/10418)
+ * Upgrade to Electron 5
+   [\#10392](https://github.com/vector-im/riot-web/pull/10392)
+ * Remove edits and reactions feature flags from docs and config
+   [\#10363](https://github.com/vector-im/riot-web/pull/10363)
+ * Cachebust config file requests
+   [\#10349](https://github.com/vector-im/riot-web/pull/10349)
+ * Convert install-app-deps to subcommand
+   [\#10334](https://github.com/vector-im/riot-web/pull/10334)
+ * Add riot.im configuration files
+   [\#10327](https://github.com/vector-im/riot-web/pull/10327)
+ * Require descriptions in mxSendRageshake and remove infinite loop in issue
+   templates
+   [\#10321](https://github.com/vector-im/riot-web/pull/10321)
+ * Remove unused disable_identity_server config flag
+   [\#10322](https://github.com/vector-im/riot-web/pull/10322)
+ * Verify i18n in CI
+   [\#10320](https://github.com/vector-im/riot-web/pull/10320)
+
 Changes in [1.3.0](https://github.com/vector-im/riot-web/releases/tag/v1.3.0) (2019-07-18)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0-rc.3...v1.3.0)
