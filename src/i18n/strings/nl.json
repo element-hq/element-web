@@ -1953,5 +1953,19 @@
     "You're signed out": "U bent afgemeld",
     "Your homeserver (<strong1>%(domainName)s</strong1>) admin has signed you out of your account <strong2>%(displayName)s (%(userId)s)</strong2>.": "De beheerder van uw thuisserver (<strong1>%(domainName)s</strong1>) heeft u afgemeld van uw account <strong2>%(displayName)s%(userId)s</strong2>.",
     "Clear personal data": "Persoonlijke gegevens wissen",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Let op: uw persoonlijke gegevens (inclusief versleutelingssleutels) worden nog steeds op dit apparaat opgeslagen. Wis deze wanneer u klaar bent met het apparaat te gebruiken, of wanneer u zich wilt aanmelden met een andere account."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Let op: uw persoonlijke gegevens (inclusief versleutelingssleutels) worden nog steeds op dit apparaat opgeslagen. Wis deze wanneer u klaar bent met het apparaat te gebruiken, of wanneer u zich wilt aanmelden met een andere account.",
+    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Laat ons weten wat er verkeerd gelopen is of nog beter: maak een GitHub rapport dat het probleem beschrijft.",
+    "Identity Server": "Identiteit server",
+    "Integrations Manager": "Integratiebeheerder",
+    "Find others by phone or email": "Vind andere  personen via telefoon of email",
+    "Be found by phone or email": "Word gevonden per telefoon of email",
+    "Use bots, bridges, widgets and sticker packs": "Gebruik robots, bruggen, widgets en sticker packs",
+    "Terms of Service": "Gebruiksvoorwaarden",
+    "To continue you need to accept the Terms of this service.": "Om verder te gaan moet je de gebruiksvoorwaarden van deze dienst aanvaarden.",
+    "Service": "Dienst",
+    "Summary": "Samenvatting",
+    "Terms": "Voorwaarden",
+    "Regain access to your account and recover encryption keys stored on this device. Without them, you won’t be able to read all of your secure messages on any device.": "Krijg terug toegang tot uw account en herstel encryptiesleutels die opgeslagen zijn op dit apparaat. Zonder deze sleutels zal je versleutelde berichten niet kunnen lezen op andere apparaten.",
+    "Sign in and regain access to your account.": "Log in en krijg terug toegang tot je account.",
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Je kan niet inloggen op je account. Gelieve je homeserver beheerder te contacteren voor meer informatie."
 }
