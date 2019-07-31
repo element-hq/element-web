@@ -36,7 +36,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
         // the message event being edited
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,
-        previousEdit: PropTypes.instanceOf(MatrixEvent).isRequired,
+        previousEdit: PropTypes.instanceOf(MatrixEvent),
         isBaseEvent: PropTypes.bool,
     };
 
