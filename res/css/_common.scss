@@ -380,7 +380,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color !important;
+    border: 1px solid $accent-color;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
