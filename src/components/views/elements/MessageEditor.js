@@ -20,6 +20,7 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
+import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
@@ -134,7 +135,7 @@ export default class MessageEditor extends React.Component {
         return this.context.matrixClient.getRoom(this.props.editState.getEvent().getRoomId());
     }
 
-    _updateEditorState = (caret) => {
+    _updateEditorState = (caret, inputType, diff) => {
         renderModel(this._editorRef, this.model);
         if (caret) {
             try {
@@ -144,6 +145,7 @@ export default class MessageEditor extends React.Component {
             }
         }
         this.setState({autoComplete: this.model.autoComplete});
+        this.historyManager.tryPush(this.model, caret, inputType, diff);
     }
 
     _onInput = (event) => {
@@ -288,7 +290,7 @@ export default class MessageEditor extends React.Component {
     }
 
     componentDidMount() {
-        this.model = this._createEditorModel();
+        this._createEditorModel();
         // initial render of model
         this._updateEditorState();
         // initial caret position
@@ -317,7 +319,8 @@ export default class MessageEditor extends React.Component {
             parts = parseEvent(editState.getEvent(), partCreator);
         }
 
-        return new EditorModel(
+        this.historyManager = new HistoryManager(partCreator);
+        this.model = new EditorModel(
             parts,
             partCreator,
             this._updateEditorState,

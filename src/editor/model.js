@@ -107,7 +107,7 @@ export default class EditorModel {
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         const newPosition = this.positionForOffset(caretOffset, true);
         this._setActivePart(newPosition, canOpenAutoComplete);
-        this._updateCallback(newPosition);
+        this._updateCallback(newPosition, inputType, diff);
     }
 
     _setActivePart(pos, canOpenAutoComplete) {
