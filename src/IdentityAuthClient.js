@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import * as Matrix from 'matrix-js-sdk';
+
 import MatrixClientPeg from './MatrixClientPeg';
+import { Service, startTermsFlow } from './Terms';
 
 export default class IdentityAuthClient {
     constructor() {
@@ -57,7 +60,20 @@ export default class IdentityAuthClient {
     }
 
     async _checkToken(token) {
-        await MatrixClientPeg.get().getIdentityAccount(token);
+        try {
+            await MatrixClientPeg.get().getIdentityAccount(token);
+        } catch (e) {
+            if (e.errcode === "M_TERMS_NOT_SIGNED") {
+                console.log("Identity Server requires new terms to be agreed to");
+                await startTermsFlow([new Service(
+                    Matrix.SERVICE_TYPES.IS,
+                    MatrixClientPeg.get().idBaseUrl,
+                    token,
+                )]);
+                return;
+            }
+            throw e;
+        }
 
         // We should ensure the token in `localStorage` is cleared
         // appropriately. We already clear storage on sign out, but we'll need
