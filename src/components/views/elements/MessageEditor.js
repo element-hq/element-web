@@ -315,9 +315,7 @@ export default class MessageEditor extends React.Component {
     componentDidMount() {
         this._createEditorModel();
         // initial render of model
-        this._updateEditorState();
-        // initial caret position
-        this._initializeCaret();
+        this._updateEditorState(this._getInitialCaretPosition());
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
         this._editorRef.addEventListener("input", this._onInput, true);
@@ -350,7 +348,7 @@ export default class MessageEditor extends React.Component {
         );
     }
 
-    _initializeCaret() {
+    _getInitialCaretPosition() {
         const {editState} = this.props;
         let caretPosition;
         if (editState.hasEditorState()) {
@@ -362,7 +360,7 @@ export default class MessageEditor extends React.Component {
             // otherwise, set it at the end
             caretPosition = this.model.getPositionAtEnd();
         }
-        setCaretPosition(this._editorRef, this.model, caretPosition);
+        return caretPosition;
     }
 
     render() {
