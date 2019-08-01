@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import HistoryManager from "../../src/editor/history";
+import HistoryManager, {MAX_STEP_LENGTH} from "../../src/editor/history";
 
 describe('editor/history', function() {
     it('push, then undo', function() {
@@ -77,8 +77,7 @@ describe('editor/history', function() {
         expect(undoState.caret).toEqual(firstCaret);
         expect(undoState.parts).toEqual(["hello"]);
         expect(history.canUndo()).toEqual(false);
-        expect(keystrokeCount).toBeGreaterThan(2);
-        expect(keystrokeCount).toBeLessThan(20);
+        expect(keystrokeCount).toEqual(MAX_STEP_LENGTH + 1); // +1 before we type before checking
     });
     it('keystroke that didn\'t add a step can undo', function() {
         const history = new HistoryManager();

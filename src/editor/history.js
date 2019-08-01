@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+export const MAX_STEP_LENGTH = 10;
+
 export default class HistoryManager {
     constructor() {
         this._stack = [];
@@ -30,9 +32,8 @@ export default class HistoryManager {
                 return true;
             }
             if (diff.added) {
-                // only append after every 5th keystroke while typing
                 this._newlyTypedCharCount += diff.added.length;
-                return this._newlyTypedCharCount > 5;
+                return this._newlyTypedCharCount > MAX_STEP_LENGTH;
             }
         } else {
             return true;
