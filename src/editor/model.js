@@ -90,6 +90,11 @@ export default class EditorModel {
         }
     }
 
+    reset(serializedParts, caret, inputType) {
+        this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
+        this._updateCallback(caret, inputType);
+    }
+
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);

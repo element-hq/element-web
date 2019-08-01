@@ -34,6 +34,8 @@ import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 
+const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
+
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
     const isReply = !!(relatesTo && relatesTo["m.in_reply_to"]);
@@ -174,6 +176,27 @@ export default class MessageEditor extends React.Component {
     }
 
     _onKeyDown = (event) => {
+        const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
+        // undo
+        if (modKey && event.key === "z") {
+            if (this.historyManager.canUndo()) {
+                const {parts, caret} = this.historyManager.undo(this.model);
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                this.model.reset(parts, caret, "historyUndo");
+            }
+            event.preventDefault();
+        }
+        // redo
+        if (modKey && event.key === "y") {
+            if (this.historyManager.canRedo()) {
+                const {parts, caret} = this.historyManager.redo();
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                this.model.reset(parts, caret, "historyRedo");
+            }
+            event.preventDefault();
+        }
         // insert newline on Shift+Enter
         if (event.shiftKey && event.key === "Enter") {
             event.preventDefault(); // just in case the browser does support this
