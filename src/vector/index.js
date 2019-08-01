@@ -24,6 +24,7 @@ require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
+require('katex/dist/katex.min.css')
 
 import olmWasmPath from 'olm/olm.wasm';
 

@@ -74,6 +74,7 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
+    "katex": "^0.10.2",
     "matrix-js-sdk": "2.2.0",
     "matrix-react-sdk": "1.4.0",
     "modernizr": "^3.6.0",
