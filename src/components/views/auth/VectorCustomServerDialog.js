@@ -15,14 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require("react");
+import React from "react";
+import createReactClass from 'create-react-class';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 /**
  * This is identical to `CustomServerDialog` except for replacing "this app"
  * with "Riot".
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'VectorCustomServerDialog',
     statics: {
         replaces: 'CustomServerDialog',

@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
+import createReactClass from 'create-react-class';
 import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'VectorAuthFooter',
     statics: {
         replaces: 'AuthFooter',
