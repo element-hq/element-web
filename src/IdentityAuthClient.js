@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import { SERVICE_TYPES } from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
 import { Service, startTermsFlow } from './Terms';
@@ -66,7 +66,7 @@ export default class IdentityAuthClient {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
                 console.log("Identity Server requires new terms to be agreed to");
                 await startTermsFlow([new Service(
-                    Matrix.SERVICE_TYPES.IS,
+                    SERVICE_TYPES.IS,
                     MatrixClientPeg.get().idBaseUrl,
                     token,
                 )]);
