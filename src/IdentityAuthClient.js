@@ -17,7 +17,7 @@ limitations under the License.
 import { SERVICE_TYPES } from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
-import { Service, startTermsFlow } from './Terms';
+import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 
 export default class IdentityAuthClient {
     constructor() {
@@ -43,17 +43,26 @@ export default class IdentityAuthClient {
 
         if (!token) {
             token = await this.registerForToken();
-            this.accessToken = token;
-            window.localStorage.setItem("mx_is_access_token", token);
+            if (token) {
+                this.accessToken = token;
+                window.localStorage.setItem("mx_is_access_token", token);
+            }
+            return token;
         }
 
         try {
             await this._checkToken(token);
         } catch (e) {
+            if (e instanceof TermsNotSignedError) {
+                // Retrying won't help this
+                throw e;
+            }
             // Retry in case token expired
             token = await this.registerForToken();
-            this.accessToken = token;
-            window.localStorage.setItem("mx_is_access_token", token);
+            if (token) {
+                this.accessToken = token;
+                window.localStorage.setItem("mx_is_access_token", token);
+            }
         }
 
         return token;
@@ -89,8 +98,8 @@ export default class IdentityAuthClient {
                 await MatrixClientPeg.get().registerWithIdentityServer(hsOpenIdToken);
             await this._checkToken(identityAccessToken);
             return identityAccessToken;
-        } catch (err) {
-            if (err.cors === "rejected" || err.httpStatus === 404) {
+        } catch (e) {
+            if (e.cors === "rejected" || e.httpStatus === 404) {
                 // Assume IS only supports deprecated v1 API for now
                 // TODO: Remove this path once v2 is only supported version
                 // See https://github.com/vector-im/riot-web/issues/10443
@@ -98,7 +107,7 @@ export default class IdentityAuthClient {
                 this.authEnabled = false;
                 return;
             }
-            console.error(err);
+            throw e;
         }
     }
 }
