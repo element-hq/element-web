@@ -99,7 +99,9 @@ export async function loadSession(opts) {
                 guest: true,
             }, true).then(() => true);
         }
-        const success = await _restoreFromLocalStorage(Boolean(opts.ignoreGuest));
+        const success = await _restoreFromLocalStorage({
+            ignoreGuest: Boolean(opts.ignoreGuest),
+        });
         if (success) {
             return true;
         }
@@ -275,7 +277,9 @@ export function getLocalStorageSessionVars() {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function _restoreFromLocalStorage(ignoreGuest) {
+async function _restoreFromLocalStorage(opts) {
+    const ignoreGuest = opts.ignoreGuest;
+
     if (!localStorage) {
         return false;
     }
