@@ -176,7 +176,7 @@ export function renderModel(editor, model) {
         }
     });
     if (lines.length) {
-        removeNextSiblings(editor.children[lines.length]);
+        removeNextSiblings(editor.children[lines.length - 1]);
     } else {
         removeChildren(editor);
     }

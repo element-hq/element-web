@@ -90,6 +90,11 @@ export default class EditorModel {
         }
     }
 
+    reset(serializedParts, caret, inputType) {
+        this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
+        this._updateCallback(caret, inputType);
+    }
+
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
@@ -107,7 +112,7 @@ export default class EditorModel {
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         const newPosition = this.positionForOffset(caretOffset, true);
         this._setActivePart(newPosition, canOpenAutoComplete);
-        this._updateCallback(newPosition);
+        this._updateCallback(newPosition, inputType, diff);
     }
 
     _setActivePart(pos, canOpenAutoComplete) {

@@ -20,6 +20,7 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
+import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
@@ -32,6 +33,8 @@ import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
+
+const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -134,7 +137,7 @@ export default class MessageEditor extends React.Component {
         return this.context.matrixClient.getRoom(this.props.editState.getEvent().getRoomId());
     }
 
-    _updateEditorState = (caret) => {
+    _updateEditorState = (caret, inputType, diff) => {
         renderModel(this._editorRef, this.model);
         if (caret) {
             try {
@@ -144,6 +147,7 @@ export default class MessageEditor extends React.Component {
             }
         }
         this.setState({autoComplete: this.model.autoComplete});
+        this.historyManager.tryPush(this.model, caret, inputType, diff);
     }
 
     _onInput = (event) => {
@@ -172,6 +176,27 @@ export default class MessageEditor extends React.Component {
     }
 
     _onKeyDown = (event) => {
+        const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
+        // undo
+        if (modKey && event.key === "z") {
+            if (this.historyManager.canUndo()) {
+                const {parts, caret} = this.historyManager.undo(this.model);
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                this.model.reset(parts, caret, "historyUndo");
+            }
+            event.preventDefault();
+        }
+        // redo
+        if (modKey && event.key === "y") {
+            if (this.historyManager.canRedo()) {
+                const {parts, caret} = this.historyManager.redo();
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                this.model.reset(parts, caret, "historyRedo");
+            }
+            event.preventDefault();
+        }
         // insert newline on Shift+Enter
         if (event.shiftKey && event.key === "Enter") {
             event.preventDefault(); // just in case the browser does support this
@@ -288,11 +313,9 @@ export default class MessageEditor extends React.Component {
     }
 
     componentDidMount() {
-        this.model = this._createEditorModel();
+        this._createEditorModel();
         // initial render of model
-        this._updateEditorState();
-        // initial caret position
-        this._initializeCaret();
+        this._updateEditorState(this._getInitialCaretPosition());
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
         this._editorRef.addEventListener("input", this._onInput, true);
@@ -317,14 +340,15 @@ export default class MessageEditor extends React.Component {
             parts = parseEvent(editState.getEvent(), partCreator);
         }
 
-        return new EditorModel(
+        this.historyManager = new HistoryManager(partCreator);
+        this.model = new EditorModel(
             parts,
             partCreator,
             this._updateEditorState,
         );
     }
 
-    _initializeCaret() {
+    _getInitialCaretPosition() {
         const {editState} = this.props;
         let caretPosition;
         if (editState.hasEditorState()) {
@@ -336,7 +360,7 @@ export default class MessageEditor extends React.Component {
             // otherwise, set it at the end
             caretPosition = this.model.getPositionAtEnd();
         }
-        setCaretPosition(this._editorRef, this.model, caretPosition);
+        return caretPosition;
     }
 
     render() {
