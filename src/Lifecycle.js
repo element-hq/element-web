@@ -66,6 +66,9 @@ import TypingStore from "./stores/TypingStore";
  * @params {string} opts.guestIsUrl: homeserver URL. Only used if enableGuest is
  *     true; defines the IS to use.
  *
+ * @params {bool} opts.ignoreGuest: If the stored session is a guest account, ignore
+ *     it and don't load it.
+ *
  * @returns {Promise} a promise which resolves when the above process completes.
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
@@ -96,7 +99,9 @@ export async function loadSession(opts) {
                 guest: true,
             }, true).then(() => true);
         }
-        const success = await _restoreFromLocalStorage();
+        const success = await _restoreFromLocalStorage({
+            ignoreGuest: Boolean(opts.ignoreGuest),
+        });
         if (success) {
             return true;
         }
@@ -272,7 +277,9 @@ export function getLocalStorageSessionVars() {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function _restoreFromLocalStorage() {
+async function _restoreFromLocalStorage(opts) {
+    const ignoreGuest = opts.ignoreGuest;
+
     if (!localStorage) {
         return false;
     }
@@ -280,6 +287,11 @@ async function _restoreFromLocalStorage() {
     const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = getLocalStorageSessionVars();
 
     if (accessToken && userId && hsUrl) {
+        if (ignoreGuest && isGuest) {
+            console.log("Ignoring stored guest account: " + userId);
+            return false;
+        }
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
