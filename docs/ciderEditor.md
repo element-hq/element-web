@@ -55,6 +55,13 @@ with the new model state, see `renderModel` in `render.js` for this.
 If the model didn't reject the input and didn't make any additional changes,
 this won't make any changes to the DOM at all, and should thus be fairly efficient.
 
+For the browser to allow the user to place the caret between two pills,
+or between a pill and the start and end of the line, we need some extra DOM nodes.
+These DOM nodes are called caret nodes, and contain an invisble character, so
+the caret can be placed into them. The model is unaware of caret nodes, and they
+are only added to the DOM during the render phase. Likewise, when calculating
+the content string, caret nodes need to be ignored, as they would confuse the model.
+
 As part of the reconciliation, the caret position is also adjusted to any changes
 the model made to the input. The caret is passed around in two formats.
 The model receives the caret *offset* within the content string (which includes
