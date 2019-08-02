@@ -16,8 +16,10 @@ The parts are then reconciled with the DOM.
 
 When typing in the `contenteditable` element, the `input` event fires and
 the DOM of the editor is turned into a string. The way this is done has
-some logic to it to deal with adding newlines for block elements, ...
-so doesn't use `innerText`, `textContent` or anything similar.
+some logic to it to deal with adding newlines for block elements, to make sure
+the caret offset is calculated in the same way as the content string, and the ignore
+caret nodes (more on that later).
+For these reasons it doesn't use `innerText`, `textContent` or anything similar.
 The model addresses any content in the editor within as an offset within this string.
 The caret position is thus also converted from a position in the DOM tree
 to an offset in the content string. This happens in `getCaretOffsetAndText` in `dom.js`.
