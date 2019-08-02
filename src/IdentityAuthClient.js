@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { SERVICE_TYPES } from 'matrix-js-sdk';
+
 import MatrixClientPeg from './MatrixClientPeg';
+import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 
 export default class IdentityAuthClient {
     constructor() {
@@ -40,24 +43,46 @@ export default class IdentityAuthClient {
 
         if (!token) {
             token = await this.registerForToken();
-            this.accessToken = token;
-            window.localStorage.setItem("mx_is_access_token", token);
+            if (token) {
+                this.accessToken = token;
+                window.localStorage.setItem("mx_is_access_token", token);
+            }
+            return token;
         }
 
         try {
             await this._checkToken(token);
         } catch (e) {
+            if (e instanceof TermsNotSignedError) {
+                // Retrying won't help this
+                throw e;
+            }
             // Retry in case token expired
             token = await this.registerForToken();
-            this.accessToken = token;
-            window.localStorage.setItem("mx_is_access_token", token);
+            if (token) {
+                this.accessToken = token;
+                window.localStorage.setItem("mx_is_access_token", token);
+            }
         }
 
         return token;
     }
 
     async _checkToken(token) {
-        await MatrixClientPeg.get().getIdentityAccount(token);
+        try {
+            await MatrixClientPeg.get().getIdentityAccount(token);
+        } catch (e) {
+            if (e.errcode === "M_TERMS_NOT_SIGNED") {
+                console.log("Identity Server requires new terms to be agreed to");
+                await startTermsFlow([new Service(
+                    SERVICE_TYPES.IS,
+                    MatrixClientPeg.get().idBaseUrl,
+                    token,
+                )]);
+                return;
+            }
+            throw e;
+        }
 
         // We should ensure the token in `localStorage` is cleared
         // appropriately. We already clear storage on sign out, but we'll need
@@ -73,8 +98,8 @@ export default class IdentityAuthClient {
                 await MatrixClientPeg.get().registerWithIdentityServer(hsOpenIdToken);
             await this._checkToken(identityAccessToken);
             return identityAccessToken;
-        } catch (err) {
-            if (err.cors === "rejected" || err.httpStatus === 404) {
+        } catch (e) {
+            if (e.cors === "rejected" || e.httpStatus === 404) {
                 // Assume IS only supports deprecated v1 API for now
                 // TODO: Remove this path once v2 is only supported version
                 // See https://github.com/vector-im/riot-web/issues/10443
@@ -82,7 +107,7 @@ export default class IdentityAuthClient {
                 this.authEnabled = false;
                 return;
             }
-            console.error(err);
+            throw e;
         }
     }
 }
