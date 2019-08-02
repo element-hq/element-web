@@ -23,19 +23,46 @@ export default class HistoryManager {
         this._currentIndex = -1;
         this._changedSinceLastPush = false;
         this._lastCaret = null;
+        this._nonWordBoundarySinceLastPush = false;
+        this._addedSinceLastPush = false;
+        this._removedSinceLastPush = false;
     }
 
     _shouldPush(inputType, diff) {
-        if (inputType === "insertText") {
+        // right now we can only push a step after
+        // the input has been applied to the model,
+        // so we can't push the state before something happened.
+        // not ideal but changing this would be harder to fit cleanly into
+        // the editor model.
+        const isNonBulkInput = inputType === "insertText" ||
+                               inputType === "deleteContentForward" ||
+                               inputType === "deleteContentBackward";
+        if (diff && isNonBulkInput) {
+            if (diff.added) {
+                this._addedSinceLastPush = true;
+            }
             if (diff.removed) {
-                // always append when removing text
+                this._removedSinceLastPush = true;
+            }
+            // as long as you've only been adding or removing since the last push
+            if (this._addedSinceLastPush !== this._removedSinceLastPush) {
+                // add steps by word boundary, up to MAX_STEP_LENGTH characters
+                const str = diff.added ? diff.added : diff.removed;
+                const isWordBoundary = str === " " || str === "\t" || str === "\n";
+                if (this._nonWordBoundarySinceLastPush && isWordBoundary) {
+                    return true;
+                }
+                if (!isWordBoundary) {
+                    this._nonWordBoundarySinceLastPush = true;
+                }
+                this._newlyTypedCharCount += str.length;
+                return this._newlyTypedCharCount > MAX_STEP_LENGTH;
+            } else {
+                // if starting to remove while adding before, or the opposite, push
                 return true;
             }
-            if (diff.added) {
-                this._newlyTypedCharCount += diff.added.length;
-                return this._newlyTypedCharCount > MAX_STEP_LENGTH;
-            }
         } else {
+            // bulk input (paste, ...) should be pushed every time
             return true;
         }
     }
@@ -51,6 +78,9 @@ export default class HistoryManager {
         this._lastCaret = null;
         this._changedSinceLastPush = false;
         this._newlyTypedCharCount = 0;
+        this._nonWordBoundarySinceLastPush = false;
+        this._addedSinceLastPush = false;
+        this._removedSinceLastPush = false;
     }
 
     // needs to persist parts and caret position

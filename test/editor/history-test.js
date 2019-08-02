@@ -79,6 +79,33 @@ describe('editor/history', function() {
         expect(history.canUndo()).toEqual(false);
         expect(keystrokeCount).toEqual(MAX_STEP_LENGTH + 1); // +1 before we type before checking
     });
+    it('history step is added at word boundary', function() {
+        const history = new HistoryManager();
+        const model = {serializeParts: () => parts.slice()};
+        const parts = ["h"];
+        let diff = {added: "h"};
+        expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
+        diff = {added: "i"};
+        parts[0] = "hi";
+        expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
+        diff = {added: " "};
+        parts[0] = "hi ";
+        const spaceCaret = {};
+        expect(history.tryPush(model, spaceCaret, "insertText", diff)).toEqual(true);
+        diff = {added: "y"};
+        parts[0] = "hi y";
+        expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
+        diff = {added: "o"};
+        parts[0] = "hi yo";
+        expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
+        diff = {added: "u"};
+        parts[0] = "hi you";
+
+        expect(history.canUndo()).toEqual(true);
+        const undoResult = history.undo(model);
+        expect(undoResult.caret).toEqual(spaceCaret);
+        expect(undoResult.parts).toEqual(["hi "]);
+    });
     it('keystroke that didn\'t add a step can undo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
