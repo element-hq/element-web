@@ -42,5 +42,12 @@
     "Create Account": "Skapa konto",
     "Need help?": "Behöver du hjälp?",
     "Explore rooms": "Utforska rum",
-    "Room Directory": "Rumslista"
+    "Room Directory": "Rumslista",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Dina Riot-inställningar innhåller ogiltig JSON. Vänligen uppdatera inställningarna och ladda om sidan.",
+    "The message from the parser is: %(message)s": "Medelandet från parsern är: %(message)s",
+    "Invalid JSON": "Ogiltig JSON",
+    "Your Riot is misconfigured": "Riot är felkonfigurerat",
+    "Unexpected error preparing the app. See console for details.": "Oväntat fel vid appstart. Se konsollen för mer information.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ogilitiga inställningar: enbart möjligt att specificera en default_config, default_server, eller default_hs_url.",
+    "Invalid configuration: no default server specified.": "Ogilitiga inställningar: ingen standardserver specificerad."
 }
