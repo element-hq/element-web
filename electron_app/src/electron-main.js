@@ -156,6 +156,14 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'setMinimizeToTrayEnabled':
             store.set('minimizeToTray', global.minimizeToTray = args[0]);
             break;
+        case 'getAutoHideMenuBarEnabled':
+            ret = global.mainWindow.isMenuBarAutoHide();
+            break;
+        case 'setAutoHideMenuBarEnabled':
+            store.set('autoHideMenuBar', args[0]);
+            global.mainWindow.setAutoHideMenuBar(args[0]);
+            global.mainWindow.setMenuBarVisibility(!args[0]);
+            break;
         case 'getAppVersion':
             ret = app.getVersion();
             break;
@@ -320,7 +328,7 @@ app.on('ready', () => {
     mainWindow = global.mainWindow = new BrowserWindow({
         icon: iconPath,
         show: false,
-        autoHideMenuBar: true,
+        autoHideMenuBar: store.get('autoHideMenuBar', true),
 
         x: mainWindowState.x,
         y: mainWindowState.y,
