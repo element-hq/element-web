@@ -1574,6 +1574,7 @@
     "General failure": "General failure",
     "This homeserver does not support login using email address.": "This homeserver does not support login using email address.",
     "Please <a>contact your service administrator</a> to continue using this service.": "Please <a>contact your service administrator</a> to continue using this service.",
+    "This account has been deactivated.": "This account has been deactivated.",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Please note you are logging into the %(hs)s server, not matrix.org.",
     "Failed to perform homeserver discovery": "Failed to perform homeserver discovery",
