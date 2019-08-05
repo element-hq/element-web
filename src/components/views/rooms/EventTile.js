@@ -29,11 +29,10 @@ const Modal = require('../../../Modal');
 
 const sdk = require('../../../index');
 const TextForEvent = require('../../../TextForEvent');
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus, default as Matrix} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -85,13 +84,10 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = withMatrixClient(React.createClass({
+module.exports = React.createClass({
     displayName: 'EventTile',
 
     propTypes: {
-        /* MatrixClient instance for sender verification etc */
-        matrixClient: PropTypes.object.isRequired,
-
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
 
@@ -192,6 +188,10 @@ module.exports = withMatrixClient(React.createClass({
         };
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+    },
+
     componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
@@ -200,7 +200,7 @@ module.exports = withMatrixClient(React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -225,7 +225,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     componentWillUnmount: function() {
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -254,7 +254,7 @@ module.exports = withMatrixClient(React.createClass({
             return;
         }
 
-        const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
+        const verified = await this.context.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
         }, () => {
@@ -312,11 +312,11 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.props.matrixClient.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.matrixClient.getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === this.props.matrixClient.credentials.userId) {
+        if (this.props.mxEvent.getSender() === this.context.matrixClient.credentials.userId) {
             return false;
         }
 
@@ -424,7 +424,7 @@ module.exports = withMatrixClient(React.createClass({
         // Cancel any outgoing key request for this event and resend it. If a response
         // is received for the request with the required keys, the event could be
         // decrypted successfully.
-        this.props.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
+        this.context.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
     },
 
     onPermalinkClicked: function(e) {
@@ -457,7 +457,7 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+        if (this.context.matrixClient.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
@@ -691,7 +691,7 @@ module.exports = withMatrixClient(React.createClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
-                const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+                const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
@@ -816,7 +816,7 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
     },
-}));
+});
 
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = ['m.room.message', 'm.sticker'];

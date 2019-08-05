@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,19 +21,22 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupMemberType } from '../../../groups';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
+import * as Matrix from "matrix-js-sdk";
 
-export default withMatrixClient(React.createClass({
+export default React.createClass({
     displayName: 'GroupMemberTile',
 
     propTypes: {
-        matrixClient: PropTypes.object,
         groupId: PropTypes.string.isRequired,
         member: GroupMemberType.isRequired,
     },
 
     getInitialState: function() {
         return {};
+    },
+
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
     },
 
     onClick: function(e) {
@@ -48,7 +52,7 @@ export default withMatrixClient(React.createClass({
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
         const name = this.props.member.displayname || this.props.member.userId;
-        const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
+        const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.member.avatarUrl,
             36, 36, 'crop',
         );
@@ -67,4 +71,4 @@ export default withMatrixClient(React.createClass({
             />
         );
     },
-}));
+});
