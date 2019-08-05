@@ -3493,9 +3493,9 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-"gemini-scrollbar@github:matrix-org/gemini-scrollbar#b302279", gemini-scrollbar@matrix-org/gemini-scrollbar#b302279:
+"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566", gemini-scrollbar@matrix-org/gemini-scrollbar#91e1e566:
   version "1.4.3"
-  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/b302279810d05319ac5ff1bd34910bff32325c7b"
+  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/91e1e566fa33324188f278801baf4a79f9f554ab"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -6393,9 +6393,9 @@ react-dom@^16.4.2:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#5e97aef":
+"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#f644523":
   version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/5e97aef7e034efc8db1431f4b0efe3b26e249ae9"
+  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/f64452388011d37d8a4427ba769153c30700ab8c"
   dependencies:
     gemini-scrollbar matrix-org/gemini-scrollbar#b302279
 
