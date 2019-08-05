@@ -1,3 +1,10 @@
+Changes in [1.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.0) (2019-08-05)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.0-rc.1...v1.5.0)
+
+ * Don't load guest sessions on post-registration login link
+   [\#3277](https://github.com/matrix-org/matrix-react-sdk/pull/3277)
+
 Changes in [1.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.0-rc.1) (2019-07-31)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.4.0...v1.5.0-rc.1)
