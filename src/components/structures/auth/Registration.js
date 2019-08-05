@@ -438,7 +438,7 @@ module.exports = React.createClass({
     _onLoginClickWithCheck: async function(ev) {
         ev.preventDefault();
 
-        const sessionLoaded = await Lifecycle.loadSession({});
+        const sessionLoaded = await Lifecycle.loadSession({ignoreGuest: true});
         if (!sessionLoaded) {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
