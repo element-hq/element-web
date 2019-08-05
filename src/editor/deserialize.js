@@ -192,8 +192,11 @@ function parseHtmlMessage(html, partCreator) {
         if (lastNode && lastNode.nodeName === "BLOCKQUOTE") {
             parts.push(partCreator.newline());
         }
-        lastNode = null;
-        return checkDecendInto(n);
+        const decend = checkDecendInto(n);
+        // when not decending (like for PRE), onNodeLeave won't be called to set lastNode
+        // so do that here.
+        lastNode = decend ? null : n;
+        return decend;
     }
 
     function onNodeLeave(n) {
