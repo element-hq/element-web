@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 .mx_ExistingPhoneNumber {
+    display: flex;
+    align-items: center;
     margin-bottom: 5px;
 }
 
@@ -24,16 +26,14 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_ExistingPhoneNumber_address {
-    vertical-align: middle;
-}
-
+.mx_ExistingPhoneNumber_address,
 .mx_ExistingPhoneNumber_promptText {
+    flex: 1;
     margin-right: 10px;
 }
 
 .mx_ExistingPhoneNumber_confirmBtn {
-    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .mx_PhoneNumbers_input {

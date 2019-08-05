@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 .mx_ExistingEmailAddress {
+    display: flex;
+    align-items: center;
     margin-bottom: 5px;
 }
 
@@ -24,14 +26,12 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_ExistingEmailAddress_email {
-    vertical-align: middle;
-}
-
+.mx_ExistingEmailAddress_email,
 .mx_ExistingEmailAddress_promptText {
+    flex: 1;
     margin-right: 10px;
 }
 
 .mx_ExistingEmailAddress_confirmBtn {
-    margin-right: 5px;
+    margin-left: 5px;
 }
