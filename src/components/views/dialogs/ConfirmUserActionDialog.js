@@ -49,10 +49,10 @@ export default React.createClass({
         onFinished: PropTypes.func.isRequired,
     },
 
-    defaultProps: {
+    getDefaultProps: () => ({
         danger: false,
         askReason: false,
-    },
+    }),
 
     componentWillMount: function() {
         this._reasonField = null;
