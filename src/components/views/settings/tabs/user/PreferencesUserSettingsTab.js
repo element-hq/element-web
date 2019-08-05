@@ -64,6 +64,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         this.state = {
             autoLaunch: false,
             autoLaunchSupported: false,
+            alwaysShowMenuBar: true,
+            alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
             autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
@@ -80,6 +82,13 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
+        const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
+        let alwaysShowMenuBar = true;
+
+        if (alwaysShowMenuBarSupported) {
+            alwaysShowMenuBar = !await platform.getAutoHideMenuBarEnabled();
+        }
+
         const minimizeToTraySupported = await platform.supportsMinimizeToTray();
         let minimizeToTray = true;
 
@@ -87,11 +96,22 @@ export default class PreferencesUserSettingsTab extends React.Component {
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
 
-        this.setState({autoLaunch, autoLaunchSupported, minimizeToTraySupported, minimizeToTray});
+        this.setState({
+            autoLaunch,
+            autoLaunchSupported,
+            alwaysShowMenuBarSupported,
+            alwaysShowMenuBar,
+            minimizeToTraySupported,
+            minimizeToTray,
+        });
     }
 
     _onAutoLaunchChange = (checked) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
+    };
+
+    _onAlwaysShowMenuBarChange = (checked) => {
+        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
     };
 
     _onMinimizeToTrayChange = (checked) => {
@@ -114,6 +134,13 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunchOption = <LabelledToggleSwitch value={this.state.autoLaunch}
                                                      onChange={this._onAutoLaunchChange}
                                                      label={_t('Start automatically after system login')} />;
+        }
+
+        let autoHideMenuOption = null;
+        if (this.state.alwaysShowMenuBarSupported) {
+            autoHideMenuOption = <LabelledToggleSwitch value={this.state.alwaysShowMenuBar}
+                                                       onChange={this._onAlwaysShowMenuBarChange}
+                                                       label={_t('Always show the window menu bar')} />;
         }
 
         let minimizeToTrayOption = null;
@@ -139,6 +166,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
                     {minimizeToTrayOption}
+                    {autoHideMenuOption}
                     {autoLaunchOption}
                     <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
                            value={this.state.autocompleteDelay}
