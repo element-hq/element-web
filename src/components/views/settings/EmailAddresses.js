@@ -102,9 +102,10 @@ export class ExistingEmailAddress extends React.Component {
 
         return (
             <div className="mx_ExistingEmailAddress">
-                <img src={require("../../../../res/img/feather-customised/cancel.svg")} width={14} height={14}
-                     onClick={this._onRemove} className="mx_ExistingEmailAddress_delete" alt={_t("Remove")} />
                 <span className="mx_ExistingEmailAddress_email">{this.props.email.address}</span>
+                <AccessibleButton onClick={this._onRemove} kind="danger_sm">
+                    {_t("Remove")}
+                </AccessibleButton>
             </div>
         );
     }
