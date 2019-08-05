@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -28,7 +27,6 @@ import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
 import ContentMessages from '../../../ContentMessages';
 import classNames from 'classnames';
-
 import E2EIcon from './E2EIcon';
 
 const formatButtonList = [
@@ -51,7 +49,7 @@ function ComposerAvatar(props) {
 
 ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
-}
+};
 
 function CallButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -63,15 +61,15 @@ function CallButton(props) {
         });
     };
 
-    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-        onClick={onVoiceCallClick}
-        title={_t('Voice call')}
-    />
+    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+            onClick={onVoiceCallClick}
+            title={_t('Voice call')}
+        />);
 }
 
 CallButton.propTypes = {
-    roomId: PropTypes.string.isRequired
-}
+    roomId: PropTypes.string.isRequired,
+};
 
 function VideoCallButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -107,15 +105,15 @@ function HangupButton(props) {
             room_id: call.roomId,
         });
     };
-    return  <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
-        onClick={onHangupClick}
-        title={_t('Hangup')}
-    />;
+    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
+            onClick={onHangupClick}
+            title={_t('Hangup')}
+        />);
 }
 
 HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
-}
+};
 
 function FormattingButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -133,7 +131,7 @@ function FormattingButton(props) {
 FormattingButton.propTypes = {
     showFormatting: PropTypes.bool.isRequired,
     onClickHandler: PropTypes.func.isRequired,
-}
+};
 
 class UploadButton extends React.Component {
     static propTypes = {
@@ -376,7 +374,7 @@ export default class MessageComposer extends React.Component {
                     height="17"
                 />
             );
-        })
+        });
 
         return (
             <div className="mx_MessageComposer_formatbar_wrapper">
@@ -401,7 +399,9 @@ export default class MessageComposer extends React.Component {
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
-            this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
+            this.props.e2eStatus ?
+                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
+                null,
         ];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
@@ -421,8 +421,11 @@ export default class MessageComposer extends React.Component {
                     placeholder={this.renderPlaceholderText()}
                     onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
-                showFormattingButton ? <FormattingButton key="controls_formatting"
-                    showFormatting={this.state.showFormatting} onClickHandler={this.onToggleFormattingClicked} /> : null,
+                showFormattingButton ? <FormattingButton
+                    key="controls_formatting"
+                    showFormatting={this.state.showFormatting}
+                    onClickHandler={this.onToggleFormattingClicked} /> :
+                null,
                 <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
@@ -485,5 +488,5 @@ MessageComposer.propTypes = {
     callState: PropTypes.string,
 
     // string representing the current room app drawer state
-    showApps: PropTypes.bool
+    showApps: PropTypes.bool,
 };
