@@ -1,3 +1,9 @@
+Changes in [1.3.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.1) (2019-08-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.1-rc.1...v1.3.1)
+
+ * Updated js-sdk for notifications fix and react-sdk for registration fix
+
 Changes in [1.3.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.1-rc.1) (2019-07-31)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.0...v1.3.1-rc.1)
