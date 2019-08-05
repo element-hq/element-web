@@ -30,6 +30,7 @@ import * as Rooms from '../../../Rooms';
 import * as RoomNotifs from '../../../RoomNotifs';
 import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
+import RoomViewStore from '../../../stores/RoomViewStore';
 
 module.exports = React.createClass({
     displayName: 'RoomTileContextMenu',
@@ -158,8 +159,12 @@ module.exports = React.createClass({
 
     _onClickForget: function() {
         // FIXME: duplicated with RoomSettings (and dead code in RoomView)
-        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
-            dis.dispatch({ action: 'view_next_room' });
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(() => {
+            // Switch to another room view if we're currently viewing the
+            // historical room
+            if (RoomViewStore.getRoomId() === this.props.room.roomId) {
+                dis.dispatch({ action: 'view_next_room' });
+            }
         }, function(err) {
             const errCode = err.errcode || _td("unknown error code");
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
