@@ -28,14 +28,14 @@ export default React.createClass({
         description: PropTypes.node,
         button: PropTypes.string,
         onFinished: PropTypes.func,
-        hasCloseX: PropTypes.bool,
+        hasCloseButton: PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             title: '',
             description: '',
-            hasCloseX: false,
+            hasCloseButton: false,
         };
     },
 
@@ -50,7 +50,7 @@ export default React.createClass({
             <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
-                hasCancel={this.props.hasCloseX}
+                hasCancel={this.props.hasCloseButton}
             >
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     { this.props.description }
