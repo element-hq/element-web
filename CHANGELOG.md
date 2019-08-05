@@ -1,3 +1,9 @@
+Changes in [1.3.2](https://github.com/vector-im/riot-web/releases/tag/v1.3.2) (2019-08-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.1...v1.3.2)
+
+ * Updated react-sdk for deactivated account error message on login
+
 Changes in [1.3.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.1) (2019-08-05)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.1-rc.1...v1.3.1)
