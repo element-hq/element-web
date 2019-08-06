@@ -128,6 +128,18 @@ export default class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    supportsAutoHideMenuBar(): boolean {
+        return false;
+    }
+
+    async getAutoHideMenuBarEnabled(): boolean {
+        return false;
+    }
+
+    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+        throw new Error("Unimplemented");
+    }
+
     supportsMinimizeToTray(): boolean {
         return false;
     }
