@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@ import {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-const sdk = require("../../../../..");
-const PlatformPeg = require("../../../../../PlatformPeg");
+import sdk from "../../../../..";
+import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
@@ -131,23 +132,26 @@ export default class PreferencesUserSettingsTab extends React.Component {
     render() {
         let autoLaunchOption = null;
         if (this.state.autoLaunchSupported) {
-            autoLaunchOption = <LabelledToggleSwitch value={this.state.autoLaunch}
-                                                     onChange={this._onAutoLaunchChange}
-                                                     label={_t('Start automatically after system login')} />;
+            autoLaunchOption = <LabelledToggleSwitch
+                value={this.state.autoLaunch}
+                onChange={this._onAutoLaunchChange}
+                label={_t('Start automatically after system login')} />;
         }
 
         let autoHideMenuOption = null;
         if (this.state.alwaysShowMenuBarSupported) {
-            autoHideMenuOption = <LabelledToggleSwitch value={this.state.alwaysShowMenuBar}
-                                                       onChange={this._onAlwaysShowMenuBarChange}
-                                                       label={_t('Always show the window menu bar')} />;
+            autoHideMenuOption = <LabelledToggleSwitch
+                value={this.state.alwaysShowMenuBar}
+                onChange={this._onAlwaysShowMenuBarChange}
+                label={_t('Always show the window menu bar')} />;
         }
 
         let minimizeToTrayOption = null;
         if (this.state.minimizeToTraySupported) {
-            minimizeToTrayOption = <LabelledToggleSwitch value={this.state.minimizeToTray}
-                                                         onChange={this._onMinimizeToTrayChange}
-                                                         label={_t('Close button should minimize window to tray')} />;
+            minimizeToTrayOption = <LabelledToggleSwitch
+                value={this.state.minimizeToTray}
+                onChange={this._onMinimizeToTrayChange}
+                label={_t('Close button should minimize window to tray')} />;
         }
 
         return (
@@ -168,9 +172,12 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
-                    <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
-                           value={this.state.autocompleteDelay}
-                           onChange={this._onAutocompleteDelayChange} />
+                    <Field
+                        id={"autocompleteDelay"}
+                        label={_t('Autocomplete delay (ms)')}
+                        type='number'
+                        value={this.state.autocompleteDelay}
+                        onChange={this._onAutocompleteDelayChange} />
                 </div>
             </div>
         );
