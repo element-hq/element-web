@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
-import EmailAddresses from "../../EmailAddresses";
-import PhoneNumbers from "../../PhoneNumbers";
 import Field from "../../../elements/Field";
 import * as languageHandler from "../../../../../languageHandler";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
@@ -110,6 +109,9 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderAccountSection() {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
+        const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
+
         const passwordChangeForm = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
