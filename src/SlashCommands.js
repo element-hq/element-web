@@ -274,30 +274,31 @@ export const CommandMap = {
         },
     }),
 
-    tint: new Command({
-        name: 'tint',
-        args: '<color1> [<color2>]',
-        description: _td('Changes colour scheme of current room'),
-        runFn: function(roomId, args) {
-            if (args) {
-                const matches = args.match(/^(#([\da-fA-F]{3}|[\da-fA-F]{6}))( +(#([\da-fA-F]{3}|[\da-fA-F]{6})))?$/);
-                if (matches) {
-                    Tinter.tint(matches[1], matches[4]);
-                    const colorScheme = {};
-                    colorScheme.primary_color = matches[1];
-                    if (matches[4]) {
-                        colorScheme.secondary_color = matches[4];
-                    } else {
-                        colorScheme.secondary_color = colorScheme.primary_color;
-                    }
-                    return success(
-                        SettingsStore.setValue('roomColor', roomId, SettingLevel.ROOM_ACCOUNT, colorScheme),
-                    );
-                }
-            }
-            return reject(this.getUsage());
-        },
-    }),
+    // Room Tint has been unsupported since the redesign
+    // tint: new Command({
+    //     name: 'tint',
+    //     args: '<color1> [<color2>]',
+    //     description: _td('Changes colour scheme of current room'),
+    //     runFn: function(roomId, args) {
+    //         if (args) {
+    //             const matches = args.match(/^(#([\da-fA-F]{3}|[\da-fA-F]{6}))( +(#([\da-fA-F]{3}|[\da-fA-F]{6})))?$/);
+    //             if (matches) {
+    //                 Tinter.tint(matches[1], matches[4]);
+    //                 const colorScheme = {};
+    //                 colorScheme.primary_color = matches[1];
+    //                 if (matches[4]) {
+    //                     colorScheme.secondary_color = matches[4];
+    //                 } else {
+    //                     colorScheme.secondary_color = colorScheme.primary_color;
+    //                 }
+    //                 return success(
+    //                     SettingsStore.setValue('roomColor', roomId, SettingLevel.ROOM_ACCOUNT, colorScheme),
+    //                 );
+    //             }
+    //         }
+    //         return reject(this.getUsage());
+    //     },
+    // }),
 
     topic: new Command({
         name: 'topic',
