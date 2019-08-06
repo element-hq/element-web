@@ -30,6 +30,7 @@ limitations under the License.
         border: solid 1px $primary-hairline-color;
         background-color: $primary-bg-color;
         max-height: 200px;
+        padding: 3px 6px;
 
         &:focus {
             border-color: $accent-color-50pct;
