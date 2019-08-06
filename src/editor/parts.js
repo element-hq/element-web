@@ -363,7 +363,7 @@ export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
 }
 
 export class PartCreator {
-    constructor(room, client, autoCompleteCreator) {
+    constructor(room, client, autoCompleteCreator = null) {
         this._room = room;
         this._client = client;
         this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};

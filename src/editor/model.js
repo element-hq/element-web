@@ -18,7 +18,7 @@ limitations under the License.
 import {diffAtCaret, diffDeletion} from "./diff";
 
 export default class EditorModel {
-    constructor(parts, partCreator, updateCallback) {
+    constructor(parts, partCreator, updateCallback = null) {
         this._parts = parts;
         this._partCreator = partCreator;
         this._activePartIdx = null;
