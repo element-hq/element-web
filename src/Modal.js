@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
@@ -32,7 +31,7 @@ const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
  * Wrap an asynchronous loader function with a react component which shows a
  * spinner until the real component loads.
  */
-const AsyncWrapper = React.createClass({
+const AsyncWrapper = createReactClass({
     propTypes: {
         /** A promise which resolves with the real component
          */

@@ -1,6 +1,7 @@
 const React = require('react');
 const ReactDom = require('react-dom');
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 const Velocity = require('velocity-animate');
 
 /**
@@ -10,7 +11,7 @@ const Velocity = require('velocity-animate');
  * from DOM order. This makes it a lot simpler and lighter: if you need fully
  * automatic positional animation, look at react-shuffle or similar libraries.
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'Velociraptor',
 
     propTypes: {
