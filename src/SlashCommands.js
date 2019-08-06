@@ -20,11 +20,9 @@ limitations under the License.
 import React from 'react';
 import MatrixClientPeg from './MatrixClientPeg';
 import dis from './dispatcher';
-import Tinter from './Tinter';
 import sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
-import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
@@ -54,12 +52,21 @@ const singleMxcUpload = async () => {
     });
 };
 
+export const CommandCategories = {
+    "messages": _td("Messages"),
+    "actions": _td("Actions"),
+    "admin": _td("Admin"),
+    "advanced": _td("Advanced"),
+    "other": _td("Other"),
+};
+
 class Command {
-    constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
+    constructor({name, args='', description, runFn, category=CommandCategories.other, hideCompletionAfterSpace=false}) {
         this.command = '/' + name;
         this.args = args;
         this.description = description;
         this.runFn = runFn;
+        this.category = category;
         this.hideCompletionAfterSpace = hideCompletionAfterSpace;
     }
 
@@ -106,6 +113,7 @@ export const CommandMap = {
             }
             return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
         },
+        category: CommandCategories.messages,
     }),
 
     ddg: new Command({
@@ -121,6 +129,7 @@ export const CommandMap = {
             });
             return success();
         },
+        category: CommandCategories.actions,
         hideCompletionAfterSpace: true,
     }),
 
@@ -199,6 +208,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     nick: new Command({
@@ -211,6 +221,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     myroomnick: new Command({
@@ -229,6 +240,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     myroomavatar: new Command({
@@ -255,6 +267,7 @@ export const CommandMap = {
                 return cli.sendStateEvent(roomId, 'm.room.member', content, userId);
             }));
         },
+        category: CommandCategories.actions,
     }),
 
     myavatar: new Command({
@@ -272,6 +285,7 @@ export const CommandMap = {
                 return MatrixClientPeg.get().setAvatarUrl(url);
             }));
         },
+        category: CommandCategories.actions,
     }),
 
     // Room Tint has been unsupported since the redesign
@@ -298,6 +312,7 @@ export const CommandMap = {
     //         }
     //         return reject(this.getUsage());
     //     },
+    //     category: CommandCategories.actions,
     // }),
 
     topic: new Command({
@@ -323,6 +338,7 @@ export const CommandMap = {
             });
             return success();
         },
+        category: CommandCategories.admin,
     }),
 
     roomname: new Command({
@@ -335,6 +351,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     invite: new Command({
@@ -358,6 +375,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     join: new Command({
@@ -462,6 +480,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     part: new Command({
@@ -509,6 +528,7 @@ export const CommandMap = {
                 }),
             );
         },
+        category: CommandCategories.actions,
     }),
 
     kick: new Command({
@@ -524,6 +544,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     // Ban a user from the room with an optional reason
@@ -540,6 +561,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     // Unban a user from ythe room
@@ -557,6 +579,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     ignore: new Command({
@@ -587,6 +610,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     unignore: new Command({
@@ -618,6 +642,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.actions,
     }),
 
     // Define the power level of a user
@@ -646,6 +671,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     // Reset the power level of a user
@@ -667,6 +693,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.admin,
     }),
 
     devtools: new Command({
@@ -677,6 +704,7 @@ export const CommandMap = {
             Modal.createDialog(DevtoolsDialog, {roomId});
             return success();
         },
+        category: CommandCategories.advanced,
     }),
 
     addwidget: new Command({
@@ -697,6 +725,7 @@ export const CommandMap = {
                 return reject(_t("You cannot modify widgets in this room."));
             }
         },
+        category: CommandCategories.admin,
     }),
 
     // Verify a user, device, and pubkey tuple
@@ -766,6 +795,7 @@ export const CommandMap = {
             }
             return reject(this.getUsage());
         },
+        category: CommandCategories.advanced,
     }),
 
     // Command definitions for autocompletion ONLY:
@@ -775,6 +805,7 @@ export const CommandMap = {
         name: 'me',
         args: '<message>',
         description: _td('Displays action'),
+        category: CommandCategories.messages,
         hideCompletionAfterSpace: true,
     }),
 
@@ -789,6 +820,7 @@ export const CommandMap = {
             }
             return success();
         },
+        category: CommandCategories.advanced,
     }),
 
     rainbow: new Command({
@@ -799,6 +831,7 @@ export const CommandMap = {
             if (!args) return reject(this.getUserId());
             return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, textToHtmlRainbow(args)));
         },
+        category: CommandCategories.messages,
     }),
 
     rainbowme: new Command({
@@ -809,32 +842,19 @@ export const CommandMap = {
             if (!args) return reject(this.getUserId());
             return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
         },
+        category: CommandCategories.messages,
     }),
 
     help: new Command({
         name: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
-            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
-            Modal.createTrackedDialog('Slash Commands', 'Help', InfoDialog, {
-                title: _t("Command Help"),
-                description: <table>
-                    <tbody>
-                    {
-                        Object.values(CommandMap).map(cmd => {
-                            return <tr key={cmd.command}>
-                                <td>{cmd.command}</td>
-                                <td>{cmd.args}</td>
-                                <td>{cmd.description}</td>
-                            </tr>;
-                        })
-                    }
-                    </tbody>
-                </table>,
-                hasCloseButton: true,
-            });
+            const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
+
+            Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
             return success();
         },
+        category: CommandCategories.advanced,
     }),
 };
 /* eslint-enable babel/no-invalid-this */

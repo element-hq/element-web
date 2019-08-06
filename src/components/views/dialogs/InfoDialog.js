@@ -20,10 +20,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import classNames from "classnames";
 
 export default React.createClass({
     displayName: 'InfoDialog',
     propTypes: {
+        className: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.node,
         button: PropTypes.string,
@@ -52,7 +54,7 @@ export default React.createClass({
                 contentId='mx_Dialog_content'
                 hasCancel={this.props.hasCloseButton}
             >
-                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
