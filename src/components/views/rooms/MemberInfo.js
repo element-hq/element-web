@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 Vector Creations Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -37,7 +39,6 @@ import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
@@ -46,11 +47,10 @@ import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
-module.exports = withMatrixClient(React.createClass({
+module.exports = React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
-        matrixClient: PropTypes.object.isRequired,
         member: PropTypes.object.isRequired,
     },
 
@@ -71,13 +71,17 @@ module.exports = withMatrixClient(React.createClass({
         };
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    },
+
     componentWillMount: function() {
         this._cancelDeviceList = null;
+        const cli = this.context.matrixClient;
 
         // only display the devices list if our client supports E2E
-        this._enableDevices = this.props.matrixClient.isCryptoEnabled();
+        this._enableDevices = cli.isCryptoEnabled();
 
-        const cli = this.props.matrixClient;
         cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
@@ -103,7 +107,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     componentWillUnmount: function() {
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         if (client) {
             client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             client.removeListener("Room", this.onRoom);
@@ -122,7 +126,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _checkIgnoreState: function() {
-        const isIgnoring = this.props.matrixClient.isUserIgnored(this.props.member.userId);
+        const isIgnoring = this.context.matrixClient.isUserIgnored(this.props.member.userId);
         this.setState({isIgnoring: isIgnoring});
     },
 
@@ -154,7 +158,7 @@ module.exports = withMatrixClient(React.createClass({
 
             // Promise.resolve to handle transition from static result to promise; can be removed
             // in future
-            Promise.resolve(this.props.matrixClient.getStoredDevicesForUser(userId)).then((devices) => {
+            Promise.resolve(this.context.matrixClient.getStoredDevicesForUser(userId)).then((devices) => {
                 this.setState({
                     devices: devices,
                     e2eStatus: this._getE2EStatus(devices),
@@ -188,7 +192,7 @@ module.exports = withMatrixClient(React.createClass({
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
-        if (findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
+        if (findReadReceiptFromUserId(receiptEvent, this.context.matrixClient.credentials.userId)) {
             this.forceUpdate();
         }
     },
@@ -233,7 +237,7 @@ module.exports = withMatrixClient(React.createClass({
         let cancelled = false;
         this._cancelDeviceList = function() { cancelled = true; };
 
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         const self = this;
         client.downloadKeys([member.userId], true).then(() => {
             return client.getStoredDevicesForUser(member.userId);
@@ -258,7 +262,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onIgnoreToggle: function() {
-        const ignoredUsers = this.props.matrixClient.getIgnoredUsers();
+        const ignoredUsers = this.context.matrixClient.getIgnoredUsers();
         if (this.state.isIgnoring) {
             const index = ignoredUsers.indexOf(this.props.member.userId);
             if (index !== -1) ignoredUsers.splice(index, 1);
@@ -266,7 +270,7 @@ module.exports = withMatrixClient(React.createClass({
             ignoredUsers.push(this.props.member.userId);
         }
 
-        this.props.matrixClient.setIgnoredUsers(ignoredUsers).then(() => {
+        this.context.matrixClient.setIgnoredUsers(ignoredUsers).then(() => {
             return this.setState({isIgnoring: !this.state.isIgnoring});
         });
     },
@@ -284,7 +288,7 @@ module.exports = withMatrixClient(React.createClass({
                 if (!proceed) return;
 
                 this.setState({ updating: this.state.updating + 1 });
-                this.props.matrixClient.kick(
+                this.context.matrixClient.kick(
                     this.props.member.roomId, this.props.member.userId,
                     reason || undefined,
                 ).then(function() {
@@ -320,11 +324,11 @@ module.exports = withMatrixClient(React.createClass({
                 this.setState({ updating: this.state.updating + 1 });
                 let promise;
                 if (this.props.member.membership === 'ban') {
-                    promise = this.props.matrixClient.unban(
+                    promise = this.context.matrixClient.unban(
                         this.props.member.roomId, this.props.member.userId,
                     );
                 } else {
-                    promise = this.props.matrixClient.ban(
+                    promise = this.context.matrixClient.ban(
                         this.props.member.roomId, this.props.member.userId,
                         reason || undefined,
                     );
@@ -370,11 +374,11 @@ module.exports = withMatrixClient(React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
-        const room = this.props.matrixClient.getRoom(roomId);
+        const room = this.context.matrixClient.getRoom(roomId);
         if (!room) return;
 
         // if muting self, warn as it may be irreversible
-        if (target === this.props.matrixClient.getUserId()) {
+        if (target === this.context.matrixClient.getUserId()) {
             try {
                 if (!(await this._warnSelfDemote())) return;
             } catch (e) {
@@ -402,7 +406,7 @@ module.exports = withMatrixClient(React.createClass({
 
         if (!isNaN(level)) {
             this.setState({ updating: this.state.updating + 1 });
-            this.props.matrixClient.setPowerLevel(roomId, target, level, powerLevelEvent).then(
+            this.context.matrixClient.setPowerLevel(roomId, target, level, powerLevelEvent).then(
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
@@ -424,13 +428,13 @@ module.exports = withMatrixClient(React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
-        const room = this.props.matrixClient.getRoom(roomId);
+        const room = this.context.matrixClient.getRoom(roomId);
         if (!room) return;
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
 
-        const me = room.getMember(this.props.matrixClient.credentials.userId);
+        const me = room.getMember(this.context.matrixClient.credentials.userId);
         if (!me) return;
 
         const defaultLevel = powerLevelEvent.getContent().users_default;
@@ -439,7 +443,7 @@ module.exports = withMatrixClient(React.createClass({
         // toggle the level
         const newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
         this.setState({ updating: this.state.updating + 1 });
-        this.props.matrixClient.setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).then(
+        this.context.matrixClient.setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -462,7 +466,7 @@ module.exports = withMatrixClient(React.createClass({
 
     _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
         this.setState({ updating: this.state.updating + 1 });
-        this.props.matrixClient.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
+        this.context.matrixClient.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -483,7 +487,7 @@ module.exports = withMatrixClient(React.createClass({
     onPowerChange: async function(powerLevel) {
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
-        const room = this.props.matrixClient.getRoom(roomId);
+        const room = this.context.matrixClient.getRoom(roomId);
         if (!room) return;
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
@@ -494,7 +498,7 @@ module.exports = withMatrixClient(React.createClass({
             return;
         }
 
-        const myUserId = this.props.matrixClient.getUserId();
+        const myUserId = this.context.matrixClient.getUserId();
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
@@ -549,13 +553,13 @@ module.exports = withMatrixClient(React.createClass({
             can: {},
             muted: false,
         };
-        const room = this.props.matrixClient.getRoom(member.roomId);
+        const room = this.context.matrixClient.getRoom(member.roomId);
         if (!room) return defaultPerms;
 
         const powerLevels = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevels) return defaultPerms;
 
-        const me = room.getMember(this.props.matrixClient.credentials.userId);
+        const me = room.getMember(this.context.matrixClient.credentials.userId);
         if (!me) return defaultPerms;
 
         const them = member;
@@ -619,7 +623,7 @@ module.exports = withMatrixClient(React.createClass({
         const avatarUrl = member.getMxcAvatarUrl();
         if (!avatarUrl) return;
 
-        const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
+        const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl);
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: httpUrl,
@@ -678,7 +682,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _renderUserOptions: function() {
-        const cli = this.props.matrixClient;
+        const cli = this.context.matrixClient;
         const member = this.props.member;
 
         let ignoreButton = null;
@@ -784,8 +788,8 @@ module.exports = withMatrixClient(React.createClass({
         let giveModButton;
         let spinner;
 
-        if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
-            const dmRoomMap = new DMRoomMap(this.props.matrixClient);
+        if (this.props.member.userId !== this.context.matrixClient.credentials.userId) {
+            const dmRoomMap = new DMRoomMap(this.context.matrixClient);
             // dmRooms will not include dmRooms that we have been invited into but did not join.
             // Because DMRoomMap runs off account_data[m.direct] which is only set on join of dm room.
             // XXX: we potentially want DMs we have been invited to, to also show up here :L
@@ -796,7 +800,7 @@ module.exports = withMatrixClient(React.createClass({
 
             const tiles = [];
             for (const roomId of dmRooms) {
-                const room = this.props.matrixClient.getRoom(roomId);
+                const room = this.context.matrixClient.getRoom(roomId);
                 if (room) {
                     const myMembership = room.getMyMembership();
                     // not a DM room if we have are not joined
@@ -918,12 +922,12 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        const room = this.props.matrixClient.getRoom(this.props.member.roomId);
+        const room = this.context.matrixClient.getRoom(this.props.member.roomId);
         const powerLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
         const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
 
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
-        const hsUrl = this.props.matrixClient.baseUrl;
+        const hsUrl = this.context.matrixClient.baseUrl;
         let showPresence = true;
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
             showPresence = enablePresenceByHsUrl[hsUrl];
@@ -962,7 +966,7 @@ module.exports = withMatrixClient(React.createClass({
                 </div>
             </div>;
 
-            const isEncrypted = this.props.matrixClient.isRoomEncrypted(this.props.member.roomId);
+            const isEncrypted = this.context.matrixClient.isRoomEncrypted(this.props.member.roomId);
             if (this.state.e2eStatus && isEncrypted) {
                 e2eIconElement = (<E2EIcon status={this.state.e2eStatus} isUser={true} />);
             }
@@ -971,13 +975,11 @@ module.exports = withMatrixClient(React.createClass({
         const avatarUrl = this.props.member.getMxcAvatarUrl();
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = <div className="mx_MemberInfo_avatar">
                 <img src={httpUrl} />
             </div>;
         }
-
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         let backButton;
         if (this.props.member.roomId) {
@@ -1020,4 +1022,4 @@ module.exports = withMatrixClient(React.createClass({
             </div>
         );
     },
-}));
+});

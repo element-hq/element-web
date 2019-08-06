@@ -19,7 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
-import * as Matrix from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
 import sdk from '../../../index';
 
@@ -30,7 +30,7 @@ export default React.createClass({
     displayName: 'ExportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         onFinished: PropTypes.func.isRequired,
     },
 
