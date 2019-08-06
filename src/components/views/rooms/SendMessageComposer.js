@@ -24,6 +24,7 @@ import {PartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
+import { _t } from '../../../languageHandler';
 
 function createMessageContent(model, editedEvent) {
     const body = textSerialize(model);
@@ -69,7 +70,7 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
-    _sendMessage = () => {
+    _sendMessage() {
         const {roomId} = this.props.room;
         this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model));
         this.model.reset([]);
@@ -98,6 +99,7 @@ export default class SendMessageComposer extends React.Component {
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}
+                    label={_t("Send message")}
                 />
             </div>
         );
