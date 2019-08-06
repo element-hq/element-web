@@ -99,7 +99,7 @@ export default class SendMessageComposer extends React.Component {
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}
-                    label={_t("Send message")}
+                    label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                 />
             </div>
