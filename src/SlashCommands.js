@@ -819,13 +819,6 @@ export const CommandMap = {
             Modal.createTrackedDialog('Slash Commands', 'Help', InfoDialog, {
                 title: _t("Command Help"),
                 description: <table>
-                    <thead>
-                        <tr>
-                            <td>{_t("Command")}</td>
-                            <td>{_t("Arguments")}</td>
-                            <td>{_t("Description")}</td>
-                        </tr>
-                    </thead>
                     <tbody>
                     {
                         Object.values(CommandMap).map(cmd => {
