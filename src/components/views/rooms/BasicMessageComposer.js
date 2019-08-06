@@ -206,7 +206,7 @@ export default class BasicMessageEditor extends React.Component {
         if (this.state.autoComplete) {
             const query = this.state.query;
             const queryLen = query.length;
-            autoComplete = <div className="mx_MessageEditor_AutoCompleteWrapper">
+            autoComplete = (<div className="mx_BasicMessageComposer_AutoCompleteWrapper">
                 <Autocomplete
                     ref={ref => this._autocompleteRef = ref}
                     query={query}
@@ -215,18 +215,18 @@ export default class BasicMessageEditor extends React.Component {
                     selection={{beginning: true, end: queryLen, start: queryLen}}
                     room={this.props.room}
                 />
-            </div>;
+            </div>);
         }
-        return <div className={this.props.className}>
-                { autoComplete }
-                <div
-                    className="mx_MessageEditor_editor"
-                    contentEditable="true"
-                    tabIndex="1"
-                    onKeyDown={this._onKeyDown}
-                    ref={ref => this._editorRef = ref}
-                    aria-label={_t("Edit message")}
-                ></div>
-            </div>;
+        return (<div className="mx_BasicMessageComposer">
+            { autoComplete }
+            <div
+                className="mx_BasicMessageComposer_input"
+                contentEditable="true"
+                tabIndex="1"
+                onKeyDown={this._onKeyDown}
+                ref={ref => this._editorRef = ref}
+                aria-label={_t("Edit message")}
+            ></div>
+        </div>);
     }
 }

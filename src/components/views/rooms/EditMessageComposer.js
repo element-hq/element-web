@@ -249,17 +249,17 @@ export default class EditMessageComposer extends React.Component {
 
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return <div className={classNames("mx_MessageEditor", this.props.className)} onKeyDown={this._onKeyDown}>
-                <BasicMessageComposer
-                    ref={this._setEditorRef}
-                    model={this.model}
-                    room={this._getRoom()}
-                    initialCaret={this.props.editState.getCaret()}
-                />
-                <div className="mx_MessageEditor_buttons">
-                    <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
-                </div>
-            </div>;
+        return (<div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this._onKeyDown}>
+            <BasicMessageComposer
+                ref={this._setEditorRef}
+                model={this.model}
+                room={this._getRoom()}
+                initialCaret={this.props.editState.getCaret()}
+            />
+            <div className="mx_EditMessageComposer_buttons">
+                <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
+                <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
+            </div>
+        </div>);
     }
 }
