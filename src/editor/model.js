@@ -35,6 +35,10 @@ export default class EditorModel {
         return this._partCreator;
     }
 
+    get isEmpty() {
+        return this._parts.reduce((len, part) => len + part.text.length, 0) === 0;
+    }
+
     clone() {
         return new EditorModel(this._parts, this._partCreator, this._updateCallback);
     }

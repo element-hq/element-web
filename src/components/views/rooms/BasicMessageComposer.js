@@ -54,6 +54,16 @@ export default class BasicMessageEditor extends React.Component {
                 console.error(err);
             }
         }
+        if (this.props.placeholder) {
+            const {isEmpty} = this.props.model;
+            if (isEmpty) {
+                this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
+                this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+            } else {
+                this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
+                this._editorRef.style.removeProperty("--placeholder");
+            }
+        }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, caret, inputType, diff);
     }
