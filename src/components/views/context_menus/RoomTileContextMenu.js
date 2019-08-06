@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
 
 import Promise from 'bluebird';
 import React from 'react';
@@ -374,25 +373,27 @@ module.exports = React.createClass({
     render: function() {
         const myMembership = this.props.room.getMyMembership();
 
-        // Can't set notif level or tags on non-join rooms
-        if (myMembership !== 'join') {
-            return <div>
-                { this._renderLeaveMenu(myMembership) }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderSettingsMenu() }
-            </div>;
+        switch (myMembership) {
+            case 'join':
+                return <div>
+                    { this._renderNotifMenu() }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderLeaveMenu(myMembership) }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderRoomTagMenu() }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderSettingsMenu() }
+                </div>;
+            case 'invite':
+                return <div>
+                    { this._renderLeaveMenu(myMembership) }
+                </div>;
+            default:
+                return <div>
+                    { this._renderLeaveMenu(myMembership) }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderSettingsMenu() }
+                </div>;
         }
-
-        return (
-            <div>
-                { this._renderNotifMenu() }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderLeaveMenu(myMembership) }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderRoomTagMenu() }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderSettingsMenu() }
-            </div>
-        );
     },
 });
