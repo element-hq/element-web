@@ -17,11 +17,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import * as Matrix from "matrix-js-sdk";
 
 export default React.createClass({
     displayName: 'MyGroups',
@@ -34,7 +34,7 @@ export default React.createClass({
     },
 
     contextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     componentWillMount: function() {

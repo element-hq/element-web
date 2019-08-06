@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -62,7 +62,7 @@ const LoggedInView = React.createClass({
     displayName: 'LoggedInView',
 
     propTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         page_type: PropTypes.string.isRequired,
         onRoomCreated: PropTypes.func,
 
@@ -78,7 +78,7 @@ const LoggedInView = React.createClass({
     },
 
     childContextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient),
+        matrixClient: PropTypes.instanceOf(MatrixClient),
         authCache: PropTypes.object,
     },
 

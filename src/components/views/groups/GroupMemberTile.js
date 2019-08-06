@@ -18,10 +18,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupMemberType } from '../../../groups';
-import * as Matrix from "matrix-js-sdk";
 
 export default React.createClass({
     displayName: 'GroupMemberTile',
@@ -36,7 +36,7 @@ export default React.createClass({
     },
 
     contextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     onClick: function(e) {

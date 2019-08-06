@@ -32,7 +32,7 @@ const TextForEvent = require('../../../TextForEvent');
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {EventStatus, default as Matrix} from 'matrix-js-sdk';
+import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -189,7 +189,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     componentWillMount: function() {

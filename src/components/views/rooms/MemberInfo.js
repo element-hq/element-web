@@ -30,6 +30,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -45,7 +46,6 @@ import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import * as Matrix from "matrix-js-sdk";
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -72,7 +72,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     componentWillMount: function() {
@@ -980,8 +980,6 @@ module.exports = React.createClass({
                 <img src={httpUrl} />
             </div>;
         }
-
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         let backButton;
         if (this.props.member.roomId) {
