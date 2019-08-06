@@ -80,7 +80,8 @@ export default class EditorModel {
             const part = this._parts[index];
             return new DocumentPosition(index, part.text.length);
         } else {
-            return new DocumentPosition(0, 0);
+            // part index -1, as there are no parts to point at
+            return new DocumentPosition(-1, 0);
         }
     }
 
