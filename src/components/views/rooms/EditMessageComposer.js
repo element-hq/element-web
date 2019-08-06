@@ -255,6 +255,7 @@ export default class EditMessageComposer extends React.Component {
                 model={this.model}
                 room={this._getRoom()}
                 initialCaret={this.props.editState.getCaret()}
+                label={_t("Edit message")}
             />
             <div className="mx_EditMessageComposer_buttons">
                 <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>

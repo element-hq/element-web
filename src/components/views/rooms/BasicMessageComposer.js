@@ -225,7 +225,7 @@ export default class BasicMessageEditor extends React.Component {
                 tabIndex="1"
                 onKeyDown={this._onKeyDown}
                 ref={ref => this._editorRef = ref}
-                aria-label={_t("Edit message")}
+                aria-label={this.props.label}
             ></div>
         </div>);
     }
