@@ -24,13 +24,13 @@ limitations under the License.
 
 .mx_LeftPanel_container.collapsed {
     min-width: unset;
-    /* Collapsed LeftPanel 70px */
-    flex: 0 0 70px;
+    /* Collapsed LeftPanel 50px */
+    flex: 0 0 50px;
 }
 
 .mx_LeftPanel_container.collapsed.mx_LeftPanel_container_hasTagPanel {
-    /* TagPanel 70px + Collapsed LeftPanel 70px */
-    flex: 0 0 140px;
+    /* TagPanel 70px + Collapsed LeftPanel 50px */
+    flex: 0 0 120px;
 }
 
 .mx_LeftPanel_tagPanelContainer {
