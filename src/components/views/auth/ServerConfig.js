@@ -210,7 +210,7 @@ export default class ServerConfig extends React.PureComponent {
                         <Field id="mx_ServerConfig_isUrl"
                             label={_t("Identity Server URL")}
                             placeholder={this.props.serverConfig.isUrl}
-                            value={this.state.isUrl}
+                            value={this.state.isUrl || ''}
                             onBlur={this.onIdentityServerBlur}
                             onChange={this.onIdentityServerChange}
                             disabled={this.state.busy}
