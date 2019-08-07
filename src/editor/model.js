@@ -108,6 +108,15 @@ export default class EditorModel {
         this._updateCallback(caret, inputType);
     }
 
+    insertPartAt(part, caret) {
+        const position = this.positionForOffset(caret.offset, caret.atNodeEnd);
+        const insertIndex = this._splitAt(position);
+        this._insertPart(insertIndex, part);
+        // want to put caret after new part?
+        const newPosition = new DocumentPosition(insertIndex, part.text.length);
+        this._updateCallback(newPosition);
+    }
+
     update(newValue, inputType, caret) {
         const diff = this._diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
@@ -231,6 +240,23 @@ export default class EditorModel {
             offset = 0;
         }
         return removedOffsetDecrease;
+    }
+    // return part index where insertion will insert between at offset
+    _splitAt(pos) {
+        if (pos.index === -1) {
+            return 0;
+        }
+        if (pos.offset === 0) {
+            return pos.index;
+        }
+        const part = this._parts[pos.index];
+        if (pos.offset >= part.text.length) {
+            return pos.index + 1;
+        }
+
+        const secondPart = part.split(pos.offset);
+        this._insertPart(pos.index + 1, secondPart);
+        return pos.index + 1;
     }
 
     /**

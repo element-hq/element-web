@@ -28,6 +28,28 @@ import {Room} from 'matrix-js-sdk';
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+function cloneSelection(selection) {
+    return {
+        anchorNode: selection.anchorNode,
+        anchorOffset: selection.anchorOffset,
+        focusNode: selection.focusNode,
+        focusOffset: selection.focusOffset,
+        isCollapsed: selection.isCollapsed,
+        rangeCount: selection.rangeCount,
+        type: selection.type,
+    };
+}
+
+function selectionEquals(a: Selection, b: Selection): boolean {
+    return a.anchorNode === b.anchorNode &&
+        a.anchorOffset === b.anchorOffset &&
+        a.focusNode === b.focusNode &&
+        a.focusOffset === b.focusOffset &&
+        a.isCollapsed === b.isCollapsed &&
+        a.rangeCount === b.rangeCount &&
+        a.type === b.type;
+}
+
 export default class BasicMessageEditor extends React.Component {
     static propTypes = {
         model: PropTypes.instanceOf(EditorModel).isRequired,
@@ -74,6 +96,7 @@ export default class BasicMessageEditor extends React.Component {
         this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
+        this._setLastCaret(caret, text, sel);
         this.props.model.update(text, event.inputType, caret);
     }
 
@@ -85,14 +108,59 @@ export default class BasicMessageEditor extends React.Component {
         this.props.model.update(newText, inputType, caret);
     }
 
-    _isCaretAtStart() {
-        const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === 0;
+    // this is used later to see if we need to recalculate the caret
+    // on selectionchange. If it is just a consequence of typing
+    // we don't need to. But if the user is navigating the caret without input
+    // we need to recalculate it, to be able to know where to insert content after
+    // losing focus
+    _setLastCaret(caret, text, selection) {
+        this._lastSelection = cloneSelection(selection);
+        this._lastCaret = caret;
+        this._lastTextLength = text.length;
     }
 
-    _isCaretAtEnd() {
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === text.length;
+    _refreshLastCaretIfNeeded() {
+        // TODO: needed when going up and down in editing messages ... not sure why yet
+        // because the editors should stop doing this when when blurred ...
+        // maybe it's on focus and the _editorRef isn't available yet or something.
+        if (!this._editorRef) {
+            return;
+        }
+        const selection = document.getSelection();
+        if (!this._lastSelection || !selectionEquals(this._lastSelection, selection)) {
+            this._lastSelection = cloneSelection(selection);
+            const {caret, text} = getCaretOffsetAndText(this._editorRef, selection);
+            this._lastCaret = caret;
+            this._lastTextLength = text.length;
+        }
+        return this._lastCaret;
+    }
+
+    getCaret() {
+        return this._lastCaret;
+    }
+
+    isCaretAtStart() {
+        return this.getCaret().offset === 0;
+    }
+
+    isCaretAtEnd() {
+        return this.getCaret().offset === this._lastTextLength;
+    }
+
+    _onBlur = () => {
+        document.removeEventListener("selectionchange", this._onSelectionChange);
+    }
+
+    _onFocus = () => {
+        document.addEventListener("selectionchange", this._onSelectionChange);
+        // force to recalculate
+        this._lastSelection = null;
+        this._refreshLastCaretIfNeeded();
+    }
+
+    _onSelectionChange = () => {
+        this._refreshLastCaretIfNeeded();
     }
 
     _onKeyDown = (event) => {
@@ -202,17 +270,6 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
-
-    isCaretAtStart() {
-        const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === 0;
-    }
-
-    isCaretAtEnd() {
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === text.length;
-    }
-
     render() {
         let autoComplete;
         if (this.state.autoComplete) {
@@ -235,6 +292,8 @@ export default class BasicMessageEditor extends React.Component {
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
                 tabIndex="1"
+                onBlur={this._onBlur}
+                onFocus={this._onFocus}
                 onKeyDown={this._onKeyDown}
                 ref={ref => this._editorRef = ref}
                 aria-label={this.props.label}

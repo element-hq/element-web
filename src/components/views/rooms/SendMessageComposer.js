@@ -97,6 +97,15 @@ export default class SendMessageComposer extends React.Component {
             case 'focus_composer':
                 this._editorRef.focus();
                 break;
+            case 'insert_mention': {
+                const userId = payload.user_id;
+                const member = this.props.room.getMember(userId);
+                const displayName = member ?
+                    member.rawDisplayName : payload.user_id;
+                const userPillPart = this.model.partCreator.userPill(displayName, userId);
+                this.model.insertPartAt(userPillPart, this._editorRef.getCaret());
+                break;
+            }
         }
     };
 
