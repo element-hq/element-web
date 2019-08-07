@@ -251,7 +251,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
  */
 export function getLocalStorageSessionVars() {
     const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const isUrl = localStorage.getItem("mx_is_url");
     const accessToken = localStorage.getItem("mx_access_token");
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
@@ -479,7 +479,9 @@ class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
     localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
-    localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+    if (credentials.identityServerUrl) {
+        localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+    }
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_access_token", credentials.accessToken);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
