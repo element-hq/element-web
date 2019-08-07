@@ -24,7 +24,7 @@ import {PartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
-import { _t } from '../../../languageHandler';
+import ReplyPreview from "./ReplyPreview";
 
 function createMessageContent(model, editedEvent) {
     const body = textSerialize(model);
@@ -93,6 +93,7 @@ export default class SendMessageComposer extends React.Component {
 
     onAction = (payload) => {
         switch (payload.action) {
+            case 'reply_to_event':
             case 'focus_composer':
                 this._editorRef.focus();
                 break;
@@ -100,11 +101,11 @@ export default class SendMessageComposer extends React.Component {
     };
 
     render() {
-        // <div className="mx_MessageComposer_autocomplete_wrapper">
-        // </div>
-        //<ReplyPreview permalinkCreator={this.props.permalinkCreator} />
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
+                <div className="mx_SendMessageComposer_overlayWrapper">
+                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
+                </div>
                 <BasicMessageComposer
                     ref={this._setEditorRef}
                     model={this.model}
