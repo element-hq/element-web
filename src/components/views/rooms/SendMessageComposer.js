@@ -82,12 +82,22 @@ export default class SendMessageComposer extends React.Component {
         const {caret} = getCaretOffsetAndText(this._editorRef, sel);
         const parts = this.model.serializeParts();
         this.props.editState.setEditorState(caret, parts);
+        dis.unregister(this.dispatcherRef);
     }
 
     componentWillMount() {
         const partCreator = new PartCreator(this.props.room, this.context.matrixClient);
         this.model = new EditorModel([], partCreator);
+        this.dispatcherRef = dis.register(this.onAction);
     }
+
+    onAction = (payload) => {
+        switch (payload.action) {
+            case 'focus_composer':
+                this._editorRef.focus();
+                break;
+        }
+    };
 
     render() {
         // <div className="mx_MessageComposer_autocomplete_wrapper">

@@ -241,4 +241,8 @@ export default class BasicMessageEditor extends React.Component {
             ></div>
         </div>);
     }
+
+    focus() {
+        this._editorRef.focus();
+    }
 }
