@@ -19,12 +19,22 @@ limitations under the License.
     min-height: 50px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     font-size: 14px;
+    justify-content: center;
+    display: flex;
 
     .mx_BasicMessageComposer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
         .mx_BasicMessageComposer_input {
             padding: 3px 0;
+            // this will center the contenteditable
+            // in it's parent vertically
+            // while keeping the autocomplete at the top
+            // of the composer. The parent needs to be a flex container for this to work.
+            margin: auto 0;
         }
     }
 }
