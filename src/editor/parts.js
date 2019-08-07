@@ -325,7 +325,7 @@ class PillCandidatePart extends PlainPart {
     }
 
     createAutoComplete(updateCallback) {
-        return this._autoCompleteCreator(updateCallback);
+        return this._autoCompleteCreator.create(updateCallback);
     }
 
     acceptsInsertion(chr, i) {
@@ -363,10 +363,14 @@ export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
 }
 
 export class PartCreator {
-    constructor(autoCompleteCreator, room, client) {
+    constructor(room, client, autoCompleteCreator) {
         this._room = room;
         this._client = client;
-        this._autoCompleteCreator = autoCompleteCreator(this);
+        this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
+    }
+
+    setAutoCompleteCreator(autoCompleteCreator) {
+        this._autoCompleteCreator.create = autoCompleteCreator(this);
     }
 
     createPartForInput(input) {

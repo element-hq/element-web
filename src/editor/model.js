@@ -24,7 +24,15 @@ export default class EditorModel {
         this._activePartIdx = null;
         this._autoComplete = null;
         this._autoCompletePartIdx = null;
+        this.setUpdateCallback(updateCallback);
+    }
+
+    setUpdateCallback(updateCallback) {
         this._updateCallback = updateCallback;
+    }
+
+    get partCreator() {
+        return this._partCreator;
     }
 
     clone() {
