@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
@@ -33,6 +32,9 @@ export default class BasicMessageEditor extends React.Component {
     static propTypes = {
         model: PropTypes.instanceOf(EditorModel).isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
+        placeholder: PropTypes.string,
+        label: PropTypes.string,    // the aria label
+        initialCaret: PropTypes.object, // See DocumentPosition in editor/model.js
     };
 
     constructor(props, context) {
