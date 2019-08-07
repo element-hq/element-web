@@ -21,7 +21,6 @@ import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
 import {PartCreator} from '../../../editor/parts';
-import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyPreview from "./ReplyPreview";
@@ -42,8 +41,9 @@ function createMessageContent(model, editedEvent) {
 
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
-        // the message event being edited
-        editState: PropTypes.instanceOf(EditorStateTransfer).isRequired,
+        room: PropTypes.object.isRequired,
+        placeholder: PropTypes.string,
+        permalinkCreator: PropTypes.object.isRequired,
     };
 
     static contextTypes = {
