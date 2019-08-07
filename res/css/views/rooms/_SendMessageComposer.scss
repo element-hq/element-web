@@ -16,17 +16,22 @@ limitations under the License.
 
 .mx_SendMessageComposer {
     flex: 1;
-    min-height: 50px;
     display: flex;
     flex-direction: column;
     font-size: 14px;
     justify-content: center;
     display: flex;
+    margin-right: 6px;
+    // don't grow wider than available space
+    min-width: 0;
 
     .mx_BasicMessageComposer {
         flex: 1;
         display: flex;
         flex-direction: column;
+        // min-height at this level so the mx_BasicMessageComposer_input
+        // still stays vertically centered when less than 50px
+        min-height: 50px;
 
         .mx_BasicMessageComposer_input {
             padding: 3px 0;
@@ -35,6 +40,9 @@ limitations under the License.
             // while keeping the autocomplete at the top
             // of the composer. The parent needs to be a flex container for this to work.
             margin: auto 0;
+            // max-height at this level so autocomplete doesn't get scrolled too
+            max-height: 140px;
+            overflow-y: auto;
         }
     }
 }
