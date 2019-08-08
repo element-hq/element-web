@@ -1,21 +1,21 @@
 {
     "presets": [
-        "react",
-        "es2015",
-        "es2016"
+        "@babel/preset-react",
+        ["@babel/preset-env", {
+            "modules": false,
+            "targets": {"browsers":  ["last 2 versions"]}
+        }],
+        "@babel/preset-flow",
+        "@babel/preset-typescript"
     ],
     "plugins": [
-        [
-            "transform-builtin-extend",
-            {
-                "globals": ["Error"]
-            }
-        ],
-        "transform-class-properties",
-        "transform-object-rest-spread",
-        "transform-async-to-bluebird",
-        "transform-runtime",
-        "add-module-exports",
-        "syntax-dynamic-import"
+        "babel-plugin-add-module-exports",
+        "@babel/plugin-proposal-numeric-separator",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-flow-comments",
+        "@babel/plugin-transform-async-to-generator",
+        "@babel/plugin-transform-runtime",
+        "@babel/plugin-syntax-dynamic-import"
     ]
 }
