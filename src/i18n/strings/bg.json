@@ -2034,5 +2034,16 @@
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Не можете да влезете в профила си. Свържете се с администратора на сървъра за повече информация.",
     "You're signed out": "Излязохте от профила",
     "Clear personal data": "Изчисти личните данни",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Внимание: личните ви данни (включително ключове за шифроване) все още се съхраняват на това устройство.  Изчистете, ако сте приключили с използването на това устройство или искате да влезете в друг профил."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Внимание: личните ви данни (включително ключове за шифроване) все още се съхраняват на това устройство.  Изчистете, ако сте приключили с използването на това устройство или искате да влезете в друг профил.",
+    "Identity Server": "Сървър за самоличност",
+    "Integrations Manager": "Мениджър на интеграциите",
+    "Find others by phone or email": "Открийте други по телефон или имейл",
+    "Be found by phone or email": "Бъдете открит по телефон или имейл",
+    "Use bots, bridges, widgets and sticker packs": "Използвайте ботове, връзки с други мрежи, приспособления и стикери",
+    "Terms of Service": "Условия за ползване",
+    "To continue you need to accept the Terms of this service.": "За да продължите е необходимо да приемете условията за ползване на тази услуга.",
+    "Service": "Услуга",
+    "Summary": "Обобщение",
+    "Terms": "Условия",
+    "This account has been deactivated.": "Този акаунт е деактивиран."
 }
