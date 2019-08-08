@@ -31,12 +31,21 @@ module.exports = React.createClass({
         mxEvent: PropTypes.object.isRequired,
     },
 
-    onAvatarClick: function(name) {
-        const httpUrl = MatrixClientPeg.get().mxcUrlToHttp(this.props.mxEvent.getContent().url);
+    onAvatarClick: function() {
+        const cli = MatrixClientPeg.get();
+        const ev = this.props.mxEvent;
+        const httpUrl = cli.mxcUrlToHttp(ev.getContent().url);
+
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
+            senderDisplayName: ev.sender && ev.sender.name ? ev.sender.name : ev.getSender(),
+            roomName: room ? room.name : '',
+        });
+
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: httpUrl,
-            name: name,
+            name: text,
         };
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
@@ -47,15 +56,11 @@ module.exports = React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const name = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
-                senderDisplayName: senderDisplayName,
-                roomName: room ? room.name : '',
-        });
 
         if (!ev.getContent().url || ev.getContent().url.trim().length === 0) {
             return (
                 <div className="mx_TextualEvent">
-                    { _t('%(senderDisplayName)s removed the room avatar.', {senderDisplayName: senderDisplayName}) }
+                    { _t('%(senderDisplayName)s removed the room avatar.', {senderDisplayName}) }
                 </div>
             );
         }
@@ -75,8 +80,8 @@ module.exports = React.createClass({
                     {
                         'img': () =>
                             <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
-                                onClick={this.onAvatarClick.bind(this, name)}>
-                                <BaseAvatar width={14} height={14} url={url} name={name} />
+                                onClick={this.onAvatarClick}>
+                                <BaseAvatar width={14} height={14} url={url} name={room ? room.name : ''} />
                             </AccessibleButton>,
                     })
                 }
