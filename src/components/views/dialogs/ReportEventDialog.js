@@ -116,11 +116,12 @@ export default class ReportEventDialog extends PureComponent {
                     {progress}
                     {error}
                 </div>
-                <DialogButtons primaryButton={_t("Send report")}
-                               onPrimaryButtonClick={this._onSubmit}
-                               focus={true}
-                               onCancel={this._onCancel}
-                               disabled={this.state.busy}
+                <DialogButtons
+                    primaryButton={_t("Send report")}
+                    onPrimaryButtonClick={this._onSubmit}
+                    focus={true}
+                    onCancel={this._onCancel}
+                    disabled={this.state.busy}
                 />
             </BaseDialog>
         );
