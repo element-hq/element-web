@@ -403,14 +403,9 @@ module.exports = React.createClass({
         // clicking the email link.
         let inhibitLogin = Boolean(this.state.formVals.email);
 
-        // Only send the bind params if we're sending username / pw params
+        // Only send inhibitLogin if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
         // session).
-        const bindThreepids = this.state.formVals.password ? {
-            email: true,
-            msisdn: true,
-        } : {};
-        // Likewise inhibitLogin
         if (!this.state.formVals.password) inhibitLogin = null;
 
         return this.state.matrixClient.register(
@@ -418,7 +413,7 @@ module.exports = React.createClass({
             this.state.formVals.password,
             undefined, // session id: included in the auth dict already
             auth,
-            bindThreepids,
+            null,
             null,
             inhibitLogin,
         );
