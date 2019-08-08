@@ -28,7 +28,7 @@ process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 
 function fileExists(name) {
     try {
-        fs.statSync(gsCss);
+        fs.statSync(name);
         return true;
     } catch (e) {
         return false;
