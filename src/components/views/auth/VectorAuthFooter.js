@@ -22,7 +22,7 @@ import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-export default React.createClass({
+module.exports = React.createClass({
     displayName: 'VectorAuthFooter',
     statics: {
         replaces: 'AuthFooter',

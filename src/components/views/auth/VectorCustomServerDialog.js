@@ -22,7 +22,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
  * This is identical to `CustomServerDialog` except for replacing "this app"
  * with "Riot".
  */
-export default React.createClass({
+module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
     statics: {
         replaces: 'CustomServerDialog',
