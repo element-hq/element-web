@@ -584,7 +584,7 @@ export default React.createClass({
                 this._setMxId(payload);
                 break;
             case 'view_start_chat_or_reuse':
-                this._chatCreateOrReuse(payload.user_id, payload.go_home_on_cancel);
+                this._chatCreateOrReuse(payload.user_id);
                 break;
             case 'view_create_chat':
                 showStartChatInviteDialog();
@@ -945,12 +945,7 @@ export default React.createClass({
         });
     },
 
-    _chatCreateOrReuse: function(userId, goHomeOnCancel) {
-        if (goHomeOnCancel === undefined) goHomeOnCancel = true;
-
-        const ChatCreateOrReuseDialog = sdk.getComponent(
-            'views.dialogs.ChatCreateOrReuseDialog',
-        );
+    _chatCreateOrReuse: function(userId) {
         // Use a deferred action to reshow the dialog once the user has registered
         if (MatrixClientPeg.get().isGuest()) {
             // No point in making 2 DMs with welcome bot. This assumes view_set_mxid will
@@ -975,30 +970,23 @@ export default React.createClass({
             return;
         }
 
-        const close = Modal.createTrackedDialog('Chat create or reuse', '', ChatCreateOrReuseDialog, {
-            userId: userId,
-            onFinished: (success) => {
-                if (!success && goHomeOnCancel) {
-                    // Dialog cancelled, default to home
-                    dis.dispatch({ action: 'view_home_page' });
-                }
-            },
-            onNewDMClick: () => {
-                dis.dispatch({
-                    action: 'start_chat',
-                    user_id: userId,
-                });
-                // Close the dialog, indicate success (calls onFinished(true))
-                close(true);
-            },
-            onExistingRoomSelected: (roomId) => {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: roomId,
-                });
-                close(true);
-            },
-        }).close;
+        // TODO: Immutable DMs replaces this
+
+        const client = MatrixClientPeg.get();
+        const dmRoomMap = new DMRoomMap(client);
+        const dmRooms = dmRoomMap.getDMRoomsForUserId(userId);
+
+        if (dmRooms.length > 0) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: dmRooms[0],
+            });
+        } else {
+            dis.dispatch({
+                action: 'start_chat',
+                user_id: userId,
+            });
+        }
     },
 
     _leaveRoomWarnings: function(roomId) {
