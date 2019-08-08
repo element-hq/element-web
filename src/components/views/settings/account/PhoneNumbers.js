@@ -161,7 +161,7 @@ export default class PhoneNumbers extends React.Component {
         const task = new AddThreepid();
         this.setState({verifying: true, continueDisabled: true, addTask: task});
 
-        task.addMsisdn(phoneCountry, phoneNumber, true).then((response) => {
+        task.addMsisdn(phoneCountry, phoneNumber, false).then((response) => {
             this.setState({continueDisabled: false, verifyMsisdn: response.msisdn});
         }).catch((err) => {
             console.error("Unable to add phone number " + phoneNumber + " " + err);
