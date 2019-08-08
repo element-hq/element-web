@@ -166,7 +166,7 @@ module.exports = function (config) {
                                  ]
                     },
                     {
-                        test: /\.(gif|png|svg|ttf)$/,
+                        test: /\.(gif|png|svg|ttf|woff2)$/,
                         loader: 'file-loader',
                     },
                 ],
