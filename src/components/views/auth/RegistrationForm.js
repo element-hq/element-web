@@ -91,14 +91,25 @@ module.exports = React.createClass({
 
         const self = this;
         if (this.state.email == '') {
+            const haveIs = Boolean(this.props.serverConfig.isUrl);
+
+            let desc;
+            if (haveIs) {
+                desc = _t(
+                    "If you don't specify an email address, you won't be able to reset your password. " +
+                    "Are you sure?",
+                );
+            } else {
+                desc = _t(
+                    "No Identity Server is configured so you cannot add add an email address in order to " +
+                    "reset your password in the future.",
+                );
+            }
+
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                 title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("If you don't specify an email address, you won't be able to reset your password. " +
-                            "Are you sure?") }
-                    </div>,
+                description: desc,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (confirmed) {
@@ -423,8 +434,16 @@ module.exports = React.createClass({
         });
     },
 
+    _showEmail() {
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (!haveIs || !this._authStepIsUsed('m.login.email.identity')) {
+            return false;
+        }
+        return true;
+    },
+
     renderEmail() {
-        if (!this._authStepIsUsed('m.login.email.identity')) {
+        if (!this._showEmail()) {
             return null;
         }
         const Field = sdk.getComponent('elements.Field');
@@ -473,7 +492,8 @@ module.exports = React.createClass({
 
     renderPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        if (!threePidLogin || !this._authStepIsUsed('m.login.msisdn')) {
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (!threePidLogin || !haveIs || !this._authStepIsUsed('m.login.msisdn')) {
             return null;
         }
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -547,6 +567,19 @@ module.exports = React.createClass({
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
 
+        const emailHelperText = this._showEmail() ? <div>
+            {_t("Use an email address to recover your account.") + " "}
+            {_t("Other users can invite you to rooms using your contact details.")}
+        </div> : null;
+
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        const noIsText = haveIs ? null : <div>
+            {_t(
+                "No Identity Server is configured: no email addreses can be added. " +
+                "You will be unable to reset your password.",
+            )}
+        </div>;
+
         return (
             <div>
                 <h3>
@@ -565,8 +598,8 @@ module.exports = React.createClass({
                         {this.renderEmail()}
                         {this.renderPhoneNumber()}
                     </div>
-                    {_t("Use an email address to recover your account.") + " "}
-                    {_t("Other users can invite you to rooms using your contact details.")}
+                    { emailHelperText }
+                    { noIsText }
                     { registerButton }
                 </form>
             </div>

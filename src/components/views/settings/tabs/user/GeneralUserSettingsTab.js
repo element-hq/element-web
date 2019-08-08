@@ -28,6 +28,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
 const PlatformPeg = require("../../../../../PlatformPeg");
+const MatrixClientPeg = require("../../../../../MatrixClientPeg");
 const sdk = require('../../../../..');
 const Modal = require("../../../../../Modal");
 const dis = require("../../../../../dispatcher");
@@ -119,6 +120,14 @@ export default class GeneralUserSettingsTab extends React.Component {
                 onFinished={this._onPasswordChanged} />
         );
 
+        const threepidSection = MatrixClientPeg.get().getIdentityServerUrl() ? <div>
+            <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+            <EmailAddresses />
+
+            <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+            <PhoneNumbers />
+        </div> : null;
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
@@ -126,12 +135,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     {_t("Set a new account password...")}
                 </p>
                 {passwordChangeForm}
-
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers />
+                {threepidSection}
             </div>
         );
     }
