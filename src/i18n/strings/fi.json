@@ -1942,5 +1942,15 @@
     "Sign in and regain access to your account.": "Kirjaudu ja pääse takaisin tilillesi.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Et voi kirjautua tilillesi. Ota yhteyttä kotipalvelimesi ylläpitäjään saadaksesi lisätietoja.",
     "Clear personal data": "Poista henkilökohtaiset tiedot",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Varoitus: Henkilökohtaisia tietojasi (mukaan lukien salausavaimia) on edelleen tallennettuna tällä laitteella. Poista ne, jos et aio enää käyttää tätä laitetta, tai haluat kirjautua toiselle tilille."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Varoitus: Henkilökohtaisia tietojasi (mukaan lukien salausavaimia) on edelleen tallennettuna tällä laitteella. Poista ne, jos et aio enää käyttää tätä laitetta, tai haluat kirjautua toiselle tilille.",
+    "Identity Server": "Identiteettipalvelin",
+    "Integrations Manager": "Integraatioiden hallinta",
+    "Find others by phone or email": "Löydä muita käyttäjiä puhelimen tai sähköpostin perusteella",
+    "Be found by phone or email": "Varmista, että sinut löydetään puhelimen tai sähköpostin perusteella",
+    "Use bots, bridges, widgets and sticker packs": "Käytä botteja, siltoja, sovelmia ja tarrapaketteja",
+    "Terms of Service": "Käyttöehdot (Terms of Service)",
+    "To continue you need to accept the Terms of this service.": "Jatkaaksesi sinun täytyy hyväksyä palvelun ehdot.",
+    "Service": "Palvelu",
+    "Summary": "Yhteenveto",
+    "Terms": "Ehdot"
 }
