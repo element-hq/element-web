@@ -37,6 +37,15 @@ limitations under the License.
     margin-left: 5px;
 }
 
+.mx_ExistingPhoneNumber_verification {
+    display: inline-flex;
+    align-items: center;
+
+    .mx_Field {
+        margin: 0 0 0 1em;
+    }
+}
+
 .mx_PhoneNumbers_input {
     display: flex;
     align-items: center;

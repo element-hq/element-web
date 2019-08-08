@@ -164,6 +164,21 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
+    _renderDiscoverySection() {
+        const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
+        const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
+
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                <EmailAddresses />
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                <PhoneNumbers />
+            </div>
+        );
+    }
+
     _renderManagementSection() {
         // TODO: Improve warning text for account deactivation
         return (
@@ -187,6 +202,9 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
                 {this._renderThemeSection()}
+                <div className="mx_SettingsTab_heading">{_t("Discovery")}</div>
+                {this._renderDiscoverySection()}
+                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
                 {this._renderManagementSection()}
             </div>
         );
