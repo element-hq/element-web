@@ -22,7 +22,6 @@ import qs from 'querystring';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import AccessibleButton from './AccessibleButton';
 import Modal from '../../../Modal';
@@ -35,7 +34,7 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
-import { showIntegrationsManager } from '../../../integrations/integrations';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -178,9 +177,22 @@ export default class AppTile extends React.Component {
             return;
         }
 
+        const managers = IntegrationManagers.sharedInstance();
+        if (!managers.hasManager()) {
+            console.warn("No integration manager - not setting scalar token", url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
+            return;
+        }
+
+        // TODO: Pick the right manager for the widget
+
         // Fetch the token before loading the iframe as we need it to mangle the URL
         if (!this._scalarClient) {
-            this._scalarClient = new ScalarAuthClient();
+            this._scalarClient = managers.getPrimaryManager().getScalarClient();
         }
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param if not already present
@@ -189,7 +201,7 @@ export default class AppTile extends React.Component {
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
-                // u.search must be set to undefined, so that u.format() uses query paramerters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
+                // u.search must be set to undefined, so that u.format() uses query parameters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
                 u.search = undefined;
                 u.query = params;
             }
@@ -251,11 +263,12 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            showIntegrationsManager({
-                room: this.props.room,
-                screen: 'type_' + this.props.type,
-                integrationId: this.props.id,
-            });
+            // TODO: Open the right manager for the widget
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                this.props.room,
+                this.props.type,
+                this.props.id,
+            );
         }
     }
 

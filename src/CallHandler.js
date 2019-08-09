@@ -63,7 +63,7 @@ import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
-import ScalarAuthClient from './ScalarAuthClient';
+import {IntegrationManagers} from "./integrations/IntegrationManagers";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -348,14 +348,20 @@ async function _startCallApp(roomId, type) {
     // the state event in anyway, but the resulting widget would then not
     // work for us. Better that the user knows before everyone else in the
     // room sees it.
-    const scalarClient = new ScalarAuthClient();
-    let haveScalar = false;
-    try {
-        await scalarClient.connect();
-        haveScalar = scalarClient.hasCredentials();
-    } catch (e) {
-        // fall through
+    const managers = IntegrationManagers.sharedInstance();
+    let haveScalar = true;
+    if (managers.hasManager()) {
+        try {
+            const scalarClient = managers.getPrimaryManager().getScalarClient();
+            await scalarClient.connect();
+            haveScalar = scalarClient.hasCredentials();
+        } catch (e) {
+            // ignore
+        }
+    } else {
+        haveScalar = false;
     }
+
     if (!haveScalar) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
