@@ -427,7 +427,8 @@ async function _startCallApp(roomId, type) {
         // URL, but this will at least allow the integration manager to not be hardcoded.
         widgetUrl = SdkConfig.get().integrations_jitsi_widget_url + '?' + queryString;
     } else {
-        widgetUrl = SdkConfig.get().integrations_rest_url + '/widgets/jitsi.html?' + queryString;
+        const apiUrl = IntegrationManagers.sharedInstance().getPrimaryManager().apiUrl;
+        widgetUrl = apiUrl + '/widgets/jitsi.html?' + queryString;
     }
 
     const widgetData = { widgetSessionId };
