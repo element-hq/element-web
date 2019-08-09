@@ -23,7 +23,10 @@ limitations under the License.
 const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
-const argv = require('minimist')(process.argv);
+const argv = require('minimist')(process.argv, {
+    alias: {help: "h"},
+});
+
 const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol} = require('electron');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
@@ -36,6 +39,19 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
+
+if (argv["help"]) {
+    console.log("Options:");
+    console.log("  --profile-dir {path}: Path to where to store the profile.");
+    console.log("  --profile {name}:     Name of alternate profile to use, allows for running multiple accounts.");
+    console.log("  --devtools:           Install and use react-devtools and react-perf.");
+    console.log("  --no-update:          Disable automatic updating.");
+    console.log("  --hidden:             Start the application hidden in the system tray.");
+    console.log("  --help:               Displays this help message.");
+    console.log("And more such as --proxy, see:" +
+        "https://github.com/electron/electron/blob/master/docs/api/chrome-command-line-switches.md");
+    app.exit();
+}
 
 // boolean flag set whilst we are doing one-time origin migration
 // We only serve the origin migration script while we're actually
@@ -155,6 +171,14 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             break;
         case 'setMinimizeToTrayEnabled':
             store.set('minimizeToTray', global.minimizeToTray = args[0]);
+            break;
+        case 'getAutoHideMenuBarEnabled':
+            ret = global.mainWindow.isMenuBarAutoHide();
+            break;
+        case 'setAutoHideMenuBarEnabled':
+            store.set('autoHideMenuBar', args[0]);
+            global.mainWindow.setAutoHideMenuBar(args[0]);
+            global.mainWindow.setMenuBarVisibility(!args[0]);
             break;
         case 'getAppVersion':
             ret = app.getVersion();
@@ -320,7 +344,7 @@ app.on('ready', () => {
     mainWindow = global.mainWindow = new BrowserWindow({
         icon: iconPath,
         show: false,
-        autoHideMenuBar: true,
+        autoHideMenuBar: store.get('autoHideMenuBar', true),
 
         x: mainWindowState.x,
         y: mainWindowState.y,
