@@ -53,7 +53,7 @@ export class IntegrationManagerInstance {
             );
         });
 
-        let newProps = {};
+        const newProps = {};
         try {
             await client.connect();
             if (!client.hasCredentials()) {
@@ -68,7 +68,7 @@ export class IntegrationManagerInstance {
             }
 
             console.error(e);
-            props["connected"] = false;
+            newProps["connected"] = false;
         }
 
         // Close the old dialog and open a new one
