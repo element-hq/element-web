@@ -138,6 +138,7 @@ export default class Field extends React.PureComponent {
 
     render() {
         const { element, prefix, onValidate, children, tooltip, ...inputProps } = this.props;
+        !tooltip; // needs to be removed from props but we don't need it here, so otherwise unused variable
 
         const inputElement = element || "input";
 
