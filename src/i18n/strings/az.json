@@ -478,5 +478,8 @@
     "You cannot modify widgets in this room.": "Bu otaqda vidjetləri dəyişdirə bilməzsiniz.",
     "Verifies a user, device, and pubkey tuple": "Bir istifadəçini, cihazı və publik açarı yoxlayır",
     "Unknown (user, device) pair:": "Naməlum (istifadəçi, cihaz) qoşulma:",
-    "Verified key": "Təsdiqlənmiş açar"
+    "Verified key": "Təsdiqlənmiş açar",
+    "Sends the given message coloured as a rainbow": "Verilən mesajı göy qurşağı kimi rəngli göndərir",
+    "Sends the given emote coloured as a rainbow": "Göndərilmiş emote rəngini göy qurşağı kimi göndərir",
+    "Unrecognised command:": "Tanınmayan əmr:"
 }
