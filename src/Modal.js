@@ -274,7 +274,7 @@ class ModalManager {
         this._reRender();
         return {
             close: closeDialog,
-            then: (resolve, reject) => onFinishedProm.then(resolve, reject),
+            finished: onFinishedProm,
         };
     }
 
@@ -285,7 +285,7 @@ class ModalManager {
         this._reRender();
         return {
             close: closeDialog,
-            then: (resolve, reject) => onFinishedProm.then(resolve, reject),
+            finished: onFinishedProm,
         };
     }
 
