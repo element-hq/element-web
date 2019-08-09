@@ -133,7 +133,6 @@ module.exports = React.createClass({
     },
 
     onError: function(ev) {
-        console.log("onError");
         const nextIndex = this.state.urlsIndex + 1;
         if (nextIndex < this.state.imageUrls.length) {
             // try the next one

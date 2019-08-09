@@ -64,8 +64,10 @@ module.exports = React.createClass({
         }
 
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        // Provide all arguments to RoomAvatar via oobData because the avatar is historic
         const oobData = {
             avatarUrl: ev.getContent().url,
+            name: room ? room.name : "",
         };
 
         return (
@@ -76,7 +78,7 @@ module.exports = React.createClass({
                         'img': () =>
                             <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
                                 onClick={this.onAvatarClick}>
-                                <RoomAvatar width={14} height={14} room={room} oobData={oobData} />
+                                <RoomAvatar width={14} height={14} oobData={oobData} />
                             </AccessibleButton>,
                     })
                 }
