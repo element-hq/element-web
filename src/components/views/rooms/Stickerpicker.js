@@ -18,13 +18,12 @@ import {_t, _td} from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import PersistedElement from "../elements/PersistedElement";
-import { showIntegrationsManager } from '../../../integrations/integrations';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 
 const widgetType = 'm.stickerpicker';
 
@@ -67,8 +66,9 @@ export default class Stickerpicker extends React.Component {
 
     _acquireScalarClient() {
         if (this.scalarClient) return Promise.resolve(this.scalarClient);
-        if (ScalarAuthClient.isPossible()) {
-            this.scalarClient = new ScalarAuthClient();
+        // TODO: Pick the right manager for the widget
+        if (IntegrationManagers.sharedInstance().hasManager()) {
+            this.scalarClient = IntegrationManagers.sharedInstance().getPrimaryManager().getScalarClient();
             return this.scalarClient.connect().then(() => {
                 this.forceUpdate();
                 return this.scalarClient;
@@ -348,11 +348,12 @@ export default class Stickerpicker extends React.Component {
      * Launch the integrations manager on the stickers integration page
      */
     _launchManageIntegrations() {
-        showIntegrationsManager({
-            room: this.props.room,
-            screen: `type_${widgetType}`,
-            integrationId: this.state.widgetId,
-        });
+        // TODO: Open the right integration manager for the widget
+        IntegrationManagers.sharedInstance().getPrimaryManager().open(
+            this.props.room,
+            `type_${widgetType}`,
+            this.state.widgetId,
+        );
     }
 
     render() {

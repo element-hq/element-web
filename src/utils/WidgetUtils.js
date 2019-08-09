@@ -27,6 +27,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -102,7 +103,8 @@ export default class WidgetUtils {
 
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
+            const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
+            if (defaultManager) scalarUrls = [defaultManager.apiUrl];
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
