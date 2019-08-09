@@ -931,18 +931,17 @@ export default React.createClass({
         }).close;
     },
 
-    _createRoom: function() {
+    _createRoom: async function() {
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
-        Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
-            onFinished: (shouldCreate, name, noFederate) => {
-                if (shouldCreate) {
-                    const createOpts = {};
-                    if (name) createOpts.name = name;
-                    if (noFederate) createOpts.creation_content = {'m.federate': false};
-                    createRoom({createOpts}).done();
-                }
-            },
-        });
+        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
+
+        const [shouldCreate, name, noFederate] = await modal;
+        if (shouldCreate) {
+            const createOpts = {};
+            if (name) createOpts.name = name;
+            if (noFederate) createOpts.creation_content = {'m.federate': false};
+            createRoom({createOpts}).done();
+        }
     },
 
     _chatCreateOrReuse: function(userId) {
