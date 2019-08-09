@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -118,7 +118,16 @@ export default class Field extends React.PureComponent {
         }
     }
 
-    validateOnChange = throttle(() => {
+    /*
+     * This was changed from throttle to debounce: this is more traditional for
+     * form validation since it means that the validation doesn't happen at all
+     * until the user stops typing for a bit (debounce defaults to not running on
+     * the leading edge). If we're doing an HTTP hit on each validation, we have more
+     * incentive to prevent validating input that's very unlikely to be valid.
+     * We may find that we actually want different behaviour for registration
+     * fields, in which case we can add some options to control it.
+     */
+    validateOnChange = debounce(() => {
         this.validate({
             focused: true,
         });
