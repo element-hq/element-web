@@ -18,6 +18,9 @@ import SdkConfig from '../SdkConfig';
 import sdk from "../index";
 import Modal from '../Modal';
 import {IntegrationManagerInstance} from "./IntegrationManagerInstance";
+import type {MatrixClient, MatrixEvent} from "matrix-js-sdk";
+import WidgetUtils from "../utils/WidgetUtils";
+import MatrixClientPeg from "../MatrixClientPeg";
 
 export class IntegrationManagers {
     static _instance;
@@ -30,9 +33,28 @@ export class IntegrationManagers {
     }
 
     _managers: IntegrationManagerInstance[] = [];
+    _client: MatrixClient;
 
     constructor() {
+        this._compileManagers();
+    }
+
+    startWatching(): void {
+        this.stopWatching();
+        this._client = MatrixClientPeg.get();
+        this._client.on("accountData", this._onAccountData.bind(this));
+        this._compileManagers();
+    }
+
+    stopWatching(): void {
+        if (!this._client) return;
+        this._client.removeListener("accountData", this._onAccountData.bind(this));
+    }
+
+    _compileManagers() {
+        this._managers = [];
         this._setupConfiguredManager();
+        this._setupAccountManagers();
     }
 
     _setupConfiguredManager() {
@@ -44,14 +66,33 @@ export class IntegrationManagers {
         }
     }
 
+    _setupAccountManagers() {
+        const widgets = WidgetUtils.getIntegrationManagerWidgets();
+        widgets.forEach(w => {
+            const data = w.content['data'];
+            if (!data) return;
+
+            const uiUrl = w.content['url'];
+            const apiUrl = data['api_url'];
+            if (!apiUrl || !uiUrl) return;
+
+            this._managers.push(new IntegrationManagerInstance(apiUrl, uiUrl));
+        });
+    }
+
+    _onAccountData(ev: MatrixEvent): void {
+        if (ev.getType() === 'm.widgets') {
+            this._compileManagers();
+        }
+    }
+
     hasManager(): boolean {
         return this._managers.length > 0;
     }
 
     getPrimaryManager(): IntegrationManagerInstance {
         if (this.hasManager()) {
-            // TODO: TravisR - Handle custom integration managers (widgets)
-            return this._managers[0];
+            return this._managers[this._managers.length - 1];
         } else {
             return null;
         }
@@ -66,3 +107,6 @@ export class IntegrationManagers {
         );
     }
 }
+
+// For debugging
+global.mxIntegrationManagers = IntegrationManagers;
