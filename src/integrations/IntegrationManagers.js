@@ -67,6 +67,7 @@ export class IntegrationManagers {
     }
 
     _setupAccountManagers() {
+        if (!this._client.getUserId()) return; // not logged in
         const widgets = WidgetUtils.getIntegrationManagerWidgets();
         widgets.forEach(w => {
             const data = w.content['data'];
