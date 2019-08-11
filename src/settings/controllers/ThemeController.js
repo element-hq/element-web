@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,17 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
+import {_td} from "../../languageHandler";
 
-const SUPPORTED_THEMES = [
-    "light",
-    "dark",
-];
+export const SUPPORTED_THEMES = {
+    "light": _td("Light theme"),
+    "dark": _td("Dark theme"),
+};
 
 export default class ThemeController extends SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         // Override in case some no longer supported theme is stored here
-        if (!SUPPORTED_THEMES.includes(calculatedValue)) {
+        if (!SUPPORTED_THEMES[calculatedValue]) {
             return "light";
         }
 
