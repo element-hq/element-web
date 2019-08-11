@@ -2075,5 +2075,18 @@
     "Command Help": "指令說明",
     "No Identity Server is configured so you cannot add add an email address in order to reset your password in the future.": "未設定身份識別伺服器，所以您無法新增未來可以用於重設您密碼的電子郵件地址。",
     "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.": "未設定身份識別伺服器：無法新增電子郵件地址。您將無法重設您的密碼。",
-    "No identity server is configured: add one in server settings to reset your password.": "未設定身份識別伺服器：在伺服器設定中新增一個以重設您的密碼。"
+    "No identity server is configured: add one in server settings to reset your password.": "未設定身份識別伺服器：在伺服器設定中新增一個以重設您的密碼。",
+    "Discovery": "探索",
+    "Deactivate account": "停用帳號",
+    "Unable to revoke sharing for email address": "無法撤回電子郵件的分享",
+    "Unable to share email address": "無法分享電子郵件",
+    "Check your inbox, then click Continue": "檢查您的收件匣，然後點擊繼續",
+    "Revoke": "撤回",
+    "Share": "分享",
+    "Discovery options will appear once you have added an email above.": "當您在上面加入電子郵件時將會出現探索選項。",
+    "Unable to revoke sharing for phone number": "無法撤回電話號碼的分享",
+    "Unable to share phone number": "無法分享電話號碼",
+    "Please enter verification code sent via text.": "請輸入透過文字傳送的驗證碼。",
+    "Discovery options will appear once you have added a phone number above.": "當您在上面加入電話號碼時將會出現探索選項。",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "文字訊息將會被傳送到 +%(msisdn)s。請輸入其中包含的驗證碼。"
 }
