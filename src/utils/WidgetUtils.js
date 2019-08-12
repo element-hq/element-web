@@ -341,6 +341,17 @@ export default class WidgetUtils {
     }
 
     /**
+     * Get all integration manager widgets for this user.
+     * @returns {Object[]} An array of integration manager user widgets.
+     */
+    static getIntegrationManagerWidgets() {
+        const widgets = WidgetUtils.getUserWidgetsArray();
+        // We'll be using im.vector.integration_manager until MSC1957 or similar is accepted.
+        const imTypes = ["m.integration_manager", "im.vector.integration_manager"];
+        return widgets.filter(w => w.content && imTypes.includes(w.content.type));
+    }
+
+    /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
