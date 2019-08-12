@@ -132,7 +132,7 @@
     "karma-webpack": "4.0.0-beta.0",
     "loader-utils": "^1.2.3",
     "matrix-mock-request": "^1.2.3",
-    "matrix-react-test-utils": "^0.2.0",
+    "matrix-react-test-utils": "^0.2.2",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
