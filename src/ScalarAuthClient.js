@@ -29,20 +29,43 @@ import * as Matrix from 'matrix-js-sdk';
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
 
-class ScalarAuthClient {
-    constructor() {
+export default class ScalarAuthClient {
+    constructor(apiUrl, uiUrl) {
+        this.apiUrl = apiUrl;
+        this.uiUrl = uiUrl;
         this.scalarToken = null;
         // `undefined` to allow `startTermsFlow` to fallback to a default
         // callback if this is unset.
         this.termsInteractionCallback = undefined;
+
+        // We try and store the token on a per-manager basis, but need a fallback
+        // for the default manager.
+        const configApiUrl = SdkConfig.get()['integrations_rest_url'];
+        const configUiUrl = SdkConfig.get()['integrations_ui_url'];
+        this.isDefaultManager = apiUrl === configApiUrl && configUiUrl === uiUrl;
     }
 
-    /**
-     * Determines if setting up a ScalarAuthClient is even possible
-     * @returns {boolean} true if possible, false otherwise.
-     */
-    static isPossible() {
-        return SdkConfig.get()['integrations_rest_url'] && SdkConfig.get()['integrations_ui_url'];
+    _writeTokenToStore() {
+        window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken);
+        if (this.isDefaultManager) {
+            // We remove the old token from storage to migrate upwards. This is safe
+            // to do because even if the user switches to /app when this is on /develop
+            // they'll at worst register for a new token.
+            window.localStorage.removeItem("mx_scalar_token"); // no-op when not present
+        }
+    }
+
+    _readTokenFromStore() {
+        let token = window.localStorage.getItem("mx_scalar_token_at_" + this.apiUrl);
+        if (!token && this.isDefaultManager) {
+            token = window.localStorage.getItem("mx_scalar_token");
+        }
+        return token;
+    }
+
+    _readToken() {
+        if (this.scalarToken) return this.scalarToken;
+        return this._readTokenFromStore();
     }
 
     setTermsInteractionCallback(callback) {
@@ -61,8 +84,7 @@ class ScalarAuthClient {
 
     // Returns a promise that resolves to a scalar_token string
     getScalarToken() {
-        let token = this.scalarToken;
-        if (!token) token = window.localStorage.getItem("mx_scalar_token");
+        const token = this._readToken();
 
         if (!token) {
             return this.registerForToken();
@@ -78,7 +100,7 @@ class ScalarAuthClient {
     }
 
     _getAccountName(token) {
-        const url = SdkConfig.get().integrations_rest_url + "/account";
+        const url = this.apiUrl + "/account";
 
         return new Promise(function(resolve, reject) {
             request({
@@ -111,7 +133,7 @@ class ScalarAuthClient {
             return token;
         }).catch((e) => {
             if (e instanceof TermsNotSignedError) {
-                console.log("Integrations manager requires new terms to be agreed to");
+                console.log("Integration manager requires new terms to be agreed to");
                 // The terms endpoints are new and so live on standard _matrix prefixes,
                 // but IM rest urls are currently configured with paths, so remove the
                 // path from the base URL before passing it to the js-sdk
@@ -126,7 +148,7 @@ class ScalarAuthClient {
                 // Once we've fully transitioned to _matrix URLs, we can give people
                 // a grace period to update their configs, then use the rest url as
                 // a regular base url.
-                const parsedImRestUrl = url.parse(SdkConfig.get().integrations_rest_url);
+                const parsedImRestUrl = url.parse(this.apiUrl);
                 parsedImRestUrl.path = '';
                 parsedImRestUrl.pathname = '';
                 return startTermsFlow([new Service(
@@ -147,17 +169,18 @@ class ScalarAuthClient {
         return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
             return this.exchangeForScalarToken(tokenObject);
-        }).then((tokenObject) => {
+        }).then((token) => {
             // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
-            return this._checkToken(tokenObject);
-        }).then((tokenObject) => {
-            window.localStorage.setItem("mx_scalar_token", tokenObject);
-            return tokenObject;
+            return this._checkToken(token);
+        }).then((token) => {
+            this.scalarToken = token;
+            this._writeTokenToStore();
+            return token;
         });
     }
 
     exchangeForScalarToken(openidTokenObject) {
-        const scalarRestUrl = SdkConfig.get().integrations_rest_url;
+        const scalarRestUrl = this.apiUrl;
 
         return new Promise(function(resolve, reject) {
             request({
@@ -181,7 +204,7 @@ class ScalarAuthClient {
     }
 
     getScalarPageTitle(url) {
-        let scalarPageLookupUrl = SdkConfig.get().integrations_rest_url + '/widgets/title_lookup';
+        let scalarPageLookupUrl = this.apiUrl + '/widgets/title_lookup';
         scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
         scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
 
@@ -217,7 +240,7 @@ class ScalarAuthClient {
      * @return {Promise}           Resolves on completion
      */
     disableWidgetAssets(widgetType, widgetId) {
-        let url = SdkConfig.get().integrations_rest_url + '/widgets/set_assets_state';
+        let url = this.apiUrl + '/widgets/set_assets_state';
         url = this.getStarterLink(url);
         return new Promise((resolve, reject) => {
             request({
@@ -246,7 +269,7 @@ class ScalarAuthClient {
     getScalarInterfaceUrlForRoom(room, screen, id) {
         const roomId = room.roomId;
         const roomName = room.name;
-        let url = SdkConfig.get().integrations_ui_url;
+        let url = this.uiUrl;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
         url += "&room_name=" + encodeURIComponent(roomName);
@@ -264,5 +287,3 @@ class ScalarAuthClient {
         return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
     }
 }
-
-module.exports = ScalarAuthClient;

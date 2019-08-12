@@ -232,13 +232,13 @@ Example:
 }
 */
 
-import SdkConfig from './SdkConfig';
 import MatrixClientPeg from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
+import {IntegrationManagers} from "./integrations/IntegrationManagers";
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -548,7 +548,8 @@ const onMessage = function(event) {
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
     let configUrl;
     try {
-        configUrl = new URL(SdkConfig.get().integrations_ui_url);
+        // TODO: Support multiple integration managers
+        configUrl = new URL(IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl);
     } catch (e) {
         // No integrations UI URL, ignore silently.
         return;
