@@ -1952,5 +1952,18 @@
     "To continue you need to accept the Terms of this service.": "Jatkaaksesi sinun täytyy hyväksyä palvelun ehdot.",
     "Service": "Palvelu",
     "Summary": "Yhteenveto",
-    "Terms": "Ehdot"
+    "Terms": "Ehdot",
+    "Failed to start chat": "Keskustelun aloittaminen ei onnistunut",
+    "Messages": "Viestit",
+    "Actions": "Toiminnot",
+    "Displays list of commands with usages and descriptions": "Näyttää luettelon komennoista käyttötavoin ja kuvauksin",
+    "Always show the window menu bar": "Näytä aina ikkunan valikkorivi",
+    "Unable to revoke sharing for email address": "Sähköpostiosoitteen jakamista ei voi perua",
+    "Unable to share email address": "Sähköpostiosoitetta ei voi jakaa",
+    "Check your inbox, then click Continue": "Tarkista sähköpostisi ja klikkaa sitten Jatka",
+    "Share": "Jaa",
+    "Unable to share phone number": "Puhelinnumeroa ei voi jakaa",
+    "No Identity Server is configured so you cannot add add an email address in order to reset your password in the future.": "Identiteettipalvelinta ei ole määritetty, joten et voi lisätä sähköpostiosoitetta salasanasi palauttamiseksi vastaisuudessa.",
+    "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.": "Identiteettipalvelinta ei ole määritetty: sähköpostiosoitetta ei voi lisätä. Et pysty palauttamaan salasanaasi.",
+    "No identity server is configured: add one in server settings to reset your password.": "Identiteettipalvelinta ei ole määritetty: lisää se palvelinasetuksissa, jotta voi palauttaa salasanasi."
 }
