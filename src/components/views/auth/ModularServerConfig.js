@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as ServerType from '../../views/auth/ServerTypeSelector';
+import ServerConfig from "./ServerConfig";
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
@@ -33,49 +33,8 @@ const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_
  * This is a variant of ServerConfig with only the HS field and different body
  * text that is specific to the Modular case.
  */
-export default class ModularServerConfig extends React.PureComponent {
-    static propTypes = {
-        onServerConfigChange: PropTypes.func,
-
-        // The current configuration that the user is expecting to change.
-        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
-
-        delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-
-        // Called after the component calls onServerConfigChange
-        onAfterSubmit: PropTypes.func,
-
-        // Optional text for the submit button. If falsey, no button will be shown.
-        submitText: PropTypes.string,
-
-        // Optional class for the submit button. Only applies if the submit button
-        // is to be rendered.
-        submitClass: PropTypes.string,
-    };
-
-    static defaultProps = {
-        onServerConfigChange: function() {},
-        customHsUrl: "",
-        delayTimeMs: 0,
-    };
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            busy: false,
-            errorText: "",
-            hsUrl: props.serverConfig.hsUrl,
-            isUrl: props.serverConfig.isUrl,
-        };
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (newProps.serverConfig.hsUrl === this.state.hsUrl &&
-            newProps.serverConfig.isUrl === this.state.isUrl) return;
-
-        this.validateAndApplyServer(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
-    }
+export default class ModularServerConfig extends ServerConfig {
+    static propTypes = ServerConfig.propTypes;
 
     async validateAndApplyServer(hsUrl, isUrl) {
         // Always try and use the defaults first
@@ -118,35 +77,6 @@ export default class ModularServerConfig extends React.PureComponent {
         // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
         // find their homeserver without demanding they use "https://matrix.org"
         return this.validateAndApplyServer(this.state.hsUrl, ServerType.TYPES.PREMIUM.identityServerUrl);
-    }
-
-    onHomeserverBlur = (ev) => {
-        this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            this.validateServer();
-        });
-    };
-
-    onHomeserverChange = (ev) => {
-        const hsUrl = ev.target.value;
-        this.setState({ hsUrl });
-    };
-
-    onSubmit = async (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        const result = await this.validateServer();
-        if (!result) return; // Do not continue.
-
-        if (this.props.onAfterSubmit) {
-            this.props.onAfterSubmit();
-        }
-    };
-
-    _waitThenInvoke(existingTimeoutId, fn) {
-        if (existingTimeoutId) {
-            clearTimeout(existingTimeoutId);
-        }
-        return setTimeout(fn.bind(this), this.props.delayTimeMs);
     }
 
     render() {
