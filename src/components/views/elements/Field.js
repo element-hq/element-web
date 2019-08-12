@@ -137,7 +137,7 @@ export default class Field extends React.PureComponent {
     }, VALIDATION_THROTTLE_MS);
 
     render() {
-        const { element, prefix, onValidate, children, tooltip, ...inputProps } = this.props;
+        const { element, prefix, onValidate, children, ...inputProps } = this.props;
         delete inputProps.tooltip; // needs to be removed from props but we don't need it here
 
         const inputElement = element || "input";
