@@ -351,6 +351,20 @@ export default class WidgetUtils {
         return widgets.filter(w => w.content && imTypes.includes(w.content.type));
     }
 
+    static removeIntegrationManagerWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        Object.entries(userWidgets).forEach(([key, widget]) => {
+            if (widget.content && widget.content.type === 'm.integration_manager') {
+                delete userWidgets[key];
+            }
+        });
+        return client.setAccountData('m.widgets', userWidgets);
+    }
+
     /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated

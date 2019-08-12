@@ -204,6 +204,17 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
+    _renderIntegrationManagerSection() {
+        const SetIntegrationManager = sdk.getComponent("views.settings.SetIntegrationManager");
+
+        return (
+            <div className="mx_SettingsTab_section">
+                { /* has its own heading as it includes the current integration manager */ }
+                <SetIntegrationManager />
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="mx_SettingsTab">
@@ -214,6 +225,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderThemeSection()}
                 <div className="mx_SettingsTab_heading">{_t("Discovery")}</div>
                 {this._renderDiscoverySection()}
+                {this._renderIntegrationManagerSection() /* Has its own title */}
                 <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
                 {this._renderManagementSection()}
             </div>
