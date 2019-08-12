@@ -1,6 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
+import {THEMES} from "../../../../../themes";
 const PlatformPeg = require("../../../../../PlatformPeg");
 const MatrixClientPeg = require("../../../../../MatrixClientPeg");
 const sdk = require('../../../../..');
@@ -160,8 +162,9 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Light theme")}</option>
-                    <option value="dark">{_t("Dark theme")}</option>
+                    {Object.entries(THEMES).map(([theme, text]) => {
+                        return <option key={theme} value={theme}>{_t(text)}</option>;
+                    })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
