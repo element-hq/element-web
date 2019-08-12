@@ -6394,7 +6394,7 @@ react-dom@^16.4.2:
   version "2.1.5"
   resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/f64452388011d37d8a4427ba769153c30700ab8c"
   dependencies:
-    gemini-scrollbar matrix-org/gemini-scrollbar#b302279
+    gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
 react-immutable-proptypes@^2.1.0:
   version "2.1.0"
