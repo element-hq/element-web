@@ -1906,5 +1906,15 @@
     "Your Modular server": "Via Modular-servilo",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Enigu la lokon de via Modular-hejmservilo. Ĝi povas uzi vian propran domajnan nomon aŭ esti subdomajno de <a>modular.im</a>.",
     "Invalid base_url for m.homeserver": "Nevalida base_url por m.homeserver",
-    "Invalid base_url for m.identity_server": "Nevalida base_url por m.identity_server"
+    "Invalid base_url for m.identity_server": "Nevalida base_url por m.identity_server",
+    "Identity Server": "Identiga servilo",
+    "Find others by phone or email": "Trovu aliajn per telefonnumero aŭ retpoŝtadreso",
+    "Be found by phone or email": "Troviĝu per telefonnumero aŭ retpoŝtadreso",
+    "Use bots, bridges, widgets and sticker packs": "Uzu robotojn, pontojn, fenestraĵojn, kaj glumarkarojn",
+    "Terms of Service": "Uzokondiĉoj",
+    "To continue you need to accept the Terms of this service.": "Por pluiĝi, vi devas akcepti la uzokondiĉojn.",
+    "Service": "Servo",
+    "Summary": "Resumo",
+    "Terms": "Kondiĉoj",
+    "This account has been deactivated.": "Tiu ĉi konto malaktiviĝis."
 }
