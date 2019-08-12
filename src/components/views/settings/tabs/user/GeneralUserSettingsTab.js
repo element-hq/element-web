@@ -28,11 +28,11 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
 import {THEMES} from "../../../../../themes";
-const PlatformPeg = require("../../../../../PlatformPeg");
-const MatrixClientPeg = require("../../../../../MatrixClientPeg");
-const sdk = require('../../../../..');
-const Modal = require("../../../../../Modal");
-const dis = require("../../../../../dispatcher");
+import PlatformPeg from "../../../../../PlatformPeg";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import sdk from "../../../../..";
+import Modal from "../../../../../Modal";
+import dis from "../../../../../dispatcher";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -174,6 +174,7 @@ export default class GeneralUserSettingsTab extends React.Component {
     _renderDiscoverySection() {
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
+        const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
         return (
             <div className="mx_SettingsTab_section">
@@ -182,6 +183,8 @@ export default class GeneralUserSettingsTab extends React.Component {
 
                 <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
                 <PhoneNumbers />
+                { /* has its own heading as it includes the current ID server */ }
+                <SetIdServer />
             </div>
         );
     }
