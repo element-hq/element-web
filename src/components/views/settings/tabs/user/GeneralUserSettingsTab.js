@@ -27,7 +27,7 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
-import {SUPPORTED_THEMES} from "../../../../../settings/controllers/ThemeController";
+import {THEMES} from "../../../../../themes";
 const PlatformPeg = require("../../../../../PlatformPeg");
 const MatrixClientPeg = require("../../../../../MatrixClientPeg");
 const sdk = require('../../../../..');
@@ -162,7 +162,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    {Object.entries(SUPPORTED_THEMES).map(([theme, text]) => {
+                    {Object.entries(THEMES).map(([theme, text]) => {
                         return <option key={theme} value={theme}>{_t(text)}</option>;
                     })}
                 </Field>
