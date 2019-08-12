@@ -131,15 +131,18 @@ export default class SetIdServer extends React.Component {
         const fullUrl = unabbreviateUrl(this.state.idServer);
 
         const errStr = await checkIsUrl(fullUrl);
+
+        let newFormValue = this.state.idServer;
         if (!errStr) {
             MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
             localStorage.setItem("mx_is_url", fullUrl);
+            newFormValue = '';
         }
         this.setState({
             busy: false,
             error: errStr,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: '',
+            idServer: newFormValue,
         });
     };
 
