@@ -172,7 +172,7 @@ export default class SetIdServer extends React.Component {
 
     _disconnectIdServer = () => {
         MatrixClientPeg.get().setIdentityServerUrl(null);
-        localStorage.removeItem("mx_is_access_token", fullUrl);
+        localStorage.removeItem("mx_is_access_token");
         localStorage.removeItem("mx_is_url");
         this.setState({
             busy: false,
