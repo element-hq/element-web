@@ -542,7 +542,7 @@
     "Not a valid ID Server (status code %(code)s)": "Not a valid ID Server (status code %(code)s)",
     "Checking Server": "Checking Server",
     "Disconnect ID Server": "Disconnect ID Server",
-    "Disconnect from the ID Server %(idserver)s?": "Disconnect from the ID Server %(idserver)s?",
+    "Disconnect from the ID Server <idserver></idserver>?": "Disconnect from the ID Server <idserver></idserver>?",
     "Disconnect": "Disconnect",
     "Identity Server (%(server)s)": "Identity Server (%(server)s)",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.",
