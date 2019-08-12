@@ -70,6 +70,8 @@ async function checkIsUrl(isUrl) {
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
     return new Promise((resolve) => {
         request(
+            // also XXX: we don't really know whether to hit /v1 or /v2 for this: we
+            // probably want a /versions endpoint like the C/S API.
             { method: "GET", url: isUrl + '/_matrix/identity/api/v1' },
             (err, response, body) => {
                 if (err) {
