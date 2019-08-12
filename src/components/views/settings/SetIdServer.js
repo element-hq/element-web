@@ -138,7 +138,7 @@ export default class SetIdServer extends React.Component {
         let newFormValue = this.state.idServer;
         if (!errStr) {
             MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
-            localStorage.removeItem("mx_is_access_token", fullUrl);
+            localStorage.removeItem("mx_is_access_token");
             localStorage.setItem("mx_is_url", fullUrl);
             newFormValue = '';
         }
