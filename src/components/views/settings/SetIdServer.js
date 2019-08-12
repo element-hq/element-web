@@ -22,6 +22,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
+import Modal from '../../../Modal';
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
@@ -148,7 +149,39 @@ export default class SetIdServer extends React.Component {
         });
     };
 
+    _onDisconnectClicked = () => {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('ID Server Disconnect Warning', '', QuestionDialog, {
+            title: _t("Disconnect ID Server"),
+            description:
+                <div>
+                    {_t(
+                        "Disconnect from the ID Server <idserver></idserver>?", {},
+                        {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
+                    )},
+                </div>,
+            button: _t("Disconnect"),
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    this._disconnectIdServer();
+                }
+            },
+        });
+    };
+
+    _disconnectIdServer = () => {
+        MatrixClientPeg.get().setIdentityServerUrl(null);
+        localStorage.removeItem("mx_is_url");
+        this.setState({
+            busy: false,
+            error: null,
+            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            idServer: '',
+        });
+    };
+
     render() {
+        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;
@@ -169,6 +202,20 @@ export default class SetIdServer extends React.Component {
             );
         }
 
+        let discoSection;
+        if (idServerUrl) {
+            discoSection = <div>
+                <span className="mx_SettingsTab_subsectionText">{_t(
+                    "Disconnecting from your identity server will mean you " +
+                    "won’t be discoverable by other users and you won’t be " +
+                    "able to invite others by email or phone.",
+                )}</span>
+                <AccessibleButton onClick={this._onDisconnectClicked} kind="danger">
+                    {_t("Disconnect")}
+                </AccessibleButton>
+            </div>;
+        }
+
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
                 <span className="mx_SettingsTab_subheading">
@@ -187,6 +234,7 @@ export default class SetIdServer extends React.Component {
                     type="submit" value={_t("Change")}
                     disabled={!this._idServerChangeEnabled()}
                 />
+                {discoSection}
             </form>
         );
     }
