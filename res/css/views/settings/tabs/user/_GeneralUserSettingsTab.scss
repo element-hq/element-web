@@ -16,15 +16,15 @@ limitations under the License.
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field,
 .mx_GeneralUserSettingsTab_themeSection .mx_Field {
-    margin-right: 100px; // Align with the other fields on the page
+    @mixin mx_Settings_fullWidthField;
 }
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
     margin-top: 0;
 }
 
-.mx_GeneralUserSettingsTab_accountSection > .mx_EmailAddresses,
-.mx_GeneralUserSettingsTab_accountSection > .mx_PhoneNumbers,
+.mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
+.mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
 .mx_GeneralUserSettingsTab_languageInput {
-    margin-right: 100px; // Align with the other fields on the page
+    @mixin mx_Settings_fullWidthField;
 }

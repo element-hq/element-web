@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 .mx_SetIdServer .mx_Field_input {
-    width: 300px;
+    @mixin mx_Settings_fullWidthField;
 }
