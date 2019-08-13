@@ -114,7 +114,7 @@ export default class SetIdServer extends React.Component {
             const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
             return <div>
                 <InlineSpinner />
-                { _t("Checking Server") }
+                { _t("Checking server") }
             </div>;
         } else if (this.state.error) {
             return this.state.error;
@@ -164,9 +164,9 @@ export default class SetIdServer extends React.Component {
         } else {
             sectionTitle = _t("Identity Server");
             bodyText = _t(
-                "You are not currently using an Identity Server. " +
+                "You are not currently using an identity server. " +
                 "To discover and be discoverable by existing contacts you know, " +
-                "add one below",
+                "add one below.",
             );
         }
 
