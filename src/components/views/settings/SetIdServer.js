@@ -58,11 +58,11 @@ function unabbreviateUrl(u) {
 /**
  * Check an IS URL is valid, including liveness check
  *
- * @param {string} isUrl The url to check
+ * @param {string} u The url to check
  * @returns {string} null if url passes all checks, otherwise i18ned error string
  */
-async function checkIdentityServerUrl(url) {
-    const parsedUrl = url.parse(isUrl);
+async function checkIdentityServerUrl(u) {
+    const parsedUrl = url.parse(u);
 
     if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
 
@@ -73,7 +73,7 @@ async function checkIdentityServerUrl(url) {
             // also XXX: we don't really know whether to hit /v1 or /v2 for this: we
             // probably want a /versions endpoint like the C/S API.
             // https://github.com/matrix-org/matrix-doc/issues/1665
-            { method: "GET", url: isUrl + '/_matrix/identity/api/v1' },
+            { method: "GET", url: u + '/_matrix/identity/api/v1' },
             (err, response, body) => {
                 if (err) {
                     resolve(_t("Could not connect to Identity Server"));
@@ -133,7 +133,7 @@ export default class SetIdServer extends React.Component {
 
         const fullUrl = unabbreviateUrl(this.state.idServer);
 
-        const errStr = await checkIsUrl(fullUrl);
+        const errStr = await checkIdentityServerUrl(fullUrl);
 
         let newFormValue = this.state.idServer;
         if (!errStr) {
