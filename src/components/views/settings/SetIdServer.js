@@ -85,9 +85,11 @@ export default class SetIdServer extends React.Component {
     constructor() {
         super();
 
-        let defaultIdServer = abbreviateUrl(MatrixClientPeg.get().getIdentityServerUrl());
-        if (!defaultIdServer) {
-            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['idServer']) || '';
+        let defaultIdServer = '';
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && SdkConfig.get()['validated_server_config']['isUrl']) {
+            // If no ID server is configured but there's one in the config, prepopulate
+            // the field to help the user.
+            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
         }
 
         this.state = {
