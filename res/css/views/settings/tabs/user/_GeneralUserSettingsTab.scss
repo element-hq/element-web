@@ -23,8 +23,8 @@ limitations under the License.
     margin-top: 0;
 }
 
-.mx_GeneralUserSettingsTab_accountSection > .mx_EmailAddresses,
-.mx_GeneralUserSettingsTab_accountSection > .mx_PhoneNumbers,
+.mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
+.mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
 .mx_GeneralUserSettingsTab_languageInput {
     margin-right: 100px; // Align with the other fields on the page
 }
