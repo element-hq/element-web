@@ -22,7 +22,7 @@ import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import MatrixClientPeg from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
-import { showIntegrationsManager } from './integrations/integrations';
+import {IntegrationManagers} from "./integrations/IntegrationManagers";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -193,11 +193,12 @@ export default class FromWidgetPostMessageApi {
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;
 
-            showIntegrationsManager({
-                room: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
-                screen: 'type_' + integType,
-                integrationId: integId,
-            });
+            // TODO: Open the right integration manager for the widget
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
+                `type_${integType}`,
+                integId,
+            );
         } else if (action === 'set_always_on_screen') {
             // This is a new message: there is no reason to support the deprecated widgetData here
             const data = event.data.data;
