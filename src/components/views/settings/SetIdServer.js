@@ -182,7 +182,7 @@ export default class SetIdServer extends React.Component {
                     id="mx_SetIdServer_idServer"
                     type="text" value={this.state.idServer} autoComplete="off"
                     onChange={this._onIdentityServerChanged}
-                    tooltip={this._getTooltip()}
+                    tooltipContent={this._getTooltip()}
                 />
                 <input className="mx_Dialog_primary"
                     type="submit" value={_t("Change")}
