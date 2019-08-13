@@ -935,7 +935,7 @@ export default React.createClass({
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
 
-        const [shouldCreate, name, noFederate] = await modal;
+        const [shouldCreate, name, noFederate] = await modal.finished;
         if (shouldCreate) {
             const createOpts = {};
             if (name) createOpts.name = name;
