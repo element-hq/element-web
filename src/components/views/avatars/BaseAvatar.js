@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
-import sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -121,6 +121,10 @@ module.exports = React.createClass({
             );
             urls.push(defaultImageUrl); // lowest priority
         }
+
+        // deduplicate URLs
+        urls = Array.from(new Set(urls));
+
         return {
             imageUrls: urls,
             defaultImageUrl: defaultImageUrl,
