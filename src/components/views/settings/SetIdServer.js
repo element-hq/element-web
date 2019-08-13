@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
 import url from 'url';
 import React from 'react';
 import {_t} from "../../../languageHandler";
