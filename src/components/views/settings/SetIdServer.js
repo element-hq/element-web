@@ -72,6 +72,7 @@ async function checkIdentityServerUrl(url) {
         request(
             // also XXX: we don't really know whether to hit /v1 or /v2 for this: we
             // probably want a /versions endpoint like the C/S API.
+            // https://github.com/matrix-org/matrix-doc/issues/1665
             { method: "GET", url: isUrl + '/_matrix/identity/api/v1' },
             (err, response, body) => {
                 if (err) {
