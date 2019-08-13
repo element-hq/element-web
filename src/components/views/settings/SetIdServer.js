@@ -128,7 +128,9 @@ export default class SetIdServer extends React.Component {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _saveIdServer = async () => {
+    _saveIdServer = async (e) => {
+        e.preventDefault();
+
         this.setState({busy: true});
 
         const fullUrl = unabbreviateUrl(this.state.idServer);
@@ -171,6 +173,7 @@ export default class SetIdServer extends React.Component {
             );
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
                 <span className="mx_SettingsTab_subheading">
@@ -185,10 +188,10 @@ export default class SetIdServer extends React.Component {
                     onChange={this._onIdentityServerChanged}
                     tooltipContent={this._getTooltip()}
                 />
-                <input className="mx_Dialog_primary"
-                    type="submit" value={_t("Change")}
+                <AccessibleButton type="submit" kind="primary_sm"
                     disabled={!this._idServerChangeEnabled()}
-                />
+                    onClick={this._saveIdServer}
+                >{_t("Change")}</AccessibleButton>
             </form>
         );
     }
