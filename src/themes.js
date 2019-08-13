@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsTab_changePassword .mx_Field,
-.mx_GeneralUserSettingsTab_themeSection .mx_Field {
-    margin-right: 100px; // Align with the other fields on the page
-}
+import {_td} from "./languageHandler";
 
-.mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
-    margin-top: 0;
-}
+export const DEFAULT_THEME = "light";
 
-.mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
-.mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
-.mx_GeneralUserSettingsTab_languageInput {
-    margin-right: 100px; // Align with the other fields on the page
-}
+export const THEMES = {
+    "light": _td("Light theme"),
+    "dark": _td("Dark theme"),
+};
