@@ -20,7 +20,7 @@ import {_t} from "../../../languageHandler";
 import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
-import Field from "../elements/Field";
+import dis from "../../../dispatcher";
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
@@ -138,6 +138,7 @@ export default class SetIdServer extends React.Component {
             MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
             localStorage.removeItem("mx_is_access_token");
             localStorage.setItem("mx_is_url", fullUrl);
+            dis.dispatch({action: 'id_server_changed'});
             newFormValue = '';
         }
         this.setState({
@@ -170,6 +171,7 @@ export default class SetIdServer extends React.Component {
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const Field = sdk.getComponent('elements.Field');
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
                 <span className="mx_SettingsTab_subheading">

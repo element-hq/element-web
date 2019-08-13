@@ -45,8 +45,21 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+            haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
         };
+
+        this.dispatcherRef = dis.register(this._onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    _onAction = (payload) => {
+        if (payload.action === 'id_server_changed') {
+            this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
+        }
+    };
 
     _onLanguageChange = (newLanguage) => {
         if (this.state.language === newLanguage) return;
@@ -124,7 +137,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 onFinished={this._onPasswordChanged} />
         );
 
-        const threepidSection = MatrixClientPeg.get().getIdentityServerUrl() ? <div>
+        const threepidSection = this.state.haveIdServer ? <div>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
             <EmailAddresses />
 
