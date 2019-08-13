@@ -68,23 +68,18 @@ async function checkIdentityServerUrl(u) {
 
     // XXX: duplicated logic from js-sdk but it's quite tied up in the validation logic in the
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
-    return new Promise((resolve) => {
-        request(
-            // also XXX: we don't really know whether to hit /v1 or /v2 for this: we
-            // probably want a /versions endpoint like the C/S API.
-            // https://github.com/matrix-org/matrix-doc/issues/1665
-            { method: "GET", url: u + '/_matrix/identity/api/v1' },
-            (err, response, body) => {
-                if (err) {
-                    resolve(_t("Could not connect to Identity Server"));
-                } else if (response.status < 200 || response.status >= 300) {
-                    resolve(_t("Not a valid Identity Server (status code %(code)s)", {code: response.status}));
-                } else {
-                    resolve(null);
-                }
-            },
-        );
-    });
+    try {
+        const response = await fetch(u + '/_matrix/identity/api/v1');
+        if (response.ok) {
+            return null;
+        } else if (response.status < 200 || response.status >= 300) {
+            return _t("Not a valid Identity Server (status code %(code)s)", {code: response.status});
+        } else {
+            return _t("Could not connect to Identity Server");
+        }
+    } catch (e) {
+        return _t("Could not connect to Identity Server");
+    }
 }
 
 export default class SetIdServer extends React.Component {
