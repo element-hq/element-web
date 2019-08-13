@@ -61,7 +61,7 @@ function unabbreviateUrl(u) {
  * @param {string} isUrl The url to check
  * @returns {string} null if url passes all checks, otherwise i18ned error string
  */
-async function checkIsUrl(isUrl) {
+async function checkIdentityServerUrl(url) {
     const parsedUrl = url.parse(isUrl);
 
     if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
@@ -75,9 +75,9 @@ async function checkIsUrl(isUrl) {
             { method: "GET", url: isUrl + '/_matrix/identity/api/v1' },
             (err, response, body) => {
                 if (err) {
-                    resolve(_t("Could not connect to ID Server"));
+                    resolve(_t("Could not connect to Identity Server"));
                 } else if (response.status < 200 || response.status >= 300) {
-                    resolve(_t("Not a valid ID Server (status code %(code)s)", {code: response.status}));
+                    resolve(_t("Not a valid Identity Server (status code %(code)s)", {code: response.status}));
                 } else {
                     resolve(null);
                 }
