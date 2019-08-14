@@ -1886,5 +1886,6 @@
     "Failed to start chat": "Chat konnte nicht gestartet werden",
     "Messages": "Nachrichten",
     "Actions": "Aktionen",
-    "Displays list of commands with usages and descriptions": "Zeigt eine Liste von Befehlen mit Verwendungen und Beschreibungen an"
+    "Displays list of commands with usages and descriptions": "Zeigt eine Liste von Befehlen mit Verwendungen und Beschreibungen an",
+    "Connect this device to Key Backup": "Schließen Sie dieses Gerät an Key Backup an"
 }
