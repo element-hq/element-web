@@ -218,7 +218,7 @@ export default class SetIdServer extends React.Component {
             discoSection = <div>
                 <span className="mx_SettingsTab_subsectionText">{_t(
                     "Disconnecting from your identity server will mean you " +
-                    "won’t be discoverable by other users and you won’t be " +
+                    "won't be discoverable by other users and you won't be " +
                     "able to invite others by email or phone.",
                 )}</span>
                 <AccessibleButton onClick={this._onDisconnectClicked} kind="danger">
