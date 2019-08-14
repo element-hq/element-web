@@ -33,7 +33,7 @@
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:compile": "yarn reskindex && babel --source-maps -d lib src --extensions \".ts,.js\"",
+    "build:compile": "yarn reskindex && babel --source-maps -d lib src --extensions \".ts,.js\" --verbose",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:bundle:dev": "webpack --progress --bail --mode development",
     "build:electron": "yarn clean && yarn build && yarn install:electron && build -wml --ia32 --x64",
