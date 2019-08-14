@@ -29,9 +29,6 @@ import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
-// We'll be using im.vector.integration_manager until MSC1957 or similar is accepted.
-const IM_WIDGET_TYPES = ["m.integration_manager", "im.vector.integration_manager"];
-
 /**
  * Encodes a URI according to a set of template variables. Variables will be
  * passed through encodeURIComponent.
@@ -349,7 +346,7 @@ export default class WidgetUtils {
      */
     static getIntegrationManagerWidgets() {
         const widgets = WidgetUtils.getUserWidgetsArray();
-        return widgets.filter(w => w.content && IM_WIDGET_TYPES.includes(w.content.type));
+        return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
     static removeIntegrationManagerWidgets() {
@@ -359,7 +356,7 @@ export default class WidgetUtils {
         }
         const userWidgets = client.getAccountData('m.widgets').getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
-            if (widget.content && IM_WIDGET_TYPES.includes(widget.content.type)) {
+            if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
             }
         });
@@ -369,7 +366,7 @@ export default class WidgetUtils {
     static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
         return WidgetUtils.setUserWidget(
             "integration_manager_" + (new Date().getTime()),
-            "im.vector.integration_manager", // TODO: Use m.integration_manager post-MSC1957
+            "m.integration_manager",
             uiUrl,
             "Integration Manager: " + name,
             {"api_url": apiUrl},
