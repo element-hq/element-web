@@ -195,11 +195,6 @@ async function loadApp() {
 
     await loadOlm();
 
-    await loadLanguage();
-
-    const fragparts = parseQsFromFragment(window.location);
-    const params = parseQs(window.location);
-
     // set the platform for react sdk
     if (window.ipcRenderer) {
         console.log("Using Electron platform");
@@ -238,6 +233,12 @@ async function loadApp() {
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     SdkConfig.put(configJson);
+
+    // Load language after loading config.json so that settingsDefaults.language can be applied
+    await loadLanguage();
+
+    const fragparts = parseQsFromFragment(window.location);
+    const params = parseQs(window.location);
 
     // don't try to redirect to the native apps if we're
     // verifying a 3pid (but after we've loaded the config)
@@ -430,6 +431,7 @@ function loadOlm() {
 
 async function loadLanguage() {
     const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
+    console.log("DEBUG", prefLang);
     let langs = [];
 
     if (!prefLang) {
@@ -439,6 +441,7 @@ async function loadLanguage() {
     } else {
         langs = [prefLang];
     }
+    console.log("DEBUG1", langs);
     try {
         await languageHandler.setLanguage(langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
