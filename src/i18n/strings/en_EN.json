@@ -552,7 +552,6 @@
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.",
     "Change": "Change",
-    "Checking server": "Checking server",
     "Integration manager offline or not accessible.": "Integration manager offline or not accessible.",
     "Failed to update integration manager": "Failed to update integration manager",
     "You are currently using <b>%(serverName)s</b> to manage your bots, widgets, and sticker packs.": "You are currently using <b>%(serverName)s</b> to manage your bots, widgets, and sticker packs.",
