@@ -2,6 +2,7 @@
 Copyright 2017 MTRNord and Cooperative EITA
 Copyright 2017 Vector Creations Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -102,7 +103,7 @@ function safeCounterpartTranslate(text, options) {
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function _t(text, variables, tags) {
-    // Don't do subsitutions in counterpart. We handle it ourselves so we can replace with React components
+    // Don't do substitutions in counterpart. We handle it ourselves so we can replace with React components
     // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
     // It is enough to pass the count variable, but in the future counterpart might make use of other information too
     const args = Object.assign({ interpolate: false }, variables);
@@ -289,7 +290,7 @@ export function setLanguage(preferredLangs) {
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
-        if (langToUse != "en") {
+        if (langToUse !== "en") {
             return getLanguage(i18nFolder + availLangs['en'].fileName);
         }
     }).then((langData) => {
@@ -329,13 +330,13 @@ export function getLanguagesFromBrowser() {
  */
 export function getNormalizedLanguageKeys(language) {
     const languageKeys = [];
-    const normalizedLanguage = this.normalizeLanguageKey(language);
+    const normalizedLanguage = normalizeLanguageKey(language);
     const languageParts = normalizedLanguage.split('-');
-    if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
+    if (languageParts.length === 2 && languageParts[0] === languageParts[1]) {
         languageKeys.push(languageParts[0]);
     } else {
         languageKeys.push(normalizedLanguage);
-        if (languageParts.length == 2) {
+        if (languageParts.length === 2) {
             languageKeys.push(languageParts[0]);
         }
     }
@@ -345,6 +346,9 @@ export function getNormalizedLanguageKeys(language) {
 /**
  * Returns a language string with underscores replaced with
  * hyphens, and lowercased.
+ *
+ * @param {string} language The language string to be normalized
+ * @returns {string} The normalized language string
  */
 export function normalizeLanguageKey(language) {
     return language.toLowerCase().replace("_", "-");
@@ -373,8 +377,8 @@ export function pickBestLanguage(langs) {
     }
 
     {
-        // Failing that, a different dialect of the same lnguage
-        const closeLangIndex = normalisedLangs.find((l) => l.substr(0,2) === currentLang.substr(0,2));
+        // Failing that, a different dialect of the same language
+        const closeLangIndex = normalisedLangs.find((l) => l.substr(0, 2) === currentLang.substr(0, 2));
         if (closeLangIndex > -1) return langs[closeLangIndex];
     }
 

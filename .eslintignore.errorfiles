@@ -50,7 +50,6 @@ src/components/views/settings/Notifications.js
 src/GroupAddressPicker.js
 src/HtmlUtils.js
 src/ImageUtils.js
-src/languageHandler.js
 src/linkify-matrix.js
 src/Markdown.js
 src/MatrixClientPeg.js
