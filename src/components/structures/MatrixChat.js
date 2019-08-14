@@ -1386,18 +1386,18 @@ export default React.createClass({
                     ) }</p>
                     <p>{ _t(
                         "Riot can use a fallback server <code>turn.matrix.org</code> " +
-                        "for the current session if you urgently need to make a call. " +
-                        "Your IP address would be shared with this fallback server " +
-                        "only if you agree and later place or receive a call.",
+                        "if you urgently need to make a call. Your IP address would be " +
+                        "shared with this fallback server only if you agree and later " +
+                        "place or receive a call. You can change this permission later " +
+                        "in the Voice & Video section of Settings.",
                         null, { code },
                     )}</p>
                 </div>,
                 button: _t('Allow Fallback'),
                 cancelButton: _t('Dismiss'),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        cli.setFallbackICEServerAllowed(true);
-                    }
+                onFinished: (allow) => {
+                    SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
+                    cli.setFallbackICEServerAllowed(allow);
                 },
             }, null, true);
         });
