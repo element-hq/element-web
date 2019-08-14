@@ -157,7 +157,7 @@ export default class SetIdServer extends React.Component {
             description:
                 <div>
                     {_t(
-                        "Disconnect from the identity server <idserver></idserver>?", {},
+                        "Disconnect from the identity server <idserver />?", {},
                         {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
                     )},
                 </div>,
