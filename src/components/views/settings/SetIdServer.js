@@ -153,7 +153,7 @@ export default class SetIdServer extends React.Component {
     _onDisconnectClicked = () => {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Identity Server Disconnect Warning', '', QuestionDialog, {
-            title: _t("Disconnect ID Server"),
+            title: _t("Disconnect Identity Server"),
             description:
                 <div>
                     {_t(
