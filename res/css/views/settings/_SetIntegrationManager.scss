@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_SetIntegrationManager .mx_Field_input {
-    margin-right: 100px; // Align with the other fields on the page
+    @mixin mx_Settings_fullWidthField;
 }
 
 .mx_SetIntegrationManager {
