@@ -245,7 +245,7 @@ export default class DeviceVerifyDialog extends React.Component {
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
             text = _t("To verify that this device can be trusted, please check that the key you see " +
-                "in User Settings on that device matches the key below:")
+                "in User Settings on that device matches the key below:");
         } else {
             text = _t("To verify that this device can be trusted, please contact its owner using some other " +
                 "means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings " +
