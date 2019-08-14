@@ -2,6 +2,7 @@
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -241,6 +242,16 @@ export default class DeviceVerifyDialog extends React.Component {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
+        let text;
+        if (MatrixClientPeg.get().getUserId() === this.props.userId) {
+            text = _t("To verify that this device can be trusted, please check that the key you see " +
+                "in User Settings on that device matches the key below:");
+        } else {
+            text = _t("To verify that this device can be trusted, please contact its owner using some other " +
+                "means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings " +
+                "for this device matches the key below:");
+        }
+
         const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
         const body = (
             <div>
@@ -250,10 +261,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     {_t("Use two-way text verification")}
                 </AccessibleButton>
                 <p>
-                    { _t("To verify that this device can be trusted, please contact its " +
-                        "owner using some other means (e.g. in person or a phone call) " +
-                        "and ask them whether the key they see in their User Settings " +
-                        "for this device matches the key below:") }
+                    { text }
                 </p>
                 <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
