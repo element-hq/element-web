@@ -198,9 +198,10 @@ export default class ReplyThread extends React.Component {
     onRoomRedaction = (ev, room) => {
         if (this.unmounted) return;
 
-        // we could skip an update if the event isn't in our timeline,
-        // but that's probably an early optimisation.
-        this.forceUpdate();
+        // If one of the events we are rendering gets redacted, force a re-render
+        if (this.state.events.some(event => event.getId() === ev.getId())) {
+            this.forceUpdate();
+        }
     };
 
     async initialize() {
