@@ -1370,37 +1370,6 @@ export default React.createClass({
                 call: call,
             }, true);
         });
-        cli.on('Call.noTURNServers', () => {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const code = sub => <code>{sub}</code>;
-            Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
-                title: _t('Homeserver not configured to support calls'),
-                description: <div>
-                    <p>{ _t(
-                        "Your homeserver <code>%(homeserverDomain)s</code> is " +
-                        "currently not configured to assist with calls by offering a " +
-                        "TURN server, which means it is likely that voice and video " +
-                        "calls will fail. Please notify your homeserver administrator " +
-                        "so that they can address this.",
-                        { homeserverDomain: cli.getDomain() }, { code },
-                    ) }</p>
-                    <p>{ _t(
-                        "Riot can use a fallback server <code>turn.matrix.org</code> " +
-                        "if you urgently need to make a call. Your IP address would be " +
-                        "shared with this fallback server only if you agree and later " +
-                        "place or receive a call. You can change this permission later " +
-                        "in the Voice & Video section of Settings.",
-                        null, { code },
-                    )}</p>
-                </div>,
-                button: _t('Allow Fallback'),
-                cancelButton: _t('Dismiss'),
-                onFinished: (allow) => {
-                    SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
-                    cli.setFallbackICEServerAllowed(allow);
-                },
-            }, null, true);
-        });
         cli.on('Session.logged_out', function(errObj) {
             if (Lifecycle.isLoggingOut()) return;
 

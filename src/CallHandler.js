@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -64,6 +65,7 @@ import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import SettingsStore, { SettingLevel } from './settings/SettingsStore';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -117,8 +119,7 @@ function _reAttemptCall(call) {
 
 function _setCallListeners(call) {
     call.on("error", function(err) {
-        console.error("Call error: %s", err);
-        console.error(err.stack);
+        console.error("Call error:", err);
         if (err.code === 'unknown_devices') {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
@@ -146,8 +147,15 @@ function _setCallListeners(call) {
                 },
             });
         } else {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            if (
+                MatrixClientPeg.get().getTurnServers().length === 0 &&
+                SettingsStore.getValue("fallbackICEServerAllowed") === null
+            ) {
+                _showICEFallbackPrompt(_t("Call Failed"));
+                return;
+            }
 
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
                 title: _t('Call Failed'),
                 description: err.message,
@@ -217,6 +225,39 @@ function _setCallState(call, roomId, status) {
     });
 }
 
+function _showICEFallbackPrompt(title) {
+    const cli = MatrixClientPeg.get();
+    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    const code = sub => <code>{sub}</code>;
+    Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
+        title,
+        description: <div>
+            <p>{ _t(
+                "Your homeserver <code>%(homeserverDomain)s</code> is " +
+                "currently not configured to assist with calls by offering a " +
+                "TURN server, which means it is likely that voice and video " +
+                "calls will fail. Please notify your homeserver administrator " +
+                "so that they can address this.",
+                { homeserverDomain: cli.getDomain() }, { code },
+            ) }</p>
+            <p>{ _t(
+                "Riot can use a fallback server <code>turn.matrix.org</code> " +
+                "if you urgently need to make a call. Your IP address would be " +
+                "shared with this fallback server only if you agree and later " +
+                "place or receive a call. You can change this permission later " +
+                "in the Voice & Video section of Settings.",
+                null, { code },
+            )}</p>
+        </div>,
+        button: _t('Allow Fallback'),
+        cancelButton: _t('Dismiss'),
+        onFinished: (allow) => {
+            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
+            cli.setFallbackICEServerAllowed(allow);
+        },
+    }, null, true);
+}
+
 function _onAction(payload) {
     function placeCall(newCall) {
         _setCallListeners(newCall);
@@ -267,6 +308,14 @@ function _onAction(payload) {
                         title: _t('VoIP is unsupported'),
                         description: _t('You cannot place VoIP calls in this browser.'),
                     });
+                    return;
+                }
+
+                if (
+                    MatrixClientPeg.get().getTurnServers().length === 0 &&
+                    SettingsStore.getValue("fallbackICEServerAllowed") === null
+                ) {
+                    _showICEFallbackPrompt(_t("Homeserver not configured to support calls"));
                     return;
                 }
 
