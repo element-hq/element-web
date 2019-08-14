@@ -431,7 +431,6 @@ function loadOlm() {
 
 async function loadLanguage() {
     const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
-    console.log("DEBUG", prefLang);
     let langs = [];
 
     if (!prefLang) {
@@ -441,7 +440,6 @@ async function loadLanguage() {
     } else {
         langs = [prefLang];
     }
-    console.log("DEBUG1", langs);
     try {
         await languageHandler.setLanguage(langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
