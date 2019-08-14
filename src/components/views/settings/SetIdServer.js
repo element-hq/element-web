@@ -174,11 +174,19 @@ export default class SetIdServer extends React.Component {
         MatrixClientPeg.get().setIdentityServerUrl(null);
         localStorage.removeItem("mx_is_access_token");
         localStorage.removeItem("mx_is_url");
+
+        let newFieldVal = '';
+        if (SdkConfig.get()['validated_server_config']['isUrl']) {
+            // Prepopulate the client's default so the user at least has some idea of
+            // a valid value they might enter
+            newFieldVal = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+        }
+
         this.setState({
             busy: false,
             error: null,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: '',
+            idServer: newFieldVal,
         });
     };
 
