@@ -113,13 +113,7 @@ export class IntegrationManagers {
         await WidgetUtils.removeIntegrationManagerWidgets();
 
         // TODO: TravisR - We should actually be carrying over the discovery response verbatim.
-        await WidgetUtils.setUserWidget(
-            "integration_manager_" + (new Date().getTime()),
-            "m.integration_manager",
-            manager.uiUrl,
-            "Integration Manager",
-            {"api_url": manager.apiUrl},
-        );
+        await WidgetUtils.addIntegrationManagerWidget(manager.name, manager.uiUrl, manager.apiUrl);
     }
 
     /**
