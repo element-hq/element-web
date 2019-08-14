@@ -20,6 +20,7 @@ import {_t} from "../../../languageHandler";
 import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
+import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
 
 /**
@@ -149,7 +150,49 @@ export default class SetIdServer extends React.Component {
         });
     };
 
+    _onDisconnectClicked = () => {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('Identity Server Disconnect Warning', '', QuestionDialog, {
+            title: _t("Disconnect Identity Server"),
+            description:
+                <div>
+                    {_t(
+                        "Disconnect from the identity server <idserver />?", {},
+                        {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
+                    )},
+                </div>,
+            button: _t("Disconnect"),
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    this._disconnectIdServer();
+                }
+            },
+        });
+    };
+
+    _disconnectIdServer = () => {
+        MatrixClientPeg.get().setIdentityServerUrl(null);
+        localStorage.removeItem("mx_is_access_token");
+        localStorage.removeItem("mx_is_url");
+
+        let newFieldVal = '';
+        if (SdkConfig.get()['validated_server_config']['isUrl']) {
+            // Prepopulate the client's default so the user at least has some idea of
+            // a valid value they might enter
+            newFieldVal = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+        }
+
+        this.setState({
+            busy: false,
+            error: null,
+            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            idServer: newFieldVal,
+        });
+    };
+
     render() {
+        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
+        const Field = sdk.getComponent('elements.Field');
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;
@@ -170,8 +213,20 @@ export default class SetIdServer extends React.Component {
             );
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Field = sdk.getComponent('elements.Field');
+        let discoSection;
+        if (idServerUrl) {
+            discoSection = <div>
+                <span className="mx_SettingsTab_subsectionText">{_t(
+                    "Disconnecting from your identity server will mean you " +
+                    "won't be discoverable by other users and you won't be " +
+                    "able to invite others by email or phone.",
+                )}</span>
+                <AccessibleButton onClick={this._onDisconnectClicked} kind="danger">
+                    {_t("Disconnect")}
+                </AccessibleButton>
+            </div>;
+        }
+
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
                 <span className="mx_SettingsTab_subheading">
@@ -187,9 +242,10 @@ export default class SetIdServer extends React.Component {
                     tooltipContent={this._getTooltip()}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
-                    disabled={!this._idServerChangeEnabled()}
                     onClick={this._saveIdServer}
+                    disabled={!this._idServerChangeEnabled()}
                 >{_t("Change")}</AccessibleButton>
+                {discoSection}
             </form>
         );
     }
