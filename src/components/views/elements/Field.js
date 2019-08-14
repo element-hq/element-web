@@ -48,7 +48,7 @@ export default class Field extends React.PureComponent {
         onValidate: PropTypes.func,
         // If specified, contents will appear as a tooltip on the element and
         // validation feedback tooltips will be suppressed.
-        tooltip: PropTypes.node,
+        tooltipContent: PropTypes.node,
         // All other props pass through to the <input>.
     };
 
@@ -137,8 +137,7 @@ export default class Field extends React.PureComponent {
     }, VALIDATION_THROTTLE_MS);
 
     render() {
-        const { element, prefix, onValidate, children, ...inputProps } = this.props;
-        delete inputProps.tooltip; // needs to be removed from props but we don't need it here
+        const { element, prefix, onValidate, children, tooltipContent, ...inputProps } = this.props;
 
         const inputElement = element || "input";
 
@@ -170,11 +169,11 @@ export default class Field extends React.PureComponent {
         // Handle displaying feedback on validity
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
-        if (this.props.tooltip || this.state.feedback) {
+        if (tooltipContent || this.state.feedback) {
             fieldTooltip = <Tooltip
                 tooltipClassName="mx_Field_tooltip"
                 visible={this.state.feedbackVisible}
-                label={this.props.tooltip || this.state.feedback}
+                label={tooltipContent || this.state.feedback}
             />;
         }
 
