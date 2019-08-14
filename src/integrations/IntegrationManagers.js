@@ -17,7 +17,7 @@ limitations under the License.
 import SdkConfig from '../SdkConfig';
 import sdk from "../index";
 import Modal from '../Modal';
-import {IntegrationManagerInstance} from "./IntegrationManagerInstance";
+import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG} from "./IntegrationManagerInstance";
 import type {MatrixClient, MatrixEvent} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
@@ -62,7 +62,7 @@ export class IntegrationManagers {
         const uiUrl = SdkConfig.get()['integrations_ui_url'];
 
         if (apiUrl && uiUrl) {
-            this._managers.push(new IntegrationManagerInstance(apiUrl, uiUrl));
+            this._managers.push(new IntegrationManagerInstance(KIND_CONFIG, apiUrl, uiUrl));
         }
     }
 
@@ -77,7 +77,7 @@ export class IntegrationManagers {
             const apiUrl = data['api_url'];
             if (!apiUrl || !uiUrl) return;
 
-            this._managers.push(new IntegrationManagerInstance(apiUrl, uiUrl));
+            this._managers.push(new IntegrationManagerInstance(KIND_ACCOUNT, apiUrl, uiUrl));
         });
     }
 
@@ -106,6 +106,68 @@ export class IntegrationManagers {
             "Integration Manager", "None", IntegrationsManager,
             {configured: false}, 'mx_IntegrationsManager',
         );
+    }
+
+    async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {
+        // TODO: TravisR - We should be logging out of scalar clients.
+        await WidgetUtils.removeIntegrationManagerWidgets();
+
+        // TODO: TravisR - We should actually be carrying over the discovery response verbatim.
+        await WidgetUtils.addIntegrationManagerWidget(manager.name, manager.uiUrl, manager.apiUrl);
+    }
+
+    /**
+     * Attempts to discover an integration manager using only its name.
+     * @param {string} domainName The domain name to look up.
+     * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
+     * or null if none was found.
+     */
+    async tryDiscoverManager(domainName: string): IntegrationManagerInstance {
+        console.log("Looking up integration manager via .well-known");
+        if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
+            // trim off the scheme and just use the domain
+            const url = url.parse(domainName);
+            domainName = url.host;
+        }
+
+        let wkConfig;
+        try {
+            const result = await fetch(`https://${domainName}/.well-known/matrix/integrations`);
+            wkConfig = await result.json();
+        } catch (e) {
+            console.error(e);
+            console.warn("Failed to locate integration manager");
+            return null;
+        }
+
+        if (!wkConfig || !wkConfig["m.integrations_widget"]) {
+            console.warn("Missing integrations widget on .well-known response");
+            return null;
+        }
+
+        const widget = wkConfig["m.integrations_widget"];
+        if (!widget["url"] || !widget["data"] || !widget["data"]["api_url"]) {
+            console.warn("Malformed .well-known response for integrations widget");
+            return null;
+        }
+
+        // All discovered managers are per-user managers
+        const manager = new IntegrationManagerInstance(KIND_ACCOUNT, widget["data"]["api_url"], widget["url"]);
+        console.log("Got integration manager response, checking for responsiveness");
+
+        // Test the manager
+        const client = manager.getScalarClient();
+        try {
+            // not throwing an error is a success here
+            await client.connect();
+        } catch (e) {
+            console.error(e);
+            console.warn("Integration manager failed liveliness check");
+            return null;
+        }
+
+        console.log("Integration manager is alive and functioning");
+        return manager;
     }
 }
 

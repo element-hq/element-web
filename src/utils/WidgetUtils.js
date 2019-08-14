@@ -346,9 +346,31 @@ export default class WidgetUtils {
      */
     static getIntegrationManagerWidgets() {
         const widgets = WidgetUtils.getUserWidgetsArray();
-        // We'll be using im.vector.integration_manager until MSC1957 or similar is accepted.
-        const imTypes = ["m.integration_manager", "im.vector.integration_manager"];
-        return widgets.filter(w => w.content && imTypes.includes(w.content.type));
+        return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
+    }
+
+    static removeIntegrationManagerWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        Object.entries(userWidgets).forEach(([key, widget]) => {
+            if (widget.content && widget.content.type === "m.integration_manager") {
+                delete userWidgets[key];
+            }
+        });
+        return client.setAccountData('m.widgets', userWidgets);
+    }
+
+    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
+        return WidgetUtils.setUserWidget(
+            "integration_manager_" + (new Date().getTime()),
+            "m.integration_manager",
+            uiUrl,
+            "Integration Manager: " + name,
+            {"api_url": apiUrl},
+        );
     }
 
     /**
