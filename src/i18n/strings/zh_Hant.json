@@ -2095,5 +2095,9 @@
     "Checking server": "正在檢查伺服器",
     "Disconnect Identity Server": "斷開身份識別伺服器的連線",
     "Disconnect from the identity server <idserver />?": "從身份識別伺服器 <idserver /> 斷開連線？",
-    "Disconnect": "斷開連線"
+    "Disconnect": "斷開連線",
+    "Identity Server (%(server)s)": "身份識別伺服器 (%(server)s)",
+    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "您目前正在使用 <server></server> 來探索以及被您所知既有的聯絡人探索。您可以在下方變更身份識別伺服器。",
+    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "您目前並未使用身份識別伺服器。要探索及被您所知既有的聯絡人探索，請在下方新增一個。",
+    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "從您的身份識別伺服器斷開連線代表您不再能被其他使用者探索到，而且您也不能透過電子郵件或電話邀請其他人。"
 }
