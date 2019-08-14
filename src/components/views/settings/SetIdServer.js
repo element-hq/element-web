@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
 import url from 'url';
 import React from 'react';
 import {_t} from "../../../languageHandler";
 import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
-import Field from "../elements/Field";
 import Modal from '../../../Modal';
+import dis from "../../../dispatcher";
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
@@ -59,41 +58,39 @@ function unabbreviateUrl(u) {
 /**
  * Check an IS URL is valid, including liveness check
  *
- * @param {string} isUrl The url to check
+ * @param {string} u The url to check
  * @returns {string} null if url passes all checks, otherwise i18ned error string
  */
-async function checkIsUrl(isUrl) {
-    const parsedUrl = url.parse(isUrl);
+async function checkIdentityServerUrl(u) {
+    const parsedUrl = url.parse(u);
 
     if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
 
     // XXX: duplicated logic from js-sdk but it's quite tied up in the validation logic in the
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
-    return new Promise((resolve) => {
-        request(
-            // also XXX: we don't really know whether to hit /v1 or /v2 for this: we
-            // probably want a /versions endpoint like the C/S API.
-            { method: "GET", url: isUrl + '/_matrix/identity/api/v1' },
-            (err, response, body) => {
-                if (err) {
-                    resolve(_t("Could not connect to ID Server"));
-                } else if (response.status < 200 || response.status >= 300) {
-                    resolve(_t("Not a valid ID Server (status code %(code)s)", {code: response.status}));
-                } else {
-                    resolve(null);
-                }
-            },
-        );
-    });
+    try {
+        const response = await fetch(u + '/_matrix/identity/api/v1');
+        if (response.ok) {
+            return null;
+        } else if (response.status < 200 || response.status >= 300) {
+            return _t("Not a valid Identity Server (status code %(code)s)", {code: response.status});
+        } else {
+            return _t("Could not connect to Identity Server");
+        }
+    } catch (e) {
+        return _t("Could not connect to Identity Server");
+    }
 }
 
 export default class SetIdServer extends React.Component {
     constructor() {
         super();
 
-        let defaultIdServer = abbreviateUrl(MatrixClientPeg.get().getIdentityServerUrl());
-        if (!defaultIdServer) {
-            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['idServer']) || '';
+        let defaultIdServer = '';
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && SdkConfig.get()['validated_server_config']['isUrl']) {
+            // If no ID server is configured but there's one in the config, prepopulate
+            // the field to help the user.
+            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
         }
 
         this.state = {
@@ -115,7 +112,7 @@ export default class SetIdServer extends React.Component {
             const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
             return <div>
                 <InlineSpinner />
-                { _t("Checking Server") }
+                { _t("Checking server") }
             </div>;
         } else if (this.state.error) {
             return this.state.error;
@@ -128,18 +125,21 @@ export default class SetIdServer extends React.Component {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _saveIdServer = async () => {
+    _saveIdServer = async (e) => {
+        e.preventDefault();
+
         this.setState({busy: true});
 
         const fullUrl = unabbreviateUrl(this.state.idServer);
 
-        const errStr = await checkIsUrl(fullUrl);
+        const errStr = await checkIdentityServerUrl(fullUrl);
 
         let newFormValue = this.state.idServer;
         if (!errStr) {
             MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
             localStorage.removeItem("mx_is_access_token");
             localStorage.setItem("mx_is_url", fullUrl);
+            dis.dispatch({action: 'id_server_changed'});
             newFormValue = '';
         }
         this.setState({
@@ -184,6 +184,7 @@ export default class SetIdServer extends React.Component {
 
     render() {
         const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
+        const Field = sdk.getComponent('elements.Field');
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;
@@ -198,9 +199,9 @@ export default class SetIdServer extends React.Component {
         } else {
             sectionTitle = _t("Identity Server");
             bodyText = _t(
-                "You are not currently using an Identity Server. " +
+                "You are not currently using an identity server. " +
                 "To discover and be discoverable by existing contacts you know, " +
-                "add one below",
+                "add one below.",
             );
         }
 
@@ -230,12 +231,12 @@ export default class SetIdServer extends React.Component {
                     id="mx_SetIdServer_idServer"
                     type="text" value={this.state.idServer} autoComplete="off"
                     onChange={this._onIdentityServerChanged}
-                    tooltip={this._getTooltip()}
+                    tooltipContent={this._getTooltip()}
                 />
-                <input className="mx_Dialog_primary"
-                    type="submit" value={_t("Change")}
+                <AccessibleButton type="submit" kind="primary_sm"
+                    onClick={this._saveIdServer}
                     disabled={!this._idServerChangeEnabled()}
-                />
+                >{_t("Change")}</AccessibleButton>
                 {discoSection}
             </form>
         );

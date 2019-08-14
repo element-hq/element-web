@@ -35,6 +35,7 @@ import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
+import {IntegrationManagers} from "./integrations/IntegrationManagers";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -580,6 +581,7 @@ async function startMatrixClient(startSyncing=true) {
         Presence.start();
     }
     DMRoomMap.makeShared().start();
+    IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
 
     if (startSyncing) {
@@ -638,6 +640,7 @@ export function stopMatrixClient(unsetClient=true) {
     TypingStore.sharedInstance().reset();
     Presence.stop();
     ActiveWidgetStore.stop();
+    IntegrationManagers.sharedInstance().stopWatching();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     const cli = MatrixClientPeg.get();
     if (cli) {

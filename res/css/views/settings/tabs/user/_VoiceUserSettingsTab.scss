@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_VoiceUserSettingsTab .mx_Field {
-    margin-right: 100px; // align with the rest of the fields
+    @mixin mx_Settings_fullWidthField;
 }
 
 .mx_VoiceUserSettingsTab_missingMediaPermissions {

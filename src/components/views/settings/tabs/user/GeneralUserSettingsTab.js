@@ -1,6 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
+import {THEMES} from "../../../../../themes";
 import PlatformPeg from "../../../../../PlatformPeg";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
@@ -43,8 +45,21 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+            haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
         };
+
+        this.dispatcherRef = dis.register(this._onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    _onAction = (payload) => {
+        if (payload.action === 'id_server_changed') {
+            this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
+        }
+    };
 
     _onLanguageChange = (newLanguage) => {
         if (this.state.language === newLanguage) return;
@@ -122,7 +137,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 onFinished={this._onPasswordChanged} />
         );
 
-        const threepidSection = MatrixClientPeg.get().getIdentityServerUrl() ? <div>
+        const threepidSection = this.state.haveIdServer ? <div>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
             <EmailAddresses />
 
@@ -160,8 +175,9 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Light theme")}</option>
-                    <option value="dark">{_t("Dark theme")}</option>
+                    {Object.entries(THEMES).map(([theme, text]) => {
+                        return <option key={theme} value={theme}>{_t(text)}</option>;
+                    })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>

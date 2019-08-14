@@ -27,6 +27,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -102,7 +103,8 @@ export default class WidgetUtils {
 
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
+            const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
+            if (defaultManager) scalarUrls = [defaultManager.apiUrl];
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
@@ -336,6 +338,17 @@ export default class WidgetUtils {
     static getStickerpickerWidgets() {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
+    }
+
+    /**
+     * Get all integration manager widgets for this user.
+     * @returns {Object[]} An array of integration manager user widgets.
+     */
+    static getIntegrationManagerWidgets() {
+        const widgets = WidgetUtils.getUserWidgetsArray();
+        // We'll be using im.vector.integration_manager until MSC1957 or similar is accepted.
+        const imTypes = ["m.integration_manager", "im.vector.integration_manager"];
+        return widgets.filter(w => w.content && imTypes.includes(w.content.type));
     }
 
     /**
