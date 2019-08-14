@@ -2088,5 +2088,12 @@
     "Unable to share phone number": "無法分享電話號碼",
     "Please enter verification code sent via text.": "請輸入透過文字傳送的驗證碼。",
     "Discovery options will appear once you have added a phone number above.": "當您在上面加入電話號碼時將會出現探索選項。",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "文字訊息將會被傳送到 +%(msisdn)s。請輸入其中包含的驗證碼。"
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "文字訊息將會被傳送到 +%(msisdn)s。請輸入其中包含的驗證碼。",
+    "Identity Server URL must be HTTPS": "身份識別伺服器 URL 必須為 HTTPS",
+    "Not a valid Identity Server (status code %(code)s)": "不是有效的身份識別伺服器（狀態碼 %(code)s）",
+    "Could not connect to Identity Server": "無法連線至身份識別伺服器",
+    "Checking server": "正在檢查伺服器",
+    "Disconnect Identity Server": "斷開身份識別伺服器的連線",
+    "Disconnect from the identity server <idserver />?": "從身份識別伺服器 <idserver /> 斷開連線？",
+    "Disconnect": "斷開連線"
 }
