@@ -22,6 +22,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
+import { getThreepidBindStatus } from '../../../boundThreepids';
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
@@ -98,6 +99,7 @@ export default class SetIdServer extends React.Component {
             idServer: defaultIdServer,
             error: null,
             busy: false,
+            disconnectBusy: false,
         };
     }
 
@@ -150,24 +152,45 @@ export default class SetIdServer extends React.Component {
         });
     };
 
-    _onDisconnectClicked = () => {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('Identity Server Disconnect Warning', '', QuestionDialog, {
-            title: _t("Disconnect Identity Server"),
-            description:
-                <div>
-                    {_t(
-                        "Disconnect from the identity server <idserver />?", {},
-                        {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
-                    )},
-                </div>,
-            button: _t("Disconnect"),
-            onFinished: (confirmed) => {
-                if (confirmed) {
-                    this._disconnectIdServer();
-                }
-            },
-        });
+    _onDisconnectClicked = async () => {
+        this.setState({disconnectBusy: true});
+        try {
+            const threepids = await getThreepidBindStatus(MatrixClientPeg.get());
+
+            const boundThreepids = threepids.filter(tp => tp.bound);
+            let message;
+            if (boundThreepids.length) {
+                message = _t(
+                    "You are currently sharing email addresses or phone numbers on the identity " +
+                    "server <idserver />. You will need to reconnect to <idserver2 /> to stop " +
+                    "sharing them.", {},
+                    {
+                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                        // XXX: https://github.com/vector-im/riot-web/issues/10564
+                        idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                    }
+                );
+            } else {
+                message = _t(
+                    "Disconnect from the identity server <idserver />?", {},
+                    {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
+                );
+            }
+
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('Identity Server Disconnect Warning', '', QuestionDialog, {
+                title: _t("Disconnect Identity Server"),
+                description: message,
+                button: _t("Disconnect"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._disconnectIdServer();
+                    }
+                },
+            });
+        } finally {
+            this.setState({disconnectBusy: false});
+        }
     };
 
     _disconnectIdServer = () => {
@@ -215,6 +238,11 @@ export default class SetIdServer extends React.Component {
 
         let discoSection;
         if (idServerUrl) {
+            let discoButtonContent = _t("Disconnect");
+            if (this.state.disconnectBusy) {
+                const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
+                discoButtonContent = <InlineSpinner />;
+            }
             discoSection = <div>
                 <span className="mx_SettingsTab_subsectionText">{_t(
                     "Disconnecting from your identity server will mean you " +
@@ -222,7 +250,7 @@ export default class SetIdServer extends React.Component {
                     "able to invite others by email or phone.",
                 )}</span>
                 <AccessibleButton onClick={this._onDisconnectClicked} kind="danger">
-                    {_t("Disconnect")}
+                    {discoButtonContent}
                 </AccessibleButton>
             </div>;
         }
