@@ -46,6 +46,8 @@ export default class Field extends React.PureComponent {
         // and a `feedback` react component field to provide feedback
         // to the user.
         onValidate: PropTypes.func,
+        // If specified, overrides the value returned by onValidate.
+        flagInvalid: PropTypes.bool,
         // If specified, contents will appear as a tooltip on the element and
         // validation feedback tooltips will be suppressed.
         tooltipContent: PropTypes.node,
@@ -137,7 +139,10 @@ export default class Field extends React.PureComponent {
     }, VALIDATION_THROTTLE_MS);
 
     render() {
-        const { element, prefix, onValidate, children, tooltipContent, ...inputProps } = this.props;
+        const {
+            element, prefix, onValidate, children, tooltipContent,
+            flagInvalid, ...inputProps,
+        } = this.props;
 
         const inputElement = element || "input";
 
@@ -157,13 +162,16 @@ export default class Field extends React.PureComponent {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
+        const hasValidationFlag = flagInvalid != null && flagInvalid !== undefined;
         const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
             mx_Field_labelAlwaysTopLeft: prefix,
             mx_Field_valid: onValidate && this.state.valid === true,
-            mx_Field_invalid: onValidate && this.state.valid === false,
+            mx_Field_invalid: hasValidationFlag
+                ? flagInvalid
+                : onValidate && this.state.valid === false,
         });
 
         // Handle displaying feedback on validity

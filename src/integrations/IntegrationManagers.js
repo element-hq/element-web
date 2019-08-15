@@ -117,7 +117,8 @@ export class IntegrationManagers {
     }
 
     /**
-     * Attempts to discover an integration manager using only its name.
+     * Attempts to discover an integration manager using only its name. This will not validate that
+     * the integration manager is functional - that is the caller's responsibility.
      * @param {string} domainName The domain name to look up.
      * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
      * or null if none was found.
@@ -153,20 +154,12 @@ export class IntegrationManagers {
 
         // All discovered managers are per-user managers
         const manager = new IntegrationManagerInstance(KIND_ACCOUNT, widget["data"]["api_url"], widget["url"]);
-        console.log("Got integration manager response, checking for responsiveness");
+        console.log("Got an integration manager (untested)");
 
-        // Test the manager
-        const client = manager.getScalarClient();
-        try {
-            // not throwing an error is a success here
-            await client.connect();
-        } catch (e) {
-            console.error(e);
-            console.warn("Integration manager failed liveliness check");
-            return null;
-        }
+        // We don't test the manager because the caller may need to do extra
+        // checks or similar with it. For instance, they may need to deal with
+        // terms of service or want to call something particular.
 
-        console.log("Integration manager is alive and functioning");
         return manager;
     }
 }

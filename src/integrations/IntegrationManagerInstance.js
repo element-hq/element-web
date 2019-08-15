@@ -40,7 +40,14 @@ export class IntegrationManagerInstance {
 
     get name(): string {
         const parsed = url.parse(this.uiUrl);
-        return parsed.hostname;
+        return parsed.host;
+    }
+
+    get trimmedApiUrl(): string {
+        const parsed = url.parse(this.apiUrl);
+        parsed.pathname = '';
+        parsed.path = '';
+        return parsed.format();
     }
 
     getScalarClient(): ScalarAuthClient {
