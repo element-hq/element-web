@@ -1,6 +1,7 @@
-/**
+/*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
 
 import url from 'url';
 import qs from 'querystring';
@@ -154,8 +153,9 @@ export default class AppTile extends React.Component {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
 
+        const canPersist = this.props.whitelistCapabilities.includes('m.always_on_screen');
         // if it's not remaining on screen, get rid of the PersistedElement container
-        if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
+        if (canPersist && !ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
             ActiveWidgetStore.destroyPersistentWidget();
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
@@ -588,11 +588,10 @@ export default class AppTile extends React.Component {
                                 src={this._getSafeUrl()}
                                 allowFullScreen="true"
                                 sandbox={sandboxFlags}
-                                onLoad={this._onLoaded}
-                            ></iframe>
+                                onLoad={this._onLoaded} />
                         </div>
                     );
-                    // if the widget would be allowed to remian on screen, we must put it in
+                    // if the widget would be allowed to remain on screen, we must put it in
                     // a PersistedElement from the get-go, otherwise the iframe will be
                     // re-mounted later when we do.
                     if (this.props.whitelistCapabilities.includes('m.always_on_screen')) {
