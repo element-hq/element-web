@@ -140,9 +140,8 @@ export default class Field extends React.PureComponent {
 
     render() {
         const {
-            element, prefix, onValidate, children, tooltipContent,
-            flagInvalid, ...inputProps,
-        } = this.props;
+            element, prefix, onValidate, children, tooltipContent, flagInvalid,
+            ...inputProps} = this.props;
 
         const inputElement = element || "input";
 
