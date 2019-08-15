@@ -144,8 +144,6 @@ export default class SetIdServer extends React.Component {
         const fullUrl = unabbreviateUrl(this.state.idServer);
 
         let errStr = await checkIdentityServerUrl(fullUrl);
-
-        let newFormValue = this.state.idServer;
         if (!errStr) {
             try {
                 this.setState({checking: false}); // clear tooltip
@@ -191,7 +189,7 @@ export default class SetIdServer extends React.Component {
             checking: false,
             error: errStr,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: newFormValue,
+            idServer: this.state.idServer,
         });
     };
 
