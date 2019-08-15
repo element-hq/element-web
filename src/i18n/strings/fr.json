@@ -2113,5 +2113,10 @@
     "Add which integration manager you want to manage your bots, widgets, and sticker packs.": "Ajoutez quel gestionnaire d’intégration vous voulez pour gérer vos robots, widgets et packs de stickers.",
     "Integration Manager": "Gestionnaire d’intégration",
     "Enter a new integration manager": "Saisissez un nouveau gestionnaire d’intégration",
-    "To verify that this device can be trusted, please check that the key you see in User Settings on that device matches the key below:": "Pour savoir si vous pouvez faire confiance à cet appareil, vérifiez que la clé que vous voyez dans les paramètres de l’utilisateur sur cet appareil correspond à la clé ci-dessous :"
+    "To verify that this device can be trusted, please check that the key you see in User Settings on that device matches the key below:": "Pour savoir si vous pouvez faire confiance à cet appareil, vérifiez que la clé que vous voyez dans les paramètres de l’utilisateur sur cet appareil correspond à la clé ci-dessous :",
+    "Call failed due to misconfigured server": "Échec de l’appel à cause d’un serveur mal configuré",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Demandez à l’administrateur de votre serveur d’accueil (<code>%(homeserverDomain)s</code>) de configurer un serveur TURN afin que les appels fonctionnent de manière fiable.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Sinon, vous pouvez essayer d’utiliser le serveur public à <code>turn.matrix.org</code>, mais ça ne sera pas aussi fiable et ça partagera votre adresse IP avec ce serveur. Vous pouvez aussi gérer cela dans les paramètres.",
+    "Try using turn.matrix.org": "Essayer d’utiliser turn.matrix.org",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Autoriser le repli sur le serveur d’assistance d’appel turn.matrix.org quand votre serveur n’en fournit pas (votre adresse IP serait partagée lors d’un appel)"
 }
