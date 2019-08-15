@@ -151,7 +151,7 @@ function _setCallListeners(call) {
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
                 SettingsStore.getValue("fallbackICEServerAllowed") === null
             ) {
-                _showICEFallbackPrompt(_t("Call Failed"));
+                _showICEFallbackPrompt();
                 return;
             }
 
@@ -225,32 +225,29 @@ function _setCallState(call, roomId, status) {
     });
 }
 
-function _showICEFallbackPrompt(title) {
+function _showICEFallbackPrompt() {
     const cli = MatrixClientPeg.get();
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const code = sub => <code>{sub}</code>;
     Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
-        title,
+        title: _t("Call failed due to misconfigured server"),
         description: <div>
-            <p>{ _t(
-                "Your homeserver <code>%(homeserverDomain)s</code> is " +
-                "currently not configured to assist with calls by offering a " +
-                "TURN server, which means it is likely that voice and video " +
-                "calls will fail. Please notify your homeserver administrator " +
-                "so that they can address this.",
+            <p>{_t(
+                "Please ask the administrator of your homeserver " +
+                "(<code>%(homeserverDomain)s</code>) to configure a TURN server in " +
+                "order for calls to work reliably.",
                 { homeserverDomain: cli.getDomain() }, { code },
-            ) }</p>
-            <p>{ _t(
-                "Riot can use a fallback server <code>turn.matrix.org</code> " +
-                "if you urgently need to make a call. Your IP address would be " +
-                "shared with this fallback server only if you agree and later " +
-                "place or receive a call. You can change this permission later " +
-                "in the Voice & Video section of Settings.",
+            )}</p>
+            <p>{_t(
+                "Alternatively, you can try to use the public server at " +
+                "<code>turn.matrix.org</code>, but this will not be as reliable, and " +
+                "it will share your IP address with that server. You can also manage " +
+                "this in Settings.",
                 null, { code },
             )}</p>
         </div>,
-        button: _t('Allow Fallback'),
-        cancelButton: _t('Dismiss'),
+        button: _t('Try using turn.matrix.org'),
+        cancelButton: _t('OK'),
         onFinished: (allow) => {
             SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
             cli.setFallbackICEServerAllowed(allow);
