@@ -166,7 +166,7 @@ export default class SetIdServer extends React.Component {
                     "sharing them.", {},
                     {
                         idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                        // XXX: https://github.com/vector-im/riot-web/issues/10564
+                        // XXX: https://github.com/vector-im/riot-web/issues/9086
                         idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
                     },
                 );
