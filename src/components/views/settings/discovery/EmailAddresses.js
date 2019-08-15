@@ -22,7 +22,6 @@ import { _t } from "../../../../languageHandler";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from '../../../../index';
 import Modal from '../../../../Modal';
-import IdentityAuthClient from '../../../../IdentityAuthClient';
 import AddThreepid from '../../../../AddThreepid';
 import { getThreepidBindStatus } from '../../../../boundThreepids';
 
@@ -199,9 +198,7 @@ export default class EmailAddresses extends React.Component {
 
     async componentWillMount() {
         const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
 
-        const { threepids } = await client.getThreePids();
         const emails = await getThreepidBindStatus(client, 'email');
 
         this.setState({ emails });
