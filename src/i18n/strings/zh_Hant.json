@@ -2099,5 +2099,12 @@
     "Identity Server (%(server)s)": "身份識別伺服器 (%(server)s)",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "您目前正在使用 <server></server> 來探索以及被您所知既有的聯絡人探索。您可以在下方變更身份識別伺服器。",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "您目前並未使用身份識別伺服器。要探索及被您所知既有的聯絡人探索，請在下方新增一個。",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "從您的身份識別伺服器斷開連線代表您不再能被其他使用者探索到，而且您也不能透過電子郵件或電話邀請其他人。"
+    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "從您的身份識別伺服器斷開連線代表您不再能被其他使用者探索到，而且您也不能透過電子郵件或電話邀請其他人。",
+    "Integration manager offline or not accessible.": "整合管理員離線或無法存取。",
+    "Failed to update integration manager": "更新整合管理員失敗",
+    "You are currently using <b>%(serverName)s</b> to manage your bots, widgets, and sticker packs.": "您目前正使用 <b>%(serverName)s</b> 來管理您的機器人、小工具與貼紙包。",
+    "Add which integration manager you want to manage your bots, widgets, and sticker packs.": "新增用來管理您的機器人、小工具與貼紙包的整合管理員。",
+    "Integration Manager": "整合管理員",
+    "Enter a new integration manager": "輸入新的整合管理員",
+    "To verify that this device can be trusted, please check that the key you see in User Settings on that device matches the key below:": "要驗證此裝置是否可受信任，請檢查您在裝置上的使用者設定裡看到的金鑰是否與下方的金鑰相同："
 }
