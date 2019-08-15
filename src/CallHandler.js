@@ -311,14 +311,6 @@ function _onAction(payload) {
                     return;
                 }
 
-                if (
-                    MatrixClientPeg.get().getTurnServers().length === 0 &&
-                    SettingsStore.getValue("fallbackICEServerAllowed") === null
-                ) {
-                    _showICEFallbackPrompt(_t("Homeserver not configured to support calls"));
-                    return;
-                }
-
                 const room = MatrixClientPeg.get().getRoom(payload.room_id);
                 if (!room) {
                     console.error("Room %s does not exist.", payload.room_id);
