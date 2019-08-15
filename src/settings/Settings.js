@@ -372,4 +372,13 @@ export const SETTINGS = {
         default: false,
         controller: new LowBandwidthController(),
     },
+    "fallbackICEServerAllowed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td(
+            "Allow fallback call assist server turn.matrix.org when your homeserver " +
+            "does not offer one (your IP address would be shared during a call)",
+        ),
+        // This is a tri-state value, where `null` means "prompt the user".
+        default: null,
+    },
 };

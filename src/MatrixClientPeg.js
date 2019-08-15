@@ -216,6 +216,7 @@ class MatrixClientPeg {
             deviceId: creds.deviceId,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
+            fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
             verificationMethods: [verificationMethods.SAS],
             unstableClientRelationAggregation: true,
         };
