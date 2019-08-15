@@ -168,7 +168,7 @@ export default class SetIdServer extends React.Component {
                         idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
                         // XXX: https://github.com/vector-im/riot-web/issues/10564
                         idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                    }
+                    },
                 );
             } else {
                 message = _t(
