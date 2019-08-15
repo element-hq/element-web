@@ -161,7 +161,7 @@ export default class Field extends React.PureComponent {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
-        const hasValidationFlag = flagInvalid != null && flagInvalid !== undefined;
+        const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
         const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
