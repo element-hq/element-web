@@ -124,7 +124,7 @@ export default class SetIntegrationManager extends React.Component {
                     id="mx_SetIntegrationManager_newUrl"
                     type="text" value={this.state.url} autoComplete="off"
                     onChange={this._onUrlChanged}
-                    tooltip={this._getTooltip()}
+                    tooltipContent={this._getTooltip()}
                 />
                 <AccessibleButton
                     kind="primary_sm"
