@@ -359,7 +359,7 @@
     "Show recently visited rooms above the room list": "Show recently visited rooms above the room list",
     "Show hidden events in timeline": "Show hidden events in timeline",
     "Low bandwidth mode": "Low bandwidth mode",
-    "Allow fallback call assist server turn.matrix.org": "Allow fallback call assist server turn.matrix.org",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading report": "Uploading report",
