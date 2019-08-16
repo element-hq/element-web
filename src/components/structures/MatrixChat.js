@@ -446,6 +446,29 @@ export default React.createClass({
         }
 
         switch (payload.action) {
+            case 'MatrixActions.accountData':
+                // XXX: This is a collection of several hacks to solve a minor problem. We want to
+                // update our local state when the ID server changes, but don't want to put that in
+                // the js-sdk as we'd be then dictating how all consumers need to behave. However,
+                // this component is already bloated and we probably don't want this tiny logic in
+                // here, but there's no better place in the react-sdk for it. Additionally, we're
+                // abusing the MatrixActionCreator stuff to avoid errors on dispatches.
+                if (payload.event_type === 'm.identity_server') {
+                    const fullUrl = payload.event_content ? payload.event_content['base_url'] : null;
+                    if (!fullUrl) {
+                        MatrixClientPeg.get().setIdentityServerUrl(null);
+                        localStorage.removeItem("mx_is_access_token");
+                        localStorage.removeItem("mx_is_url");
+                    } else {
+                        MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
+                        localStorage.removeItem("mx_is_access_token"); // clear token
+                        localStorage.setItem("mx_is_url", fullUrl); // XXX: Do we still need this?
+                    }
+
+                    // redispatch the change with a more specific action
+                    dis.dispatch({action: 'id_server_changed'});
+                }
+                break;
             case 'logout':
                 Lifecycle.logout();
                 break;
