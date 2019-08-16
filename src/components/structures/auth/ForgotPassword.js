@@ -62,10 +62,12 @@ module.exports = React.createClass({
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
+            serverRequiresIdServer: null,
         };
     },
 
     componentWillMount: function() {
+        this.reset = null;
         this._checkServerLiveliness(this.props.serverConfig);
     },
 
@@ -83,7 +85,14 @@ module.exports = React.createClass({
                 serverConfig.hsUrl,
                 serverConfig.isUrl,
             );
-            this.setState({serverIsAlive: true});
+
+            const pwReset = new PasswordReset(serverConfig.hsUrl, serverConfig.isUrl);
+            const serverRequiresIdServer = await pwReset.doesServerRequireIdServerParam();
+
+            this.setState({
+                serverIsAlive: true,
+                serverRequiresIdServer,
+            });
         } catch (e) {
             this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
         }
@@ -256,7 +265,7 @@ module.exports = React.createClass({
             </a>;
         }
 
-        if (!this.props.serverConfig.isUrl) {
+        if (!this.props.serverConfig.isUrl && this.state.serverRequiresIdServer) {
             return <div>
                 <h3>
                     {yourMatrixAccountText}
