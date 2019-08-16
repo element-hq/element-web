@@ -536,7 +536,7 @@ module.exports = React.createClass({
             />;
         } else if (!this.state.matrixClient && !this.state.busy) {
             return null;
-        } else if (this.state.busy || !this.state.flows | this.state.serverCaps === null) {
+        } else if (this.state.busy || !this.state.flows) {
             return <div className="mx_AuthBody_spinner">
                 <Spinner />
             </div>;
