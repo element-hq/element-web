@@ -1,3 +1,10 @@
+Changes in [1.3.3](https://github.com/vector-im/riot-web/releases/tag/v1.3.3) (2019-08-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.2...v1.3.3)
+
+ * Linux-only release to fix sandboxing with Electron 5 on Debian
+   [\#10580](https://github.com/vector-im/riot-web/pull/10580)
+
 Changes in [1.3.2](https://github.com/vector-im/riot-web/releases/tag/v1.3.2) (2019-08-05)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.1...v1.3.2)
