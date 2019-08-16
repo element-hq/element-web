@@ -55,6 +55,7 @@ module.exports = React.createClass({
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         canSubmit: PropTypes.bool,
+        serverCapabilities: PropTypes.object,
     },
 
     getDefaultProps: function() {
@@ -436,8 +437,9 @@ module.exports = React.createClass({
     },
 
     _showEmail() {
+        const idServerRequired = !this.props.serverCapabilities['me.dbkr.idomyownemail'];
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if (!haveIs || !this._authStepIsUsed('m.login.email.identity')) {
+        if ((idServerRequired && !haveIs) || !this._authStepIsUsed('m.login.email.identity')) {
             return false;
         }
         return true;

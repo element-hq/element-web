@@ -98,6 +98,9 @@ module.exports = React.createClass({
             // component without it.
             matrixClient: null,
 
+            // the capabilities object from the server
+            serverCaps: null,
+
             // The user ID we've just registered
             registeredUsername: null,
 
@@ -204,13 +207,24 @@ module.exports = React.createClass({
         }
 
         const {hsUrl, isUrl} = serverConfig;
-        this.setState({
-            matrixClient: Matrix.createClient({
-                baseUrl: hsUrl,
-                idBaseUrl: isUrl,
-            }),
+        const cli = Matrix.createClient({
+            baseUrl: hsUrl,
+            idBaseUrl: isUrl,
         });
-        this.setState({busy: false});
+
+        let caps = null;
+        try {
+            caps = await cli.getServerCapabilities();
+            caps = caps || {};
+        } catch (e) {
+            console.log("Unable to fetch server capabilities", e);
+        }
+
+        this.setState({
+            matrixClient: cli,
+            serverCaps: caps,
+            busy: false,
+        });
         try {
             await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
@@ -523,7 +537,7 @@ module.exports = React.createClass({
             />;
         } else if (!this.state.matrixClient && !this.state.busy) {
             return null;
-        } else if (this.state.busy || !this.state.flows) {
+        } else if (this.state.busy || !this.state.flows | this.state.serverCaps === null) {
             return <div className="mx_AuthBody_spinner">
                 <Spinner />
             </div>;
@@ -550,6 +564,7 @@ module.exports = React.createClass({
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
                 canSubmit={!this.state.serverErrorIsFatal}
+                serverCapabilities={this.state.serverCaps}
             />;
         }
     },
