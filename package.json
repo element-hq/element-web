@@ -175,6 +175,9 @@
         "StartupWMClass": "riot"
       }
     },
+    "deb": {
+      "afterInstall": "electron_app/build/linux/after-install.tpl"
+    },
     "mac": {
       "category": "public.app-category.social-networking"
     },
