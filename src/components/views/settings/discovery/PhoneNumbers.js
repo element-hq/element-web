@@ -22,8 +22,8 @@ import { _t } from "../../../../languageHandler";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from '../../../../index';
 import Modal from '../../../../Modal';
-import IdentityAuthClient from '../../../../IdentityAuthClient';
 import AddThreepid from '../../../../AddThreepid';
+import { getThreepidBindStatus } from '../../../../boundThreepids';
 
 /*
 TODO: Improve the UX for everything in here.
@@ -217,31 +217,8 @@ export default class PhoneNumbers extends React.Component {
 
     async componentWillMount() {
         const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
 
-        const { threepids } = await client.getThreePids();
-        const msisdns = threepids.filter((a) => a.medium === 'msisdn');
-
-        if (msisdns.length > 0) {
-            // TODO: Handle terms agreement
-            // See https://github.com/vector-im/riot-web/issues/10522
-            const authClient = new IdentityAuthClient();
-            const identityAccessToken = await authClient.getAccessToken();
-
-            // Restructure for lookup query
-            const query = msisdns.map(({ medium, address }) => [medium, address]);
-            const lookupResults = await client.bulkLookupThreePids(query, identityAccessToken);
-
-            // Record which are already bound
-            for (const [medium, address, mxid] of lookupResults.threepids) {
-                if (medium !== "msisdn" || mxid !== userId) {
-                    continue;
-                }
-                const msisdn = msisdns.find(e => e.address === address);
-                if (!msisdn) continue;
-                msisdn.bound = true;
-            }
-        }
+        const msisdns = await getThreepidBindStatus(client, 'msisdn');
 
         this.setState({ msisdns });
     }
