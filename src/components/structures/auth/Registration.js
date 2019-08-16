@@ -98,8 +98,8 @@ module.exports = React.createClass({
             // component without it.
             matrixClient: null,
 
-            // the capabilities object from the server
-            serverCaps: null,
+            // whether the HS requires an ID server to register with a threepid
+            serverRequiresIdServer: null,
 
             // The user ID we've just registered
             registeredUsername: null,
@@ -212,17 +212,16 @@ module.exports = React.createClass({
             idBaseUrl: isUrl,
         });
 
-        let caps = null;
+        let serverRequiresIdServer = true;
         try {
-            caps = await cli.getServerCapabilities();
-            caps = caps || {};
+            serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
         } catch (e) {
-            console.log("Unable to fetch server capabilities", e);
+            console.log("Unable to determine is server needs id_server param", e);
         }
 
         this.setState({
             matrixClient: cli,
-            serverCaps: caps,
+            serverRequiresIdServer,
             busy: false,
         });
         try {
@@ -564,7 +563,7 @@ module.exports = React.createClass({
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
                 canSubmit={!this.state.serverErrorIsFatal}
-                serverCapabilities={this.state.serverCaps}
+                serverRequiresIdServer={this.state.serverRequiresIdServer}
             />;
         }
     },
