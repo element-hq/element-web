@@ -98,6 +98,9 @@ module.exports = React.createClass({
             // component without it.
             matrixClient: null,
 
+            // whether the HS requires an ID server to register with a threepid
+            serverRequiresIdServer: null,
+
             // The user ID we've just registered
             registeredUsername: null,
 
@@ -204,13 +207,23 @@ module.exports = React.createClass({
         }
 
         const {hsUrl, isUrl} = serverConfig;
-        this.setState({
-            matrixClient: Matrix.createClient({
-                baseUrl: hsUrl,
-                idBaseUrl: isUrl,
-            }),
+        const cli = Matrix.createClient({
+            baseUrl: hsUrl,
+            idBaseUrl: isUrl,
         });
-        this.setState({busy: false});
+
+        let serverRequiresIdServer = true;
+        try {
+            serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
+        } catch (e) {
+            console.log("Unable to determine is server needs id_server param", e);
+        }
+
+        this.setState({
+            matrixClient: cli,
+            serverRequiresIdServer,
+            busy: false,
+        });
         try {
             await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
@@ -550,6 +563,7 @@ module.exports = React.createClass({
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
                 canSubmit={!this.state.serverErrorIsFatal}
+                serverRequiresIdServer={this.state.serverRequiresIdServer}
             />;
         }
     },
