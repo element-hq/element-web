@@ -23,6 +23,8 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
 import { getThreepidBindStatus } from '../../../boundThreepids';
+import IdentityAuthClient from "../../../IdentityAuthClient";
+import {SERVICE_TYPES} from "matrix-js-sdk";
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
@@ -101,6 +103,7 @@ export default class SetIdServer extends React.Component {
             error: null,
             busy: false,
             disconnectBusy: false,
+            checking: false,
         };
     }
 
@@ -111,14 +114,14 @@ export default class SetIdServer extends React.Component {
     };
 
     _getTooltip = () => {
-        if (this.state.busy) {
+        if (this.state.checking) {
             const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
             return <div>
                 <InlineSpinner />
                 { _t("Checking server") }
             </div>;
         } else if (this.state.error) {
-            return this.state.error;
+            return <span className='warning'>{this.state.error}</span>;
         } else {
             return null;
         }
@@ -128,28 +131,68 @@ export default class SetIdServer extends React.Component {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _saveIdServer = async (e) => {
+    _saveIdServer = (fullUrl) => {
+        MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
+        localStorage.removeItem("mx_is_access_token");
+        localStorage.setItem("mx_is_url", fullUrl);
+        dis.dispatch({action: 'id_server_changed'});
+        this.setState({idServer: '', busy: false, error: null});
+    };
+
+    _checkIdServer = async (e) => {
         e.preventDefault();
 
-        this.setState({busy: true});
+        this.setState({busy: true, checking: true, error: null});
 
         const fullUrl = unabbreviateUrl(this.state.idServer);
 
-        const errStr = await checkIdentityServerUrl(fullUrl);
-
-        let newFormValue = this.state.idServer;
+        let errStr = await checkIdentityServerUrl(fullUrl);
         if (!errStr) {
-            MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
-            localStorage.removeItem("mx_is_access_token");
-            localStorage.setItem("mx_is_url", fullUrl);
-            dis.dispatch({action: 'id_server_changed'});
-            newFormValue = '';
+            try {
+                this.setState({checking: false}); // clear tooltip
+
+                // Test the identity server by trying to register with it. This
+                // may result in a terms of service prompt.
+                const authClient = new IdentityAuthClient(fullUrl);
+                await authClient.getAccessToken();
+
+                // Double check that the identity server even has terms of service.
+                const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
+                if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
+                    const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
+                    Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+                        title: _t("Identity server has no terms of service"),
+                        description: (
+                            <div>
+                                <span className="warning">
+                                    {_t("The identity server you have chosen does not have any terms of service.")}
+                                </span>
+                                <span>
+                                    &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                                </span>
+                            </div>
+                        ),
+                        button: _t("Continue"),
+                        onFinished: async (confirmed) => {
+                            if (!confirmed) return;
+                            this._saveIdServer(fullUrl);
+                        },
+                    });
+                    return;
+                }
+
+                this._saveIdServer(fullUrl);
+            } catch (e) {
+                console.error(e);
+                errStr = _t("Terms of service not accepted or the identity server is invalid.");
+            }
         }
         this.setState({
             busy: false,
+            checking: false,
             error: errStr,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: newFormValue,
+            idServer: this.state.idServer,
         });
     };
 
@@ -257,7 +300,7 @@ export default class SetIdServer extends React.Component {
         }
 
         return (
-            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
+            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
                     {sectionTitle}
                 </span>
@@ -274,7 +317,7 @@ export default class SetIdServer extends React.Component {
                     tooltipContent={this._getTooltip()}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
-                    onClick={this._saveIdServer}
+                    onClick={this._checkIdServer}
                     disabled={!this._idServerChangeEnabled()}
                 >{_t("Change")}</AccessibleButton>
                 {discoSection}
