@@ -107,6 +107,31 @@ export default class SetIdServer extends React.Component {
         };
     }
 
+    componentDidMount(): void {
+        this.dispatcherRef = dis.register(this.onAction);
+    }
+
+    componentWillUnmount(): void {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    onAction = (payload) => {
+        // We react to changes in the ID server in the event the user is staring at this form
+        // when changing their identity server on another device. If the user is trying to change
+        // it in two places, we'll end up stomping all over their input, but at that point we
+        // should question our UX which led to them doing that.
+        if (payload.action !== "id_server_changed") return;
+
+        const fullUrl = MatrixClientPeg.get().getIdentityServerUrl();
+        let abbr = '';
+        if (fullUrl) abbr = abbreviateUrl(fullUrl);
+
+        this.setState({
+            currentClientIdServer: fullUrl,
+            idServer: abbr,
+        });
+    };
+
     _onIdentityServerChanged = (ev) => {
         const u = ev.target.value;
 
@@ -132,10 +157,10 @@ export default class SetIdServer extends React.Component {
     };
 
     _saveIdServer = (fullUrl) => {
-        MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
-        localStorage.removeItem("mx_is_access_token");
-        localStorage.setItem("mx_is_url", fullUrl);
-        dis.dispatch({action: 'id_server_changed'});
+        // Account data change will update localstorage, client, etc through dispatcher
+        MatrixClientPeg.get().setAccountData("m.identity_server", {
+            base_url: fullUrl,
+        });
         this.setState({idServer: '', busy: false, error: null});
     };
 
@@ -238,9 +263,10 @@ export default class SetIdServer extends React.Component {
     };
 
     _disconnectIdServer = () => {
-        MatrixClientPeg.get().setIdentityServerUrl(null);
-        localStorage.removeItem("mx_is_access_token");
-        localStorage.removeItem("mx_is_url");
+        // Account data change will update localstorage, client, etc through dispatcher
+        MatrixClientPeg.get().setAccountData("m.identity_server", {
+            base_url: null, // clear
+        });
 
         let newFieldVal = '';
         if (SdkConfig.get()['validated_server_config']['isUrl']) {
