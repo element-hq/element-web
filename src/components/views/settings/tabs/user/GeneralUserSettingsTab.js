@@ -189,13 +189,17 @@ export default class GeneralUserSettingsTab extends React.Component {
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
+        const threepidSection = this.state.haveIdServer ? <div>
+            <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+            <EmailAddresses />
+
+            <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+            <PhoneNumbers />
+        </div> : null;
+
         return (
             <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers />
+                {threepidSection}
                 { /* has its own heading as it includes the current ID server */ }
                 <SetIdServer />
             </div>
