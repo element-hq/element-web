@@ -46,9 +46,15 @@ export default class GeneralUserSettingsTab extends React.Component {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
+            serverRequiresIdServer: null,
         };
 
         this.dispatcherRef = dis.register(this._onAction);
+    }
+
+    async componentWillMount() {
+        const serverRequiresIdServer = await MatrixClientPeg.get().doesServerRequireIdServerParam();
+        this.setState({serverRequiresIdServer});
     }
 
     componentWillUnmount() {
@@ -127,6 +133,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
+        const Spinner = sdk.getComponent("views.elements.Spinner");
 
         const passwordChangeForm = (
             <ChangePassword
@@ -137,13 +144,19 @@ export default class GeneralUserSettingsTab extends React.Component {
                 onFinished={this._onPasswordChanged} />
         );
 
-        const threepidSection = this.state.haveIdServer ? <div>
-            <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-            <EmailAddresses />
+        let threepidSection = null;
 
-            <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-            <PhoneNumbers />
-        </div> : null;
+        if (this.state.haveIdServer || this.state.serverRequiresIdServer === false) {
+            threepidSection = <div>
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                <EmailAddresses />
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                <PhoneNumbers />
+            </div>;
+        } else if (this.state.serverRequiresIdServer === null) {
+            threepidSection = <Spinner />;
+        }
 
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
@@ -189,13 +202,17 @@ export default class GeneralUserSettingsTab extends React.Component {
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
+        const threepidSection = this.state.haveIdServer ? <div>
+            <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+            <EmailAddresses />
+
+            <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+            <PhoneNumbers />
+        </div> : null;
+
         return (
             <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers />
+                {threepidSection}
                 { /* has its own heading as it includes the current ID server */ }
                 <SetIdServer />
             </div>

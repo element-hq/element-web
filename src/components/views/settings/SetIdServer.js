@@ -97,8 +97,9 @@ export default class SetIdServer extends React.Component {
         }
 
         this.state = {
+            defaultIdServer,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: defaultIdServer,
+            idServer: "",
             error: null,
             busy: false,
             disconnectBusy: false,
@@ -155,7 +156,7 @@ export default class SetIdServer extends React.Component {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _continueTerms = (fullUrl) => {
+    _saveIdServer = (fullUrl) => {
         // Account data change will update localstorage, client, etc through dispatcher
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: fullUrl,
@@ -163,7 +164,7 @@ export default class SetIdServer extends React.Component {
         this.setState({idServer: '', busy: false, error: null});
     };
 
-    _saveIdServer = async (e) => {
+    _checkIdServer = async (e) => {
         e.preventDefault();
 
         this.setState({busy: true, checking: true, error: null});
@@ -199,13 +200,13 @@ export default class SetIdServer extends React.Component {
                         button: _t("Continue"),
                         onFinished: async (confirmed) => {
                             if (!confirmed) return;
-                            this._continueTerms(fullUrl);
+                            this._saveIdServer(fullUrl);
                         },
                     });
                     return;
                 }
 
-                this._continueTerms(fullUrl);
+                this._saveIdServer(fullUrl);
             } catch (e) {
                 console.error(e);
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
@@ -325,7 +326,7 @@ export default class SetIdServer extends React.Component {
         }
 
         return (
-            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
+            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
                     {sectionTitle}
                 </span>
@@ -334,12 +335,15 @@ export default class SetIdServer extends React.Component {
                 </span>
                 <Field label={_t("Identity Server")}
                     id="mx_SetIdServer_idServer"
-                    type="text" value={this.state.idServer} autoComplete="off"
+                    type="text"
+                    autoComplete="off"
+                    placeholder={this.state.defaultIdServer}
+                    value={this.state.idServer}
                     onChange={this._onIdentityServerChanged}
                     tooltipContent={this._getTooltip()}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
-                    onClick={this._saveIdServer}
+                    onClick={this._checkIdServer}
                     disabled={!this._idServerChangeEnabled()}
                 >{_t("Change")}</AccessibleButton>
                 {discoSection}
