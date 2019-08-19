@@ -87,15 +87,15 @@ export class ExistingEmailAddress extends React.Component {
             return (
                 <div className="mx_ExistingEmailAddress">
                     <span className="mx_ExistingEmailAddress_promptText">
-                        {_t("Are you sure?")}
+                        {_t("Remove %(email)s?", {email: this.props.email.address} )}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
+                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
                                       className="mx_ExistingEmailAddress_confirmBtn">
-                        {_t("Yes")}
+                        {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
+                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
                                       className="mx_ExistingEmailAddress_confirmBtn">
-                        {_t("No")}
+                        {_t("Cancel")}
                     </AccessibleButton>
                 </div>
             );

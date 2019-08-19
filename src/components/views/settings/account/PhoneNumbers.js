@@ -82,15 +82,15 @@ export class ExistingPhoneNumber extends React.Component {
             return (
                 <div className="mx_ExistingPhoneNumber">
                     <span className="mx_ExistingPhoneNumber_promptText">
-                        {_t("Are you sure?")}
+                        {_t("Remove %(phone)s?", {phone: this.props.msisdn.address})}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
+                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
                                       className="mx_ExistingPhoneNumber_confirmBtn">
-                        {_t("Yes")}
+                        {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
+                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
                                       className="mx_ExistingPhoneNumber_confirmBtn">
-                        {_t("No")}
+                        {_t("Cancel")}
                     </AccessibleButton>
                 </div>
             );
