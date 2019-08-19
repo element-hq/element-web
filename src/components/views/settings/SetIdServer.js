@@ -263,7 +263,7 @@ export default class SetIdServer extends React.Component {
                 <span className="mx_SettingsTab_subsectionText">
                     {bodyText}
                 </span>
-                <Field label={_t("Identity Server")}
+                <Field label={_t("Enter a new identity server")}
                     id="mx_SetIdServer_idServer"
                     type="text" value={this.state.idServer} autoComplete="off"
                     onChange={this._onIdentityServerChanged}
