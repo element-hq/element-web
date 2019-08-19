@@ -95,8 +95,9 @@ export default class SetIdServer extends React.Component {
         }
 
         this.state = {
+            defaultIdServer,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: defaultIdServer,
+            idServer: "",
             error: null,
             busy: false,
             disconnectBusy: false,
@@ -265,7 +266,10 @@ export default class SetIdServer extends React.Component {
                 </span>
                 <Field label={_t("Identity Server")}
                     id="mx_SetIdServer_idServer"
-                    type="text" value={this.state.idServer} autoComplete="off"
+                    type="text"
+                    autoComplete="off"
+                    placeholder={this.state.defaultIdServer}
+                    value={this.state.idServer}
                     onChange={this._onIdentityServerChanged}
                     tooltipContent={this._getTooltip()}
                 />
