@@ -130,7 +130,7 @@ export default class SetIdServer extends React.Component {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _continueTerms = (fullUrl) => {
+    _saveIdServer = (fullUrl) => {
         MatrixClientPeg.get().setIdentityServerUrl(fullUrl);
         localStorage.removeItem("mx_is_access_token");
         localStorage.setItem("mx_is_url", fullUrl);
@@ -138,7 +138,7 @@ export default class SetIdServer extends React.Component {
         this.setState({idServer: '', busy: false, error: null});
     };
 
-    _saveIdServer = async (e) => {
+    _checkIdServer = async (e) => {
         e.preventDefault();
 
         this.setState({busy: true, checking: true, error: null});
@@ -174,13 +174,13 @@ export default class SetIdServer extends React.Component {
                         button: _t("Continue"),
                         onFinished: async (confirmed) => {
                             if (!confirmed) return;
-                            this._continueTerms(fullUrl);
+                            this._saveIdServer(fullUrl);
                         },
                     });
                     return;
                 }
 
-                this._continueTerms(fullUrl);
+                this._saveIdServer(fullUrl);
             } catch (e) {
                 console.error(e);
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
@@ -299,7 +299,7 @@ export default class SetIdServer extends React.Component {
         }
 
         return (
-            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._saveIdServer}>
+            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
                     {sectionTitle}
                 </span>
@@ -313,7 +313,7 @@ export default class SetIdServer extends React.Component {
                     tooltipContent={this._getTooltip()}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
-                    onClick={this._saveIdServer}
+                    onClick={this._checkIdServer}
                     disabled={!this._idServerChangeEnabled()}
                 >{_t("Change")}</AccessibleButton>
                 {discoSection}
