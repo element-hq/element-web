@@ -2022,5 +2022,17 @@
     "To continue you need to accept the Terms of this service.": "Per continuare devi accettare le Condizioni di questo servizio.",
     "Service": "Servizio",
     "Summary": "Sommario",
-    "Terms": "Condizioni"
+    "Terms": "Condizioni",
+    "Call failed due to misconfigured server": "Chiamata non riuscita a causa di un server non configurato correttamente",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Chiedi all'amministratore del tuo homeserver(<code>%(homeserverDomain)s</code>) per configurare un server TURN affinché le chiamate funzionino in modo affidabile.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "In alternativa, puoi provare a utilizzare il server pubblico all'indirizzo <code>turn.matrix.org</code>, ma questo non sarà così affidabile e condividerà il tuo indirizzo IP con quel server. Puoi anche gestirlo in Impostazioni.",
+    "Try using turn.matrix.org": "Prova a usare turn.matrix.org",
+    "Failed to start chat": "Impossibile avviare la chat",
+    "Messages": "Messaggi",
+    "Actions": "Azioni",
+    "Displays list of commands with usages and descriptions": "Visualizza l'elenco dei comandi con usi e descrizioni",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Consenti al server di assistenza alle chiamate di fallback turn.matrix.org quando il tuo homeserver non ne offre uno (il tuo indirizzo IP verrà condiviso durante una chiamata)",
+    "Identity Server URL must be HTTPS": "L'URL di Identita' Server deve essere HTTPS",
+    "Not a valid Identity Server (status code %(code)s)": "Non è un server di identità valida (status code %(code)s)",
+    "Could not connect to Identity Server": "Impossibile connettersi ad in identita' Server"
 }
