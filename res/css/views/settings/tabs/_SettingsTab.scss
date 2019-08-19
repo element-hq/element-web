@@ -24,6 +24,10 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
+.mx_SettingsTab_heading:nth-child(n + 2) {
+    margin-top: 30px;
+}
+
 .mx_SettingsTab_subheading {
     font-size: 16px;
     display: block;
@@ -37,9 +41,8 @@ limitations under the License.
 .mx_SettingsTab_subsectionText {
     color: $settings-subsection-fg-color;
     font-size: 14px;
-    padding-bottom: 12px;
     display: block;
-    margin: 0 100px 0 0; // Align with the rest of the view
+    margin: 10px 100px 10px 0; // Align with the rest of the view
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag {
@@ -68,9 +71,14 @@ limitations under the License.
 }
 
 .mx_SettingsTab .mx_SettingsTab_subheading:nth-child(n + 2) {
+    // TODO: This `nth-child(n + 2)` isn't working very well since many sections
+    // add intermediate elements (mostly because our version of React requires
+    // them) which throws off the numbering and results in many subheading
+    // missing margins.
+    // See also https://github.com/vector-im/riot-web/issues/10554
     // These views have a lot of the same repetitive information on it, so
     // give them more visual distinction between the sections.
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .mx_SettingsTab a {
