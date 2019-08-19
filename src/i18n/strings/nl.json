@@ -2019,5 +2019,10 @@
     "Only continue if you trust the owner of the server.": "Ga enkel verder indien u de eigenaar van de server vertrouwt.",
     "Terms of service not accepted or the identity server is invalid.": "Dienstvoorwaarden niet aanvaard, of de identiteitsserver is ongeldig.",
     "You are currently sharing email addresses or phone numbers on the identity server <idserver />. You will need to reconnect to <idserver2 /> to stop sharing them.": "U deelt momenteel e-mailadressen of telefoonnummers op de identiteitsserver <idserver />. U zult opnieuw verbinding  moeten maken met <idserver2 /> om deze niet meer te delen.",
-    "Terms of service not accepted or the integration manager is invalid.": "Dienstvoorwaarden niet aanvaard, of de integratiebeheerder is ingeldig."
+    "Terms of service not accepted or the integration manager is invalid.": "Dienstvoorwaarden niet aanvaard, of de integratiebeheerder is ongeldig.",
+    "Enter a new identity server": "Voer een nieuwe identiteitsserver in",
+    "Integration manager has no terms of service": "Integratiebeheerder heeft geen dienstvoorwaarden",
+    "The integration manager you have chosen does not have any terms of service.": "De integratiebeheerder die u heeft gekozen heeft geen dienstvoorwaarden.",
+    "Remove %(email)s?": "%(email)s verwijderen?",
+    "Remove %(phone)s?": "%(phone)s verwijderen?"
 }
