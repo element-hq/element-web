@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix, { SERVICE_TYPES } from 'matrix-js-sdk';
+import { createClient, SERVICE_TYPES } from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
@@ -36,7 +36,7 @@ export default class IdentityAuthClient {
             // though, and making all of them take one could lead to developer
             // confusion about what the idBaseUrl does on a client. Therefore, we
             // just make a new client and live with it.
-            this.tempClient = Matrix.createClient({
+            this.tempClient = createClient({
                 baseUrl: "", // invalid by design
                 idBaseUrl: identityUrl,
             });
