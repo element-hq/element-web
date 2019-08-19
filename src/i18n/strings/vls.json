@@ -1,15 +1,15 @@
 {
     "Unexpected error preparing the app. See console for details.": "’t Is een onverwachte foute ipgetreedn by ’t voorbereidn van den app. Bekykt de console vo details.",
     "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "De serverconfiguroatie van deze Riot-instantie lykt oungeldig. A je gy den beheerder zyt, gelieve ton de foute hierounder te corrigeern",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Oungeldige configuroatie: ku moar één van default_server_config, default_server_name, of default_hs_url ipgeevn.",
-    "Invalid configuration: no default server specified.": "Oungeldige configuroatie: geen standoardserver ipgegeevn.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Oungeldige configuroasje: ku moar één van default_server_config, default_server_name, of default_hs_url ingeevn.",
+    "Invalid configuration: no default server specified.": "Oungeldige configuroasje: geen standoardserver ingegeevn.",
     "Riot Desktop on %(platformName)s": "Riot Desktop ip %(platformName)s",
     "Unknown device": "Ounbekend toestel",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s ip %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Je moet HTTPS gebruukn vo een iproep me schermdeeln te kunn startn.",
     "powered by Matrix": "meuglik gemakt deur Matrix",
     "Custom Server Options": "Angepaste serverinstelliengn",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Je kut d’angepaste serverinstelliengn gebruukn vo jen eigen an te melden by andere Matrix-servers, deur een andere thuusserver-URL in te geevn. Dit lat je toe van Riot te gebruukn met e bestoande Matrix-account by een andere thuusserver.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Je kut d’angepaste serverinstelliengn gebruukn vo jen eigen an te meldn by andere Matrix-servers, deur een andere thuusserver-URL in te geevn. Da lat je toe van Riot te gebruukn met e bestoande Matrix-account by een andere thuusserver.",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Je kut ook een angepasten identiteitsserver instelln, ma je goa geen gebruukers kunn uutnodign via e-mail, of zelve via e-mail uutgenodigd wirden.",
     "Dismiss": "Afwyzn",
     "Welcome to Riot.im": "Welgekommn by Riot.im",
@@ -21,7 +21,7 @@
     "Explore rooms": "Gesprekkn ountdekkn",
     "Room Directory": "Gesprekscataloog",
     "Your Riot is misconfigured": "Je Riot is verkeerd geconfigureerd gewist",
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Je Riot-configuroatie bevat oungeldigen JSON. Corrigeer ’t probleem en herload ’t blad.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Je Riot-configuroasje bevat oungeldigen JSON. Corrigeer ’t probleem en herload ’t blad.",
     "The message from the parser is: %(message)s": "’t Bericht van de verwerker is: %(message)s",
     "Invalid JSON": "Oungeldigen JSON"
 }
