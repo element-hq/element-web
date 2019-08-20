@@ -134,7 +134,7 @@ export default class SendMessageComposer extends React.Component {
                 const displayName = member ?
                     member.rawDisplayName : payload.user_id;
                 const userPillPart = this.model.partCreator.userPill(displayName, userId);
-                this.model.insertPartAt(userPillPart, this._editorRef.getCaret());
+                this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
                 break;
             }
         }

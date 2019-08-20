@@ -108,12 +108,18 @@ export default class EditorModel {
         this._updateCallback(caret, inputType);
     }
 
-    insertPartAt(part, caret) {
+    insertPartsAt(parts, caret) {
         const position = this.positionForOffset(caret.offset, caret.atNodeEnd);
         const insertIndex = this._splitAt(position);
-        this._insertPart(insertIndex, part);
-        // want to put caret after new part?
-        const newPosition = new DocumentPosition(insertIndex, part.text.length);
+        let newTextLength = 0;
+        for (let i = 0; i < parts.length; ++i) {
+            const part = parts[i];
+            newTextLength += part.text.length;
+            this._insertPart(insertIndex + i, part);
+        }
+        // put caret after new part
+        const lastPartIndex = insertIndex + parts.length - 1;
+        const newPosition = new DocumentPosition(lastPartIndex, newTextLength);
         this._updateCallback(newPosition);
     }
 
