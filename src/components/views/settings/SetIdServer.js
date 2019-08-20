@@ -319,7 +319,7 @@ export default class SetIdServer extends React.Component {
                     "won't be discoverable by other users and you won't be " +
                     "able to invite others by email or phone.",
                 )}</span>
-                <AccessibleButton onClick={this._onDisconnectClicked} kind="danger">
+                <AccessibleButton onClick={this._onDisconnectClicked} kind="danger_sm">
                     {discoButtonContent}
                 </AccessibleButton>
             </div>;
@@ -341,6 +341,9 @@ export default class SetIdServer extends React.Component {
                     value={this.state.idServer}
                     onChange={this._onIdentityServerChanged}
                     tooltipContent={this._getTooltip()}
+                    tooltipClassName="mx_SetIdServer_tooltip"
+                    disabled={this.state.busy}
+                    flagInvalid={!!this.state.error}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
                     onClick={this._checkIdServer}

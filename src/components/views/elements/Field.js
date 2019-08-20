@@ -51,6 +51,9 @@ export default class Field extends React.PureComponent {
         // If specified, contents will appear as a tooltip on the element and
         // validation feedback tooltips will be suppressed.
         tooltipContent: PropTypes.node,
+        // If specified alongside tooltipContent, the class name to apply to the
+        // tooltip itself.
+        tooltipClassName: PropTypes.string,
         // All other props pass through to the <input>.
     };
 
@@ -177,8 +180,9 @@ export default class Field extends React.PureComponent {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
+            const addlClassName = this.props.tooltipClassName ? this.props.tooltipClassName : '';
             fieldTooltip = <Tooltip
-                tooltipClassName="mx_Field_tooltip"
+                tooltipClassName={`mx_Field_tooltip ${addlClassName}`}
                 visible={this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
             />;

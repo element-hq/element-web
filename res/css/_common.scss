@@ -561,5 +561,10 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 @define-mixin mx_Settings_fullWidthField {
-    margin-right: 200px;
+    margin-right: 100px;
+}
+
+@define-mixin mx_Settings_tooltip {
+    // So it fits in the space provided by the page
+    max-width: 120px;
 }
