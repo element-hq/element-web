@@ -24,18 +24,49 @@ import {PartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyPreview from "./ReplyPreview";
+import RoomViewStore from '../../../stores/RoomViewStore';
+import ReplyThread from "../elements/ReplyThread";
 
-function createMessageContent(model, editedEvent) {
+function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
+    const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
+    Object.assign(content, replyContent);
+
+    // Part of Replies fallback support - prepend the text we're sending
+    // with the text we're replying to
+    const nestedReply = ReplyThread.getNestedReplyText(repliedToEvent, permalinkCreator);
+    if (nestedReply) {
+        if (content.formatted_body) {
+            content.formatted_body = nestedReply.html + content.formatted_body;
+        }
+        content.body = nestedReply.body + content.body;
+    }
+
+    // Clear reply_to_event as we put the message into the queue
+    // if the send fails, retry will handle resending.
+    dis.dispatch({
+        action: 'reply_to_event',
+        event: null,
+    });
+}
+
+function createMessageContent(model, permalinkCreator) {
+    const repliedToEvent = RoomViewStore.getQuotingEvent();
+
     const body = textSerialize(model);
     const content = {
         msgtype: "m.text",
-        body,
+        body: body,
     };
-    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: false});
+    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: !!repliedToEvent});
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
         content.formatted_body = formattedBody;
     }
+
+    if (repliedToEvent) {
+        addReplyToMessageContent(content, repliedToEvent, permalinkCreator);
+    }
+
     return content;
 }
 
@@ -72,7 +103,7 @@ export default class SendMessageComposer extends React.Component {
 
     _sendMessage() {
         const {roomId} = this.props.room;
-        this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model));
+        this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model, this.props.permalinkCreator));
         this.model.reset([]);
         dis.dispatch({action: 'focus_composer'});
     }
