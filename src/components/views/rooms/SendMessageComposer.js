@@ -41,13 +41,6 @@ function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
         }
         content.body = nestedReply.body + content.body;
     }
-
-    // Clear reply_to_event as we put the message into the queue
-    // if the send fails, retry will handle resending.
-    dis.dispatch({
-        action: 'reply_to_event',
-        event: null,
-    });
 }
 
 function createMessageContent(model, permalinkCreator) {
@@ -103,9 +96,18 @@ export default class SendMessageComposer extends React.Component {
     }
 
     _sendMessage() {
+        const isReply = !!RoomViewStore.getQuotingEvent();
         const {roomId} = this.props.room;
         this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model, this.props.permalinkCreator));
         this.model.reset([]);
+        if (isReply) {
+            // Clear reply_to_event as we put the message into the queue
+            // if the send fails, retry will handle resending.
+            dis.dispatch({
+                action: 'reply_to_event',
+                event: null,
+            });
+        }
         dis.dispatch({action: 'focus_composer'});
     }
 
