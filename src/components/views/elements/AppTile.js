@@ -266,7 +266,7 @@ export default class AppTile extends React.Component {
             // TODO: Open the right manager for the widget
             IntegrationManagers.sharedInstance().getPrimaryManager().open(
                 this.props.room,
-                this.props.type,
+                'type_' + this.props.type,
                 this.props.id,
             );
         }
