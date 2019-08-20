@@ -196,6 +196,7 @@ export default class SetIntegrationManager extends React.Component {
                     autoComplete="off"
                     onChange={this._onUrlChanged}
                     tooltipContent={this._getTooltip()}
+                    tooltipClassName="mx_SetIntegrationManager_tooltip"
                     disabled={this.state.busy}
                     flagInvalid={!!this.state.error}
                 />
