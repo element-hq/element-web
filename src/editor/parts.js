@@ -312,7 +312,7 @@ class UserPillPart extends PillPart {
 
     serialize() {
         const obj = super.serialize();
-        obj.userId = this.resourceId;
+        obj.resourceId = this.resourceId;
         return obj;
     }
 }
@@ -403,7 +403,7 @@ export class PartCreator {
             case "room-pill":
                 return this.roomPill(part.text);
             case "user-pill":
-                return this.userPill(part.text, part.userId);
+                return this.userPill(part.text, part.resourceId);
         }
     }
 
