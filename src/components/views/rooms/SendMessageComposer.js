@@ -129,28 +129,35 @@ export default class SendMessageComposer extends React.Component {
             case 'focus_composer':
                 this._editorRef.focus();
                 break;
-            case 'insert_mention': {
-                const userId = payload.user_id;
-                const member = this.props.room.getMember(userId);
-                const displayName = member ?
-                    member.rawDisplayName : payload.user_id;
-                const userPillPart = this.model.partCreator.userPill(displayName, userId);
-                this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
+            case 'insert_mention':
+                this._insertMention(payload.user_id);
                 break;
-            }
-            case 'quote': {
-                const {partCreator} = this.model;
-                const quoteParts = parseEvent(payload.event, partCreator, { isQuotedMessage: true });
-                // add two newlines
-                quoteParts.push(partCreator.newline());
-                quoteParts.push(partCreator.newline());
-                this.model.insertPartsAt(quoteParts, {offset: 0});
-                // refocus on composer, as we just clicked "Quote"
-                this._editorRef.focus();
+            case 'quote':
+                this._insertQuotedMessage(payload.event);
                 break;
-            }
         }
     };
+
+    _insertMention(userId) {
+        const member = this.props.room.getMember(userId);
+        const displayName = member ?
+            member.rawDisplayName : userId;
+        const userPillPart = this.model.partCreator.userPill(displayName, userId);
+        this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
+        // refocus on composer, as we just clicked "Mention"
+        this._editorRef.focus();
+    }
+
+    _insertQuotedMessage(event) {
+        const {partCreator} = this.model;
+        const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
+        // add two newlines
+        quoteParts.push(partCreator.newline());
+        quoteParts.push(partCreator.newline());
+        this.model.insertPartsAt(quoteParts, {offset: 0});
+        // refocus on composer, as we just clicked "Quote"
+        this._editorRef.focus();
+    }
 
     render() {
         return (
