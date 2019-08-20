@@ -92,7 +92,7 @@ export default class InlineTermsAgreement extends React.Component {
                         <input type='checkbox' onChange={() => this._togglePolicy(i)} checked={policy.checked} />
                         {_t("Accept")}
                     </div>
-                </div>
+                </div>,
             );
         }
         return rendered;
