@@ -26,6 +26,7 @@ import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
+import {parseEvent} from '../../../editor/deserialize';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -135,6 +136,17 @@ export default class SendMessageComposer extends React.Component {
                     member.rawDisplayName : payload.user_id;
                 const userPillPart = this.model.partCreator.userPill(displayName, userId);
                 this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
+                break;
+            }
+            case 'quote': {
+                const {partCreator} = this.model;
+                const quoteParts = parseEvent(payload.event, partCreator, { isQuotedMessage: true });
+                // add two newlines
+                quoteParts.push(partCreator.newline());
+                quoteParts.push(partCreator.newline());
+                this.model.insertPartsAt(quoteParts, {offset: 0});
+                // refocus on composer, as we just clicked "Quote"
+                this._editorRef.focus();
                 break;
             }
         }
