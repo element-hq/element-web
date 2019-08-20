@@ -65,7 +65,7 @@ export default class IdentityAuthClient {
     }
 
     // Returns a promise that resolves to the access_token string from the IS
-    async getAccessToken() {
+    async getAccessToken(check=true) {
         if (!this.authEnabled) {
             // The current IS doesn't support authentication
             return null;
@@ -77,7 +77,7 @@ export default class IdentityAuthClient {
         }
 
         if (!token) {
-            token = await this.registerForToken();
+            token = await this.registerForToken(check);
             if (token) {
                 this.accessToken = token;
                 this._writeToken();
@@ -85,18 +85,20 @@ export default class IdentityAuthClient {
             return token;
         }
 
-        try {
-            await this._checkToken(token);
-        } catch (e) {
-            if (e instanceof TermsNotSignedError) {
-                // Retrying won't help this
-                throw e;
-            }
-            // Retry in case token expired
-            token = await this.registerForToken();
-            if (token) {
-                this.accessToken = token;
-                this._writeToken();
+        if (check) {
+            try {
+                await this._checkToken(token);
+            } catch (e) {
+                if (e instanceof TermsNotSignedError) {
+                    // Retrying won't help this
+                    throw e;
+                }
+                // Retry in case token expired
+                token = await this.registerForToken();
+                if (token) {
+                    this.accessToken = token;
+                    this._writeToken();
+                }
             }
         }
 
@@ -126,12 +128,12 @@ export default class IdentityAuthClient {
         // See also https://github.com/vector-im/riot-web/issues/10455.
     }
 
-    async registerForToken() {
+    async registerForToken(check=true) {
         try {
             const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
             const { access_token: identityAccessToken } =
                 await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
-            await this._checkToken(identityAccessToken);
+            if (check) await this._checkToken(identityAccessToken);
             return identityAccessToken;
         } catch (e) {
             if (e.cors === "rejected" || e.httpStatus === 404) {
