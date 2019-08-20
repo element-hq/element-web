@@ -36,10 +36,10 @@
     "build:compile": "yarn reskindex && babel --source-maps -d lib src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:bundle:dev": "webpack --progress --bail --mode development",
-    "build:electron": "yarn clean && yarn build && yarn install:electron && build -wml --ia32 --x64",
-    "build:electron:linux": "yarn build && build -l --x64",
-    "build:electron:macos": "yarn build && build -m --x64",
-    "build:electron:windows": "yarn build && build -w --ia32 --x64",
+    "build:electron": "yarn clean && yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
+    "build:electron:linux": "yarn build && electron-builder -l --x64",
+    "build:electron:macos": "yarn build && electron-builder -m --x64",
+    "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
     "build:react-sdk": "node scripts/yarn-sub.js matrix-react-sdk build",
     "build:js-sdk": "node scripts/yarn-sub.js matrix-js-sdk start:init",
     "build": "yarn build:js-sdk && yarn build:react-sdk && yarn reskindex && yarn build:res && yarn build:bundle",
@@ -154,7 +154,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "5.0.7",
+    "electronVersion": "6.0.2",
     "files": [
       "node_modules/**",
       "src/**"
