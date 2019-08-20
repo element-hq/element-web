@@ -15,37 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Value} from 'slate';
-
 import _clamp from 'lodash/clamp';
-
-type MessageFormat = 'rich' | 'markdown';
-
-class HistoryItem {
-    // We store history items in their native format to ensure history is accurate
-    // and then convert them if our RTE has subsequently changed format.
-    value: Value;
-    format: MessageFormat = 'rich';
-
-    constructor(value: ?Value, format: ?MessageFormat) {
-        this.value = value;
-        this.format = format;
-    }
-
-    static fromJSON(obj: Object): HistoryItem {
-        return new HistoryItem(
-            Value.fromJSON(obj.value),
-            obj.format,
-        );
-    }
-
-    toJSON(): Object {
-        return {
-            value: this.value.toJSON(),
-            format: this.format,
-        };
-    }
-}
 
 export default class ComposerHistoryManager {
     history: Array<HistoryItem> = [];
@@ -57,26 +27,30 @@ export default class ComposerHistoryManager {
         this.prefix = prefix + roomId;
 
         // TODO: Performance issues?
-        let item;
-        for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
+        let index = 0;
+        let itemJSON;
+
+        while (itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`)) {
             try {
-                this.history.push(
-                    HistoryItem.fromJSON(JSON.parse(item)),
-                );
+                const serializedParts = JSON.parse(itemJSON);
+                this.history.push(serializedParts);
             } catch (e) {
                 console.warn("Throwing away unserialisable history", e);
+                break;
             }
+            ++index;
         }
-        this.lastIndex = this.currentIndex;
+        this.lastIndex = this.history.length - 1;
         // reset currentIndex to account for any unserialisable history
-        this.currentIndex = this.history.length;
+        this.currentIndex = this.lastIndex + 1;
     }
 
-    save(value: Value, format: MessageFormat) {
-        const item = new HistoryItem(value, format);
-        this.history.push(item);
+    save(editorModel: Object) {
+        const serializedParts = editorModel.serializeParts();
+        this.history.push(serializedParts);
         this.currentIndex = this.history.length;
-        sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item.toJSON()));
+        this.lastIndex += 1;
+        sessionStorage.setItem(`${this.prefix}[${this.lastIndex}]`, JSON.stringify(serializedParts));
     }
 
     getItem(offset: number): ?HistoryItem {

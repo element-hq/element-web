@@ -144,6 +144,10 @@ export default class BasicMessageEditor extends React.Component {
         return this._lastCaret;
     }
 
+    isSelectionCollapsed() {
+        return !this._lastSelection || this._lastSelection.isCollapsed;
+    }
+
     isCaretAtStart() {
         return this.getCaret().offset === 0;
     }

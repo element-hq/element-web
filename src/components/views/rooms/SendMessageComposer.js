@@ -27,6 +27,8 @@ import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
+import {findEditableEvent} from '../../../utils/EventUtils';
+import ComposerHistoryManager from "../../../ComposerHistoryManager";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -79,6 +81,7 @@ export default class SendMessageComposer extends React.Component {
         super(props, context);
         this.model = null;
         this._editorRef = null;
+        this.currentlyComposedEditorState = null;
     }
 
     _setEditorRef = ref => {
@@ -86,19 +89,75 @@ export default class SendMessageComposer extends React.Component {
     };
 
     _onKeyDown = (event) => {
-        if (event.metaKey || event.altKey || event.shiftKey) {
-            return;
-        }
-        if (event.key === "Enter") {
+        const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+        if (event.key === "Enter" && !hasModifier) {
             this._sendMessage();
             event.preventDefault();
+        } else if (event.key === "ArrowUp") {
+            this.onVerticalArrow(event, true);
+        } else if (event.key === "ArrowDown") {
+            this.onVerticalArrow(event, false);
+        }
+    }
+
+    onVerticalArrow(e, up) {
+        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
+
+        const shouldSelectHistory = e.altKey;
+        const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
+
+        if (shouldSelectHistory) {
+            // Try select composer history
+            const selected = this.selectSendHistory(up);
+            if (selected) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+            }
+        } else if (shouldEditLastMessage) {
+            // selection must be collapsed and caret at start
+            if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
+                const editEvent = findEditableEvent(this.props.room, false);
+                if (editEvent) {
+                    // We're selecting history, so prevent the key event from doing anything else
+                    e.preventDefault();
+                    dis.dispatch({
+                        action: 'edit_event',
+                        event: editEvent,
+                    });
+                }
+            }
+        }
+    }
+
+    selectSendHistory(up) {
+        const delta = up ? -1 : 1;
+
+        // True if we are not currently selecting history, but composing a message
+        if (this.sendHistoryManager.currentIndex === this.sendHistoryManager.history.length) {
+            // We can't go any further - there isn't any more history, so nop.
+            if (!up) {
+                return;
+            }
+            this.currentlyComposedEditorState = this.model.serializeParts();
+        } else if (this.sendHistoryManager.currentIndex + delta === this.sendHistoryManager.history.length) {
+            // True when we return to the message being composed currently
+            this.model.reset(this.currentlyComposedEditorState);
+            this.sendHistoryManager.currentIndex = this.sendHistoryManager.history.length;
+            return;
+        }
+        const serializedParts = this.sendHistoryManager.getItem(delta);
+        if (serializedParts) {
+            this.model.reset(serializedParts);
+            this._editorRef.focus();
         }
     }
 
     _sendMessage() {
         const isReply = !!RoomViewStore.getQuotingEvent();
         const {roomId} = this.props.room;
-        this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model, this.props.permalinkCreator));
+        const content = createMessageContent(this.model, this.props.permalinkCreator);
+        this.context.matrixClient.sendMessage(roomId, content);
+        this.sendHistoryManager.save(this.model);
         this.model.reset([]);
         this._editorRef.clearUndoHistory();
 
@@ -125,6 +184,7 @@ export default class SendMessageComposer extends React.Component {
         const partCreator = new PartCreator(this.props.room, this.context.matrixClient);
         this.model = new EditorModel([], partCreator);
         this.dispatcherRef = dis.register(this.onAction);
+        this.sendHistoryManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     onAction = (payload) => {
