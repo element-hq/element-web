@@ -32,14 +32,14 @@ import {SERVICE_TYPES} from "matrix-js-sdk";
  * @param {string} u The url to be abbreviated
  * @returns {string} The abbreviated url
  */
-function abbreviateUrl(u) {
+export function abbreviateIdentityUrl(u) {
     if (!u) return '';
 
     const parsedUrl = url.parse(u);
     // if it's something we can't parse as a url then just return it
     if (!parsedUrl) return u;
 
-    if (parsedUrl.path == '/') {
+    if (parsedUrl.path === '/') {
         // we ignore query / hash parts: these aren't relevant for IS server URLs
         return parsedUrl.host;
     }
@@ -93,7 +93,7 @@ export default class SetIdServer extends React.Component {
         if (!MatrixClientPeg.get().getIdentityServerUrl() && SdkConfig.get()['validated_server_config']['isUrl']) {
             // If no ID server is configured but there's one in the config, prepopulate
             // the field to help the user.
-            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+            defaultIdServer = abbreviateIdentityUrl(SdkConfig.get()['validated_server_config']['isUrl']);
         }
 
         this.state = {
@@ -124,7 +124,7 @@ export default class SetIdServer extends React.Component {
 
         const fullUrl = MatrixClientPeg.get().getIdentityServerUrl();
         let abbr = '';
-        if (fullUrl) abbr = abbreviateUrl(fullUrl);
+        if (fullUrl) abbr = abbreviateIdentityUrl(fullUrl);
 
         this.setState({
             currentClientIdServer: fullUrl,
@@ -234,15 +234,15 @@ export default class SetIdServer extends React.Component {
                     "server <idserver />. You will need to reconnect to <idserver2 /> to stop " +
                     "sharing them.", {},
                     {
-                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                        idserver: sub => <b>{abbreviateIdentityUrl(this.state.currentClientIdServer)}</b>,
                         // XXX: https://github.com/vector-im/riot-web/issues/9086
-                        idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                        idserver2: sub => <b>{abbreviateIdentityUrl(this.state.currentClientIdServer)}</b>,
                     },
                 );
             } else {
                 message = _t(
                     "Disconnect from the identity server <idserver />?", {},
-                    {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
+                    {idserver: sub => <b>{abbreviateIdentityUrl(this.state.currentClientIdServer)}</b>},
                 );
             }
 
@@ -272,7 +272,7 @@ export default class SetIdServer extends React.Component {
         if (SdkConfig.get()['validated_server_config']['isUrl']) {
             // Prepopulate the client's default so the user at least has some idea of
             // a valid value they might enter
-            newFieldVal = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+            newFieldVal = abbreviateIdentityUrl(SdkConfig.get()['validated_server_config']['isUrl']);
         }
 
         this.setState({
@@ -290,12 +290,12 @@ export default class SetIdServer extends React.Component {
         let sectionTitle;
         let bodyText;
         if (idServerUrl) {
-            sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
+            sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateIdentityUrl(idServerUrl) });
             bodyText = _t(
                 "You are currently using <server></server> to discover and be discoverable by " +
                 "existing contacts you know. You can change your identity server below.",
                 {},
-                { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                { server: sub => <b>{abbreviateIdentityUrl(idServerUrl)}</b> },
             );
         } else {
             sectionTitle = _t("Identity Server");
