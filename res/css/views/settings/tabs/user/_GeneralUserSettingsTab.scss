@@ -28,3 +28,7 @@ limitations under the License.
 .mx_GeneralUserSettingsTab_languageInput {
     @mixin mx_Settings_fullWidthField;
 }
+
+.mx_GeneralUserSettingsTab_warningIcon {
+    vertical-align: middle;
+}

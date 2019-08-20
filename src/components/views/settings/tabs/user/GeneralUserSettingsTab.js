@@ -33,6 +33,10 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher";
+import {Service, startTermsFlow} from "../../../../../Terms";
+import {SERVICE_TYPES} from "matrix-js-sdk";
+import IdentityAuthClient from "../../../../../IdentityAuthClient";
+import {abbreviateIdentityUrl} from "../../SetIdServer";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -47,6 +51,14 @@ export default class GeneralUserSettingsTab extends React.Component {
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverRequiresIdServer: null,
+            idServerHasUnsignedTerms: false,
+            requiredPolicyInfo: {       // This object is passed along to a component for handling
+                hasTerms: false,
+                // policiesAndServices, // From the startTermsFlow callback
+                // agreedUrls,          // From the startTermsFlow callback
+                // resolve,             // Promise resolve function for startTermsFlow callback
+                // reject,              // Promise reject function for startTermsFlow callback
+            },
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -55,6 +67,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     async componentWillMount() {
         const serverRequiresIdServer = await MatrixClientPeg.get().doesServerRequireIdServerParam();
         this.setState({serverRequiresIdServer});
+
+        // Check to see if terms need accepting
+        this._checkTerms();
     }
 
     componentWillUnmount() {
@@ -64,8 +79,48 @@ export default class GeneralUserSettingsTab extends React.Component {
     _onAction = (payload) => {
         if (payload.action === 'id_server_changed') {
             this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
+            this._checkTerms();
         }
     };
+
+    async _checkTerms() {
+        if (!this.state.haveIdServer) {
+            this.setState({idServerHasUnsignedTerms: false});
+            return;
+        }
+
+        // By starting the terms flow we get the logic for checking which terms the user has signed
+        // for free. So we might as well use that for our own purposes.
+        const authClient = new IdentityAuthClient();
+        console.log("Getting access token...");
+        const idAccessToken = await authClient.getAccessToken(/*check=*/false);
+        console.log("Got access token: " + idAccessToken);
+        startTermsFlow([new Service(
+            SERVICE_TYPES.IS,
+            MatrixClientPeg.get().getIdentityServerUrl(),
+            idAccessToken,
+        )], (policiesAndServices, agreedUrls, extraClassNames) => {
+            return new Promise((resolve, reject) => {
+               this.setState({
+                   idServerName: abbreviateIdentityUrl(MatrixClientPeg.get().getIdentityServerUrl()),
+                   requiredPolicyInfo: {
+                       hasTerms: true,
+                       policiesAndServices,
+                       agreedUrls,
+                       resolve,
+                       reject,
+                   },
+               });
+            });
+        }).then(() => {
+            // User accepted all terms
+            this.setState({
+                requiredPolicyInfo: {
+                    hasTerms: false,
+                },
+            });
+        });
+    }
 
     _onLanguageChange = (newLanguage) => {
         if (this.state.language === newLanguage) return;
@@ -198,6 +253,23 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderDiscoverySection() {
+        if (this.state.requiredPolicyInfo.hasTerms) {
+            const InlineTermsAgreement = sdk.getComponent("views.terms.InlineTermsAgreement");
+            const intro = <span className="mx_SettingsTab_subsectionText">
+                {_t(
+                    "Agree to the identity server (%(serverName)s) Terms of Service to " +
+                    "allow yourself to be discoverable by email address or phone number.",
+                    {serverName: this.state.idServerName},
+                )}
+            </span>;
+            return <InlineTermsAgreement
+                policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
+                agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
+                onFinished={this.state.requiredPolicyInfo.resolve}
+                introElement={intro}
+            />;
+        }
+
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
@@ -246,6 +318,12 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     render() {
+        const discoWarning = this.state.requiredPolicyInfo.hasTerms
+            ? <img className='mx_GeneralUserSettingsTab_warningIcon'
+                src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
+                width="18" height="18" alt={_t("Warning")} />
+            : null;
+
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
@@ -253,7 +331,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
                 {this._renderThemeSection()}
-                <div className="mx_SettingsTab_heading">{_t("Discovery")}</div>
+                <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
                 {this._renderDiscoverySection()}
                 {this._renderIntegrationManagerSection() /* Has its own title */}
                 <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
