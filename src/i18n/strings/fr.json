@@ -2123,5 +2123,11 @@
     "Terms of service not accepted or the integration manager is invalid.": "Les conditions de service n’ont pas été acceptées ou le gestionnaire d’intégration n’est pas valide.",
     "Integration manager has no terms of service": "Le gestionnaire d’intégration n’a pas de conditions de service",
     "The integration manager you have chosen does not have any terms of service.": "Le gestionnaire d’intégration que vous avez choisi n’a aucune condition de service.",
-    "Only continue if you trust the owner of the server.": "Continuez seulement si vous faites confiance au propriétaire du serveur."
+    "Only continue if you trust the owner of the server.": "Continuez seulement si vous faites confiance au propriétaire du serveur.",
+    "Identity server has no terms of service": "Le serveur d’identité n’a pas de conditions de service",
+    "The identity server you have chosen does not have any terms of service.": "Le serveur d’identité que vous avez choisi n’a pas de conditions de service.",
+    "Terms of service not accepted or the identity server is invalid.": "Les conditions de services n’ont pas été acceptées ou le serveur d’identité n’est pas valide.",
+    "Enter a new identity server": "Saisissez un nouveau serveur d’identité",
+    "Remove %(email)s?": "Supprimer %(email)s ?",
+    "Remove %(phone)s?": "Supprimer %(phone)s ?"
 }
