@@ -186,7 +186,7 @@ export default class BasicMessageEditor extends React.Component {
             }
             handled = true;
         // insert newline on Shift+Enter
-        } else if (event.shiftKey && event.key === "Enter") {
+        } else if (event.key === "Enter" && (event.shiftKey || (IS_MAC && event.altKey))) {
             this._insertText("\n");
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
