@@ -236,7 +236,7 @@ function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
     return parts;
 }
 
-export function parseEvent(event, partCreator, {isQuotedMessage = false}) {
+export function parseEvent(event, partCreator, {isQuotedMessage = false} = {}) {
     const content = event.getContent();
     let parts;
     if (content.format === "org.matrix.custom.html") {

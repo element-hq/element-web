@@ -33,7 +33,7 @@ export function mdSerialize(model) {
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model, {forceHTML = false}) {
+export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
     const md = mdSerialize(model);
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
