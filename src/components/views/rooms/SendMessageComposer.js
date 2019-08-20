@@ -100,6 +100,8 @@ export default class SendMessageComposer extends React.Component {
         const {roomId} = this.props.room;
         this.context.matrixClient.sendMessage(roomId, createMessageContent(this.model, this.props.permalinkCreator));
         this.model.reset([]);
+        this._editorRef.clearUndoHistory();
+
         if (isReply) {
             // Clear reply_to_event as we put the message into the queue
             // if the send fails, retry will handle resending.

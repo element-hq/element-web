@@ -136,6 +136,10 @@ export default class BasicMessageEditor extends React.Component {
         return this._lastCaret;
     }
 
+    clearUndoHistory() {
+        this.historyManager.clear();
+    }
+
     getCaret() {
         return this._lastCaret;
     }

@@ -18,6 +18,10 @@ export const MAX_STEP_LENGTH = 10;
 
 export default class HistoryManager {
     constructor() {
+        this.clear();
+    }
+
+    clear() {
         this._stack = [];
         this._newlyTypedCharCount = 0;
         this._currentIndex = -1;
