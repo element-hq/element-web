@@ -220,11 +220,6 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
-    _cancelEdit = () => {
-        dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
-    }
-
     isModified() {
         return this._modifiedFlag;
     }
