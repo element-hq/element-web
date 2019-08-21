@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
+import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import {PartCreator} from '../../../editor/parts';
@@ -56,17 +56,10 @@ function getTextReplyFallback(mxEvent) {
     return "";
 }
 
-function _isEmote(model) {
-    const firstPart = model.parts[0];
-    return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
-}
-
 function createEditContent(model, editedEvent) {
-    const isEmote = _isEmote(model);
+    const isEmote = containsEmote(model);
     if (isEmote) {
-        // trim "/me "
-        model = model.clone();
-        model.removeText({index: 0, offset: 0}, 4);
+        model = stripEmoteCommand(model);
     }
     const isReply = _isReply(editedEvent);
     let plainPrefix = "";

@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
+import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
 import {PartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
@@ -29,6 +29,10 @@ import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import ComposerHistoryManager from "../../../ComposerHistoryManager";
+import {processCommandInput} from '../../../SlashCommands';
+import sdk from '../../../index';
+import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -46,11 +50,15 @@ function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
 }
 
 function createMessageContent(model, permalinkCreator) {
+    const isEmote = containsEmote(model);
+    if (isEmote) {
+        model = stripEmoteCommand(model);
+    }
     const repliedToEvent = RoomViewStore.getQuotingEvent();
 
     const body = textSerialize(model);
     const content = {
-        msgtype: "m.text",
+        msgtype: isEmote ? "m.emote" : "m.text",
         body: body,
     };
     const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: !!repliedToEvent});
@@ -129,9 +137,10 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    // we keep sent messages/commands in a separate history (separate from undo history)
+    // so you can alt+up/down in them
     selectSendHistory(up) {
         const delta = up ? -1 : 1;
-
         // True if we are not currently selecting history, but composing a message
         if (this.sendHistoryManager.currentIndex === this.sendHistoryManager.history.length) {
             // We can't go any further - there isn't any more history, so nop.
@@ -152,24 +161,69 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    _isSlashCommand() {
+        const parts = this.model.parts;
+        const isPlain = parts.reduce((isPlain, part) => {
+            return isPlain && (part.type === "plain" || part.type === "newline");
+        }, true);
+        return isPlain && parts.length > 0 && parts[0].text.startsWith("/");
+    }
+
+    async _runSlashCommand() {
+        const commandText = this.model.parts.reduce((text, part) => {
+            return text + part.text;
+        }, "");
+        const cmd = processCommandInput(this.props.room.roomId, commandText);
+
+        if (cmd) {
+            let error = cmd.error;
+            if (cmd.promise) {
+                try {
+                    await cmd.promise;
+                } catch (err) {
+                    error = err;
+                }
+            }
+            if (error) {
+                console.error("Command failure: %s", error);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                // assume the error is a server error when the command is async
+                const isServerError = !!cmd.promise;
+                const title = isServerError ? "Server error" : "Command error";
+                Modal.createTrackedDialog(title, '', ErrorDialog, {
+                    title: isServerError ? _t("Server error") : _t("Command error"),
+                    description: error.message ? error.message : _t(
+                        "Server unavailable, overloaded, or something else went wrong.",
+                    ),
+                });
+            } else {
+                console.log("Command success.");
+            }
+        }
+    }
+
     _sendMessage() {
-        const isReply = !!RoomViewStore.getQuotingEvent();
-        const {roomId} = this.props.room;
-        const content = createMessageContent(this.model, this.props.permalinkCreator);
-        this.context.matrixClient.sendMessage(roomId, content);
+        if (!containsEmote(this.model) && this._isSlashCommand()) {
+            this._runSlashCommand();
+        } else {
+            const isReply = !!RoomViewStore.getQuotingEvent();
+            const {roomId} = this.props.room;
+            const content = createMessageContent(this.model, this.props.permalinkCreator);
+            this.context.matrixClient.sendMessage(roomId, content);
+            if (isReply) {
+                // Clear reply_to_event as we put the message into the queue
+                // if the send fails, retry will handle resending.
+                dis.dispatch({
+                    action: 'reply_to_event',
+                    event: null,
+                });
+            }
+        }
         this.sendHistoryManager.save(this.model);
+        // clear composer
         this.model.reset([]);
         this._editorRef.clearUndoHistory();
-
-        if (isReply) {
-            // Clear reply_to_event as we put the message into the queue
-            // if the send fails, retry will handle resending.
-            dis.dispatch({
-                action: 'reply_to_event',
-                event: null,
-            });
-        }
-        dis.dispatch({action: 'focus_composer'});
+        this._editorRef.focus();
     }
 
     componentWillUnmount() {

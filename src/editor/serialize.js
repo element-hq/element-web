@@ -56,3 +56,15 @@ export function textSerialize(model) {
         }
     }, "");
 }
+
+export function containsEmote(model) {
+    const firstPart = model.parts[0];
+    return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
+}
+
+export function stripEmoteCommand(model) {
+    // trim "/me "
+    model = model.clone();
+    model.removeText({index: 0, offset: 0}, 4);
+    return model;
+}
