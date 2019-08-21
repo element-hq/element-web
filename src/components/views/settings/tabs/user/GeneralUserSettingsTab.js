@@ -36,7 +36,7 @@ import dis from "../../../../../dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
-import {abbreviateIdentityUrl} from "../../SetIdServer";
+import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -101,7 +101,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         )], (policiesAndServices, agreedUrls, extraClassNames) => {
             return new Promise((resolve, reject) => {
                this.setState({
-                   idServerName: abbreviateIdentityUrl(MatrixClientPeg.get().getIdentityServerUrl()),
+                   idServerName: abbreviateUrl(MatrixClientPeg.get().getIdentityServerUrl()),
                    requiredPolicyInfo: {
                        hasTerms: true,
                        policiesAndServices,
