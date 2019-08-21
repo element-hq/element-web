@@ -25,6 +25,8 @@ limitations under the License.
 
 .mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
 .mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
+.mx_GeneralUserSettingsTab_discovery .mx_ExistingEmailAddress,
+.mx_GeneralUserSettingsTab_discovery .mx_ExistingPhoneNumber,
 .mx_GeneralUserSettingsTab_languageInput {
     @mixin mx_Settings_fullWidthField;
 }
