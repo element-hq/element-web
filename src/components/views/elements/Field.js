@@ -144,7 +144,7 @@ export default class Field extends React.PureComponent {
     render() {
         const {
             element, prefix, onValidate, children, tooltipContent, flagInvalid,
-            ...inputProps} = this.props;
+            tooltipClassName, ...inputProps} = this.props;
 
         const inputElement = element || "input";
 
@@ -180,7 +180,7 @@ export default class Field extends React.PureComponent {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
-            const addlClassName = this.props.tooltipClassName ? this.props.tooltipClassName : '';
+            const addlClassName = tooltipClassName ? tooltipClassName : '';
             fieldTooltip = <Tooltip
                 tooltipClassName={`mx_Field_tooltip ${addlClassName}`}
                 visible={this.state.feedbackVisible}
