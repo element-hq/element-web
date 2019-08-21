@@ -2116,5 +2116,14 @@
     "Terms of service not accepted or the integration manager is invalid.": "服務條款不接受或整合管理員無效。",
     "Integration manager has no terms of service": "整合管理員沒有服務條款",
     "The integration manager you have chosen does not have any terms of service.": "您選擇的整合管理員沒有任何服務條款。",
-    "Only continue if you trust the owner of the server.": "僅在您信任伺服器擁有者時才繼續。"
+    "Only continue if you trust the owner of the server.": "僅在您信任伺服器擁有者時才繼續。",
+    "ID": "ID",
+    "Public Name": "公開名稱",
+    "Identity server has no terms of service": "身份識別伺服器沒有服務條款",
+    "The identity server you have chosen does not have any terms of service.": "您所選擇的身份識別伺服器沒有任何服務條款。",
+    "Terms of service not accepted or the identity server is invalid.": "不接受服務條款或身份識別伺服器無效。",
+    "Enter a new identity server": "輸入新的身份識別伺服器",
+    "A device's public name is visible to people you communicate with": "與您通訊的所有人都可以看到裝置的公開名稱",
+    "Remove %(email)s?": "移除 %(email)s？",
+    "Remove %(phone)s?": "移除 %(phone)s？"
 }
