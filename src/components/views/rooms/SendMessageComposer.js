@@ -20,7 +20,7 @@ import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
-import {PartCreator} from '../../../editor/parts';
+import {CommandPartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyPreview from "./ReplyPreview";
@@ -164,7 +164,7 @@ export default class SendMessageComposer extends React.Component {
     _isSlashCommand() {
         const parts = this.model.parts;
         const isPlain = parts.reduce((isPlain, part) => {
-            return isPlain && (part.type === "plain" || part.type === "newline");
+            return isPlain && (part.type === "command" || part.type === "plain" || part.type === "newline");
         }, true);
         return isPlain && parts.length > 0 && parts[0].text.startsWith("/");
     }
@@ -227,15 +227,11 @@ export default class SendMessageComposer extends React.Component {
     }
 
     componentWillUnmount() {
-        const sel = document.getSelection();
-        const {caret} = getCaretOffsetAndText(this._editorRef, sel);
-        const parts = this.model.serializeParts();
-        this.props.editState.setEditorState(caret, parts);
         dis.unregister(this.dispatcherRef);
     }
 
     componentWillMount() {
-        const partCreator = new PartCreator(this.props.room, this.context.matrixClient);
+        const partCreator = new CommandPartCreator(this.props.room, this.context.matrixClient);
         this.model = new EditorModel([], partCreator);
         this.dispatcherRef = dis.register(this.onAction);
         this.sendHistoryManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');

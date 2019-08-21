@@ -303,7 +303,7 @@ export default class EditorModel {
             index = 0;
         }
         while (str) {
-            const newPart = this._partCreator.createPartForInput(str);
+            const newPart = this._partCreator.createPartForInput(str, index);
             if (validate) {
                 str = newPart.appendUntilRejected(str);
             } else {

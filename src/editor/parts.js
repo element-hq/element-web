@@ -441,3 +441,33 @@ export class PartCreator {
     }
 }
 
+// part creator that support auto complete for /commands,
+// used in SendMessageComposer
+export class CommandPartCreator extends PartCreator {
+    createPartForInput(text, partIndex) {
+        // at beginning and starts with /? create
+        if (partIndex === 0 && text[0] === "/") {
+            return new CommandPart("", this._autoCompleteCreator);
+        } else {
+            return super.createPartForInput(text, partIndex);
+        }
+    }
+
+    deserializePart(part) {
+        if (part.type === "command") {
+            return new CommandPart(part.text, this._autoCompleteCreator);
+        } else {
+            return super.deserializePart(part);
+        }
+    }
+}
+
+class CommandPart extends PillCandidatePart {
+    acceptsInsertion(chr, i) {
+        return PlainPart.prototype.acceptsInsertion.call(this, chr, i);
+    }
+
+    get type() {
+        return "command";
+    }
+}
