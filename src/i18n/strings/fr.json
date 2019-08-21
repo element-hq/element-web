@@ -2129,5 +2129,8 @@
     "Terms of service not accepted or the identity server is invalid.": "Les conditions de services n’ont pas été acceptées ou le serveur d’identité n’est pas valide.",
     "Enter a new identity server": "Saisissez un nouveau serveur d’identité",
     "Remove %(email)s?": "Supprimer %(email)s ?",
-    "Remove %(phone)s?": "Supprimer %(phone)s ?"
+    "Remove %(phone)s?": "Supprimer %(phone)s ?",
+    "ID": "Identifiant",
+    "Public Name": "Nom public",
+    "A device's public name is visible to people you communicate with": "Le nom public d’un appareil est visible par les personnes avec qui vous communiquez"
 }
