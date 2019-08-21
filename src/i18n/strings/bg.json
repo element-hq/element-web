@@ -2045,5 +2045,6 @@
     "Service": "Услуга",
     "Summary": "Обобщение",
     "Terms": "Условия",
-    "This account has been deactivated.": "Този акаунт е деактивиран."
+    "This account has been deactivated.": "Този акаунт е деактивиран.",
+    "Call failed due to misconfigured server": "Неуспешен разговор поради неправилно конфигуриран сървър"
 }
