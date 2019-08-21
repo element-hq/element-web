@@ -52,6 +52,7 @@ function selectionEquals(a: Selection, b: Selection): boolean {
 
 export default class BasicMessageEditor extends React.Component {
     static propTypes = {
+        onChange: PropTypes.func,
         model: PropTypes.instanceOf(EditorModel).isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
         placeholder: PropTypes.string,
@@ -91,6 +92,10 @@ export default class BasicMessageEditor extends React.Component {
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, caret, inputType, diff);
         TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
+
+        if (this.props.onChange) {
+            this.props.onChange();
+        }
     }
 
     _onInput = (event) => {

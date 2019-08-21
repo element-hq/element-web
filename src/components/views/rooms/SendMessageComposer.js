@@ -223,6 +223,7 @@ export default class SendMessageComposer extends React.Component {
         this.model.reset([]);
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
+        this._clearStoredEditorState();
     }
 
     componentWillUnmount() {
@@ -231,9 +232,35 @@ export default class SendMessageComposer extends React.Component {
 
     componentWillMount() {
         const partCreator = new CommandPartCreator(this.props.room, this.context.matrixClient);
-        this.model = new EditorModel([], partCreator);
+        const parts = this._restoreStoredEditorState(partCreator) || [];
+        this.model = new EditorModel(parts, partCreator);
         this.dispatcherRef = dis.register(this.onAction);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+    }
+
+    get _editorStateKey() {
+        return `cider_editor_state_${this.props.room.roomId}`;
+    }
+
+    _clearStoredEditorState() {
+        localStorage.removeItem(this._editorStateKey);
+    }
+
+    _restoreStoredEditorState(partCreator) {
+        const json = localStorage.getItem(this._editorStateKey);
+        if (json) {
+            const serializedParts = JSON.parse(json);
+            const parts = serializedParts.map(p => partCreator.deserializePart(p));
+            return parts;
+        }
+    }
+
+    _saveStoredEditorState = () => {
+        if (this.model.isEmpty) {
+            this._clearStoredEditorState();
+        } else {
+            localStorage.setItem(this._editorStateKey, JSON.stringify(this.model.serializeParts()));
+        }
     }
 
     onAction = (payload) => {
@@ -284,6 +311,7 @@ export default class SendMessageComposer extends React.Component {
                     room={this.props.room}
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
+                    onChange={this._saveStoredEditorState}
                 />
             </div>
         );
