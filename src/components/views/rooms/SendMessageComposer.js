@@ -240,7 +240,7 @@ export default class SendMessageComposer extends React.Component {
         switch (payload.action) {
             case 'reply_to_event':
             case 'focus_composer':
-                this._editorRef.focus();
+                this._editorRef && this._editorRef.focus();
                 break;
             case 'insert_mention':
                 this._insertMention(payload.user_id);
@@ -258,7 +258,7 @@ export default class SendMessageComposer extends React.Component {
         const userPillPart = this.model.partCreator.userPill(displayName, userId);
         this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
         // refocus on composer, as we just clicked "Mention"
-        this._editorRef.focus();
+        this._editorRef && this._editorRef.focus();
     }
 
     _insertQuotedMessage(event) {
@@ -269,7 +269,7 @@ export default class SendMessageComposer extends React.Component {
         quoteParts.push(partCreator.newline());
         this.model.insertPartsAt(quoteParts, {offset: 0});
         // refocus on composer, as we just clicked "Quote"
-        this._editorRef.focus();
+        this._editorRef && this._editorRef.focus();
     }
 
     render() {
