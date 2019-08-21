@@ -74,13 +74,17 @@ class ConsoleLogger {
 
         // Convert objects and errors to helpful things
         args = args.map((arg) => {
+            let msg = '';
             if (arg instanceof Error) {
-                return arg.message + (arg.stack ? `\n${arg.stack}` : '');
+                msg = arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof(arg) === 'object') {
-                return JSON.stringify(arg);
+                msg = JSON.stringify(arg);
             } else {
-                return arg;
+                msg = arg;
             }
+            // Do some cleanup
+            msg = msg.replace(/token=[a-zA-Z0-9-]+/gm, 'token=xxxxx');
+            return msg;
         });
 
         // Some browsers support string formatting which we're not doing here
