@@ -105,6 +105,13 @@ export default class EditorModel {
 
     reset(serializedParts, caret, inputType) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
+        // close auto complete if open
+        // this would happen when clearing the composer after sending
+        // a message with the autocomplete still open
+        if (this._autoComplete) {
+            this._autoComplete = null;
+            this._autoCompletePartIdx = null;
+        }
         this._updateCallback(caret, inputType);
     }
 

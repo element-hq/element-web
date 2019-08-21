@@ -203,19 +203,32 @@ export default class BasicMessageEditor extends React.Component {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
                     case "Enter":
-                        autoComplete.onEnter(event); break;
+                        // only capture enter when something is selected in the list,
+                        // otherwise don't handle so the contents of the composer gets sent
+                        if (autoComplete.hasSelection()) {
+                            autoComplete.onEnter(event);
+                            handled = true;
+                        }
+                        break;
                     case "ArrowUp":
-                        autoComplete.onUpArrow(event); break;
+                        autoComplete.onUpArrow(event);
+                        handled = true;
+                        break;
                     case "ArrowDown":
-                        autoComplete.onDownArrow(event); break;
+                        autoComplete.onDownArrow(event);
+                        handled = true;
+                        break;
                     case "Tab":
-                        autoComplete.onTab(event); break;
+                        autoComplete.onTab(event);
+                        handled = true;
+                        break;
                     case "Escape":
-                        autoComplete.onEscape(event); break;
+                        autoComplete.onEscape(event);
+                        handled = true;
+                        break;
                     default:
                         return; // don't preventDefault on anything else
                 }
-                handled = true;
             }
         }
         if (handled) {

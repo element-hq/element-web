@@ -33,6 +33,10 @@ export default class AutocompleteWrapperModel {
         });
     }
 
+    hasSelection() {
+        return this._getAutocompleterComponent().hasSelection();
+    }
+
     onEnter() {
         this._updateCallback({close: true});
     }
@@ -103,7 +107,7 @@ export default class AutocompleteWrapperModel {
             }
             case "#":
                 return this._partCreator.roomPill(completionId);
-            // also used for emoji completion
+            // used for emoji and command completion replacement
             default:
                 return this._partCreator.plain(text);
         }
