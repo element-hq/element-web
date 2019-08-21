@@ -16,7 +16,6 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
@@ -25,6 +24,7 @@ import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {Room} from 'matrix-js-sdk';
+import TypingStore from "../../../stores/TypingStore";
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
@@ -90,6 +90,7 @@ export default class BasicMessageEditor extends React.Component {
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, caret, inputType, diff);
+        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
     }
 
     _onInput = (event) => {
