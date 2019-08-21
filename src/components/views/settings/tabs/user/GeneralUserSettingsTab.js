@@ -91,9 +91,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         // By starting the terms flow we get the logic for checking which terms the user has signed
         // for free. So we might as well use that for our own purposes.
         const authClient = new IdentityAuthClient();
-        console.log("Getting access token...");
         const idAccessToken = await authClient.getAccessToken(/*check=*/false);
-        console.log("Got access token: " + idAccessToken);
         startTermsFlow([new Service(
             SERVICE_TYPES.IS,
             MatrixClientPeg.get().getIdentityServerUrl(),
