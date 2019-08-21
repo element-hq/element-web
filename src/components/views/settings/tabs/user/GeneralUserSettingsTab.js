@@ -57,7 +57,6 @@ export default class GeneralUserSettingsTab extends React.Component {
                 // policiesAndServices, // From the startTermsFlow callback
                 // agreedUrls,          // From the startTermsFlow callback
                 // resolve,             // Promise resolve function for startTermsFlow callback
-                // reject,              // Promise reject function for startTermsFlow callback
             },
         };
 
@@ -108,7 +107,6 @@ export default class GeneralUserSettingsTab extends React.Component {
                        policiesAndServices,
                        agreedUrls,
                        resolve,
-                       reject,
                    },
                });
             });
