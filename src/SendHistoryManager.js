@@ -17,7 +17,7 @@ limitations under the License.
 
 import _clamp from 'lodash/clamp';
 
-export default class ComposerHistoryManager {
+export default class SendHistoryManager {
     history: Array<HistoryItem> = [];
     prefix: string;
     lastIndex: number = 0; // used for indexing the storage

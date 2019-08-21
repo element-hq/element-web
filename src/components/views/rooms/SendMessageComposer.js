@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
-import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
@@ -28,7 +27,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
-import ComposerHistoryManager from "../../../ComposerHistoryManager";
+import SendHistoryManager from "../../../SendHistoryManager";
 import {processCommandInput} from '../../../SlashCommands';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -234,7 +233,7 @@ export default class SendMessageComposer extends React.Component {
         const partCreator = new CommandPartCreator(this.props.room, this.context.matrixClient);
         this.model = new EditorModel([], partCreator);
         this.dispatcherRef = dis.register(this.onAction);
-        this.sendHistoryManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     onAction = (payload) => {
