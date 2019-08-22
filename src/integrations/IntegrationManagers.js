@@ -21,7 +21,7 @@ import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} 
 import type {MatrixClient, MatrixEvent} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
-import {AutoDiscovery} from "../../../matrix-js-sdk";
+import {AutoDiscovery} from "matrix-js-sdk";
 
 const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
 const KIND_PREFERENCE = [
