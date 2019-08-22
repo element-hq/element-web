@@ -154,10 +154,9 @@ export default class AppTile extends React.Component {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
 
-        const canPersist = this.props.whitelistCapabilities.includes('m.always_on_screen');
         // if it's not remaining on screen, get rid of the PersistedElement container
-        if (canPersist && !ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
-            ActiveWidgetStore.destroyPersistentWidget();
+        if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
+            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }
@@ -429,7 +428,7 @@ export default class AppTile extends React.Component {
         this.setState({hasPermissionToLoad: false});
 
         // Force the widget to be non-persistent
-        ActiveWidgetStore.destroyPersistentWidget();
+        ActiveWidgetStore.destroyPersistentWidget(this.props.id);
         const PersistedElement = sdk.getComponent("elements.PersistedElement");
         PersistedElement.destroyElement(this._persistKey);
     }
