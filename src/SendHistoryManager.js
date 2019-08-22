@@ -23,7 +23,7 @@ export default class SendHistoryManager {
     lastIndex: number = 0; // used for indexing the storage
     currentIndex: number = 0; // used for indexing the loaded validated history Array
 
-    constructor(roomId: string, prefix: string = 'mx_composer_history_') {
+    constructor(roomId: string, prefix: string) {
         this.prefix = prefix + roomId;
 
         // TODO: Performance issues?
