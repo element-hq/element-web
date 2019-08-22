@@ -235,7 +235,7 @@ export default class SendMessageComposer extends React.Component {
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.dispatcherRef = dis.register(this.onAction);
-        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_cider_composer_history_');
     }
 
     get _editorStateKey() {
