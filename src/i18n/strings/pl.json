@@ -1517,5 +1517,10 @@
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Możesz również spróbować skorzystać z publicznego serwera <code>turn.matrix.org</code>, lecz nie będzie aż tak niezawodny i Twój adres IP zostanie przesłany temu serwerowi. Możesz zarządzać tym w Ustawieniach.",
     "Sends the given emote coloured as a rainbow": "Wysyła podaną emotkę w kolorach tęczy",
     "Displays list of commands with usages and descriptions": "Wyświetla listę komend z przykładami i opisami",
-    "%(senderName)s made no change.": "%(senderName)s nic nie zmienił(a)."
+    "%(senderName)s made no change.": "%(senderName)s nic nie zmienił(a).",
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s ustawił(a) pokój jako publiczny dla każdego znającego link.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s ustawił(a) pokój jako tylko dla zaproszonych.",
+    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s zmienił(a) zasadę dołączania na %(rule)s",
+    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s pozwolił(a) by goście dołączali do pokoju.",
+    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s zabronił(a) gościom dołączać do pokoju."
 }
