@@ -179,12 +179,12 @@ export function replaceByRegexes(text, mapping) {
 
     for (const regexpString in mapping) {
         // TODO: Cache regexps
-        const regexp = new RegExp(regexpString);
+        const regexp = new RegExp(regexpString, "g");
 
         // Loop over what output we have so far and perform replacements
         // We look for matches: if we find one, we get three parts: everything before the match, the replaced part,
         // and everything after the match. Insert all three into the output. We need to do this because we can insert objects.
-        // Otherwise there would be no need for the splitting and we could do simple replcement.
+        // Otherwise there would be no need for the splitting and we could do simple replacement.
         let matchFoundSomewhere = false; // If we don't find a match anywhere we want to log it
         for (const outputIndex in output) {
             const inputText = output[outputIndex];
@@ -192,44 +192,58 @@ export function replaceByRegexes(text, mapping) {
                 continue;
             }
 
-            const match = inputText.match(regexp);
-            if (!match) {
-                continue;
-            }
+            // process every match in the string
+            // starting with the first
+            let match = regexp.exec(inputText);
+
+            if (!match) continue;
             matchFoundSomewhere = true;
 
-            const capturedGroups = match.slice(2);
-
-            // The textual part before the match
+            // The textual part before the first match
             const head = inputText.substr(0, match.index);
 
-            // The textual part after the match
-            const tail = inputText.substr(match.index + match[0].length);
+            const parts = [];
+            // keep track of prevMatch
+            let prevMatch;
+            while (match) {
+                // store prevMatch
+                prevMatch = match;
+                const capturedGroups = match.slice(2);
 
-            let replaced;
-            // If substitution is a function, call it
-            if (mapping[regexpString] instanceof Function) {
-                replaced = mapping[regexpString].apply(null, capturedGroups);
-            } else {
-                replaced = mapping[regexpString];
+                let replaced;
+                // If substitution is a function, call it
+                if (mapping[regexpString] instanceof Function) {
+                    replaced = mapping[regexpString].apply(null, capturedGroups);
+                } else {
+                    replaced = mapping[regexpString];
+                }
+
+                if (typeof replaced === 'object') {
+                    shouldWrapInSpan = true;
+                }
+
+                // Here we also need to check that it actually is a string before comparing against one
+                // The head and tail are always strings
+                if (typeof replaced !== 'string' || replaced !== '') {
+                    parts.push(replaced);
+                }
+
+                // try the next match
+                match = regexp.exec(inputText);
+
+                // add the text between prevMatch and this one
+                // or the end of the string if prevMatch is the last match
+                if (match) {
+                    const startIndex = prevMatch.index + prevMatch[0].length;
+                    parts.push(inputText.substr(startIndex, match.index - startIndex));
+                } else {
+                    parts.push(inputText.substr(prevMatch.index + prevMatch[0].length));
+                }
             }
-
-            if (typeof replaced === 'object') {
-                shouldWrapInSpan = true;
-            }
-
-            output.splice(outputIndex, 1); // Remove old element
 
             // Insert in reverse order as splice does insert-before and this way we get the final order correct
-            if (tail !== '') {
-                output.splice(outputIndex, 0, tail);
-            }
-
-            // Here we also need to check that it actually is a string before comparing against one
-            // The head and tail are always strings
-            if (typeof replaced !== 'string' || replaced !== '') {
-                output.splice(outputIndex, 0, replaced);
-            }
+            // remove the old element at the same time
+            output.splice(outputIndex, 1, ...parts);
 
             if (head !== '') { // Don't push empty nodes, they are of no use
                 output.splice(outputIndex, 0, head);
