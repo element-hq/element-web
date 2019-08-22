@@ -1515,5 +1515,7 @@
     "You cannot modify widgets in this room.": "Nie możesz modyfikować widżetów w tym pokoju.",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Poproś administratora swojego serwera głównego (<code>%(homeserverDomain)s</code>) by skonfigurował serwer TURN aby rozmowy działały bardziej niezawodnie.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Możesz również spróbować skorzystać z publicznego serwera <code>turn.matrix.org</code>, lecz nie będzie aż tak niezawodny i Twój adres IP zostanie przesłany temu serwerowi. Możesz zarządzać tym w Ustawieniach.",
-    "Sends the given emote coloured as a rainbow": "Wysyła podaną emotkę w kolorach tęczy"
+    "Sends the given emote coloured as a rainbow": "Wysyła podaną emotkę w kolorach tęczy",
+    "Displays list of commands with usages and descriptions": "Wyświetla listę komend z przykładami i opisami",
+    "%(senderName)s made no change.": "%(senderName)s nic nie zmienił(a)."
 }
