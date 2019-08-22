@@ -144,7 +144,7 @@ describe('editor/deserialize', function() {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({type: "plain", text: "Hi "});
-            expect(parts[1]).toStrictEqual({type: "user-pill", text: "Alice", userId: "@alice:hs.tld"});
+            expect(parts[1]).toStrictEqual({type: "user-pill", text: "Alice", resourceId: "@alice:hs.tld"});
             expect(parts[2]).toStrictEqual({type: "plain", text: "!"});
         });
         it('room pill', function() {
