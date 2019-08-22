@@ -2132,5 +2132,7 @@
     "Remove %(phone)s?": "Supprimer %(phone)s ?",
     "ID": "Identifiant",
     "Public Name": "Nom public",
-    "A device's public name is visible to people you communicate with": "Le nom public d’un appareil est visible par les personnes avec qui vous communiquez"
+    "A device's public name is visible to people you communicate with": "Le nom public d’un appareil est visible par les personnes avec qui vous communiquez",
+    "Accept <policyLink /> to continue:": "Acceptez <policyLink /> pour continuer :",
+    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Acceptez les conditions de service du serveur d’identité (%(serverName)s) pour vous permettre d’être découvrable par votre adresse e-mail ou votre numéro de téléphone."
 }
