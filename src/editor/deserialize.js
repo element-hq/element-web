@@ -223,14 +223,14 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
     const lines = body.split("\n");
     const parts = lines.reduce((parts, line, i) => {
-        const isLast = i === lines.length - 1;
-        if (!isLast) {
-            parts.push(partCreator.newline());
-        }
         if (isQuotedMessage) {
             parts.push(partCreator.plain(QUOTE_LINE_PREFIX));
         }
         parts.push(...parseAtRoomMentions(line, partCreator));
+        const isLast = i === lines.length - 1;
+        if (!isLast) {
+            parts.push(partCreator.newline());
+        }
         return parts;
     }, []);
     return parts;

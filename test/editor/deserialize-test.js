@@ -71,10 +71,10 @@ describe('editor/deserialize', function() {
     describe('text messages', function() {
         it('test with newlines', function() {
             const parts = normalize(parseEvent(textMessage("hello\nworld"), createPartCreator()));
-            expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({type: "plain", text: "hello"});
             expect(parts[1]).toStrictEqual({type: "newline", text: "\n"});
             expect(parts[2]).toStrictEqual({type: "plain", text: "world"});
+            expect(parts.length).toBe(3);
         });
         it('@room pill', function() {
             const parts = normalize(parseEvent(textMessage("text message for @room"), createPartCreator()));
