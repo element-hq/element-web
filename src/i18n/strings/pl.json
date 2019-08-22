@@ -604,7 +604,7 @@
     "If you have previously used a more recent version of Riot, your session may be incompatible with this version. Close this window and return to the more recent version.": "Jeśli wcześniej używałeś/aś nowszej wersji Riot, Twoja sesja może być niekompatybilna z tą wersją. Zamknij to okno i powróć do nowszej wersji.",
     "You are currently blacklisting unverified devices; to send messages to these devices you must verify them.": "Aktualnie wpisujesz niezweryfikowane urządzenia na czarną listę; aby wysłać wiadomość do tych urządzeń musisz je zweryfikować.",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot zbiera anonimowe dane analityczne, aby umożliwić nam rozwijanie aplikacji.",
-    "Verifies a user, device, and pubkey tuple": "Weryfikuje użytkownika, urządzenie i krotkę kluczy publicznych",
+    "Verifies a user, device, and pubkey tuple": "Weryfikuje krotkę(tuple) użytkownika, urządzenia i klucza publicznego",
     "\"%(RoomName)s\" contains devices that you haven't seen before.": "\"%(RoomName)s\" zawiera niewidziane przez Ciebie wcześniej urządzenia.",
     "ex. @bob:example.com": "np. @jan:example.com",
     "This Home Server would like to make sure you are not a robot": "Ten serwer domowy chciałby się upewnić, że nie jesteś robotem",
@@ -1512,5 +1512,8 @@
     "Gets or sets the room topic": "Wyświetla lub ustawia temat pokoju",
     "Unbans user with given ID": "Odblokowuje użytkownika o danym ID",
     "Please supply a https:// or http:// widget URL": "Podaj adres URL widżeta, zaczynający się od http:// lub https://",
-    "You cannot modify widgets in this room.": "Nie możesz modyfikować widżetów w tym pokoju."
+    "You cannot modify widgets in this room.": "Nie możesz modyfikować widżetów w tym pokoju.",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Poproś administratora swojego serwera głównego (<code>%(homeserverDomain)s</code>) by skonfigurował serwer TURN aby rozmowy działały bardziej niezawodnie.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Możesz również spróbować skorzystać z publicznego serwera <code>turn.matrix.org</code>, lecz nie będzie aż tak niezawodny i Twój adres IP zostanie przesłany temu serwerowi. Możesz zarządzać tym w Ustawieniach.",
+    "Sends the given emote coloured as a rainbow": "Wysyła podaną emotkę w kolorach tęczy"
 }
