@@ -177,6 +177,10 @@ export function replaceByRegexes(text, mapping) {
     // If we insert any components we need to wrap the output in a span. React doesn't like just an array of components.
     let shouldWrapInSpan = false;
 
+    if (text === "You are now ignoring %(userId)s") {
+        debugger;
+    }
+
     for (const regexpString in mapping) {
         // TODO: Cache regexps
         const regexp = new RegExp(regexpString, "g");
@@ -233,11 +237,15 @@ export function replaceByRegexes(text, mapping) {
 
                 // add the text between prevMatch and this one
                 // or the end of the string if prevMatch is the last match
+                let tail;
                 if (match) {
                     const startIndex = prevMatch.index + prevMatch[0].length;
-                    parts.push(inputText.substr(startIndex, match.index - startIndex));
+                    tail = inputText.substr(startIndex, match.index - startIndex);
                 } else {
-                    parts.push(inputText.substr(prevMatch.index + prevMatch[0].length));
+                    tail = inputText.substr(prevMatch.index + prevMatch[0].length);
+                }
+                if (tail) {
+                    parts.push(tail);
                 }
             }
 

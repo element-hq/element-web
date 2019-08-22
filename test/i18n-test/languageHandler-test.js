@@ -73,12 +73,12 @@ describe('languageHandler', function() {
 
     it('multiple replacements of the same variable', function() {
         const text = '%(var1)s %(var1)s';
-        expect(languageHandler._t(text, { var1: 'val1' })).toBe('val1 val1');
+        expect(languageHandler.substitute(text, { var1: 'val1' })).toBe('val1 val1');
     });
 
     it('multiple replacements of the same tag', function() {
         const text = '<a>Click here</a> to join the discussion! <a>or here</a>';
-        expect(languageHandler._t(text, {}, { 'a': (sub) => `x${sub}x` }))
+        expect(languageHandler.substitute(text, {}, { 'a': (sub) => `x${sub}x` }))
             .toBe('xClick herex to join the discussion! xor herex');
     });
 });
