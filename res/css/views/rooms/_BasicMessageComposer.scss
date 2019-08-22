@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 .mx_BasicMessageComposer {
-    .mx_BasicMessageComposer_inputEmpty > :first-child:before {
+    .mx_BasicMessageComposer_inputEmpty > :first-child::before {
         content: var(--placeholder);
         opacity: 0.333;
         width: 0;
