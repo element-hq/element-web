@@ -354,7 +354,9 @@ export default class WidgetUtils {
         if (!client) {
             throw new Error('User not logged in');
         }
-        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
@@ -382,7 +384,9 @@ export default class WidgetUtils {
         if (!client) {
             throw new Error('User not logged in');
         }
-        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === 'm.stickerpicker') {
                 delete userWidgets[key];
