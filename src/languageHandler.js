@@ -177,10 +177,6 @@ export function replaceByRegexes(text, mapping) {
     // If we insert any components we need to wrap the output in a span. React doesn't like just an array of components.
     let shouldWrapInSpan = false;
 
-    if (text === "You are now ignoring %(userId)s") {
-        debugger;
-    }
-
     for (const regexpString in mapping) {
         // TODO: Cache regexps
         const regexp = new RegExp(regexpString, "g");
