@@ -144,22 +144,28 @@ export class IntegrationManagers {
         return this._managers.length > 0;
     }
 
+    getOrderedManagers(): IntegrationManagerInstance[] {
+        const ordered = [];
+        for (const kind of KIND_PREFERENCE) {
+            const managers = this._managers.filter(m => m.kind === kind);
+            if (!managers || !managers.length) continue;
+
+            if (kind === KIND_ACCOUNT) {
+                // Order by state_keys (IDs)
+                managers.sort((a, b) => a.id.localeCompare(b.id));
+            }
+
+            ordered.push(...managers);
+        }
+        return ordered;
+    }
+
     getPrimaryManager(): IntegrationManagerInstance {
         if (this.hasManager()) {
             if (this._primaryManager) return this._primaryManager;
 
-            for (const kind of KIND_PREFERENCE) {
-                const managers = this._managers.filter(m => m.kind === kind);
-                if (!managers || !managers.length) continue;
-
-                if (kind === KIND_ACCOUNT) {
-                    // Order by state_keys (IDs)
-                    managers.sort((a, b) => a.id.localeCompare(b.id));
-                }
-
-                this._primaryManager = managers[0];
-                return this._primaryManager;
-            }
+            this._primaryManager = this.getOrderedManagers()[0];
+            return this._primaryManager;
         } else {
             return null;
         }
