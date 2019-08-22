@@ -116,7 +116,8 @@ export const SETTINGS = {
     },
     "feature_cider_composer": {
         isFeature: true,
-        displayName: _td("Use the new, faster, but still experimental composer for writing messages (requires refresh)"),
+        displayName: _td("Use the new, faster, but still experimental composer " +
+            "for writing messages (requires refresh)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
