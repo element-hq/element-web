@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import {diffAtCaret, diffDeletion} from "./diff";
+import DocumentPosition from "./position";
+import Range from "./range";
 
 export default class EditorModel {
     constructor(parts, partCreator, updateCallback = null) {
@@ -197,7 +199,7 @@ export default class EditorModel {
         this._updateCallback(pos);
     }
 
-    _mergeAdjacentParts(docPos) {
+    _mergeAdjacentParts() {
         let prevPart;
         for (let i = 0; i < this._parts.length; ++i) {
             let part = this._parts[i];
@@ -339,19 +341,32 @@ export default class EditorModel {
 
         return new DocumentPosition(index, totalOffset - currentOffset);
     }
-}
 
-class DocumentPosition {
-    constructor(index, offset) {
-        this._index = index;
-        this._offset = offset;
+    startRange(position) {
+        return new Range(this, position);
     }
 
-    get index() {
-        return this._index;
-    }
-
-    get offset() {
-        return this._offset;
+    // called from Range.replace
+    replaceRange(startPosition, endPosition, parts) {
+        const newStartPartIndex = this._splitAt(startPosition);
+        const idxDiff = newStartPartIndex - startPosition.index;
+        // if both position are in the same part, and we split it at start position,
+        // the offset of the end position needs to be decreased by the offset of the start position
+        const removedOffset = startPosition.index === endPosition.index ? startPosition.offset : 0;
+        const adjustedEndPosition = new DocumentPosition(
+            endPosition.index + idxDiff,
+            endPosition.offset - removedOffset,
+        );
+        const newEndPartIndex = this._splitAt(adjustedEndPosition);
+        for (let i = newEndPartIndex - 1; i >= newStartPartIndex; --i) {
+            this._removePart(i);
+        }
+        let insertIdx = newStartPartIndex;
+        for (const part of parts) {
+            this._insertPart(insertIdx, part);
+            insertIdx += 1;
+        }
+        this._mergeAdjacentParts();
+        this._updateCallback();
     }
 }
