@@ -196,7 +196,7 @@ export default class SetIdServer extends React.Component {
                 this._saveIdServer(fullUrl);
             },
         });
-    };
+    }
 
     _onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
