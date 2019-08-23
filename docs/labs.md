@@ -45,3 +45,8 @@ Once enabled, send a custom state event to a room to set values:
 ```
 
 That's it. Now should see your new counter under the header.
+
+## New simple composer (`feature_cider_composer`)
+
+An experimental, faster, message composer which should be more reliable and less prone to problems when 
+using your chosen input method.
