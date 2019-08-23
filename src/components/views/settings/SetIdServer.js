@@ -153,31 +153,17 @@ export default class SetIdServer extends React.Component {
                 // Double check that the identity server even has terms of service.
                 const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
-                    const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
-                    Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
-                        title: _t("Identity server has no terms of service"),
-                        description: (
-                            <div>
-                                <span className="warning">
-                                    {_t("The identity server you have chosen does not have any terms of service.")}
-                                </span>
-                                <span>
-                                    &nbsp;{_t("Only continue if you trust the owner of the server.")}
-                                </span>
-                            </div>
-                        ),
-                        button: _t("Continue"),
-                        onFinished: async (confirmed) => {
-                            if (!confirmed) return;
-                            this._saveIdServer(fullUrl);
-                        },
-                    });
+                    this._showNoTermsWarning(fullUrl);
                     return;
                 }
 
                 this._saveIdServer(fullUrl);
             } catch (e) {
                 console.error(e);
+                if (e.cors === "rejected" || e.httpStatus === 404) {
+                    this._showNoTermsWarning(fullUrl);
+                    return;
+                }
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
             }
         }
@@ -189,6 +175,28 @@ export default class SetIdServer extends React.Component {
             idServer: this.state.idServer,
         });
     };
+
+    _showNoTermsWarning(fullUrl) {
+        const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
+        Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+            title: _t("Identity server has no terms of service"),
+            description: (
+                <div>
+                    <span className="warning">
+                        {_t("The identity server you have chosen does not have any terms of service.")}
+                    </span>
+                    <span>
+                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                    </span>
+                </div>
+            ),
+            button: _t("Continue"),
+            onFinished: async (confirmed) => {
+                if (!confirmed) return;
+                this._saveIdServer(fullUrl);
+            },
+        });
+    }
 
     _onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
