@@ -18,7 +18,7 @@ import SdkConfig from '../SdkConfig';
 import sdk from "../index";
 import Modal from '../Modal';
 import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} from "./IntegrationManagerInstance";
-import type {MatrixClient, MatrixEvent} from "matrix-js-sdk";
+import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
 import {AutoDiscovery} from "matrix-js-sdk";
@@ -177,6 +177,14 @@ export class IntegrationManagers {
         Modal.createTrackedDialog(
             "Integration Manager", "None", IntegrationsManager,
             {configured: false}, 'mx_IntegrationsManager',
+        );
+    }
+
+    openAll(room: Room = null, screen: string = null, integrationId: string = null): void {
+        const TabbedIntegrationManagerDialog = sdk.getComponent("views.dialogs.TabbedIntegrationManagerDialog");
+        Modal.createTrackedDialog(
+            'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
+            {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
         );
     }
 

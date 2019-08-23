@@ -24,6 +24,7 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import PersistedElement from "../elements/PersistedElement";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const widgetType = 'm.stickerpicker';
 
@@ -349,11 +350,19 @@ export default class Stickerpicker extends React.Component {
      */
     _launchManageIntegrations() {
         // TODO: Open the right integration manager for the widget
-        IntegrationManagers.sharedInstance().getPrimaryManager().open(
-            this.props.room,
-            `type_${widgetType}`,
-            this.state.widgetId,
-        );
+        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll(
+                this.props.room,
+                `type_${widgetType}`,
+                this.state.widgetId,
+            );
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                this.props.room,
+                `type_${widgetType}`,
+                this.state.widgetId,
+            );
+        }
     }
 
     render() {

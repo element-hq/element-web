@@ -121,6 +121,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_many_integration_managers": {
+        isFeature: true,
+        displayName: _td("Multiple integration managers"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),

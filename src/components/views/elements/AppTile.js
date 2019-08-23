@@ -34,6 +34,7 @@ import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -264,11 +265,19 @@ export default class AppTile extends React.Component {
             this.props.onEditClick();
         } else {
             // TODO: Open the right manager for the widget
-            IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                this.props.room,
-                'type_' + this.props.type,
-                this.props.id,
-            );
+            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+                IntegrationManagers.sharedInstance().openAll(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            } else {
+                IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            }
         }
     }
 

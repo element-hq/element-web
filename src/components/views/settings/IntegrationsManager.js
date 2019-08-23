@@ -43,7 +43,7 @@ export default class IntegrationsManager extends React.Component {
         configured: true,
         connected: true,
         loading: false,
-    }
+    };
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
