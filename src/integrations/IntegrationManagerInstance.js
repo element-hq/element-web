@@ -23,11 +23,13 @@ import url from 'url';
 
 export const KIND_ACCOUNT = "account";
 export const KIND_CONFIG = "config";
+export const KIND_HOMESERVER = "homeserver";
 
 export class IntegrationManagerInstance {
     apiUrl: string;
     uiUrl: string;
     kind: string;
+    id: string; // only applicable in some cases
 
     constructor(kind: string, apiUrl: string, uiUrl: string) {
         this.kind = kind;
