@@ -17,7 +17,7 @@ The parts are then reconciled with the DOM.
 When typing in the `contenteditable` element, the `input` event fires and
 the DOM of the editor is turned into a string. The way this is done has
 some logic to it to deal with adding newlines for block elements, to make sure
-the caret offset is calculated in the same way as the content string, and the ignore
+the caret offset is calculated in the same way as the content string, and to ignore
 caret nodes (more on that later).
 For these reasons it doesn't use `innerText`, `textContent` or anything similar.
 The model addresses any content in the editor within as an offset within this string.
@@ -25,13 +25,13 @@ The caret position is thus also converted from a position in the DOM tree
 to an offset in the content string. This happens in `getCaretOffsetAndText` in `dom.js`.
 
 Once the content string and caret offset is calculated, it is passed to the `update()`
-method of the model. The model first calculates the same content string its current parts,
+method of the model. The model first calculates the same content string of its current parts,
 basically just concatenating their text. It then looks for differences between
 the current and the new content string. The diffing algorithm is very basic,
 and assumes there is only one change around the caret offset,
 so this should be very inexpensive. See `diff.js` for details.
 
-The result of the diffing is the strings that was added and/or removed from
+The result of the diffing is the strings that were added and/or removed from
 the current content. These differences are then applied to the parts,
 where parts can apply validation logic to these changes.
 
@@ -48,7 +48,8 @@ to leave the parts it intersects alone.
 
 The benefit of this is that we can use the `input` event, which is broadly supported,
 to find changes in the editor. We don't have to rely on keyboard events,
-which relate poorly to text input or changes.
+which relate poorly to text input or changes, and don't need the `beforeinput` event,
+which isn't broadly supported yet.
 
 Once the parts of the model are updated, the DOM of the editor is then reconciled
 with the new model state, see `renderModel` in `render.js` for this.

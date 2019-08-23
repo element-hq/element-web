@@ -1550,7 +1550,6 @@ module.exports = React.createClass({
 
     render: function() {
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
-        const MessageComposer = sdk.getComponent('rooms.MessageComposer');
         const ForwardMessage = sdk.getComponent("rooms.ForwardMessage");
         const AuxPanel = sdk.getComponent("rooms.AuxPanel");
         const SearchBar = sdk.getComponent("rooms.SearchBar");
@@ -1778,15 +1777,29 @@ module.exports = React.createClass({
             myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
-            messageComposer =
-                <MessageComposer
-                    room={this.state.room}
-                    callState={this.state.callState}
-                    disabled={this.props.disabled}
-                    showApps={this.state.showApps}
-                    e2eStatus={this.state.e2eStatus}
-                    permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
-                />;
+            if (SettingsStore.isFeatureEnabled("feature_cider_composer")) {
+                const MessageComposer = sdk.getComponent('rooms.MessageComposer');
+                messageComposer =
+                    <MessageComposer
+                        room={this.state.room}
+                        callState={this.state.callState}
+                        disabled={this.props.disabled}
+                        showApps={this.state.showApps}
+                        e2eStatus={this.state.e2eStatus}
+                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
+                    />;
+            } else {
+                const SlateMessageComposer = sdk.getComponent('rooms.SlateMessageComposer');
+                messageComposer =
+                    <SlateMessageComposer
+                        room={this.state.room}
+                        callState={this.state.callState}
+                        disabled={this.props.disabled}
+                        showApps={this.state.showApps}
+                        e2eStatus={this.state.e2eStatus}
+                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
+                    />;
+            }
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format

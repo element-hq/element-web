@@ -92,7 +92,6 @@
 @import "./views/elements/_InteractiveTooltip.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
 @import "./views/elements/_MemberEventListSummary.scss";
-@import "./views/elements/_MessageEditor.scss";
 @import "./views/elements/_PowerSelector.scss";
 @import "./views/elements/_ProgressBar.scss";
 @import "./views/elements/_ReplyThread.scss";
@@ -135,7 +134,9 @@
 @import "./views/rooms/_AppsDrawer.scss";
 @import "./views/rooms/_Autocomplete.scss";
 @import "./views/rooms/_AuxPanel.scss";
+@import "./views/rooms/_BasicMessageComposer.scss";
 @import "./views/rooms/_E2EIcon.scss";
+@import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
@@ -158,6 +159,7 @@
 @import "./views/rooms/_RoomUpgradeWarningBar.scss";
 @import "./views/rooms/_SearchBar.scss";
 @import "./views/rooms/_SearchableEntityList.scss";
+@import "./views/rooms/_SendMessageComposer.scss";
 @import "./views/rooms/_Stickers.scss";
 @import "./views/rooms/_TopUnreadMessagesBar.scss";
 @import "./views/rooms/_WhoIsTypingTile.scss";

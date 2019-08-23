@@ -18,7 +18,7 @@ limitations under the License.
 import {diffAtCaret, diffDeletion} from "./diff";
 
 export default class EditorModel {
-    constructor(parts, partCreator, updateCallback) {
+    constructor(parts, partCreator, updateCallback = null) {
         this._parts = parts;
         this._partCreator = partCreator;
         this._activePartIdx = null;
@@ -33,6 +33,10 @@ export default class EditorModel {
 
     get partCreator() {
         return this._partCreator;
+    }
+
+    get isEmpty() {
+        return this._parts.reduce((len, part) => len + part.text.length, 0) === 0;
     }
 
     clone() {
@@ -80,7 +84,8 @@ export default class EditorModel {
             const part = this._parts[index];
             return new DocumentPosition(index, part.text.length);
         } else {
-            return new DocumentPosition(0, 0);
+            // part index -1, as there are no parts to point at
+            return new DocumentPosition(-1, 0);
         }
     }
 
@@ -100,7 +105,29 @@ export default class EditorModel {
 
     reset(serializedParts, caret, inputType) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
+        // close auto complete if open
+        // this would happen when clearing the composer after sending
+        // a message with the autocomplete still open
+        if (this._autoComplete) {
+            this._autoComplete = null;
+            this._autoCompletePartIdx = null;
+        }
         this._updateCallback(caret, inputType);
+    }
+
+    insertPartsAt(parts, caret) {
+        const position = this.positionForOffset(caret.offset, caret.atNodeEnd);
+        const insertIndex = this._splitAt(position);
+        let newTextLength = 0;
+        for (let i = 0; i < parts.length; ++i) {
+            const part = parts[i];
+            newTextLength += part.text.length;
+            this._insertPart(insertIndex + i, part);
+        }
+        // put caret after new part
+        const lastPartIndex = insertIndex + parts.length - 1;
+        const newPosition = new DocumentPosition(lastPartIndex, newTextLength);
+        this._updateCallback(newPosition);
     }
 
     update(newValue, inputType, caret) {
@@ -227,6 +254,23 @@ export default class EditorModel {
         }
         return removedOffsetDecrease;
     }
+    // return part index where insertion will insert between at offset
+    _splitAt(pos) {
+        if (pos.index === -1) {
+            return 0;
+        }
+        if (pos.offset === 0) {
+            return pos.index;
+        }
+        const part = this._parts[pos.index];
+        if (pos.offset >= part.text.length) {
+            return pos.index + 1;
+        }
+
+        const secondPart = part.split(pos.offset);
+        this._insertPart(pos.index + 1, secondPart);
+        return pos.index + 1;
+    }
 
     /**
      * inserts `str` into the model at `pos`.
@@ -266,7 +310,7 @@ export default class EditorModel {
             index = 0;
         }
         while (str) {
-            const newPart = this._partCreator.createPartForInput(str);
+            const newPart = this._partCreator.createPartForInput(str, index);
             if (validate) {
                 str = newPart.appendUntilRejected(str);
             } else {

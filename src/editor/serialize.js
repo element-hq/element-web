@@ -23,6 +23,7 @@ export function mdSerialize(model) {
             case "newline":
                 return html + "\n";
             case "plain":
+            case "command":
             case "pill-candidate":
             case "at-room-pill":
                 return html + part.text;
@@ -33,7 +34,7 @@ export function mdSerialize(model) {
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model, {forceHTML = false}) {
+export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
     const md = mdSerialize(model);
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
@@ -47,6 +48,7 @@ export function textSerialize(model) {
             case "newline":
                 return text + "\n";
             case "plain":
+            case "command":
             case "pill-candidate":
             case "at-room-pill":
                 return text + part.text;
@@ -55,4 +57,20 @@ export function textSerialize(model) {
                 return text + `${part.resourceId}`;
         }
     }, "");
+}
+
+export function containsEmote(model) {
+    const firstPart = model.parts[0];
+    // part type will be "plain" while editing,
+    // and "command" while composing a message.
+    return firstPart &&
+        (firstPart.type === "plain" || firstPart.type === "command") &&
+        firstPart.text.startsWith("/me ");
+}
+
+export function stripEmoteCommand(model) {
+    // trim "/me "
+    model = model.clone();
+    model.removeText({index: 0, offset: 0}, 4);
+    return model;
 }

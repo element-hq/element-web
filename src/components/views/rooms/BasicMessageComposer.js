@@ -15,9 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
@@ -26,13 +24,40 @@ import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {Room} from 'matrix-js-sdk';
+import TypingStore from "../../../stores/TypingStore";
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+function cloneSelection(selection) {
+    return {
+        anchorNode: selection.anchorNode,
+        anchorOffset: selection.anchorOffset,
+        focusNode: selection.focusNode,
+        focusOffset: selection.focusOffset,
+        isCollapsed: selection.isCollapsed,
+        rangeCount: selection.rangeCount,
+        type: selection.type,
+    };
+}
+
+function selectionEquals(a: Selection, b: Selection): boolean {
+    return a.anchorNode === b.anchorNode &&
+        a.anchorOffset === b.anchorOffset &&
+        a.focusNode === b.focusNode &&
+        a.focusOffset === b.focusOffset &&
+        a.isCollapsed === b.isCollapsed &&
+        a.rangeCount === b.rangeCount &&
+        a.type === b.type;
+}
+
 export default class BasicMessageEditor extends React.Component {
     static propTypes = {
+        onChange: PropTypes.func,
         model: PropTypes.instanceOf(EditorModel).isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
+        placeholder: PropTypes.string,
+        label: PropTypes.string,    // the aria label
+        initialCaret: PropTypes.object, // See DocumentPosition in editor/model.js
     };
 
     constructor(props, context) {
@@ -54,14 +79,30 @@ export default class BasicMessageEditor extends React.Component {
                 console.error(err);
             }
         }
+        if (this.props.placeholder) {
+            const {isEmpty} = this.props.model;
+            if (isEmpty) {
+                this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
+                this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+            } else {
+                this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
+                this._editorRef.style.removeProperty("--placeholder");
+            }
+        }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, caret, inputType, diff);
+        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
+
+        if (this.props.onChange) {
+            this.props.onChange();
+        }
     }
 
     _onInput = (event) => {
         this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
+        this._setLastCaret(caret, text, sel);
         this.props.model.update(text, event.inputType, caret);
     }
 
@@ -73,14 +114,67 @@ export default class BasicMessageEditor extends React.Component {
         this.props.model.update(newText, inputType, caret);
     }
 
-    _isCaretAtStart() {
-        const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === 0;
+    // this is used later to see if we need to recalculate the caret
+    // on selectionchange. If it is just a consequence of typing
+    // we don't need to. But if the user is navigating the caret without input
+    // we need to recalculate it, to be able to know where to insert content after
+    // losing focus
+    _setLastCaret(caret, text, selection) {
+        this._lastSelection = cloneSelection(selection);
+        this._lastCaret = caret;
+        this._lastTextLength = text.length;
     }
 
-    _isCaretAtEnd() {
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === text.length;
+    _refreshLastCaretIfNeeded() {
+        // TODO: needed when going up and down in editing messages ... not sure why yet
+        // because the editors should stop doing this when when blurred ...
+        // maybe it's on focus and the _editorRef isn't available yet or something.
+        if (!this._editorRef) {
+            return;
+        }
+        const selection = document.getSelection();
+        if (!this._lastSelection || !selectionEquals(this._lastSelection, selection)) {
+            this._lastSelection = cloneSelection(selection);
+            const {caret, text} = getCaretOffsetAndText(this._editorRef, selection);
+            this._lastCaret = caret;
+            this._lastTextLength = text.length;
+        }
+        return this._lastCaret;
+    }
+
+    clearUndoHistory() {
+        this.historyManager.clear();
+    }
+
+    getCaret() {
+        return this._lastCaret;
+    }
+
+    isSelectionCollapsed() {
+        return !this._lastSelection || this._lastSelection.isCollapsed;
+    }
+
+    isCaretAtStart() {
+        return this.getCaret().offset === 0;
+    }
+
+    isCaretAtEnd() {
+        return this.getCaret().offset === this._lastTextLength;
+    }
+
+    _onBlur = () => {
+        document.removeEventListener("selectionchange", this._onSelectionChange);
+    }
+
+    _onFocus = () => {
+        document.addEventListener("selectionchange", this._onSelectionChange);
+        // force to recalculate
+        this._lastSelection = null;
+        this._refreshLastCaretIfNeeded();
+    }
+
+    _onSelectionChange = () => {
+        this._refreshLastCaretIfNeeded();
     }
 
     _onKeyDown = (event) => {
@@ -106,7 +200,7 @@ export default class BasicMessageEditor extends React.Component {
             }
             handled = true;
         // insert newline on Shift+Enter
-        } else if (event.shiftKey && event.key === "Enter") {
+        } else if (event.key === "Enter" && (event.shiftKey || (IS_MAC && event.altKey))) {
             this._insertText("\n");
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
@@ -115,30 +209,38 @@ export default class BasicMessageEditor extends React.Component {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
                     case "Enter":
-                        autoComplete.onEnter(event); break;
+                        // only capture enter when something is selected in the list,
+                        // otherwise don't handle so the contents of the composer gets sent
+                        if (autoComplete.hasSelection()) {
+                            autoComplete.onEnter(event);
+                            handled = true;
+                        }
+                        break;
                     case "ArrowUp":
-                        autoComplete.onUpArrow(event); break;
+                        autoComplete.onUpArrow(event);
+                        handled = true;
+                        break;
                     case "ArrowDown":
-                        autoComplete.onDownArrow(event); break;
+                        autoComplete.onDownArrow(event);
+                        handled = true;
+                        break;
                     case "Tab":
-                        autoComplete.onTab(event); break;
+                        autoComplete.onTab(event);
+                        handled = true;
+                        break;
                     case "Escape":
-                        autoComplete.onEscape(event); break;
+                        autoComplete.onEscape(event);
+                        handled = true;
+                        break;
                     default:
                         return; // don't preventDefault on anything else
                 }
-                handled = true;
             }
         }
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
         }
-    }
-
-    _cancelEdit = () => {
-        dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
     }
 
     isModified() {
@@ -190,23 +292,12 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
-
-    isCaretAtStart() {
-        const {caret} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === 0;
-    }
-
-    isCaretAtEnd() {
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, document.getSelection());
-        return caret.offset === text.length;
-    }
-
     render() {
         let autoComplete;
         if (this.state.autoComplete) {
             const query = this.state.query;
             const queryLen = query.length;
-            autoComplete = <div className="mx_MessageEditor_AutoCompleteWrapper">
+            autoComplete = (<div className="mx_BasicMessageComposer_AutoCompleteWrapper">
                 <Autocomplete
                     ref={ref => this._autocompleteRef = ref}
                     query={query}
@@ -215,18 +306,24 @@ export default class BasicMessageEditor extends React.Component {
                     selection={{beginning: true, end: queryLen, start: queryLen}}
                     room={this.props.room}
                 />
-            </div>;
+            </div>);
         }
-        return <div className={this.props.className}>
-                { autoComplete }
-                <div
-                    className="mx_MessageEditor_editor"
-                    contentEditable="true"
-                    tabIndex="1"
-                    onKeyDown={this._onKeyDown}
-                    ref={ref => this._editorRef = ref}
-                    aria-label={_t("Edit message")}
-                ></div>
-            </div>;
+        return (<div className="mx_BasicMessageComposer">
+            { autoComplete }
+            <div
+                className="mx_BasicMessageComposer_input"
+                contentEditable="true"
+                tabIndex="1"
+                onBlur={this._onBlur}
+                onFocus={this._onFocus}
+                onKeyDown={this._onKeyDown}
+                ref={ref => this._editorRef = ref}
+                aria-label={this.props.label}
+            ></div>
+        </div>);
+    }
+
+    focus() {
+        this._editorRef.focus();
     }
 }

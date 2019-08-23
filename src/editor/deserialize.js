@@ -130,29 +130,29 @@ function checkIgnored(n) {
     return true;
 }
 
+const QUOTE_LINE_PREFIX = "> ";
 function prefixQuoteLines(isFirstNode, parts, partCreator) {
-    const PREFIX = "> ";
     // a newline (to append a > to) wouldn't be added to parts for the first line
     // if there was no content before the BLOCKQUOTE, so handle that
     if (isFirstNode) {
-        parts.splice(0, 0, partCreator.plain(PREFIX));
+        parts.splice(0, 0, partCreator.plain(QUOTE_LINE_PREFIX));
     }
     for (let i = 0; i < parts.length; i += 1) {
         if (parts[i].type === "newline") {
-            parts.splice(i + 1, 0, partCreator.plain(PREFIX));
+            parts.splice(i + 1, 0, partCreator.plain(QUOTE_LINE_PREFIX));
             i += 1;
         }
     }
 }
 
-function parseHtmlMessage(html, partCreator) {
+function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
     const rootNode = new DOMParser().parseFromString(html, "text/html").body;
     const parts = [];
     let lastNode;
-    let inQuote = false;
+    let inQuote = isQuotedMessage;
     const state = {};
 
     function onNodeEnter(n) {
@@ -220,22 +220,29 @@ function parseHtmlMessage(html, partCreator) {
     return parts;
 }
 
-export function parseEvent(event, partCreator) {
+function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
+    const lines = body.split("\n");
+    const parts = lines.reduce((parts, line, i) => {
+        if (isQuotedMessage) {
+            parts.push(partCreator.plain(QUOTE_LINE_PREFIX));
+        }
+        parts.push(...parseAtRoomMentions(line, partCreator));
+        const isLast = i === lines.length - 1;
+        if (!isLast) {
+            parts.push(partCreator.newline());
+        }
+        return parts;
+    }, []);
+    return parts;
+}
+
+export function parseEvent(event, partCreator, {isQuotedMessage = false} = {}) {
     const content = event.getContent();
     let parts;
     if (content.format === "org.matrix.custom.html") {
-        parts = parseHtmlMessage(content.formatted_body || "", partCreator);
+        parts = parseHtmlMessage(content.formatted_body || "", partCreator, isQuotedMessage);
     } else {
-        const body = content.body || "";
-        const lines = body.split("\n");
-        parts = lines.reduce((parts, line, i) => {
-            const isLast = i === lines.length - 1;
-            const newParts = parseAtRoomMentions(line, partCreator);
-            if (!isLast) {
-                newParts.push(partCreator.newline());
-            }
-            return parts.concat(newParts);
-        }, []);
+        parts = parsePlainTextMessage(content.body || "", partCreator, isQuotedMessage);
     }
     if (content.msgtype === "m.emote") {
         parts.unshift(partCreator.plain("/me "));
