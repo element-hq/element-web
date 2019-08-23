@@ -25,7 +25,8 @@
         "feature_tabbed_settings": "labs",
         "feature_sas": "labs",
         "feature_room_breadcrumbs": "labs",
-        "feature_state_counters": "labs"
+        "feature_state_counters": "labs",
+        "feature_cider_composer": "labs"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
