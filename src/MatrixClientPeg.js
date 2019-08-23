@@ -220,9 +220,7 @@ class MatrixClientPeg {
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
             verificationMethods: [verificationMethods.SAS],
             unstableClientRelationAggregation: true,
-            getIdentityAccessToken: () => {
-                return new IdentityAuthClient().getAccessToken();
-            },
+            identityServer: new IdentityAuthClient(),
         };
 
         this.matrixClient = createMatrixClient(opts);
