@@ -74,17 +74,13 @@ class ConsoleLogger {
 
         // Convert objects and errors to helpful things
         args = args.map((arg) => {
-            let msg = '';
             if (arg instanceof Error) {
-                msg = arg.message + (arg.stack ? `\n${arg.stack}` : '');
+                return arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof(arg) === 'object') {
-                msg = JSON.stringify(arg);
+                return JSON.stringify(arg);
             } else {
-                msg = arg;
+                return arg;
             }
-            // Do some cleanup
-            msg = msg.replace(/token=[a-zA-Z0-9-]+/gm, 'token=xxxxx');
-            return msg;
         });
 
         // Some browsers support string formatting which we're not doing here
@@ -92,7 +88,9 @@ class ConsoleLogger {
         // run.
         // Example line:
         // 2017-01-18T11:23:53.214Z W Failed to set badge count
-        const line = `${ts} ${level} ${args.join(' ')}\n`;
+        let line = `${ts} ${level} ${args.join(' ')}\n`;
+        // Do some cleanup
+        line = line.replace(/token=[a-zA-Z0-9-]+/gm, 'token=xxxxx');
         // Using + really is the quickest way in JS
         // http://jsperf.com/concat-vs-plus-vs-join
         this.logs += line;
