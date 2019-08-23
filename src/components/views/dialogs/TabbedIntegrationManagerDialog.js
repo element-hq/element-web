@@ -135,7 +135,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
                     {m.name}
                 </AccessibleButton>
             );
-        })
+        });
     }
 
     _renderTab() {
@@ -167,6 +167,6 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
                     {this._renderTab()}
                 </div>
             </div>
-        )
+        );
     }
 }

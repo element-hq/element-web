@@ -683,5 +683,5 @@ module.exports = {
 
     setOpenManagerUrl: function(url) {
         openManagerUrl = url;
-    }
+    },
 };
