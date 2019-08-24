@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
@@ -29,7 +30,7 @@ const RESTORE_TYPE_RECOVERYKEY = 1;
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
-export default React.createClass({
+export default createReactClass({
     getInitialState: function() {
         return {
             backupInfo: null,
