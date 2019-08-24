@@ -17,6 +17,7 @@ limitations under the License.
 import FileSaver from 'file-saver';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
@@ -26,7 +27,7 @@ import sdk from '../../../index';
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'ExportE2eKeysDialog',
 
     propTypes: {
