@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -36,10 +36,10 @@
     "build:compile": "yarn reskindex && babel --source-maps -d lib src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:bundle:dev": "webpack --progress --bail --mode development",
-    "build:electron": "yarn clean && yarn build && yarn install:electron && build -wml --ia32 --x64",
-    "build:electron:linux": "yarn build && build -l --x64",
-    "build:electron:macos": "yarn build && build -m --x64",
-    "build:electron:windows": "yarn build && build -w --ia32 --x64",
+    "build:electron": "yarn clean && yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
+    "build:electron:linux": "yarn build && electron-builder -l --x64",
+    "build:electron:macos": "yarn build && electron-builder -m --x64",
+    "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
     "build:react-sdk": "node scripts/yarn-sub.js matrix-react-sdk build",
     "build:js-sdk": "node scripts/yarn-sub.js matrix-js-sdk start:init",
     "build": "yarn build:js-sdk && yarn build:react-sdk && yarn reskindex && yarn build:res && yarn build:bundle",
@@ -108,8 +108,8 @@
     "cpx": "^1.3.2",
     "cross-env": "^4.0.0",
     "css-loader": "^2.1.0",
-    "electron-builder": "^20.44.4",
-    "electron-builder-squirrel-windows": "^21.0.6",
+    "electron-builder": "^21.2.0",
+    "electron-builder-squirrel-windows": "^21.2.0",
     "electron-devtools-installer": "^2.2.4",
     "eslint": "^5.8.0",
     "eslint-config-google": "^0.7.1",
@@ -132,7 +132,7 @@
     "karma-webpack": "4.0.0-beta.0",
     "loader-utils": "^1.2.3",
     "matrix-mock-request": "^1.2.3",
-    "matrix-react-test-utils": "^0.2.0",
+    "matrix-react-test-utils": "^0.2.2",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
@@ -152,7 +152,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "5.0.7",
+    "electronVersion": "6.0.3",
     "files": [
       "node_modules/**",
       "src/**"
@@ -172,6 +172,9 @@
       "desktop": {
         "StartupWMClass": "riot"
       }
+    },
+    "deb": {
+      "afterInstall": "electron_app/build/linux/after-install.tpl"
     },
     "mac": {
       "category": "public.app-category.social-networking"

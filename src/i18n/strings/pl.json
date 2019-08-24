@@ -40,5 +40,14 @@
     "Sign In": "Zaloguj",
     "Need help?": "Potrzebujesz pomocy?",
     "Room Directory": "Katalog pokojów",
-    "Explore rooms": "Przeglądaj pokoje"
+    "Explore rooms": "Przeglądaj pokoje",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Twojego Riot zawiera błędny plik JSON. Popraw swoją konfigurację i odśwież stronę.",
+    "The message from the parser is: %(message)s": "Wiadomość od parsera to: %(message)s",
+    "Invalid JSON": "Błędny JSON",
+    "Your Riot is misconfigured": "Twój Riot jest źle skonfigurowany",
+    "Unexpected error preparing the app. See console for details.": "Niespodziewany błąd podczas przygotowywania aplikacji. Otwórz konsolę po szczegóły.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Błędna konfiguracja. Można sprecyzować tylko jedno z: default_server_config, default_server_name, lub default_hs_url.",
+    "Invalid configuration: no default server specified.": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Możesz użyć Niestandardowych Opcji Serwera by zalogować się do innych serwerów Matrix poprzez podanie URL innego serwera głównego. Dzięki temu możesz używać Riot z istniejącym kontem z innego serwera głównego.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Możesz również ustawić niestandardowy serwer tożsamości, lecz nie będziesz móc zapraszać użytkowników i otrzymywać zaproszeń poprzez podanie adresu email."
 }
