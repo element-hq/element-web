@@ -2127,5 +2127,6 @@
     "Remove %(email)s?": "移除 %(email)s？",
     "Remove %(phone)s?": "移除 %(phone)s？",
     "Accept <policyLink /> to continue:": "接受 <policyLink /> 以繼續：",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "同意身份識別伺服器 (%(serverName)s) 服務條款以讓您可以被透過電子郵件地址或電話號碼探索。"
+    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "同意身份識別伺服器 (%(serverName)s) 服務條款以讓您可以被透過電子郵件地址或電話號碼探索。",
+    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "使用更新更快但仍在實驗中的 composer 來寫入訊息（需要重新整理）"
 }
