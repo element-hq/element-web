@@ -1628,5 +1628,6 @@
     "Failed to update integration manager": "Błąd przy aktualizacji menedżera integracji",
     "Integration manager offline or not accessible.": "Menedżer integracji nieaktywny lub niedostępny.",
     "Terms of service not accepted or the integration manager is invalid.": "Warunki użytkowania nieakceptowane lub menedżer integracji jest nieprawidłowy.",
-    "Integration manager has no terms of service": "Menedżer integracji nie posiada warunków użytkowania"
+    "Integration manager has no terms of service": "Menedżer integracji nie posiada warunków użytkowania",
+    "<a>Upgrade</a> to your own domain": "<a>Zaktualizuj</a> do swojej własnej domeny"
 }
