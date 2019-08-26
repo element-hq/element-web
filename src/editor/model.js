@@ -19,6 +19,13 @@ import {diffAtCaret, diffDeletion} from "./diff";
 import DocumentPosition from "./position";
 import Range from "./range";
 
+/**
+ * @callback ModelCallback
+ * @param {DocumentPosition?} caretPosition the position where the caret should be position
+ * @param {string?} inputType the inputType of the DOM input event
+ * @param {object?} diff an object with `removed` and `added` strings
+ */
+
  /**
  * @callback TransformCallback
  * @param {DocumentPosition?} caretPosition the position where the caret should be position
@@ -50,6 +57,9 @@ export default class EditorModel {
         this._transformCallback = transformCallback;
     }
 
+    /** Set a callback for rerendering the model after it has been updated.
+     * @param {ModelCallback} updateCallback
+     */
     setUpdateCallback(updateCallback) {
         this._updateCallback = updateCallback;
     }
@@ -376,6 +386,11 @@ export default class EditorModel {
         return new DocumentPosition(index, totalOffset - currentOffset);
     }
 
+    /**
+     * Starts a range, which can span across multiple parts, to find and replace text.
+     * @param {DocumentPosition} position where to start the range
+     * @return {Range}
+     */
     startRange(position) {
         return new Range(this, position);
     }
