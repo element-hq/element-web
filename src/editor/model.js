@@ -19,6 +19,15 @@ import {diffAtCaret, diffDeletion} from "./diff";
 import DocumentPosition from "./position";
 import Range from "./range";
 
+ /**
+ * @callback TransformCallback
+ * @param {DocumentPosition?} caretPosition the position where the caret should be position
+ * @param {string?} inputType the inputType of the DOM input event
+ * @param {object?} diff an object with `removed` and `added` strings
+ * @return {Number?} addedLen how many characters were added/removed (-) before the caret during the transformation step.
+                     This is used to adjust the caret position.
+ */
+
 export default class EditorModel {
     constructor(parts, partCreator, updateCallback = null) {
         this._parts = parts;
@@ -26,7 +35,19 @@ export default class EditorModel {
         this._activePartIdx = null;
         this._autoComplete = null;
         this._autoCompletePartIdx = null;
+        this._transformCallback = null;
         this.setUpdateCallback(updateCallback);
+        this._updateInProgress = false;
+    }
+
+    /** Set a callback for the transformation step.
+     * While processing an update, right before calling the update callback,
+     * a transform callback can be called, which serves to do modifications
+     * on the model that can span multiple parts. Also see `startRange()`.
+     * @param {TransformCallback} transformCallback
+     */
+    setTransformCallback(transformCallback) {
+        this._transformCallback = transformCallback;
     }
 
     setUpdateCallback(updateCallback) {
@@ -133,6 +154,7 @@ export default class EditorModel {
     }
 
     update(newValue, inputType, caret) {
+        this._updateInProgress = true;
         const diff = this._diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
@@ -147,9 +169,21 @@ export default class EditorModel {
         }
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
-        const newPosition = this.positionForOffset(caretOffset, true);
+        let newPosition = this.positionForOffset(caretOffset, true);
         this._setActivePart(newPosition, canOpenAutoComplete);
+        if (this._transformCallback) {
+            const transformAddedLen = this._transform(newPosition, inputType, diff);
+            if (transformAddedLen !== 0) {
+                newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
+            }
+        }
+        this._updateInProgress = false;
         this._updateCallback(newPosition, inputType, diff);
+    }
+
+    _transform(newPosition, inputType, diff) {
+        const result = this._transformCallback(newPosition, inputType, diff);
+        return Number.isFinite(result) ? result : 0;
     }
 
     _setActivePart(pos, canOpenAutoComplete) {
@@ -367,6 +401,8 @@ export default class EditorModel {
             insertIdx += 1;
         }
         this._mergeAdjacentParts();
-        this._updateCallback();
+        if (!this._updateInProgress) {
+            this._updateCallback();
+        }
     }
 }
