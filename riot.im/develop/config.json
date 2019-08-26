@@ -5,9 +5,11 @@
     "integrations_ui_url": "https://scalar-staging.vector.im/",
     "integrations_rest_url": "https://scalar-staging.vector.im/api",
     "integrations_widgets_urls": [
-        "https://scalar-staging.riot.im/scalar/api",
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
         "https://scalar-staging.vector.im/api",
-        "https://scalar.vector.im/api"
+        "https://scalar-staging.riot.im/scalar/api"
     ],
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
