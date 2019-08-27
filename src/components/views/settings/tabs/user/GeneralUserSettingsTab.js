@@ -249,6 +249,8 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderDiscoverySection() {
+        const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
+
         if (this.state.requiredPolicyInfo.hasTerms) {
             const InlineTermsAgreement = sdk.getComponent("views.terms.InlineTermsAgreement");
             const intro = <span className="mx_SettingsTab_subsectionText">
@@ -258,17 +260,22 @@ export default class GeneralUserSettingsTab extends React.Component {
                     {serverName: this.state.idServerName},
                 )}
             </span>;
-            return <InlineTermsAgreement
-                policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
-                agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
-                onFinished={this.state.requiredPolicyInfo.resolve}
-                introElement={intro}
-            />;
+            return (
+                <div>
+                    <InlineTermsAgreement
+                        policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
+                        agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
+                        onFinished={this.state.requiredPolicyInfo.resolve}
+                        introElement={intro}
+                    />
+                    { /* has its own heading as it includes the current ID server */ }
+                    <SetIdServer missingTerms={true} />
+                </div>
+            );
         }
 
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
-        const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
