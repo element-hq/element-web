@@ -78,7 +78,8 @@ export default class BasicMessageEditor extends React.Component {
     _replaceEmoticon = (caret, inputType, diff) => {
         const {model} = this.props;
         const range = model.startRange(caret);
-        // expand range max 8 characters backwards from caret
+        // expand range max 8 characters backwards from caret,
+        // as a space to look for an emoticon
         let n = 8;
         range.expandBackwardsWhile((index, offset) => {
             const part = model.parts[index];
@@ -90,8 +91,14 @@ export default class BasicMessageEditor extends React.Component {
             const query = emoticonMatch[1].toLowerCase().replace("-", "");
             const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
             if (data) {
-                // + 1 because index is reported without preceding space
-                range.moveStart(emoticonMatch.index + 1);
+                const hasPrecedingSpace = emoticonMatch[0][0] === " ";
+                // we need the range to only comprise of the emoticon
+                // because we'll replace the whole range with an emoji,
+                // so move the start forward to the start of the emoticon.
+                // Take + 1 because index is reported without the possible preceding space.
+                range.moveStart(emoticonMatch.index + (hasPrecedingSpace ? 1 : 0));
+                // this returns the amount of added/removed characters during the replace
+                // so the caret position can be adjusted.
                 return range.replace([this.props.model.partCreator.plain(data.unicode + " ")]);
             }
         }
