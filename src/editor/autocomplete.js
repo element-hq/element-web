@@ -52,9 +52,6 @@ export default class AutocompleteWrapperModel {
         } else {
             await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
-        this._updateCallback({
-            close: true,
-        });
     }
 
     onUpArrow() {
