@@ -1402,5 +1402,22 @@
     "Folder": "폴더",
     "Pin": "핀",
     "Accept <policyLink /> to continue:": "계속하려면 <policyLink />을(를) 수락하세요:",
-    "Power level": "권한 등급"
+    "Power level": "권한 등급",
+    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\"와 같은 반복은 \"abc\"에서 겨우 조금 더 어렵습니다",
+    "Sequences like abc or 6543 are easy to guess": "abc나 6543과 같은 반복은 추측하기 쉽습니다",
+    "Recent years are easy to guess": "최근 연도는 추측하기 쉽습니다",
+    "Dates are often easy to guess": "날짜는 종종 추측하기 쉽습니다",
+    "This is a top-10 common password": "이것은 상위 10에 해당하는 흔한 비밀번호입니다",
+    "This is a top-100 common password": "이것은 상위 100에 해당하는 흔한 비밀번호입니다",
+    "This is a very common password": "이것은 매우 흔한 비밀번호입니다",
+    "This is similar to a commonly used password": "이것은 흔히 사용되는 비밀번호와 유사합니다",
+    "A word by itself is easy to guess": "단어 자체는 추측하기 쉽습니다",
+    "Names and surnames by themselves are easy to guess": "이름과 성 자체는 추측하기 쉽습니다",
+    "Common names and surnames are easy to guess": "흔한 이름과 성은 추측하기 쉽습니다",
+    "Straight rows of keys are easy to guess": "키의 한 줄은 추측하기 쉽습니다",
+    "Short keyboard patterns are easy to guess": "짧은 키보드 패턴은 추측하기 쉽습니다",
+    "There was an error joining the room": "방에 참가하는 동안 오류가 발생했습니다",
+    "Sorry, your homeserver is too old to participate in this room.": "죄송합니다, 이 방에 참여하기엔 홈 서버가 너무 오래됬습니다.",
+    "Custom user status messages": "맞춤 사용자 상태 메시지",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "맞춤 태그로 방을 그룹 & 필터\n(변경 사항을 적용하려면 새로고침)"
 }
