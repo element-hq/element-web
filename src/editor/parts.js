@@ -366,6 +366,8 @@ export class PartCreator {
     constructor(room, client, autoCompleteCreator = null) {
         this._room = room;
         this._client = client;
+        // pre-create the creator as an object even without callback so it can already be passed
+        // to PillCandidatePart (e.g. while deserializing) and set later on
         this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
     }
 
