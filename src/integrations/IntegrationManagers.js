@@ -17,10 +17,19 @@ limitations under the License.
 import SdkConfig from '../SdkConfig';
 import sdk from "../index";
 import Modal from '../Modal';
-import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG} from "./IntegrationManagerInstance";
+import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} from "./IntegrationManagerInstance";
 import type {MatrixClient, MatrixEvent} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
+import {AutoDiscovery} from "matrix-js-sdk";
+
+const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
+const KIND_PREFERENCE = [
+    // Ordered: first is most preferred, last is least preferred.
+    KIND_ACCOUNT,
+    KIND_HOMESERVER,
+    KIND_CONFIG,
+];
 
 export class IntegrationManagers {
     static _instance;
@@ -34,6 +43,8 @@ export class IntegrationManagers {
 
     _managers: IntegrationManagerInstance[] = [];
     _client: MatrixClient;
+    _wellknownRefreshTimerId: number = null;
+    _primaryManager: IntegrationManagerInstance;
 
     constructor() {
         this._compileManagers();
@@ -44,16 +55,19 @@ export class IntegrationManagers {
         this._client = MatrixClientPeg.get();
         this._client.on("accountData", this._onAccountData.bind(this));
         this._compileManagers();
+        setInterval(() => this._setupHomeserverManagers(), HS_MANAGERS_REFRESH_INTERVAL);
     }
 
     stopWatching(): void {
         if (!this._client) return;
         this._client.removeListener("accountData", this._onAccountData.bind(this));
+        if (this._wellknownRefreshTimerId !== null) clearInterval(this._wellknownRefreshTimerId);
     }
 
     _compileManagers() {
         this._managers = [];
         this._setupConfiguredManager();
+        this._setupHomeserverManagers();
         this._setupAccountManagers();
     }
 
@@ -63,6 +77,42 @@ export class IntegrationManagers {
 
         if (apiUrl && uiUrl) {
             this._managers.push(new IntegrationManagerInstance(KIND_CONFIG, apiUrl, uiUrl));
+            this._primaryManager = null; // reset primary
+        }
+    }
+
+    async _setupHomeserverManagers() {
+        try {
+            console.log("Updating homeserver-configured integration managers...");
+            const homeserverDomain = MatrixClientPeg.getHomeserverName();
+            const discoveryResponse = await AutoDiscovery.getRawClientConfig(homeserverDomain);
+            if (discoveryResponse && discoveryResponse['m.integrations']) {
+                let managers = discoveryResponse['m.integrations']['managers'];
+                if (!Array.isArray(managers)) managers = []; // make it an array so we can wipe the HS managers
+
+                console.log(`Homeserver has ${managers.length} integration managers`);
+
+                // Clear out any known managers for the homeserver
+                // TODO: Log out of the scalar clients
+                this._managers = this._managers.filter(m => m.kind !== KIND_HOMESERVER);
+
+                // Now add all the managers the homeserver wants us to have
+                for (const hsManager of managers) {
+                    if (!hsManager["api_url"]) continue;
+                    this._managers.push(new IntegrationManagerInstance(
+                        KIND_HOMESERVER,
+                        hsManager["api_url"],
+                        hsManager["ui_url"], // optional
+                    ));
+                }
+
+                this._primaryManager = null; // reset primary
+            } else {
+                console.log("Homeserver has no integration managers");
+            }
+        } catch (e) {
+            console.error(e);
+            // Errors during discovery are non-fatal
         }
     }
 
@@ -77,8 +127,11 @@ export class IntegrationManagers {
             const apiUrl = data['api_url'];
             if (!apiUrl || !uiUrl) return;
 
-            this._managers.push(new IntegrationManagerInstance(KIND_ACCOUNT, apiUrl, uiUrl));
+            const manager = new IntegrationManagerInstance(KIND_ACCOUNT, apiUrl, uiUrl);
+            manager.id = w['id'] || w['state_key'] || '';
+            this._managers.push(manager);
         });
+        this._primaryManager = null; // reset primary
     }
 
     _onAccountData(ev: MatrixEvent): void {
@@ -91,9 +144,28 @@ export class IntegrationManagers {
         return this._managers.length > 0;
     }
 
+    getOrderedManagers(): IntegrationManagerInstance[] {
+        const ordered = [];
+        for (const kind of KIND_PREFERENCE) {
+            const managers = this._managers.filter(m => m.kind === kind);
+            if (!managers || !managers.length) continue;
+
+            if (kind === KIND_ACCOUNT) {
+                // Order by state_keys (IDs)
+                managers.sort((a, b) => a.id.localeCompare(b.id));
+            }
+
+            ordered.push(...managers);
+        }
+        return ordered;
+    }
+
     getPrimaryManager(): IntegrationManagerInstance {
         if (this.hasManager()) {
-            return this._managers[this._managers.length - 1];
+            if (this._primaryManager) return this._primaryManager;
+
+            this._primaryManager = this.getOrderedManagers()[0];
+            return this._primaryManager;
         } else {
             return null;
         }
