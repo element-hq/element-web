@@ -30,6 +30,7 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -128,7 +129,11 @@ module.exports = React.createClass({
     },
 
     _launchManageIntegrations: function() {
-        IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
+        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll();
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
+        }
     },
 
     onClickAddWidget: function(e) {

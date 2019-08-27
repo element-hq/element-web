@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -33,7 +34,11 @@ export default class ManageIntegsButton extends React.Component {
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
         } else {
-            managers.getPrimaryManager().open(this.props.room);
+            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+                managers.openAll(this.props.room);
+            } else {
+                managers.getPrimaryManager().open(this.props.room);
+            }
         }
     };
 

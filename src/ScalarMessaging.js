@@ -548,8 +548,8 @@ const onMessage = function(event) {
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
     let configUrl;
     try {
-        // TODO: Support multiple integration managers
-        configUrl = new URL(IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl);
+        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl;
+        configUrl = new URL(openManagerUrl);
     } catch (e) {
         // No integrations UI URL, ignore silently.
         return;
@@ -657,6 +657,7 @@ const onMessage = function(event) {
 };
 
 let listenerCount = 0;
+let openManagerUrl = null;
 module.exports = {
     startListening: function() {
         if (listenerCount === 0) {
@@ -678,5 +679,9 @@ module.exports = {
             );
             console.error(e);
         }
+    },
+
+    setOpenManagerUrl: function(url) {
+        openManagerUrl = url;
     },
 };
