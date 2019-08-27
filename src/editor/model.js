@@ -158,8 +158,14 @@ export default class EditorModel {
         this._updateCallback(caret, inputType);
     }
 
-    insertPartsAt(parts, caret) {
-        const position = this.positionForOffset(caret.offset, caret.atNodeEnd);
+    /**
+     * Inserts the given parts at the given position.
+     * Should be run inside a `model.transform()` callback.
+     * @param {Part[]} parts the parts to replace the range with
+     * @param {DocumentPosition} position the position to start inserting at
+     * @return {Number} the amount of characters added
+     */
+    insert(parts, position) {
         const insertIndex = this._splitAt(position);
         let newTextLength = 0;
         for (let i = 0; i < parts.length; ++i) {
@@ -167,10 +173,7 @@ export default class EditorModel {
             newTextLength += part.text.length;
             this._insertPart(insertIndex + i, part);
         }
-        // put caret after new part
-        const lastPartIndex = insertIndex + parts.length - 1;
-        const newPosition = new DocumentPosition(lastPartIndex, newTextLength);
-        this._updateCallback(newPosition);
+        return newTextLength;
     }
 
     update(newValue, inputType, caret) {
@@ -403,7 +406,7 @@ export default class EditorModel {
         return new Range(this, position);
     }
 
-    // called from Range.replace
+    //mostly internal, called from Range.replace
     replaceRange(startPosition, endPosition, parts) {
         const newStartPartIndex = this._splitAt(startPosition);
         const idxDiff = newStartPartIndex - startPosition.index;

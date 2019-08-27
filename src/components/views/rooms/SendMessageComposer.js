@@ -279,22 +279,33 @@ export default class SendMessageComposer extends React.Component {
     };
 
     _insertMention(userId) {
+        const {model} = this;
+        const {partCreator} = model;
         const member = this.props.room.getMember(userId);
         const displayName = member ?
             member.rawDisplayName : userId;
-        const userPillPart = this.model.partCreator.userPill(displayName, userId);
-        this.model.insertPartsAt([userPillPart], this._editorRef.getCaret());
+        const userPillPart = partCreator.userPill(displayName, userId);
+        const caret = this._editorRef.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([userPillPart], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
         // refocus on composer, as we just clicked "Mention"
         this._editorRef && this._editorRef.focus();
     }
 
     _insertQuotedMessage(event) {
-        const {partCreator} = this.model;
+        const {model} = this;
+        const {partCreator} = model;
         const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
         // add two newlines
         quoteParts.push(partCreator.newline());
         quoteParts.push(partCreator.newline());
-        this.model.insertPartsAt(quoteParts, {offset: 0});
+        model.transform(() => {
+            const addedLen = model.insert(quoteParts, model.positionForOffset(0));
+            return model.positionForOffset(addedLen, true);
+        });
         // refocus on composer, as we just clicked "Quote"
         this._editorRef && this._editorRef.focus();
     }
