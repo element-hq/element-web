@@ -90,10 +90,14 @@ export default class EditorModel {
 
     _removePart(index) {
         this._parts.splice(index, 1);
-        if (this._activePartIdx >= index) {
+        if (index === this._activePartIdx) {
+            this._activePartIdx = null;
+        } else if (this._activePartIdx > index) {
             --this._activePartIdx;
         }
-        if (this._autoCompletePartIdx >= index) {
+        if (index === this._autoCompletePartIdx) {
+            this._autoCompletePartIdx = null;
+        } else if (this._autoCompletePartIdx > index) {
             --this._autoCompletePartIdx;
         }
     }
