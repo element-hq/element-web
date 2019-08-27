@@ -75,10 +75,10 @@ export default class BasicMessageEditor extends React.Component {
         this._modifiedFlag = false;
     }
 
-    _replaceEmoticon = (caret, inputType, diff) => {
+    _replaceEmoticon = (caretPosition, inputType, diff) => {
         const {model} = this.props;
-        const range = model.startRange(caret);
-        // expand range max 8 characters backwards from caret,
+        const range = model.startRange(caretPosition);
+        // expand range max 8 characters backwards from caretPosition,
         // as a space to look for an emoticon
         let n = 8;
         range.expandBackwardsWhile((index, offset) => {
@@ -91,6 +91,7 @@ export default class BasicMessageEditor extends React.Component {
             const query = emoticonMatch[1].toLowerCase().replace("-", "");
             const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
             if (data) {
+                const {partCreator} = model;
                 const hasPrecedingSpace = emoticonMatch[0][0] === " ";
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
@@ -99,7 +100,7 @@ export default class BasicMessageEditor extends React.Component {
                 range.moveStart(emoticonMatch.index + (hasPrecedingSpace ? 1 : 0));
                 // this returns the amount of added/removed characters during the replace
                 // so the caret position can be adjusted.
-                return range.replace([this.props.model.partCreator.plain(data.unicode + " ")]);
+                return range.replace([partCreator.plain(data.unicode + " ")]);
             }
         }
     }
@@ -160,7 +161,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _refreshLastCaretIfNeeded() {
-        // TODO: needed when going up and down in editing messages ... not sure why yet
+        // XXX: needed when going up and down in editing messages ... not sure why yet
         // because the editors should stop doing this when when blurred ...
         // maybe it's on focus and the _editorRef isn't available yet or something.
         if (!this._editorRef) {
