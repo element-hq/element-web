@@ -186,13 +186,14 @@ export default class EditorModel {
         this._mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         let newPosition = this.positionForOffset(caretOffset, true);
-        this._setActivePart(newPosition, canOpenAutoComplete);
+        const acPromise = this._setActivePart(newPosition, canOpenAutoComplete);
         if (this._transformCallback) {
             const transformAddedLen = this._transform(newPosition, inputType, diff);
             newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
         this._updateInProgress = false;
         this._updateCallback(newPosition, inputType, diff);
+        return acPromise;
     }
 
     _transform(newPosition, inputType, diff) {
@@ -218,13 +219,14 @@ export default class EditorModel {
             }
             // not _autoComplete, only there if active part is autocomplete part
             if (this.autoComplete) {
-                this.autoComplete.onPartUpdate(part, pos.offset);
+                return this.autoComplete.onPartUpdate(part, pos.offset);
             }
         } else {
             this._activePartIdx = null;
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
         }
+        return Promise.resolve();
     }
 
     _onAutoComplete = ({replacePart, caretOffset, close}) => {
