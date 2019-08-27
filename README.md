@@ -27,8 +27,9 @@ at https://riot.im/packages/keys/riot.asc
 Note that for the security of your chats will need to serve Riot
 over HTTPS. Major browsers also do not allow you to use VoIP/video
 chats over HTTP, as WebRTC is only usable over HTTPS.
-An exception of this is localhost, which usually is trusted in
-browsers.
+There are some exception like when using localhost, which is
+considered a [secure context](https://developer.mozilla.org/docs/Web/Security/Secure_Contexts)
+and thus allowed.
 
 ### Installation Steps for Debian Stretch
 1. Add the repository to your sources.list using either of the following two options:
