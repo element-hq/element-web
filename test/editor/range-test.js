@@ -60,7 +60,6 @@ describe('editor/range', function() {
         expect(model.parts[2].type).toBe("plain");
         expect(model.parts[2].text).toBe("!!!!");
         expect(model.parts.length).toBe(3);
-        expect(renderer.count).toBe(1);
     });
     it('range replace across parts', function() {
         const renderer = createRenderer();
@@ -83,6 +82,5 @@ describe('editor/range', function() {
         expect(model.parts[2].type).toBe("plain");
         expect(model.parts[2].text).toBe(" me");
         expect(model.parts.length).toBe(3);
-        expect(renderer.count).toBe(1);
     });
 });
