@@ -183,9 +183,7 @@ export default class EditorModel {
         this._setActivePart(newPosition, canOpenAutoComplete);
         if (this._transformCallback) {
             const transformAddedLen = this._transform(newPosition, inputType, diff);
-            if (transformAddedLen !== 0) {
-                newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
-            }
+            newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
         this._updateInProgress = false;
         this._updateCallback(newPosition, inputType, diff);
