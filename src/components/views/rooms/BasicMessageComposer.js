@@ -25,6 +25,11 @@ import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
 import {Room} from 'matrix-js-sdk';
 import TypingStore from "../../../stores/TypingStore";
+import EMOJIBASE from 'emojibase-data/en/compact.json';
+import SettingsStore from "../../../settings/SettingsStore";
+import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+
+const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
@@ -68,6 +73,35 @@ export default class BasicMessageEditor extends React.Component {
         this._editorRef = null;
         this._autocompleteRef = null;
         this._modifiedFlag = false;
+    }
+
+    _replaceEmoticon = (caret, inputType, diff) => {
+        const {model} = this.props;
+        const range = model.startRange(caret);
+        // expand range max 8 characters backwards from caret,
+        // as a space to look for an emoticon
+        let n = 8;
+        range.expandBackwardsWhile((index, offset) => {
+            const part = model.parts[index];
+            n -= 1;
+            return n >= 0 && (part.type === "plain" || part.type === "pill-candidate");
+        });
+        const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(range.text);
+        if (emoticonMatch) {
+            const query = emoticonMatch[1].toLowerCase().replace("-", "");
+            const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
+            if (data) {
+                const hasPrecedingSpace = emoticonMatch[0][0] === " ";
+                // we need the range to only comprise of the emoticon
+                // because we'll replace the whole range with an emoji,
+                // so move the start forward to the start of the emoticon.
+                // Take + 1 because index is reported without the possible preceding space.
+                range.moveStart(emoticonMatch.index + (hasPrecedingSpace ? 1 : 0));
+                // this returns the amount of added/removed characters during the replace
+                // so the caret position can be adjusted.
+                return range.replace([this.props.model.partCreator.plain(data.unicode + " ")]);
+            }
+        }
     }
 
     _updateEditorState = (caret, inputType, diff) => {
@@ -262,6 +296,9 @@ export default class BasicMessageEditor extends React.Component {
     componentDidMount() {
         const model = this.props.model;
         model.setUpdateCallback(this._updateEditorState);
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            model.setTransformCallback(this._replaceEmoticon);
+        }
         const partCreator = model.partCreator;
         // TODO: does this allow us to get rid of EditorStateTransfer?
         // not really, but we could not serialize the parts, and just change the autoCompleter
