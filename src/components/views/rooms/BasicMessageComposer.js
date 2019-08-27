@@ -269,12 +269,31 @@ export default class BasicMessageEditor extends React.Component {
                     default:
                         return; // don't preventDefault on anything else
                 }
+            } else if (event.key === "Tab") {
+                this._tabCompleteName(event);
+                handled = true;
             }
         }
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
         }
+    }
+
+    async _tabCompleteName(event) {
+        const {model} = this.props;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        const range = model.startRange(position);
+        range.expandBackwardsWhile((index, offset, part) => {
+            return part.text[offset] !== " " && (part.type === "plain" || part.type === "pill-candidate");
+        });
+        const {partCreator} = model;
+        await model.transform(() => {
+            const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+        await model.autoComplete.onTab();
     }
 
     isModified() {
