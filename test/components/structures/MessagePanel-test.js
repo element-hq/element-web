@@ -19,7 +19,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 const React = require('react');
 const ReactDOM = require("react-dom");
 import PropTypes from "prop-types";
-const TestUtils = require('react-addons-test-utils');
+const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
 import sinon from 'sinon';
 import { EventEmitter } from "events";

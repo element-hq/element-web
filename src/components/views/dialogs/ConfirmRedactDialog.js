@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 /*
  * A dialog for confirming a redaction.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'ConfirmRedactDialog',
 
     render: function() {

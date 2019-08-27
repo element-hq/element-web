@@ -16,6 +16,7 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
+import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
@@ -55,6 +56,12 @@ async function checkIdentityServerUrl(u) {
 }
 
 export default class SetIdServer extends React.Component {
+    static propTypes = {
+        // Whether or not the ID server is missing terms. This affects the text
+        // shown to the user.
+        missingTerms: PropTypes.bool,
+    };
+
     constructor() {
         super();
 
@@ -153,31 +160,17 @@ export default class SetIdServer extends React.Component {
                 // Double check that the identity server even has terms of service.
                 const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
-                    const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
-                    Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
-                        title: _t("Identity server has no terms of service"),
-                        description: (
-                            <div>
-                                <span className="warning">
-                                    {_t("The identity server you have chosen does not have any terms of service.")}
-                                </span>
-                                <span>
-                                    &nbsp;{_t("Only continue if you trust the owner of the server.")}
-                                </span>
-                            </div>
-                        ),
-                        button: _t("Continue"),
-                        onFinished: async (confirmed) => {
-                            if (!confirmed) return;
-                            this._saveIdServer(fullUrl);
-                        },
-                    });
+                    this._showNoTermsWarning(fullUrl);
                     return;
                 }
 
                 this._saveIdServer(fullUrl);
             } catch (e) {
                 console.error(e);
+                if (e.cors === "rejected" || e.httpStatus === 404) {
+                    this._showNoTermsWarning(fullUrl);
+                    return;
+                }
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
             }
         }
@@ -189,6 +182,28 @@ export default class SetIdServer extends React.Component {
             idServer: this.state.idServer,
         });
     };
+
+    _showNoTermsWarning(fullUrl) {
+        const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
+        Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+            title: _t("Identity server has no terms of service"),
+            description: (
+                <div>
+                    <span className="warning">
+                        {_t("The identity server you have chosen does not have any terms of service.")}
+                    </span>
+                    <span>
+                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                    </span>
+                </div>
+            ),
+            button: _t("Continue"),
+            onFinished: async (confirmed) => {
+                if (!confirmed) return;
+                this._saveIdServer(fullUrl);
+            },
+        });
+    }
 
     _onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
@@ -266,6 +281,13 @@ export default class SetIdServer extends React.Component {
                 {},
                 { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
             );
+            if (this.props.missingTerms) {
+                bodyText = _t(
+                    "If you don't want to use <server /> to discover and be discoverable by existing " +
+                    "contacts you know, enter another identity server below.",
+                    {}, {server: sub => <b>{abbreviateUrl(idServerUrl)}</b>},
+                );
+            }
         } else {
             sectionTitle = _t("Identity Server");
             bodyText = _t(
@@ -278,16 +300,25 @@ export default class SetIdServer extends React.Component {
         let discoSection;
         if (idServerUrl) {
             let discoButtonContent = _t("Disconnect");
+            let discoBodyText = _t(
+                "Disconnecting from your identity server will mean you " +
+                "won't be discoverable by other users and you won't be " +
+                "able to invite others by email or phone.",
+            );
+            if (this.props.missingTerms) {
+                discoBodyText = _t(
+                    "Using an identity server is optional. If you choose not to " +
+                    "use an identity server, you won't be discoverable by other users " +
+                    "and you won't be able to invite others by email or phone.",
+                );
+                discoButtonContent = _t("Do not use an identity server");
+            }
             if (this.state.disconnectBusy) {
                 const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
                 discoButtonContent = <InlineSpinner />;
             }
             discoSection = <div>
-                <span className="mx_SettingsTab_subsectionText">{_t(
-                    "Disconnecting from your identity server will mean you " +
-                    "won't be discoverable by other users and you won't be " +
-                    "able to invite others by email or phone.",
-                )}</span>
+                <span className="mx_SettingsTab_subsectionText">{discoBodyText}</span>
                 <AccessibleButton onClick={this._onDisconnectClicked} kind="danger_sm">
                     {discoButtonContent}
                 </AccessibleButton>

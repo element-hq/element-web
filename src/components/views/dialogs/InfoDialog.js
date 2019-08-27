@@ -17,12 +17,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'InfoDialog',
     propTypes: {
         className: PropTypes.string,
