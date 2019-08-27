@@ -35,6 +35,11 @@ import Range from "./range";
  *    This is used to adjust the caret position.
  */
 
+/**
+ * @callback ManualTransformCallback
+ * @return the caret position
+ */
+
 export default class EditorModel {
     constructor(parts, partCreator, updateCallback = null) {
         this._parts = parts;
@@ -44,7 +49,6 @@ export default class EditorModel {
         this._autoCompletePartIdx = null;
         this._transformCallback = null;
         this.setUpdateCallback(updateCallback);
-        this._updateInProgress = false;
     }
 
     /**
@@ -170,7 +174,6 @@ export default class EditorModel {
     }
 
     update(newValue, inputType, caret) {
-        this._updateInProgress = true;
         const diff = this._diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
@@ -191,7 +194,6 @@ export default class EditorModel {
             const transformAddedLen = this._transform(newPosition, inputType, diff);
             newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
-        this._updateInProgress = false;
         this._updateCallback(newPosition, inputType, diff);
         return acPromise;
     }
@@ -422,8 +424,18 @@ export default class EditorModel {
             insertIdx += 1;
         }
         this._mergeAdjacentParts();
-        if (!this._updateInProgress) {
-            this._updateCallback();
-        }
+    }
+
+    /**
+     * Performs a transformation not part of an update cycle.
+     * Modifying the model should only happen inside a transform call if not part of an update call.
+     * @param {ManualTransformCallback} callback to run the transformations in
+     * @return {Promise} a promise when auto-complete (if applicable) is done updating
+     */
+    transform(callback) {
+        const pos = callback();
+        const acPromise = this._setActivePart(pos, true);
+        this._updateCallback(pos);
+        return acPromise;
     }
 }
