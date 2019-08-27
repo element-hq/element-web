@@ -32,7 +32,7 @@ import Range from "./range";
  * @param {string?} inputType the inputType of the DOM input event
  * @param {object?} diff an object with `removed` and `added` strings
  * @return {Number?} addedLen how many characters were added/removed (-) before the caret during the transformation step.
-                     This is used to adjust the caret position.
+ *    This is used to adjust the caret position.
  */
 
 export default class EditorModel {
@@ -47,7 +47,8 @@ export default class EditorModel {
         this._updateInProgress = false;
     }
 
-    /** Set a callback for the transformation step.
+    /**
+     * Set a callback for the transformation step.
      * While processing an update, right before calling the update callback,
      * a transform callback can be called, which serves to do modifications
      * on the model that can span multiple parts. Also see `startRange()`.
@@ -57,7 +58,8 @@ export default class EditorModel {
         this._transformCallback = transformCallback;
     }
 
-    /** Set a callback for rerendering the model after it has been updated.
+    /**
+     * Set a callback for rerendering the model after it has been updated.
      * @param {ModelCallback} updateCallback
      */
     setUpdateCallback(updateCallback) {
