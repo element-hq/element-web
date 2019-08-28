@@ -577,6 +577,13 @@ module.exports = createReactClass({
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
+        let inputLabel;
+        if (this.props.description) {
+            inputLabel = <div className="mx_AddressPickerDialog_label">
+                <label htmlFor="textinput">{this.props.description}</label>
+            </div>;
+        }
+
         const query = [];
         // create the invite list
         if (this.state.selectedList.length > 0) {
@@ -640,9 +647,7 @@ module.exports = createReactClass({
         return (
             <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
                 onFinished={this.props.onFinished} title={this.props.title}>
-                <div className="mx_AddressPickerDialog_label">
-                    <label htmlFor="textinput">{ this.props.description }</label>
-                </div>
+                {inputLabel}
                 <div className="mx_Dialog_content">
                     <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>
                     { error }

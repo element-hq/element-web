@@ -68,7 +68,6 @@ export function showRoomInviteDialog(roomId) {
 
     Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
         title: _t('Invite new room members'),
-        description: _t('Who would you like to add to this room?'),
         button: _t('Send Invites'),
         placeholder: _t("Email, name or Matrix ID"),
         validAddressTypes,
