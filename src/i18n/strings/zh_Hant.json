@@ -2128,5 +2128,9 @@
     "Remove %(phone)s?": "移除 %(phone)s？",
     "Accept <policyLink /> to continue:": "接受 <policyLink /> 以繼續：",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "同意身份識別伺服器 (%(serverName)s) 服務條款以讓您可以被透過電子郵件地址或電話號碼探索。",
-    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "使用更新更快但仍在實驗中的 composer 來寫入訊息（需要重新整理）"
+    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "使用更新更快但仍在實驗中的 composer 來寫入訊息（需要重新整理）",
+    "Multiple integration managers": "多個整合管理員",
+    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "如果您不想要使用 <server /> 來探索與被您已知的既有聯絡人探索，在下方輸入其他身份識別伺服器。",
+    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "使用身份識別伺服器是選擇性的。如果您選擇不要使用身份識別伺服器，您將無法被其他使用者探索，您也不能透過電子郵件或電話邀請其他人。",
+    "Do not use an identity server": "不要使用身份識別伺服器"
 }
