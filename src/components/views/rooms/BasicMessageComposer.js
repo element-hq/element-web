@@ -336,14 +336,7 @@ export default class BasicMessageEditor extends React.Component {
         // not really, but we could not serialize the parts, and just change the autoCompleter
         partCreator.setAutoCompleteCreator(autoCompleteCreator(
             () => this._autocompleteRef,
-            query => {
-                return new Promise(resolve => this.setState({query}, resolve));
-                // if setState
-                // if (this.state.query === query) {
-                //     return Promise.resolve();
-                // } else {
-                // }
-            },
+            query => new Promise(resolve => this.setState({query}, resolve)),
         ));
         this.historyManager = new HistoryManager(partCreator);
         // initial render of model
