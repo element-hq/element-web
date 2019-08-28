@@ -499,6 +499,7 @@ module.exports = React.createClass({
                     serverConfig={this.props.serverConfig}
                     onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
+                    showIdentityServerIfRequiredByHomeserver={true}
                     {...serverDetailsProps}
                 />;
                 break;
