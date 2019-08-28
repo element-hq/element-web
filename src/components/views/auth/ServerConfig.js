@@ -82,7 +82,12 @@ export default class ServerConfig extends React.PureComponent {
         // Always try and use the defaults first
         const defaultConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
         if (defaultConfig.hsUrl === hsUrl && defaultConfig.isUrl === isUrl) {
-            this.setState({busy: false, errorText: ""});
+            this.setState({
+                hsUrl: defaultConfig.hsUrl,
+                isUrl: defaultConfig.isUrl,
+                busy: false,
+                errorText: "",
+            });
             this.props.onServerConfigChange(defaultConfig);
             return defaultConfig;
         }
