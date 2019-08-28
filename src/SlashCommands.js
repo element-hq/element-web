@@ -139,8 +139,13 @@ export const CommandMap = {
         description: _td('Upgrades a room to a new version'),
         runFn: function(roomId, args) {
             if (args) {
-                const room = MatrixClientPeg.get().getRoom(roomId);
-                Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                const cli = MatrixClientPeg.get();
+                const room = cli.getRoom(roomId);
+                if (!room.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
+                    return reject(_t("You do not have the required permissions to use this command."));
+                }
+
+                const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
                     QuestionDialog, {
                     title: _t('Room upgrade confirmation'),
                     description: (
@@ -198,13 +203,13 @@ export const CommandMap = {
                         </div>
                     ),
                     button: _t("Upgrade"),
-                    onFinished: (confirm) => {
-                        if (!confirm) return;
-
-                        MatrixClientPeg.get().upgradeRoom(roomId, args);
-                    },
                 });
-                return success();
+
+                return success(finished.then((confirm) => {
+                    if (!confirm) return;
+
+                    return cli.upgradeRoom(roomId, args);
+                }));
             }
             return reject(this.getUsage());
         },
