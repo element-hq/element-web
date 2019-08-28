@@ -27,6 +27,8 @@ module.exports = async function signup(session, username, password, homeserver) 
         await session.replaceInputText(hsInputField, homeserver);
         const nextButton = await session.query('.mx_Login_submit');
         await nextButton.click();
+        await session.query('.mx_ServerConfig_identityServer_shown');
+        await nextButton.click();
     }
     //fill out form
     const usernameField = await session.query("#mx_RegistrationForm_username");
