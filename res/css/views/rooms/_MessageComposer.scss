@@ -129,7 +129,7 @@ limitations under the License.
 }
 
 @keyframes visualbell {
-    from { background-color: #faa; }
+    from { background-color: $visual-bell-bg-color; }
     to { background-color: $primary-bg-color; }
 }
 

@@ -284,6 +284,9 @@ class UserPillPart extends PillPart {
     }
 
     setAvatar(node) {
+        if (!this._member) {
+            return;
+        }
         const name = this._member.name || this._member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
         let avatarUrl = Avatar.avatarUrlForMember(
@@ -366,6 +369,8 @@ export class PartCreator {
     constructor(room, client, autoCompleteCreator = null) {
         this._room = room;
         this._client = client;
+        // pre-create the creator as an object even without callback so it can already be passed
+        // to PillCandidatePart (e.g. while deserializing) and set later on
         this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
     }
 

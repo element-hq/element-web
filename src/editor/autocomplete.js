@@ -33,6 +33,10 @@ export default class AutocompleteWrapperModel {
         });
     }
 
+    close() {
+        this._updateCallback({close: true});
+    }
+
     hasSelection() {
         return this._getAutocompleterComponent().hasSelection();
     }
@@ -52,9 +56,6 @@ export default class AutocompleteWrapperModel {
         } else {
             await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
-        this._updateCallback({
-            close: true,
-        });
     }
 
     onUpArrow() {
@@ -70,7 +71,7 @@ export default class AutocompleteWrapperModel {
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this._queryPart = part;
         this._queryOffset = offset;
-        this._updateQuery(part.text);
+        return this._updateQuery(part.text);
     }
 
     onComponentSelectionChange(completion) {

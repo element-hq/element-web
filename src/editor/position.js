@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import DocumentOffset from "./offset";
+
 export default class DocumentPosition {
     constructor(index, offset) {
         this._index = index;
@@ -103,5 +105,19 @@ export default class DocumentPosition {
                 offset = parts[index].text.length;
             }
         }
+    }
+
+    asOffset(model) {
+        if (this.index === -1) {
+            return new DocumentOffset(0, true);
+        }
+        let offset = 0;
+        for (let i = 0; i < this.index; ++i) {
+            offset += model.parts[i].text.length;
+        }
+        offset += this.offset;
+        const lastPart = model.parts[this.index];
+        const atEnd = offset >= lastPart.text.length;
+        return new DocumentOffset(offset, atEnd);
     }
 }
