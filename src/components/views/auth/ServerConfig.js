@@ -51,7 +51,7 @@ export default class ServerConfig extends React.PureComponent {
         submitClass: PropTypes.string,
 
         // Whether the flow this component is embedded in requires an identity
-        // server when the homeserver says it will need one.
+        // server when the homeserver says it will need one. Default false.
         showIdentityServerIfRequiredByHomeserver: PropTypes.bool,
     };
 
