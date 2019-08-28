@@ -57,6 +57,8 @@ function mockRoom(roomId, members, serverACL) {
                 }
             },
         },
+        on: () => undefined,
+        removeListener: () => undefined,
     };
 }
 

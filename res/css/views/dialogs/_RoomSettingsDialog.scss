@@ -17,19 +17,19 @@ limitations under the License.
 // ICONS
 // ==========================================================
 
-.mx_RoomSettingsDialog_settingsIcon:before {
+.mx_RoomSettingsDialog_settingsIcon::before {
     mask-image: url('$(res)/img/feather-customised/settings.svg');
 }
 
-.mx_RoomSettingsDialog_securityIcon:before {
+.mx_RoomSettingsDialog_securityIcon::before {
     mask-image: url('$(res)/img/feather-customised/lock.svg');
 }
 
-.mx_RoomSettingsDialog_rolesIcon:before {
+.mx_RoomSettingsDialog_rolesIcon::before {
     mask-image: url('$(res)/img/feather-customised/users-sm.svg');
 }
 
-.mx_RoomSettingsDialog_warningIcon:before {
+.mx_RoomSettingsDialog_warningIcon::before {
     mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
 }
 

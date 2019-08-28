@@ -1,5 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +19,6 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
-import EmailAddresses from "../../EmailAddresses";
-import PhoneNumbers from "../../PhoneNumbers";
 import Field from "../../../elements/Field";
 import * as languageHandler from "../../../../../languageHandler";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
@@ -26,19 +26,96 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
-const PlatformPeg = require("../../../../../PlatformPeg");
-const sdk = require('../../../../..');
-const Modal = require("../../../../../Modal");
-const dis = require("../../../../../dispatcher");
+import PropTypes from "prop-types";
+import {THEMES} from "../../../../../themes";
+import PlatformPeg from "../../../../../PlatformPeg";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import sdk from "../../../../..";
+import Modal from "../../../../../Modal";
+import dis from "../../../../../dispatcher";
+import {Service, startTermsFlow} from "../../../../../Terms";
+import {SERVICE_TYPES} from "matrix-js-sdk";
+import IdentityAuthClient from "../../../../../IdentityAuthClient";
+import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 
 export default class GeneralUserSettingsTab extends React.Component {
+    static propTypes = {
+        closeSettingsFn: PropTypes.func.isRequired,
+    };
+
     constructor() {
         super();
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+            haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
+            serverRequiresIdServer: null,
+            idServerHasUnsignedTerms: false,
+            requiredPolicyInfo: {       // This object is passed along to a component for handling
+                hasTerms: false,
+                // policiesAndServices, // From the startTermsFlow callback
+                // agreedUrls,          // From the startTermsFlow callback
+                // resolve,             // Promise resolve function for startTermsFlow callback
+            },
         };
+
+        this.dispatcherRef = dis.register(this._onAction);
+    }
+
+    async componentWillMount() {
+        const serverRequiresIdServer = await MatrixClientPeg.get().doesServerRequireIdServerParam();
+        this.setState({serverRequiresIdServer});
+
+        // Check to see if terms need accepting
+        this._checkTerms();
+    }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    _onAction = (payload) => {
+        if (payload.action === 'id_server_changed') {
+            this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
+            this._checkTerms();
+        }
+    };
+
+    async _checkTerms() {
+        if (!this.state.haveIdServer) {
+            this.setState({idServerHasUnsignedTerms: false});
+            return;
+        }
+
+        // By starting the terms flow we get the logic for checking which terms the user has signed
+        // for free. So we might as well use that for our own purposes.
+        const authClient = new IdentityAuthClient();
+        const idAccessToken = await authClient.getAccessToken(/*check=*/false);
+        startTermsFlow([new Service(
+            SERVICE_TYPES.IS,
+            MatrixClientPeg.get().getIdentityServerUrl(),
+            idAccessToken,
+        )], (policiesAndServices, agreedUrls, extraClassNames) => {
+            return new Promise((resolve, reject) => {
+               this.setState({
+                   idServerName: abbreviateUrl(MatrixClientPeg.get().getIdentityServerUrl()),
+                   requiredPolicyInfo: {
+                       hasTerms: true,
+                       policiesAndServices,
+                       agreedUrls,
+                       resolve,
+                   },
+               });
+            });
+        }).then(() => {
+            // User accepted all terms
+            this.setState({
+                requiredPolicyInfo: {
+                    hasTerms: false,
+                },
+            });
+        });
     }
 
     _onLanguageChange = (newLanguage) => {
@@ -87,7 +164,11 @@ export default class GeneralUserSettingsTab extends React.Component {
     };
 
     _onDeactivateClicked = () => {
-        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {});
+        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {
+            onFinished: (success) => {
+                if (success) this.props.closeSettingsFn();
+            },
+        });
     };
 
     _renderProfileSection() {
@@ -101,6 +182,10 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderAccountSection() {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
+        const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
+        const Spinner = sdk.getComponent("views.elements.Spinner");
+
         const passwordChangeForm = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
@@ -110,6 +195,20 @@ export default class GeneralUserSettingsTab extends React.Component {
                 onFinished={this._onPasswordChanged} />
         );
 
+        let threepidSection = null;
+
+        if (this.state.haveIdServer || this.state.serverRequiresIdServer === false) {
+            threepidSection = <div>
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                <EmailAddresses />
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                <PhoneNumbers />
+            </div>;
+        } else if (this.state.serverRequiresIdServer === null) {
+            threepidSection = <Spinner />;
+        }
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
@@ -117,12 +216,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     {_t("Set a new account password...")}
                 </p>
                 {passwordChangeForm}
-
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers />
+                {threepidSection}
             </div>
         );
     }
@@ -145,10 +239,57 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Light theme")}</option>
-                    <option value="dark">{_t("Dark theme")}</option>
+                    {Object.entries(THEMES).map(([theme, text]) => {
+                        return <option key={theme} value={theme}>{_t(text)}</option>;
+                    })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
+            </div>
+        );
+    }
+
+    _renderDiscoverySection() {
+        const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
+
+        if (this.state.requiredPolicyInfo.hasTerms) {
+            const InlineTermsAgreement = sdk.getComponent("views.terms.InlineTermsAgreement");
+            const intro = <span className="mx_SettingsTab_subsectionText">
+                {_t(
+                    "Agree to the identity server (%(serverName)s) Terms of Service to " +
+                    "allow yourself to be discoverable by email address or phone number.",
+                    {serverName: this.state.idServerName},
+                )}
+            </span>;
+            return (
+                <div>
+                    <InlineTermsAgreement
+                        policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
+                        agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
+                        onFinished={this.state.requiredPolicyInfo.resolve}
+                        introElement={intro}
+                    />
+                    { /* has its own heading as it includes the current ID server */ }
+                    <SetIdServer missingTerms={true} />
+                </div>
+            );
+        }
+
+        const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
+        const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
+
+        const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
+            <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+            <EmailAddresses />
+
+            <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+            <PhoneNumbers />
+        </div> : null;
+
+        return (
+            <div className="mx_SettingsTab_section">
+                {threepidSection}
+                { /* has its own heading as it includes the current ID server */ }
+                <SetIdServer />
             </div>
         );
     }
@@ -168,7 +309,24 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
+    _renderIntegrationManagerSection() {
+        const SetIntegrationManager = sdk.getComponent("views.settings.SetIntegrationManager");
+
+        return (
+            <div className="mx_SettingsTab_section">
+                { /* has its own heading as it includes the current integration manager */ }
+                <SetIntegrationManager />
+            </div>
+        );
+    }
+
     render() {
+        const discoWarning = this.state.requiredPolicyInfo.hasTerms
+            ? <img className='mx_GeneralUserSettingsTab_warningIcon'
+                src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
+                width="18" height="18" alt={_t("Warning")} />
+            : null;
+
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
@@ -176,6 +334,10 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
                 {this._renderThemeSection()}
+                <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
+                {this._renderDiscoverySection()}
+                {this._renderIntegrationManagerSection() /* Has its own title */}
+                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
                 {this._renderManagementSection()}
             </div>
         );

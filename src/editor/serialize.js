@@ -15,19 +15,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function htmlSerialize(model) {
+import Markdown from '../Markdown';
+
+export function mdSerialize(model) {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
             case "newline":
-                return html + "<br />";
+                return html + "\n";
             case "plain":
+            case "command":
             case "pill-candidate":
+            case "at-room-pill":
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `<a href="https://matrix.to/#/${part.resourceId}">${part.text}</a>`;
+                return html + `[${part.text}](https://matrix.to/#/${part.resourceId})`;
         }
     }, "");
+}
+
+export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
+    const md = mdSerialize(model);
+    const parser = new Markdown(md);
+    if (!parser.isPlainText() || forceHTML) {
+        return parser.toHTML();
+    }
 }
 
 export function textSerialize(model) {
@@ -36,7 +48,9 @@ export function textSerialize(model) {
             case "newline":
                 return text + "\n";
             case "plain":
+            case "command":
             case "pill-candidate":
+            case "at-room-pill":
                 return text + part.text;
             case "room-pill":
             case "user-pill":
@@ -45,16 +59,18 @@ export function textSerialize(model) {
     }, "");
 }
 
-export function requiresHtml(model) {
-    return model.parts.some(part => {
-        switch (part.type) {
-            case "newline":
-            case "plain":
-            case "pill-candidate":
-                return false;
-            case "room-pill":
-            case "user-pill":
-                return true;
-        }
-    });
+export function containsEmote(model) {
+    const firstPart = model.parts[0];
+    // part type will be "plain" while editing,
+    // and "command" while composing a message.
+    return firstPart &&
+        (firstPart.type === "plain" || firstPart.type === "command") &&
+        firstPart.text.startsWith("/me ");
+}
+
+export function stripEmoteCommand(model) {
+    // trim "/me "
+    model = model.clone();
+    model.removeText({index: 0, offset: 0}, 4);
+    return model;
 }

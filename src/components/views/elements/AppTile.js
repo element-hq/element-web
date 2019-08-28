@@ -1,6 +1,7 @@
-/**
+/*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import url from 'url';
 import qs from 'querystring';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import AccessibleButton from './AccessibleButton';
 import Modal from '../../../Modal';
@@ -35,6 +33,8 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -139,7 +139,10 @@ export default class AppTile extends React.Component {
     }
 
     componentWillMount() {
-        this.setScalarToken();
+        // Only fetch IM token on mount if we're showing and have permission to load
+        if (this.props.show && this.state.hasPermissionToLoad) {
+            this.setScalarToken();
+        }
     }
 
     componentDidMount() {
@@ -153,7 +156,7 @@ export default class AppTile extends React.Component {
 
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
-            ActiveWidgetStore.destroyPersistentWidget();
+            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }
@@ -164,8 +167,6 @@ export default class AppTile extends React.Component {
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
-        this.setState({initialising: true});
-
         if (!WidgetUtils.isScalarUrl(this.props.url)) {
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
@@ -176,9 +177,22 @@ export default class AppTile extends React.Component {
             return;
         }
 
+        const managers = IntegrationManagers.sharedInstance();
+        if (!managers.hasManager()) {
+            console.warn("No integration manager - not setting scalar token", url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
+            return;
+        }
+
+        // TODO: Pick the right manager for the widget
+
         // Fetch the token before loading the iframe as we need it to mangle the URL
         if (!this._scalarClient) {
-            this._scalarClient = new ScalarAuthClient();
+            this._scalarClient = managers.getPrimaryManager().getScalarClient();
         }
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param if not already present
@@ -187,7 +201,7 @@ export default class AppTile extends React.Component {
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
-                // u.search must be set to undefined, so that u.format() uses query paramerters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
+                // u.search must be set to undefined, so that u.format() uses query parameters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
                 u.search = undefined;
                 u.query = params;
             }
@@ -214,11 +228,20 @@ export default class AppTile extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
             this._getNewState(nextProps);
-            this.setScalarToken();
-        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
-            this.setState({
-                loading: true,
-            });
+            // Fetch IM token for new URL if we're showing and have permission to load
+            if (this.props.show && this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
+        } else if (nextProps.show && !this.props.show) {
+            if (this.props.waitForIframeLoad) {
+                this.setState({
+                    loading: true,
+                });
+            }
+            // Fetch IM token now that we're showing if we already have permission to load
+            if (this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
         } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
@@ -240,19 +263,20 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            this._scalarClient.connect().done(() => {
-                const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room, 'type_' + this.props.type, this.props.id);
-                Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                    src: src,
-                }, "mx_IntegrationsManager");
-            }, (err) => {
-                this.setState({
-                    error: err.message,
-                });
-                console.error('Error ensuring a valid scalar_token exists', err);
-            });
+            // TODO: Open the right manager for the widget
+            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+                IntegrationManagers.sharedInstance().openAll(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            } else {
+                IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            }
         }
     }
 
@@ -416,6 +440,8 @@ export default class AppTile extends React.Component {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
         this.setState({hasPermissionToLoad: true});
+        // Now that we have permission, fetch the IM token
+        this.setScalarToken();
     }
 
     _revokeWidgetPermission() {
@@ -424,7 +450,7 @@ export default class AppTile extends React.Component {
         this.setState({hasPermissionToLoad: false});
 
         // Force the widget to be non-persistent
-        ActiveWidgetStore.destroyPersistentWidget();
+        ActiveWidgetStore.destroyPersistentWidget(this.props.id);
         const PersistedElement = sdk.getComponent("elements.PersistedElement");
         PersistedElement.destroyElement(this._persistKey);
     }
@@ -531,13 +557,24 @@ export default class AppTile extends React.Component {
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
-            if (this.state.initialising) {
+            if (!this.state.hasPermissionToLoad) {
+                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+                appTileBody = (
+                    <div className={appTileBodyClass}>
+                        <AppPermission
+                            isRoomEncrypted={isRoomEncrypted}
+                            url={this.state.widgetUrl}
+                            onPermissionGranted={this._grantWidgetPermission}
+                        />
+                    </div>
+                );
+            } else if (this.state.initialising) {
                 appTileBody = (
                     <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                         { loadingElement }
                     </div>
                 );
-            } else if (this.state.hasPermissionToLoad == true) {
+            } else {
                 if (this.isMixedContent()) {
                     appTileBody = (
                         <div className={appTileBodyClass}>
@@ -559,11 +596,10 @@ export default class AppTile extends React.Component {
                                 src={this._getSafeUrl()}
                                 allowFullScreen="true"
                                 sandbox={sandboxFlags}
-                                onLoad={this._onLoaded}
-                            ></iframe>
+                                onLoad={this._onLoaded} />
                         </div>
                     );
-                    // if the widget would be allowed to remian on screen, we must put it in
+                    // if the widget would be allowed to remain on screen, we must put it in
                     // a PersistedElement from the get-go, otherwise the iframe will be
                     // re-mounted later when we do.
                     if (this.props.whitelistCapabilities.includes('m.always_on_screen')) {
@@ -577,17 +613,6 @@ export default class AppTile extends React.Component {
                         </div>;
                     }
                 }
-            } else {
-                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-                appTileBody = (
-                    <div className={appTileBodyClass}>
-                        <AppPermission
-                            isRoomEncrypted={isRoomEncrypted}
-                            url={this.state.widgetUrl}
-                            onPermissionGranted={this._grantWidgetPermission}
-                        />
-                    </div>
-                );
             }
         }
 

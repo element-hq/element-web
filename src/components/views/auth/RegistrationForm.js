@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -51,16 +53,15 @@ module.exports = React.createClass({
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
-        // This is optional and only set if we used a server name to determine
-        // the HS URL via `.well-known` discovery. The server name is used
-        // instead of the HS URL when talking about "your account".
-        hsName: PropTypes.string,
-        hsUrl: PropTypes.string,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        canSubmit: PropTypes.bool,
+        serverRequiresIdServer: PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             onValidationChange: console.error,
+            canSubmit: true,
         };
     },
 
@@ -70,10 +71,10 @@ module.exports = React.createClass({
             fieldValid: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
-            username: "",
-            email: "",
-            phoneNumber: "",
-            password: "",
+            username: this.props.defaultUsername || "",
+            email: this.props.defaultEmail || "",
+            phoneNumber: this.props.defaultPhoneNumber || "",
+            password: this.props.defaultPassword || "",
             passwordConfirm: "",
             passwordComplexity: null,
             passwordSafe: false,
@@ -83,21 +84,34 @@ module.exports = React.createClass({
     onSubmit: async function(ev) {
         ev.preventDefault();
 
+        if (!this.props.canSubmit) return;
+
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
             return;
         }
 
         const self = this;
-        if (this.state.email == '') {
+        if (this.state.email === '') {
+            const haveIs = Boolean(this.props.serverConfig.isUrl);
+
+            let desc;
+            if (haveIs) {
+                desc = _t(
+                    "If you don't specify an email address, you won't be able to reset your password. " +
+                    "Are you sure?",
+                );
+            } else {
+                desc = _t(
+                    "No Identity Server is configured so you cannot add add an email address in order to " +
+                    "reset your password in the future.",
+                );
+            }
+
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                 title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("If you don't specify an email address, you won't be able to reset your password. " +
-                            "Are you sure?") }
-                    </div>,
+                description: desc,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (confirmed) {
@@ -383,7 +397,7 @@ module.exports = React.createClass({
     },
 
     validateUsernameRules: withValidation({
-        description: () => _t("Use letters, numbers, dashes and underscores only"),
+        description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
         rules: [
             {
                 key: "required",
@@ -422,8 +436,25 @@ module.exports = React.createClass({
         });
     },
 
+    _showEmail() {
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if ((this.props.serverRequiresIdServer && !haveIs) || !this._authStepIsUsed('m.login.email.identity')) {
+            return false;
+        }
+        return true;
+    },
+
+    _showPhoneNumber() {
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (!threePidLogin || !haveIs || !this._authStepIsUsed('m.login.msisdn')) {
+            return false;
+        }
+        return true;
+    },
+
     renderEmail() {
-        if (!this._authStepIsUsed('m.login.email.identity')) {
+        if (!this._showEmail()) {
             return null;
         }
         const Field = sdk.getComponent('elements.Field');
@@ -435,7 +466,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_EMAIL] = field}
             type="text"
             label={emailPlaceholder}
-            defaultValue={this.props.defaultEmail}
             value={this.state.email}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
@@ -449,7 +479,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PASSWORD] = field}
             type="password"
             label={_t("Password")}
-            defaultValue={this.props.defaultPassword}
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
@@ -463,7 +492,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
             label={_t("Confirm")}
-            defaultValue={this.props.defaultPassword}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
@@ -471,8 +499,7 @@ module.exports = React.createClass({
     },
 
     renderPhoneNumber() {
-        const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        if (!threePidLogin || !this._authStepIsUsed('m.login.msisdn')) {
+        if (!this._showPhoneNumber()) {
             return null;
         }
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -491,7 +518,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PHONE_NUMBER] = field}
             type="text"
             label={phoneLabel}
-            defaultValue={this.props.defaultPhoneNumber}
             value={this.state.phoneNumber}
             prefix={phoneCountry}
             onChange={this.onPhoneNumberChange}
@@ -507,7 +533,6 @@ module.exports = React.createClass({
             type="text"
             autoFocus={true}
             label={_t("Username")}
-            defaultValue={this.props.defaultUsername}
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
@@ -515,20 +540,22 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let yourMatrixAccountText = _t('Create your Matrix account');
-        if (this.props.hsName) {
-            yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-                serverName: this.props.hsName,
+        let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                // ignore
-            }
         }
 
         let editLink = null;
@@ -541,8 +568,34 @@ module.exports = React.createClass({
         }
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
+
+        let emailHelperText = null;
+        if (this._showEmail()) {
+            if (this._showPhoneNumber()) {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email or phone to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            } else {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            }
+        }
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        const noIsText = haveIs ? null : <div>
+            {_t(
+                "No Identity Server is configured: no email addreses can be added. " +
+                "You will be unable to reset your password.",
+            )}
+        </div>;
 
         return (
             <div>
@@ -562,8 +615,8 @@ module.exports = React.createClass({
                         {this.renderEmail()}
                         {this.renderPhoneNumber()}
                     </div>
-                    {_t("Use an email address to recover your account.") + " "}
-                    {_t("Other users can invite you to rooms using your contact details.")}
+                    { emailHelperText }
+                    { noIsText }
                     { registerButton }
                 </form>
             </div>

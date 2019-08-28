@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
 import { _t } from './languageHandler';
+import Promise from "bluebird";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -32,7 +32,7 @@ const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
  * Wrap an asynchronous loader function with a react component which shows a
  * spinner until the real component loads.
  */
-const AsyncWrapper = React.createClass({
+const AsyncWrapper = createReactClass({
     propTypes: {
         /** A promise which resolves with the real component
          */
@@ -156,13 +156,77 @@ class ModalManager {
         return this.createDialog(...rest);
     }
 
+    appendTrackedDialog(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialog(...rest);
+    }
+
     createDialog(Element, ...rest) {
         return this.createDialogAsync(Promise.resolve(Element), ...rest);
+    }
+
+    appendDialog(Element, ...rest) {
+        return this.appendDialogAsync(Promise.resolve(Element), ...rest);
     }
 
     createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync(...rest);
+    }
+
+    appendTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialogAsync(...rest);
+    }
+
+    _buildModal(prom, props, className) {
+        const modal = {};
+
+        // never call this from onFinished() otherwise it will loop
+        const [closeDialog, onFinishedProm] = this._getCloseFn(modal, props);
+
+        // don't attempt to reuse the same AsyncWrapper for different dialogs,
+        // otherwise we'll get confused.
+        const modalCount = this._counter++;
+
+        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
+        // property set here so you can't close the dialog from a button click!
+        modal.elem = (
+            <AsyncWrapper key={modalCount} prom={prom} {...props}
+                          onFinished={closeDialog} />
+        );
+        modal.onFinished = props ? props.onFinished : null;
+        modal.className = className;
+
+        return {modal, closeDialog, onFinishedProm};
+    }
+
+    _getCloseFn(modal, props) {
+        const deferred = Promise.defer();
+        return [(...args) => {
+            deferred.resolve(args);
+            if (props && props.onFinished) props.onFinished.apply(null, args);
+            const i = this._modals.indexOf(modal);
+            if (i >= 0) {
+                this._modals.splice(i, 1);
+            }
+
+            if (this._priorityModal === modal) {
+                this._priorityModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            if (this._staticModal === modal) {
+                this._staticModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            this._reRender();
+        }, deferred.promise];
     }
 
     /**
@@ -195,46 +259,7 @@ class ModalManager {
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const modal = {};
-
-        // never call this from onFinished() otherwise it will loop
-        //
-        const closeDialog = (...args) => {
-            if (props && props.onFinished) props.onFinished.apply(null, args);
-            const i = this._modals.indexOf(modal);
-            if (i >= 0) {
-                this._modals.splice(i, 1);
-            }
-
-            if (this._priorityModal === modal) {
-                this._priorityModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            if (this._staticModal === modal) {
-                this._staticModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            this._reRender();
-        };
-
-        // don't attempt to reuse the same AsyncWrapper for different dialogs,
-        // otherwise we'll get confused.
-        const modalCount = this._counter++;
-
-        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
-        // property set here so you can't close the dialog from a button click!
-        modal.elem = (
-            <AsyncWrapper key={modalCount} prom={prom} {...props}
-                onFinished={closeDialog} />
-        );
-        modal.onFinished = props ? props.onFinished : null;
-        modal.className = className;
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
 
         if (isPriorityModal) {
             // XXX: This is destructive
@@ -247,7 +272,21 @@ class ModalManager {
         }
 
         this._reRender();
-        return {close: closeDialog};
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
+    }
+
+    appendDialogAsync(prom, props, className) {
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
+
+        this._modals.push(modal);
+        this._reRender();
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
     }
 
     closeAll() {

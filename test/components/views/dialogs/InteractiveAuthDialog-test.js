@@ -18,7 +18,7 @@ import expect from 'expect';
 import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import sinon from 'sinon';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 
@@ -97,18 +97,15 @@ describe('InteractiveAuthDialog', function() {
             ReactTestUtils.Simulate.submit(formNode, {});
 
             expect(doRequest.callCount).toEqual(1);
-            expect(doRequest.calledWithExactly({
+            expect(doRequest.calledWithMatch({
                 session: "sess",
                 type: "m.login.password",
                 password: "s3kr3t",
-                user: "@user:id",
+                identifier: {
+                    type: "m.id.user",
+                    user: "@user:id",
+                },
             })).toBe(true);
-
-            // there should now be a spinner
-            ReactTestUtils.findRenderedComponentWithType(
-                dlg, sdk.getComponent('elements.Spinner'),
-            );
-
             // let the request complete
             return Promise.delay(1);
         }).then(() => {

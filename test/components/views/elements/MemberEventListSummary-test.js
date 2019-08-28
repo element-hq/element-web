@@ -1,6 +1,6 @@
 import expect from 'expect';
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import sdk from 'matrix-react-sdk';
 import * as languageHandler from '../../../../src/languageHandler';
 import * as testUtils from '../../../test-utils';
@@ -494,7 +494,14 @@ describe('MemberEventListSummary', function() {
                 membership: "leave",
                 senderId: "@some_other_user:some.domain",
             },
-            // default = left
+            // default for sender=target (leave)
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: "????",
+                membership: "leave",
+                senderId: "@user_1:some.domain",
+            },
+            // default for sender<>target (kicked)
             {
                 userId: "@user_1:some.domain",
                 prevMembership: "????",
@@ -520,7 +527,7 @@ describe('MemberEventListSummary', function() {
 
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
-            "had their invitation withdrawn, was unbanned, was kicked and left",
+            "had their invitation withdrawn, was unbanned, was kicked, left and was kicked",
         );
     });
 

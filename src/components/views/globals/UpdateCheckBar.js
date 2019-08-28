@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2017, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import PlatformPeg from '../../../PlatformPeg';
 import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
 export default React.createClass({
     propTypes: {
-        status: React.PropTypes.string.isRequired,
+        status: PropTypes.string.isRequired,
         // Currently for error detail but will be usable for download progress
         // once that is a thing that squirrel passes through electron.
-        detail: React.PropTypes.string,
+        detail: PropTypes.string,
     },
 
     getDefaultProps: function() {

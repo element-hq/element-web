@@ -1,5 +1,8 @@
 module.exports = {
     "extends": "stylelint-config-standard",
+    "plugins": [
+        "stylelint-scss",
+    ],
     "rules": {
         "indentation": 4,
         "comment-empty-line-before": null,
@@ -11,5 +14,10 @@ module.exports = {
         "number-no-trailing-zeros": null,
         "number-leading-zero": null,
         "selector-list-comma-newline-after": null,
+        "at-rule-no-unknown": null,
+        "scss/at-rule-no-unknown": [true, {
+            // https://github.com/vector-im/riot-web/issues/10544
+            "ignoreAtRules": ["define-mixin"],
+        }],
     }
 }

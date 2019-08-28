@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AccessibleButton:focus {
-    outline: 0;
-}
-
 .mx_AccessibleButton {
     cursor: pointer;
+}
+
+.mx_AccessibleButton:focus {
+    outline: 0;
 }
 
 .mx_AccessibleButton_disabled {
@@ -78,4 +78,23 @@ limitations under the License.
 .mx_AccessibleButton_kind_danger_sm.mx_AccessibleButton_disabled {
     color: $button-danger-disabled-fg-color;
     background-color: $button-danger-disabled-bg-color;
+}
+
+.mx_AccessibleButton_kind_link {
+    color: $button-link-fg-color;
+    background-color: $button-link-bg-color;
+}
+
+.mx_AccessibleButton_kind_link.mx_AccessibleButton_disabled {
+    opacity: 0.4;
+}
+
+.mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_link_sm {
+    padding: 5px 12px;
+    color: $button-link-fg-color;
+    background-color: $button-link-bg-color;
+}
+
+.mx_AccessibleButton_kind_link_sm.mx_AccessibleButton_disabled {
+    opacity: 0.4;
 }

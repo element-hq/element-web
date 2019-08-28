@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
@@ -30,6 +29,7 @@ import * as Rooms from '../../../Rooms';
 import * as RoomNotifs from '../../../RoomNotifs';
 import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
+import RoomViewStore from '../../../stores/RoomViewStore';
 
 module.exports = React.createClass({
     displayName: 'RoomTileContextMenu',
@@ -158,8 +158,12 @@ module.exports = React.createClass({
 
     _onClickForget: function() {
         // FIXME: duplicated with RoomSettings (and dead code in RoomView)
-        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
-            dis.dispatch({ action: 'view_next_room' });
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(() => {
+            // Switch to another room view if we're currently viewing the
+            // historical room
+            if (RoomViewStore.getRoomId() === this.props.room.roomId) {
+                dis.dispatch({ action: 'view_next_room' });
+            }
         }, function(err) {
             const errCode = err.errcode || _td("unknown error code");
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -369,25 +373,27 @@ module.exports = React.createClass({
     render: function() {
         const myMembership = this.props.room.getMyMembership();
 
-        // Can't set notif level or tags on non-join rooms
-        if (myMembership !== 'join') {
-            return <div>
-                { this._renderLeaveMenu(myMembership) }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderSettingsMenu() }
-            </div>;
+        switch (myMembership) {
+            case 'join':
+                return <div>
+                    { this._renderNotifMenu() }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderLeaveMenu(myMembership) }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderRoomTagMenu() }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderSettingsMenu() }
+                </div>;
+            case 'invite':
+                return <div>
+                    { this._renderLeaveMenu(myMembership) }
+                </div>;
+            default:
+                return <div>
+                    { this._renderLeaveMenu(myMembership) }
+                    <hr className="mx_RoomTileContextMenu_separator" />
+                    { this._renderSettingsMenu() }
+                </div>;
         }
-
-        return (
-            <div>
-                { this._renderNotifMenu() }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderLeaveMenu(myMembership) }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderRoomTagMenu() }
-                <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderSettingsMenu() }
-            </div>
-        );
     },
 });

@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
@@ -277,6 +277,11 @@ module.exports = React.createClass({
                     ? _t("%(severalUsers)schanged their avatar %(count)s times", { severalUsers: "", count: repeats })
                     : _t("%(oneUser)schanged their avatar %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "no_change":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)smade no changes %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)smade no changes %(count)s times", { oneUser: "", count: repeats });
+                break;
         }
 
         return res;
@@ -308,6 +313,11 @@ module.exports = React.createClass({
      * if a transition is not recognised.
      */
     _getTransition: function(e) {
+        if (e.mxEvent.getType() === 'm.room.third_party_invite') {
+            // Handle 3pid invites the same as invites so they get bundled together
+            return 'invited';
+        }
+
         switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
@@ -321,7 +331,7 @@ module.exports = React.createClass({
                         return 'changed_avatar';
                     }
                     // console.log("MELS ignoring duplicate membership join event");
-                    return null;
+                    return 'no_change';
                 } else {
                     return 'joined';
                 }
@@ -335,8 +345,8 @@ module.exports = React.createClass({
                 switch (e.mxEvent.getPrevContent().membership) {
                     case 'invite': return 'invite_withdrawal';
                     case 'ban': return 'unbanned';
-                    case 'join': return 'kicked';
-                    default: return 'left';
+                    // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                    default: return 'kicked';
                 }
             default: return null;
         }
@@ -422,9 +432,17 @@ module.exports = React.createClass({
                 userEvents[userId] = [];
                 if (e.target) avatarMembers.push(e.target);
             }
+
+            let displayName = userId;
+            if (e.getType() === 'm.room.third_party_invite') {
+                displayName = e.getContent().display_name;
+            } else if (e.target) {
+                displayName = e.target.name;
+            }
+
             userEvents[userId].push({
                 mxEvent: e,
-                displayName: (e.target ? e.target.name : null) || userId,
+                displayName,
                 index: index,
             });
         });

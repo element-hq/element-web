@@ -63,6 +63,7 @@ class LifecycleStore extends Store {
                 dis.dispatch(deferredAction);
                 break;
             }
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
                 break;

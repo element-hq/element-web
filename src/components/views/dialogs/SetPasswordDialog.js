@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
@@ -60,10 +63,10 @@ const WarmFuzzy = function(props) {
  *
  * On success, `onFinished()` when finished
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'SetPasswordDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

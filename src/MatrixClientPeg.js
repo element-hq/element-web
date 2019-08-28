@@ -32,6 +32,7 @@ import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
+import IdentityAuthClient from './IdentityAuthClient';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -51,6 +52,7 @@ interface MatrixClientCreds {
 class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
+        this._justRegisteredUserId = null;
 
         // These are the default options used when when the
         // client is started in 'start'. These can be altered
@@ -85,6 +87,31 @@ class MatrixClientPeg {
         MatrixActionCreators.stop();
     }
 
+    /*
+     * If we've registered a user ID we set this to the ID of the
+     * user we've just registered. If they then go & log in, we
+     * can send them to the welcome user (obviously this doesn't
+     * guarentee they'll get a chat with the welcome user).
+     *
+     * @param {string} uid The user ID of the user we've just registered
+     */
+    setJustRegisteredUserId(uid) {
+        this._justRegisteredUserId = uid;
+    }
+
+    /*
+     * Returns true if the current user has just been registered by this
+     * client as determined by setJustRegisteredUserId()
+     *
+     * @returns {bool} True if user has just been registered
+     */
+    currentUserIsJustRegistered() {
+        return (
+            this.matrixClient &&
+            this.matrixClient.credentials.userId === this._justRegisteredUserId
+        );
+    }
+
     /**
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
@@ -94,7 +121,7 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    async start() {
+    async assign() {
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
@@ -105,7 +132,7 @@ class MatrixClientPeg {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
                     this.matrixClient.store = new Matrix.MemoryStore({
-                      localStorage: global.localStorage,
+                        localStorage: global.localStorage,
                     });
                 } else {
                     console.error('Failed to start memory store!', err);
@@ -119,7 +146,7 @@ class MatrixClientPeg {
         // try to initialise e2e on the new client
         try {
             // check that we have a version of the js-sdk which includes initCrypto
-            if (this.matrixClient.initCrypto) {
+            if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
                 StorageManager.setCryptoInitialised(true);
             }
@@ -146,6 +173,12 @@ class MatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
 
+        return opts;
+    }
+
+    async start() {
+        const opts = await this.assign();
+
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);
         console.log(`MatrixClientPeg: MatrixClient started`);
@@ -167,7 +200,7 @@ class MatrixClientPeg {
      * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
      */
-    getHomeServerName() {
+    getHomeserverName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
@@ -176,9 +209,6 @@ class MatrixClientPeg {
     }
 
     _createClient(creds: MatrixClientCreds) {
-        const aggregateRelations = SettingsStore.isFeatureEnabled("feature_reactions");
-        const enableEdits = SettingsStore.isFeatureEnabled("feature_message_editing");
-
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -187,8 +217,10 @@ class MatrixClientPeg {
             deviceId: creds.deviceId,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
+            fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
             verificationMethods: [verificationMethods.SAS],
-            unstableClientRelationAggregation: aggregateRelations || enableEdits,
+            unstableClientRelationAggregation: true,
+            identityServer: new IdentityAuthClient(),
         };
 
         this.matrixClient = createMatrixClient(opts);

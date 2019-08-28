@@ -25,7 +25,7 @@ module.exports = React.createClass({
 
     propTypes: {
         onChange: PropTypes.func,
-        selected_users: PropTypes.arrayOf(React.PropTypes.string),
+        selected_users: PropTypes.arrayOf(PropTypes.string),
     },
 
     getDefaultProps: function() {

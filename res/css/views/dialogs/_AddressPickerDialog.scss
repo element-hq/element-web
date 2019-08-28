@@ -17,8 +17,7 @@ limitations under the License.
 
 /* Using a textarea for this element, to circumvent autofill */
 .mx_AddressPickerDialog_input,
-.mx_AddressPickerDialog_input:focus
-{
+.mx_AddressPickerDialog_input:focus {
     height: 26px;
     font-size: 14px;
     font-family: $font-family;
@@ -36,7 +35,7 @@ limitations under the License.
 }
 
 .mx_AddressPickerDialog .mx_Dialog_content {
-    min-height: 50px
+    min-height: 50px;
 }
 
 .mx_AddressPickerDialog_inputContainer {

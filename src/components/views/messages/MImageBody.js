@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
-Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -172,8 +172,8 @@ export default class MImageBody extends React.Component {
         // thumbnail resolution will be unnecessarily reduced.
         // custom timeline widths seems preferable.
         const pixelRatio = window.devicePixelRatio;
-        const thumbWidth = 800 * pixelRatio;
-        const thumbHeight = 600 * pixelRatio;
+        const thumbWidth = Math.round(800 * pixelRatio);
+        const thumbHeight = Math.round(600 * pixelRatio);
 
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -264,6 +264,7 @@ export default class MImageBody extends React.Component {
                     decryptedBlob = blob;
                     return URL.createObjectURL(blob);
                 }).then((contentUrl) => {
+                    if (this.unmounted) return;
                     this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
@@ -271,6 +272,7 @@ export default class MImageBody extends React.Component {
                     });
                 });
             }).catch((err) => {
+                if (this.unmounted) return;
                 console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({

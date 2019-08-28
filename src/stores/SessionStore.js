@@ -68,6 +68,7 @@ class SessionStore extends Store {
                     cachedPassword: null,
                 });
                 break;
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this._setState({
                     cachedPassword: null,

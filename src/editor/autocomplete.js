@@ -15,40 +15,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {UserPillPart, RoomPillPart, PlainPart} from "./parts";
-
 export default class AutocompleteWrapperModel {
-    constructor(updateCallback, getAutocompleterComponent, updateQuery, room) {
+    constructor(updateCallback, getAutocompleterComponent, updateQuery, partCreator) {
         this._updateCallback = updateCallback;
         this._getAutocompleterComponent = getAutocompleterComponent;
         this._updateQuery = updateQuery;
+        this._partCreator = partCreator;
         this._query = null;
-        this._room = room;
     }
 
     onEscape(e) {
         this._getAutocompleterComponent().onEscape(e);
         this._updateCallback({
-            replacePart: new PlainPart(this._queryPart.text),
+            replacePart: this._partCreator.plain(this._queryPart.text),
             caretOffset: this._queryOffset,
             close: true,
         });
+    }
+
+    close() {
+        this._updateCallback({close: true});
+    }
+
+    hasSelection() {
+        return this._getAutocompleterComponent().hasSelection();
     }
 
     onEnter() {
         this._updateCallback({close: true});
     }
 
-    onTab() {
-        //forceCompletion here?
+    async onTab(e) {
+        const acComponent = this._getAutocompleterComponent();
+
+        if (acComponent.countCompletions() === 0) {
+            // Force completions to show for the text currently entered
+            await acComponent.forceComplete();
+            // Select the first item by moving "down"
+            await acComponent.moveSelection(+1);
+        } else {
+            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
+        }
     }
 
     onUpArrow() {
-        this._getAutocompleterComponent().onUpArrow();
+        this._getAutocompleterComponent().moveSelection(-1);
     }
 
     onDownArrow() {
-        this._getAutocompleterComponent().onDownArrow();
+        this._getAutocompleterComponent().moveSelection(+1);
     }
 
     onPartUpdate(part, offset) {
@@ -56,7 +71,7 @@ export default class AutocompleteWrapperModel {
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this._queryPart = part;
         this._queryOffset = offset;
-        this._updateQuery(part.text);
+        return this._updateQuery(part.text);
     }
 
     onComponentSelectionChange(completion) {
@@ -80,21 +95,22 @@ export default class AutocompleteWrapperModel {
     }
 
     _partForCompletion(completion) {
-        const firstChr = completion.completionId && completion.completionId[0];
+        const {completionId} = completion;
+        const text = completion.completion;
+        const firstChr = completionId && completionId[0];
         switch (firstChr) {
             case "@": {
-                const displayName = completion.completion;
-                const userId = completion.completionId;
-                const member = this._room.getMember(userId);
-                return new UserPillPart(userId, displayName, member);
+                if (completionId === "@room") {
+                    return this._partCreator.atRoomPill(completionId);
+                } else {
+                    return this._partCreator.userPill(text, completionId);
+                }
             }
-            case "#": {
-                const displayAlias = completion.completionId;
-                return new RoomPillPart(displayAlias);
-            }
-            // also used for emoji completion
+            case "#":
+                return this._partCreator.roomPill(completionId);
+            // used for emoji and command completion replacement
             default:
-                return new PlainPart(completion.completion);
+                return this._partCreator.plain(text);
         }
     }
 }

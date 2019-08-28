@@ -145,6 +145,7 @@ function remoteRender(event) {
     a.target = data.target;
     a.download = data.download;
     a.style = data.style;
+    a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
     a.href = window.URL.createObjectURL(data.blob);
     a.appendChild(img);
     a.appendChild(document.createTextNode(data.textContent));

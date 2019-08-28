@@ -24,13 +24,13 @@ import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
 import sdk from '../../../index';
-import SdkConfig from '../../../SdkConfig';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -45,10 +45,10 @@ module.exports = React.createClass({
         hide: PropTypes.bool, // If rendered, should apps drawer be visible
     },
 
-    defaultProps: {
+    getDefaultProps: () => ({
         showApps: true,
         hide: false,
-    },
+    }),
 
     getInitialState: function() {
         return {
@@ -63,20 +63,6 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        this.scalarClient = null;
-        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
-            this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().then(() => {
-                this.forceUpdate();
-            }).catch((e) => {
-                console.log('Failed to connect to integrations server');
-                // TODO -- Handle Scalar errors
-                //     this.setState({
-                //         scalar_error: err,
-                //     });
-            });
-        }
-
         this.dispatcherRef = dis.register(this.onAction);
     },
 
@@ -143,17 +129,11 @@ module.exports = React.createClass({
     },
 
     _launchManageIntegrations: function() {
-        const IntegrationsManager = sdk.getComponent('views.settings.IntegrationsManager');
-        this.scalarClient.connect().done(() => {
-            const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room, 'add_integ') :
-                null;
-            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                src: src,
-            }, 'mx_IntegrationsManager');
-        }, (err) => {
-            console.error('Error ensuring a valid scalar_token exists', err);
-        });
+        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll();
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
+        }
     },
 
     onClickAddWidget: function(e) {

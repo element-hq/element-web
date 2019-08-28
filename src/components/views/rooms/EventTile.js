@@ -1,6 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,11 +29,10 @@ const Modal = require('../../../Modal');
 
 const sdk = require('../../../index');
 const TextForEvent = require('../../../TextForEvent');
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -83,13 +84,10 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = withMatrixClient(React.createClass({
+module.exports = React.createClass({
     displayName: 'EventTile',
 
     propTypes: {
-        /* MatrixClient instance for sender verification etc */
-        matrixClient: PropTypes.object.isRequired,
-
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
 
@@ -130,7 +128,7 @@ module.exports = withMatrixClient(React.createClass({
         onHeightChanged: PropTypes.func,
 
         /* a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'. */
-        readReceipts: PropTypes.arrayOf(React.PropTypes.object),
+        readReceipts: PropTypes.arrayOf(PropTypes.object),
 
         /* opaque readreceipt info for each userId; used by ReadReceiptMarker
          * to manage its animations. Should be an empty object when the room
@@ -190,6 +188,10 @@ module.exports = withMatrixClient(React.createClass({
         };
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    },
+
     componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
@@ -198,10 +200,10 @@ module.exports = withMatrixClient(React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
-        if (this.props.showReactions && SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (this.props.showReactions) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
         }
     },
@@ -223,10 +225,10 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     componentWillUnmount: function() {
-        const client = this.props.matrixClient;
+        const client = this.context.matrixClient;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
-        if (this.props.showReactions && SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
         }
     },
@@ -252,7 +254,7 @@ module.exports = withMatrixClient(React.createClass({
             return;
         }
 
-        const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
+        const verified = await this.context.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
         }, () => {
@@ -310,11 +312,11 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.props.matrixClient.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.matrixClient.getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === this.props.matrixClient.credentials.userId) {
+        if (this.props.mxEvent.getSender() === this.context.matrixClient.credentials.userId) {
             return false;
         }
 
@@ -403,7 +405,7 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onCryptoClicked: function(e) {
+    onCryptoClick: function(e) {
         const event = this.props.mxEvent;
 
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
@@ -422,7 +424,7 @@ module.exports = withMatrixClient(React.createClass({
         // Cancel any outgoing key request for this event and resend it. If a response
         // is received for the request with the required keys, the event could be
         // decrypted successfully.
-        this.props.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
+        this.context.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
     },
 
     onPermalinkClicked: function(e) {
@@ -439,7 +441,7 @@ module.exports = withMatrixClient(React.createClass({
 
     _renderE2EPadlock: function() {
         const ev = this.props.mxEvent;
-        const props = {onClick: this.onCryptoClicked};
+        const props = {onClick: this.onCryptoClick};
 
         // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
@@ -455,7 +457,7 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+        if (this.context.matrixClient.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
@@ -489,8 +491,7 @@ module.exports = withMatrixClient(React.createClass({
     getReactions() {
         if (
             !this.props.showReactions ||
-            !this.props.getRelationsForEvent ||
-            !SettingsStore.isFeatureEnabled("feature_reactions")
+            !this.props.getRelationsForEvent
         ) {
             return null;
         }
@@ -520,13 +521,20 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (
+        let isInfoMessage = (
             eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
-        if (!tileHandler && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        // If we're showing hidden events in the timeline, we should use the
+        // source tile when there's no regular tile for an event and also for
+        // replace relations (which otherwise would display as a confusing
+        // duplicate of the thing they are replacing).
+        const useSource = !tileHandler || this.props.mxEvent.isRelation("m.replace");
+        if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
             tileHandler = "messages.ViewSourceEvent";
+            // Reuse info message avatar and sender profile styling
+            isInfoMessage = true;
         }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -545,13 +553,14 @@ module.exports = withMatrixClient(React.createClass({
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
+        const isEditing = !!this.props.editState;
         const classes = classNames({
             mx_EventTile: true,
-            mx_EventTile_isEditing: this.props.isEditing,
+            mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
             mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
-            mx_EventTile_sending: isSending,
+            mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
             mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
@@ -625,7 +634,7 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
-        const actionBar = !this.props.isEditing ? <MessageActionBar
+        const actionBar = !isEditing ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
             permalinkCreator={this.props.permalinkCreator}
@@ -662,17 +671,17 @@ module.exports = withMatrixClient(React.createClass({
                 {'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a>},
             );
 
-        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
+        const TooltipButton = sdk.getComponent('elements.TooltipButton');
         const keyRequestInfo = isEncryptionFailure ?
             <div className="mx_EventTile_keyRequestInfo">
                 <span className="mx_EventTile_keyRequestInfo_text">
                     { keyRequestInfoContent }
                 </span>
-                <ToolTipButton helpText={keyRequestHelpText} />
+                <TooltipButton helpText={keyRequestHelpText} />
             </div> : null;
 
         let reactionsRow;
-        if (SettingsStore.isFeatureEnabled("feature_reactions")) {
+        if (!isRedacted) {
             const ReactionsRow = sdk.getComponent('messages.ReactionsRow');
             reactionsRow = <ReactionsRow
                 mxEvent={this.props.mxEvent}
@@ -682,7 +691,7 @@ module.exports = withMatrixClient(React.createClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
-                const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+                const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
@@ -787,7 +796,7 @@ module.exports = withMatrixClient(React.createClass({
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            replacingEventId={this.props.replacingEventId}
-                                           isEditing={this.props.isEditing}
+                                           editState={this.props.editState}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
@@ -797,7 +806,7 @@ module.exports = withMatrixClient(React.createClass({
                             { actionBar }
                         </div>
                         {
-                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // The avatar goes after the event tile as it's absolutely positioned to be over the
                             // event tile line, so needs to be later in the DOM so it appears on top (this avoids
                             // the need for further z-indexing chaos)
                         }
@@ -807,7 +816,7 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
     },
-}));
+});
 
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = ['m.room.message', 'm.sticker'];
@@ -818,6 +827,9 @@ function isMessageEvent(ev) {
 module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
+
+    // No tile for replacement events since they update the original tile
+    if (e.isRelation("m.replace")) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;

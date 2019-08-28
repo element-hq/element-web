@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,7 +43,6 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AddWidget_button {
     order: 2;
     cursor: pointer;
-    padding-right: 12px;
     padding: 0;
     margin: 5px auto 5px auto;
     color: $accent-color;
@@ -198,7 +198,7 @@ $AppsDrawerBodyHeight: 273px;
     border-radius: 2px;
 }
 
-.mx_AppTileBody{
+.mx_AppTileBody {
     height: $AppsDrawerBodyHeight;
     width: 100%;
     overflow: hidden;
@@ -234,7 +234,7 @@ $AppsDrawerBodyHeight: 273px;
     background-color: $lightbox-bg-color;
     border: 1px solid rgba(0, 0, 0, 0);
     width: 200px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 3px;
     margin: 5px;
@@ -248,7 +248,7 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppIconTile:hover {
     border: 1px solid $accent-color;
-    box-shadow: 0 0 10px 5px rgba(200,200,200,0.5);
+    box-shadow: 0 0 10px 5px rgba(200, 200, 200, 0.5);
 }
 
 .mx_AppIconTile_content {
@@ -270,9 +270,8 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppIconTile_image {
     padding: 10px;
-    width: 75%;
-    max-width:100px;
-    max-height:100px;
+    max-width: 100px;
+    max-height: 100px;
     width: auto;
     height: auto;
 }
@@ -312,7 +311,7 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarningText {
-    max-width: 400px;
+    max-width: 90%;
     margin: 10px auto 10px auto;
     color: $primary-fg-color;
 }
@@ -323,7 +322,12 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarningTextURL {
+    display: inline-block;
+    max-width: 100%;
     color: $accent-color;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mx_AppPermissionButton {
@@ -361,11 +365,11 @@ form.mx_Custom_Widget_Form div {
 }
 
 @keyframes mx_AppLoading_spinner_fadeIn_animation {
-    from { opacity: 0 }
-    to { opacity: 1 }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 
 .mx_AppLoading iframe {
-  display: none;
+    display: none;
 }

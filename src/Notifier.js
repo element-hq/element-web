@@ -85,7 +85,11 @@ const Notifier = {
             msg = '';
         }
 
-        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop') : null;
+        let avatarUrl = null;
+        if (ev.sender && !SettingsStore.getValue("lowBandwidth")) {
+            avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop');
+        }
+
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
@@ -96,10 +100,55 @@ const Notifier = {
         }
     },
 
-    _playAudioNotification: function(ev, room) {
-        const e = document.getElementById("messageAudio");
-        if (e) {
-            e.play();
+    getSoundForRoom: async function(roomId) {
+        // We do no caching here because the SDK caches setting
+        // and the browser will cache the sound.
+        const content = SettingsStore.getValue("notificationSound", roomId);
+        if (!content) {
+            return null;
+        }
+
+        if (!content.url) {
+            console.warn(`${roomId} has custom notification sound event, but no url key`);
+            return null;
+        }
+        
+        if (!content.url.startsWith("mxc://")) {
+            console.warn(`${roomId} has custom notification sound event, but url is not a mxc url`);
+            return null;
+        }
+
+        // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
+
+        return {
+            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            name: content.name,
+            type: content.type,
+            size: content.size,
+        };
+    },
+
+    _playAudioNotification: async function(ev, room) {
+        const sound = await this.getSoundForRoom(room.roomId);
+        console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
+
+        try {
+            const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
+            let audioElement = selector;
+            if (!selector) {
+                if (!sound) {
+                    console.error("No audio element or sound to play for notification");
+                    return;
+                }
+                audioElement = new Audio(sound.url);
+                if (sound.type) {
+                    audioElement.type = sound.type;
+                }
+                document.body.appendChild(audioElement);
+            }
+            audioElement.play();
+        } catch (ex) {
+            console.warn("Caught error when trying to fetch room notification sound:", ex);
         }
     },
 

@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -176,6 +177,9 @@ export default class ReplyThread extends React.Component {
     componentWillMount() {
         this.unmounted = false;
         this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
+        this.room.on("Room.redaction", this.onRoomRedaction);
+        // same event handler as Room.redaction as for both we just do forceUpdate
+        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
         this.initialize();
     }
 
@@ -185,7 +189,20 @@ export default class ReplyThread extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
+        if (this.room) {
+            this.room.removeListener("Room.redaction", this.onRoomRedaction);
+            this.room.removeListener("Room.redactionCancelled", this.onRoomRedaction);
+        }
     }
+
+    onRoomRedaction = (ev, room) => {
+        if (this.unmounted) return;
+
+        // If one of the events we are rendering gets redacted, force a re-render
+        if (this.state.events.some(event => event.getId() === ev.getId())) {
+            this.forceUpdate();
+        }
+    };
 
     async initialize() {
         const {parentEv} = this.props;
@@ -298,11 +315,13 @@ export default class ReplyThread extends React.Component {
 
             return <blockquote className="mx_ReplyThread" key={ev.getId()}>
                 { dateSep }
-                <EventTile mxEvent={ev}
-                           tileShape="reply"
-                           onHeightChanged={this.props.onHeightChanged}
-                           permalinkCreator={this.props.permalinkCreator}
-                           isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
+                <EventTile
+                    mxEvent={ev}
+                    tileShape="reply"
+                    onHeightChanged={this.props.onHeightChanged}
+                    permalinkCreator={this.props.permalinkCreator}
+                    isRedacted={ev.isRedacted()}
+                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </blockquote>;
         });
 

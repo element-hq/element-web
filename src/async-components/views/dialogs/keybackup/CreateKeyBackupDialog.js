@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
@@ -48,7 +49,7 @@ function selectText(target) {
  * Walks the user through the process of creating an e2e key backup
  * on the server.
  */
-export default React.createClass({
+export default createReactClass({
     getInitialState: function() {
         return {
             phase: PHASE_PASSPHRASE,

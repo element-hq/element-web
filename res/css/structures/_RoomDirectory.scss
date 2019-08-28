@@ -35,13 +35,6 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_RoomDirectory .gm-scroll-view {
-    // little hack because gemini doesn't seem to detect
-    // the scrollbar width well in this instance
-    // when using css scrollbars
-    scrollbar-width: thin;
-}
-
 .mx_RoomDirectory_createRoom {
     background-color: $button-bg-color;
     border-radius: 4px;

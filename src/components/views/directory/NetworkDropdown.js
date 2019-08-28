@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
 
@@ -37,7 +39,7 @@ export default class NetworkDropdown extends React.Component {
 
         this.inputTextBox = null;
 
-        const server = MatrixClientPeg.getHomeServerName();
+        const server = MatrixClientPeg.getHomeserverName();
         this.state = {
             expanded: false,
             selectedServer: server,
@@ -138,8 +140,8 @@ export default class NetworkDropdown extends React.Component {
             servers = servers.concat(roomDirectory.servers);
         }
 
-        if (!servers.includes(MatrixClientPeg.getHomeServerName())) {
-            servers.unshift(MatrixClientPeg.getHomeServerName());
+        if (!servers.includes(MatrixClientPeg.getHomeserverName())) {
+            servers.unshift(MatrixClientPeg.getHomeserverName());
         }
 
         // For our own HS, we can use the instance_ids given in the third party protocols
@@ -148,7 +150,7 @@ export default class NetworkDropdown extends React.Component {
         // we can only show the default room list.
         for (const server of servers) {
             options.push(this._makeMenuOption(server, null, true));
-            if (server === MatrixClientPeg.getHomeServerName()) {
+            if (server === MatrixClientPeg.getHomeserverName()) {
                 options.push(this._makeMenuOption(server, null, false));
                 if (this.props.protocols) {
                     for (const proto of Object.keys(this.props.protocols)) {
@@ -241,10 +243,10 @@ export default class NetworkDropdown extends React.Component {
 }
 
 NetworkDropdown.propTypes = {
-    onOptionChange: React.PropTypes.func.isRequired,
-    protocols: React.PropTypes.object,
+    onOptionChange: PropTypes.func.isRequired,
+    protocols: PropTypes.object,
     // The room directory config. May have a 'servers' key that is a list of server names to include in the dropdown
-    config: React.PropTypes.object,
+    config: PropTypes.object,
 };
 
 NetworkDropdown.defaultProps = {

@@ -98,10 +98,12 @@ export default class TopLeftMenuButton extends React.Component {
     render() {
         const name = this._getDisplayName();
         let nameElement;
+        let chevronElement;
         if (!this.props.collapsed) {
             nameElement = <div className="mx_TopLeftMenuButton_name">
                 { name }
             </div>;
+            chevronElement = <span className="mx_TopLeftMenuButton_chevron" />;
         }
 
         return (
@@ -121,7 +123,7 @@ export default class TopLeftMenuButton extends React.Component {
                     resizeMethod="crop"
                 />
                 { nameElement }
-                <span className="mx_TopLeftMenuButton_chevron" />
+                { chevronElement }
             </AccessibleButton>
         );
     }

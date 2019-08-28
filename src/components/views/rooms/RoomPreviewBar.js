@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -54,11 +56,18 @@ module.exports = React.createClass({
         // If invited by 3rd party invite, the email address the invite was sent to
         invitedEmail: PropTypes.string,
 
+        // For third party invites, information passed about the room out-of-band
+        oobData: PropTypes.object,
+
+        // For third party invites, a URL for a 3pid invite signing service
+        signUrl: PropTypes.string,
+
         // A standard client/server API error object. If supplied, indicates that the
         // caller was unable to fetch details about the room for the given reason.
         error: PropTypes.object,
 
         canPreview: PropTypes.bool,
+        previewLoading: PropTypes.bool,
         room: PropTypes.object,
 
         // When a spinner is present, a spinnerState can be specified to indicate the
@@ -87,20 +96,35 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._checkInvitedEmail();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
+            this._checkInvitedEmail();
+        }
+    },
+
+    _checkInvitedEmail: async function() {
         // If this is an invite and we've been told what email
         // address was invited, fetch the user's list of Threepids
         // so we can check them against the one that was invited
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
-            MatrixClientPeg.get().lookupThreePid(
-                'email', this.props.invitedEmail,
-            ).finally(() => {
-                this.setState({busy: false});
-            }).done((result) => {
+            try {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                const result = await MatrixClientPeg.get().lookupThreePid(
+                    'email',
+                    this.props.invitedEmail,
+                    undefined /* callback */,
+                    identityAccessToken,
+                );
                 this.setState({invitedEmailMxid: result.mxid});
-            }, (err) => {
+            } catch (err) {
                 this.setState({threePidFetchError: err});
-            });
+            }
+            this.setState({busy: false});
         }
     },
 
@@ -215,15 +239,30 @@ module.exports = React.createClass({
         return memberContent.membership === "invite" && memberContent.is_direct;
     },
 
+    _makeScreenAfterLogin() {
+        return {
+            screen: 'room',
+            params: {
+                email: this.props.invitedEmail,
+                signurl: this.props.signUrl,
+                room_name: this.props.oobData.room_name,
+                room_avatar_url: this.props.oobData.avatarUrl,
+                inviter_name: this.props.oobData.inviterName,
+            }
+        };
+    },
+
     onLoginClick: function() {
-        dis.dispatch({ action: 'start_login' });
+        dis.dispatch({ action: 'start_login', screenAfterLogin: this._makeScreenAfterLogin() });
     },
 
     onRegisterClick: function() {
-        dis.dispatch({ action: 'start_registration' });
+        dis.dispatch({ action: 'start_registration', screenAfterLogin: this._makeScreenAfterLogin() });
     },
 
     render: function() {
+        const Spinner = sdk.getComponent('elements.Spinner');
+
         let showSpinner = false;
         let darkStyle = false;
         let title;
@@ -232,6 +271,7 @@ module.exports = React.createClass({
         let primaryActionLabel;
         let secondaryActionHandler;
         let secondaryActionLabel;
+        let footer;
 
         const messageCase = this._getMessageCase();
         switch (messageCase) {
@@ -257,13 +297,21 @@ module.exports = React.createClass({
                 primaryActionHandler = this.onRegisterClick;
                 secondaryActionLabel = _t("Sign In");
                 secondaryActionHandler = this.onLoginClick;
+                if (this.props.previewLoading) {
+                    footer = (
+                        <div>
+                            <Spinner w={20} h={20}/>
+                            {_t("Loading room preview")}
+                        </div>
+                    );
+                }
                 break;
             }
             case MessageCase.Kicked: {
                 const {memberName, reason} = this._getKickOrBanInfo();
                 title = _t("You were kicked from %(roomName)s by %(memberName)s",
                     {memberName, roomName: this._roomName()});
-                subTitle = _t("Reason: %(reason)s", {reason});
+                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
 
                 if (this._joinRule() === "invite") {
                     primaryActionLabel = _t("Forget this room");
@@ -280,7 +328,7 @@ module.exports = React.createClass({
                 const {memberName, reason} = this._getKickOrBanInfo();
                 title = _t("You were banned from %(roomName)s by %(memberName)s",
                     {memberName, roomName: this._roomName()});
-                subTitle = _t("Reason: %(reason)s", {reason});
+                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
                 primaryActionLabel = _t("Forget this room");
                 primaryActionHandler = this.props.onForgetClick;
                 break;
@@ -335,7 +383,7 @@ module.exports = React.createClass({
             }
             case MessageCase.Invite: {
                 const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
-                const avatar = <RoomAvatar room={this.props.room} />;
+                const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
 
                 const inviteMember = this._getInviteMember();
                 let inviterElement;
@@ -403,7 +451,6 @@ module.exports = React.createClass({
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Spinner = sdk.getComponent('elements.Spinner');
 
         let subTitleElements;
         if (subTitle) {
@@ -453,6 +500,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
                     { primaryButton }
+                </div>
+                <div className="mx_RoomPreviewBar_footer">
+                    { footer }
                 </div>
             </div>
         );

@@ -27,6 +27,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -102,7 +103,8 @@ export default class WidgetUtils {
 
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
+            const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
+            if (defaultManager) scalarUrls = [defaultManager.apiUrl];
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
@@ -339,6 +341,41 @@ export default class WidgetUtils {
     }
 
     /**
+     * Get all integration manager widgets for this user.
+     * @returns {Object[]} An array of integration manager user widgets.
+     */
+    static getIntegrationManagerWidgets() {
+        const widgets = WidgetUtils.getUserWidgetsArray();
+        return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
+    }
+
+    static removeIntegrationManagerWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
+        Object.entries(userWidgets).forEach(([key, widget]) => {
+            if (widget.content && widget.content.type === "m.integration_manager") {
+                delete userWidgets[key];
+            }
+        });
+        return client.setAccountData('m.widgets', userWidgets);
+    }
+
+    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
+        return WidgetUtils.setUserWidget(
+            "integration_manager_" + (new Date().getTime()),
+            "m.integration_manager",
+            uiUrl,
+            "Integration Manager: " + name,
+            {"api_url": apiUrl},
+        );
+    }
+
+    /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
@@ -347,7 +384,9 @@ export default class WidgetUtils {
         if (!client) {
             throw new Error('User not logged in');
         }
-        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === 'm.stickerpicker') {
                 delete userWidgets[key];

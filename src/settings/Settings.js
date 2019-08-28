@@ -23,9 +23,11 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
+import LowBandwidthController from "./controllers/LowBandwidthController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
+const LEVELS_ROOM_OR_ACCOUNT = ['room-account', 'account'];
 const LEVELS_ROOM_SETTINGS_WITH_ROOM = ['device', 'room-device', 'room-account', 'account', 'config', 'room'];
 const LEVELS_ACCOUNT_SETTINGS = ['device', 'account', 'config'];
 const LEVELS_FEATURE = ['device', 'config'];
@@ -100,12 +102,6 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_room_breadcrumbs": {
-        isFeature: true,
-        displayName: _td("Show recent room avatars above the room list"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_tags": {
         isFeature: true,
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
@@ -118,15 +114,16 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_message_editing": {
+    "feature_cider_composer": {
         isFeature: true,
-        displayName: _td("Edit messages after they have been sent (refresh to apply changes)"),
+        displayName: _td("Use the new, faster, but still experimental composer " +
+            "for writing messages (requires refresh)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_reactions": {
+    "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("React to messages with emoji (refresh to apply changes)"),
+        displayName: _td("Multiple integration managers"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -327,6 +324,10 @@ export const SETTINGS = {
         default: false,
         controller: new NotificationsEnabledController(),
     },
+    "notificationSound": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
+    },
     "notificationBodyEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
@@ -368,9 +369,29 @@ export const SETTINGS = {
         displayName: _td('Order rooms in the room list by most important first instead of most recent'),
         default: true,
     },
+    "breadcrumbs": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show recently visited rooms above the room list"),
+        default: true,
+    },
     "showHiddenEventsInTimeline": {
         displayName: _td("Show hidden events in timeline"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
+    },
+    "lowBandwidth": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td('Low bandwidth mode'),
+        default: false,
+        controller: new LowBandwidthController(),
+    },
+    "fallbackICEServerAllowed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td(
+            "Allow fallback call assist server turn.matrix.org when your homeserver " +
+            "does not offer one (your IP address would be shared during a call)",
+        ),
+        // This is a tri-state value, where `null` means "prompt the user".
+        default: null,
     },
 };

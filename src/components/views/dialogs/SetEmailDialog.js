@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Email from '../../../email';
@@ -29,7 +30,7 @@ import Modal from '../../../Modal';
  *
  * On success, `onFinished(true)` is called.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'SetEmailDialog',
     propTypes: {
         onFinished: PropTypes.func.isRequired,

@@ -22,7 +22,6 @@ limitations under the License.
 .mx_RoomHeader_wrapper {
     margin: auto;
     height: 52px;
-    align-items: center;
     display: flex;
     align-items: center;
     min-width: 0;
@@ -107,7 +106,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_settingsHint {
-    color: $settings-grey-fg-color ! important;
+    color: $settings-grey-fg-color !important;
 }
 
 .mx_RoomHeader_searchStatus {
@@ -134,17 +133,17 @@ limitations under the License.
 }
 
 .mx_RoomHeader_placeholder {
-    color: $settings-grey-fg-color ! important;
+    color: $settings-grey-fg-color !important;
 }
 
 .mx_RoomHeader_editable {
-    border-bottom: 1px solid $strong-input-border-color ! important;
+    border-bottom: 1px solid $strong-input-border-color !important;
     min-width: 150px;
     cursor: text;
 }
 
 .mx_RoomHeader_editable:focus {
-    border-bottom: 1px solid $accent-color ! important;
+    border-bottom: 1px solid $accent-color !important;
     outline: none;
     box-shadow: none;
 }

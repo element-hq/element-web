@@ -187,7 +187,7 @@ describe('GroupView', function() {
             const avatarImgElement = ReactDOM.findDOMNode(img);
             expect(avatarImgElement).toBeTruthy();
             expect(avatarImgElement.src).toContain(
-                'https://my.home.server/_matrix/media/v1/thumbnail/' +
+                'https://my.home.server/_matrix/media/r0/thumbnail/' +
                 'someavatarurl?width=28&height=28&method=crop',
             );
 
@@ -265,7 +265,7 @@ describe('GroupView', function() {
             expect(longDescElement.innerHTML).toContain('<ul>');
             expect(longDescElement.innerHTML).toContain('<li>And lists!</li>');
 
-            const imgSrc = "https://my.home.server/_matrix/media/v1/thumbnail/someimageurl?width=800&amp;height=600";
+            const imgSrc = "https://my.home.server/_matrix/media/r0/thumbnail/someimageurl?width=800&amp;height=600";
             expect(longDescElement.innerHTML).toContain('<img src="' + imgSrc + '">');
         });
 

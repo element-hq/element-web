@@ -44,10 +44,10 @@ limitations under the License.
     top: 0;
 }
 
-.mx_ToggleSwitch:not(.mx_ToggleSwitch_on) > .mx_ToggleSwitch_ball {
-    left: 2px;
-}
-
 .mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
     left: 23px; // 48px switch - 20px ball - 5px padding = 23px
+}
+
+.mx_ToggleSwitch:not(.mx_ToggleSwitch_on) > .mx_ToggleSwitch_ball {
+    left: 2px;
 }

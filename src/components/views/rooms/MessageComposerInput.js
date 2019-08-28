@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,7 +45,6 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
-import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 import ContentMessages from '../../../ContentMessages';
 
@@ -60,10 +60,11 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
+import {findEditableEvent} from '../../../utils/EventUtils';
+import SlateComposerHistoryManager from "../../../SlateComposerHistoryManager";
+import TypingStore from "../../../stores/TypingStore";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
-
-const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
 
 // the Slate node type to default to for unstyled text
 const DEFAULT_NODE = 'paragraph';
@@ -140,7 +141,7 @@ export default class MessageComposerInput extends React.Component {
 
     client: MatrixClient;
     autocomplete: Autocomplete;
-    historyManager: ComposerHistoryManager;
+    historyManager: SlateComposerHistoryManager;
 
     constructor(props, context) {
         super(props, context);
@@ -330,7 +331,7 @@ export default class MessageComposerInput extends React.Component {
 
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        this.historyManager = new SlateComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
@@ -423,73 +424,6 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onTypingActivity() {
-        this.isTyping = true;
-        if (!this.userTypingTimer) {
-            this.sendTyping(true);
-        }
-        this.startUserTypingTimer();
-        this.startServerTypingTimer();
-    }
-
-    onFinishedTyping() {
-        this.isTyping = false;
-        this.sendTyping(false);
-        this.stopUserTypingTimer();
-        this.stopServerTypingTimer();
-    }
-
-    startUserTypingTimer() {
-        this.stopUserTypingTimer();
-        const self = this;
-        this.userTypingTimer = setTimeout(function() {
-            self.isTyping = false;
-            self.sendTyping(self.isTyping);
-            self.userTypingTimer = null;
-        }, TYPING_USER_TIMEOUT);
-    }
-
-    stopUserTypingTimer() {
-        if (this.userTypingTimer) {
-            clearTimeout(this.userTypingTimer);
-            this.userTypingTimer = null;
-        }
-    }
-
-    startServerTypingTimer() {
-        if (!this.serverTypingTimer) {
-            const self = this;
-            this.serverTypingTimer = setTimeout(function() {
-                if (self.isTyping) {
-                    self.sendTyping(self.isTyping);
-                    self.startServerTypingTimer();
-                }
-            }, TYPING_SERVER_TIMEOUT / 2);
-        }
-    }
-
-    stopServerTypingTimer() {
-        if (this.serverTypingTimer) {
-            clearTimeout(this.serverTypingTimer);
-            this.serverTypingTimer = null;
-        }
-    }
-
-    sendTyping(isTyping) {
-        if (!SettingsStore.getValue('sendTypingNotifications')) return;
-        MatrixClientPeg.get().sendTyping(
-            this.props.room.roomId,
-            this.isTyping, TYPING_SERVER_TIMEOUT,
-        ).done();
-    }
-
-    refreshTyping() {
-        if (this.typingTimeout) {
-            clearTimeout(this.typingTimeout);
-            this.typingTimeout = null;
-        }
-    }
-
     onChange = (change: Change, originalEditorState?: Value) => {
         let editorState = change.value;
 
@@ -520,9 +454,9 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (Plain.serialize(editorState) !== '') {
-            this.onTypingActivity();
+            TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, true);
         } else {
-            this.onFinishedTyping();
+            TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, false);
         }
 
         if (editorState.startText !== null) {
@@ -534,21 +468,24 @@ export default class MessageComposerInput extends React.Component {
                 // The first matched group includes just the matched plaintext emoji
                 const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emoticonMatch) {
-                    const data = EMOJIBASE.find(e => e.emoticon === emoticonMatch[1]);
-                    const unicodeEmoji = data ? data.unicode : '';
+                    const query = emoticonMatch[1].toLowerCase().replace("-", "");
+                    const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
 
-                    const range = Range.create({
-                        anchor: {
-                            key: editorState.startText.key,
-                            offset: currentStartOffset - emoticonMatch[1].length - 1,
-                        },
-                        focus: {
-                            key: editorState.startText.key,
-                            offset: currentStartOffset - 1,
-                        },
-                    });
-                    change = change.insertTextAtRange(range, unicodeEmoji);
-                    editorState = change.value;
+                    // only perform replacement if we found a match, otherwise we would be not letting user type
+                    if (data) {
+                        const range = Range.create({
+                            anchor: {
+                                key: editorState.startText.key,
+                                offset: currentStartOffset - emoticonMatch[1].length - 1,
+                            },
+                            focus: {
+                                key: editorState.startText.key,
+                                offset: currentStartOffset - 1,
+                            },
+                        });
+                        change = change.insertTextAtRange(range, data.unicode);
+                        editorState = change.value;
+                    }
                 }
             }
         }
@@ -671,6 +608,23 @@ export default class MessageComposerInput extends React.Component {
 
     onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
         this.suppressAutoComplete = false;
+        this.direction = '';
+
+        // Navigate autocomplete list with arrow keys
+        if (this.autocomplete.countCompletions() > 0) {
+            if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
+                switch (ev.keyCode) {
+                    case KeyCode.UP:
+                        this.autocomplete.moveSelection(-1);
+                        ev.preventDefault();
+                        return true;
+                    case KeyCode.DOWN:
+                        this.autocomplete.moveSelection(+1);
+                        ev.preventDefault();
+                        return true;
+                }
+            }
+        }
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
@@ -678,8 +632,6 @@ export default class MessageComposerInput extends React.Component {
             this.direction = 'Previous';
         } else if (ev.keyCode === KeyCode.RIGHT) {
             this.direction = 'Next';
-        } else {
-            this.direction = '';
         }
 
         switch (ev.keyCode) {
@@ -990,6 +942,12 @@ export default class MessageComposerInput extends React.Component {
             return change.insertText('\n');
         }
 
+        if (this.autocomplete.hasSelection()) {
+            this.autocomplete.hide();
+            ev.preventDefault();
+            return true;
+        }
+
         const editorState = this.state.editorState;
 
         const lastBlock = editorState.blocks.last();
@@ -1109,10 +1067,7 @@ export default class MessageComposerInput extends React.Component {
         let sendHtmlFn = ContentHelpers.makeHtmlMessage;
         let sendTextFn = ContentHelpers.makeTextMessage;
 
-        this.historyManager.save(
-            editorState,
-            this.state.isRichTextEnabled ? 'rich' : 'markdown',
-        );
+        this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
 
         if (commandText && commandText.startsWith('/me')) {
             if (replyingToEv) {
@@ -1173,37 +1128,43 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
-        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
-            return;
-        }
+        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
 
-        // Select history only if we are not currently auto-completing
-        if (this.autocomplete.state.completionList.length === 0) {
-            const selection = this.state.editorState.selection;
+        const shouldSelectHistory = e.altKey;
+        const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
 
+        if (shouldSelectHistory) {
+            // Try select composer history
+            const selected = this.selectHistory(up);
+            if (selected) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+            }
+        } else if (shouldEditLastMessage) {
             // selection must be collapsed
+            const selection = this.state.editorState.selection;
             if (!selection.isCollapsed) return;
-            const document = this.state.editorState.document;
-
             // and we must be at the edge of the document (up=start, down=end)
+            const document = this.state.editorState.document;
             if (up) {
                 if (!selection.anchor.isAtStartOfNode(document)) return;
             } else {
                 if (!selection.anchor.isAtEndOfNode(document)) return;
             }
 
-            const selected = this.selectHistory(up);
-            if (selected) {
+            const editEvent = findEditableEvent(this.props.room, false);
+            if (editEvent) {
                 // We're selecting history, so prevent the key event from doing anything else
                 e.preventDefault();
+                dis.dispatch({
+                    action: 'edit_event',
+                    event: editEvent,
+                });
             }
-        } else {
-            this.moveAutocompleteSelection(up);
-            e.preventDefault();
         }
     };
 
-    selectHistory = async (up) => {
+    selectHistory = (up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
@@ -1256,21 +1217,17 @@ export default class MessageComposerInput extends React.Component {
             someCompletions: null,
         });
         e.preventDefault();
-        if (this.autocomplete.state.completionList.length === 0) {
+        if (this.autocomplete.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             const completionCount = await this.autocomplete.forceComplete();
             this.setState({
                 someCompletions: completionCount > 0,
             });
             // Select the first item by moving "down"
-            await this.moveAutocompleteSelection(false);
+            await this.autocomplete.moveSelection(+1);
         } else {
-            await this.moveAutocompleteSelection(e.shiftKey);
+            await this.autocomplete.moveSelection(e.shiftKey ? -1 : +1);
         }
-    };
-
-    moveAutocompleteSelection = (up) => {
-        up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
     onEscape = async (e) => {

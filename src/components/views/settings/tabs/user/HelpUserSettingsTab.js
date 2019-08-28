@@ -135,11 +135,27 @@ export default class HelpUserSettingsTab extends React.Component {
                 <ul>
                     <li>
                         The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noopener" target="_blank">
-                        default cover photo</a> is (C)&nbsp;
+                        default cover photo</a> is ©&nbsp;
                         <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
                         <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">
-                        CC-BY-SA 4.0</a>. No warranties are given.
+                        CC-BY-SA 4.0</a>.
+                    </li>
+                    <li>
+                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noopener" target="_blank">
+                        twemoji-colr</a> font is ©&nbsp;
+                        <a href="https://mozilla.org" rel="noopener" target="_blank">Mozilla Foundation</a>{' '}
+                        used under the terms of&nbsp;
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noopener" target="_blank">
+                        Apache 2.0</a>.
+                    </li>
+                    <li>
+                        The <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">
+                        Twemoji</a> emoji art is ©&nbsp;
+                        <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">Twitter, Inc and other
+                        contributors</a> used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener" target="_blank">
+                        CC-BY 4.0</a>.
                     </li>
                 </ul>
             </div>

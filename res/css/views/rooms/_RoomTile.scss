@@ -25,6 +25,11 @@ limitations under the License.
     position: relative;
 }
 
+.mx_RoomTile:focus {
+    filter: none !important;
+    background-color: $roomtile-focused-bg-color;
+}
+
 .mx_RoomTile_menuButton {
     display: none;
     flex: 0 0 16px;
@@ -34,20 +39,12 @@ limitations under the License.
     background-position: center;
 }
 
-// toggle menuButton and badge on hover/menu displayed
-.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
-    .mx_RoomTile_menuButton {
-        display: block;
-    }
-}
-
 .mx_RoomTile_tooltip {
     display: inline-block;
     position: relative;
     top: -54px;
     left: -12px;
 }
-
 
 .mx_RoomTile_nameContainer {
     display: flex;
@@ -109,9 +106,18 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
+.mx_RoomTile_badge {
+    flex: 0 1 content;
+    border-radius: 0.8em;
+    padding: 0 0.4em;
+    color: $accent-fg-color;
+    font-weight: 600;
+    font-size: 12px;
+}
+
 .collapsed {
     .mx_RoomTile {
-        margin: 0 2px;
+        margin: 0 6px;
         padding: 0 2px;
         position: relative;
         justify-content: center;
@@ -135,13 +141,12 @@ limitations under the License.
     }
 }
 
-.mx_RoomTile_badge {
-    flex: 0 1 content;
-    border-radius: 0.8em;
-    padding: 0 0.4em;
-    color: $accent-fg-color;
-    font-weight: 600;
-    font-size: 12px;
+// toggle menuButton and badge on hover/menu displayed
+.mx_RoomTile_menuDisplayed,
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
+    .mx_RoomTile_menuButton {
+        display: block;
+    }
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge,
@@ -150,8 +155,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge,
-.mx_RoomTile_badge.mx_RoomTile_badgeRed
-{
+.mx_RoomTile_badge.mx_RoomTile_badgeRed {
     background-color: $warning-color;
 }
 
@@ -174,11 +178,6 @@ limitations under the License.
 
 .mx_DNDRoomTile_dragging {
     transform: scale(1.05, 1.05);
-}
-
-.mx_RoomTile:focus {
-    filter: none !important;
-    background-color: $roomtile-focused-bg-color;
 }
 
 .mx_RoomTile_arrow {

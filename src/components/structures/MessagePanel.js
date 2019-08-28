@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/* global Velocity */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -28,6 +30,8 @@ import SettingsStore from '../../settings/SettingsStore';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
+
+const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType() === 'm.room.third_party_invite';
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -51,6 +55,10 @@ module.exports = React.createClass({
 
         // ID of an event to highlight. If undefined, no event will be highlighted.
         highlightedEventId: PropTypes.string,
+
+        // The room these events are all in together, if any.
+        // (The notification panel won't have a room here, for example.)
+        room: PropTypes.object,
 
         // Should we show URL Previews
         showUrlPreview: PropTypes.bool,
@@ -115,9 +123,47 @@ module.exports = React.createClass({
         // to manage its animations
         this._readReceiptMap = {};
 
+        // Track read receipts by event ID. For each _shown_ event ID, we store
+        // the list of read receipts to display:
+        //   [
+        //       {
+        //           userId: string,
+        //           member: RoomMember,
+        //           ts: number,
+        //       },
+        //   ]
+        // This is recomputed on each render. It's only stored on the component
+        // for ease of passing the data around since it's computed in one pass
+        // over all events.
+        this._readReceiptsByEvent = {};
+
+        // Track read receipts by user ID. For each user ID we've ever shown a
+        // a read receipt for, we store an object:
+        //   {
+        //       lastShownEventId: string,
+        //       receipt: {
+        //           userId: string,
+        //           member: RoomMember,
+        //           ts: number,
+        //       },
+        //   }
+        // so that we can always keep receipts displayed by reverting back to
+        // the last shown event for that user ID when needed. This may feel like
+        // it duplicates the receipt storage in the room, but at this layer, we
+        // are tracking _shown_ event IDs, which the JS SDK knows nothing about.
+        // This is recomputed on each render, using the data from the previous
+        // render as our fallback for any user IDs we can't match a receipt to a
+        // displayed event in the current render cycle.
+        this._readReceiptsByUserId = {};
+
         // Remember the read marker ghost node so we can do the cleanup that
         // Velocity requires
         this._readMarkerGhostNode = null;
+
+        // Cache hidden events setting on mount since Settings is expensive to
+        // query, and we check this in a hot code path.
+        this._showHiddenEventsInTimeline =
+            SettingsStore.getValue("showHiddenEventsInTimeline");
 
         this._isMounted = true;
     },
@@ -234,6 +280,13 @@ module.exports = React.createClass({
         }
     },
 
+    scrollToEventIfNeeded: function(eventId) {
+        const node = this.eventNodes[eventId];
+        if (node) {
+            node.scrollIntoView({block: "nearest", behavior: "instant"});
+        }
+    },
+
     /* check the scroll state and send out pagination requests if necessary.
      */
     checkFillState: function() {
@@ -252,7 +305,7 @@ module.exports = React.createClass({
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        if (this._showHiddenEventsInTimeline) {
             return true;
         }
 
@@ -318,7 +371,10 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
-        const isMembershipChange = (e) => e.getType() === 'm.room.member';
+        this._readReceiptsByEvent = {};
+        if (this.props.showReadReceipts) {
+            this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
+        }
 
         for (i = 0; i < this.props.events.length; i++) {
             const mxEv = this.props.events[i];
@@ -387,7 +443,7 @@ module.exports = React.createClass({
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
-                    // timestamp of the current event, and no DateSeperator is inserted.
+                    // timestamp of the current event, and no DateSeparator is inserted.
                     return this._getTilesForEvent(e, e, e === lastShownEvent);
                 }).reduce((a, b) => a.concat(b));
 
@@ -461,7 +517,8 @@ module.exports = React.createClass({
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
 
-        const isEditing = this.props.editEvent && this.props.editEvent.getId() === mxEv.getId();
+        const isEditing = this.props.editState &&
+            this.props.editState.getEvent().getId() === mxEv.getId();
         // is this a continuation of the previous message?
         let continuation = false;
 
@@ -518,10 +575,8 @@ module.exports = React.createClass({
         // Local echos have a send "status".
         const scrollToken = mxEv.status ? undefined : eventId;
 
-        let readReceipts;
-        if (this.props.showReadReceipts) {
-            readReceipts = this._getReadReceiptsForEvent(mxEv);
-        }
+        const readReceipts = this._readReceiptsByEvent[eventId];
+
         ret.push(
             <li key={eventId}
                 ref={this._collectEventNode.bind(this, eventId)}
@@ -531,13 +586,13 @@ module.exports = React.createClass({
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
                     replacingEventId={mxEv.replacingEventId()}
-                    isEditing={isEditing}
+                    editState={isEditing && this.props.editState}
                     onHeightChanged={this._onHeightChanged}
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
                     showUrlPreview={this.props.showUrlPreview}
                     checkUnmounting={this._isUnmounting}
-                    eventSendStatus={mxEv.replacementOrOwnStatus()}
+                    eventSendStatus={mxEv.getAssociatedStatus()}
                     tileShape={this.props.tileShape}
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}
@@ -561,13 +616,13 @@ module.exports = React.createClass({
         return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
     },
 
-    // get a list of read receipts that should be shown next to this event
+    // Get a list of read receipts that should be shown next to this event
     // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
     _getReadReceiptsForEvent: function(event) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get list of read receipts, sorted most recent first
-        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        const { room } = this.props;
         if (!room) {
             return null;
         }
@@ -586,10 +641,65 @@ module.exports = React.createClass({
                 ts: r.data ? r.data.ts : 0,
             });
         });
+        return receipts;
+    },
 
-        return receipts.sort((r1, r2) => {
-            return r2.ts - r1.ts;
-        });
+    // Get an object that maps from event ID to a list of read receipts that
+    // should be shown next to that event. If a hidden event has read receipts,
+    // they are folded into the receipts of the last shown event.
+    _getReadReceiptsByShownEvent: function() {
+        const receiptsByEvent = {};
+        const receiptsByUserId = {};
+
+        let lastShownEventId;
+        for (const event of this.props.events) {
+            if (this._shouldShowEvent(event)) {
+                lastShownEventId = event.getId();
+            }
+            if (!lastShownEventId) {
+                continue;
+            }
+
+            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
+            const newReceipts = this._getReadReceiptsForEvent(event);
+            receiptsByEvent[lastShownEventId] = existingReceipts.concat(newReceipts);
+
+            // Record these receipts along with their last shown event ID for
+            // each associated user ID.
+            for (const receipt of newReceipts) {
+                receiptsByUserId[receipt.userId] = {
+                    lastShownEventId,
+                    receipt,
+                };
+            }
+        }
+
+        // It's possible in some cases (for example, when a read receipt
+        // advances before we have paginated in the new event that it's marking
+        // received) that we can temporarily not have a matching event for
+        // someone which had one in the last. By looking through our previous
+        // mapping of receipts by user ID, we can cover recover any receipts
+        // that would have been lost by using the same event ID from last time.
+        for (const userId in this._readReceiptsByUserId) {
+            if (receiptsByUserId[userId]) {
+                continue;
+            }
+            const { lastShownEventId, receipt } = this._readReceiptsByUserId[userId];
+            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
+            receiptsByEvent[lastShownEventId] = existingReceipts.concat(receipt);
+            receiptsByUserId[userId] = { lastShownEventId, receipt };
+        }
+        this._readReceiptsByUserId = receiptsByUserId;
+
+        // After grouping receipts by shown events, do another pass to sort each
+        // receipt list.
+        for (const eventId in receiptsByEvent) {
+            receiptsByEvent[eventId].sort((r1, r2) => {
+                return r2.ts - r1.ts;
+            });
+        }
+
+        return receiptsByEvent;
     },
 
     _getReadMarkerTile: function(visible) {
@@ -615,6 +725,7 @@ module.exports = React.createClass({
         this._readMarkerGhostNode = ghostNode;
 
         if (ghostNode) {
+            // eslint-disable-next-line new-cap
             Velocity(ghostNode, {opacity: '0', width: '10%'},
                      {duration: 400, easing: 'easeInSine',
                       delay: 1000});

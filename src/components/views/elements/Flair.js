@@ -134,9 +134,6 @@ Flair.propTypes = {
     groups: PropTypes.arrayOf(PropTypes.string),
 };
 
-// TODO: We've decided that all components should follow this pattern, which means removing withMatrixClient and using
-// this.context.matrixClient everywhere instead of this.props.matrixClient.
-// See https://github.com/vector-im/riot-web/issues/4951.
 Flair.contextTypes = {
     matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };

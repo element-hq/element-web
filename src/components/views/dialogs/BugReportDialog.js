@@ -1,6 +1,7 @@
 /*
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -50,6 +52,13 @@ export default class BugReportDialog extends React.Component {
     }
 
     _onSubmit(ev) {
+        if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
+            this.setState({
+                err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
+            });
+            return;
+        }
+
         const userText =
             (this.state.text.length > 0 ? this.state.text + '\n\n': '') + 'Issue: ' +
             (this.state.issueUrl.length > 0 ? this.state.issueUrl : 'No issue link given');
@@ -93,7 +102,7 @@ export default class BugReportDialog extends React.Component {
         this.setState({ issueUrl: ev.target.value });
     }
 
-   _onSendLogsChange(ev) {
+    _onSendLogsChange(ev) {
         this.setState({ sendLogs: ev.target.checked });
     }
 
@@ -193,5 +202,5 @@ export default class BugReportDialog extends React.Component {
 }
 
 BugReportDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

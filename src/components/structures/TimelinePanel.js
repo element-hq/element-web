@@ -2,6 +2,7 @@
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,6 +36,8 @@ const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
+import shouldHideEvent from '../../shouldHideEvent';
+import EditorStateTransfer from '../../utils/EditorStateTransfer';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -140,6 +143,7 @@ const TimelinePanel = React.createClass({
 
         return {
             events: [],
+            liveEvents: [],
             timelineLoading: true, // track whether our room timeline is loading
 
             // canBackPaginate == false may mean:
@@ -207,6 +211,8 @@ const TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
+        // same event handler as Room.redaction as for both we just do forceUpdate
+        MatrixClientPeg.get().on("Room.redactionCancelled", this.onRoomRedaction);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
@@ -286,6 +292,7 @@ const TimelinePanel = React.createClass({
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
+            client.removeListener("Room.redactionCancelled", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
@@ -318,9 +325,11 @@ const TimelinePanel = React.createClass({
 
             // We can now paginate in the unpaginated direction
             const canPaginateKey = (backwards) ? 'canBackPaginate' : 'canForwardPaginate';
+            const { events, liveEvents } = this._getEvents();
             this.setState({
                 [canPaginateKey]: true,
-                events: this._getEvents(),
+                events,
+                liveEvents,
             });
         }
     },
@@ -352,10 +361,12 @@ const TimelinePanel = React.createClass({
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
 
+            const { events, liveEvents } = this._getEvents();
             const newState = {
                 [paginatingKey]: false,
                 [canPaginateKey]: r,
-                events: this._getEvents(),
+                events,
+                liveEvents,
             };
 
             // moving the window in this direction may mean that we can now
@@ -408,7 +419,14 @@ const TimelinePanel = React.createClass({
             this.forceUpdate();
         }
         if (payload.action === "edit_event") {
-            this.setState({editEvent: payload.event});
+            const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+            this.setState({editState}, () => {
+                if (payload.event && this.refs.messagePanel) {
+                    this.refs.messagePanel.scrollToEventIfNeeded(
+                        payload.event.getId(),
+                    );
+                }
+            });
         }
     },
 
@@ -442,15 +460,13 @@ const TimelinePanel = React.createClass({
         this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).done(() => {
             if (this.unmounted) { return; }
 
-            const events = this._timelineWindow.getEvents();
-            const lastEv = events[events.length-1];
+            const { events, liveEvents } = this._getEvents();
+            const lastLiveEvent = liveEvents[liveEvents.length - 1];
 
-            // if we're at the end of the live timeline, append the pending events
-            if (this.props.timelineSet.room && !this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-                events.push(...this.props.timelineSet.room.getPendingEvents());
-            }
-
-            const updatedState = {events: events};
+            const updatedState = {
+                events,
+                liveEvents,
+            };
 
             let callRMUpdated;
             if (this.props.manageReadMarkers) {
@@ -467,13 +483,13 @@ const TimelinePanel = React.createClass({
                 callRMUpdated = false;
                 if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
-                } else if (lastEv && this.getReadMarkerPosition() === 0) {
+                } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
 
-                    this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
+                    this._setReadMarker(lastLiveEvent.getId(), lastLiveEvent.getTs(), true);
                     updatedState.readMarkerVisible = false;
-                    updatedState.readMarkerEventId = lastEv.getId();
+                    updatedState.readMarkerEventId = lastLiveEvent.getId();
                     callRMUpdated = true;
                 }
             }
@@ -607,6 +623,8 @@ const TimelinePanel = React.createClass({
     },
 
     sendReadReceipt: function() {
+        if (SettingsStore.getValue("lowBandwidth")) return;
+
         if (!this.refs.messagePanel) return;
         if (!this.props.manageReadReceipts) return;
         // This happens on user_activity_end which is delayed, and it's
@@ -680,9 +698,12 @@ const TimelinePanel = React.createClass({
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
-                    ).catch(() => {
+                    ).catch((e) => {
+                        console.error(e);
                         this.lastRRSentEventId = undefined;
                     });
+                } else {
+                    console.error(e);
                 }
                 // it failed, so allow retries next time the user is active
                 this.lastRRSentEventId = undefined;
@@ -717,14 +738,8 @@ const TimelinePanel = React.createClass({
         // move the RM to *after* the message at the bottom of the screen. This
         // avoids a problem whereby we never advance the RM if there is a huge
         // message which doesn't fit on the screen.
-        //
-        // But ignore local echoes for this - they have a temporary event ID
-        // and we'll get confused when their ID changes and we can't figure out
-        // where the RM is pointing to. The read marker will be invisible for
-        // now anyway, so this doesn't really matter.
         const lastDisplayedIndex = this._getLastDisplayedEventIndex({
             allowPartial: true,
-            ignoreEchoes: true,
         });
 
         if (lastDisplayedIndex === null) {
@@ -748,9 +763,9 @@ const TimelinePanel = React.createClass({
     _advanceReadMarkerPastMyEvents: function() {
         if (!this.props.manageReadMarkers) return;
 
-        // we call _timelineWindow.getEvents() rather than using
-        // this.state.events, because react batches the update to the latter, so it
-        // may not have been updated yet.
+        // we call `_timelineWindow.getEvents()` rather than using
+        // `this.state.liveEvents`, because React batches the update to the
+        // latter, so it may not have been updated yet.
         const events = this._timelineWindow.getEvents();
 
         // first find where the current RM is
@@ -1053,6 +1068,7 @@ const TimelinePanel = React.createClass({
         } else {
             this.setState({
                 events: [],
+                liveEvents: [],
                 canBackPaginate: false,
                 canForwardPaginate: false,
                 timelineLoading: true,
@@ -1072,21 +1088,26 @@ const TimelinePanel = React.createClass({
         // the results if so.
         if (this.unmounted) return;
 
-        this.setState({
-            events: this._getEvents(),
-        });
+        this.setState(this._getEvents());
     },
 
     // get the list of events from the timeline window and the pending event list
     _getEvents: function() {
         const events = this._timelineWindow.getEvents();
 
+        // Hold onto the live events separately. The read receipt and read marker
+        // should use this list, so that they don't advance into pending events.
+        const liveEvents = [...events];
+
         // if we're at the end of the live timeline, append the pending events
         if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             events.push(...this.props.timelineSet.getPendingEvents());
         }
 
-        return events;
+        return {
+            events,
+            liveEvents,
+        };
     },
 
     _indexForEventId: function(evId) {
@@ -1101,36 +1122,76 @@ const TimelinePanel = React.createClass({
     _getLastDisplayedEventIndex: function(opts) {
         opts = opts || {};
         const ignoreOwn = opts.ignoreOwn || false;
-        const ignoreEchoes = opts.ignoreEchoes || false;
         const allowPartial = opts.allowPartial || false;
 
         const messagePanel = this.refs.messagePanel;
         if (messagePanel === undefined) return null;
 
+        const EventTile = sdk.getComponent('rooms.EventTile');
+
         const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
-        for (let i = this.state.events.length-1; i >= 0; --i) {
-            const ev = this.state.events[i];
-
-            if (ignoreOwn && ev.sender && ev.sender.userId == myUserId) {
-                continue;
+        const isNodeInView = (node) => {
+            if (node) {
+                const boundingRect = node.getBoundingClientRect();
+                if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
+                    (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
+                    return true;
+                }
             }
+            return false;
+        };
 
-            // local echoes have a fake event ID
-            if (ignoreEchoes && ev.status) {
-                continue;
-            }
+        // We keep track of how many of the adjacent events didn't have a tile
+        // but should have the read receipt moved past them, so
+        // we can include those once we find the last displayed (visible) event.
+        // The counter is not started for events we don't want
+        // to send a read receipt for (our own events, local echos).
+        let adjacentInvisibleEventCount = 0;
+        // Use `liveEvents` here because we don't want the read marker or read
+        // receipt to advance into pending events.
+        for (let i = this.state.liveEvents.length - 1; i >= 0; --i) {
+            const ev = this.state.liveEvents[i];
 
             const node = messagePanel.getNodeForEventId(ev.getId());
-            if (!node) continue;
+            const isInView = isNodeInView(node);
 
-            const boundingRect = node.getBoundingClientRect();
-            if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
-                (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
+            // when we've reached the first visible event, and the previous
+            // events were all invisible (with the first one not being ignored),
+            // return the index of the first invisible event.
+            if (isInView && adjacentInvisibleEventCount !== 0) {
+                return i + adjacentInvisibleEventCount;
+            }
+            if (node && !isInView) {
+                // has node but not in view, so reset adjacent invisible events
+                adjacentInvisibleEventCount = 0;
+            }
+
+            const shouldIgnore = !!ev.status || // local echo
+                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
+            const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
+
+            if (isWithoutTile || !node) {
+                // don't start counting if the event should be ignored,
+                // but continue counting if we were already so the offset
+                // to the previous invisble event that didn't need to be ignored
+                // doesn't get messed up
+                if (!shouldIgnore || (shouldIgnore && adjacentInvisibleEventCount !== 0)) {
+                    ++adjacentInvisibleEventCount;
+                }
+                continue;
+            }
+
+            if (shouldIgnore) {
+                continue;
+            }
+
+            if (isInView) {
                 return i;
             }
         }
+
         return null;
     },
 
@@ -1266,7 +1327,7 @@ const TimelinePanel = React.createClass({
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editEvent={this.state.editEvent}
+                editState={this.state.editState}
                 showReactions={this.props.showReactions}
             />
         );

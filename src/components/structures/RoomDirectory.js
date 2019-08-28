@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ const sdk = require('../../index');
 const dis = require('../../dispatcher');
 
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
@@ -41,8 +43,8 @@ module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
-        config: React.PropTypes.object,
-        onFinished: React.PropTypes.func.isRequired,
+        config: PropTypes.object,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -65,7 +67,7 @@ module.exports = React.createClass({
     },
 
     childContextTypes: {
-        matrixClient: React.PropTypes.object,
+        matrixClient: PropTypes.object,
     },
 
     getChildContext: function() {
@@ -145,7 +147,7 @@ module.exports = React.createClass({
         // too. If it's changed, appending to the list will corrupt it.
         const my_next_batch = this.nextBatch;
         const opts = {limit: 20};
-        if (my_server != MatrixClientPeg.getHomeServerName()) {
+        if (my_server != MatrixClientPeg.getHomeserverName()) {
             opts.server = my_server;
         }
         if (this.state.instanceId) {
@@ -333,7 +335,7 @@ module.exports = React.createClass({
             if (alias.indexOf(':') == -1) {
                 alias = alias + ':' + this.state.roomServer;
             }
-            this.showRoomAlias(alias);
+            this.showRoomAlias(alias, true);
         } else {
             // This is a 3rd party protocol. Let's see if we can join it
             const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
@@ -349,7 +351,7 @@ module.exports = React.createClass({
             }
             MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).done((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
-                    this.showRoomAlias(resp[0].alias);
+                    this.showRoomAlias(resp[0].alias, true);
                 } else {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Room not found', '', ErrorDialog, {
@@ -367,13 +369,16 @@ module.exports = React.createClass({
         }
     },
 
-    showRoomAlias: function(alias) {
-        this.showRoom(null, alias);
+    showRoomAlias: function(alias, autoJoin=false) {
+        this.showRoom(null, alias, autoJoin);
     },
 
-    showRoom: function(room, room_alias) {
+    showRoom: function(room, room_alias, autoJoin=false) {
         this.props.onFinished();
-        const payload = {action: 'view_room'};
+        const payload = {
+            action: 'view_room',
+            auto_join: autoJoin,
+        };
         if (room) {
             // Don't let the user view a room they won't be able to either
             // peek or join: fail earlier so they don't have to click back

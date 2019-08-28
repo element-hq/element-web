@@ -36,6 +36,7 @@ export default class BasePlatform {
 
     _onAction(payload: Object) {
         switch (payload.action) {
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this.setNotificationCount(0);
                 break;
@@ -124,6 +125,18 @@ export default class BasePlatform {
     }
 
     async setAutoLaunchEnabled(enabled: boolean): void {
+        throw new Error("Unimplemented");
+    }
+
+    supportsAutoHideMenuBar(): boolean {
+        return false;
+    }
+
+    async getAutoHideMenuBarEnabled(): boolean {
+        return false;
+    }
+
+    async setAutoHideMenuBarEnabled(enabled: boolean): void {
         throw new Error("Unimplemented");
     }
 

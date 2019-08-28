@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import { ContentRepo } from 'matrix-js-sdk';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -31,12 +31,21 @@ module.exports = React.createClass({
         mxEvent: PropTypes.object.isRequired,
     },
 
-    onAvatarClick: function(name) {
-        const httpUrl = MatrixClientPeg.get().mxcUrlToHttp(this.props.mxEvent.getContent().url);
+    onAvatarClick: function() {
+        const cli = MatrixClientPeg.get();
+        const ev = this.props.mxEvent;
+        const httpUrl = cli.mxcUrlToHttp(ev.getContent().url);
+
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
+            senderDisplayName: ev.sender && ev.sender.name ? ev.sender.name : ev.getSender(),
+            roomName: room ? room.name : '',
+        });
+
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: httpUrl,
-            name: name,
+            name: text,
         };
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
@@ -44,29 +53,22 @@ module.exports = React.createClass({
     render: function() {
         const ev = this.props.mxEvent;
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const name = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
-                senderDisplayName: senderDisplayName,
-                roomName: room ? room.name : '',
-        });
+        const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
 
         if (!ev.getContent().url || ev.getContent().url.trim().length === 0) {
             return (
                 <div className="mx_TextualEvent">
-                    { _t('%(senderDisplayName)s removed the room avatar.', {senderDisplayName: senderDisplayName}) }
+                    { _t('%(senderDisplayName)s removed the room avatar.', {senderDisplayName}) }
                 </div>
             );
         }
 
-        const url = ContentRepo.getHttpUriForMxc(
-                    MatrixClientPeg.get().getHomeserverUrl(),
-                    ev.getContent().url,
-                    Math.ceil(14 * window.devicePixelRatio),
-                    Math.ceil(14 * window.devicePixelRatio),
-                    'crop',
-                );
+        const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        // Provide all arguments to RoomAvatar via oobData because the avatar is historic
+        const oobData = {
+            avatarUrl: ev.getContent().url,
+            name: room ? room.name : "",
+        };
 
         return (
             <div className="mx_RoomAvatarEvent">
@@ -75,8 +77,8 @@ module.exports = React.createClass({
                     {
                         'img': () =>
                             <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
-                                onClick={this.onAvatarClick.bind(this, name)}>
-                                <BaseAvatar width={14} height={14} url={url} name={name} />
+                                onClick={this.onAvatarClick}>
+                                <RoomAvatar width={14} height={14} oobData={oobData} />
                             </AccessibleButton>,
                     })
                 }

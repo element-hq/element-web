@@ -575,5 +575,9 @@
     "Failed to change power level": "Не вдалося змінити рівень повноважень",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви також можете встановити власний сервер ідентифікації, але Ви не зможете запрошувати користувачів або бути запрошеним за адресою електронної пошти.",
     "Chat with Riot Bot": "Чат із Riot-ботом",
-    "Whether or not you're logged in (we don't record your username)": "Незалежно від того, увійшли ви чи ні (ми не записуємо ваше ім'я користувача)"
+    "Whether or not you're logged in (we don't record your username)": "Незалежно від того, увійшли ви чи ні (ми не записуємо ваше ім'я користувача)",
+    "A conference call could not be started because the integrations server is not available": "Конференц-дзвінок не можна розпочати оскільки інтеграційний сервер недоступний",
+    "The file '%(fileName)s' failed to upload.": "Файл '%(fileName)s' не вийшло відвантажити.",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Файл '%(fileName)s' перевищує ліміт розміру для відвантажень домашнього сервера",
+    "The server does not support the room version specified.": "Сервер не підтримує вказану версію кімнати."
 }

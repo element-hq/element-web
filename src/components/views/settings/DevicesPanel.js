@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -186,7 +187,7 @@ export default class DevicesPanel extends React.Component {
 
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
-            <AccessibleButton className="mx_textButton" onClick={this._onDeleteClick}>
+            <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
                { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
             </AccessibleButton>;
 
@@ -194,11 +195,11 @@ export default class DevicesPanel extends React.Component {
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">{ _t("Device ID") }</div>
-                    <div className="mx_DevicesPanel_deviceName">{ _t("Device Name") }</div>
+                    <div className="mx_DevicesPanel_deviceId">{ _t("ID") }</div>
+                    <div className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
                     <div className="mx_DevicesPanel_deviceButtons">
-                        { this.state.selectedDevices.length > 0 ? deleteButton : _t('Select devices') }
+                        { this.state.selectedDevices.length > 0 ? deleteButton : null }
                     </div>
                 </div>
                 { devices.map(this._renderDevice) }
@@ -207,7 +208,6 @@ export default class DevicesPanel extends React.Component {
     }
 }
 
-DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
     className: PropTypes.string,
 };

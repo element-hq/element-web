@@ -121,6 +121,9 @@ $event-sending-color: $text-secondary-color;
 $event-redacted-fg-color: #606060;
 $event-redacted-border-color: #000000;
 
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: #25271F;
+
 // event timestamp
 $event-timestamp-color: $text-secondary-color;
 
@@ -140,6 +143,10 @@ $button-danger-fg-color: #ffffff;
 $button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+$button-link-fg-color: $accent-color;
+$button-link-bg-color: transparent;
+
+$visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
 
@@ -159,6 +166,9 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
+
+$interactive-tooltip-bg-color: $base-color;
+$interactive-tooltip-fg-color: #ffffff;
 
 // ***** Mixins! *****
 

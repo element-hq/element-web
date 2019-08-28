@@ -180,7 +180,7 @@ export default class KeyBackupPanel extends React.PureComponent {
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
                 clientBackupStatus = <div>
                     <p>{encryptedMessageAreEncrypted}</p>
-                    <p>{_t("This device is backing up your keys. ")}✅</p>
+                    <p>✅ {_t("This device is backing up your keys. ")}</p>
                 </div>;
             } else {
                 clientBackupStatus = <div>

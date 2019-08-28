@@ -54,9 +54,9 @@ const LeftPanel = React.createClass({
         this.focusedElement = null;
 
         this._settingWatchRef = SettingsStore.watchSetting(
-            "feature_room_breadcrumbs", null, this._onBreadcrumbsChanged);
+            "breadcrumbs", null, this._onBreadcrumbsChanged);
 
-        const useBreadcrumbs = SettingsStore.isFeatureEnabled("feature_room_breadcrumbs");
+        const useBreadcrumbs = !!SettingsStore.getValue("breadcrumbs");
         Analytics.setBreadcrumbs(useBreadcrumbs);
         this.setState({breadcrumbs: useBreadcrumbs});
     },

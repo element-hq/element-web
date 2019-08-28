@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +27,6 @@ import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
-import escape from 'lodash/escape';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
 import url from 'url';
@@ -51,10 +51,13 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
+const SINGLE_EMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
+
+const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
 
 /*
  * Return true if the given string contains emoji
@@ -63,7 +66,7 @@ const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
  * need emojification.
  * unicodeToImage uses this function.
  */
-export function containsEmoji(str) {
+function mightContainEmoji(str) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -74,7 +77,10 @@ export function containsEmoji(str) {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    const data = EMOJIBASE.find(e => e.unicode === char);
+    // Check against both the char and the char with an empty variation selector appended because that's how
+    // emoji-base stores its base emojis which have variations. https://github.com/vector-im/riot-web/issues/9785
+    const emptyVariation = char + VARIATION_SELECTOR;
+    const data = EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
@@ -428,7 +434,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : content.body);
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
@@ -462,14 +468,14 @@ export function bodyToHtml(content, highlights, opts={}) {
                     // their username
                     (
                         content.formatted_body == undefined ||
-		                !content.formatted_body.includes("https://matrix.to/")
+                        !content.formatted_body.includes("https://matrix.to/")
                     );
     }
 
     const className = classNames({
         'mx_EventTile_body': true,
         'mx_EventTile_bigEmoji': emojiBody,
-        'markdown-body': isHtmlMessage,
+        'markdown-body': isHtmlMessage && !emojiBody,
     });
 
     return isDisplayedWithHtml ?
@@ -506,4 +512,39 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  */
 export function linkifyAndSanitizeHtml(dirtyHtml) {
     return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
+}
+
+/**
+ * Returns if a node is a block element or not.
+ * Only takes html nodes into account that are allowed in matrix messages.
+ *
+ * @param {Node} node
+ * @returns {bool}
+ */
+export function checkBlockNode(node) {
+    switch (node.nodeName) {
+        case "H1":
+        case "H2":
+        case "H3":
+        case "H4":
+        case "H5":
+        case "H6":
+        case "PRE":
+        case "BLOCKQUOTE":
+        case "DIV":
+        case "P":
+        case "UL":
+        case "OL":
+        case "LI":
+        case "HR":
+        case "TABLE":
+        case "THEAD":
+        case "TBODY":
+        case "TR":
+        case "TH":
+        case "TD":
+            return true;
+        default:
+            return false;
+    }
 }

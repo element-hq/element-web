@@ -113,7 +113,7 @@ module.exports = React.createClass({
         this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
     },
 
-    onCustomKeyPress: function(event) {
+    onCustomKeyDown: function(event) {
         if (event.key === "Enter") {
             event.preventDefault();
             event.stopPropagation();
@@ -133,7 +133,7 @@ module.exports = React.createClass({
             picker = (
                 <Field id={`powerSelector_custom_${this.props.powerLevelKey}`} type="number"
                        label={this.props.label || _t("Power level")} max={this.props.maxValue}
-                       onBlur={this.onCustomBlur} onKeyPress={this.onCustomKeyPress} onChange={this.onCustomChange}
+                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
                        value={String(this.state.customValue)} disabled={this.props.disabled} />
             );
         } else {
