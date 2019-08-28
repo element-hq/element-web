@@ -79,8 +79,8 @@
     "modernizr": "^3.6.0",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.0.tgz",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "sanitize-html": "^1.19.1",
     "ua-parser-js": "^0.7.19",
     "url": "^0.11.0"
