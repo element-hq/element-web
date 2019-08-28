@@ -408,16 +408,13 @@ export default class EditorModel {
 
     //mostly internal, called from Range.replace
     replaceRange(startPosition, endPosition, parts) {
+        // convert end position to offset, so it is independent of how the document is split into parts
+        // which we'll change when splitting up at the start position
+        const endOffset = endPosition.asOffset(this);
         const newStartPartIndex = this._splitAt(startPosition);
-        const idxDiff = newStartPartIndex - startPosition.index;
-        // if both position are in the same part, and we split it at start position,
-        // the offset of the end position needs to be decreased by the offset of the start position
-        const removedOffset = startPosition.index === endPosition.index ? startPosition.offset : 0;
-        const adjustedEndPosition = new DocumentPosition(
-            endPosition.index + idxDiff,
-            endPosition.offset - removedOffset,
-        );
-        const newEndPartIndex = this._splitAt(adjustedEndPosition);
+        // convert it back to position once split at start
+        endPosition = endOffset.asPosition(this);
+        const newEndPartIndex = this._splitAt(endPosition);
         for (let i = newEndPartIndex - 1; i >= newStartPartIndex; --i) {
             this._removePart(i);
         }
