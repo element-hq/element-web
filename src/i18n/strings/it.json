@@ -2085,5 +2085,9 @@
     "A device's public name is visible to people you communicate with": "Il nome pubblico di un dispositivo è visibile dalle persone con cui comunichi",
     "Remove %(email)s?": "Rimuovere %(email)s?",
     "Remove %(phone)s?": "Rimuovere %(phone)s?",
-    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "Usa nuovo il compositore, più veloce, ma ancora sperimentale per scrivere messaggi (necessario ricaricare)"
+    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "Usa nuovo il compositore, più veloce, ma ancora sperimentale per scrivere messaggi (necessario ricaricare)",
+    "Multiple integration managers": "Gestori di integrazione multipli",
+    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Se non vuoi usare <server /> per trovare ed essere trovato dai contatti esistenti che conosci, inserisci un altro server di identità qua sotto.",
+    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Usare un server di identità è facoltativo. Se scegli di non usarne uno, non potrai essere trovato dagli altri utenti e non potrai invitarne altri per email o telefono.",
+    "Do not use an identity server": "Non usare un server di identità"
 }
