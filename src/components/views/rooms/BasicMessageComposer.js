@@ -14,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditorModel from '../../../editor/model';
@@ -271,7 +273,7 @@ export default class BasicMessageEditor extends React.Component {
                         return; // don't preventDefault on anything else
                 }
             } else if (event.key === "Tab") {
-                this._tabCompleteName(event);
+                this._tabCompleteName();
                 handled = true;
             }
         }
@@ -281,20 +283,30 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
-    async _tabCompleteName(event) {
-        const {model} = this.props;
-        const caret = this.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        const range = model.startRange(position);
-        range.expandBackwardsWhile((index, offset, part) => {
-            return part.text[offset] !== " " && (part.type === "plain" || part.type === "pill-candidate");
-        });
-        const {partCreator} = model;
-        await model.transform(() => {
-            const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
-            return model.positionForOffset(caret.offset + addedLen, true);
-        });
-        await model.autoComplete.onTab();
+    async _tabCompleteName() {
+        try {
+            await new Promise(resolve => this.setState({showVisualBell: false}, resolve));
+            const {model} = this.props;
+            const caret = this.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            const range = model.startRange(position);
+            range.expandBackwardsWhile((index, offset, part) => {
+                return part.text[offset] !== " " && (part.type === "plain" || part.type === "pill-candidate");
+            });
+            const {partCreator} = model;
+            // await for auto-complete to be open
+            await model.transform(() => {
+                const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
+                return model.positionForOffset(caret.offset + addedLen, true);
+            });
+            await model.autoComplete.onTab();
+            if (!model.autoComplete.hasSelection()) {
+                this.setState({showVisualBell: true});
+                model.autoComplete.close();
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     isModified() {
@@ -324,7 +336,14 @@ export default class BasicMessageEditor extends React.Component {
         // not really, but we could not serialize the parts, and just change the autoCompleter
         partCreator.setAutoCompleteCreator(autoCompleteCreator(
             () => this._autocompleteRef,
-            query => new Promise(resolve => this.setState({query}, resolve)),
+            query => {
+                return new Promise(resolve => this.setState({query}, resolve));
+                // if setState
+                // if (this.state.query === query) {
+                //     return Promise.resolve();
+                // } else {
+                // }
+            },
         ));
         this.historyManager = new HistoryManager(partCreator);
         // initial render of model
@@ -365,7 +384,10 @@ export default class BasicMessageEditor extends React.Component {
                 />
             </div>);
         }
-        return (<div className="mx_BasicMessageComposer">
+        const classes = classNames("mx_BasicMessageComposer", {
+            "mx_BasicMessageComposer_input_error": this.state.showVisualBell,
+        });
+        return (<div className={classes}>
             { autoComplete }
             <div
                 className="mx_BasicMessageComposer_input"
