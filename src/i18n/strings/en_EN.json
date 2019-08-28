@@ -1463,6 +1463,7 @@
     "Create your Matrix account on <underlinedServerName />": "Create your Matrix account on <underlinedServerName />",
     "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.",
     "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.",
+    "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.": "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.",
     "Other servers": "Other servers",
     "Enter custom server URLs <a>What does this mean?</a>": "Enter custom server URLs <a>What does this mean?</a>",
     "Homeserver URL": "Homeserver URL",
