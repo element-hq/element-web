@@ -30,6 +30,7 @@ const plEventsToLabels = {
     "m.room.history_visibility": _td("Change history visibility"),
     "m.room.power_levels": _td("Change permissions"),
     "m.room.topic": _td("Change topic"),
+    "m.room.encryption": _td("Enable room encryption"),
 
     "im.vector.modular.widgets": _td("Modify widgets"),
 };
@@ -42,6 +43,7 @@ const plEventsToShow = {
     "m.room.history_visibility": {isState: true},
     "m.room.power_levels": {isState: true},
     "m.room.topic": {isState: true},
+    "m.room.encryption": {isState: true},
 
     "im.vector.modular.widgets": {isState: true},
 };
