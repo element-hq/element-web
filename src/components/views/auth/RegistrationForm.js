@@ -444,6 +444,15 @@ module.exports = React.createClass({
         return true;
     },
 
+    _showPhoneNumber() {
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (!threePidLogin || !haveIs || !this._authStepIsUsed('m.login.msisdn')) {
+            return false;
+        }
+        return true;
+    },
+
     renderEmail() {
         if (!this._showEmail()) {
             return null;
@@ -490,9 +499,7 @@ module.exports = React.createClass({
     },
 
     renderPhoneNumber() {
-        const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if (!threePidLogin || !haveIs || !this._authStepIsUsed('m.login.msisdn')) {
+        if (!this._showPhoneNumber()) {
             return null;
         }
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -564,11 +571,24 @@ module.exports = React.createClass({
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
 
-        const emailHelperText = this._showEmail() ? <div>
-            {_t("Use an email address to recover your account.") + " "}
-            {_t("Other users can invite you to rooms using your contact details.")}
-        </div> : null;
-
+        let emailHelperText = null;
+        if (this._showEmail()) {
+            if (this._showPhoneNumber()) {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email or phone to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            } else {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            }
+        }
         const haveIs = Boolean(this.props.serverConfig.isUrl);
         const noIsText = haveIs ? null : <div>
             {_t(
