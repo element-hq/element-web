@@ -1161,6 +1161,8 @@
     "That doesn't look like a valid email address": "That doesn't look like a valid email address",
     "You have entered an invalid address.": "You have entered an invalid address.",
     "Try using one of the following valid address types: %(validTypesList)s.": "Try using one of the following valid address types: %(validTypesList)s.",
+    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Use an identity server to invite by email. Manage in <settings>Settings</settings>.",
     "The following users may not exist": "The following users may not exist",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?",
     "Invite anyway and never warn me again": "Invite anyway and never warn me again",

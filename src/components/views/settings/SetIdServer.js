@@ -20,13 +20,13 @@ import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import SdkConfig from "../../../SdkConfig";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
 import { getThreepidBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
+import { getDefaultIdentityServerUrl } from '../../../utils/IdentityServerUtils';
 
 /**
  * Check an IS URL is valid, including liveness check
@@ -66,10 +66,10 @@ export default class SetIdServer extends React.Component {
         super();
 
         let defaultIdServer = '';
-        if (!MatrixClientPeg.get().getIdentityServerUrl() && SdkConfig.get()['validated_server_config']['isUrl']) {
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
             // If no ID server is configured but there's one in the config, prepopulate
             // the field to help the user.
-            defaultIdServer = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+            defaultIdServer = abbreviateUrl(getDefaultIdentityServerUrl());
         }
 
         this.state = {
@@ -253,10 +253,10 @@ export default class SetIdServer extends React.Component {
         });
 
         let newFieldVal = '';
-        if (SdkConfig.get()['validated_server_config']['isUrl']) {
+        if (getDefaultIdentityServerUrl()) {
             // Prepopulate the client's default so the user at least has some idea of
             // a valid value they might enter
-            newFieldVal = abbreviateUrl(SdkConfig.get()['validated_server_config']['isUrl']);
+            newFieldVal = abbreviateUrl(getDefaultIdentityServerUrl());
         }
 
         this.setState({

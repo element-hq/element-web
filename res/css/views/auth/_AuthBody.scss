@@ -39,8 +39,7 @@ limitations under the License.
     a:link,
     a:hover,
     a:visited {
-        color: $accent-color;
-        text-decoration: none;
+        @mixin mx_Dialog_link;
     }
 
     input[type=text],

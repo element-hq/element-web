@@ -328,3 +328,8 @@ $interactive-tooltip-fg-color: #ffffff;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
+
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
