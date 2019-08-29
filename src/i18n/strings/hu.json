@@ -2125,5 +2125,15 @@
     "No Identity Server is configured so you cannot add add an email address in order to reset your password in the future.": "Nincs Azonosítási szerver beállítva, így nem tudsz e-mail címet hozzáadni, hogy később a jelszavadat vissza tudd állítani.",
     "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.": "Nincs Azonosítási Szerver beállítva: nem tudsz e-mail címet hozzáadni. A jövőben a jelszavadat nem fogod tudni visszaállítani.",
     "No identity server is configured: add one in server settings to reset your password.": "Nincs azonosítási szerver beállítva: adj meg egyet a szerver beállításoknál, hogy a jelszavadat vissza tudd állítani.",
-    "This account has been deactivated.": "Ez a fiók zárolva van."
+    "This account has been deactivated.": "Ez a fiók zárolva van.",
+    "You do not have the required permissions to use this command.": "A parancs használatához nincs meg a megfelelő jogosultságod.",
+    "Multiple integration managers": "Több integrációs menedzser",
+    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Ha felkutatásra és, hogy más ismerősök megtalálhassanak, nem akarod használni ezt a szervert: <server />, akkor adjál meg másik azonosítási szervert alább.",
+    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Azonosítási szerver használata nem kötelező. Ha úgy döntesz, hogy az azonosítási szervert nem használod más felhasználók nem találnak rád és másokat sem tudsz e-mail cím vagy telefonszám alapján meghívni.",
+    "Do not use an identity server": "Az azonosítási szerver mellőzése",
+    "Upgrade the room": "Szoba frissítése",
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "E-mail cím beállítása a fiók visszaállításához. E-mail cím vagy telefonszám, hogy ismerősök megtalálhassanak.",
+    "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "E-mail cím beállítása a fiók visszaállításához. E-mail cím, hogy ismerősök megtalálhassanak.",
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "Add meg a matrix szervered URL-jét <a>Mit jelent ez?</a>",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "Add meg az azonosítási szervered URL-jét <a>Mit jelent ez?</a>"
 }
