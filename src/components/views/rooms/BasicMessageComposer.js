@@ -309,6 +309,10 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
+    getEditableRootNode() {
+        return this._editorRef;
+    }
+
     isModified() {
         return this._modifiedFlag;
     }
