@@ -226,7 +226,7 @@ export default class EditorModel {
             }
             // not _autoComplete, only there if active part is autocomplete part
             if (this.autoComplete) {
-                return this.autoComplete.onPartUpdate(part, pos.offset);
+                return this.autoComplete.onPartUpdate(part, pos);
             }
         } else {
             this._activePartIdx = null;

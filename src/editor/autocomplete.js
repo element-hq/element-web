@@ -65,10 +65,11 @@ export default class AutocompleteWrapperModel {
         this._getAutocompleterComponent().moveSelection(+1);
     }
 
-    onPartUpdate(part, offset) {
+    onPartUpdate(part, pos) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this._queryPart = part;
+        this._partIndex = pos.index;
         return this._updateQuery(part.text);
     }
 
@@ -100,7 +101,9 @@ export default class AutocompleteWrapperModel {
                 if (completionId === "@room") {
                     return [this._partCreator.atRoomPill(completionId)];
                 } else {
-                    return [this._partCreator.userPill(text, completionId), this._partCreator.plain(": ")];
+                    const pill = this._partCreator.userPill(text, completionId);
+                    const postfix = this._partCreator.plain(this._partIndex === 0 ? ": " : " ");
+                    return [pill, postfix];
                 }
             }
             case "#":
