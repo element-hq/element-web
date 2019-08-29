@@ -23,7 +23,7 @@ class BasePart {
         this._text = text;
     }
 
-    acceptsInsertion(chr) {
+    acceptsInsertion(chr, offset, inputType) {
         return true;
     }
 
@@ -56,10 +56,11 @@ class BasePart {
     }
 
     // append str, returns the remaining string if a character was rejected.
-    appendUntilRejected(str) {
+    appendUntilRejected(str, inputType) {
+        const offset = this.text.length;
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr, i)) {
+            if (!this.acceptsInsertion(chr, offset + i, inputType)) {
                 this._text = this._text + str.substr(0, i);
                 return str.substr(i);
             }
@@ -69,10 +70,10 @@ class BasePart {
 
     // inserts str at offset if all the characters in str were accepted, otherwise don't do anything
     // return whether the str was accepted or not.
-    validateAndInsert(offset, str) {
+    validateAndInsert(offset, str, inputType) {
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr)) {
+            if (!this.acceptsInsertion(chr, offset + i, inputType)) {
                 return false;
             }
         }
@@ -80,16 +81,6 @@ class BasePart {
         const afterInsert = this._text.substr(offset);
         this._text = beforeInsert + str + afterInsert;
         return true;
-    }
-
-    insert(offset, str) {
-        if (this.canEdit) {
-            const beforeInsert = this._text.substr(0, offset);
-            const afterInsert = this._text.substr(offset);
-            this._text = beforeInsert + str + afterInsert;
-            return true;
-        }
-        return false;
     }
 
     createAutoComplete() {}
@@ -119,8 +110,15 @@ class BasePart {
 
 // exported for unit tests, should otherwise only be used through PartCreator
 export class PlainPart extends BasePart {
-    acceptsInsertion(chr) {
-        return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "\n";
+    acceptsInsertion(chr, offset, inputType) {
+        if (chr === "\n") {
+            return false;
+        }
+        // when not pasting or dropping text, reject characters that should start a pill candidate
+        if (inputType !== "insertFromPaste" && inputType !== "insertFromDrop") {
+            return chr !== "@" && chr !== "#" && chr !== ":";
+        }
+        return true;
     }
 
     toDOMNode() {
@@ -141,7 +139,6 @@ export class PlainPart extends BasePart {
 
     updateDOMNode(node) {
         if (node.textContent !== this.text) {
-            // console.log("changing plain text from", node.textContent, "to", this.text);
             node.textContent = this.text;
         }
     }
@@ -211,8 +208,8 @@ class PillPart extends BasePart {
 }
 
 class NewlinePart extends BasePart {
-    acceptsInsertion(chr, i) {
-        return (this.text.length + i) === 0 && chr === "\n";
+    acceptsInsertion(chr, offset) {
+        return offset === 0 && chr === "\n";
     }
 
     acceptsRemoval(position, chr) {
@@ -331,11 +328,11 @@ class PillCandidatePart extends PlainPart {
         return this._autoCompleteCreator.create(updateCallback);
     }
 
-    acceptsInsertion(chr, i) {
-        if ((this.text.length + i) === 0) {
+    acceptsInsertion(chr, offset, inputType) {
+        if (offset === 0) {
             return true;
         } else {
-            return super.acceptsInsertion(chr, i);
+            return super.acceptsInsertion(chr, offset, inputType);
         }
     }
 
