@@ -75,6 +75,7 @@ export default class BasicMessageEditor extends React.Component {
         this._editorRef = null;
         this._autocompleteRef = null;
         this._modifiedFlag = false;
+        this._isIMEComposing = false;
     }
 
     _replaceEmoticon = (caretPosition, inputType, diff) => {
@@ -119,11 +120,9 @@ export default class BasicMessageEditor extends React.Component {
         if (this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
-                this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
-                this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+                this._showPlaceholder();
             } else {
-                this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
-                this._editorRef.style.removeProperty("--placeholder");
+                this._hidePlaceholder();
             }
         }
         this.setState({autoComplete: this.props.model.autoComplete});
@@ -135,7 +134,31 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
+    _showPlaceholder() {
+        this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
+        this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+    }
+
+    _hidePlaceholder() {
+        this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
+        this._editorRef.style.removeProperty("--placeholder");
+    }
+
+    _onCompositionStart = (event) => {
+        this._isIMEComposing = true;
+        // even if the model is empty, the composition text shouldn't be mixed with the placeholder
+        this._hidePlaceholder();
+    }
+
+    _onCompositionEnd = (event) => {
+        this._isIMEComposing = false;
+    }
+
     _onInput = (event) => {
+        // ignore any input while doing IME compositions
+        if (this._isIMEComposing) {
+            return;
+        }
         this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
@@ -323,6 +346,8 @@ export default class BasicMessageEditor extends React.Component {
 
     componentWillUnmount() {
         this._editorRef.removeEventListener("input", this._onInput, true);
+        this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
+        this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
     }
 
     componentDidMount() {
@@ -344,6 +369,8 @@ export default class BasicMessageEditor extends React.Component {
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
         this._editorRef.addEventListener("input", this._onInput, true);
+        this._editorRef.addEventListener("compositionstart", this._onCompositionStart, true);
+        this._editorRef.addEventListener("compositionend", this._onCompositionEnd, true);
         this._editorRef.focus();
     }
 
