@@ -2139,5 +2139,11 @@
     "Multiple integration managers": "Gestionnaires d’intégration multiples",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Si vous ne voulez pas utiliser <server /> pour découvrir et être découvrable par les contacts que vous connaissez, saisissez un autre serveur d’identité ci-dessous.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "L’utilisation d’un serveur d’identité est optionnelle. Si vous ne choisissez pas d’utiliser un serveur d’identité, les autres utilisateurs ne pourront pas vous découvrir et vous ne pourrez pas en inviter par e-mail ou par téléphone.",
-    "Do not use an identity server": "Ne pas utiliser de serveur d’identité"
+    "Do not use an identity server": "Ne pas utiliser de serveur d’identité",
+    "You do not have the required permissions to use this command.": "Vous n’avez pas les permissions nécessaires pour utiliser cette commande.",
+    "Upgrade the room": "Mettre à niveau le salon",
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Renseignez un e-mail pour la récupération de compte. Utilisez un e-mail ou un téléphone pour être éventuellement découvrable par des contacts existants.",
+    "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "Renseignez un e-mail pour la récupération de compte. Utilisez un e-mail pour être éventuellement découvrable par des contacts existants.",
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "Saisissez l’URL de votre serveur d’accueil personnalisé <a>Qu’est-ce que ça veut dire ?</a>",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "Saisissez l’URL de votre serveur d’identité personnalisé <a>Qu’est-ce que ça veut dire ?</a>"
 }
