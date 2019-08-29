@@ -84,6 +84,14 @@ function getTextAndFocusNodeOffset(editor, focusNode, focusOffset) {
                 foundCaret = true;
             }
         }
+        // usually newlines are entered as new DIV elements,
+        // but for example while pasting in some browsers, they are still
+        // converted to BRs, so also take these into account when they
+        // are not the last element in the DIV.
+        if (node.tagName === "BR" && node.nextSibling) {
+            text += "\n";
+            focusNodeOffset += 1;
+        }
         const nodeText = node.nodeType === Node.TEXT_NODE && getTextNodeValue(node);
         if (nodeText) {
             if (!foundCaret) {
