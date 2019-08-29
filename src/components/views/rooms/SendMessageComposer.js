@@ -32,6 +32,7 @@ import {processCommandInput} from '../../../SlashCommands';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import ContentMessages from '../../../ContentMessages';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -226,8 +227,13 @@ export default class SendMessageComposer extends React.Component {
         this._clearStoredEditorState();
     }
 
+    componentDidMount() {
+        this._editorRef.getEditableRootNode().addEventListener("paste", this._onPaste, true);
+    }
+
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
+        this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
     componentWillMount() {
@@ -308,6 +314,19 @@ export default class SendMessageComposer extends React.Component {
         });
         // refocus on composer, as we just clicked "Quote"
         this._editorRef && this._editorRef.focus();
+    }
+
+    _onPaste = (event) => {
+        const {clipboardData} = event;
+        if (clipboardData.files.length) {
+            // This actually not so much for 'files' as such (at time of writing
+            // neither chrome nor firefox let you paste a plain file copied
+            // from Finder) but more images copied from a different website
+            // / word processor etc.
+            ContentMessages.sharedInstance().sendContentListToRoom(
+                Array.from(clipboardData.files), this.props.room.roomId, this.context.matrixClient,
+            );
+        }
     }
 
     render() {
