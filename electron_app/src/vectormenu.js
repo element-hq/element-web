@@ -16,6 +16,19 @@ limitations under the License.
 
 const {app, shell, Menu} = require('electron');
 
+let viewSubmenu = [
+    { type: 'separator' },
+    { role: 'resetzoom' },
+    { role: 'zoomin', accelerator: 'CommandOrControl+=' },
+    { role: 'zoomout' },
+    { type: 'separator' },
+    { role: 'togglefullscreen' },
+];
+
+if (process.argv.includes('--devtools')) {
+    viewSubmenu.push({ role: 'toggledevtools' });
+}
+
 // Menu template from http://electron.atom.io/docs/api/menu/, edited
 const template = [
     {
@@ -34,15 +47,7 @@ const template = [
     },
     {
         label: '&View',
-        submenu: [
-            { type: 'separator' },
-            { role: 'resetzoom' },
-            { role: 'zoomin', accelerator: 'CommandOrControl+=' },
-            { role: 'zoomout' },
-            { type: 'separator' },
-            { role: 'togglefullscreen' },
-            { role: 'toggledevtools' },
-        ],
+        submenu: viewSubmenu,
     },
     {
         label: '&Window',
@@ -57,8 +62,8 @@ const template = [
         role: 'help',
         submenu: [
             {
-                label: 'Riot Help',
-                click() { shell.openExternal('https://about.riot.im/help'); },
+                label: 'Tchap Help',
+                click() { shell.openExternal('https://www.tchap.gouv.fr/faq/'); },
             },
         ],
     },
