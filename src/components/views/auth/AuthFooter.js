@@ -15,12 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import { _t } from '../../../languageHandler';
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'AuthFooter',
 
     render: function() {

@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'CustomServerDialog',
 
     render: function() {

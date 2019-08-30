@@ -20,6 +20,7 @@ limitations under the License.
 import Matrix from 'matrix-js-sdk';
 import Promise from 'bluebird';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
@@ -40,7 +41,7 @@ const PHASE_REGISTRATION = 1;
 // Enable phases for registration
 const PHASES_ENABLED = true;
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'Registration',
 
     propTypes: {

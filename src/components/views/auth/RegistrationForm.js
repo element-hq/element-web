@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Email from '../../../email';
@@ -40,7 +41,7 @@ const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from of
 /**
  * A pure UI component which displays a registration form.
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RegistrationForm',
 
     propTypes: {
