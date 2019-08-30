@@ -2137,5 +2137,6 @@
     "Enter your custom homeserver URL <a>What does this mean?</a>": "Add meg a matrix szervered URL-jét <a>Mit jelent ez?</a>",
     "Enter your custom identity server URL <a>What does this mean?</a>": "Add meg az azonosítási szervered URL-jét <a>Mit jelent ez?</a>",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Használj azonosítási szervert e-mail címmel való meghíváshoz. <default> Használd az alapértelmezett szervert (%(defaultIdentityServerName)s)</default> vagy adj meg mást a <settings>Beállításokban</settings>.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Használj azonosítási szervert e-mail címmel való meghíváshoz. Megadása a <settings>Beállításokban</settings>."
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Használj azonosítási szervert e-mail címmel való meghíváshoz. Megadása a <settings>Beállításokban</settings>.",
+    "Enable room encryption": "Szoba titkosításának bekapcsolása"
 }
