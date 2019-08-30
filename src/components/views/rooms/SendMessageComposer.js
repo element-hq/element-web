@@ -343,6 +343,7 @@ export default class SendMessageComposer extends React.Component {
                     placeholder={this.props.placeholder}
                     onChange={this._saveStoredEditorState}
                 />
+                <div className="mx_SendMessageComposer_legend"><strong>**bold**</strong><em>_italic_</em><span>~strikethrough~</span><code>`code`</code><span>&gt; quote</span></div>
             </div>
         );
     }

@@ -30,7 +30,7 @@ limitations under the License.
         flex-direction: column;
         // min-height at this level so the mx_BasicMessageComposer_input
         // still stays vertically centered when less than 50px
-        min-height: 50px;
+        min-height: 42px;
 
         .mx_BasicMessageComposer_input {
             padding: 3px 0;
@@ -38,7 +38,7 @@ limitations under the License.
             // in it's parent vertically
             // while keeping the autocomplete at the top
             // of the composer. The parent needs to be a flex container for this to work.
-            margin: auto 0;
+            margin: auto 0 0 0;
             // max-height at this level so autocomplete doesn't get scrolled too
             max-height: 140px;
             overflow-y: auto;
@@ -48,6 +48,32 @@ limitations under the License.
     .mx_SendMessageComposer_overlayWrapper {
         position: relative;
         height: 0;
+    }
+
+    .mx_SendMessageComposer_legend {
+        height: 16px;
+        box-sizing: content-box;
+        font-size: 8px;
+        line-height: 10px;
+        padding: 0 0 2px 0;
+        color: $light-fg-color;
+        user-select: none;
+        visibility: hidden;
+
+        * {
+            display: inline-block;
+            margin: 0 10px 0 0;
+            padding: 1px;
+        }
+
+        code {
+            border-radius: 2px;
+            background-color: $focus-bg-color;
+        }
+
+        &.mx_SendMessageComposer_legend_shown {
+            visibility: visible;
+        }
     }
 }
 
