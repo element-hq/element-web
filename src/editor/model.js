@@ -47,6 +47,7 @@ export default class EditorModel {
         this._activePartIdx = null;
         this._autoComplete = null;
         this._autoCompletePartIdx = null;
+        this._autoCompletePartCount = 0;
         this._transformCallback = null;
         this.setUpdateCallback(updateCallback);
     }
@@ -218,34 +219,36 @@ export default class EditorModel {
                         // make sure that react picks up the difference between both acs
                         this._autoComplete = ac;
                         this._autoCompletePartIdx = index;
+                        this._autoCompletePartCount = 1;
                     }
                 }
             }
             // not _autoComplete, only there if active part is autocomplete part
             if (this.autoComplete) {
-                return this.autoComplete.onPartUpdate(part, pos.offset);
+                return this.autoComplete.onPartUpdate(part, pos);
             }
         } else {
             this._activePartIdx = null;
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
+            this._autoCompletePartCount = 0;
         }
         return Promise.resolve();
     }
 
-    _onAutoComplete = ({replacePart, caretOffset, close}) => {
+    _onAutoComplete = ({replaceParts, close}) => {
         let pos;
-        if (replacePart) {
-            this._replacePart(this._autoCompletePartIdx, replacePart);
-            const index = this._autoCompletePartIdx;
-            if (caretOffset === undefined) {
-                caretOffset = replacePart.text.length;
-            }
-            pos = new DocumentPosition(index, caretOffset);
+        if (replaceParts) {
+            this._parts.splice(this._autoCompletePartIdx, this._autoCompletePartCount, ...replaceParts);
+            this._autoCompletePartCount = replaceParts.length;
+            const lastPart = replaceParts[replaceParts.length - 1];
+            const lastPartIndex = this._autoCompletePartIdx + replaceParts.length - 1;
+            pos = new DocumentPosition(lastPartIndex, lastPart.text.length);
         }
         if (close) {
             this._autoComplete = null;
             this._autoCompletePartIdx = null;
+            this._autoCompletePartCount = 0;
         }
         // rerender even if editor contents didn't change
         // to make sure the MessageEditor checks

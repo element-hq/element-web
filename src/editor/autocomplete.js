@@ -27,8 +27,7 @@ export default class AutocompleteWrapperModel {
     onEscape(e) {
         this._getAutocompleterComponent().onEscape(e);
         this._updateCallback({
-            replacePart: this._partCreator.plain(this._queryPart.text),
-            caretOffset: this._queryOffset,
+            replaceParts: [this._partCreator.plain(this._queryPart.text)],
             close: true,
         });
     }
@@ -66,30 +65,29 @@ export default class AutocompleteWrapperModel {
         this._getAutocompleterComponent().moveSelection(+1);
     }
 
-    onPartUpdate(part, offset) {
+    onPartUpdate(part, pos) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this._queryPart = part;
-        this._queryOffset = offset;
+        this._partIndex = pos.index;
         return this._updateQuery(part.text);
     }
 
     onComponentSelectionChange(completion) {
         if (!completion) {
             this._updateCallback({
-                replacePart: this._queryPart,
-                caretOffset: this._queryOffset,
+                replaceParts: [this._queryPart],
             });
         } else {
             this._updateCallback({
-                replacePart: this._partForCompletion(completion),
+                replaceParts: this._partForCompletion(completion),
             });
         }
     }
 
     onComponentConfirm(completion) {
         this._updateCallback({
-            replacePart: this._partForCompletion(completion),
+            replaceParts: this._partForCompletion(completion),
             close: true,
         });
     }
@@ -101,16 +99,18 @@ export default class AutocompleteWrapperModel {
         switch (firstChr) {
             case "@": {
                 if (completionId === "@room") {
-                    return this._partCreator.atRoomPill(completionId);
+                    return [this._partCreator.atRoomPill(completionId)];
                 } else {
-                    return this._partCreator.userPill(text, completionId);
+                    const pill = this._partCreator.userPill(text, completionId);
+                    const postfix = this._partCreator.plain(this._partIndex === 0 ? ": " : " ");
+                    return [pill, postfix];
                 }
             }
             case "#":
-                return this._partCreator.roomPill(completionId);
+                return [this._partCreator.roomPill(completionId)];
             // used for emoji and command completion replacement
             default:
-                return this._partCreator.plain(text);
+                return [this._partCreator.plain(text)];
         }
     }
 }
