@@ -2137,6 +2137,8 @@
     "Upgrade the room": "升級聊天室",
     "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "設定電子郵件以供復原使用。使用電子郵件或電話以選擇性供其他聯絡人探索。",
     "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "設定電子郵件以供復原使用。使用電子郵件以選擇性供其他聯絡人探索。",
-    "Enter your custom homeserver URL <a>What does this mean?</a>": "輸入您自訂的家伺服器 URL。<a>這代表什麼？",
-    "Enter your custom identity server URL <a>What does this mean?</a>": "輸入您自訂的身份識別伺服器 URL。<a>這代表什麼？</a>"
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "輸入您自訂的家伺服器 URL。<a>這代表什麼？</a>",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "輸入您自訂的身份識別伺服器 URL。<a>這代表什麼？</a>",
+    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "使用身份識別伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "使用身份識別伺服器以透過電子郵件邀請。在<settings>設定</settings>中管理。"
 }
