@@ -202,6 +202,11 @@ $interactive-tooltip-fg-color: #ffffff;
     background-color: $button-secondary-bg-color;
 }
 
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
+
 // Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.

@@ -51,7 +51,14 @@ export function showStartChatInviteDialog() {
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
-        placeholder: _t("Email, name or Matrix ID"),
+        placeholder: (validAddressTypes) => {
+            // The set of valid address type can be mutated inside the dialog
+            // when you first have no IS but agree to use one in the dialog.
+            if (validAddressTypes.includes('email')) {
+                return _t("Email, name or Matrix ID");
+            }
+            return _t("Name or Matrix ID");
+        },
         validAddressTypes,
         button: _t("Start Chat"),
         onFinished: _onStartDmFinished,
@@ -68,9 +75,15 @@ export function showRoomInviteDialog(roomId) {
 
     Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
         title: _t('Invite new room members'),
-        description: _t('Who would you like to add to this room?'),
         button: _t('Send Invites'),
-        placeholder: _t("Email, name or Matrix ID"),
+        placeholder: (validAddressTypes) => {
+            // The set of valid address type can be mutated inside the dialog
+            // when you first have no IS but agree to use one in the dialog.
+            if (validAddressTypes.includes('email')) {
+                return _t("Email, name or Matrix ID");
+            }
+            return _t("Name or Matrix ID");
+        },
         validAddressTypes,
         onFinished: (shouldInvite, addrs) => {
             _onRoomInviteFinished(roomId, shouldInvite, addrs);
