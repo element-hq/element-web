@@ -447,7 +447,8 @@ module.exports = React.createClass({
     _showPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if (!threePidLogin || (this.props.serverRequiresIdServer && !haveIs) || !this._authStepIsUsed('m.login.msisdn')) {
+        const haveRequiredIs = this.props.serverRequiresIdServer && !haveIs;
+        if (!threePidLogin || haveRequiredIs || !this._authStepIsUsed('m.login.msisdn')) {
             return false;
         }
         return true;
