@@ -54,7 +54,7 @@ export function textSerialize(model) {
                 return text + part.text;
             case "room-pill":
             case "user-pill":
-                return text + `${part.resourceId}`;
+                return text + `${part.text}`;
         }
     }, "");
 }
