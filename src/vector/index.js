@@ -303,6 +303,12 @@ async function loadApp() {
         }
     }
 
+    // Inject Custom CSS
+    const customCss = SettingsStore.getValue("customCss");
+    var node = document.createElement('style');
+    node.innerHTML = customCss;
+    document.body.appendChild(node);
+
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
     if (configSyntaxError) {
         const errorMessage = (
