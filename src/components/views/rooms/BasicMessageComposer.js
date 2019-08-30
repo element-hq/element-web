@@ -268,14 +268,6 @@ export default class BasicMessageEditor extends React.Component {
             if (model.autoComplete) {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
-                    case "Enter":
-                        // only capture enter when something is selected in the list,
-                        // otherwise don't handle so the contents of the composer gets sent
-                        if (autoComplete.hasSelection()) {
-                            autoComplete.onEnter(event);
-                            handled = true;
-                        }
-                        break;
                     case "ArrowUp":
                         autoComplete.onUpArrow(event);
                         handled = true;
