@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
+import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ContentMessages from '../../ContentMessages';
 const dis = require('../../dispatcher');
 const filesize = require('filesize');
 import { _t } from '../../languageHandler';
 
-module.exports = React.createClass({displayName: 'UploadBar',
+module.exports = createReactClass({
+    displayName: 'UploadBar',
     propTypes: {
         room: PropTypes.object,
     },

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import TagOrderStore from '../../stores/TagOrderStore';
@@ -28,7 +29,7 @@ import { _t } from '../../languageHandler';
 import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 
-const TagPanel = React.createClass({
+const TagPanel = createReactClass({
     displayName: 'TagPanel',
 
     contextTypes: {
