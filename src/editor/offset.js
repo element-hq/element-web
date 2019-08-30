@@ -1,5 +1,4 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ServerConfig_help:link {
-    opacity: 0.8;
-}
+export default class DocumentOffset {
+    constructor(offset, atEnd) {
+        this.offset = offset;
+        this.atEnd = atEnd;
+    }
 
-.mx_ServerConfig_error {
-    display: block;
-    color: $warning-color;
-}
-
-.mx_ServerConfig_identityServer {
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.25s;
-
-    &.mx_ServerConfig_identityServer_shown {
-        transform: scaleY(1);
+    asPosition(model) {
+        return model.positionForOffset(this.offset, this.atEnd);
     }
 }

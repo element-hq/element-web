@@ -14,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditorModel from '../../../editor/model';
@@ -73,12 +75,13 @@ export default class BasicMessageEditor extends React.Component {
         this._editorRef = null;
         this._autocompleteRef = null;
         this._modifiedFlag = false;
+        this._isIMEComposing = false;
     }
 
-    _replaceEmoticon = (caret, inputType, diff) => {
+    _replaceEmoticon = (caretPosition, inputType, diff) => {
         const {model} = this.props;
-        const range = model.startRange(caret);
-        // expand range max 8 characters backwards from caret,
+        const range = model.startRange(caretPosition);
+        // expand range max 8 characters backwards from caretPosition,
         // as a space to look for an emoticon
         let n = 8;
         range.expandBackwardsWhile((index, offset) => {
@@ -91,6 +94,7 @@ export default class BasicMessageEditor extends React.Component {
             const query = emoticonMatch[1].toLowerCase().replace("-", "");
             const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
             if (data) {
+                const {partCreator} = model;
                 const hasPrecedingSpace = emoticonMatch[0][0] === " ";
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
@@ -99,7 +103,7 @@ export default class BasicMessageEditor extends React.Component {
                 range.moveStart(emoticonMatch.index + (hasPrecedingSpace ? 1 : 0));
                 // this returns the amount of added/removed characters during the replace
                 // so the caret position can be adjusted.
-                return range.replace([this.props.model.partCreator.plain(data.unicode + " ")]);
+                return range.replace([partCreator.plain(data.unicode + " ")]);
             }
         }
     }
@@ -116,11 +120,9 @@ export default class BasicMessageEditor extends React.Component {
         if (this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
-                this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
-                this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+                this._showPlaceholder();
             } else {
-                this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
-                this._editorRef.style.removeProperty("--placeholder");
+                this._hidePlaceholder();
             }
         }
         this.setState({autoComplete: this.props.model.autoComplete});
@@ -132,7 +134,31 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
+    _showPlaceholder() {
+        this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
+        this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+    }
+
+    _hidePlaceholder() {
+        this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
+        this._editorRef.style.removeProperty("--placeholder");
+    }
+
+    _onCompositionStart = (event) => {
+        this._isIMEComposing = true;
+        // even if the model is empty, the composition text shouldn't be mixed with the placeholder
+        this._hidePlaceholder();
+    }
+
+    _onCompositionEnd = (event) => {
+        this._isIMEComposing = false;
+    }
+
     _onInput = (event) => {
+        // ignore any input while doing IME compositions
+        if (this._isIMEComposing) {
+            return;
+        }
         this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
@@ -160,7 +186,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _refreshLastCaretIfNeeded() {
-        // TODO: needed when going up and down in editing messages ... not sure why yet
+        // XXX: needed when going up and down in editing messages ... not sure why yet
         // because the editors should stop doing this when when blurred ...
         // maybe it's on focus and the _editorRef isn't available yet or something.
         if (!this._editorRef) {
@@ -242,14 +268,6 @@ export default class BasicMessageEditor extends React.Component {
             if (model.autoComplete) {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
-                    case "Enter":
-                        // only capture enter when something is selected in the list,
-                        // otherwise don't handle so the contents of the composer gets sent
-                        if (autoComplete.hasSelection()) {
-                            autoComplete.onEnter(event);
-                            handled = true;
-                        }
-                        break;
                     case "ArrowUp":
                         autoComplete.onUpArrow(event);
                         handled = true;
@@ -269,12 +287,45 @@ export default class BasicMessageEditor extends React.Component {
                     default:
                         return; // don't preventDefault on anything else
                 }
+            } else if (event.key === "Tab") {
+                this._tabCompleteName();
+                handled = true;
             }
         }
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
         }
+    }
+
+    async _tabCompleteName() {
+        try {
+            await new Promise(resolve => this.setState({showVisualBell: false}, resolve));
+            const {model} = this.props;
+            const caret = this.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            const range = model.startRange(position);
+            range.expandBackwardsWhile((index, offset, part) => {
+                return part.text[offset] !== " " && (part.type === "plain" || part.type === "pill-candidate");
+            });
+            const {partCreator} = model;
+            // await for auto-complete to be open
+            await model.transform(() => {
+                const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
+                return model.positionForOffset(caret.offset + addedLen, true);
+            });
+            await model.autoComplete.onTab();
+            if (!model.autoComplete.hasSelection()) {
+                this.setState({showVisualBell: true});
+                model.autoComplete.close();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    getEditableRootNode() {
+        return this._editorRef;
     }
 
     isModified() {
@@ -291,6 +342,8 @@ export default class BasicMessageEditor extends React.Component {
 
     componentWillUnmount() {
         this._editorRef.removeEventListener("input", this._onInput, true);
+        this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
+        this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
     }
 
     componentDidMount() {
@@ -304,7 +357,7 @@ export default class BasicMessageEditor extends React.Component {
         // not really, but we could not serialize the parts, and just change the autoCompleter
         partCreator.setAutoCompleteCreator(autoCompleteCreator(
             () => this._autocompleteRef,
-            query => this.setState({query}),
+            query => new Promise(resolve => this.setState({query}, resolve)),
         ));
         this.historyManager = new HistoryManager(partCreator);
         // initial render of model
@@ -312,6 +365,8 @@ export default class BasicMessageEditor extends React.Component {
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
         this._editorRef.addEventListener("input", this._onInput, true);
+        this._editorRef.addEventListener("compositionstart", this._onCompositionStart, true);
+        this._editorRef.addEventListener("compositionend", this._onCompositionEnd, true);
         this._editorRef.focus();
     }
 
@@ -345,7 +400,10 @@ export default class BasicMessageEditor extends React.Component {
                 />
             </div>);
         }
-        return (<div className="mx_BasicMessageComposer">
+        const classes = classNames("mx_BasicMessageComposer", {
+            "mx_BasicMessageComposer_input_error": this.state.showVisualBell,
+        });
+        return (<div className={classes}>
             { autoComplete }
             <div
                 className="mx_BasicMessageComposer_input"

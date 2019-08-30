@@ -27,6 +27,15 @@ limitations under the License.
         white-space: nowrap;
     }
 
+    @keyframes visualbell {
+        from { background-color: $visual-bell-bg-color; }
+        to { background-color: $primary-bg-color; }
+    }
+
+    &.mx_BasicMessageComposer_input_error {
+        animation: 0.2s visualbell;
+    }
+
     .mx_BasicMessageComposer_input {
         white-space: pre-wrap;
         word-wrap: break-word;

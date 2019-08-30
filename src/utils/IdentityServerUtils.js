@@ -1,5 +1,4 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ServerConfig_help:link {
-    opacity: 0.8;
+import SdkConfig from '../SdkConfig';
+import MatrixClientPeg from '../MatrixClientPeg';
+
+export function getDefaultIdentityServerUrl() {
+    return SdkConfig.get()['validated_server_config']['isUrl'];
 }
 
-.mx_ServerConfig_error {
-    display: block;
-    color: $warning-color;
-}
-
-.mx_ServerConfig_identityServer {
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.25s;
-
-    &.mx_ServerConfig_identityServer_shown {
-        transform: scaleY(1);
-    }
+export function useDefaultIdentityServer() {
+    const url = getDefaultIdentityServerUrl();
+    // Account data change will update localstorage, client, etc through dispatcher
+    MatrixClientPeg.get().setAccountData("m.identity_server", {
+        base_url: url,
+    });
 }

@@ -52,7 +52,6 @@ describe('editor/range', function() {
         range.expandBackwardsWhile((index, offset) => model.parts[index].text[offset] !== " ");
         expect(range.text).toBe("world");
         range.replace([pc.roomPill(pillChannel)]);
-        console.log({parts: JSON.stringify(model.serializeParts())});
         expect(model.parts[0].type).toBe("plain");
         expect(model.parts[0].text).toBe("hello ");
         expect(model.parts[1].type).toBe("room-pill");
@@ -60,7 +59,6 @@ describe('editor/range', function() {
         expect(model.parts[2].type).toBe("plain");
         expect(model.parts[2].text).toBe("!!!!");
         expect(model.parts.length).toBe(3);
-        expect(renderer.count).toBe(1);
     });
     it('range replace across parts', function() {
         const renderer = createRenderer();
@@ -74,7 +72,6 @@ describe('editor/range', function() {
         const range = model.startRange(model.positionForOffset(14));  // after "replace"
         range.expandBackwardsWhile((index, offset) => model.parts[index].text[offset] !== " ");
         expect(range.text).toBe("replace");
-        console.log("range.text", {text: range.text});
         range.replace([pc.roomPill(pillChannel)]);
         expect(model.parts[0].type).toBe("plain");
         expect(model.parts[0].text).toBe("try to ");
@@ -83,6 +80,23 @@ describe('editor/range', function() {
         expect(model.parts[2].type).toBe("plain");
         expect(model.parts[2].text).toBe(" me");
         expect(model.parts.length).toBe(3);
-        expect(renderer.count).toBe(1);
+    });
+    // bug found while implementing tab completion
+    it('replace a part with an identical part with start position at end of previous part', function() {
+        const renderer = createRenderer();
+        const pc = createPartCreator();
+        const model = new EditorModel([
+            pc.plain("hello "),
+            pc.pillCandidate("man"),
+        ], pc, renderer);
+        const range = model.startRange(model.positionForOffset(9, true));  // before "man"
+        range.expandBackwardsWhile((index, offset) => model.parts[index].text[offset] !== " ");
+        expect(range.text).toBe("man");
+        range.replace([pc.pillCandidate(range.text)]);
+        expect(model.parts[0].type).toBe("plain");
+        expect(model.parts[0].text).toBe("hello ");
+        expect(model.parts[1].type).toBe("pill-candidate");
+        expect(model.parts[1].text).toBe("man");
+        expect(model.parts.length).toBe(2);
     });
 });
