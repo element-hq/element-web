@@ -1082,7 +1082,7 @@
     "Visible to everyone": "모두에게 보여짐",
     "Only visible to community members": "커뮤니티 구성원에게만 보여짐",
     "Visibility in Room List": "방 목록에서의 가시성",
-    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "%(groupId)s에 있는 %(roomName)s 방에서의 가시성이 업데이트 되지 않았습니다.",
+    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "%(groupId)s에서 '%(roomName)s' 방의 가시성이 업데이트되지 않았습니다.",
     "was invited %(count)s times|one": "님이 초대됐습니다.",
     "was invited %(count)s times|other": "님이 %(count)s번 초대됐습니다.",
     "collapse": "접기",
