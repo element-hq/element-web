@@ -27,9 +27,12 @@ released version of Riot:
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
 at https://packages.riot.im/riot-release-key.asc.
 
-Note that Chrome does not allow microphone or webcam access for sites served
-over http (except localhost), so for working VoIP you will need to serve Riot
-over https.
+Note that for the security of your chats will need to serve Riot
+over HTTPS. Major browsers also do not allow you to use VoIP/video
+chats over HTTP, as WebRTC is only usable over HTTPS.
+There are some exceptions like when using localhost, which is
+considered a [secure context](https://developer.mozilla.org/docs/Web/Security/Secure_Contexts)
+and thus allowed.
 
 To install Riot as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
