@@ -16,10 +16,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'CompatibilityPage',
     propTypes: {
         onAccept: PropTypes.func,

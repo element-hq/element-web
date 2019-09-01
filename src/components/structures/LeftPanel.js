@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
@@ -30,7 +29,7 @@ import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
 
 
-const LeftPanel = React.createClass({
+const LeftPanel = createReactClass({
     displayName: 'LeftPanel',
 
     // NB. If you add props, don't forget to update

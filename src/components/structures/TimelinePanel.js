@@ -19,8 +19,9 @@ limitations under the License.
 
 import SettingsStore from "../../settings/SettingsStore";
 
-const React = require('react');
-const ReactDOM = require("react-dom");
+import React from 'react';
+import createReactClass from 'create-react-class';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 
@@ -58,7 +59,7 @@ if (DEBUG) {
  *
  * Also responsible for handling and sending read receipts.
  */
-const TimelinePanel = React.createClass({
+const TimelinePanel = createReactClass({
     displayName: 'TimelinePanel',
 
     propTypes: {

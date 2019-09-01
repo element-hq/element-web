@@ -18,6 +18,7 @@ limitations under the License.
 /* global Velocity */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -35,7 +36,7 @@ const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType()
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MessagePanel',
 
     propTypes: {

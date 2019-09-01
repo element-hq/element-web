@@ -24,6 +24,7 @@ limitations under the License.
 import shouldHideEvent from '../../shouldHideEvent';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
@@ -70,7 +71,7 @@ const RoomContext = PropTypes.shape({
     room: PropTypes.instanceOf(Room),
 });
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,

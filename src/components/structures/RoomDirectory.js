@@ -15,9 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
+import createReactClass from 'create-react-class';
 
 const MatrixClientPeg = require('../../MatrixClientPeg');
 const ContentRepo = require("matrix-js-sdk").ContentRepo;
@@ -39,7 +38,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
