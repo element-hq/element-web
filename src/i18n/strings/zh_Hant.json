@@ -2140,5 +2140,9 @@
     "Enter your custom homeserver URL <a>What does this mean?</a>": "輸入您自訂的家伺服器 URL。<a>這代表什麼？</a>",
     "Enter your custom identity server URL <a>What does this mean?</a>": "輸入您自訂的身份識別伺服器 URL。<a>這代表什麼？</a>",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "使用身份識別伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "使用身份識別伺服器以透過電子郵件邀請。在<settings>設定</settings>中管理。"
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "使用身份識別伺服器以透過電子郵件邀請。在<settings>設定</settings>中管理。",
+    "Use an identity server": "使用身份識別伺服器",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "使用身份識別伺服器以透過電子郵件邀請。點選繼續以使用預設的身份識別伺服器 (%(defaultIdentityServerName)s) 或在設定中管理。",
+    "Use an identity server to invite by email. Manage in Settings.": "使用身份識別伺服器以透過電子郵件邀請。在設定中管理。",
+    "Enable room encryption": "啟用聊天室加密"
 }
