@@ -163,10 +163,7 @@ export default class SendMessageComposer extends React.Component {
 
     _isSlashCommand() {
         const parts = this.model.parts;
-        const isPlain = parts.reduce((isPlain, part) => {
-            return isPlain && (part.type === "command" || part.type === "plain" || part.type === "newline");
-        }, true);
-        return isPlain && parts.length > 0 && parts[0].text.startsWith("/");
+        return parts.length && parts[0].type === "command";
     }
 
     async _runSlashCommand() {
