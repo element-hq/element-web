@@ -268,7 +268,7 @@ export default class BasicMessageEditor extends React.Component {
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
         } else if (!(event.metaKey || event.altKey || event.shiftKey)) {
-            if (model.autoComplete) {
+            if (model.autoComplete && model.autoComplete.hasCompletions()) {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
                     case "ArrowUp":
@@ -309,7 +309,11 @@ export default class BasicMessageEditor extends React.Component {
             const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
             const range = model.startRange(position);
             range.expandBackwardsWhile((index, offset, part) => {
-                return part.text[offset] !== " " && (part.type === "plain" || part.type === "pill-candidate");
+                return part.text[offset] !== " " && (
+                    part.type === "plain" ||
+                    part.type === "pill-candidate" ||
+                    part.type === "command"
+                );
             });
             const {partCreator} = model;
             // await for auto-complete to be open
