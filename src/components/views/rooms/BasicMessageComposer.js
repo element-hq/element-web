@@ -175,6 +175,7 @@ export default class BasicMessageEditor extends React.Component {
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
         caret.offset += textToInsert.length;
         this.props.model.update(newText, inputType, caret);
+        this._modifiedFlag = true;
     }
 
     // this is used later to see if we need to recalculate the caret
