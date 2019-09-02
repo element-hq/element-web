@@ -18,7 +18,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
-import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand, unescapeMessage} from '../../../editor/serialize';
+import {
+    htmlSerializeIfNeeded,
+    textSerialize,
+    containsEmote,
+    stripEmoteCommand,
+    unescapeMessage,
+} from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
