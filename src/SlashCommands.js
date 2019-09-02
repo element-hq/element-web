@@ -31,6 +31,9 @@ import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
 import {textToHtmlRainbow} from "./utils/colour";
 import Promise from "bluebird";
+import { getAddressType } from './UserAddress';
+import { abbreviateUrl } from './utils/UrlUtils';
+import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 
 const singleMxcUpload = async () => {
     return new Promise((resolve) => {
@@ -342,11 +345,46 @@ export const CommandMap = {
                 if (matches) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
-                    const userId = matches[1];
+                    const address = matches[1];
+                    // If we need an identity server but don't have one, things
+                    // get a bit more complex here, but we try to show something
+                    // meaningful.
+                    let finished = Promise.resolve();
+                    if (
+                        getAddressType(address) === 'email' &&
+                        !MatrixClientPeg.get().getIdentityServerUrl()
+                    ) {
+                        const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
+                        if (defaultIdentityServerUrl) {
+                            ({ finished } = Modal.createTrackedDialog('Slash Commands', 'Identity server',
+                                QuestionDialog, {
+                                    title: _t("Use an identity server"),
+                                    description: <p>{_t(
+                                        "Use an identity server to invite by email. " +
+                                        "Click continue to use the default identity server " +
+                                        "(%(defaultIdentityServerName)s) or manage in Settings.",
+                                        {
+                                            defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
+                                        },
+                                    )}</p>,
+                                    button: _t("Continue"),
+                                },
+                            ));
+                        } else {
+                            return reject(_t("Use an identity server to invite by email. Manage in Settings."));
+                        }
+                    }
                     const inviter = new MultiInviter(roomId);
-                    return success(inviter.invite([userId]).then(() => {
-                        if (inviter.getCompletionState(userId) !== "invited") {
-                            throw new Error(inviter.getErrorText(userId));
+                    return success(finished.then(([useDefault] = []) => {
+                        if (useDefault) {
+                            useDefaultIdentityServer();
+                        } else if (useDefault === false) {
+                            throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
+                        }
+                        return inviter.invite([address]);
+                    }).then(() => {
+                        if (inviter.getCompletionState(address) !== "invited") {
+                            throw new Error(inviter.getErrorText(address));
                         }
                     }));
                 }
