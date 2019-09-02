@@ -2141,5 +2141,8 @@
     "Enable room encryption": "Szoba titkosításának bekapcsolása",
     "Use an identity server": "Azonosítási szerver használata",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Azonosítási szerver használata e-maillel való meghíváshoz. Kattints a folytatáshoz az alapértelmezett (%(defaultIdentityServerName)s) azonosítási szerverrel vagy változtasd meg a Beállításokban.",
-    "Use an identity server to invite by email. Manage in Settings.": "Az e-maillel való meghíváshoz használj azonosítási szervert. Módosítsd a Beállításokban."
+    "Use an identity server to invite by email. Manage in Settings.": "Az e-maillel való meghíváshoz használj azonosítási szervert. Módosítsd a Beállításokban.",
+    "Deactivate user?": "Felhasználó felfüggesztése?",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "A felhasználó felfüggesztése a felhasználót kijelentkezteti és megakadályozza, hogy vissza tudjon lépni. Továbbá kilép minden szobából aminek tagja volt. Ezt nem lehet visszavonni. Biztos, hogy felfüggeszted ezt a felhasználót?",
+    "Deactivate user": "Felhasználó felfüggesztése"
 }
