@@ -465,10 +465,6 @@ export class CommandPartCreator extends PartCreator {
 }
 
 class CommandPart extends PillCandidatePart {
-    acceptsInsertion(chr, i) {
-        return PlainPart.prototype.acceptsInsertion.call(this, chr, i);
-    }
-
     get type() {
         return "command";
     }
