@@ -494,7 +494,7 @@
     "Dec": "12월",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(monthName)s %(day)s일 %(weekDayName)s요일 %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(fullYear)s년 %(monthName)s %(day)s일 %(weekDayName)s요일 %(time)s",
-    "%(weekDayName)s %(time)s": "%(weekDayName)s, %(time)s",
+    "%(weekDayName)s %(time)s": "%(weekDayName)s요일, %(time)s",
     "Set a display name:": "표시 이름 설정:",
     "Upload an avatar:": "아바타 업로드:",
     "This server does not support authentication with a phone number.": "이 서버는 전화번호 인증을 지원하지 않습니다.",
