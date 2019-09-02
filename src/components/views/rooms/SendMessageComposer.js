@@ -203,6 +203,9 @@ export default class SendMessageComposer extends React.Component {
     }
 
     _sendMessage() {
+        if (this.model.isEmpty) {
+            return;
+        }
         if (!containsEmote(this.model) && this._isSlashCommand()) {
             this._runSlashCommand();
         } else {
