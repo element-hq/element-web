@@ -1887,5 +1887,22 @@
     "Messages": "Nachrichten",
     "Actions": "Aktionen",
     "Displays list of commands with usages and descriptions": "Zeigt eine Liste von Befehlen mit Verwendungen und Beschreibungen an",
-    "Connect this device to Key Backup": "Schließen Sie dieses Gerät an Key Backup an"
+    "Connect this device to Key Backup": "Schließen Sie dieses Gerät an Key Backup an",
+    "Call failed due to misconfigured server": "Anruf aufgrund eines falsch konfigurierten Servers fehlgeschlagen",
+    "Try using turn.matrix.org": "Versuchen Sie es mit turn.matrix.org",
+    "You do not have the required permissions to use this command.": "Sie haben nicht die erforderlichen Berechtigungen, um diesen Befehl zu verwenden.",
+    "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "Verwenden Sie den neuen, schnelleren, aber noch experimentellen Composer zum Schreiben von Nachrichten (Aktualisierung erforderlich)",
+    "Multiple integration managers": "Mehrere Integrationsmanager",
+    "Public Name": "Öffentlicher Name",
+    "This Riot instance does not have an integrations server configured.": "Für diese Riot-Instanz ist kein Integrationsserver konfiguriert.",
+    "Connecting to integrations server...": "Verbindung zum Integrationsserver wird hergestellt ...",
+    "Cannot connect to integrations server": "Es kann keine Verbindung zum Integrationsserver hergestellt werden",
+    "The integrations server is offline or it cannot reach your homeserver.": "Der Integrationsserver ist offline oder kann Ihren Homeserver nicht erreichen.",
+    "Enable audible notifications for this device": "Aktivieren Sie die akustischen Benachrichtigungen für dieses Gerät",
+    "Identity Server URL must be HTTPS": "Die Identity Server-URL muss HTTPS sein",
+    "Could not connect to Identity Server": "Verbindung zum Identity Server konnte nicht hergestellt werden",
+    "Checking server": "Server wird überprüft",
+    "Identity server has no terms of service": "Für den Identity Server gelten keine Nutzungsbedingungen",
+    "Disconnect": "Trennen",
+    "Identity Server": "Identitätsserver"
 }
