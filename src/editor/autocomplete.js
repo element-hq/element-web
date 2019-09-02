@@ -41,6 +41,11 @@ export default class AutocompleteWrapperModel {
         return this._getAutocompleterComponent().hasSelection();
     }
 
+    hasCompletions() {
+        const ac = this._getAutocompleterComponent();
+        return ac && ac.countCompletions() > 0;
+    }
+
     onEnter() {
         this._updateCallback({close: true});
     }

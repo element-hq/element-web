@@ -265,7 +265,7 @@ export default class BasicMessageEditor extends React.Component {
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
         } else if (!(event.metaKey || event.altKey || event.shiftKey)) {
-            if (model.autoComplete) {
+            if (model.autoComplete && model.autoComplete.hasCompletions()) {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
                     case "ArrowUp":
