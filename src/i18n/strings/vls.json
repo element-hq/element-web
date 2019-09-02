@@ -1750,5 +1750,21 @@
     "Command Help": "Hulp by ipdrachtn",
     "No Identity Server is configured so you cannot add add an email address in order to reset your password in the future.": "’t Is geen identiteitsserver geconfigureerd, dus je ku geen e-mailadresse toevoegn vo je paswoord in den toekomst herin te stelln.",
     "No Identity Server is configured: no email addreses can be added. You will be unable to reset your password.": "’t Is geen identiteitsserver geconfigureerd gewist: e-mailadressn kunn nie toegevoegd wordn. Je goa je paswoord nie kunn herinstelln.",
-    "No identity server is configured: add one in server settings to reset your password.": "’t Is geen identiteitsserver geconfigureerd gewist: voegt der één toe in de serverinstelliengn vo je paswoord herin te stelln."
+    "No identity server is configured: add one in server settings to reset your password.": "’t Is geen identiteitsserver geconfigureerd gewist: voegt der één toe in de serverinstelliengn vo je paswoord herin te stelln.",
+    "Call failed due to misconfigured server": "Iproep mislukt door verkeerd gecounfigureerde server",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Vroagt an den beheerder van je thuusserver (<code>%(homeserverDomain)s</code>) vo e TURN-server te counfigureern tenende jen iproepn betrouwboar te doen werkn.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Je kut ook de publieke server ip <code>turn.matrix.org</code> gebruukn, mo da goa minder betrouwboar zyn, en goa jen IP-adresse me die server deeln. Je kut dit ook beheern in d’Instelliengn.",
+    "Try using turn.matrix.org": "Probeert van turn.matrix.org te gebruukn",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Lat den terugvalserver vo iproepsbystand turn.matrix.org toe o je thuusserver der geen anbiedt (jen IP-adresse wor gedeeld binst een iproep)",
+    "Identity server has no terms of service": "Den identiteitsserver èt geen dienstvoorwoardn",
+    "The identity server you have chosen does not have any terms of service.": "Den identiteitsserver da je gekozen ghed èt, èt geen dienstvoorwoardn.",
+    "Only continue if you trust the owner of the server.": "Goat alleene mo verder o je den eigenoar van de server betrouwt.",
+    "Terms of service not accepted or the identity server is invalid.": "Dienstvoorwoardn nie anveird, of den identiteitsserver is oungeldig.",
+    "You are currently sharing email addresses or phone numbers on the identity server <idserver />. You will need to reconnect to <idserver2 /> to stop sharing them.": "Je deelt vo de moment e-mailadressn of telefongnumero’s ip den identiteitsserver <idserver />. Je goa moen herverbiendn me <idserver2 /> vo ze nie mi te deeln.",
+    "Enter a new identity server": "Gift e nieuwen identiteitsserver in",
+    "Terms of service not accepted or the integration manager is invalid.": "Dienstvoorwoardn nie anveird, of den integroasjebeheerder is oungeldig.",
+    "Integration manager has no terms of service": "Den integroasjebeheerder èt geen dienstvoorwoardn",
+    "The integration manager you have chosen does not have any terms of service.": "Den integroasjebeheerder da je gekozen ghed èt, èt geen dienstvoorwoardn.",
+    "Remove %(email)s?": "%(email)s verwydern?",
+    "Remove %(phone)s?": "%(phone)s verwydern?"
 }
