@@ -337,8 +337,10 @@ module.exports = React.createClass({
                 title = _t("Something went wrong with your invite to %(roomName)s",
                     {roomName: this._roomName()});
                 const joinRule = this._joinRule();
-                const errCodeMessage = _t("%(errcode)s was returned while trying to valide your invite. You could try to pass this information on to a room admin.",
-                    {errcode: this.state.threePidFetchError.errcode},
+                const errCodeMessage = _t(
+                    "An error (%(errcode)s) was returned while trying to validate your " +
+                    "invite. You could try to pass this information on to a room admin.",
+                    {errcode: this.state.threePidFetchError.errcode || _t("unknown error code")},
                 );
                 switch (joinRule) {
                     case "invite":
