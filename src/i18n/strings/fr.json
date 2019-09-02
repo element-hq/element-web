@@ -2148,5 +2148,8 @@
     "Enter your custom identity server URL <a>What does this mean?</a>": "Saisissez l’URL de votre serveur d’identité personnalisé <a>Qu’est-ce que ça veut dire ?</a>",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilisez un serveur d’identité pour inviter avec un e-mail. <default>Utilisez le serveur par défaut (%(defaultIdentityServerName)s)</default> ou gérez-le dans les <settings>Paramètres</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Utilisez un serveur d’identité pour inviter par e-mail. Gérez-le dans les <settings>Paramètres</settings>.",
-    "Enable room encryption": "Activer le chiffrement du salon"
+    "Enable room encryption": "Activer le chiffrement du salon",
+    "Use an identity server": "Utiliser un serveur d’identité",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Cliquez sur continuer pour utiliser le serveur d’identité par défaut (%(defaultIdentityServerName)s) ou gérez-le dans les paramètres.",
+    "Use an identity server to invite by email. Manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Gérez-le dans les paramètres."
 }
