@@ -164,6 +164,7 @@ class PillPart extends BasePart {
 
     toDOMNode() {
         const container = document.createElement("span");
+        container.setAttribute("spellcheck", "false");
         container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
         this.setAvatar(container);
