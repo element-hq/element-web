@@ -118,7 +118,15 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-
+    plain: new Command({
+        name: 'plain',
+        args: '<message>',
+        description: _td('Sends a message as plain text, without interpreting it as markdown'),
+        runFn: function(roomId, messages) {
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+        },
+        category: CommandCategories.messages,
+    }),
     ddg: new Command({
         name: 'ddg',
         args: '<query>',
