@@ -46,6 +46,7 @@ import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -61,6 +62,7 @@ module.exports = React.createClass({
                 ban: false,
                 mute: false,
                 modifyLevel: false,
+                synapseDeactivate: false,
             },
             muted: false,
             isTargetMod: false,
@@ -215,8 +217,8 @@ module.exports = React.createClass({
         }
     },
 
-    _updateStateForNewMember: function(member) {
-        const newState = this._calculateOpsPermissions(member);
+    _updateStateForNewMember: async function(member) {
+        const newState = await this._calculateOpsPermissions(member);
         newState.devicesLoading = true;
         newState.devices = null;
         this.setState(newState);
@@ -464,6 +466,25 @@ module.exports = React.createClass({
         });
     },
 
+    onSynapseDeactivate: function() {
+        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        Modal.createTrackedDialog('Synapse User Deactivation', '', QuestionDialog, {
+            title: _t("Deactivate user?"),
+            description:
+                <div>{ _t(
+                    "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
+                    "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to " +
+                    "deactivate this user?"
+                ) }</div>,
+            button: _t("Deactivate user"),
+            danger: true,
+            onFinished: (accepted) => {
+                if (!accepted) return;
+                this.context.matrixClient.deactivateSynapseUser(this.props.member.userId);
+            },
+        });
+    },
+
     _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
         this.setState({ updating: this.state.updating + 1 });
         this.context.matrixClient.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
@@ -548,7 +569,7 @@ module.exports = React.createClass({
         });
     },
 
-    _calculateOpsPermissions: function(member) {
+    _calculateOpsPermissions: async function(member) {
         const defaultPerms = {
             can: {},
             muted: false,
@@ -564,7 +585,7 @@ module.exports = React.createClass({
 
         const them = member;
         return {
-            can: this._calculateCanPermissions(
+            can: await this._calculateCanPermissions(
                 me, them, powerLevels.getContent(),
             ),
             muted: this._isMuted(them, powerLevels.getContent()),
@@ -572,7 +593,7 @@ module.exports = React.createClass({
         };
     },
 
-    _calculateCanPermissions: function(me, them, powerLevels) {
+    _calculateCanPermissions: async function(me, them, powerLevels) {
         const isMe = me.userId === them.userId;
         const can = {
             kick: false,
@@ -581,6 +602,10 @@ module.exports = React.createClass({
             modifyLevel: false,
             modifyLevelMax: 0,
         };
+
+        // Calculate permissions for Synapse before doing the PL checks
+        can.synapseDeactivate = await this.context.matrixClient.isSynapseAdministrator();
+
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
             //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
@@ -786,6 +811,7 @@ module.exports = React.createClass({
         let banButton;
         let muteButton;
         let giveModButton;
+        let synapseDeactivateButton;
         let spinner;
 
         if (this.props.member.userId !== this.context.matrixClient.credentials.userId) {
@@ -893,8 +919,19 @@ module.exports = React.createClass({
             </AccessibleButton>;
         }
 
+        // We don't need a perfect check here, just something to pass as "probably not our homeserver". If
+        // someone does figure out how to bypass this check the worst that happens is an error.
+        const sameHomeserver = this.props.member.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`);
+        if (this.state.can.synapseDeactivate && sameHomeserver) {
+            synapseDeactivateButton = (
+                <AccessibleButton onClick={this.onSynapseDeactivate} className="mx_MemberInfo_field">
+                    {_t("Deactivate user")}
+                </AccessibleButton>
+            );
+        }
+
         let adminTools;
-        if (kickButton || banButton || muteButton || giveModButton) {
+        if (kickButton || banButton || muteButton || giveModButton || synapseDeactivateButton) {
             adminTools =
                 <div>
                     <h3>{ _t("Admin Tools") }</h3>
@@ -904,6 +941,7 @@ module.exports = React.createClass({
                         { kickButton }
                         { banButton }
                         { giveModButton }
+                        { synapseDeactivateButton }
                     </div>
                 </div>;
         }
