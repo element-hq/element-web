@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
-import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
+import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand, unescapeMessage} from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
@@ -54,6 +54,7 @@ function createMessageContent(model, permalinkCreator) {
     if (isEmote) {
         model = stripEmoteCommand(model);
     }
+    model = unescapeMessage(model);
     const repliedToEvent = RoomViewStore.getQuotingEvent();
 
     const body = textSerialize(model);
