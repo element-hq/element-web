@@ -290,11 +290,12 @@ export default class SendMessageComposer extends React.Component {
         const member = this.props.room.getMember(userId);
         const displayName = member ?
             member.rawDisplayName : userId;
-        const userPillPart = partCreator.userPill(displayName, userId);
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        const insertIndex = position.index + 1;
+        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
         model.transform(() => {
-            const addedLen = model.insert([userPillPart], position);
+            const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);
         });
         // refocus on composer, as we just clicked "Mention"

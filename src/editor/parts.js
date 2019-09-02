@@ -441,6 +441,12 @@ export class PartCreator {
         const member = this._room.getMember(userId);
         return new UserPillPart(userId, displayName, member);
     }
+
+    createMentionParts(partIndex, displayName, userId) {
+        const pill = this.userPill(displayName, userId);
+        const postfix = this.plain(partIndex === 0 ? ": " : " ");
+        return [pill, postfix];
+    }
 }
 
 // part creator that support auto complete for /commands,
