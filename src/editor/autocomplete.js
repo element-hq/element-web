@@ -106,9 +106,7 @@ export default class AutocompleteWrapperModel {
                 if (completionId === "@room") {
                     return [this._partCreator.atRoomPill(completionId)];
                 } else {
-                    const pill = this._partCreator.userPill(text, completionId);
-                    const postfix = this._partCreator.plain(this._partIndex === 0 ? ": " : " ");
-                    return [pill, postfix];
+                    return this._partCreator.createMentionParts(this._partIndex, text, completionId);
                 }
             }
             case "#":
