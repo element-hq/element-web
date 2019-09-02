@@ -2138,5 +2138,8 @@
     "Enter your custom identity server URL <a>What does this mean?</a>": "Add meg az azonosítási szervered URL-jét <a>Mit jelent ez?</a>",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Használj azonosítási szervert e-mail címmel való meghíváshoz. <default> Használd az alapértelmezett szervert (%(defaultIdentityServerName)s)</default> vagy adj meg mást a <settings>Beállításokban</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Használj azonosítási szervert e-mail címmel való meghíváshoz. Megadása a <settings>Beállításokban</settings>.",
-    "Enable room encryption": "Szoba titkosításának bekapcsolása"
+    "Enable room encryption": "Szoba titkosításának bekapcsolása",
+    "Use an identity server": "Azonosítási szerver használata",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Azonosítási szerver használata e-maillel való meghíváshoz. Kattints a folytatáshoz az alapértelmezett (%(defaultIdentityServerName)s) azonosítási szerverrel vagy változtasd meg a Beállításokban.",
+    "Use an identity server to invite by email. Manage in Settings.": "Az e-maillel való meghíváshoz használj azonosítási szervert. Módosítsd a Beállításokban."
 }
