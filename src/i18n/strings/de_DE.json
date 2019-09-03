@@ -1904,5 +1904,16 @@
     "Checking server": "Server wird überprüft",
     "Identity server has no terms of service": "Für den Identity Server gelten keine Nutzungsbedingungen",
     "Disconnect": "Trennen",
-    "Identity Server": "Identitätsserver"
+    "Identity Server": "Identitätsserver",
+    "Use an identity server": "Benutze einen Identitätsserver",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Benutze einen Identitätsserver, um andere mittels E-Mail einzuladen. Klicke auf fortfahren, um den Standard-Identitätsserver (%(defaultIdentityServerName)s) zu benutzen oder gehe in die Einstellung und gib einen anderen Server an.",
+    "ID": "ID",
+    "Not a valid Identity Server (status code %(code)s)": "Kein gültiger Identitätsserver (status code %(code)s)",
+    "Terms of service not accepted or the identity server is invalid.": "Die Nutzungsbedingungen wurden nicht akzeptiert oder der Identitätsserver ist ungültig.",
+    "Identity Server (%(server)s)": "Identitätsserver (%(server)s)",
+    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Die Verwendung eines Identitätsserver ist optional. Wenn du dich dazu entschließen solltest, keinen Identitätsserver zu verwenden, wirst du von anderen Nutzern nicht gefunden werden können und du kannst andere nicht mittels E-Mail oder Telefonnummer einladen.",
+    "Do not use an identity server": "Keinen Identitätsserver verwenden",
+    "Enter a new identity server": "Gib einen neuen Identitätsserver ein",
+    "Clear personal data": "Persönliche Daten löschen",
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Warnung: Deine persönlichen Daten (inkl. Verschlüsselungsschlüssel) sind noch auf diesem Gerät gespeichert. Lösche diese Daten, wenn du mit der Nutzung auf diesem Gerät fertig bist oder dich in einen anderen Account einloggen möchtest."
 }
