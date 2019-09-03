@@ -2144,5 +2144,12 @@
     "Use an identity server to invite by email. Manage in Settings.": "Az e-maillel való meghíváshoz használj azonosítási szervert. Módosítsd a Beállításokban.",
     "Deactivate user?": "Felhasználó felfüggesztése?",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "A felhasználó felfüggesztése a felhasználót kijelentkezteti és megakadályozza, hogy vissza tudjon lépni. Továbbá kilép minden szobából aminek tagja volt. Ezt nem lehet visszavonni. Biztos, hogy felfüggeszted ezt a felhasználót?",
-    "Deactivate user": "Felhasználó felfüggesztése"
+    "Deactivate user": "Felhasználó felfüggesztése",
+    "Sends a message as plain text, without interpreting it as markdown": "Az üzenet elküldése sima szövegként anélkül, hogy „markdown” formázás lenne",
+    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to a room admin.": "A meghívód ellenőrzésekor az alábbi hibát kaptuk: %(errcode)s. Ezt az információt megpróbálhatod eljuttatni a szoba gazdájának.",
+    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "A meghívó ehhez a szobához: %(roomName)s erre az e-mail címre lett elküldve: %(email)s ami nincs társítva a fiókodhoz",
+    "Link this email with your account in Settings to receive invites directly in Riot.": "Kösd össze a Beállításokban ezt az e-mail címet a fiókoddal, hogy közvetlenül a Riotba kaphassa meghívókat.",
+    "This invite to %(roomName)s was sent to %(email)s": "A meghívó ehhez a szobához: %(roomName)s ide lett elküldve: %(email)s",
+    "Use an identity server in Settings to receive invites directly in Riot.": "Állíts be azonosítási szervert a Beállításokban, hogy közvetlen meghívókat kaphass Riotba.",
+    "Share this email in Settings to receive invites directly in Riot.": "Oszd meg a Beállításokban ezt az e-mail címet, hogy közvetlen meghívókat kaphass Riotba."
 }
