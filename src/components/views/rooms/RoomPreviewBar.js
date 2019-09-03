@@ -117,8 +117,8 @@ module.exports = React.createClass({
                 // Gather the account 3PIDs
                 const account3pids = await MatrixClientPeg.get().getThreePids();
                 this.setState({
-                    accountEmails: account3pids.threepids.filter(b => b.medium === 'email')
-                                                         .map(b => b.address),
+                    accountEmails: account3pids.threepids
+                        .filter(b => b.medium === 'email').map(b => b.address),
                 });
                 // If we have an IS connected, use that to lookup the email and
                 // check the bound MXID.
