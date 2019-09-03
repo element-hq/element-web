@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 export default class Range {
-    constructor(model, startPosition, endPosition = startPosition) {
+    constructor(model, positionA, positionB = positionA) {
         this._model = model;
-        this._start = startPosition;
-        this._end = endPosition;
+        const bIsLarger = positionA.compare(positionB) < 0;
+        this._start = bIsLarger ? positionA : positionB;
+        this._end = bIsLarger ? positionB : positionA;
     }
 
     moveStart(delta) {
