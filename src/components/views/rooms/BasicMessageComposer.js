@@ -226,21 +226,15 @@ export default class BasicMessageEditor extends React.Component {
         return this.getCaret().offset === this._lastTextLength;
     }
 
-    _onBlur = (event) => {
+    _onBlur = () => {
         document.removeEventListener("selectionchange", this._onSelectionChange);
-        if (this.props.onBlur) {
-            this.props.onBlur(event);
-        }
     }
 
-    _onFocus = (event) => {
+    _onFocus = () => {
         document.addEventListener("selectionchange", this._onSelectionChange);
         // force to recalculate
         this._lastSelection = null;
         this._refreshLastCaretIfNeeded();
-        if (this.props.onFocus) {
-            this.props.onFocus(event);
-        }
     }
 
     _onSelectionChange = () => {

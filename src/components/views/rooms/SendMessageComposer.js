@@ -33,7 +33,6 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import classNames from "classnames";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -88,7 +87,6 @@ export default class SendMessageComposer extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = {};
         this.model = null;
         this._editorRef = null;
         this.currentlyComposedEditorState = null;
@@ -332,18 +330,7 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
-    _onFocus = () => {
-        this.setState({focused: true});
-    }
-
-    _onBlur = () => {
-        this.setState({focused: false});
-    }
-
     render() {
-        const legendClasses = classNames("mx_SendMessageComposer_legend", {
-            "mx_SendMessageComposer_legend_shown": this.state.focused,
-        });
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
                 <div className="mx_SendMessageComposer_overlayWrapper">
@@ -356,16 +343,7 @@ export default class SendMessageComposer extends React.Component {
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onChange={this._saveStoredEditorState}
-                    onFocus={this._onFocus}
-                    onBlur={this._onBlur}
                 />
-                <div className={legendClasses}>
-                    <strong>**bold**</strong>
-                    <em>_italic_</em>
-                    <span>&lt;del&gt;strikethrough&lt;/del&gt;</span>
-                    <code>`code`</code>
-                    <span>&gt; quote</span>
-                </div>
             </div>
         );
     }
