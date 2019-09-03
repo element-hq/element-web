@@ -1997,5 +1997,16 @@
     "Remove %(email)s?": "Poista %(email)s?",
     "Remove %(phone)s?": "Poista %(phone)s?",
     "Command Help": "Komento-ohje",
-    "This account has been deactivated.": "Tämä tili on deaktivoitu."
+    "This account has been deactivated.": "Tämä tili on deaktivoitu.",
+    "Sends a message as plain text, without interpreting it as markdown": "Lähettää viestin pelkkänä tekstinä, tulkitsematta sitä markdownina",
+    "You do not have the required permissions to use this command.": "Sinulla ei ole vaadittavia oikeuksia tämän komennon käyttämiseksi.",
+    "Use an identity server": "Käytä identiteettipalvelinta",
+    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Ellet halua käyttää palvelinta <server /> löytääksesi tuntemiasi ihmisiä ja tullaksesi löydetyksi, syötä toinen identiteettipalvelin alle.",
+    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Identiteettipalvelimen käyttäminen on valinnaista. Jos päätät olla käyttämättä identiteettipalvelinta, muut käyttäjät eivät löydä sinua etkä voi kutsua muita sähköpostin tai puhelinnumeron perusteella.",
+    "Do not use an identity server": "Älä käytä identiteettipalvelinta",
+    "This invite to %(roomName)s was sent to %(email)s": "Tämä kutsu huoneeseen %(roomName)s lähetettiin sähköpostiosoitteeseen %(email)s",
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Aseta sähköpostiosoite tilin palauttamista varten. Sähköpostiosoitetta tai puhelinnumeroa voi valinnaisesti käyttää siihen, että tuntemasi ihmiset voivat löytää sinut.",
+    "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "Aseta sähköpostiosoite tilin palauttamista varten. Sähköpostiosoitetta voi valinnaisesti käyttää siihen, että tuntemasi ihmiset voivat löytää sinut.",
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "Syötä mukautettu kotipalvelimen URL-osoite <a>Mitä tämä tarkoittaa?</a>",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "Syötä mukautettu identiteettipalvelimen URL-osoite <a>Mitä tämä tarkoittaa?</a>"
 }
