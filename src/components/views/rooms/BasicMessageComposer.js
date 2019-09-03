@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
-import {getCaretOffsetAndText} from '../../../editor/dom';
+import {getCaretOffsetAndText, getSelectionOffsetAndText} from '../../../editor/dom';
 import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
@@ -424,7 +424,45 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
+    _replaceSelection(callback) {
+        const selection = document.getSelection();
+        if (selection.isCollapsed) {
+            return;
+        }
+        const focusOffset = getSelectionOffsetAndText(
+            this._editorRef,
+            selection.focusNode,
+            selection.focusOffset,
+        ).offset;
+        const anchorOffset = getSelectionOffsetAndText(
+            this._editorRef,
+            selection.anchorNode,
+            selection.anchorOffset,
+        ).offset;
+        const {model} = this.props;
+        const focusPosition = focusOffset.asPosition(model);
+        const anchorPosition = anchorOffset.asPosition(model);
+        const range = model.startRange(focusPosition, anchorPosition);
+        const firstPosition = focusPosition.compare(anchorPosition) < 0 ? focusPosition : anchorPosition;
+
+        model.transform(() => {
+            const oldLen = range.length;
+            const newParts = callback(range);
+            const addedLen = range.replace(newParts);
+            const lastOffset = firstPosition.asOffset(model);
+            lastOffset.offset += oldLen + addedLen;
+            return lastOffset.asPosition(model);
+        });
+    }
+
     _formatBold = () => {
+        const {partCreator} = this.props.model;
+        this._replaceSelection(range => {
+            const parts = range.parts;
+            parts.splice(0, 0, partCreator.plain("**"));
+            parts.push(partCreator.plain("**"));
+            return parts;
+        });
     }
 
     _formatItalic = () => {
