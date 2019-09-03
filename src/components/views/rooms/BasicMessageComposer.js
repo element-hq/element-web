@@ -74,8 +74,10 @@ export default class BasicMessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
+        this._formatBarRef = null;
         this._modifiedFlag = false;
         this._isIMEComposing = false;
+        this._hasTextSelected = false;
     }
 
     _replaceEmoticon = (caretPosition, inputType, diff) => {
@@ -239,6 +241,36 @@ export default class BasicMessageEditor extends React.Component {
 
     _onSelectionChange = () => {
         this._refreshLastCaretIfNeeded();
+        const selection = document.getSelection();
+        if (this._hasTextSelected && selection.isCollapsed) {
+            this._hasTextSelected = false;
+            if (this._formatBarRef) {
+                this._formatBarRef.classList.remove("mx_BasicMessageComposer_formatBar_shown");
+            }
+        } else if (!selection.isCollapsed) {
+            this._hasTextSelected = true;
+            if (this._formatBarRef) {
+                this._formatBarRef.classList.add("mx_BasicMessageComposer_formatBar_shown");
+                const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
+
+                let leftOffset = 0;
+                let node = this._formatBarRef;
+                while (node.offsetParent) {
+                    node = node.offsetParent;
+                    leftOffset += node.offsetLeft;
+                }
+
+                let topOffset = 0;
+                node = this._formatBarRef;
+                while (node.offsetParent) {
+                    node = node.offsetParent;
+                    topOffset += node.offsetTop;
+                }
+
+                this._formatBarRef.style.left = `${selectionRect.left - leftOffset}px`;
+                this._formatBarRef.style.top = `${selectionRect.top - topOffset - 16 - 12}px`;
+            }
+        }
     }
 
     _onKeyDown = (event) => {
@@ -392,6 +424,25 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
+    _formatBold = () => {
+    }
+
+    _formatItalic = () => {
+
+    }
+
+    _formatStrikethrough = () => {
+
+    }
+
+    _formatQuote = () => {
+
+    }
+
+    _formatCodeBlock = () => {
+
+    }
+
     render() {
         let autoComplete;
         if (this.state.autoComplete) {
@@ -413,6 +464,13 @@ export default class BasicMessageEditor extends React.Component {
         });
         return (<div className={classes}>
             { autoComplete }
+            <div className="mx_BasicMessageComposer_formatBar" ref={ref => this._formatBarRef = ref}>
+                <span onClick={this._formatBold} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatBold"></span>
+                <span onClick={this._formatItalic} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatItalic"></span>
+                <span onClick={this._formatStrikethrough} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatStrikethrough"></span>
+                <span onClick={this._formatCode} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatCode"></span>
+                <span onClick={this._formatQuote} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatQuote"></span>
+            </div>
             <div
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
