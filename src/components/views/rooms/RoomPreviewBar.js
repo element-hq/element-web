@@ -35,6 +35,8 @@ const MessageCase = Object.freeze({
     Kicked: "Kicked",
     Banned: "Banned",
     OtherThreePIDError: "OtherThreePIDError",
+    InvitedEmailNotFoundInAccount: "InvitedEmailNotFoundInAccount",
+    InvitedEmailNoIdentityServer: "InvitedEmailNoIdentityServer",
     InvitedEmailMismatch: "InvitedEmailMismatch",
     Invite: "Invite",
     ViewingRoom: "ViewingRoom",
@@ -106,12 +108,24 @@ module.exports = React.createClass({
     },
 
     _checkInvitedEmail: async function() {
-        // If this is an invite and we've been told what email
-        // address was invited, fetch the user's list of Threepids
-        // so we can check them against the one that was invited
+        // If this is an invite and we've been told what email address was
+        // invited, fetch the user's account emails and discovery bindings so we
+        // can check them against the email that was invited.
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
             try {
+                // Gather the account 3PIDs
+                const account3pids = await MatrixClientPeg.get().getThreePids();
+                this.setState({
+                    accountEmails: account3pids.threepids.filter(b => b.medium === 'email')
+                                                         .map(b => b.address),
+                });
+                // If we have an IS connected, use that to lookup the email and
+                // check the bound MXID.
+                if (!MatrixClientPeg.get().getIdentityServerUrl()) {
+                    this.setState({busy: false});
+                    return;
+                }
                 const authClient = new IdentityAuthClient();
                 const identityAccessToken = await authClient.getAccessToken();
                 const result = await MatrixClientPeg.get().lookupThreePid(
@@ -157,6 +171,13 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     return MessageCase.OtherThreePIDError;
+                } else if (
+                    this.state.accountEmails &&
+                    !this.state.accountEmails.includes(this.props.invitedEmail)
+                ) {
+                    return MessageCase.InvitedEmailNotFoundInAccount;
+                } else if (!MatrixClientPeg.get().getIdentityServerUrl()) {
+                    return MessageCase.InvitedEmailNoIdentityServer;
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().getUserId()) {
                     return MessageCase.InvitedEmailMismatch;
                 }
@@ -348,6 +369,8 @@ module.exports = React.createClass({
                             _t("You can only join it with a working invite."),
                             errCodeMessage,
                         ];
+                        primaryActionLabel = _t("Try to join anyway");
+                        primaryActionHandler = this.props.onJoinClick;
                         break;
                     case "public":
                         subTitle = _t("You can still join it because this is a public room.");
@@ -362,25 +385,51 @@ module.exports = React.createClass({
                 }
                 break;
             }
+            case MessageCase.InvitedEmailNotFoundInAccount: {
+                title = _t(
+                    "This invite to %(roomName)s was sent to %(email)s which is not " +
+                    "associated with your account",
+                    {
+                        roomName: this._roomName(),
+                        email: this.props.invitedEmail,
+                    },
+                );
+                subTitle = _t(
+                    "Link this email with your account in Settings to receive invites " +
+                    "directly in Riot.",
+                );
+                primaryActionLabel = _t("Join the discussion");
+                primaryActionHandler = this.props.onJoinClick;
+                break;
+            }
+            case MessageCase.InvitedEmailNoIdentityServer: {
+                title = _t(
+                    "This invite to %(roomName)s was sent to %(email)s",
+                    {
+                        roomName: this._roomName(),
+                        email: this.props.invitedEmail,
+                    },
+                );
+                subTitle = _t(
+                    "Use an identity server in Settings to receive invites directly in Riot.",
+                );
+                primaryActionLabel = _t("Join the discussion");
+                primaryActionHandler = this.props.onJoinClick;
+                break;
+            }
             case MessageCase.InvitedEmailMismatch: {
-                title = _t("This invite to %(roomName)s wasn't sent to your account",
-                    {roomName: this._roomName()});
-                const joinRule = this._joinRule();
-                if (joinRule === "public") {
-                    subTitle = _t("You can still join it because this is a public room.");
-                    primaryActionLabel = _t("Join the discussion");
-                    primaryActionHandler = this.props.onJoinClick;
-                } else {
-                    subTitle = _t(
-                        "Sign in with a different account, ask for another invite, or " +
-                        "add the e-mail address %(email)s to this account.",
-                        {email: this.props.invitedEmail},
-                    );
-                    if (joinRule !== "invite") {
-                        primaryActionLabel = _t("Try to join anyway");
-                        primaryActionHandler = this.props.onJoinClick;
-                    }
-                }
+                title = _t(
+                    "This invite to %(roomName)s was sent to %(email)s",
+                    {
+                        roomName: this._roomName(),
+                        email: this.props.invitedEmail,
+                    },
+                );
+                subTitle = _t(
+                    "Share this email in Settings to receive invites directly in Riot.",
+                );
+                primaryActionLabel = _t("Join the discussion");
+                primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.Invite: {
