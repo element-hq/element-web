@@ -306,6 +306,7 @@ async function loadApp() {
     // Inject Custom CSS
     const customCss = SettingsStore.getValue("customCss");
     var node = document.createElement('style');
+    node.setAttribute("id", "customcss_container");
     node.innerHTML = customCss;
     document.body.appendChild(node);
 
