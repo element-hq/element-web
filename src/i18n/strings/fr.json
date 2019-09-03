@@ -2151,5 +2151,8 @@
     "Enable room encryption": "Activer le chiffrement du salon",
     "Use an identity server": "Utiliser un serveur d’identité",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Cliquez sur continuer pour utiliser le serveur d’identité par défaut (%(defaultIdentityServerName)s) ou gérez-le dans les paramètres.",
-    "Use an identity server to invite by email. Manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Gérez-le dans les paramètres."
+    "Use an identity server to invite by email. Manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Gérez-le dans les paramètres.",
+    "Deactivate user?": "Désactiver l’utilisateur ?",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Désactiver cet utilisateur le déconnectera et l’empêchera de se reconnecter. De plus, il quittera tous les salons qu’il a rejoints. Cette action ne peut pas être annulée. Voulez-vous vraiment désactiver cet utilisateur ?",
+    "Deactivate user": "Désactiver l’utilisateur"
 }
