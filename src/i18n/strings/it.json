@@ -2089,5 +2089,20 @@
     "Multiple integration managers": "Gestori di integrazione multipli",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Se non vuoi usare <server /> per trovare ed essere trovato dai contatti esistenti che conosci, inserisci un altro server di identità qua sotto.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Usare un server di identità è facoltativo. Se scegli di non usarne uno, non potrai essere trovato dagli altri utenti e non potrai invitarne altri per email o telefono.",
-    "Do not use an identity server": "Non usare un server di identità"
+    "Do not use an identity server": "Non usare un server di identità",
+    "You do not have the required permissions to use this command.": "Non hai l'autorizzazione necessaria per usare questo comando.",
+    "Use an identity server": "Usa un server di identità",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Usa un server di identità per invitare via email. Clicca \"Continua\" per usare quello predefinito (%(defaultIdentityServerName)s) o gestiscilo nelle impostazioni.",
+    "Use an identity server to invite by email. Manage in Settings.": "Usa un server di identità per invitare via email. Gestisci nelle impostazioni.",
+    "Upgrade the room": "Aggiorna la stanza",
+    "Enable room encryption": "Attiva la cifratura della stanza",
+    "Deactivate user?": "Disattivare l'utente?",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Disattivare questo utente lo disconnetterà e ne impedirà nuovi accessi. In aggiunta, abbandonerà tutte le stanze in cui è presente. Questa azione non può essere annullata. Sei sicuro di volere disattivare questo utente?",
+    "Deactivate user": "Disattiva utente",
+    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Usa un server di identità per invitare via email. <default>Usa quello predefinito (%(defaultIdentityServerName)s)</default> o gestiscilo nelle <settings>impostazioni</settings>.",
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Usa un server di identità per invitare via email. Gestisci nelle <settings>impostazioni</settings>.",
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Imposta un'email per il recupero dell'account. Usa l'email o il telefono per essere facoltativamente trovabile dai contatti esistenti.",
+    "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "Imposta un'email per il recupero dell'account. Usa l'email per essere facoltativamente trovabile dai contatti esistenti.",
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "Inserisci l'URL dell'homeserver personalizzato <a>Cosa significa?</a>",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "Inserisci l'URL del server di identità personalizzato <a>Cosa significa?</a>"
 }
