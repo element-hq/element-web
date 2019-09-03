@@ -151,6 +151,22 @@ export default class RolesRoomSettingsTab extends React.Component {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent);
     };
 
+    _onUserPowerLevelChanged = (value, powerLevelKey) => {
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(this.props.roomId);
+        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        let plContent = plEvent ? (plEvent.getContent() || {}) : {};
+
+        // Clone the power levels just in case
+        plContent = Object.assign({}, plContent);
+
+        // powerLevelKey should be a user ID
+        if (!plContent['users']) plContent['users'] = {};
+        plContent['users'][powerLevelKey] = value;
+
+        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent);
+    };
+
     render() {
         const PowerSelector = sdk.getComponent('elements.PowerSelector');
 
@@ -220,15 +236,29 @@ export default class RolesRoomSettingsTab extends React.Component {
             const privilegedUsers = [];
             const mutedUsers = [];
 
-            Object.keys(userLevels).forEach(function(user) {
+            Object.keys(userLevels).forEach((user) => {
                 const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
-                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                        <PowerSelector
+                            value={userLevels[user]}
+                            disabled={!canChange}
+                            label={user}
+                            key={user}
+                            powerLevelKey={user} // Will be sent as the second parameter to `onChange`
+                            onChange={this._onUserPowerLevelChanged}
+                        />,
                     );
                 } else if (userLevels[user] < defaultUserLevel) { // muted
                     mutedUsers.push(
-                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                        <PowerSelector
+                            value={userLevels[user]}
+                            disabled={!canChange}
+                            label={user}
+                            key={user}
+                            powerLevelKey={user} // Will be sent as the second parameter to `onChange`
+                            onChange={this._onUserPowerLevelChanged}
+                        />,
                     );
                 }
             });
