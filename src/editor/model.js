@@ -394,11 +394,12 @@ export default class EditorModel {
 
     /**
      * Starts a range, which can span across multiple parts, to find and replace text.
-     * @param {DocumentPosition} position where to start the range
+     * @param {DocumentPosition} positionA a boundary of the range
+     * @param {DocumentPosition?} positionB the other boundary of the range, optional
      * @return {Range}
      */
-    startRange(position) {
-        return new Range(this, position);
+    startRange(positionA, positionB = positionA) {
+        return new Range(this, positionA, positionB);
     }
 
     //mostly internal, called from Range.replace
