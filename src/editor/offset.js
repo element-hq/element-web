@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 export default class DocumentOffset {
-    constructor(offset, atEnd) {
+    constructor(offset, atNodeEnd) {
         this.offset = offset;
-        this.atEnd = atEnd;
+        this.atNodeEnd = atNodeEnd;
     }
 
     asPosition(model) {
-        return model.positionForOffset(this.offset, this.atEnd);
+        return model.positionForOffset(this.offset, this.atNodeEnd);
     }
 }
