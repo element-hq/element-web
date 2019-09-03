@@ -1124,7 +1124,7 @@
     "Reply": "답장",
     "Pin Message": "메시지 고정하기",
     "Share Message": "메시지 공유",
-    "Collapse Reply Thread": "이어지는 답장 줄이기",
+    "Collapse Reply Thread": "이어지는 답장 접기",
     "View Community": "커뮤니티 보기",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "<chromeLink>크롬</chromeLink>이나 <firefoxLink>파이어폭스</firefoxLink>를 설치하면 가장 좋은 경험을 하실 수 있습니다.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>사파리</safariLink>나 <operaLink>오페라</operaLink>도 가능합니다.",
@@ -1211,7 +1211,7 @@
     "Revoke widget access": "위젯 접근 취소",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s이 %(count)s번 떠나고 다시 참가했습니다",
-    "<a>In reply to</a> <pill>": "<a>이 답장의 질문</a> <pill>",
+    "<a>In reply to</a> <pill>": "<a>질문한 사람</a> <pill>",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "계정을 비활성화할 때 보낸 모든 메시지는 지워주세요 (<b>경고:</b> 이후 이용자들은 불완전한 대화 목록을 볼 수 있을 겁니다)",
     "Explore Account Data": "계정 정보 탐색",
     "Updating Riot": "Riot 업데이트 중",
@@ -1995,5 +1995,8 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요.",
     "Use an identity server": "ID 서버 사용",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "ID 서버를 사용해 이메일로 초대하세요. 기본 ID 서버 (%(defaultIdentityServerName)s)를 사용하려면 계속을 클릭하거나 설정에서 관리하세요.",
-    "Use an identity server to invite by email. Manage in Settings.": "ID 서버를 사용해 이메일로 초대하세요. 설정에서 관리하세요."
+    "Use an identity server to invite by email. Manage in Settings.": "ID 서버를 사용해 이메일로 초대하세요. 설정에서 관리하세요.",
+    "Deactivate user?": "사용자를 비활성화합니까?",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "사용자를 비활성화하면 사용자는 로그아웃되며 다시 로그인할 수 없게 됩니다. 또한 사용자는 모든 방에서 떠나게 됩니다. 이 작업은 돌이킬 수 없습니다. 이 사용자를 비활성화하겠습니까?",
+    "Deactivate user": "사용자 비활성화"
 }
