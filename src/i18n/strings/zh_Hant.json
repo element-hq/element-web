@@ -2144,5 +2144,8 @@
     "Use an identity server": "使用身份識別伺服器",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "使用身份識別伺服器以透過電子郵件邀請。點選繼續以使用預設的身份識別伺服器 (%(defaultIdentityServerName)s) 或在設定中管理。",
     "Use an identity server to invite by email. Manage in Settings.": "使用身份識別伺服器以透過電子郵件邀請。在設定中管理。",
-    "Enable room encryption": "啟用聊天室加密"
+    "Enable room encryption": "啟用聊天室加密",
+    "Deactivate user?": "停用使用者？",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "停用此使用者將會把他們登出並防止他們再次登入。另外，他們也將會離開所有加入的聊天室。此動作不可逆。您確定您想要停用此使用者嗎？",
+    "Deactivate user": "停用使用者"
 }
