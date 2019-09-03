@@ -57,4 +57,27 @@ export default class Range {
         this._model.replaceRange(this._start, this._end, parts);
         return newLength - oldLength;
     }
+
+    /**
+     * Returns a copy of the (partial) parts within the range.
+     * For partial parts, only the text is adjusted to the part that intersects with the range.
+     */
+    get parts() {
+        const parts = [];
+        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+            const serializedPart = part.serialize();
+            serializedPart.text = part.text.substring(startIdx, endIdx);
+            const newPart = this._model.partCreator.deserializePart(serializedPart);
+            parts.push(newPart);
+        });
+        return parts;
+    }
+
+    get length() {
+        let len = 0;
+        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+            len += endIdx - startIdx;
+        });
+        return len;
+    }
 }
