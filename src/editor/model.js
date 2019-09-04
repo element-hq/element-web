@@ -388,7 +388,11 @@ export default class EditorModel {
             currentOffset += partLen;
             return false;
         });
-        return new DocumentPosition(index, totalOffset - currentOffset);
+        if (index === -1) {
+            return this.getPositionAtEnd();
+        } else {
+            return new DocumentPosition(index, totalOffset - currentOffset);
+        }
     }
 
     /**
