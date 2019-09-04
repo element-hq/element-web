@@ -58,7 +58,7 @@ export default class Range {
         this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
             oldLength += endIdx - startIdx;
         });
-        this._model.replaceRange(this._start, this._end, parts);
+        this._model._replaceRange(this._start, this._end, parts);
         return newLength - oldLength;
     }
 

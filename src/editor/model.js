@@ -401,8 +401,8 @@ export default class EditorModel {
         return new Range(this, positionA, positionB);
     }
 
-    //mostly internal, called from Range.replace
-    replaceRange(startPosition, endPosition, parts) {
+    // called from Range.replace
+    _replaceRange(startPosition, endPosition, parts) {
         // convert end position to offset, so it is independent of how the document is split into parts
         // which we'll change when splitting up at the start position
         const endOffset = endPosition.asOffset(this);
