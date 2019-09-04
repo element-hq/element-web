@@ -21,7 +21,10 @@ import PropTypes from 'prop-types';
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
-import {getCaretOffsetAndText, getSelectionOffsetAndText} from '../../../editor/dom';
+import {
+    formatInline,
+} from '../../../editor/operations';
+import {getCaretOffsetAndText, getRangeForSelection, getSelectionOffsetAndText} from '../../../editor/dom';
 import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
@@ -455,26 +458,24 @@ export default class BasicMessageEditor extends React.Component {
         });
     }
 
-    _wrapSelection(prefix, suffix = prefix) {
-        const {partCreator} = this.props.model;
-        this._replaceSelection(range => {
-            const parts = range.parts;
-            parts.splice(0, 0, partCreator.plain(prefix));
-            parts.push(partCreator.plain(suffix));
-            return parts;
-        });
+    _wrapSelectionAsInline(prefix, suffix = prefix) {
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatInline(range, prefix, suffix);
     }
 
     _formatBold = () => {
-        this._wrapSelection("**");
+        this._wrapSelectionAsInline("**");
     }
 
     _formatItalic = () => {
-        this._wrapSelection("*");
+        this._wrapSelectionAsInline("*");
     }
 
     _formatStrikethrough = () => {
-        this._wrapSelection("<del>", "</del>");
+        this._wrapSelectionAsInline("<del>", "</del>");
     }
 
     _formatQuote = () => {

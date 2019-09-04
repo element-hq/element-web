@@ -142,3 +142,19 @@ function getTextNodeValue(node) {
         return nodeText;
     }
 }
+
+export function getRangeForSelection(editor, model, selection) {
+    const focusOffset = getSelectionOffsetAndText(
+        editor,
+        selection.focusNode,
+        selection.focusOffset,
+    ).offset;
+    const anchorOffset = getSelectionOffsetAndText(
+        editor,
+        selection.anchorNode,
+        selection.anchorOffset,
+    ).offset;
+    const focusPosition = focusOffset.asPosition(model);
+    const anchorPosition = anchorOffset.asPosition(model);
+    return model.startRange(focusPosition, anchorPosition);
+}
