@@ -388,7 +388,6 @@ export default class EditorModel {
             currentOffset += partLen;
             return false;
         });
-
         return new DocumentPosition(index, totalOffset - currentOffset);
     }
 
