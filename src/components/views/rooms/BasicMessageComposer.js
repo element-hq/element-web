@@ -24,6 +24,7 @@ import {setCaretPosition} from '../../../editor/caret';
 import {
     replaceRangeAndExpandSelection,
     formatRangeAsQuote,
+    formatRangeAsCode,
     formatInline,
 } from '../../../editor/operations';
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
@@ -457,8 +458,12 @@ export default class BasicMessageEditor extends React.Component {
         formatRangeAsQuote(range);
     }
 
-    _formatCodeBlock = () => {
-
+    _formatCode = () => {
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatRangeAsCode(range);
     }
 
     render() {

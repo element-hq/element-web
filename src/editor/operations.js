@@ -67,6 +67,29 @@ export function formatRangeAsQuote(range) {
     replaceRangeAndExpandSelection(model, range, parts);
 }
 
+export function formatRangeAsCode(range) {
+    const {model, parts} = range;
+    const {partCreator} = model;
+    const needsBlock = parts.some(p => p.type === "newline");
+    if (needsBlock) {
+        parts.unshift(partCreator.plain("```"), partCreator.newline());
+        if (!rangeStartsAtBeginningOfLine(range)) {
+            parts.unshift(partCreator.newline());
+        }
+        parts.push(
+            partCreator.newline(),
+            partCreator.plain("```"));
+        if (rangeEndsAtEndOfLine(range)) {
+            parts.push(partCreator.newline());
+        }
+        replaceRangeAndExpandSelection(model, range, parts);
+    } else {
+        parts.unshift(partCreator.plain("`"));
+        parts.push(partCreator.plain("`"));
+        replaceRangeAndExpandSelection(model, range, parts);
+    }
+}
+
 export function formatInline(range, prefix, suffix = prefix) {
     const {model, parts} = range;
     const {partCreator} = model;
