@@ -478,7 +478,30 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _formatQuote = () => {
-
+        const {model} = this.props;
+        const {partCreator} = this.props.model;
+        this._replaceSelection(range => {
+            const parts = range.parts;
+            parts.splice(0, 0, partCreator.plain("> "));
+            const startsWithPartial = range.start.offset !== 0;
+            const isFirstPart = range.start.index === 0;
+            const previousIsNewline = !isFirstPart && model.parts[range.start.index - 1].type === "newline";
+            // prepend a newline if there is more text before the range on this line
+            if (startsWithPartial || (!isFirstPart && !previousIsNewline)) {
+                parts.splice(0, 0, partCreator.newline());
+            }
+            // start at position 1 to make sure we skip the potentially inserted newline above,
+            // as we already inserted a quote sign for it above
+            for (let i = 1; i < parts.length; ++i) {
+                const part = parts[i];
+                if (part.type === "newline") {
+                    parts.splice(i + 1, 0, partCreator.plain("> "));
+                }
+            }
+            parts.push(partCreator.newline());
+            parts.push(partCreator.newline());
+            return parts;
+        });
     }
 
     _formatCodeBlock = () => {
