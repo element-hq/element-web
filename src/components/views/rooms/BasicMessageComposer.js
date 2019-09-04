@@ -22,9 +22,11 @@ import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
 import {
+    replaceRangeAndExpandSelection,
+    formatRangeAsQuote,
     formatInline,
 } from '../../../editor/operations';
-import {getCaretOffsetAndText, getRangeForSelection, getSelectionOffsetAndText} from '../../../editor/dom';
+import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
 import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
@@ -427,37 +429,6 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
-    _replaceSelection(callback) {
-        const selection = document.getSelection();
-        if (selection.isCollapsed) {
-            return;
-        }
-        const focusOffset = getSelectionOffsetAndText(
-            this._editorRef,
-            selection.focusNode,
-            selection.focusOffset,
-        ).offset;
-        const anchorOffset = getSelectionOffsetAndText(
-            this._editorRef,
-            selection.anchorNode,
-            selection.anchorOffset,
-        ).offset;
-        const {model} = this.props;
-        const focusPosition = focusOffset.asPosition(model);
-        const anchorPosition = anchorOffset.asPosition(model);
-        const range = model.startRange(focusPosition, anchorPosition);
-        const firstPosition = focusPosition.compare(anchorPosition) < 0 ? focusPosition : anchorPosition;
-
-        model.transform(() => {
-            const oldLen = range.length;
-            const newParts = callback(range);
-            const addedLen = range.replace(newParts);
-            const lastOffset = firstPosition.asOffset(model);
-            lastOffset.offset += oldLen + addedLen;
-            return lastOffset.asPosition(model);
-        });
-    }
-
     _wrapSelectionAsInline(prefix, suffix = prefix) {
         const range = getRangeForSelection(
             this._editorRef,
@@ -479,30 +450,11 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _formatQuote = () => {
-        const {model} = this.props;
-        const {partCreator} = this.props.model;
-        this._replaceSelection(range => {
-            const parts = range.parts;
-            parts.splice(0, 0, partCreator.plain("> "));
-            const startsWithPartial = range.start.offset !== 0;
-            const isFirstPart = range.start.index === 0;
-            const previousIsNewline = !isFirstPart && model.parts[range.start.index - 1].type === "newline";
-            // prepend a newline if there is more text before the range on this line
-            if (startsWithPartial || (!isFirstPart && !previousIsNewline)) {
-                parts.splice(0, 0, partCreator.newline());
-            }
-            // start at position 1 to make sure we skip the potentially inserted newline above,
-            // as we already inserted a quote sign for it above
-            for (let i = 1; i < parts.length; ++i) {
-                const part = parts[i];
-                if (part.type === "newline") {
-                    parts.splice(i + 1, 0, partCreator.plain("> "));
-                }
-            }
-            parts.push(partCreator.newline());
-            parts.push(partCreator.newline());
-            return parts;
-        });
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatRangeAsQuote(range);
     }
 
     _formatCodeBlock = () => {

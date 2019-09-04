@@ -29,6 +29,44 @@ export function replaceRangeAndExpandSelection(model, range, newParts) {
     });
 }
 
+export function rangeStartsAtBeginningOfLine(range) {
+    const {model} = range;
+    const startsWithPartial = range.start.offset !== 0;
+    const isFirstPart = range.start.index === 0;
+    const previousIsNewline = !isFirstPart && model.parts[range.start.index - 1].type === "newline";
+    return !startsWithPartial && (isFirstPart || previousIsNewline);
+}
+
+export function rangeEndsAtEndOfLine(range) {
+    const {model} = range;
+    const lastPart = model.parts[range.end.index];
+    const endsWithPartial = range.end.offset !== lastPart.length;
+    const isLastPart = range.end.index === model.parts.length - 1;
+    const nextIsNewline = !isLastPart && model.parts[range.end.index + 1].type === "newline";
+    return !endsWithPartial && (isLastPart || nextIsNewline);
+}
+
+export function formatRangeAsQuote(range) {
+    const {model, parts} = range;
+    const {partCreator} = model;
+    for (let i = 0; i < parts.length; ++i) {
+        const part = parts[i];
+        if (part.type === "newline") {
+            parts.splice(i + 1, 0, partCreator.plain("> "));
+        }
+    }
+    parts.unshift(partCreator.plain("> "));
+    if (!rangeStartsAtBeginningOfLine(range)) {
+        parts.unshift(partCreator.newline());
+    }
+    if (rangeEndsAtEndOfLine(range)) {
+        parts.push(partCreator.newline());
+    }
+
+    parts.push(partCreator.newline());
+    replaceRangeAndExpandSelection(model, range, parts);
+}
+
 export function formatInline(range, prefix, suffix = prefix) {
     const {model, parts} = range;
     const {partCreator} = model;

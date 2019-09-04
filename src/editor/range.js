@@ -33,6 +33,10 @@ export default class Range {
         this._start = this._start.backwardsWhile(this._model, predicate);
     }
 
+    get model() {
+        return this._model;
+    }
+
     get text() {
         let text = "";
         this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {

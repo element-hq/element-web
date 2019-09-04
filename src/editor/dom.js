@@ -45,7 +45,7 @@ export function getCaretOffsetAndText(editor, sel) {
     return {caret: offset, text};
 }
 
-export function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
+function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
     // sometimes selectionNode is an element, and then selectionOffset means
     // the index of a child element ... - 1 🤷
     if (selectionNode.nodeType === Node.ELEMENT_NODE && selectionOffset !== 0) {

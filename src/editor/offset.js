@@ -23,4 +23,8 @@ export default class DocumentOffset {
     asPosition(model) {
         return model.positionForOffset(this.offset, this.atNodeEnd);
     }
+
+    add(delta, atNodeEnd = false) {
+        return new DocumentOffset(this.offset + delta, atNodeEnd);
+    }
 }
