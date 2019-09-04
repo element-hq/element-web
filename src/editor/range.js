@@ -80,4 +80,12 @@ export default class Range {
         });
         return len;
     }
+
+    get start() {
+        return this._start;
+    }
+
+    get end() {
+        return this._end;
+    }
 }
