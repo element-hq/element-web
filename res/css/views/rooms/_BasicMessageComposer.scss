@@ -76,13 +76,12 @@ limitations under the License.
 
     .mx_BasicMessageComposer_formatBar {
         display: none;
-        background-color: red;
         width: calc(26px * 5);
         height: 24px;
         position: absolute;
         cursor: pointer;
         border-radius: 4px;
-        background: $message-action-bar-bg-color;
+        background-color: $message-action-bar-bg-color;
 
         &.mx_BasicMessageComposer_formatBar_shown {
             display: block;
@@ -137,6 +136,5 @@ limitations under the License.
         .mx_BasicMessageComposer_formatCode::after {
             mask-image: url('$(res)/img/format/code.svg');
         }
-
     }
 }
