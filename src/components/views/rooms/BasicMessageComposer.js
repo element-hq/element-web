@@ -455,22 +455,26 @@ export default class BasicMessageEditor extends React.Component {
         });
     }
 
-    _formatBold = () => {
+    _wrapSelection(prefix, suffix = prefix) {
         const {partCreator} = this.props.model;
         this._replaceSelection(range => {
             const parts = range.parts;
-            parts.splice(0, 0, partCreator.plain("**"));
-            parts.push(partCreator.plain("**"));
+            parts.splice(0, 0, partCreator.plain(prefix));
+            parts.push(partCreator.plain(suffix));
             return parts;
         });
     }
 
-    _formatItalic = () => {
+    _formatBold = () => {
+        this._wrapSelection("**");
+    }
 
+    _formatItalic = () => {
+        this._wrapSelection("*");
     }
 
     _formatStrikethrough = () => {
-
+        this._wrapSelection("<del>", "</del>");
     }
 
     _formatQuote = () => {
