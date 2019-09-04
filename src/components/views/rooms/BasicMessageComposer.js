@@ -22,7 +22,6 @@ import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import {setCaretPosition} from '../../../editor/caret';
 import {
-    replaceRangeAndExpandSelection,
     formatRangeAsQuote,
     formatRangeAsCode,
     formatInline,
