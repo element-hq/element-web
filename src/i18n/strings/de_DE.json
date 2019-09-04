@@ -1915,5 +1915,6 @@
     "Do not use an identity server": "Keinen Identitätsserver verwenden",
     "Enter a new identity server": "Gib einen neuen Identitätsserver ein",
     "Clear personal data": "Persönliche Daten löschen",
-    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Warnung: Deine persönlichen Daten (inkl. Verschlüsselungsschlüssel) sind noch auf diesem Gerät gespeichert. Lösche diese Daten, wenn du mit der Nutzung auf diesem Gerät fertig bist oder dich in einen anderen Account einloggen möchtest."
+    "Warning: Your personal data (including encryption keys) is still stored on this device. Clear it if you're finished using this device, or want to sign in to another account.": "Warnung: Deine persönlichen Daten (inkl. Verschlüsselungsschlüssel) sind noch auf diesem Gerät gespeichert. Lösche diese Daten, wenn du mit der Nutzung auf diesem Gerät fertig bist oder dich in einen anderen Account einloggen möchtest.",
+    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Wenn du die Verbindung zu deinem Identitätsserver trennst, heißt das, dass du nicht mehr von anderen Benutzern gefunden werden und auch andere nicht mehr per E-Mail oder Telefonnummer einladen kannst."
 }
