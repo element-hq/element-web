@@ -59,7 +59,7 @@ export function formatRangeAsQuote(range) {
     if (!rangeStartsAtBeginningOfLine(range)) {
         parts.unshift(partCreator.newline());
     }
-    if (rangeEndsAtEndOfLine(range)) {
+    if (!rangeEndsAtEndOfLine(range)) {
         parts.push(partCreator.newline());
     }
 
@@ -79,15 +79,14 @@ export function formatRangeAsCode(range) {
         parts.push(
             partCreator.newline(),
             partCreator.plain("```"));
-        if (rangeEndsAtEndOfLine(range)) {
+        if (!rangeEndsAtEndOfLine(range)) {
             parts.push(partCreator.newline());
         }
-        replaceRangeAndExpandSelection(model, range, parts);
     } else {
         parts.unshift(partCreator.plain("`"));
         parts.push(partCreator.plain("`"));
-        replaceRangeAndExpandSelection(model, range, parts);
     }
+    replaceRangeAndExpandSelection(model, range, parts);
 }
 
 export function formatInline(range, prefix, suffix = prefix) {
