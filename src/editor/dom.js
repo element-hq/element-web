@@ -80,13 +80,13 @@ function getCaret(node, offsetToNode, offsetWithinNode) {
 // all ZWS from caret nodes are filtered out
 function getTextAndOffsetToNode(editor, selectionNode) {
     let offsetToNode = 0;
-    let foundCaret = false;
+    let foundNode = false;
     let text = "";
 
     function enterNodeCallback(node) {
-        if (!foundCaret) {
+        if (!foundNode) {
             if (node === selectionNode) {
-                foundCaret = true;
+                foundNode = true;
             }
         }
         // usually newlines are entered as new DIV elements,
@@ -94,12 +94,14 @@ function getTextAndOffsetToNode(editor, selectionNode) {
         // converted to BRs, so also take these into account when they
         // are not the last element in the DIV.
         if (node.tagName === "BR" && node.nextSibling) {
+            if (!foundNode) {
+                offsetToNode += 1;
+            }
             text += "\n";
-            offsetToNode += 1;
         }
         const nodeText = node.nodeType === Node.TEXT_NODE && getTextNodeValue(node);
         if (nodeText) {
-            if (!foundCaret) {
+            if (!foundNode) {
                 offsetToNode += nodeText.length;
             }
             text += nodeText;
@@ -114,7 +116,7 @@ function getTextAndOffsetToNode(editor, selectionNode) {
         // whereas you just want it to be appended to the current line
         if (node.tagName === "DIV" && node.nextSibling && node.nextSibling.tagName === "DIV") {
             text += "\n";
-            if (!foundCaret) {
+            if (!foundNode) {
                 offsetToNode += 1;
             }
         }
