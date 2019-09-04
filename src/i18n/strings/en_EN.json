@@ -689,6 +689,8 @@
     "Failed to unban": "Failed to unban",
     "Unban": "Unban",
     "Banned by %(displayName)s": "Banned by %(displayName)s",
+    "Error changing power level": "Error changing power level",
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.",
     "Default role": "Default role",
     "Send messages": "Send messages",
     "Invite users": "Invite users",

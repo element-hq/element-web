@@ -164,7 +164,18 @@ export default class RolesRoomSettingsTab extends React.Component {
         if (!plContent['users']) plContent['users'] = {};
         plContent['users'][powerLevelKey] = value;
 
-        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent);
+        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
+            console.error(e);
+
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
+                title: _t('Error changing power level'),
+                description: _t(
+                    "An error occurred changing the user's power level. Ensure you have sufficient " +
+                    "permissions and try again.",
+                ),
+            });
+        });
     };
 
     render() {
