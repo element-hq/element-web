@@ -45,15 +45,47 @@ export function getCaretOffsetAndText(editor, sel) {
     return {caret: offset, text};
 }
 
-function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
-    // sometimes selectionNode is an element, and then selectionOffset means
-    // the index of a child element ... - 1 🤷
-    if (selectionNode.nodeType === Node.ELEMENT_NODE && selectionOffset !== 0) {
-        selectionNode = selectionNode.childNodes[selectionOffset - 1];
-        selectionOffset = selectionNode.textContent.length;
+function tryReduceSelectionToTextNode(selectionNode, selectionOffset) {
+    // if selectionNode is an element, the selected location comes after the selectionOffset-th child node,
+    // which can point past any childNode, in which case, the end of selectionNode is selected.
+    // we try to simplify this to point at a text node with the offset being
+    // a character offset within the text node
+    // Also see https://developer.mozilla.org/en-US/docs/Web/API/Selection
+    while (selectionNode && selectionNode.nodeType === Node.ELEMENT_NODE) {
+        const childNodeCount = selectionNode.childNodes.length;
+        if (childNodeCount) {
+            if (selectionOffset >= childNodeCount) {
+                selectionNode = selectionNode.lastChild;
+                if (selectionNode.nodeType === Node.TEXT_NODE) {
+                    selectionOffset = selectionNode.textContent.length;
+                } else {
+                    // this will select the last child node in the next iteration
+                    selectionOffset = Number.MAX_SAFE_INTEGER;
+                }
+            } else {
+                selectionNode = selectionNode.childNodes[selectionOffset];
+                // this will select the first child node in the next iteration
+                selectionOffset = 0;
+            }
+        } else {
+            // here node won't be a text node,
+            // but characterOffset should be 0,
+            // this happens under some circumstances
+            // when the editor is empty.
+            // In this case characterOffset=0 is the right thing to do
+            break;
+        }
     }
-    const {text, offsetToNode} = getTextAndOffsetToNode(editor, selectionNode);
-    const offset = getCaret(selectionNode, offsetToNode, selectionOffset);
+    return {
+        node: selectionNode,
+        characterOffset: selectionOffset,
+    };
+}
+
+function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
+    const {node, characterOffset} = tryReduceSelectionToTextNode(selectionNode, selectionOffset);
+    const {text, offsetToNode} = getTextAndOffsetToNode(editor, node);
+    const offset = getCaret(node, offsetToNode, characterOffset);
     return {offset, text};
 }
 
