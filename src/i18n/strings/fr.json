@@ -2154,5 +2154,12 @@
     "Use an identity server to invite by email. Manage in Settings.": "Utilisez un serveur d’identité pour inviter par e-mail. Gérez-le dans les paramètres.",
     "Deactivate user?": "Désactiver l’utilisateur ?",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Désactiver cet utilisateur le déconnectera et l’empêchera de se reconnecter. De plus, il quittera tous les salons qu’il a rejoints. Cette action ne peut pas être annulée. Voulez-vous vraiment désactiver cet utilisateur ?",
-    "Deactivate user": "Désactiver l’utilisateur"
+    "Deactivate user": "Désactiver l’utilisateur",
+    "Sends a message as plain text, without interpreting it as markdown": "Envoie un message en texte brut, sans l’interpréter en format markdown",
+    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to a room admin.": "Une erreur (%(errcode)s) a été retournée en essayant de valider votre invitation. Vous pouvez essayer de transmettre cette information à un administrateur du salon.",
+    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Cette invitation à %(roomName)s a été envoyée à %(email)s qui n’est pas associé à votre compte",
+    "Link this email with your account in Settings to receive invites directly in Riot.": "Liez cet e-mail à votre compte dans les paramètres pour recevoir les invitations directement dans Riot.",
+    "This invite to %(roomName)s was sent to %(email)s": "Cette invitation à %(roomName)s a été envoyée à %(email)s",
+    "Use an identity server in Settings to receive invites directly in Riot.": "Utilisez un serveur d’identité dans les paramètres pour recevoir une invitation directement dans Riot.",
+    "Share this email in Settings to receive invites directly in Riot.": "Partagez cet e-mail dans les paramètres pour recevoir les invitations directement dans Riot."
 }
