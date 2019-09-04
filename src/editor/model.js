@@ -433,7 +433,12 @@ export default class EditorModel {
      */
     transform(callback) {
         const pos = callback();
-        const acPromise = this._setActivePart(pos, true);
+        let acPromise = null;
+        if (!(pos instanceof Range)) {
+            acPromise = this._setActivePart(pos, true);
+        } else {
+            acPromise = Promise.resolve();
+        }
         this._updateCallback(pos);
         return acPromise;
     }

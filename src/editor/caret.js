@@ -16,12 +16,39 @@ limitations under the License.
 */
 
 import {needsCaretNodeBefore, needsCaretNodeAfter} from "./render";
+import Range from "./range";
+
+export function setSelection(editor, model, selection) {
+    if (selection instanceof Range) {
+        setDocumentRangeSelection(editor, model, selection);
+    } else {
+        setCaretPosition(editor, model, selection);
+    }
+}
+
+function setDocumentRangeSelection(editor, model, range) {
+    const sel = document.getSelection();
+    sel.removeAllRanges();
+    const selectionRange = document.createRange();
+    const start = getNodeAndOffsetForPosition(editor, model, range.start);
+    selectionRange.setStart(start.node, start.offset);
+    const end = getNodeAndOffsetForPosition(editor, model, range.end);
+    selectionRange.setEnd(end.node, end.offset);
+    sel.addRange(selectionRange);
+}
 
 export function setCaretPosition(editor, model, caretPosition) {
     const sel = document.getSelection();
     sel.removeAllRanges();
     const range = document.createRange();
-    const {offset, lineIndex, nodeIndex} = getLineAndNodePosition(model, caretPosition);
+    const {node, offset} = getNodeAndOffsetForPosition(editor, model, caretPosition);
+    range.setStart(node, offset);
+    range.collapse(true);
+    sel.addRange(range);
+}
+
+function getNodeAndOffsetForPosition(editor, model, position) {
+    const {offset, lineIndex, nodeIndex} = getLineAndNodePosition(model, position);
     const lineNode = editor.childNodes[lineIndex];
 
     let focusNode;
@@ -35,9 +62,7 @@ export function setCaretPosition(editor, model, caretPosition) {
             focusNode = focusNode.firstChild;
         }
     }
-    range.setStart(focusNode, offset);
-    range.collapse(true);
-    sel.addRange(range);
+    return {node: focusNode, offset};
 }
 
 export function getLineAndNodePosition(model, caretPosition) {
