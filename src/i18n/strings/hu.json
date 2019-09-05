@@ -2151,5 +2151,7 @@
     "Link this email with your account in Settings to receive invites directly in Riot.": "Kösd össze a Beállításokban ezt az e-mail címet a fiókoddal, hogy közvetlenül a Riotba kaphassa meghívókat.",
     "This invite to %(roomName)s was sent to %(email)s": "A meghívó ehhez a szobához: %(roomName)s ide lett elküldve: %(email)s",
     "Use an identity server in Settings to receive invites directly in Riot.": "Állíts be azonosítási szervert a Beállításokban, hogy közvetlen meghívókat kaphass Riotba.",
-    "Share this email in Settings to receive invites directly in Riot.": "Oszd meg a Beállításokban ezt az e-mail címet, hogy közvetlen meghívókat kaphass Riotba."
+    "Share this email in Settings to receive invites directly in Riot.": "Oszd meg a Beállításokban ezt az e-mail címet, hogy közvetlen meghívókat kaphass Riotba.",
+    "Error changing power level": "A hozzáférési szint változtatásnál hiba történt",
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "A felhasználó  hozzáférési szint változtatásakor hiba történt. Ellenőrizd, hogy elegendő jogod van-e hozzá és próbáld újra."
 }
