@@ -232,7 +232,7 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     return parts;
 }
 
-function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
+export function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
     const lines = body.split("\n");
     const parts = lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
