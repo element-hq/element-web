@@ -266,8 +266,20 @@ export default class BasicMessageEditor extends React.Component {
         const model = this.props.model;
         const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
+        // format bold
+        if (modKey && event.key === "b") {
+            this._onFormatAction("bold");
+            handled = true;
+        // format italics
+        } else if (modKey && event.key === "i") {
+            this._onFormatAction("italics");
+            handled = true;
+        // format quote
+        } else if (modKey && event.key === ">") {
+            this._onFormatAction("quote");
+            handled = true;
         // undo
-        if (modKey && event.key === "z") {
+        } else if (modKey && event.key === "z") {
             if (this.historyManager.canUndo()) {
                 const {parts, caret} = this.historyManager.undo(this.props.model);
                 // pass matching inputType so historyManager doesn't push echo
