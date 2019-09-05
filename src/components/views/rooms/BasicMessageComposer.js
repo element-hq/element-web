@@ -35,6 +35,7 @@ import TypingStore from "../../../stores/TypingStore";
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import SettingsStore from "../../../settings/SettingsStore";
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import { _t } from '../../../languageHandler';
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -487,11 +488,11 @@ export default class BasicMessageEditor extends React.Component {
         return (<div className={classes}>
             { autoComplete }
             <div className="mx_BasicMessageComposer_formatBar" ref={ref => this._formatBarRef = ref}>
-                <span onClick={this._formatBold} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatBold"></span>
-                <span onClick={this._formatItalic} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatItalic"></span>
-                <span onClick={this._formatStrikethrough} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatStrikethrough"></span>
-                <span onClick={this._formatCode} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatCode"></span>
-                <span onClick={this._formatQuote} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatQuote"></span>
+                <span aria-label={_t("Bold")} role="button" onClick={this._formatBold} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatBold"></span>
+                <span aria-label={_t("Italics")} role="button" onClick={this._formatItalic} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatItalic"></span>
+                <span aria-label={_t("Strikethrough")} role="button" onClick={this._formatStrikethrough} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatStrikethrough"></span>
+                <span aria-label={_t("Code block")} role="button" onClick={this._formatCode} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatCode"></span>
+                <span aria-label={_t("Quote")} role="button" onClick={this._formatQuote} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatQuote"></span>
             </div>
             <div
                 className="mx_BasicMessageComposer_input"
