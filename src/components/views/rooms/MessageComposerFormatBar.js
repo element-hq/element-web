@@ -23,15 +23,16 @@ import sdk from '../../../index';
 export default class MessageComposerFormatBar extends React.PureComponent {
     static propTypes = {
         onAction: PropTypes.func.isRequired,
+        shortcuts: PropTypes.object.isRequired,
     }
 
     render() {
         return (<div className="mx_MessageComposerFormatBar" ref={ref => this._formatBarRef = ref}>
-            <FormatButton label={_t("Bold")} onClick={() => this.props.onAction("bold")} icon="Bold" />
-            <FormatButton label={_t("Italics")} onClick={() => this.props.onAction("italics")} icon="Italic" />
+            <FormatButton shortcut={this.props.shortcuts.bold} label={_t("Bold")} onClick={() => this.props.onAction("bold")} icon="Bold" />
+            <FormatButton shortcut={this.props.shortcuts.italics} label={_t("Italics")} onClick={() => this.props.onAction("italics")} icon="Italic" />
             <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction("strikethrough")} icon="Strikethrough" />
             <FormatButton label={_t("Code block")} onClick={() => this.props.onAction("code")} icon="Code" />
-            <FormatButton label={_t("Quote")} onClick={() => this.props.onAction("quote")} icon="Quote" />
+            <FormatButton shortcut={this.props.shortcuts.quote} label={_t("Quote")} onClick={() => this.props.onAction("quote")} icon="Quote" />
         </div>);
     }
 
@@ -66,13 +67,21 @@ class FormatButton extends React.PureComponent {
         label: PropTypes.string.isRequired,
         onClick: PropTypes.func.isRequired,
         icon: PropTypes.string.isRequired,
+        shortcut: PropTypes.string,
     }
 
     render() {
         const InteractiveTooltip = sdk.getComponent('elements.InteractiveTooltip');
         const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
+        let shortcut;
+        if (this.props.shortcut) {
+            shortcut = <div className="mx_MessageComposerFormatBar_tooltipShortcut">{this.props.shortcut}</div>;
+        }
         const tooltipContent = (
-            <div className="mx_MessageComposerFormatBar_buttonTooltip">{this.props.label}</div>
+            <div className="mx_MessageComposerFormatBar_buttonTooltip">
+                <div>{this.props.label}</div>
+                {shortcut}
+            </div>
         );
 
         return (

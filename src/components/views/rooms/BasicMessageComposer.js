@@ -41,6 +41,10 @@ const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.sourc
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+function ctrlShortcutLabel(key) {
+    return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
+}
+
 function cloneSelection(selection) {
     return {
         anchorNode: selection.anchorNode,
@@ -470,10 +474,15 @@ export default class BasicMessageEditor extends React.Component {
         });
 
         const MessageComposerFormatBar = sdk.getComponent('rooms.MessageComposerFormatBar');
+        const shortcuts = {
+            bold: ctrlShortcutLabel("B"),
+            italics: ctrlShortcutLabel("I"),
+            quote: ctrlShortcutLabel(">"),
+        };
 
         return (<div className={classes}>
             { autoComplete }
-            <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} />
+            <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} shortcuts={shortcuts} />
             <div
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
