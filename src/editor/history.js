@@ -106,6 +106,12 @@ export default class HistoryManager {
         return shouldPush;
     }
 
+    ensureLastChangesPushed(model) {
+        if (this._changedSinceLastPush) {
+            this._pushState(model, this._lastCaret);
+        }
+    }
+
     canUndo() {
         return this._currentIndex >= 1 || this._changedSinceLastPush;
     }
@@ -117,9 +123,7 @@ export default class HistoryManager {
     // returns state that should be applied to model
     undo(model) {
         if (this.canUndo()) {
-            if (this._changedSinceLastPush) {
-                this._pushState(model, this._lastCaret);
-            }
+            this.ensureLastChangesPushed(model);
             this._currentIndex -= 1;
             return this._stack[this._currentIndex];
         }

@@ -437,6 +437,7 @@ export default class BasicMessageEditor extends React.Component {
         if (range.length === 0) {
             return;
         }
+        this.historyManager.ensureLastChangesPushed(this.props.model);
         switch (action) {
             case "bold":
                 formatInline(range, "**");
