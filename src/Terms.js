@@ -119,7 +119,8 @@ export async function startTermsFlow(
     if (unagreedPoliciesAndServicePairs.length > 0) {
         const newlyAgreedUrls = await interactionCallback(unagreedPoliciesAndServicePairs, [...agreedUrlSet]);
         console.log("User has agreed to URLs", newlyAgreedUrls);
-        agreedUrlSet = new Set(newlyAgreedUrls);
+        // Merge with previously agreed URLs
+        newlyAgreedUrls.forEach(url => agreedUrlSet.add(url));
     } else {
         console.log("User has already agreed to all required policies");
     }
