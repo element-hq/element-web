@@ -82,6 +82,7 @@ limitations under the License.
         cursor: pointer;
         border-radius: 4px;
         background-color: $message-action-bar-bg-color;
+        user-select: none;
 
         &.mx_BasicMessageComposer_formatBar_shown {
             display: block;
