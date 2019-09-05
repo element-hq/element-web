@@ -2161,5 +2161,7 @@
     "Link this email with your account in Settings to receive invites directly in Riot.": "Liez cet e-mail à votre compte dans les paramètres pour recevoir les invitations directement dans Riot.",
     "This invite to %(roomName)s was sent to %(email)s": "Cette invitation à %(roomName)s a été envoyée à %(email)s",
     "Use an identity server in Settings to receive invites directly in Riot.": "Utilisez un serveur d’identité dans les paramètres pour recevoir une invitation directement dans Riot.",
-    "Share this email in Settings to receive invites directly in Riot.": "Partagez cet e-mail dans les paramètres pour recevoir les invitations directement dans Riot."
+    "Share this email in Settings to receive invites directly in Riot.": "Partagez cet e-mail dans les paramètres pour recevoir les invitations directement dans Riot.",
+    "Error changing power level": "Erreur de changement de rang",
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Une erreur est survenue lors du changement de rang de l’utilisateur. Vérifiez que vous avez les permissions nécessaires et réessayez."
 }
