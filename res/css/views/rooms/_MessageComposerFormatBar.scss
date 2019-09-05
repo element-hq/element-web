@@ -79,3 +79,9 @@ limitations under the License.
         mask-image: url('$(res)/img/format/code.svg');
     }
 }
+
+.mx_MessageComposerFormatBar_buttonTooltip {
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+}

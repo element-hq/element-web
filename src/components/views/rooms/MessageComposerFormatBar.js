@@ -17,6 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import sdk from '../../../index';
+
 
 export default class MessageComposerFormatBar extends React.PureComponent {
     static propTypes = {
@@ -67,13 +69,20 @@ class FormatButton extends React.PureComponent {
     }
 
     render() {
+        const InteractiveTooltip = sdk.getComponent('elements.InteractiveTooltip');
         const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
+        const tooltipContent = (
+            <div className="mx_MessageComposerFormatBar_buttonTooltip">{this.props.label}</div>
+        );
+
         return (
-            <span aria-label={this.props.label}
-               role="button"
-               onClick={this.props.onClick}
-               className={className}>
-            </span>
+            <InteractiveTooltip content={tooltipContent}>
+                <span aria-label={this.props.label}
+                   role="button"
+                   onClick={this.props.onClick}
+                   className={className}>
+                </span>
+            </InteractiveTooltip>
         );
     }
 }
