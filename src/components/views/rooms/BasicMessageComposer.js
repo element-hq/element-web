@@ -434,6 +434,9 @@ export default class BasicMessageEditor extends React.Component {
             this._editorRef,
             this.props.model,
             document.getSelection());
+        if (range.length === 0) {
+            return;
+        }
         switch (action) {
             case "bold":
                 formatInline(range, "**");
