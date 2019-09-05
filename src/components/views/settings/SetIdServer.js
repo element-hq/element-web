@@ -137,7 +137,12 @@ export default class SetIdServer extends React.Component {
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: fullUrl,
         });
-        this.setState({idServer: '', busy: false, error: null});
+        this.setState({
+            busy: false,
+            error: null,
+            currentClientIdServer: fullUrl,
+            idServer: '',
+        });
     };
 
     _checkIdServer = async (e) => {
@@ -157,14 +162,34 @@ export default class SetIdServer extends React.Component {
                 const authClient = new IdentityAuthClient(fullUrl);
                 await authClient.getAccessToken();
 
+                let save = true;
+
                 // Double check that the identity server even has terms of service.
                 const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
-                    this._showNoTermsWarning(fullUrl);
-                    return;
+                    save &= await this._showNoTermsWarning(fullUrl);
                 }
 
-                this._saveIdServer(fullUrl);
+                // Show a general warning, possibly with details about any bound
+                // 3PIDs that would be left behind.
+                if (this.state.currentClientIdServer) {
+                    save &= await this._showServerChangeWarning({
+                        title: _t("Change identity server"),
+                        unboundMessage: _t(
+                            "Disconnect from the identity server <current /> and " +
+                            "connect to <new /> instead?", {},
+                            {
+                                current: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                                new: sub => <b>{abbreviateUrl(this.state.idServer)}</b>,
+                            },
+                        ),
+                        button: _t("Continue"),
+                    });
+                }
+
+                if (save) {
+                    this._saveIdServer(fullUrl);
+                }
             } catch (e) {
                 console.error(e);
                 if (e.cors === "rejected" || e.httpStatus === 404) {
@@ -179,72 +204,79 @@ export default class SetIdServer extends React.Component {
             checking: false,
             error: errStr,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
-            idServer: this.state.idServer,
         });
     };
 
     _showNoTermsWarning(fullUrl) {
         const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
-        Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
-            title: _t("Identity server has no terms of service"),
-            description: (
-                <div>
-                    <span className="warning">
-                        {_t("The identity server you have chosen does not have any terms of service.")}
-                    </span>
-                    <span>
-                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
-                    </span>
-                </div>
-            ),
-            button: _t("Continue"),
-            onFinished: async (confirmed) => {
-                if (!confirmed) return;
-                this._saveIdServer(fullUrl);
-            },
+        return new Promise(resolve => {
+            Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+                title: _t("Identity server has no terms of service"),
+                description: (
+                    <div>
+                        <span className="warning">
+                            {_t("The identity server you have chosen does not have any terms of service.")}
+                        </span>
+                        <span>
+                            &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                        </span>
+                    </div>
+                ),
+                button: _t("Continue"),
+                onFinished: resolve,
+            });
         });
     }
 
     _onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
         try {
-            const threepids = await getThreepidBindStatus(MatrixClientPeg.get());
-
-            const boundThreepids = threepids.filter(tp => tp.bound);
-            let message;
-            if (boundThreepids.length) {
-                message = _t(
-                    "You are currently sharing email addresses or phone numbers on the identity " +
-                    "server <idserver />. You will need to reconnect to <idserver2 /> to stop " +
-                    "sharing them.", {},
-                    {
-                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                        // XXX: https://github.com/vector-im/riot-web/issues/9086
-                        idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                    },
-                );
-            } else {
-                message = _t(
+            const confirmed = await this._showServerChangeWarning({
+                title: _t("Disconnect identity server"),
+                unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
                     {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
-                );
-            }
-
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createTrackedDialog('Identity Server Disconnect Warning', '', QuestionDialog, {
-                title: _t("Disconnect Identity Server"),
-                description: message,
+                ),
                 button: _t("Disconnect"),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        this._disconnectIdServer();
-                    }
-                },
             });
+            if (confirmed) {
+                this._disconnectIdServer();
+            }
         } finally {
             this.setState({disconnectBusy: false});
         }
     };
+
+    async _showServerChangeWarning({ title, unboundMessage, button }) {
+        const threepids = await getThreepidBindStatus(MatrixClientPeg.get());
+
+        const boundThreepids = threepids.filter(tp => tp.bound);
+        let message;
+        if (boundThreepids.length) {
+            message = _t(
+                "You are currently sharing email addresses or phone numbers on the identity " +
+                "server <idserver />. You will need to reconnect to <idserver2 /> to stop " +
+                "sharing them.", {},
+                {
+                    idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                    // XXX: https://github.com/vector-im/riot-web/issues/9086
+                    idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                },
+            );
+        } else {
+            message = unboundMessage;
+        }
+
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        return new Promise(resolve => {
+            Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
+                title,
+                description: message,
+                button,
+                onFinished: resolve,
+            });
+        });
+    }
 
     _disconnectIdServer = () => {
         // Account data change will update localstorage, client, etc through dispatcher
