@@ -2104,5 +2104,14 @@
     "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Imposta un'email per il recupero dell'account. Usa l'email o il telefono per essere facoltativamente trovabile dai contatti esistenti.",
     "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "Imposta un'email per il recupero dell'account. Usa l'email per essere facoltativamente trovabile dai contatti esistenti.",
     "Enter your custom homeserver URL <a>What does this mean?</a>": "Inserisci l'URL dell'homeserver personalizzato <a>Cosa significa?</a>",
-    "Enter your custom identity server URL <a>What does this mean?</a>": "Inserisci l'URL del server di identità personalizzato <a>Cosa significa?</a>"
+    "Enter your custom identity server URL <a>What does this mean?</a>": "Inserisci l'URL del server di identità personalizzato <a>Cosa significa?</a>",
+    "Sends a message as plain text, without interpreting it as markdown": "Invia un messaggio in testo semplice, senza interpretarlo come markdown",
+    "Error changing power level": "Errore cambiando il livello di poteri",
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Si è verificato un errore cambiando il livello di poteri dell'utente. Assicurati di averne l'autorizzazione e riprova.",
+    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to a room admin.": "Si è verificato un errore (%(errcode)s) tentando di validare il tuo invito. Puoi provare a passare questa informazione ad un admin della stanza.",
+    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Questo invito per %(roomName)s è stato inviato a %(email)s , la quale non è associata al tuo account",
+    "Link this email with your account in Settings to receive invites directly in Riot.": "Collega questa email al tuo account nelle impostazioni per ricevere inviti direttamente in Riot.",
+    "This invite to %(roomName)s was sent to %(email)s": "Questo invito per %(roomName)s è stato inviato a %(email)s",
+    "Use an identity server in Settings to receive invites directly in Riot.": "Usa un server di identià nelle impostazioni per ricevere inviti direttamente in Riot.",
+    "Share this email in Settings to receive invites directly in Riot.": "Condividi questa email nelle impostazioni per ricevere inviti direttamente in Riot."
 }
