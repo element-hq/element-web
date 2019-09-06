@@ -388,21 +388,25 @@ export default class EditorModel {
             currentOffset += partLen;
             return false;
         });
-
-        return new DocumentPosition(index, totalOffset - currentOffset);
+        if (index === -1) {
+            return this.getPositionAtEnd();
+        } else {
+            return new DocumentPosition(index, totalOffset - currentOffset);
+        }
     }
 
     /**
      * Starts a range, which can span across multiple parts, to find and replace text.
-     * @param {DocumentPosition} position where to start the range
+     * @param {DocumentPosition} positionA a boundary of the range
+     * @param {DocumentPosition?} positionB the other boundary of the range, optional
      * @return {Range}
      */
-    startRange(position) {
-        return new Range(this, position);
+    startRange(positionA, positionB = positionA) {
+        return new Range(this, positionA, positionB);
     }
 
-    //mostly internal, called from Range.replace
-    replaceRange(startPosition, endPosition, parts) {
+    // called from Range.replace
+    _replaceRange(startPosition, endPosition, parts) {
         // convert end position to offset, so it is independent of how the document is split into parts
         // which we'll change when splitting up at the start position
         const endOffset = endPosition.asOffset(this);
@@ -429,7 +433,12 @@ export default class EditorModel {
      */
     transform(callback) {
         const pos = callback();
-        const acPromise = this._setActivePart(pos, true);
+        let acPromise = null;
+        if (!(pos instanceof Range)) {
+            acPromise = this._setActivePart(pos, true);
+        } else {
+            acPromise = Promise.resolve();
+        }
         this._updateCallback(pos);
         return acPromise;
     }

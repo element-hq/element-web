@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 export default class Range {
-    constructor(model, startPosition, endPosition = startPosition) {
+    constructor(model, positionA, positionB = positionA) {
         this._model = model;
-        this._start = startPosition;
-        this._end = endPosition;
+        const bIsLarger = positionA.compare(positionB) < 0;
+        this._start = bIsLarger ? positionA : positionB;
+        this._end = bIsLarger ? positionB : positionA;
     }
 
     moveStart(delta) {
@@ -30,6 +31,10 @@ export default class Range {
 
     expandBackwardsWhile(predicate) {
         this._start = this._start.backwardsWhile(this._model, predicate);
+    }
+
+    get model() {
+        return this._model;
     }
 
     get text() {
@@ -53,7 +58,38 @@ export default class Range {
         this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
             oldLength += endIdx - startIdx;
         });
-        this._model.replaceRange(this._start, this._end, parts);
+        this._model._replaceRange(this._start, this._end, parts);
         return newLength - oldLength;
+    }
+
+    /**
+     * Returns a copy of the (partial) parts within the range.
+     * For partial parts, only the text is adjusted to the part that intersects with the range.
+     */
+    get parts() {
+        const parts = [];
+        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+            const serializedPart = part.serialize();
+            serializedPart.text = part.text.substring(startIdx, endIdx);
+            const newPart = this._model.partCreator.deserializePart(serializedPart);
+            parts.push(newPart);
+        });
+        return parts;
+    }
+
+    get length() {
+        let len = 0;
+        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+            len += endIdx - startIdx;
+        });
+        return len;
+    }
+
+    get start() {
+        return this._start;
+    }
+
+    get end() {
+        return this._end;
     }
 }

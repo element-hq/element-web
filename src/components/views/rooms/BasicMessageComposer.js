@@ -20,8 +20,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
-import {setCaretPosition} from '../../../editor/caret';
-import {getCaretOffsetAndText} from '../../../editor/dom';
+import {setSelection} from '../../../editor/caret';
+import {
+    formatRangeAsQuote,
+    formatRangeAsCode,
+    formatInline,
+} from '../../../editor/operations';
+import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
 import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {renderModel} from '../../../editor/render';
@@ -30,6 +35,7 @@ import TypingStore from "../../../stores/TypingStore";
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import SettingsStore from "../../../settings/SettingsStore";
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import { _t } from '../../../languageHandler';
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -74,8 +80,10 @@ export default class BasicMessageEditor extends React.Component {
         };
         this._editorRef = null;
         this._autocompleteRef = null;
+        this._formatBarRef = null;
         this._modifiedFlag = false;
         this._isIMEComposing = false;
+        this._hasTextSelected = false;
     }
 
     _replaceEmoticon = (caretPosition, inputType, diff) => {
@@ -108,11 +116,11 @@ export default class BasicMessageEditor extends React.Component {
         }
     }
 
-    _updateEditorState = (caret, inputType, diff) => {
+    _updateEditorState = (selection, inputType, diff) => {
         renderModel(this._editorRef, this.props.model);
-        if (caret) {
+        if (selection) { // set the caret/selection
             try {
-                setCaretPosition(this._editorRef, this.props.model, caret);
+                setSelection(this._editorRef, this.props.model, selection);
             } catch (err) {
                 console.error(err);
             }
@@ -126,7 +134,7 @@ export default class BasicMessageEditor extends React.Component {
             }
         }
         this.setState({autoComplete: this.props.model.autoComplete});
-        this.historyManager.tryPush(this.props.model, caret, inputType, diff);
+        this.historyManager.tryPush(this.props.model, selection, inputType, diff);
         TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
 
         if (this.props.onChange) {
@@ -239,6 +247,37 @@ export default class BasicMessageEditor extends React.Component {
 
     _onSelectionChange = () => {
         this._refreshLastCaretIfNeeded();
+        const selection = document.getSelection();
+        if (this._hasTextSelected && selection.isCollapsed) {
+            this._hasTextSelected = false;
+            if (this._formatBarRef) {
+                this._formatBarRef.classList.remove("mx_BasicMessageComposer_formatBar_shown");
+            }
+        } else if (!selection.isCollapsed) {
+            this._hasTextSelected = true;
+            if (this._formatBarRef) {
+                this._formatBarRef.classList.add("mx_BasicMessageComposer_formatBar_shown");
+                const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
+
+                let leftOffset = 0;
+                let node = this._formatBarRef;
+                while (node.offsetParent) {
+                    node = node.offsetParent;
+                    leftOffset += node.offsetLeft;
+                }
+
+                let topOffset = 0;
+                node = this._formatBarRef;
+                while (node.offsetParent) {
+                    node = node.offsetParent;
+                    topOffset += node.offsetTop;
+                }
+
+                this._formatBarRef.style.left = `${selectionRect.left - leftOffset}px`;
+                // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
+                this._formatBarRef.style.top = `${selectionRect.top - topOffset - 16 - 12}px`;
+            }
+        }
     }
 
     _onKeyDown = (event) => {
@@ -392,6 +431,42 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
+    _wrapSelectionAsInline(prefix, suffix = prefix) {
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatInline(range, prefix, suffix);
+    }
+
+    _formatBold = () => {
+        this._wrapSelectionAsInline("**");
+    }
+
+    _formatItalic = () => {
+        this._wrapSelectionAsInline("*");
+    }
+
+    _formatStrikethrough = () => {
+        this._wrapSelectionAsInline("<del>", "</del>");
+    }
+
+    _formatQuote = () => {
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatRangeAsQuote(range);
+    }
+
+    _formatCode = () => {
+        const range = getRangeForSelection(
+            this._editorRef,
+            this.props.model,
+            document.getSelection());
+        formatRangeAsCode(range);
+    }
+
     render() {
         let autoComplete;
         if (this.state.autoComplete) {
@@ -413,6 +488,13 @@ export default class BasicMessageEditor extends React.Component {
         });
         return (<div className={classes}>
             { autoComplete }
+            <div className="mx_BasicMessageComposer_formatBar" ref={ref => this._formatBarRef = ref}>
+                <span aria-label={_t("Bold")} role="button" onClick={this._formatBold} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatBold"></span>
+                <span aria-label={_t("Italics")} role="button" onClick={this._formatItalic} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatItalic"></span>
+                <span aria-label={_t("Strikethrough")} role="button" onClick={this._formatStrikethrough} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatStrikethrough"></span>
+                <span aria-label={_t("Code block")} role="button" onClick={this._formatCode} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatCode"></span>
+                <span aria-label={_t("Quote")} role="button" onClick={this._formatQuote} className="mx_BasicMessageComposer_formatButton mx_BasicMessageComposer_formatQuote"></span>
+            </div>
             <div
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
