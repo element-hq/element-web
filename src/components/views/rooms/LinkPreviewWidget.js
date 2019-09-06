@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
 
 const sdk = require('../../../index');
@@ -25,7 +24,7 @@ const MatrixClientPeg = require('../../../MatrixClientPeg');
 const ImageUtils = require('../../../ImageUtils');
 const Modal = require('../../../Modal');
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {

@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
@@ -35,7 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'AppsDrawer',
 
     propTypes: {

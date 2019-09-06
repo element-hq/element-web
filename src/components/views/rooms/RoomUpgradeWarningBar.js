@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomUpgradeWarningBar',
 
     propTypes: {

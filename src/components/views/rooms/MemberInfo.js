@@ -29,6 +29,7 @@ limitations under the License.
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
@@ -48,7 +49,7 @@ import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MemberInfo',
 
     propTypes: {
