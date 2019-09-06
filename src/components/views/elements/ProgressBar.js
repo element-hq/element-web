@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from "react";
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'ProgressBar',
     propTypes: {
         value: PropTypes.number,

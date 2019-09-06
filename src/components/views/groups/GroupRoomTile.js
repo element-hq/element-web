@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClient} from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+import {MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
 
-const GroupRoomTile = React.createClass({
+const GroupRoomTile = createReactClass({
     displayName: 'GroupRoomTile',
 
     propTypes: {

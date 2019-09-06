@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'PersistentApp',
 
     getInitialState: function() {
