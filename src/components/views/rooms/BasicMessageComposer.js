@@ -41,6 +41,10 @@ const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.sourc
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+function ctrlShortcutLabel(key) {
+    return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
+}
+
 function cloneSelection(selection) {
     return {
         anchorNode: selection.anchorNode,
@@ -266,8 +270,20 @@ export default class BasicMessageEditor extends React.Component {
         const model = this.props.model;
         const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
+        // format bold
+        if (modKey && event.key === "b") {
+            this._onFormatAction("bold");
+            handled = true;
+        // format italics
+        } else if (modKey && event.key === "i") {
+            this._onFormatAction("italics");
+            handled = true;
+        // format quote
+        } else if (modKey && event.key === ">") {
+            this._onFormatAction("quote");
+            handled = true;
         // undo
-        if (modKey && event.key === "z") {
+        } else if (modKey && event.key === "z") {
             if (this.historyManager.canUndo()) {
                 const {parts, caret} = this.historyManager.undo(this.props.model);
                 // pass matching inputType so historyManager doesn't push echo
@@ -418,6 +434,9 @@ export default class BasicMessageEditor extends React.Component {
             this._editorRef,
             this.props.model,
             document.getSelection());
+        if (range.length === 0) {
+            return;
+        }
         switch (action) {
             case "bold":
                 formatInline(range, "**");
@@ -458,10 +477,15 @@ export default class BasicMessageEditor extends React.Component {
         });
 
         const MessageComposerFormatBar = sdk.getComponent('rooms.MessageComposerFormatBar');
+        const shortcuts = {
+            bold: ctrlShortcutLabel("B"),
+            italics: ctrlShortcutLabel("I"),
+            quote: ctrlShortcutLabel(">"),
+        };
 
         return (<div className={classes}>
             { autoComplete }
-            <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} />
+            <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} shortcuts={shortcuts} />
             <div
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
