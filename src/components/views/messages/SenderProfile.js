@@ -14,17 +14,16 @@
  limitations under the License.
  */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import {MatrixClient} from 'matrix-js-sdk';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import { _t } from '../../../languageHandler';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'SenderProfile',
     propTypes: {
         mxEvent: PropTypes.object.isRequired, // event whose sender we're showing

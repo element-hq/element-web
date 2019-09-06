@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import Promise from 'bluebird';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -62,7 +63,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'Notifications',
 
     phases: {
