@@ -2007,5 +2007,9 @@
     "Use an identity server in Settings to receive invites directly in Riot.": "설정에서 ID 서버를 사용해 Riot에서 직접 초대를 받을 수 있습니다.",
     "Share this email in Settings to receive invites directly in Riot.": "설정에서 이 이메일을 공유해서 Riot에서 직접 초대를 받을 수 있습니다.",
     "Error changing power level": "권한 등급 변경 중 오류",
-    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "사용자의 권한 등급을 변경하는 중 오류가 발생했습니다. 변경할 수 있는 권한이 있는 지 확인한 후 다시 시도하세요."
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "사용자의 권한 등급을 변경하는 중 오류가 발생했습니다. 변경할 수 있는 권한이 있는 지 확인한 후 다시 시도하세요.",
+    "Bold": "굵게",
+    "Italics": "기울게",
+    "Strikethrough": "취소선",
+    "Code block": "코드 블록"
 }
