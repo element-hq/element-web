@@ -185,7 +185,6 @@ export default class SetIdServer extends React.Component {
 
                 // Show a general warning, possibly with details about any bound
                 // 3PIDs that would be left behind.
-                console.log(fullUrl, idServer, currentClientIdServer)
                 if (save && currentClientIdServer && fullUrl !== currentClientIdServer) {
                     const [confirmed] = await this._showServerChangeWarning({
                         title: _t("Change identity server"),
