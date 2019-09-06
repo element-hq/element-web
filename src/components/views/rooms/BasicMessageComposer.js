@@ -274,6 +274,7 @@ export default class BasicMessageEditor extends React.Component {
                 }
 
                 this._formatBarRef.style.left = `${selectionRect.left - leftOffset}px`;
+                // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
                 this._formatBarRef.style.top = `${selectionRect.top - topOffset - 16 - 12}px`;
             }
         }
