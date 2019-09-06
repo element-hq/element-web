@@ -128,6 +128,9 @@ export default class BasicMessageEditor extends React.Component {
             } catch (err) {
                 console.error(err);
             }
+            // if caret is a range, take the end position
+            const position = caret.end || caret;
+            this._setLastCaretFromPosition(position);
         }
         if (this.props.placeholder) {
             const {isEmpty} = this.props.model;
@@ -177,7 +180,6 @@ export default class BasicMessageEditor extends React.Component {
         this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
-        this._setLastCaret(caret, text, sel);
         this.props.model.update(text, event.inputType, caret);
     }
 
@@ -195,10 +197,11 @@ export default class BasicMessageEditor extends React.Component {
     // we don't need to. But if the user is navigating the caret without input
     // we need to recalculate it, to be able to know where to insert content after
     // losing focus
-    _setLastCaret(caret, text, selection) {
-        this._lastSelection = cloneSelection(selection);
-        this._lastCaret = caret;
-        this._lastTextLength = text.length;
+    _setLastCaretFromPosition(position) {
+        const {model} = this.props;
+        this._isCaretAtEnd = position.isAtEnd(model);
+        this._lastCaret = position.asOffset(model);
+        this._lastSelection = cloneSelection(document.getSelection());
     }
 
     _refreshLastCaretIfNeeded() {
@@ -213,7 +216,7 @@ export default class BasicMessageEditor extends React.Component {
             this._lastSelection = cloneSelection(selection);
             const {caret, text} = getCaretOffsetAndText(this._editorRef, selection);
             this._lastCaret = caret;
-            this._lastTextLength = text.length;
+            this._isCaretAtEnd = caret.offset === text.length;
         }
         return this._lastCaret;
     }
@@ -235,7 +238,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     isCaretAtEnd() {
-        return this.getCaret().offset === this._lastTextLength;
+        return this._isCaretAtEnd;
     }
 
     _onBlur = () => {

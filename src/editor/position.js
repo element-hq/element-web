@@ -120,4 +120,17 @@ export default class DocumentPosition {
         const atEnd = offset >= lastPart.text.length;
         return new DocumentOffset(offset, atEnd);
     }
+
+    isAtEnd(model) {
+        if (model.parts.length === 0) {
+            return true;
+        }
+        const lastPartIdx = model.parts.length - 1;
+        const lastPart = model.parts[lastPartIdx];
+        return this.index === lastPartIdx && this.offset === lastPart.text.length;
+    }
+
+    isAtStart() {
+        return this.index === 0 && this.offset === 0;
+    }
 }
