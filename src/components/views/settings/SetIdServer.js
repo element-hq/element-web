@@ -167,13 +167,14 @@ export default class SetIdServer extends React.Component {
                 // Double check that the identity server even has terms of service.
                 const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
-                    save &= await this._showNoTermsWarning(fullUrl);
+                    const [confirmed] = await this._showNoTermsWarning(fullUrl);
+                    save &= confirmed;
                 }
 
                 // Show a general warning, possibly with details about any bound
                 // 3PIDs that would be left behind.
-                if (this.state.currentClientIdServer) {
-                    save &= await this._showServerChangeWarning({
+                if (save && this.state.currentClientIdServer) {
+                    const [confirmed] = await this._showServerChangeWarning({
                         title: _t("Change identity server"),
                         unboundMessage: _t(
                             "Disconnect from the identity server <current /> and " +
@@ -185,6 +186,7 @@ export default class SetIdServer extends React.Component {
                         ),
                         button: _t("Continue"),
                     });
+                    save &= confirmed;
                 }
 
                 if (save) {
@@ -209,29 +211,27 @@ export default class SetIdServer extends React.Component {
 
     _showNoTermsWarning(fullUrl) {
         const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
-        return new Promise(resolve => {
-            Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
-                title: _t("Identity server has no terms of service"),
-                description: (
-                    <div>
-                        <span className="warning">
-                            {_t("The identity server you have chosen does not have any terms of service.")}
-                        </span>
-                        <span>
-                            &nbsp;{_t("Only continue if you trust the owner of the server.")}
-                        </span>
-                    </div>
-                ),
-                button: _t("Continue"),
-                onFinished: resolve,
-            });
+        const { finished } = Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+            title: _t("Identity server has no terms of service"),
+            description: (
+                <div>
+                    <span className="warning">
+                        {_t("The identity server you have chosen does not have any terms of service.")}
+                    </span>
+                    <span>
+                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                    </span>
+                </div>
+            ),
+            button: _t("Continue"),
         });
+        return finished;
     }
 
     _onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
         try {
-            const confirmed = await this._showServerChangeWarning({
+            const [confirmed] = await this._showServerChangeWarning({
                 title: _t("Disconnect identity server"),
                 unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
@@ -268,14 +268,12 @@ export default class SetIdServer extends React.Component {
         }
 
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        return new Promise(resolve => {
-            Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
-                title,
-                description: message,
-                button,
-                onFinished: resolve,
-            });
+        const { finished } = Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
+            title,
+            description: message,
+            button,
         });
+        return finished;
     }
 
     _disconnectIdServer = () => {
