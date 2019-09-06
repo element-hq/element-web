@@ -260,17 +260,21 @@ export default class SetIdServer extends React.Component {
 
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;
+        let danger = false;
         if (boundThreepids.length) {
             message = _t(
-                "You are currently sharing email addresses or phone numbers on the identity " +
-                "server <idserver />. You will need to reconnect to <idserver2 /> to stop " +
-                "sharing them.", {},
+                "You are still <b>sharing your personal data</b> on the identity " +
+                "server <idserver />. <br /> <br /> " +
+                "We recommend that you remove your email addresses and phone numbers " +
+                "from the identity server before disconnecting.", {},
                 {
                     idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                    // XXX: https://github.com/vector-im/riot-web/issues/9086
-                    idserver2: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                    b: sub => <b>{sub}</b>,
+                    br: () => <br />,
                 },
             );
+            danger = true;
+            button = _t("Disconnect anyway");
         } else {
             message = unboundMessage;
         }
@@ -280,6 +284,8 @@ export default class SetIdServer extends React.Component {
             title,
             description: message,
             button,
+            cancelButton: _t("Go back"),
+            danger,
         });
         return finished;
     }
