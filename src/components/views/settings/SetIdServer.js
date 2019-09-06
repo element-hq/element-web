@@ -165,7 +165,18 @@ export default class SetIdServer extends React.Component {
                 let save = true;
 
                 // Double check that the identity server even has terms of service.
-                const terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
+                let terms;
+                try {
+                    terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
+                } catch (e) {
+                    console.error(e);
+                    if (e.cors === "rejected" || e.httpStatus === 404) {
+                        terms = null;
+                    } else {
+                        throw e;
+                    }
+                }
+
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
                     const [confirmed] = await this._showNoTermsWarning(fullUrl);
                     save &= confirmed;
@@ -194,10 +205,6 @@ export default class SetIdServer extends React.Component {
                 }
             } catch (e) {
                 console.error(e);
-                if (e.cors === "rejected" || e.httpStatus === 404) {
-                    this._showNoTermsWarning(fullUrl);
-                    return;
-                }
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
             }
         }
