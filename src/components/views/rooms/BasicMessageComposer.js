@@ -130,8 +130,8 @@ export default class BasicMessageEditor extends React.Component {
             } catch (err) {
                 console.error(err);
             }
-            // if caret is a range, take the end position
-            const position = caret.end || caret;
+            // if caret selection is a range, take the end position
+            const position = selection.end || selection;
             this._setLastCaretFromPosition(position);
         }
         if (this.props.placeholder) {
