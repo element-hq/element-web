@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
 export default class IndicatorScrollbar extends React.Component {
-    static PropTypes = {
+    static propTypes = {
         // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
         // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
         // by the parent element.
