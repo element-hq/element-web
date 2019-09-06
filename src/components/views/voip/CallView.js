@@ -15,13 +15,14 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import CallHandler from '../../../CallHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'CallView',
 
     propTypes: {

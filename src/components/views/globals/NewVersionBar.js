@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 import PlatformPeg from '../../../PlatformPeg';
@@ -31,7 +32,7 @@ function checkVersion(ver) {
     return parts.length == 5 && parts[1] == 'react' && parts[3] == 'js';
 }
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         version: PropTypes.string.isRequired,
         newVersion: PropTypes.string.isRequired,

@@ -16,17 +16,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
-import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextualMenu from '../../structures/ContextualMenu';
@@ -36,7 +34,7 @@ import {host as matrixtoHost} from '../../../matrix-to';
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'TextualBody',
 
     propTypes: {

@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import PlatformPeg from '../../../PlatformPeg';
 import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         status: PropTypes.string.isRequired,
         // Currently for error detail but will be usable for download progress
