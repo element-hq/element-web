@@ -1998,5 +1998,11 @@
     "Terms of service not accepted or the integration manager is invalid.": "Условия использования не приняты или менеджер по интеграции недействителен.",
     "Integration manager has no terms of service": "У менеджера по интеграции нет условий предоставления услуг",
     "Integration Manager": "Менеджер интеграции",
-    "Enter a new integration manager": "Введите новый менеджера интеграции"
+    "Enter a new integration manager": "Введите новый менеджера интеграции",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Кроме того, вы можете попытаться использовать общедоступный сервер по адресу <code> turn.matrix.org </code>, но это не будет настолько надежным, и он предоставит ваш IP-адрес этому серверу. Вы также можете управлять этим в настройках.",
+    "Sends a message as plain text, without interpreting it as markdown": "Посылает сообщение в виде простого текста, не интерпретируя его как разметку",
+    "Use an identity server": "Используйте сервер идентификации",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Используйте идентификационный сервер для приглашения по электронной почте. Нажмите «Продолжить», чтобы использовать сервер идентификации по умолчанию (% (defaultIdentityServerName)s) или измените его в настройках.",
+    "Use an identity server to invite by email. Manage in Settings.": "Используйте идентификационный сервер для приглашения по электронной почте. Управление в меню Настройки.",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Разрешить резервный вызов поддержки сервера turn.matrix.org, когда ваш домашний сервер не предлагает такой поддержки (ваш IP-адрес будет использоваться во время вызова)"
 }
