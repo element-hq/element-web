@@ -456,16 +456,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     background-color: $primary-bg-color;
 }
 
-::-moz-selection {
-    background-color: $accent-color;
-    color: $selection-fg-color;
-}
-
-::selection {
-    background-color: $accent-color;
-    color: $selection-fg-color;
-}
-
 .mx_textButton {
     @mixin mx_DialogButton_small;
 }
