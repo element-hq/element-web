@@ -2117,5 +2117,11 @@
     "Link this email with your account in Settings to receive invites directly in Riot.": "Që të merrni ftesa drejt e në Riot, lidheni këtë email me llogarinë tuaj, te Rregullimet.",
     "This invite to %(roomName)s was sent to %(email)s": "Kjo ftesë për %(roomName)s u dërgua te %(email)s",
     "Use an identity server in Settings to receive invites directly in Riot.": "Që të merrni ftesa drejt e në Riot, përdorni një shërbyes identitetesh, te Rregullimet.",
-    "Share this email in Settings to receive invites directly in Riot.": "Që të merrni ftesa drejt e te Riot, ndajeni me të tjerët këtë email, te Rregullimet."
+    "Share this email in Settings to receive invites directly in Riot.": "Që të merrni ftesa drejt e te Riot, ndajeni me të tjerët këtë email, te Rregullimet.",
+    "Error changing power level": "Gabim në ndryshimin e shkallës së pushtetit",
+    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Ndodhi një gabim gjatë ndryshimit të shkallës së pushtetit të përdoruesit. Sigurohuni se keni leje të mjaftueshme dhe riprovoni.",
+    "Bold": "Të trasha",
+    "Italics": "Të pjerrëta",
+    "Strikethrough": "Hequrvije",
+    "Code block": "Bllok kodi"
 }
