@@ -38,23 +38,10 @@ export default class MessageComposerFormatBar extends React.PureComponent {
 
     showAt(selectionRect) {
         this._formatBarRef.classList.add("mx_MessageComposerFormatBar_shown");
-        let leftOffset = 0;
-        let node = this._formatBarRef;
-        while (node.offsetParent) {
-            node = node.offsetParent;
-            leftOffset += node.offsetLeft;
-        }
-
-        let topOffset = 0;
-        node = this._formatBarRef;
-        while (node.offsetParent) {
-            node = node.offsetParent;
-            topOffset += node.offsetTop;
-        }
-
-        this._formatBarRef.style.left = `${selectionRect.left - leftOffset}px`;
+        const parentRect = this._formatBarRef.parentElement.getBoundingClientRect();
+        this._formatBarRef.style.left = `${selectionRect.left - parentRect.left}px`;
         // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
-        this._formatBarRef.style.top = `${selectionRect.top - topOffset - 16 - 12}px`;
+        this._formatBarRef.style.top = `${selectionRect.top - parentRect.top - 16 - 12}px`;
     }
 
     hide() {
