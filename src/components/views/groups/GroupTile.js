@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import {MatrixClient} from 'matrix-js-sdk';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import sdk from '../../../index';
@@ -24,7 +25,7 @@ import FlairStore from '../../../stores/FlairStore';
 
 function nop() {}
 
-const GroupTile = React.createClass({
+const GroupTile = createReactClass({
     displayName: 'GroupTile',
 
     propTypes: {

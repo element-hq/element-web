@@ -17,8 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'EditableText',
 
     propTypes: {

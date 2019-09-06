@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'PowerSelector',
 
     propTypes: {
