@@ -395,7 +395,7 @@ export const SETTINGS = {
         default: null,
     },
     "sendReadReceipts": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        supportedLevels: LEVELS_ROOM_SETTINGS,
         displayName: _td(
             "Send read receipts for messages (requires compatible homeserver to disable)",
         ),

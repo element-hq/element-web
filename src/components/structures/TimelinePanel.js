@@ -685,7 +685,8 @@ const TimelinePanel = createReactClass({
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
-            const hiddenRR = !SettingsStore.getValue("sendReadReceipts");
+            const roomId = this.props.timelineSet.room.roomId;
+            const hiddenRR = !SettingsStore.getValue("sendReadReceipts", roomId);
 
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
