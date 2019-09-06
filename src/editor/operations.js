@@ -18,13 +18,25 @@ limitations under the License.
  * Some common queries and transformations on the editor model
  */
 
-export function replaceRangeAndExpandSelection(model, range, newParts) {
+export function replaceRangeAndExpandSelection(range, newParts) {
+    const {model} = range;
     model.transform(() => {
         const oldLen = range.length;
         const addedLen = range.replace(newParts);
         const firstOffset = range.start.asOffset(model);
         const lastOffset = firstOffset.add(oldLen + addedLen);
         return model.startRange(firstOffset.asPosition(model), lastOffset.asPosition(model));
+    });
+}
+
+export function replaceRangeAndMoveCaret(range, newParts) {
+    const {model} = range;
+    model.transform(() => {
+        const oldLen = range.length;
+        const addedLen = range.replace(newParts);
+        const firstOffset = range.start.asOffset(model);
+        const lastOffset = firstOffset.add(oldLen + addedLen);
+        return lastOffset.asPosition(model);
     });
 }
 
@@ -63,7 +75,7 @@ export function formatRangeAsQuote(range) {
     }
 
     parts.push(partCreator.newline());
-    replaceRangeAndExpandSelection(model, range, parts);
+    replaceRangeAndExpandSelection(range, parts);
 }
 
 export function formatRangeAsCode(range) {
@@ -85,7 +97,7 @@ export function formatRangeAsCode(range) {
         parts.unshift(partCreator.plain("`"));
         parts.push(partCreator.plain("`"));
     }
-    replaceRangeAndExpandSelection(model, range, parts);
+    replaceRangeAndExpandSelection(range, parts);
 }
 
 export function formatInline(range, prefix, suffix = prefix) {
@@ -93,5 +105,5 @@ export function formatInline(range, prefix, suffix = prefix) {
     const {partCreator} = model;
     parts.unshift(partCreator.plain(prefix));
     parts.push(partCreator.plain(suffix));
-    replaceRangeAndExpandSelection(model, range, parts);
+    replaceRangeAndExpandSelection(range, parts);
 }

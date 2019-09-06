@@ -25,10 +25,12 @@ import {
     formatRangeAsQuote,
     formatRangeAsCode,
     formatInline,
+    replaceRangeAndMoveCaret,
 } from '../../../editor/operations';
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
 import Autocomplete from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
+import {parsePlainTextMessage} from '../../../editor/deserialize';
 import {renderModel} from '../../../editor/render';
 import {Room} from 'matrix-js-sdk';
 import TypingStore from "../../../stores/TypingStore";
@@ -170,6 +172,18 @@ export default class BasicMessageEditor extends React.Component {
         // some browsers (chromium) don't fire an input event after ending a composition
         // so trigger a model update after the composition is done by calling the input handler
         this._onInput({inputType: "insertCompositionText"});
+    }
+
+    _onPaste = (event) => {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const text = event.clipboardData.getData("text/plain");
+        if (text) {
+            const range = getRangeForSelection(this._editorRef, model, document.getSelection());
+            const parts = parsePlainTextMessage(text, partCreator);
+            replaceRangeAndMoveCaret(range, parts);
+            event.preventDefault();
+        }
     }
 
     _onInput = (event) => {
@@ -495,6 +509,7 @@ export default class BasicMessageEditor extends React.Component {
                 tabIndex="1"
                 onBlur={this._onBlur}
                 onFocus={this._onFocus}
+                onPaste={this._onPaste}
                 onKeyDown={this._onKeyDown}
                 ref={ref => this._editorRef = ref}
                 aria-label={this.props.label}
