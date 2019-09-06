@@ -100,10 +100,27 @@ export function formatRangeAsCode(range) {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatInline(range, prefix, suffix = prefix) {
+export function toggleInlineFormat(range, prefix, suffix = prefix) {
     const {model, parts} = range;
     const {partCreator} = model;
-    parts.unshift(partCreator.plain(prefix));
-    parts.push(partCreator.plain(suffix));
+
+    const isFormatted = parts.length &&
+        parts[0].text.startsWith(prefix) &&
+        parts[parts.length - 1].text.endsWith(suffix);
+
+    if (isFormatted) {
+        // remove prefix and suffix
+        const partWithoutPrefix = parts[0].serialize();
+        partWithoutPrefix.text = partWithoutPrefix.text.substr(prefix.length);
+        parts[0] = partCreator.deserializePart(partWithoutPrefix);
+
+        const partWithoutSuffix = parts[parts.length - 1].serialize();
+        const suffixPartText = partWithoutSuffix.text;
+        partWithoutSuffix.text = suffixPartText.substring(0, suffixPartText.length - suffix.length);
+        parts[parts.length - 1] = partCreator.deserializePart(partWithoutSuffix);
+    } else {
+        parts.unshift(partCreator.plain(prefix));
+        parts.push(partCreator.plain(suffix));
+    }
     replaceRangeAndExpandSelection(range, parts);
 }

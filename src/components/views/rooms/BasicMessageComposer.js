@@ -24,7 +24,7 @@ import {setSelection} from '../../../editor/caret';
 import {
     formatRangeAsQuote,
     formatRangeAsCode,
-    formatInline,
+    toggleInlineFormat,
     replaceRangeAndMoveCaret,
 } from '../../../editor/operations';
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
@@ -457,13 +457,13 @@ export default class BasicMessageEditor extends React.Component {
         this.historyManager.ensureLastChangesPushed(this.props.model);
         switch (action) {
             case "bold":
-                formatInline(range, "**");
+                toggleInlineFormat(range, "**");
                 break;
             case "italics":
-                formatInline(range, "*");
+                toggleInlineFormat(range, "*");
                 break;
             case "strikethrough":
-                formatInline(range, "<del>", "</del>");
+                toggleInlineFormat(range, "<del>", "</del>");
                 break;
             case "code":
                 formatRangeAsCode(range);
