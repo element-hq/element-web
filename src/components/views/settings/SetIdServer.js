@@ -147,10 +147,11 @@ export default class SetIdServer extends React.Component {
 
     _checkIdServer = async (e) => {
         e.preventDefault();
+        const { idServer, currentClientIdServer } = this.state;
 
         this.setState({busy: true, checking: true, error: null});
 
-        const fullUrl = unabbreviateUrl(this.state.idServer);
+        const fullUrl = unabbreviateUrl(idServer);
 
         let errStr = await checkIdentityServerUrl(fullUrl);
         if (!errStr) {
@@ -179,25 +180,26 @@ export default class SetIdServer extends React.Component {
 
                 if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
                     const [confirmed] = await this._showNoTermsWarning(fullUrl);
-                    save &= confirmed;
+                    save = confirmed;
                 }
 
                 // Show a general warning, possibly with details about any bound
                 // 3PIDs that would be left behind.
-                if (save && this.state.currentClientIdServer) {
+                console.log(fullUrl, idServer, currentClientIdServer)
+                if (save && currentClientIdServer && fullUrl !== currentClientIdServer) {
                     const [confirmed] = await this._showServerChangeWarning({
                         title: _t("Change identity server"),
                         unboundMessage: _t(
                             "Disconnect from the identity server <current /> and " +
                             "connect to <new /> instead?", {},
                             {
-                                current: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                                new: sub => <b>{abbreviateUrl(this.state.idServer)}</b>,
+                                current: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
+                                new: sub => <b>{abbreviateUrl(idServer)}</b>,
                             },
                         ),
                         button: _t("Continue"),
                     });
-                    save &= confirmed;
+                    save = confirmed;
                 }
 
                 if (save) {
