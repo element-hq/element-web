@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -36,7 +37,7 @@ export function CancelButton(props) {
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'SimpleRoomHeader',
 
     propTypes: {

@@ -20,6 +20,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -33,7 +34,7 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomTile',
 
     propTypes: {

@@ -16,10 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
@@ -44,7 +43,7 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomPreviewBar',
 
     propTypes: {
