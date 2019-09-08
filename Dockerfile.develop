@@ -13,8 +13,11 @@ RUN apk add --no-cache git dos2unix
 
 WORKDIR /src
 
-COPY . /src
-RUN dos2unix /src/scripts/docker-link-repos.sh && sh /src/scripts/docker-link-repos.sh
+# Install deps-only into separate Docker layer and run Riot when the container
+# starts, mount source as a volume and keep dev environment consistent
+COPY scripts /src/scripts
+RUN dos2unix /src/scripts/docker-link-repos.sh \
+    && sh /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=100000 install
 RUN yarn build
 
