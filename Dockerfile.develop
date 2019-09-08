@@ -27,3 +27,19 @@ COPY package.json yarn.lock /src/
 RUN sed -i -e '/"prepare":/d' /src/package.json
 RUN yarn --network-timeout=100000 install
 
+# Overlay src files with the original ones in case something was left out
+# from explicit copying above and doesn't work with mounting properly such as:
+#
+# "ERROR in Entry module not found: Error: Can't resolve './src' in '/src'"
+# "ERROR in multi (webpack)-dev-server/client?http://0.0.0.0 ./src"
+COPY . /src
+
+# Assemble entrypoint that copies the config at container start
+# and runs webpack server. Mount volume to /src/src for developing.
+RUN echo 'mkdir /src/webapp' >> /entry.sh \
+    && echo 'cp /src/config.sample.json /src/webapp/config.json' >> /entry.sh \
+    && echo 'yarn start' >> /entry.sh \
+    && chmod +x /entry.sh
+
+# run webpack server to change the code on-the-go
+ENTRYPOINT /entry.sh
