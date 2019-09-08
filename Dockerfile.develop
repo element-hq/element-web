@@ -18,11 +18,12 @@ WORKDIR /src
 COPY scripts /src/scripts
 RUN dos2unix /src/scripts/docker-link-repos.sh \
     && sh /src/scripts/docker-link-repos.sh
+
+# Cache package.json
+COPY package.json yarn.lock /src/
+
+# Remove 'prepare' script because there is NO config in yarn and npm for
+# disabling it and is not necessary for development build
+RUN sed -i -e '/"prepare":/d' /src/package.json
 RUN yarn --network-timeout=100000 install
-RUN yarn build
-
-# Copy the config now so that we don't create another layer in the app image
-RUN cp /src/config.sample.json /src/webapp/config.json
-
-
 
