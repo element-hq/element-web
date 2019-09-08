@@ -304,6 +304,43 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
+Using Docker image for development
+----------------------------------
+
+Avoids installation of Node, NPM and the rest of the environment by providing
+the same environment that's used in serving Riot via Dockerfile officially
+and at the same time allows to plug in the folder with source files so that
+you can edit outside of Docker container and let it compile inside where
+it is safely separated from your machine or any custom configuration.
+
+Using this approach provides a reproducible environment between you and
+the maintainers if you share your changes in a pull request.
+
+Run it with:
+
+    # build image
+    docker build --tag vectorim/riot-web:develop --file Dockerfile.develop .
+
+    # remove old container or do nothing
+    docker rm -f riot || true
+
+    # run a new container with src folder mounted from git repository
+    # located on the host machine. You can mount additional folders
+    # such as res with additional --volume $PWD/res:/src/res
+    docker run --detach --interactive --tty \
+        --publish <port-on-host>:8080 \
+        --volume $PWD/src:/src/src \
+        --name riot \
+        vectorim/riot-web:develop
+
+And access ``yarn`` and other commands from inside of the container:
+
+    # run shell process from container
+    docker exec -it riot sh
+
+    # run yarn process from container
+    docker exec -it riot yarn
+
 Running the tests
 -----------------
 
