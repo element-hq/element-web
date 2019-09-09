@@ -2163,5 +2163,12 @@
     "Disconnect identity server": "Az azonosítási szerverről lecsatlakozás",
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Az azonosítási szerverrel (<idserver />) továbbra is <b>megosztasz személyes adatokat</b>.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Javasoljuk, hogy mielőtt az azonosítási szerverről lecsatlakozol töröld az e-mail címedet és telefonszámodat.",
-    "Disconnect anyway": "Mindenképpen lecsatlakozás"
+    "Disconnect anyway": "Mindenképpen lecsatlakozás",
+    "No recent messages by %(user)s found": "Nincs friss üzenet ettől a felhasználótól: %(user)s",
+    "Try scrolling up in the timeline to see if there are any earlier ones.": "Az idővonalon próbálj meg felgörgetni, hogy megnézd van-e régebbi üzenet.",
+    "Remove recent messages by %(user)s": "Friss üzenetek törlése a felhasználótól: %(user)s",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "%(count)s db üzenetet törölsz ettől a felhasználótól: %(user)s. Ezt nem lehet visszavonni. Folytatod?",
+    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Ez időt vehet igénybe ha sok üzenet érintett. Kérlek közben ne frissíts a kliensben.",
+    "Remove %(count)s messages|other": "%(count)s db üzenet törlése",
+    "Remove recent messages": "Friss üzenetek törlése"
 }
