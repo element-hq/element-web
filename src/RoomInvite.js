@@ -43,10 +43,7 @@ function inviteMultipleToRoom(roomId, addrs) {
 export function showStartChatInviteDialog() {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
 
-    const validAddressTypes = ['mx-user-id'];
-    if (MatrixClientPeg.get().getIdentityServerUrl()) {
-        validAddressTypes.push('email');
-    }
+    const validAddressTypes = ['mx-user-id', 'email'];
 
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
