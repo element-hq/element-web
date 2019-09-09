@@ -48,6 +48,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import Matrix from "matrix-js-sdk";
+const EventTimeline = Matrix.EventTimeline;
 
 module.exports = createReactClass({
     displayName: 'MemberInfo',
@@ -64,6 +66,7 @@ module.exports = createReactClass({
                 mute: false,
                 modifyLevel: false,
                 synapseDeactivate: false,
+                redactMessages: false,
             },
             muted: false,
             isTargetMod: false,
@@ -356,6 +359,73 @@ module.exports = createReactClass({
         });
     },
 
+    onRedactAllMessages: async function() {
+        const {roomId, userId} = this.props.member;
+        const room = this.context.matrixClient.getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        let timeline = room.getLiveTimeline();
+        let eventsToRedact = [];
+        while (timeline) {
+            eventsToRedact = timeline.getEvents().reduce((events, event) => {
+                if (event.getSender() === userId && !event.isRedacted()) {
+                    return events.concat(event);
+                } else {
+                    return events;
+                }
+            }, eventsToRedact);
+            timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
+        }
+
+        const count = eventsToRedact.length;
+        const user = this.props.member.name;
+
+        if (count === 0) {
+            const InfoDialog = sdk.getComponent("dialogs.InfoDialog");
+            Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
+                title: _t("No recent messages by %(user)s found", {user}),
+                description:
+                    <div>
+                        <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
+                    </div>,
+            });
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const confirmed = await new Promise((resolve) => {
+                Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
+                    title: _t("Remove recent messages by %(user)s", {user}),
+                    description:
+                        <div>
+                            <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
+                            <p>{ _t("For large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
+                        </div>,
+                    button: _t("Remove %(count)s messages", {count}),
+                    onFinished: resolve,
+                });
+            });
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Submitting a large number of redactions freezes the UI,
+            // so first wait 200ms to allow to rerender after closing the dialog.
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            await Promise.all(eventsToRedact.map(async event => {
+                try {
+                    await this.context.matrixClient.redactEvent(roomId, event.getId());
+                } catch (err) {
+                    // log and swallow errors
+                    console.error("Could not redact", event.getId());
+                    console.error(err);
+                }
+            }));
+            console.log("Done redacting recent messages!");
+        }
+    },
+
     _warnSelfDemote: function() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         return new Promise((resolve) => {
@@ -602,6 +672,7 @@ module.exports = createReactClass({
             mute: false,
             modifyLevel: false,
             modifyLevelMax: 0,
+            redactMessages: false,
         };
 
         // Calculate permissions for Synapse before doing the PL checks
@@ -623,6 +694,7 @@ module.exports = createReactClass({
         can.mute = me.powerLevel >= editPowerLevel;
         can.modifyLevel = me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel);
         can.modifyLevelMax = me.powerLevel;
+        can.redactMessages = me.powerLevel >= powerLevels.redact;
 
         return can;
     },
@@ -812,6 +884,7 @@ module.exports = createReactClass({
         let banButton;
         let muteButton;
         let giveModButton;
+        let redactButton;
         let synapseDeactivateButton;
         let spinner;
 
@@ -892,6 +965,16 @@ module.exports = createReactClass({
                 </AccessibleButton>
             );
         }
+
+
+        if (this.state.can.redactMessages) {
+            redactButton = (
+                <AccessibleButton className="mx_MemberInfo_field" onClick={this.onRedactAllMessages}>
+                    { _t("Remove recent messages") }
+                </AccessibleButton>
+            );
+        }
+
         if (this.state.can.ban) {
             let label = _t("Ban");
             if (this.props.member.membership === 'ban') {
@@ -932,7 +1015,7 @@ module.exports = createReactClass({
         }
 
         let adminTools;
-        if (kickButton || banButton || muteButton || giveModButton || synapseDeactivateButton) {
+        if (kickButton || banButton || muteButton || giveModButton || synapseDeactivateButton || redactButton) {
             adminTools =
                 <div>
                     <h3>{ _t("Admin Tools") }</h3>
@@ -941,6 +1024,7 @@ module.exports = createReactClass({
                         { muteButton }
                         { kickButton }
                         { banButton }
+                        { redactButton }
                         { giveModButton }
                         { synapseDeactivateButton }
                     </div>
