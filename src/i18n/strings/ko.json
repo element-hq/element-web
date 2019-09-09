@@ -2011,5 +2011,11 @@
     "Bold": "굵게",
     "Italics": "기울게",
     "Strikethrough": "취소선",
-    "Code block": "코드 블록"
+    "Code block": "코드 블록",
+    "Change identity server": "ID 서버 변경",
+    "Disconnect from the identity server <current /> and connect to <new /> instead?": "현재 ID 서버 <current />와의 연결을 끊고 새 ID 서버 <new />에 연결하겠습니까?",
+    "Disconnect identity server": "ID 서버 연결 끊기",
+    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "여전히 ID 서버 <idserver />에 <b>개인 정보를 공유</b>하고 있습니다.",
+    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "연결을 끊기 전에 ID 서버에 이메일 주소와 전화번호를 지우기를 권합니다.",
+    "Disconnect anyway": "무시하고 연결 끊기"
 }
