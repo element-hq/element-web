@@ -37,18 +37,19 @@ export default class ReplyPreview extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        this.unmounted = false;
 
         this.state = {
-            event: null,
+            event: RoomViewStore.getQuotingEvent(),
         };
 
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
-
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
-        this._onRoomViewStoreUpdate();
     }
 
     componentWillUnmount() {
+        this.unmounted = true;
+
         // Remove RoomStore listener
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
@@ -56,6 +57,8 @@ export default class ReplyPreview extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
+        if (this.unmounted) return;
+
         const event = RoomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });

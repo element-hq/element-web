@@ -586,7 +586,6 @@ module.exports = createReactClass({
                 return ContentMessages.sharedInstance().sendContentListToRoom(
                     [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
                 );
-                break;
             case 'notifier_enabled':
             case 'upload_started':
             case 'upload_finished':
@@ -623,6 +622,11 @@ module.exports = createReactClass({
                 this.setState({
                     showApps: payload.show,
                 });
+                break;
+            case 'reply_to_event':
+                if (this.state.searchResults && payload.event.getRoomId() === this.state.roomId && !this.unmounted) {
+                    this.onCancelSearchClick();
+                }
                 break;
         }
     },
