@@ -678,7 +678,7 @@ module.exports = createReactClass({
         }
 
         let identityServer;
-        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')) {
+        if (this.props.pickerType === 'user' && this.props.validAddressTypes.includes('email')) {
             const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
             if (defaultIdentityServerUrl) {
                 identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(
