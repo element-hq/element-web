@@ -93,18 +93,11 @@ export default class SetIdServer extends React.Component {
 
     onAction = (payload) => {
         // We react to changes in the ID server in the event the user is staring at this form
-        // when changing their identity server on another device. If the user is trying to change
-        // it in two places, we'll end up stomping all over their input, but at that point we
-        // should question our UX which led to them doing that.
+        // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
 
-        const fullUrl = MatrixClientPeg.get().getIdentityServerUrl();
-        let abbr = '';
-        if (fullUrl) abbr = abbreviateUrl(fullUrl);
-
         this.setState({
-            currentClientIdServer: fullUrl,
-            idServer: abbr,
+            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
         });
     };
 
