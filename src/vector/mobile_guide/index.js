@@ -94,7 +94,7 @@ async function initPage() {
     if (hsUrl !== 'https://matrix.org/') {
         document.getElementById('step2_container').style.display = 'block';
         document.getElementById('hs_url').innerText = hsUrl;
-        document.getElementById('step_login_header').innerHTML= 'Step 3: Register or Log in';
+        document.getElementById('step_login_header').innerHTML= '3: Launch the app';
 
         if (isUrl && isUrl !== "https://vector.im/") {
             document.getElementById('default_is').style.display = 'none';
