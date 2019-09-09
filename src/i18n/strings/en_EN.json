@@ -695,6 +695,8 @@
     "Failed to unban": "Failed to unban",
     "Unban": "Unban",
     "Banned by %(displayName)s": "Banned by %(displayName)s",
+    "Error changing power level requirement": "Error changing power level requirement",
+    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.",
     "Error changing power level": "Error changing power level",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.",
     "Default role": "Default role",
