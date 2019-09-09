@@ -48,8 +48,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import Matrix from "matrix-js-sdk";
-const EventTimeline = Matrix.EventTimeline;
+import {EventTimeline} from "matrix-js-sdk";
 
 module.exports = createReactClass({
     displayName: 'MemberInfo',
@@ -398,7 +397,7 @@ module.exports = createReactClass({
                     description:
                         <div>
                             <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
-                            <p>{ _t("For large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
+                            <p>{ _t("For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
                         </div>,
                     button: _t("Remove %(count)s messages", {count}),
                     onFinished: resolve,
@@ -410,9 +409,10 @@ module.exports = createReactClass({
             }
 
             // Submitting a large number of redactions freezes the UI,
-            // so first wait 200ms to allow to rerender after closing the dialog.
-            await new Promise(resolve => setTimeout(resolve, 200));
+            // so first yield to allow to rerender after closing the dialog.
+            await Promise.resolve();
 
+            console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
             await Promise.all(eventsToRedact.map(async event => {
                 try {
                     await this.context.matrixClient.redactEvent(roomId, event.getId());
@@ -422,7 +422,7 @@ module.exports = createReactClass({
                     console.error(err);
                 }
             }));
-            console.log("Done redacting recent messages!");
+            console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
         }
     },
 
@@ -965,7 +965,6 @@ module.exports = createReactClass({
                 </AccessibleButton>
             );
         }
-
 
         if (this.state.can.redactMessages) {
             redactButton = (
