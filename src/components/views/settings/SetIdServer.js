@@ -262,17 +262,20 @@ export default class SetIdServer extends React.Component {
         let message;
         let danger = false;
         if (boundThreepids.length) {
-            message = _t(
-                "You are still <b>sharing your personal data</b> on the identity " +
-                "server <idserver />. <br /> <br /> " +
-                "We recommend that you remove your email addresses and phone numbers " +
-                "from the identity server before disconnecting.", {},
-                {
-                    idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                    b: sub => <b>{sub}</b>,
-                    br: () => <br />,
-                },
-            );
+            message = <div>
+                <p>{_t(
+                    "You are still <b>sharing your personal data</b> on the identity " +
+                    "server <idserver />.", {},
+                    {
+                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
+                        b: sub => <b>{sub}</b>,
+                    },
+                )}</p>
+                <p>{_t(
+                    "We recommend that you remove your email addresses and phone numbers " +
+                    "from the identity server before disconnecting.",
+                )}</p>
+            </div>;
             danger = true;
             button = _t("Disconnect anyway");
         } else {
