@@ -460,7 +460,7 @@ export default class BasicMessageEditor extends React.Component {
                 toggleInlineFormat(range, "**");
                 break;
             case "italics":
-                toggleInlineFormat(range, "*");
+                toggleInlineFormat(range, "_");
                 break;
             case "strikethrough":
                 toggleInlineFormat(range, "<del>", "</del>");
