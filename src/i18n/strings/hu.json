@@ -2157,5 +2157,11 @@
     "Bold": "Félkövér",
     "Italics": "Dőlt",
     "Strikethrough": "Áthúzott",
-    "Code block": "Kód blokk"
+    "Code block": "Kód blokk",
+    "Change identity server": "Azonosítási szerver kicserélése",
+    "Disconnect from the identity server <current /> and connect to <new /> instead?": "<current /> azonosítási szerverről lecsatlakozás és csatlakozás ehhez: <new />?",
+    "Disconnect identity server": "Az azonosítási szerverről lecsatlakozás",
+    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Az azonosítási szerverrel (<idserver />) továbbra is <b>megosztasz személyes adatokat</b>.",
+    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Javasoljuk, hogy mielőtt az azonosítási szerverről lecsatlakozol töröld az e-mail címedet és telefonszámodat.",
+    "Disconnect anyway": "Mindenképpen lecsatlakozás"
 }
