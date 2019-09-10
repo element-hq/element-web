@@ -164,7 +164,7 @@ export default class EditMessageComposer extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
-    _isModifiedOrSameAsOld(newContent) {
+    _isContentModified(newContent) {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
         if (!this._editorRef.isModified() ||
@@ -181,12 +181,14 @@ export default class EditMessageComposer extends React.Component {
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
 
-        if (this._isModifiedOrSameAsOld(newContent)) {
+        // If content is modified then send an updated event into the room
+        if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
             this.context.matrixClient.sendMessage(roomId, editContent);
         }
 
+        // close the event editing and focus composer
         dis.dispatch({action: "edit_event", event: null});
         dis.dispatch({action: 'focus_composer'});
     };
