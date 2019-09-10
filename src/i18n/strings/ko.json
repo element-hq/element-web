@@ -2017,5 +2017,14 @@
     "Disconnect identity server": "ID 서버 연결 끊기",
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "여전히 ID 서버 <idserver />에 <b>개인 정보를 공유</b>하고 있습니다.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "연결을 끊기 전에 ID 서버에 이메일 주소와 전화번호를 지우기를 권합니다.",
-    "Disconnect anyway": "무시하고 연결 끊기"
+    "Disconnect anyway": "무시하고 연결 끊기",
+    "Error changing power level requirement": "권한 등급 요구 사항 변경 중 오류",
+    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "방의 권한 등급 요구 사항을 변경하는 중 오류가 발생했습니다. 변경할 수 있는 권한을 갖고 있는 지 확인한 후 다시 시도하세요.",
+    "No recent messages by %(user)s found": "%(user)s님의 최근 메시지 없음",
+    "Try scrolling up in the timeline to see if there are any earlier ones.": "이전 타임라인이 있는지 위로 스크롤하세요.",
+    "Remove recent messages by %(user)s": "%(user)s님의 최근 메시지 삭제",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "%(user)s님의 %(count)s개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
+    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아, 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
+    "Remove %(count)s messages|other": "%(count)s개의 메시지 삭제",
+    "Remove recent messages": "최근 메시지 삭제"
 }
