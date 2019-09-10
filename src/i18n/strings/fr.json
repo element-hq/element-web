@@ -2167,5 +2167,20 @@
     "Bold": "Gras",
     "Italics": "Italique",
     "Strikethrough": "Barré",
-    "Code block": "Bloc de code"
+    "Code block": "Bloc de code",
+    "Change identity server": "Changer le serveur d’identité",
+    "Disconnect from the identity server <current /> and connect to <new /> instead?": "Se déconnecter du serveur d’identité <current /> et se connecter à <new /> à la place ?",
+    "Disconnect identity server": "Se déconnecter du serveur d’identité",
+    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Vous <b>partagez toujours vos données personnelles</b> sur le serveur d’identité <idserver />.",
+    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Nous recommandons que vous supprimiez vos adresses e-mail et vos numéros de téléphone du serveur d’identité avant de vous déconnecter.",
+    "Disconnect anyway": "Se déconnecter quand même",
+    "Error changing power level requirement": "Erreur de changement du critère de rang",
+    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Une erreur est survenue lors de la modification des critères de rang du salon. Vérifiez que vous avez les bonnes permissions et réessayez.",
+    "No recent messages by %(user)s found": "Aucun message récent de %(user)s n’a été trouvé",
+    "Try scrolling up in the timeline to see if there are any earlier ones.": "Essayez de faire défiler l’historique vers le haut pour voir s’il y en a de plus anciens.",
+    "Remove recent messages by %(user)s": "Supprimer les messages récents de %(user)s",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "Vous êtes sur le point de supprimer %(count)s messages de %(user)s. Ça ne peut pas être annulé. Voulez-vous continuer ?",
+    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Pour un grand nombre de messages, cela peut prendre du temps. N’actualisez pas votre client pendant ce temps.",
+    "Remove %(count)s messages|other": "Supprimer %(count)s messages",
+    "Remove recent messages": "Supprimer les messages récents"
 }
