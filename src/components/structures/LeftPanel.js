@@ -217,6 +217,7 @@ const LeftPanel = createReactClass({
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
         let tagPanelContainer;
@@ -240,6 +241,15 @@ const LeftPanel = createReactClass({
             },
         );
 
+        let exploreButton;
+        if (!this.props.collapsed) {
+            exploreButton = (
+                <div className={classNames("mx_LeftPanel_explore", {"mx_LeftPanel_explore_hidden": this.state.searchFocused})}>
+                    <AccessibleButton onClick={() => dis.dispatch({action: 'view_room_directory'})}>{_t("Explore")}</AccessibleButton>
+                </div>
+            );
+        }
+
         const searchBox = (<SearchBox
             enableRoomSearchFocus={true}
             placeholder={ _t('Filter room names') }
@@ -258,7 +268,10 @@ const LeftPanel = createReactClass({
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
                     { breadcrumbs }
-                    { searchBox }
+                    <div className="mx_LeftPanel_exploreAndFilterRow">
+                        { exploreButton }
+                        { searchBox }
+                    </div>
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
