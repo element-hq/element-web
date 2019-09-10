@@ -138,7 +138,12 @@ limitations under the License.
 .mx_LeftPanel_explore {
     flex: 0 0 40%;
     overflow: hidden;
+    transition: flex-basis 0.2s;
     box-sizing: border-box;
+
+    &.mx_LeftPanel_explore_hidden {
+        flex-basis: 0;
+    }
 
     .mx_AccessibleButton {
         font-size: 14px;
