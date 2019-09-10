@@ -321,11 +321,6 @@ module.exports = createReactClass({
         }
     },
 
-    onCreateRoomClicked: function() {
-        this.props.onFinished();
-        dis.dispatch({action: 'view_create_room'});
-    },
-
     onJoinClick: function(alias) {
         // If we don't have a particular instance id selected, just show that rooms alias
         if (!this.state.instanceId) {
@@ -602,17 +597,11 @@ module.exports = createReactClass({
             </div>;
         }
 
-        const createRoomButton = (<AccessibleButton
-            onClick={this.onCreateRoomClicked}
-            className="mx_RoomDirectory_createRoom"
-        >{_t("Create new room")}</AccessibleButton>);
-
         return (
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                headerButton={createRoomButton}
                 title={_t("Room directory")}
             >
                 <div className="mx_RoomDirectory">
