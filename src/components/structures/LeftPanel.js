@@ -81,6 +81,9 @@ const LeftPanel = createReactClass({
         if (this.state.searchFilter !== nextState.searchFilter) {
             return true;
         }
+        if (this.state.searchFocused !== nextState.searchFocused) {
+            return true;
+        }
 
         return false;
     },
@@ -209,6 +212,14 @@ const LeftPanel = createReactClass({
         this._roomList = ref;
     },
 
+    _onSearchFocus: function() {
+        this.setState({searchFocused: true});
+    },
+
+    _onSearchBlur: function() {
+        this.setState({searchFocused: false});
+    },
+
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
         const RoomBreadcrumbs = sdk.getComponent('rooms.RoomBreadcrumbs');
@@ -255,6 +266,8 @@ const LeftPanel = createReactClass({
             placeholder={ _t('Filter room names') }
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
+            onFocus={this._onSearchFocus}
+            onBlur={this._onSearchBlur}
             collapsed={this.props.collapsed} />);
 
         let breadcrumbs;

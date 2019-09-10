@@ -95,6 +95,15 @@ module.exports = createReactClass({
 
     _onFocus: function(ev) {
         ev.target.select();
+        if (this.props.onFocus) {
+            this.props.onFocus(ev);
+        }
+    },
+
+    _onBlur: function(ev) {
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
+        }
     },
 
     _clearSearch: function(source) {
@@ -132,6 +141,7 @@ module.exports = createReactClass({
                     onChange={ this.onChange }
                     onKeyDown={ this._onKeyDown }
                     placeholder={ this.props.placeholder }
+                    onBlur={this._onBlur}
                 />
                 { clearButton }
             </div>
