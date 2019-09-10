@@ -18,6 +18,10 @@ limitations under the License.
     flex: 1 1 0;
     min-width: 0;
 
+    &.mx_SearchBox_blurred:not(:hover) {
+        background-color: transparent;
+    }
+
     .mx_SearchBox_closeButton {
         cursor: pointer;
         background-image: url('$(res)/img/icons-close.svg');
