@@ -642,7 +642,10 @@ module.exports = createReactClass({
 
     _calculateOpsPermissions: async function(member) {
         const defaultPerms = {
-            can: {},
+            can: {
+                // Calculate permissions for Synapse before doing the PL checks
+                synapseDeactivate: await this.context.matrixClient.isSynapseAdministrator(),
+            },
             muted: false,
         };
         const room = this.context.matrixClient.getRoom(member.roomId);
@@ -656,9 +659,10 @@ module.exports = createReactClass({
 
         const them = member;
         return {
-            can: await this._calculateCanPermissions(
-                me, them, powerLevels.getContent(),
-            ),
+            can: {
+                ...defaultPerms.can,
+                ...await this._calculateCanPermissions(me, them, powerLevels.getContent()),
+            },
             muted: this._isMuted(them, powerLevels.getContent()),
             isTargetMod: them.powerLevel > powerLevels.getContent().users_default,
         };
@@ -674,9 +678,6 @@ module.exports = createReactClass({
             modifyLevelMax: 0,
             redactMessages: false,
         };
-
-        // Calculate permissions for Synapse before doing the PL checks
-        can.synapseDeactivate = await this.context.matrixClient.isSynapseAdministrator();
 
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
