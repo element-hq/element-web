@@ -92,6 +92,9 @@ async function initPage() {
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
     if (hsUrl !== 'https://matrix.org/') {
+        document.getElementById('configure_riot_button').href =
+            "https://riot.im/config/config?hs_url=" + encodeURIComponent(hsUrl)  +
+            "&is_url=" + encodeURIComponent(isUrl);
         document.getElementById('step2_container').style.display = 'block';
         document.getElementById('hs_url').innerText = hsUrl;
         document.getElementById('step_login_header').innerHTML= '3: Launch the app';
