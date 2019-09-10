@@ -21,11 +21,15 @@ module.exports = async function signup(session, username, password, homeserver) 
     await session.goto(session.url('/#/register'));
     // change the homeserver by clicking the "Change" link.
     if (homeserver) {
-        const changeServerDetailsLink = await session.query('.mx_AuthBody_editServerDetails');
-        await changeServerDetailsLink.click();
+        const advancedButton = await session.query('.mx_ServerTypeSelector_type_Advanced');
+        await advancedButton.click();
         const hsInputField = await session.query('#mx_ServerConfig_hsUrl');
         await session.replaceInputText(hsInputField, homeserver);
         const nextButton = await session.query('.mx_Login_submit');
+        // accept homeserver
+        await nextButton.click();
+        await session.delay(200);
+        // accept discovered identity server
         await nextButton.click();
     }
     //fill out form
