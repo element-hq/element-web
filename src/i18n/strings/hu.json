@@ -2172,5 +2172,6 @@
     "Remove %(count)s messages|other": "%(count)s db üzenet törlése",
     "Remove recent messages": "Friss üzenetek törlése",
     "Error changing power level requirement": "A szükséges hozzáférési szint változtatás nem sikerült",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "A szoba szükséges hozzáférési szint változtatásakor hiba történt. Ellenőrizd, hogy megvan hozzá a megfelelő jogosultságod és próbáld újra."
+    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "A szoba szükséges hozzáférési szint változtatásakor hiba történt. Ellenőrizd, hogy megvan hozzá a megfelelő jogosultságod és próbáld újra.",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "Olvasás visszajelzés küldése üzenetekhez (a tiltáshoz kompatibilis matrix szerverre van szükség)"
 }
