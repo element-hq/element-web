@@ -263,7 +263,8 @@ const LeftPanel = createReactClass({
 
         const searchBox = (<SearchBox
             enableRoomSearchFocus={true}
-            placeholder={ _t('Filter room names') }
+            blurredPlaceholder={ _t('Filter') }
+            placeholder={ _t('Filter rooms…') }
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
             onFocus={this._onSearchFocus}
