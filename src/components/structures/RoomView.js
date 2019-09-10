@@ -583,9 +583,10 @@ module.exports = createReactClass({
                   payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
-                return ContentMessages.sharedInstance().sendContentListToRoom(
+                ContentMessages.sharedInstance().sendContentListToRoom(
                     [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
                 );
+                break;
             case 'notifier_enabled':
             case 'upload_started':
             case 'upload_finished':
