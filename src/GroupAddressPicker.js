@@ -46,7 +46,7 @@ export function showGroupInviteDialog(groupId) {
 
                 _onGroupInviteFinished(groupId, addrs).then(resolve, reject);
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     });
 }
 
@@ -81,7 +81,7 @@ export function showGroupAddRoomDialog(groupId) {
 
                 _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly).then(resolve, reject);
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     });
 }
 
