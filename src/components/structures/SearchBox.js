@@ -139,7 +139,7 @@ module.exports = React.createClass({
             this.props.placeholder;
         const className = this.props.className || "";
         return (
-            <div className="mx_SearchBox mx_textinput">
+            <div className={classNames("mx_SearchBox", "mx_textinput", {"mx_SearchBox_blurred": this.state.blurred})}>
                 <input
                     key="searchfield"
                     type="text"
