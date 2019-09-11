@@ -37,6 +37,7 @@ import {Service, startTermsFlow} from "../../../../../Terms";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
+import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -58,17 +59,27 @@ export default class GeneralUserSettingsTab extends React.Component {
                 // agreedUrls,          // From the startTermsFlow callback
                 // resolve,             // Promise resolve function for startTermsFlow callback
             },
+            emails: [],
+            msisdns: [],
         };
 
         this.dispatcherRef = dis.register(this._onAction);
     }
 
     async componentWillMount() {
-        const serverRequiresIdServer = await MatrixClientPeg.get().doesServerRequireIdServerParam();
+        const cli = MatrixClientPeg.get();
+
+        const serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
         this.setState({serverRequiresIdServer});
 
         // Check to see if terms need accepting
         this._checkTerms();
+
+        // Need to get 3PIDs generally for Account section and possibly also for
+        // Discovery (assuming we have an IS and terms are agreed).
+        const threepids = await getThreepidsWithBindStatus(cli);
+        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
+        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
     }
 
     componentWillUnmount() {
@@ -81,6 +92,14 @@ export default class GeneralUserSettingsTab extends React.Component {
             this._checkTerms();
         }
     };
+
+    _onEmailsChange = (emails) => {
+        this.setState({ emails });
+    }
+
+    _onMsisdnsChange = (msisdns) => {
+        this.setState({ msisdns });
+    }
 
     async _checkTerms() {
         if (!this.state.haveIdServer) {
@@ -200,10 +219,16 @@ export default class GeneralUserSettingsTab extends React.Component {
         if (this.state.haveIdServer || this.state.serverRequiresIdServer === false) {
             threepidSection = <div>
                 <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses />
+                <EmailAddresses
+                    emails={this.state.emails}
+                    onEmailsChange={this._onEmailsChange}
+                />
 
                 <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers />
+                <PhoneNumbers
+                    msisdns={this.state.msisdns}
+                    onMsisdnsChange={this._onMsisdnsChange}
+                />
             </div>;
         } else if (this.state.serverRequiresIdServer === null) {
             threepidSection = <Spinner />;
@@ -279,10 +304,10 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-            <EmailAddresses />
+            <EmailAddresses emails={this.state.emails} />
 
             <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-            <PhoneNumbers />
+            <PhoneNumbers msisdns={this.state.msisdns} />
         </div> : null;
 
         return (

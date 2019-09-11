@@ -16,7 +16,7 @@ limitations under the License.
 
 import IdentityAuthClient from './IdentityAuthClient';
 
-export async function getThreepidBindStatus(client, filterMedium) {
+export async function getThreepidsWithBindStatus(client, filterMedium) {
     const userId = client.getUserId();
 
     let { threepids } = await client.getThreePids();
@@ -24,7 +24,8 @@ export async function getThreepidBindStatus(client, filterMedium) {
         threepids = threepids.filter((a) => a.medium === filterMedium);
     }
 
-    if (threepids.length > 0) {
+    // Check bind status assuming we have an IS and terms are agreed
+    if (threepids.length > 0 && client.getIdentityServerUrl()) {
         // TODO: Handle terms agreement
         // See https://github.com/vector-im/riot-web/issues/10522
         const authClient = new IdentityAuthClient();
