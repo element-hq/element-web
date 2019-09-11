@@ -2186,5 +2186,7 @@
     "Send read receipts for messages (requires compatible homeserver to disable)": "Envoyer des accusés de lecture pour les messages (nécessite un serveur d’accueil compatible pour le désactiver)",
     "Explore": "Explorer",
     "Filter": "Filtrer",
-    "Filter rooms…": "Filtrer les salons…"
+    "Filter rooms…": "Filtrer les salons…",
+    "Preview": "Aperçu",
+    "View": "Afficher"
 }
