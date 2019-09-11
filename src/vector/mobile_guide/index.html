@@ -45,30 +45,9 @@ body {
 
 .mx_HomePage_header {
     color: #2E2F32;
-    text-align: center;
-}
-
-.mx_HomePage_header h1 {
-    margin-left: 0px;
-    margin-bottom: 20px;
-}
-
-.mx_HomePage_header h2 {
-    margin-left: 0px;
-    margin-top: 5px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    color: #2E2F32;
-}
-
-.mx_HomePage_header h1 a {
-    color: #2E2F32;
-}
-
-.mx_HomePage_header h4 {
-    margin-top: -10px;
-    margin-right: 20px;
-    line-height: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mx_HomePage h3 {
@@ -84,32 +63,20 @@ body {
     flex-direction: row;
 }
 
-.mx_HomePage_toprow {
-    flex-wrap: wrap;
-    margin-top: 40px;
-}
-
 .mx_HomePage_row {
     flex: 1 1 0;
-    margin-right: 20px;
-    margin-top: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .mx_HomePage_logo {
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 30px;
-    margin-bottom: 20px;
-    display: inline;
-    height: 80px;
+    margin-right: 20px;
 }
 
 .mx_HomePage_container {
     display: block ! important;
-    margin: 20px;
+    margin: 10px 20px;
 }
 
 .mx_HomePage_errorContainer {
@@ -125,10 +92,11 @@ body {
 .mx_HomePage_container h3,
 .mx_HomePage_container h4 {
     font-weight: 600;
+    margin-bottom: 32px;
 }
 
 .mx_Spacer {
-    margin-top: 30px;
+    margin-top: 24px;
 }
 
 .mx_FooterLink {
@@ -138,6 +106,10 @@ body {
 
 .mx_Subtext {
     font-size: 14px;
+}
+
+.mx_SubtextTop {
+    margin-top: 32px;
 }
 
 @media screen and (max-width: 1120px) {
@@ -153,13 +125,12 @@ body {
   .mx_Button {
     font-size: 18px;
     padding: 14px 28px;
-    margin-bottom: 12px;
   }
-  .mx_HomePage_toprow {
-      margin-top: 12px;
+  .mx_HomePage_header {
+      justify-content: left;
   }
   .mx_Spacer {
-      margin-top: 60px;
+      margin-top: 24px;
   }
 }
 
@@ -191,15 +162,13 @@ body {
                   </g>
               </svg>
           </span>
-          <div>
-              <h1>Set up Riot on iOS or Android</h1>
-          </div>
+          <p>Set up Riot on iOS or Android</p>
       </div>
-      <div class="mx_HomePage_col mx_HomePage_toprow">
+      <div class="mx_HomePage_col">
         <div class="mx_HomePage_row">
           <div>
-              <h2>1: Install the app</h2>
-              <p><strong>iOS:</strong> If you have an iPhone or iPad, install Riot from the Apple App Store.</p>
+              <h2 id="step1_heading">Install the app</h2>
+              <p><strong>iOS</strong> (iPhone or iPad)</p>
               <a href="https://itunes.apple.com/app/riot-im/id1083446067?mt=8" target="_blank" class="mx_ClearDecoration">
                 <svg width="144px" height="48px" viewBox="0 0 120 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <desc>Download on the App Store.</desc>
@@ -251,7 +220,7 @@ body {
                     </g>
                 </svg>
               </a>
-              <p class="mx_Spacer"><strong>Android:</strong> If you have an Android device, Riot from Google Play or F-droid.</p>
+              <p class="mx_Spacer"><strong>Android</strong></p>
               <a href="https://play.google.com/store/apps/details?id=im.vector.app" target="_blank" class="mx_ClearDecoration">
                 <svg width="162px" height="48px" viewBox="0 0 162 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
@@ -357,30 +326,22 @@ body {
           </div>
         </div>
       </div>
-      <div id="step2_container" class="mx_HomePage_col mx_HomePage_toprow" style="display: none;">
+      <div id="step2_container" class="mx_HomePage_col mx_Spacer" style="display: none;">
         <div class="mx_HomePage_row">
           <div>
               <h2>2: Configure your app</h2>
               <a class="mx_Button" id="configure_riot_button" href="#">Configure</a>
-              <p class="mx_Subtext">Tap the button above, or manually enable <em>Use custom server</em> and enter:</p>
+              <p class="mx_Subtext mx_SubtextTop">Tap the button above, or manually enable <em>Use custom server</em> and enter:</p>
               <p class="mx_Subtext">Homeserver: <em id="hs_url"></em></p>
               <p class="mx_Subtext" id="default_is">Identity Server: <em>https://vector.im</em> (default)</p>
               <p class="mx_Subtext" id="custom_is">Identity Server: <em id="is_url"></em></p>
           </div>
         </div>
       </div>
-      <div class="mx_HomePage_col mx_HomePage_toprow">
-        <div class="mx_HomePage_row">
-          <div>
-            <h2 id="step_login_header">2: Launch the app</h2>
-            <p>Launch & use the app to continue!</p>
-          </div>
-        </div>
-      </div>
       <div class="mx_HomePage_row mx_Center mx_Spacer">
-         <p>
+         <p class="mx_Spacer">
              <a id="back_to_riot_button" href="#" class="mx_FooterLink">
-                 Back to Desktop
+                 Go to Desktop Site
              </a>
          </p>
       </div>
