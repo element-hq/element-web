@@ -33,9 +33,6 @@ import React from 'react';
 // add React and ReactPerf to the global namespace, to make them easier to
 // access via the console
 global.React = React;
-if (process.env.NODE_ENV !== 'production') {
-    global.Perf = require('react-addons-perf');
-}
 
 import './modernizr';
 import ReactDOM from 'react-dom';
