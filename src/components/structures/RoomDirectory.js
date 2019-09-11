@@ -391,6 +391,11 @@ module.exports = createReactClass({
         });
     },
 
+    onCreateRoomClick: function(room) {
+        this.props.onFinished();
+        dis.dispatch({action: 'view_create_room'});
+    },
+
     showRoomAlias: function(alias, autoJoin=false) {
         this.showRoom(null, alias, autoJoin);
     },
@@ -472,7 +477,7 @@ module.exports = createReactClass({
         topic = linkifyAndSanitizeHtml(topic);
         const avatarUrl = ContentRepo.getHttpUriForMxc(
                                 MatrixClientPeg.get().getHomeserverUrl(),
-                                room.avatar_url, 24, 24, "crop",
+                                room.avatar_url, 32, 32, "crop",
                             );
         return (
             <tr key={ room.room_id }
@@ -481,7 +486,7 @@ module.exports = createReactClass({
                 onMouseDown={(ev) => {ev.preventDefault();}}
             >
                 <td className="mx_RoomDirectory_roomAvatar">
-                    <BaseAvatar width={24} height={24} resizeMethod='crop'
+                    <BaseAvatar width={32} height={32} resizeMethod='crop'
                         name={ name } idName={ name }
                         url={ avatarUrl } />
                 </td>
@@ -595,10 +600,9 @@ module.exports = createReactClass({
                 instance_expected_field_type = this.protocols[protocolName].field_types[last_field];
             }
 
-
-            let placeholder = _t('Search for a room');
+            let placeholder = _t('Find a room…');
             if (!this.state.instanceId) {
-                placeholder = _t('Search for a room like #example') + ':' + this.state.roomServer;
+                placeholder = _t("Find a room… (e.g. %(exampleRoom)s)", {exampleRoom: "#example:" + this.state.roomServer});
             } else if (instance_expected_field_type) {
                 placeholder = instance_expected_field_type.placeholder;
             }
@@ -620,15 +624,25 @@ module.exports = createReactClass({
                 <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
             </div>;
         }
+        const explanation =
+            _t("If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.", null,
+                {a: sub => {
+                    return (<AccessibleButton
+                        kind="secondary"
+                        onClick={this.onCreateRoomClick}
+                    >{sub}</AccessibleButton>);
+                }},
+            );
 
         return (
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Room directory")}
+                title={_t("Explore rooms")}
             >
                 <div className="mx_RoomDirectory">
+                    <p>{explanation}</p>
                     <div className="mx_RoomDirectory_list">
                         {listHeader}
                         {content}
