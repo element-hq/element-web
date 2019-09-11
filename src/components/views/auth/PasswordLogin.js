@@ -31,6 +31,7 @@ export default class PasswordLogin extends React.Component {
     static propTypes = {
         onSubmit: PropTypes.func.isRequired, // fn(username, password)
         onError: PropTypes.func,
+        onEditServerDetailsClick: PropTypes.func,
         onForgotPasswordClick: PropTypes.func, // fn()
         initialUsername: PropTypes.string,
         initialPhoneCountry: PropTypes.string,
@@ -257,6 +258,7 @@ export default class PasswordLogin extends React.Component {
 
     render() {
         const Field = sdk.getComponent('elements.Field');
+        const SignInToText = sdk.getComponent('views.auth.SignInToText');
 
         let forgotPasswordJsx;
 
@@ -271,33 +273,6 @@ export default class PasswordLogin extends React.Component {
                     </a>,
                 })}
             </span>;
-        }
-
-        let signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
-            serverName: this.props.serverConfig.hsName,
-        });
-        if (this.props.serverConfig.hsNameIsDifferent) {
-            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
-
-            signInToText = _t('Sign in to your Matrix account on <underlinedServerName />', {}, {
-                'underlinedServerName': () => {
-                    return <TextWithTooltip
-                        class="mx_Login_underlinedServerName"
-                        tooltip={this.props.serverConfig.hsUrl}
-                    >
-                        {this.props.serverConfig.hsName}
-                    </TextWithTooltip>;
-                },
-            });
-        }
-
-        let editLink = null;
-        if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_AuthBody_editServerDetails"
-                href="#" onClick={this.props.onEditServerDetailsClick}
-            >
-                {_t('Change')}
-            </a>;
         }
 
         const pwFieldClass = classNames({
@@ -342,10 +317,8 @@ export default class PasswordLogin extends React.Component {
 
         return (
             <div>
-                <h3>
-                    {signInToText}
-                    {editLink}
-                </h3>
+                <SignInToText serverConfig={this.props.serverConfig}
+                    onEditServerDetailsClick={this.props.onEditServerDetailsClick} />
                 <form onSubmit={this.onSubmitForm}>
                     {loginType}
                     {loginField}

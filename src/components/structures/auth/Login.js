@@ -566,6 +566,7 @@ module.exports = createReactClass({
     },
 
     _renderSsoStep: function(url) {
+        const SignInToText = sdk.getComponent('views.auth.SignInToText');
         // XXX: This link does *not* have a target="_blank" because single sign-on relies on
         // redirecting the user back to a URI once they're logged in. On the web, this means
         // we use the same window and redirect back to riot. On electron, this actually
@@ -574,9 +575,12 @@ module.exports = createReactClass({
         // If this bug gets fixed, it will break SSO since it will open the SSO page in the
         // user's browser, let them log into their SSO provider, then redirect their browser
         // to vector://vector which, of course, will not work.
-        return (
+        return <div>
+            <SignInToText serverConfig={this.props.serverConfig}
+                onEditServerDetailsClick={this.onEditServerDetailsClick} />
+
             <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
-        );
+        </div>;
     },
 
     render: function() {
