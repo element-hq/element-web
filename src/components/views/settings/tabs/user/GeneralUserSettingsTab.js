@@ -72,14 +72,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         const serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
         this.setState({serverRequiresIdServer});
 
-        // Check to see if terms need accepting
-        this._checkTerms();
-
-        // Need to get 3PIDs generally for Account section and possibly also for
-        // Discovery (assuming we have an IS and terms are agreed).
-        const threepids = await getThreepidsWithBindStatus(cli);
-        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
-        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
+        this._getThreepidState();
     }
 
     componentWillUnmount() {
@@ -89,7 +82,7 @@ export default class GeneralUserSettingsTab extends React.Component {
     _onAction = (payload) => {
         if (payload.action === 'id_server_changed') {
             this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
-            this._checkTerms();
+            this._getThreepidState();
         }
     };
 
@@ -99,6 +92,19 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onMsisdnsChange = (msisdns) => {
         this.setState({ msisdns });
+    }
+
+    async _getThreepidState() {
+        const cli = MatrixClientPeg.get();
+
+        // Check to see if terms need accepting
+        this._checkTerms();
+
+        // Need to get 3PIDs generally for Account section and possibly also for
+        // Discovery (assuming we have an IS and terms are agreed).
+        const threepids = await getThreepidsWithBindStatus(cli);
+        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
+        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
     }
 
     async _checkTerms() {

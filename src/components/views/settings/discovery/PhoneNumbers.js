@@ -50,6 +50,11 @@ export class PhoneNumber extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { bound } = nextProps.msisdn;
+        this.setState({ bound });
+    }
+
     async changeBinding({ bind, label, errorTitle }) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.msisdn;

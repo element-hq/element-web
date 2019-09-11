@@ -58,6 +58,11 @@ export class EmailAddress extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { bound } = nextProps.email;
+        this.setState({ bound });
+    }
+
     async changeBinding({ bind, label, errorTitle }) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.email;
