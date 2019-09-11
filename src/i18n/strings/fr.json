@@ -2182,5 +2182,9 @@
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "Vous êtes sur le point de supprimer %(count)s messages de %(user)s. Ça ne peut pas être annulé. Voulez-vous continuer ?",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Pour un grand nombre de messages, cela peut prendre du temps. N’actualisez pas votre client pendant ce temps.",
     "Remove %(count)s messages|other": "Supprimer %(count)s messages",
-    "Remove recent messages": "Supprimer les messages récents"
+    "Remove recent messages": "Supprimer les messages récents",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "Envoyer des accusés de lecture pour les messages (nécessite un serveur d’accueil compatible pour le désactiver)",
+    "Explore": "Explorer",
+    "Filter": "Filtrer",
+    "Filter rooms…": "Filtrer les salons…"
 }
