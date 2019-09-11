@@ -94,7 +94,7 @@ module.exports = React.createClass({
             // Phase of the overall login dialog.
             phase: PHASE_LOGIN,
             // The current login flow, such as password, SSO, etc.
-            currentFlow: "m.login.password",
+            currentFlow: null, // we need to load the flows from the server
 
             // We perform liveliness checks later, but for now suppress the errors.
             // We also track the server dead errors independently of the regular errors so
@@ -373,6 +373,7 @@ module.exports = React.createClass({
 
         this.setState({
             busy: true,
+            currentFlow: null, // reset flow
             loginIncorrect: false,
         });
 
