@@ -23,12 +23,8 @@ module.exports = async function join(session, roomName) {
     const roomInput = await session.query('.mx_DirectorySearchBox input');
     await session.replaceInputText(roomInput, roomName);
 
-    const firstRoomLabel = await session.query('.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child');
-    await firstRoomLabel.click();
-
-    const joinLink = await session.query('.mx_RoomPreviewBar_ViewingRoom .mx_AccessibleButton_kind_primary');
-    await joinLink.click();
-
+    const joinFirstLink = await session.query('.mx_RoomDirectory_table .mx_RoomDirectory_join .mx_AccessibleButton');
+    await joinFirstLink.click();
     await session.query('.mx_MessageComposer');
     session.log.done();
 }
