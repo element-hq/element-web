@@ -471,7 +471,10 @@ module.exports = React.createClass({
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
         topic = linkifyAndSanitizeHtml(topic);
-
+        const avatarUrl = ContentRepo.getHttpUriForMxc(
+                                MatrixClientPeg.get().getHomeserverUrl(),
+                                room.avatar_url, 24, 24, "crop",
+                            );
         return (
             <tr key={ room.room_id }
                 onClick={() => this.onRoomClicked(room)}
@@ -481,15 +484,13 @@ module.exports = React.createClass({
                 <td className="mx_RoomDirectory_roomAvatar">
                     <BaseAvatar width={24} height={24} resizeMethod='crop'
                         name={ name } idName={ name }
-                        url={ ContentRepo.getHttpUriForMxc(
-                                MatrixClientPeg.get().getHomeserverUrl(),
-                                room.avatar_url, 24, 24, "crop") } />
+                        url={ avatarUrl } />
                 </td>
                 <td className="mx_RoomDirectory_roomDescription">
                     <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                     <div className="mx_RoomDirectory_topic"
-                         onClick={ (ev) => { ev.stopPropagation(); } }
-                         dangerouslySetInnerHTML={{ __html: topic }} />
+                        onClick={ (ev) => { ev.stopPropagation(); } }
+                        dangerouslySetInnerHTML={{ __html: topic }} />
                     <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(room) }</div>
                 </td>
                 <td className="mx_RoomDirectory_roomMemberCount">
