@@ -487,7 +487,7 @@ module.exports = createReactClass({
                 <td className="mx_RoomDirectory_roomDescription">
                     <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                     <div className="mx_RoomDirectory_topic"
-                         onClick={ function(e) { e.stopPropagation(); } }
+                         onClick={ (ev) => { ev.stopPropagation(); } }
                          dangerouslySetInnerHTML={{ __html: topic }} />
                     <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(room) }</div>
                 </td>
