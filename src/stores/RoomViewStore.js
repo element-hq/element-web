@@ -113,9 +113,19 @@ class RoomViewStore extends Store {
                 });
                 break;
             case 'reply_to_event':
-                this._setState({
-                    replyingToEvent: payload.event,
-                });
+                // If currently viewed room does not match the room in which we wish to reply then change rooms
+                // this can happen when performing a search across all rooms
+                if (payload.event && payload.event.getRoomId() !== this._state.roomId) {
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: payload.event.getRoomId(),
+                        replyingToEvent: payload.event,
+                    });
+                } else {
+                    this._setState({
+                        replyingToEvent: payload.event,
+                    });
+                }
                 break;
             case 'open_room_settings': {
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
@@ -146,6 +156,11 @@ class RoomViewStore extends Store {
                 // pull the user out of Room Settings
                 isEditingSettings: false,
             };
+
+            // Allow being given an event to be replied to when switching rooms but sanity check its for this room
+            if (payload.replyingToEvent && payload.replyingToEvent.getRoomId() === payload.room_id) {
+                newState.replyingToEvent = payload.replyingToEvent;
+            }
 
             if (this._state.forwardingEvent) {
                 dis.dispatch({

@@ -583,7 +583,7 @@ module.exports = createReactClass({
                   payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
-                return ContentMessages.sharedInstance().sendContentListToRoom(
+                ContentMessages.sharedInstance().sendContentListToRoom(
                     [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
                 );
                 break;
@@ -623,6 +623,11 @@ module.exports = createReactClass({
                 this.setState({
                     showApps: payload.show,
                 });
+                break;
+            case 'reply_to_event':
+                if (this.state.searchResults && payload.event.getRoomId() === this.state.roomId && !this.unmounted) {
+                    this.onCancelSearchClick();
+                }
                 break;
         }
     },
