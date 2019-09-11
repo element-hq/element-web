@@ -135,4 +135,13 @@ limitations under the License.
 .mx_RoomDirectory_table tr {
     padding-bottom: 10px;
     cursor: pointer;
+
+    .mx_RoomDirectory_roomDescription {
+        width: 50%;
+    }
+
+    .mx_RoomDirectory_join, .mx_RoomDirectory_preview {
+        width: 80px;
+        text-align: center;
+    }
 }

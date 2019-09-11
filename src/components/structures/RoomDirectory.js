@@ -321,7 +321,7 @@ module.exports = createReactClass({
         }
     },
 
-    onJoinClick: function(alias) {
+    onJoinFromSearchClick: function(alias) {
         // If we don't have a particular instance id selected, just show that rooms alias
         if (!this.state.instanceId) {
             // If the user specified an alias without a domain, add on whichever server is selected
@@ -361,6 +361,34 @@ module.exports = createReactClass({
                 });
             });
         }
+    },
+
+    onPreviewClick: function(room) {
+        this.props.onFinished();
+        dis.dispatch({
+            action: 'view_room',
+            room_id: room.room_id,
+            should_peek: true,
+        });
+    },
+
+    onViewClick: function(room) {
+        this.props.onFinished();
+        dis.dispatch({
+            action: 'view_room',
+            room_id: room.room_id,
+            should_peek: false,
+        });
+    },
+
+    onJoinClick: function(room) {
+        this.props.onFinished();
+        MatrixClientPeg.get().joinRoom(room.room_id);
+        dis.dispatch({
+            action: 'view_room',
+            room_id: room.room_id,
+            joining: true,
+        });
     },
 
     showRoomAlias: function(alias, autoJoin=false) {
@@ -407,74 +435,70 @@ module.exports = createReactClass({
         dis.dispatch(payload);
     },
 
-    getRows: function() {
+    getRow(room) {
+        const client = MatrixClientPeg.get();
+        const clientRoom = client.getRoom(room.room_id);
+        const hasJoinedRoom = clientRoom && clientRoom.getMyMembership() === "join";
+        const isGuest = client.isGuest();
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        let previewButton;
+        let joinOrViewButton;
 
-        if (!this.state.publicRooms) return [];
-
-        const rooms = this.state.publicRooms;
-        const rows = [];
-        const self = this;
-        let guestRead; let guestJoin; let perms;
-        for (let i = 0; i < rooms.length; i++) {
-            guestRead = null;
-            guestJoin = null;
-
-            if (rooms[i].world_readable) {
-                guestRead = (
-                    <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
-                );
-            }
-            if (rooms[i].guest_can_join) {
-                guestJoin = (
-                    <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
-                );
-            }
-
-            perms = null;
-            if (guestRead || guestJoin) {
-                perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
-            }
-
-            let name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
-            if (name.length > MAX_NAME_LENGTH) {
-                name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
-            }
-
-            let topic = rooms[i].topic || '';
-            if (topic.length > MAX_TOPIC_LENGTH) {
-                topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
-            }
-            topic = linkifyAndSanitizeHtml(topic);
-
-            rows.push(
-                <tr key={ rooms[i].room_id }
-                    onClick={self.onRoomClicked.bind(self, rooms[i])}
-                    // cancel onMouseDown otherwise shift-clicking highlights text
-                    onMouseDown={(ev) => {ev.preventDefault();}}
-                >
-                    <td className="mx_RoomDirectory_roomAvatar">
-                        <BaseAvatar width={24} height={24} resizeMethod='crop'
-                            name={ name } idName={ name }
-                            url={ ContentRepo.getHttpUriForMxc(
-                                    MatrixClientPeg.get().getHomeserverUrl(),
-                                    rooms[i].avatar_url, 24, 24, "crop") } />
-                    </td>
-                    <td className="mx_RoomDirectory_roomDescription">
-                        <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                        { perms }
-                        <div className="mx_RoomDirectory_topic"
-                             onClick={ function(e) { e.stopPropagation(); } }
-                             dangerouslySetInnerHTML={{ __html: topic }} />
-                        <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(rooms[i]) }</div>
-                    </td>
-                    <td className="mx_RoomDirectory_roomMemberCount">
-                        { rooms[i].num_joined_members }
-                    </td>
-                </tr>,
+        if (room.world_readable && !hasJoinedRoom) {
+            previewButton = (
+                <AccessibleButton kind="secondary" onClick={() => this.onPreviewClick(room)}>{_t("Preview")}</AccessibleButton>
             );
         }
-        return rows;
+        if (hasJoinedRoom) {
+            joinOrViewButton = (
+                <AccessibleButton kind="secondary" onClick={() => this.onViewClick(room)}>{_t("View")}</AccessibleButton>
+            );
+        } else if (!isGuest || room.guest_can_join) {
+            joinOrViewButton = (
+                <AccessibleButton kind="primary" onClick={() => this.onJoinClick(room)}>{_t("Join")}</AccessibleButton>
+            );
+        }
+
+        let name = room.name || get_display_alias_for_room(room) || _t('Unnamed room');
+        if (name.length > MAX_NAME_LENGTH) {
+            name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
+        }
+
+        let topic = room.topic || '';
+        if (topic.length > MAX_TOPIC_LENGTH) {
+            topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
+        }
+        topic = linkifyAndSanitizeHtml(topic);
+        const avatarUrl = ContentRepo.getHttpUriForMxc(
+                                MatrixClientPeg.get().getHomeserverUrl(),
+                                room.avatar_url, 24, 24, "crop",
+                            );
+        return (
+            <tr key={ room.room_id }
+                onClick={() => this.onRoomClicked(room)}
+                // cancel onMouseDown otherwise shift-clicking highlights text
+                onMouseDown={(ev) => {ev.preventDefault();}}
+            >
+                <td className="mx_RoomDirectory_roomAvatar">
+                    <BaseAvatar width={24} height={24} resizeMethod='crop'
+                        name={ name } idName={ name }
+                        url={ avatarUrl } />
+                </td>
+                <td className="mx_RoomDirectory_roomDescription">
+                    <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
+                    <div className="mx_RoomDirectory_topic"
+                        onClick={ (ev) => { ev.stopPropagation(); } }
+                        dangerouslySetInnerHTML={{ __html: topic }} />
+                    <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(room) }</div>
+                </td>
+                <td className="mx_RoomDirectory_roomMemberCount">
+                    { room.num_joined_members }
+                </td>
+                <td className="mx_RoomDirectory_preview">{previewButton}</td>
+                <td className="mx_RoomDirectory_join">{joinOrViewButton}</td>
+            </tr>
+        );
     },
 
     collectScrollPanel: function(element) {
@@ -528,7 +552,7 @@ module.exports = createReactClass({
         } else if (this.state.protocolsLoading || this.state.loading) {
             content = <Loader />;
         } else {
-            const rows = this.getRows();
+            const rows = (this.state.publicRooms || []).map(room => this.getRow(room));
             // we still show the scrollpanel, at least for now, because
             // otherwise we don't fetch more because we don't get a fill
             // request from the scrollpanel because there isn't one
@@ -538,7 +562,7 @@ module.exports = createReactClass({
             } else {
                 scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
                     <tbody>
-                        { this.getRows() }
+                        { rows }
                     </tbody>
                 </table>;
             }
@@ -590,7 +614,7 @@ module.exports = createReactClass({
             listHeader = <div className="mx_RoomDirectory_listheader">
                 <DirectorySearchBox
                     className="mx_RoomDirectory_searchbox"
-                    onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
+                    onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinFromSearchClick}
                     placeholder={placeholder} showJoinButton={showJoinButton}
                 />
                 <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
