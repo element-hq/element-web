@@ -576,12 +576,14 @@ module.exports = React.createClass({
         // If this bug gets fixed, it will break SSO since it will open the SSO page in the
         // user's browser, let them log into their SSO provider, then redirect their browser
         // to vector://vector which, of course, will not work.
-        return <div>
-            <SignInToText serverConfig={this.props.serverConfig}
-                onEditServerDetailsClick={this.onEditServerDetailsClick} />
+        return (
+            <div>
+                <SignInToText serverConfig={this.props.serverConfig}
+                    onEditServerDetailsClick={this.onEditServerDetailsClick} />
 
-            <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
-        </div>;
+                <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
+            </div>
+        );
     },
 
     render: function() {
