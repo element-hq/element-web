@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -140,6 +141,10 @@ module.exports = React.createClass({
 
     getMoreRooms: function() {
         if (!MatrixClientPeg.get()) return Promise.resolve();
+
+        this.setState({
+            loading: true,
+        });
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -555,15 +560,21 @@ module.exports = React.createClass({
         let content;
         if (this.state.error) {
             content = this.state.error;
-        } else if (this.state.protocolsLoading || this.state.loading) {
+        } else if (this.state.protocolsLoading) {
             content = <Loader />;
         } else {
             const rows = (this.state.publicRooms || []).map(room => this.getRow(room));
             // we still show the scrollpanel, at least for now, because
             // otherwise we don't fetch more because we don't get a fill
             // request from the scrollpanel because there isn't one
+
+            let spinner;
+            if (this.state.loading) {
+                spinner = <Loader />;
+            }
+
             let scrollpanel_content;
-            if (rows.length == 0) {
+            if (rows.length === 0 && !this.state.loading) {
                 scrollpanel_content = <i>{ _t('No rooms to show') }</i>;
             } else {
                 scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
@@ -580,6 +591,7 @@ module.exports = React.createClass({
                 startAtBottom={false}
             >
                 { scrollpanel_content }
+                { spinner }
             </ScrollPanel>;
         }
 
