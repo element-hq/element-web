@@ -2188,5 +2188,9 @@
     "Filter": "Filtrer",
     "Filter rooms…": "Filtrer les salons…",
     "Preview": "Aperçu",
-    "View": "Afficher"
+    "View": "Afficher",
+    "Find a room…": "Trouver un salon…",
+    "Find a room… (e.g. %(exampleRoom)s)": "Trouver un salon… (par ex. %(exampleRoom)s)",
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Si vous ne trouvez pas le salon que vous cherchez, demandez une invitation ou <a>créez un nouveau salon</a>.",
+    "Explore rooms": "Explorer les salons"
 }
