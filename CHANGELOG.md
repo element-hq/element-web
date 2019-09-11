@@ -1,3 +1,10 @@
+Changes in [1.5.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.2-rc.1) (2019-09-11)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.1...v1.5.2-rc.1)
+
+ * Merge first pass of First Time User Experience to release branch
+   [\#3420](https://github.com/matrix-org/matrix-react-sdk/pull/3420)
+
 Changes in [1.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.1) (2019-08-05)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.0-rc.1...v1.5.1)
