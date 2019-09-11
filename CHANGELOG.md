@@ -1,3 +1,10 @@
+Changes in [1.3.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.3.4-rc.1) (2019-09-11)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.3...v1.3.4-rc.1)
+
+ * Update install guide
+   [\#10831](https://github.com/vector-im/riot-web/pull/10831)
+
 Changes in [1.3.3](https://github.com/vector-im/riot-web/releases/tag/v1.3.3) (2019-08-16)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.2...v1.3.3)
