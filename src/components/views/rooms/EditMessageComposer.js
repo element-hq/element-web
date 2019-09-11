@@ -114,7 +114,7 @@ export default class EditMessageComposer extends React.Component {
         this._editorRef = null;
 
         this.state = {
-            changed: false,
+            saveDisabled: true,
         };
     }
 
@@ -247,12 +247,12 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _onChange = () => {
-        if (this.state.changed || !this._editorRef || !this._editorRef.isModified()) {
+        if (!this.state.saveDisabled || !this._editorRef || !this._editorRef.isModified()) {
             return;
         }
 
         this.setState({
-            changed: true,
+            saveDisabled: false,
         });
     };
 
@@ -269,7 +269,7 @@ export default class EditMessageComposer extends React.Component {
             />
             <div className="mx_EditMessageComposer_buttons">
                 <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
-                <AccessibleButton kind="primary" onClick={this._sendEdit} disabled={!this.state.changed}>
+                <AccessibleButton kind="primary" onClick={this._sendEdit} disabled={this.state.saveDisabled}>
                     {_t("Save")}
                 </AccessibleButton>
             </div>
