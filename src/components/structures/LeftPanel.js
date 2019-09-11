@@ -82,7 +82,7 @@ const LeftPanel = React.createClass({
         if (this.state.searchFilter !== nextState.searchFilter) {
             return true;
         }
-        if (this.state.searchFocused !== nextState.searchFocused) {
+        if (this.state.searchExpanded !== nextState.searchExpanded) {
             return true;
         }
 
@@ -207,6 +207,7 @@ const LeftPanel = React.createClass({
         if (source === "keyboard") {
             dis.dispatch({action: 'focus_composer'});
         }
+        this.setState({searchExpanded: false});
     },
 
     collectRoomList: function(ref) {
@@ -214,11 +215,13 @@ const LeftPanel = React.createClass({
     },
 
     _onSearchFocus: function() {
-        this.setState({searchFocused: true});
+        this.setState({searchExpanded: true});
     },
 
-    _onSearchBlur: function() {
-        this.setState({searchFocused: false});
+    _onSearchBlur: function(event) {
+        if (event.target.value.length === 0) {
+            this.setState({searchExpanded: false});
+        }
     },
 
     render: function() {
@@ -256,7 +259,7 @@ const LeftPanel = React.createClass({
         let exploreButton;
         if (!this.props.collapsed) {
             exploreButton = (
-                <div className={classNames("mx_LeftPanel_explore", {"mx_LeftPanel_explore_hidden": this.state.searchFocused})}>
+                <div className={classNames("mx_LeftPanel_explore", {"mx_LeftPanel_explore_hidden": this.state.searchExpanded})}>
                     <AccessibleButton onClick={() => dis.dispatch({action: 'view_room_directory'})}>{_t("Explore")}</AccessibleButton>
                 </div>
             );
