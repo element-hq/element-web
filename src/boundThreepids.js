@@ -26,26 +26,31 @@ export async function getThreepidsWithBindStatus(client, filterMedium) {
 
     // Check bind status assuming we have an IS and terms are agreed
     if (threepids.length > 0 && client.getIdentityServerUrl()) {
-        // TODO: Handle terms agreement
-        // See https://github.com/vector-im/riot-web/issues/10522
-        const authClient = new IdentityAuthClient();
-        const identityAccessToken = await authClient.getAccessToken();
+        try {
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken({ check: false });
 
-        // Restructure for lookup query
-        const query = threepids.map(({ medium, address }) => [medium, address]);
-        const lookupResults = await client.bulkLookupThreePids(query, identityAccessToken);
+            // Restructure for lookup query
+            const query = threepids.map(({ medium, address }) => [medium, address]);
+            const lookupResults = await client.bulkLookupThreePids(query, identityAccessToken);
 
-        // Record which are already bound
-        for (const [medium, address, mxid] of lookupResults.threepids) {
-            if (mxid !== userId) {
-                continue;
+            // Record which are already bound
+            for (const [medium, address, mxid] of lookupResults.threepids) {
+                if (mxid !== userId) {
+                    continue;
+                }
+                if (filterMedium && medium !== filterMedium) {
+                    continue;
+                }
+                const threepid = threepids.find(e => e.medium === medium && e.address === address);
+                if (!threepid) continue;
+                threepid.bound = true;
             }
-            if (filterMedium && medium !== filterMedium) {
-                continue;
+        } catch (e) {
+            // Ignore terms errors here and assume other flows handle this
+            if (!(e.errcode === "M_TERMS_NOT_SIGNED")) {
+                throw e;
             }
-            const threepid = threepids.find(e => e.medium === medium && e.address === address);
-            if (!threepid) continue;
-            threepid.bound = true;
         }
     }
 
