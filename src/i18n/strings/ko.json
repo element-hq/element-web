@@ -2026,5 +2026,6 @@
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "%(user)s님의 %(count)s개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아, 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
     "Remove %(count)s messages|other": "%(count)s개의 메시지 삭제",
-    "Remove recent messages": "최근 메시지 삭제"
+    "Remove recent messages": "최근 메시지 삭제",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "메시지 읽은 기록 보내기 (이 기능을 끄려면 그것을 호환하는 홈서버이어야 함)"
 }
