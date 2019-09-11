@@ -75,6 +75,11 @@ describe('Login', function() {
 
         const root = render();
 
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            currentFlow: "m.login.password",
+        });
+
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,
             sdk.getComponent('auth.PasswordLogin'),
