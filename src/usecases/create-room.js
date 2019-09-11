@@ -17,6 +17,13 @@ limitations under the License.
 const assert = require('assert');
 
 async function openRoomDirectory(session) {
+    const roomDirectoryButton = await session.query('.mx_LeftPanel_explore .mx_AccessibleButton');
+    await roomDirectoryButton.click();
+}
+
+async function createRoom(session, roomName) {
+    session.log.step(`creates room "${roomName}"`);
+
     const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
     const roomListHeaderLabels = await Promise.all(roomListHeaders.map(h => session.innerText(h)));
     const roomsIndex = roomListHeaderLabels.findIndex(l => l.toLowerCase().includes("rooms"));
@@ -26,13 +33,7 @@ async function openRoomDirectory(session) {
     const roomsHeader = roomListHeaders[roomsIndex];
     const addRoomButton = await roomsHeader.$(".mx_RoomSubList_addRoom");
     await addRoomButton.click();
-}
 
-async function createRoom(session, roomName) {
-    session.log.step(`creates room "${roomName}"`);
-    await openRoomDirectory(session);
-    const createRoomButton = await session.query('.mx_RoomDirectory_createRoom');
-    await createRoomButton.click();
 
     const roomNameInput = await session.query('.mx_CreateRoomDialog_input');
     await session.replaceInputText(roomNameInput, roomName);
