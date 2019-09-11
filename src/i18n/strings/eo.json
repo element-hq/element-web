@@ -1916,5 +1916,6 @@
     "Service": "Servo",
     "Summary": "Resumo",
     "Terms": "Kondiĉoj",
-    "This account has been deactivated.": "Tiu ĉi konto malaktiviĝis."
+    "This account has been deactivated.": "Tiu ĉi konto malaktiviĝis.",
+    "Call failed due to misconfigured server": "Voko malsukcesis pro misagordita servilo"
 }
