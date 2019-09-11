@@ -25,7 +25,7 @@ export async function getThreepidsWithBindStatus(client, filterMedium) {
     }
 
     // Check bind status assuming we have an IS and terms are agreed
-    if (threepids.length > 0 && client.getIdentityServerUrl()) {
+    if (threepids.length > 0 && !!client.getIdentityServerUrl()) {
         try {
             const authClient = new IdentityAuthClient();
             const identityAccessToken = await authClient.getAccessToken({ check: false });
