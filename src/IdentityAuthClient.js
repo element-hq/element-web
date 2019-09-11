@@ -65,7 +65,7 @@ export default class IdentityAuthClient {
     }
 
     // Returns a promise that resolves to the access_token string from the IS
-    async getAccessToken(check=true) {
+    async getAccessToken({ check = true } = {}) {
         if (!this.authEnabled) {
             // The current IS doesn't support authentication
             return null;

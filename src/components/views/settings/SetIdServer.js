@@ -22,7 +22,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
-import { getThreepidBindStatus } from '../../../boundThreepids';
+import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
@@ -249,7 +249,7 @@ export default class SetIdServer extends React.Component {
     };
 
     async _showServerChangeWarning({ title, unboundMessage, button }) {
-        const threepids = await getThreepidBindStatus(MatrixClientPeg.get());
+        const threepids = await getThreepidsWithBindStatus(MatrixClientPeg.get());
 
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;
