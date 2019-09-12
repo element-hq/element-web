@@ -2123,5 +2123,7 @@
     "Bold": "Të trasha",
     "Italics": "Të pjerrëta",
     "Strikethrough": "Hequrvije",
-    "Code block": "Bllok kodi"
+    "Code block": "Bllok kodi",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "Dërgo dëftesa leximi për mesazhe (lyp shërbyes Home të përputhshëm për çaktivizim)",
+    "Change identity server": "Ndryshoni shërbyes identitetesh"
 }
