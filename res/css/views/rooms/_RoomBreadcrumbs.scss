@@ -22,6 +22,19 @@ limitations under the License.
     display: flex;
     flex-direction: row;
 
+    // repeating circles as empty placeholders
+    background:
+        radial-gradient(
+            circle at center,
+            $breadcrumb-placeholder-bg-color,
+            $breadcrumb-placeholder-bg-color 15px,
+            transparent 16px
+        );
+    background-size: 36px;
+    background-position: 6px -1px;
+    background-repeat: repeat-x;
+
+
     // Autohide the scrollbar
     overflow-x: hidden;
     &:hover {
