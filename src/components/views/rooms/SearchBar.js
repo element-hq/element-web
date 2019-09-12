@@ -14,16 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const sdk = require('../../../index');
+import React from 'react';
+import createReactClass from 'create-react-class';
 const classNames = require('classnames');
 const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'SearchBar',
 
     getInitialState: function() {

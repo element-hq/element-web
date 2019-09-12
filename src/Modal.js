@@ -23,6 +23,7 @@ import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
 import { _t } from './languageHandler';
+import Promise from "bluebird";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -182,7 +183,7 @@ class ModalManager {
         const modal = {};
 
         // never call this from onFinished() otherwise it will loop
-        const closeDialog = this._getCloseFn(modal, props);
+        const [closeDialog, onFinishedProm] = this._getCloseFn(modal, props);
 
         // don't attempt to reuse the same AsyncWrapper for different dialogs,
         // otherwise we'll get confused.
@@ -197,11 +198,13 @@ class ModalManager {
         modal.onFinished = props ? props.onFinished : null;
         modal.className = className;
 
-        return {modal, closeDialog};
+        return {modal, closeDialog, onFinishedProm};
     }
 
     _getCloseFn(modal, props) {
-        return (...args) => {
+        const deferred = Promise.defer();
+        return [(...args) => {
+            deferred.resolve(args);
             if (props && props.onFinished) props.onFinished.apply(null, args);
             const i = this._modals.indexOf(modal);
             if (i >= 0) {
@@ -223,7 +226,7 @@ class ModalManager {
             }
 
             this._reRender();
-        };
+        }, deferred.promise];
     }
 
     /**
@@ -256,7 +259,7 @@ class ModalManager {
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const {modal, closeDialog} = this._buildModal(prom, props, className);
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
 
         if (isPriorityModal) {
             // XXX: This is destructive
@@ -269,15 +272,21 @@ class ModalManager {
         }
 
         this._reRender();
-        return {close: closeDialog};
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
     }
 
     appendDialogAsync(prom, props, className) {
-        const {modal, closeDialog} = this._buildModal(prom, props, className);
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
 
         this._modals.push(modal);
         this._reRender();
-        return {close: closeDialog};
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
     }
 
     closeAll() {

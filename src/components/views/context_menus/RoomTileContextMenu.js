@@ -18,8 +18,9 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -31,7 +32,7 @@ import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
 import RoomViewStore from '../../../stores/RoomViewStore';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {

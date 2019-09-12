@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 import dis from '../../../dispatcher';
 import { RoomPermalinkCreator } from '../../../matrix-to';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomCreate',
 
     propTypes: {

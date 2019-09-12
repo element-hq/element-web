@@ -32,6 +32,7 @@ import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
+import IdentityAuthClient from './IdentityAuthClient';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -216,8 +217,10 @@ class MatrixClientPeg {
             deviceId: creds.deviceId,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
+            fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
             verificationMethods: [verificationMethods.SAS],
             unstableClientRelationAggregation: true,
+            identityServer: new IdentityAuthClient(),
         };
 
         this.matrixClient = createMatrixClient(opts);

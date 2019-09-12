@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
+import React from "react";
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'InlineSpinner',
 
     render: function() {

@@ -31,6 +31,9 @@ import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
 import {textToHtmlRainbow} from "./utils/colour";
 import Promise from "bluebird";
+import { getAddressType } from './UserAddress';
+import { abbreviateUrl } from './utils/UrlUtils';
+import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 
 const singleMxcUpload = async () => {
     return new Promise((resolve) => {
@@ -115,7 +118,15 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-
+    plain: new Command({
+        name: 'plain',
+        args: '<message>',
+        description: _td('Sends a message as plain text, without interpreting it as markdown'),
+        runFn: function(roomId, messages) {
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+        },
+        category: CommandCategories.messages,
+    }),
     ddg: new Command({
         name: 'ddg',
         args: '<query>',
@@ -139,8 +150,13 @@ export const CommandMap = {
         description: _td('Upgrades a room to a new version'),
         runFn: function(roomId, args) {
             if (args) {
-                const room = MatrixClientPeg.get().getRoom(roomId);
-                Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                const cli = MatrixClientPeg.get();
+                const room = cli.getRoom(roomId);
+                if (!room.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
+                    return reject(_t("You do not have the required permissions to use this command."));
+                }
+
+                const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
                     QuestionDialog, {
                     title: _t('Room upgrade confirmation'),
                     description: (
@@ -198,13 +214,13 @@ export const CommandMap = {
                         </div>
                     ),
                     button: _t("Upgrade"),
-                    onFinished: (confirm) => {
-                        if (!confirm) return;
-
-                        MatrixClientPeg.get().upgradeRoom(roomId, args);
-                    },
                 });
-                return success();
+
+                return success(finished.then((confirm) => {
+                    if (!confirm) return;
+
+                    return cli.upgradeRoom(roomId, args);
+                }));
             }
             return reject(this.getUsage());
         },
@@ -337,11 +353,46 @@ export const CommandMap = {
                 if (matches) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
-                    const userId = matches[1];
+                    const address = matches[1];
+                    // If we need an identity server but don't have one, things
+                    // get a bit more complex here, but we try to show something
+                    // meaningful.
+                    let finished = Promise.resolve();
+                    if (
+                        getAddressType(address) === 'email' &&
+                        !MatrixClientPeg.get().getIdentityServerUrl()
+                    ) {
+                        const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
+                        if (defaultIdentityServerUrl) {
+                            ({ finished } = Modal.createTrackedDialog('Slash Commands', 'Identity server',
+                                QuestionDialog, {
+                                    title: _t("Use an identity server"),
+                                    description: <p>{_t(
+                                        "Use an identity server to invite by email. " +
+                                        "Click continue to use the default identity server " +
+                                        "(%(defaultIdentityServerName)s) or manage in Settings.",
+                                        {
+                                            defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
+                                        },
+                                    )}</p>,
+                                    button: _t("Continue"),
+                                },
+                            ));
+                        } else {
+                            return reject(_t("Use an identity server to invite by email. Manage in Settings."));
+                        }
+                    }
                     const inviter = new MultiInviter(roomId);
-                    return success(inviter.invite([userId]).then(() => {
-                        if (inviter.getCompletionState(userId) !== "invited") {
-                            throw new Error(inviter.getErrorText(userId));
+                    return success(finished.then(([useDefault] = []) => {
+                        if (useDefault) {
+                            useDefaultIdentityServer();
+                        } else if (useDefault === false) {
+                            throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
+                        }
+                        return inviter.invite([address]);
+                    }).then(() => {
+                        if (inviter.getCompletionState(address) !== "invited") {
+                            throw new Error(inviter.getErrorText(address));
                         }
                     }));
                 }

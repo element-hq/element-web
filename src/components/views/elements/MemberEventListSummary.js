@@ -18,11 +18,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MemberEventListSummary',
 
     propTypes: {

@@ -16,11 +16,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import GeminiScrollbar from 'react-gemini-scrollbar';
-import Resend from '../../../Resend';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { markAllDevicesKnown } from '../../../cryptodevices';
@@ -67,7 +66,7 @@ UnknownDeviceList.propTypes = {
 };
 
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'UnknownDeviceDialog',
 
     propTypes: {

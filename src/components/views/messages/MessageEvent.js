@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
+import createReactClass from 'create-react-class';
+import sdk from '../../../index';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MessageEvent',
 
     propTypes: {

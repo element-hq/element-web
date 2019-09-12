@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -24,7 +25,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'PinnedEventTile',
     propTypes: {
         mxRoom: PropTypes.object.isRequired,

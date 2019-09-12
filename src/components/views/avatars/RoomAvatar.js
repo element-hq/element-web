@@ -15,13 +15,14 @@ limitations under the License.
 */
 import React from "react";
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import {ContentRepo} from "matrix-js-sdk";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import sdk from "../../../index";
 import Avatar from '../../../Avatar';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomAvatar',
 
     // Room may be left unset here, but if it is,

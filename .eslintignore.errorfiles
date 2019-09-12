@@ -34,7 +34,7 @@ src/components/views/rooms/LinkPreviewWidget.js
 src/components/views/rooms/MemberDeviceInfo.js
 src/components/views/rooms/MemberInfo.js
 src/components/views/rooms/MemberList.js
-src/components/views/rooms/MessageComposer.js
+src/components/views/rooms/SlateMessageComposer.js
 src/components/views/rooms/PinnedEventTile.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
@@ -50,7 +50,6 @@ src/components/views/settings/Notifications.js
 src/GroupAddressPicker.js
 src/HtmlUtils.js
 src/ImageUtils.js
-src/languageHandler.js
 src/linkify-matrix.js
 src/Markdown.js
 src/MatrixClientPeg.js

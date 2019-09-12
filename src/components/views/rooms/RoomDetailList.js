@@ -19,11 +19,12 @@ import dis from '../../../dispatcher';
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 
 import {roomShape} from './RoomDetailRow';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'RoomDetailList',
 
     propTypes: {

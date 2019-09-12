@@ -26,8 +26,13 @@ limitations under the License.
     font-weight: bold;
 }
 
+.mx_DevicesPanel_header > .mx_DevicesPanel_deviceButtons {
+    height: 48px; // make this tall so the table doesn't move down when the delete button appears
+}
+
 .mx_DevicesPanel_header > div {
     display: table-cell;
+    vertical-align: bottom;
 }
 
 .mx_DevicesPanel_header .mx_DevicesPanel_deviceLastSeen {

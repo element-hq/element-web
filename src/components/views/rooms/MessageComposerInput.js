@@ -61,7 +61,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 import AccessibleButton from '../elements/AccessibleButton';
 import {findEditableEvent} from '../../../utils/EventUtils';
-import ComposerHistoryManager from "../../../ComposerHistoryManager";
+import SlateComposerHistoryManager from "../../../SlateComposerHistoryManager";
 import TypingStore from "../../../stores/TypingStore";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -141,7 +141,7 @@ export default class MessageComposerInput extends React.Component {
 
     client: MatrixClient;
     autocomplete: Autocomplete;
-    historyManager: ComposerHistoryManager;
+    historyManager: SlateComposerHistoryManager;
 
     constructor(props, context) {
         super(props, context);
@@ -331,7 +331,7 @@ export default class MessageComposerInput extends React.Component {
 
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        this.historyManager = new SlateComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {

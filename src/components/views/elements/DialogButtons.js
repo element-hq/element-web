@@ -17,12 +17,13 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 /**
  * Basic container for buttons in modal dialogs.
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: "DialogButtons",
 
     propTypes: {

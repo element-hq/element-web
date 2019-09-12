@@ -40,12 +40,12 @@ class MockAutoComplete {
             } else {
                 pill = this._partCreator.roomPill(match.resourceId);
             }
-            this._updateCallback({replacePart: pill, close});
+            this._updateCallback({replaceParts: [pill], close});
         }
     }
 
     // called by EditorModel when typing into pill-candidate part
-    onPartUpdate(part, offset) {
+    onPartUpdate(part, pos) {
         this._part = part;
     }
 }

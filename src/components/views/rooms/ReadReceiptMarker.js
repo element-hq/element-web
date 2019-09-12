@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 const sdk = require('../../../index');
 
@@ -36,7 +35,7 @@ try {
 } catch (e) {
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'ReadReceiptMarker',
 
     propTypes: {

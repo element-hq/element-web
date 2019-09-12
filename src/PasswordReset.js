@@ -36,7 +36,11 @@ class PasswordReset {
             idBaseUrl: identityUrl,
         });
         this.clientSecret = this.client.generateClientSecret();
-        this.identityServerDomain = identityUrl.split("://")[1];
+        this.identityServerDomain = identityUrl ? identityUrl.split("://")[1] : null;
+    }
+
+    doesServerRequireIdServerParam() {
+        return this.client.doesServerRequireIdServerParam();
     }
 
     /**

@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
@@ -27,7 +28,7 @@ import RightPanel from '../../structures/RightPanel';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'GroupMemberList',
 
     propTypes: {

@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerializeIfNeeded, textSerialize} from '../../../editor/serialize';
+import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import {PartCreator} from '../../../editor/parts';
@@ -56,17 +56,10 @@ function getTextReplyFallback(mxEvent) {
     return "";
 }
 
-function _isEmote(model) {
-    const firstPart = model.parts[0];
-    return firstPart && firstPart.type === "plain" && firstPart.text.startsWith("/me ");
-}
-
 function createEditContent(model, editedEvent) {
-    const isEmote = _isEmote(model);
+    const isEmote = containsEmote(model);
     if (isEmote) {
-        // trim "/me "
-        model = model.clone();
-        model.removeText({index: 0, offset: 0}, 4);
+        model = stripEmoteCommand(model);
     }
     const isReply = _isReply(editedEvent);
     let plainPrefix = "";
@@ -119,6 +112,10 @@ export default class EditMessageComposer extends React.Component {
         super(props, context);
         this.model = null;
         this._editorRef = null;
+
+        this.state = {
+            saveDisabled: true,
+        };
     }
 
     _setEditorRef = ref => {
@@ -167,7 +164,7 @@ export default class EditMessageComposer extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
-    _isModifiedOrSameAsOld(newContent) {
+    _isContentModified(newContent) {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
         if (!this._editorRef.isModified() ||
@@ -183,16 +180,18 @@ export default class EditMessageComposer extends React.Component {
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
-        if (!this._isModifiedOrSameAsOld(newContent)) {
-            return;
-        }
-        const roomId = editedEvent.getRoomId();
-        this._cancelPreviousPendingEdit();
-        this.context.matrixClient.sendMessage(roomId, editContent);
 
+        // If content is modified then send an updated event into the room
+        if (this._isContentModified(newContent)) {
+            const roomId = editedEvent.getRoomId();
+            this._cancelPreviousPendingEdit();
+            this.context.matrixClient.sendMessage(roomId, editContent);
+        }
+
+        // close the event editing and focus composer
         dis.dispatch({action: "edit_event", event: null});
         dis.dispatch({action: 'focus_composer'});
-    }
+    };
 
     _cancelPreviousPendingEdit() {
         const originalEvent = this.props.editState.getEvent();
@@ -247,19 +246,33 @@ export default class EditMessageComposer extends React.Component {
         return caretPosition;
     }
 
+    _onChange = () => {
+        if (!this.state.saveDisabled || !this._editorRef || !this._editorRef.isModified()) {
+            return;
+        }
+
+        this.setState({
+            saveDisabled: false,
+        });
+    };
+
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return <div className={classNames("mx_MessageEditor", this.props.className)} onKeyDown={this._onKeyDown}>
-                <BasicMessageComposer
-                    ref={this._setEditorRef}
-                    model={this.model}
-                    room={this._getRoom()}
-                    initialCaret={this.props.editState.getCaret()}
-                />
-                <div className="mx_MessageEditor_buttons">
-                    <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
-                </div>
-            </div>;
+        return (<div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this._onKeyDown}>
+            <BasicMessageComposer
+                ref={this._setEditorRef}
+                model={this.model}
+                room={this._getRoom()}
+                initialCaret={this.props.editState.getCaret()}
+                label={_t("Edit message")}
+                onChange={this._onChange}
+            />
+            <div className="mx_EditMessageComposer_buttons">
+                <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
+                <AccessibleButton kind="primary" onClick={this._sendEdit} disabled={this.state.saveDisabled}>
+                    {_t("Save")}
+                </AccessibleButton>
+            </div>
+        </div>);
     }
 }

@@ -16,12 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {SettingLevel} from "../../../settings/SettingsStore";
 import SettingsStore from "../../../settings/SettingsStore";
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         unknownProfileUsers: PropTypes.array.isRequired, // [ {userId, errorText}... ]
         onInviteAnyways: PropTypes.func.isRequired,

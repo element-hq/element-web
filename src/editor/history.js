@@ -18,6 +18,10 @@ export const MAX_STEP_LENGTH = 10;
 
 export default class HistoryManager {
     constructor() {
+        this.clear();
+    }
+
+    clear() {
         this._stack = [];
         this._newlyTypedCharCount = 0;
         this._currentIndex = -1;
@@ -102,6 +106,12 @@ export default class HistoryManager {
         return shouldPush;
     }
 
+    ensureLastChangesPushed(model) {
+        if (this._changedSinceLastPush) {
+            this._pushState(model, this._lastCaret);
+        }
+    }
+
     canUndo() {
         return this._currentIndex >= 1 || this._changedSinceLastPush;
     }
@@ -113,9 +123,7 @@ export default class HistoryManager {
     // returns state that should be applied to model
     undo(model) {
         if (this.canUndo()) {
-            if (this._changedSinceLastPush) {
-                this._pushState(model, this._lastCaret);
-            }
+            this.ensureLastChangesPushed(model);
             this._currentIndex -= 1;
             return this._stack[this._currentIndex];
         }

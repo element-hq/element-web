@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -34,7 +35,7 @@ import {_t} from "../../languageHandler";
 // turn this on for drop & drag console debugging galore
 const debug = false;
 
-const RoomSubList = React.createClass({
+const RoomSubList = createReactClass({
     displayName: 'RoomSubList',
 
     debug: debug,

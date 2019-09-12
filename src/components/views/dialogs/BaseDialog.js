@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import FocusTrap from 'focus-trap-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -32,7 +33,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * Includes a div for the title, and a keypress handler which cancels the
  * dialog on escape.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'BaseDialog',
 
     propTypes: {

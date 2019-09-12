@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import {CARET_NODE_CHAR, isCaretNode} from "./render";
+import DocumentOffset from "./offset";
 
 export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
     let node = rootNode.firstChild;
@@ -40,26 +41,62 @@ export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback
 }
 
 export function getCaretOffsetAndText(editor, sel) {
-    let {focusNode, focusOffset} = sel;
-    // sometimes focusNode is an element, and then focusOffset means
-    // the index of a child element ... - 1 🤷
-    if (focusNode.nodeType === Node.ELEMENT_NODE && focusOffset !== 0) {
-        focusNode = focusNode.childNodes[focusOffset - 1];
-        focusOffset = focusNode.textContent.length;
+    const {offset, text} = getSelectionOffsetAndText(editor, sel.focusNode, sel.focusOffset);
+    return {caret: offset, text};
+}
+
+function tryReduceSelectionToTextNode(selectionNode, selectionOffset) {
+    // if selectionNode is an element, the selected location comes after the selectionOffset-th child node,
+    // which can point past any childNode, in which case, the end of selectionNode is selected.
+    // we try to simplify this to point at a text node with the offset being
+    // a character offset within the text node
+    // Also see https://developer.mozilla.org/en-US/docs/Web/API/Selection
+    while (selectionNode && selectionNode.nodeType === Node.ELEMENT_NODE) {
+        const childNodeCount = selectionNode.childNodes.length;
+        if (childNodeCount) {
+            if (selectionOffset >= childNodeCount) {
+                selectionNode = selectionNode.lastChild;
+                if (selectionNode.nodeType === Node.TEXT_NODE) {
+                    selectionOffset = selectionNode.textContent.length;
+                } else {
+                    // this will select the last child node in the next iteration
+                    selectionOffset = Number.MAX_SAFE_INTEGER;
+                }
+            } else {
+                selectionNode = selectionNode.childNodes[selectionOffset];
+                // this will select the first child node in the next iteration
+                selectionOffset = 0;
+            }
+        } else {
+            // here node won't be a text node,
+            // but characterOffset should be 0,
+            // this happens under some circumstances
+            // when the editor is empty.
+            // In this case characterOffset=0 is the right thing to do
+            break;
+        }
     }
-    const {text, focusNodeOffset} = getTextAndFocusNodeOffset(editor, focusNode, focusOffset);
-    const caret = getCaret(focusNode, focusNodeOffset, focusOffset);
-    return {caret, text};
+    return {
+        node: selectionNode,
+        characterOffset: selectionOffset,
+    };
+}
+
+function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
+    const {node, characterOffset} = tryReduceSelectionToTextNode(selectionNode, selectionOffset);
+    const {text, offsetToNode} = getTextAndOffsetToNode(editor, node);
+    const offset = getCaret(node, offsetToNode, characterOffset);
+    return {offset, text};
 }
 
 // gets the caret position details, ignoring and adjusting to
 // the ZWS if you're typing in a caret node
-function getCaret(focusNode, focusNodeOffset, focusOffset) {
-    let atNodeEnd = focusOffset === focusNode.textContent.length;
-    if (focusNode.nodeType === Node.TEXT_NODE && isCaretNode(focusNode.parentElement)) {
-        const zwsIdx = focusNode.nodeValue.indexOf(CARET_NODE_CHAR);
-        if (zwsIdx !== -1 && zwsIdx < focusOffset) {
-            focusOffset -= 1;
+function getCaret(node, offsetToNode, offsetWithinNode) {
+    let atNodeEnd = offsetWithinNode === node.textContent.length;
+    if (node.nodeType === Node.TEXT_NODE && isCaretNode(node.parentElement)) {
+        const zwsIdx = node.nodeValue.indexOf(CARET_NODE_CHAR);
+        if (zwsIdx !== -1 && zwsIdx < offsetWithinNode) {
+            offsetWithinNode -= 1;
         }
         // if typing in a caret node, you're either typing before or after the ZWS.
         // In both cases, you should be considered at node end because the ZWS is
@@ -67,27 +104,37 @@ function getCaret(focusNode, focusNodeOffset, focusOffset) {
         // that caret node will be removed.
         atNodeEnd = true;
     }
-    return {offset: focusNodeOffset + focusOffset, atNodeEnd};
+    return new DocumentOffset(offsetToNode + offsetWithinNode, atNodeEnd);
 }
 
 // gets the text of the editor as a string,
-// and the offset in characters where the focusNode starts in that string
+// and the offset in characters where the selectionNode starts in that string
 // all ZWS from caret nodes are filtered out
-function getTextAndFocusNodeOffset(editor, focusNode, focusOffset) {
-    let focusNodeOffset = 0;
-    let foundCaret = false;
+function getTextAndOffsetToNode(editor, selectionNode) {
+    let offsetToNode = 0;
+    let foundNode = false;
     let text = "";
 
     function enterNodeCallback(node) {
-        if (!foundCaret) {
-            if (node === focusNode) {
-                foundCaret = true;
+        if (!foundNode) {
+            if (node === selectionNode) {
+                foundNode = true;
             }
+        }
+        // usually newlines are entered as new DIV elements,
+        // but for example while pasting in some browsers, they are still
+        // converted to BRs, so also take these into account when they
+        // are not the last element in the DIV.
+        if (node.tagName === "BR" && node.nextSibling) {
+            if (!foundNode) {
+                offsetToNode += 1;
+            }
+            text += "\n";
         }
         const nodeText = node.nodeType === Node.TEXT_NODE && getTextNodeValue(node);
         if (nodeText) {
-            if (!foundCaret) {
-                focusNodeOffset += nodeText.length;
+            if (!foundNode) {
+                offsetToNode += nodeText.length;
             }
             text += nodeText;
         }
@@ -101,15 +148,15 @@ function getTextAndFocusNodeOffset(editor, focusNode, focusOffset) {
         // whereas you just want it to be appended to the current line
         if (node.tagName === "DIV" && node.nextSibling && node.nextSibling.tagName === "DIV") {
             text += "\n";
-            if (!foundCaret) {
-                focusNodeOffset += 1;
+            if (!foundNode) {
+                offsetToNode += 1;
             }
         }
     }
 
     walkDOMDepthFirst(editor, enterNodeCallback, leaveNodeCallback);
 
-    return {text, focusNodeOffset};
+    return {text, offsetToNode};
 }
 
 // get text value of text node, ignoring ZWS if it's a caret node
@@ -128,4 +175,20 @@ function getTextNodeValue(node) {
     } else {
         return nodeText;
     }
+}
+
+export function getRangeForSelection(editor, model, selection) {
+    const focusOffset = getSelectionOffsetAndText(
+        editor,
+        selection.focusNode,
+        selection.focusOffset,
+    ).offset;
+    const anchorOffset = getSelectionOffsetAndText(
+        editor,
+        selection.anchorNode,
+        selection.anchorOffset,
+    ).offset;
+    const focusPosition = focusOffset.asPosition(model);
+    const anchorPosition = anchorOffset.asPosition(model);
+    return model.startRange(focusPosition, anchorPosition);
 }

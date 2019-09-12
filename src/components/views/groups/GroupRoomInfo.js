@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -23,7 +24,7 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'GroupRoomInfo',
 
     contextTypes: {

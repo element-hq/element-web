@@ -24,6 +24,10 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
+.mx_SettingsTab_heading:nth-child(n + 2) {
+    margin-top: 30px;
+}
+
 .mx_SettingsTab_subheading {
     font-size: 16px;
     display: block;
@@ -37,9 +41,8 @@ limitations under the License.
 .mx_SettingsTab_subsectionText {
     color: $settings-subsection-fg-color;
     font-size: 14px;
-    padding-bottom: 12px;
     display: block;
-    margin: 0 100px 0 0; // Align with the rest of the view
+    margin: 10px 100px 10px 0; // Align with the rest of the view
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag {
@@ -65,12 +68,6 @@ limitations under the License.
     cursor: pointer;
     color: $accent-color;
     word-break: break-all;
-}
-
-.mx_SettingsTab .mx_SettingsTab_subheading:nth-child(n + 2) {
-    // These views have a lot of the same repetitive information on it, so
-    // give them more visual distinction between the sections.
-    margin-top: 30px;
 }
 
 .mx_SettingsTab a {

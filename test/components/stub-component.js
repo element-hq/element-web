@@ -1,8 +1,8 @@
 /* A dummy React component which we use for stubbing out app-level components
  */
-'use strict';
 
-const React = require('react');
+import React from 'react';
+import createReactClass from 'create-react-class';
 
 module.exports = function(opts) {
     opts = opts || {};
@@ -16,5 +16,5 @@ module.exports = function(opts) {
         };
     }
 
-    return React.createClass(opts);
+    return createReactClass(opts);
 };

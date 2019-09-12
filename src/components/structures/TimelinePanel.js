@@ -19,8 +19,9 @@ limitations under the License.
 
 import SettingsStore from "../../settings/SettingsStore";
 
-const React = require('react');
-const ReactDOM = require("react-dom");
+import React from 'react';
+import createReactClass from 'create-react-class';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 
@@ -58,7 +59,7 @@ if (DEBUG) {
  *
  * Also responsible for handling and sending read receipts.
  */
-const TimelinePanel = React.createClass({
+const TimelinePanel = createReactClass({
     displayName: 'TimelinePanel',
 
     propTypes: {
@@ -684,20 +685,26 @@ const TimelinePanel = React.createClass({
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
+            const roomId = this.props.timelineSet.room.roomId;
+            const hiddenRR = !SettingsStore.getValue("sendReadReceipts", roomId);
+
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
+                ' hidden:' + hiddenRR,
             );
             MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent, // Could be null, in which case no RR is sent
+                {hidden: hiddenRR},
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
+                        {hidden: hiddenRR},
                     ).catch((e) => {
                         console.error(e);
                         this.lastRRSentEventId = undefined;

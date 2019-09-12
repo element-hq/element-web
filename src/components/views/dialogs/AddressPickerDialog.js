@@ -19,15 +19,19 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
+import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../utils/IdentityServerUtils';
+import { abbreviateUrl } from '../../../utils/UrlUtils';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -39,7 +43,7 @@ const addressTypeName = {
 };
 
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: "AddressPickerDialog",
 
     propTypes: {
@@ -48,7 +52,7 @@ module.exports = React.createClass({
         // Extra node inserted after picker input, dropdown and errors
         extraNode: PropTypes.node,
         value: PropTypes.string,
-        placeholder: PropTypes.string,
+        placeholder: PropTypes.oneOfType(PropTypes.string, PropTypes.func),
         roomId: PropTypes.string,
         button: PropTypes.string,
         focus: PropTypes.bool,
@@ -90,6 +94,9 @@ module.exports = React.createClass({
             // List of UserAddressType objects representing the set of
             // auto-completion results for the current search query.
             suggestedList: [],
+            // List of address types initialised from props, but may change while the
+            // dialog is open.
+            validAddressTypes: this.props.validAddressTypes,
         };
     },
 
@@ -98,6 +105,15 @@ module.exports = React.createClass({
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
         }
+    },
+
+    getPlaceholder() {
+        const { placeholder } = this.props;
+        if (typeof placeholder === "string") {
+            return placeholder;
+        }
+        // Otherwise it's a function, as checked by prop types.
+        return placeholder(this.state.validAddressTypes);
     },
 
     onButtonClick: function() {
@@ -433,7 +449,7 @@ module.exports = React.createClass({
         // This is important, otherwise there's no way to invite
         // a perfectly valid address if there are close matches.
         const addrType = getAddressType(query);
-        if (this.props.validAddressTypes.includes(addrType)) {
+        if (this.state.validAddressTypes.includes(addrType)) {
             if (addrType === 'email' && !Email.looksValid(query)) {
                 this.setState({searchError: _t("That doesn't look like a valid email address")});
                 return;
@@ -469,7 +485,7 @@ module.exports = React.createClass({
                 isKnown: false,
             };
 
-            if (!this.props.validAddressTypes.includes(addrType)) {
+            if (!this.state.validAddressTypes.includes(addrType)) {
                 hasError = true;
             } else if (addrType === 'mx-user-id') {
                 const user = MatrixClientPeg.get().getUser(addrObj.address);
@@ -570,11 +586,36 @@ module.exports = React.createClass({
         this._addAddressesToList(text.split(/[\s,]+/));
     },
 
+    onUseDefaultIdentityServerClick(e) {
+        e.preventDefault();
+
+        // Update the IS in account data. Actually using it may trigger terms.
+        useDefaultIdentityServer();
+
+        // Add email as a valid address type.
+        const { validAddressTypes } = this.state;
+        validAddressTypes.push('email');
+        this.setState({ validAddressTypes });
+    },
+
+    onManageSettingsClick(e) {
+        e.preventDefault();
+        dis.dispatch({ action: 'view_user_settings' });
+        this.onCancel();
+    },
+
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
+
+        let inputLabel;
+        if (this.props.description) {
+            inputLabel = <div className="mx_AddressPickerDialog_label">
+                <label htmlFor="textinput">{this.props.description}</label>
+            </div>;
+        }
 
         const query = [];
         // create the invite list
@@ -602,7 +643,7 @@ module.exports = React.createClass({
                 ref="textinput"
                 className="mx_AddressPickerDialog_input"
                 onChange={this.onQueryChanged}
-                placeholder={this.props.placeholder}
+                placeholder={this.getPlaceholder()}
                 defaultValue={this.props.value}
                 autoFocus={this.props.focus}>
             </textarea>,
@@ -613,7 +654,7 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.invalidAddressError) {
-            const validTypeDescriptions = this.props.validAddressTypes.map((t) => _t(addressTypeName[t]));
+            const validTypeDescriptions = this.state.validAddressTypes.map((t) => _t(addressTypeName[t]));
             error = <div className="mx_AddressPickerDialog_error">
                 { _t("You have entered an invalid address.") }
                 <br />
@@ -636,17 +677,43 @@ module.exports = React.createClass({
             );
         }
 
+        let identityServer;
+        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')) {
+            const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
+            if (defaultIdentityServerUrl) {
+                identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(
+                    "Use an identity server to invite by email. " +
+                    "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
+                    "or manage in <settings>Settings</settings>.",
+                    {
+                        defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
+                    },
+                    {
+                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                    },
+                )}</div>;
+            } else {
+                identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(
+                    "Use an identity server to invite by email. " +
+                    "Manage in <settings>Settings</settings>.",
+                    {}, {
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                    },
+                )}</div>;
+            }
+        }
+
         return (
             <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
                 onFinished={this.props.onFinished} title={this.props.title}>
-                <div className="mx_AddressPickerDialog_label">
-                    <label htmlFor="textinput">{ this.props.description }</label>
-                </div>
+                {inputLabel}
                 <div className="mx_Dialog_content">
                     <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>
                     { error }
                     { addressSelector }
                     { this.props.extraNode }
+                    { identityServer }
                 </div>
                 <DialogButtons primaryButton={this.props.button}
                     onPrimaryButtonClick={this.onButtonClick}

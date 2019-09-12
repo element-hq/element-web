@@ -32,7 +32,7 @@ export class LabsSettingToggle extends React.Component {
     };
 
     render() {
-        const label = _t(SettingsStore.getDisplayName(this.props.featureId));
+        const label = SettingsStore.getDisplayName(this.props.featureId);
         const value = SettingsStore.isFeatureEnabled(this.props.featureId);
         return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} />;
     }
@@ -54,6 +54,7 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
+                    <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
                 </div>
             </div>
         );

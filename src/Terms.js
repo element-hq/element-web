@@ -116,16 +116,21 @@ export async function startTermsFlow(
     }
 
     // if there's anything left to agree to, prompt the user
+    const numAcceptedBeforeAgreement = agreedUrlSet.size;
     if (unagreedPoliciesAndServicePairs.length > 0) {
         const newlyAgreedUrls = await interactionCallback(unagreedPoliciesAndServicePairs, [...agreedUrlSet]);
         console.log("User has agreed to URLs", newlyAgreedUrls);
-        agreedUrlSet = new Set(newlyAgreedUrls);
+        // Merge with previously agreed URLs
+        newlyAgreedUrls.forEach(url => agreedUrlSet.add(url));
     } else {
         console.log("User has already agreed to all required policies");
     }
 
-    const newAcceptedTerms = { accepted: Array.from(agreedUrlSet) };
-    await MatrixClientPeg.get().setAccountData('m.accepted_terms', newAcceptedTerms);
+    // We only ever add to the set of URLs, so if anything has changed then we'd see a different length
+    if (agreedUrlSet.size !== numAcceptedBeforeAgreement) {
+        const newAcceptedTerms = {accepted: Array.from(agreedUrlSet)};
+        await MatrixClientPeg.get().setAccountData('m.accepted_terms', newAcceptedTerms);
+    }
 
     const agreePromises = policiesAndServicePairs.map((policiesAndService) => {
         // filter the agreed URL list for ones that are actually for this service

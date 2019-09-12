@@ -2,6 +2,7 @@
 Copyright 2017 MTRNord and Cooperative EITA
 Copyright 2017 Vector Creations Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -102,7 +103,7 @@ function safeCounterpartTranslate(text, options) {
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function _t(text, variables, tags) {
-    // Don't do subsitutions in counterpart. We handle it ourselves so we can replace with React components
+    // Don't do substitutions in counterpart. We handle it ourselves so we can replace with React components
     // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
     // It is enough to pass the count variable, but in the future counterpart might make use of other information too
     const args = Object.assign({ interpolate: false }, variables);
@@ -178,12 +179,12 @@ export function replaceByRegexes(text, mapping) {
 
     for (const regexpString in mapping) {
         // TODO: Cache regexps
-        const regexp = new RegExp(regexpString);
+        const regexp = new RegExp(regexpString, "g");
 
         // Loop over what output we have so far and perform replacements
         // We look for matches: if we find one, we get three parts: everything before the match, the replaced part,
         // and everything after the match. Insert all three into the output. We need to do this because we can insert objects.
-        // Otherwise there would be no need for the splitting and we could do simple replcement.
+        // Otherwise there would be no need for the splitting and we could do simple replacement.
         let matchFoundSomewhere = false; // If we don't find a match anywhere we want to log it
         for (const outputIndex in output) {
             const inputText = output[outputIndex];
@@ -191,44 +192,62 @@ export function replaceByRegexes(text, mapping) {
                 continue;
             }
 
-            const match = inputText.match(regexp);
-            if (!match) {
-                continue;
-            }
+            // process every match in the string
+            // starting with the first
+            let match = regexp.exec(inputText);
+
+            if (!match) continue;
             matchFoundSomewhere = true;
 
-            const capturedGroups = match.slice(2);
-
-            // The textual part before the match
+            // The textual part before the first match
             const head = inputText.substr(0, match.index);
 
-            // The textual part after the match
-            const tail = inputText.substr(match.index + match[0].length);
+            const parts = [];
+            // keep track of prevMatch
+            let prevMatch;
+            while (match) {
+                // store prevMatch
+                prevMatch = match;
+                const capturedGroups = match.slice(2);
 
-            let replaced;
-            // If substitution is a function, call it
-            if (mapping[regexpString] instanceof Function) {
-                replaced = mapping[regexpString].apply(null, capturedGroups);
-            } else {
-                replaced = mapping[regexpString];
+                let replaced;
+                // If substitution is a function, call it
+                if (mapping[regexpString] instanceof Function) {
+                    replaced = mapping[regexpString].apply(null, capturedGroups);
+                } else {
+                    replaced = mapping[regexpString];
+                }
+
+                if (typeof replaced === 'object') {
+                    shouldWrapInSpan = true;
+                }
+
+                // Here we also need to check that it actually is a string before comparing against one
+                // The head and tail are always strings
+                if (typeof replaced !== 'string' || replaced !== '') {
+                    parts.push(replaced);
+                }
+
+                // try the next match
+                match = regexp.exec(inputText);
+
+                // add the text between prevMatch and this one
+                // or the end of the string if prevMatch is the last match
+                let tail;
+                if (match) {
+                    const startIndex = prevMatch.index + prevMatch[0].length;
+                    tail = inputText.substr(startIndex, match.index - startIndex);
+                } else {
+                    tail = inputText.substr(prevMatch.index + prevMatch[0].length);
+                }
+                if (tail) {
+                    parts.push(tail);
+                }
             }
-
-            if (typeof replaced === 'object') {
-                shouldWrapInSpan = true;
-            }
-
-            output.splice(outputIndex, 1); // Remove old element
 
             // Insert in reverse order as splice does insert-before and this way we get the final order correct
-            if (tail !== '') {
-                output.splice(outputIndex, 0, tail);
-            }
-
-            // Here we also need to check that it actually is a string before comparing against one
-            // The head and tail are always strings
-            if (typeof replaced !== 'string' || replaced !== '') {
-                output.splice(outputIndex, 0, replaced);
-            }
+            // remove the old element at the same time
+            output.splice(outputIndex, 1, ...parts);
 
             if (head !== '') { // Don't push empty nodes, they are of no use
                 output.splice(outputIndex, 0, head);
@@ -289,7 +308,7 @@ export function setLanguage(preferredLangs) {
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
-        if (langToUse != "en") {
+        if (langToUse !== "en") {
             return getLanguage(i18nFolder + availLangs['en'].fileName);
         }
     }).then((langData) => {
@@ -329,13 +348,13 @@ export function getLanguagesFromBrowser() {
  */
 export function getNormalizedLanguageKeys(language) {
     const languageKeys = [];
-    const normalizedLanguage = this.normalizeLanguageKey(language);
+    const normalizedLanguage = normalizeLanguageKey(language);
     const languageParts = normalizedLanguage.split('-');
-    if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
+    if (languageParts.length === 2 && languageParts[0] === languageParts[1]) {
         languageKeys.push(languageParts[0]);
     } else {
         languageKeys.push(normalizedLanguage);
-        if (languageParts.length == 2) {
+        if (languageParts.length === 2) {
             languageKeys.push(languageParts[0]);
         }
     }
@@ -345,6 +364,9 @@ export function getNormalizedLanguageKeys(language) {
 /**
  * Returns a language string with underscores replaced with
  * hyphens, and lowercased.
+ *
+ * @param {string} language The language string to be normalized
+ * @returns {string} The normalized language string
  */
 export function normalizeLanguageKey(language) {
     return language.toLowerCase().replace("_", "-");
@@ -373,8 +395,8 @@ export function pickBestLanguage(langs) {
     }
 
     {
-        // Failing that, a different dialect of the same lnguage
-        const closeLangIndex = normalisedLangs.find((l) => l.substr(0,2) === currentLang.substr(0,2));
+        // Failing that, a different dialect of the same language
+        const closeLangIndex = normalisedLangs.find((l) => l.substr(0, 2) === currentLang.substr(0, 2));
         if (closeLangIndex > -1) return langs[closeLangIndex];
     }
 

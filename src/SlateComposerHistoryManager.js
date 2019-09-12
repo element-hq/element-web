@@ -47,7 +47,7 @@ class HistoryItem {
     }
 }
 
-export default class ComposerHistoryManager {
+export default class SlateComposerHistoryManager {
     history: Array<HistoryItem> = [];
     prefix: string;
     lastIndex: number = 0; // used for indexing the storage

@@ -16,31 +16,17 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
 import ContentMessages from '../../../ContentMessages';
 import classNames from 'classnames';
-
 import E2EIcon from './E2EIcon';
-
-const formatButtonList = [
-    _td("bold"),
-    _td("italic"),
-    _td("deleted"),
-    _td("underlined"),
-    _td("inline-code"),
-    _td("block-quote"),
-    _td("bulleted-list"),
-    _td("numbered-list"),
-];
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -51,7 +37,7 @@ function ComposerAvatar(props) {
 
 ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
-}
+};
 
 function CallButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -63,15 +49,15 @@ function CallButton(props) {
         });
     };
 
-    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-        onClick={onVoiceCallClick}
-        title={_t('Voice call')}
-    />
+    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+            onClick={onVoiceCallClick}
+            title={_t('Voice call')}
+        />);
 }
 
 CallButton.propTypes = {
-    roomId: PropTypes.string.isRequired
-}
+    roomId: PropTypes.string.isRequired,
+};
 
 function VideoCallButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -107,38 +93,21 @@ function HangupButton(props) {
             room_id: call.roomId,
         });
     };
-    return  <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
-        onClick={onHangupClick}
-        title={_t('Hangup')}
-    />;
+    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
+            onClick={onHangupClick}
+            title={_t('Hangup')}
+        />);
 }
 
 HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
-}
-
-function FormattingButton(props) {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-    return <AccessibleButton
-        element="img"
-        className="mx_MessageComposer_formatting"
-        alt={_t("Show Text Formatting Toolbar")}
-        title={_t("Show Text Formatting Toolbar")}
-        src={require("../../../../res/img/button-text-formatting.svg")}
-        style={{visibility: props.showFormatting ? 'hidden' : 'visible'}}
-        onClick={props.onClickHandler}
-    />;
-}
-
-FormattingButton.propTypes = {
-    showFormatting: PropTypes.bool.isRequired,
-    onClickHandler: PropTypes.func.isRequired,
-}
+};
 
 class UploadButton extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
     }
+
     constructor(props, context) {
         super(props, context);
         this.onUploadClick = this.onUploadClick.bind(this);
@@ -195,24 +164,14 @@ class UploadButton extends React.Component {
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
-        this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
-        this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
-        this.renderFormatBar = this.renderFormatBar.bind(this);
 
         this.state = {
-            inputState: {
-                marks: [],
-                blockType: null,
-                isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
-            },
-            showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
@@ -259,6 +218,7 @@ export default class MessageComposer extends React.Component {
     onEvent(event) {
         if (event.getType() !== 'm.room.encryption') return;
         if (event.getRoomId() !== this.props.room.roomId) return;
+        // TODO: put (encryption state??) in state
         this.forceUpdate();
     }
 
@@ -283,32 +243,10 @@ export default class MessageComposer extends React.Component {
         this.setState({ isQuoting });
     }
 
-
     onInputStateChanged(inputState) {
         // Merge the new input state with old to support partial updates
         inputState = Object.assign({}, this.state.inputState, inputState);
         this.setState({inputState});
-    }
-
-    _onAutocompleteConfirm(range, completion) {
-        if (this.messageComposerInput) {
-            this.messageComposerInput.setDisplayedCompletion(range, completion);
-        }
-    }
-
-    onFormatButtonClicked(name, event) {
-        event.preventDefault();
-        this.messageComposerInput.onFormatButtonClicked(name, event);
-    }
-
-    onToggleFormattingClicked() {
-        SettingsStore.setValue("MessageComposer.showFormatting", null, SettingLevel.DEVICE, !this.state.showFormatting);
-        this.setState({showFormatting: !this.state.showFormatting});
-    }
-
-    onToggleMarkdownClicked(e) {
-        e.preventDefault(); // don't steal focus from the editor!
-        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichTextEnabled);
     }
 
     _onTombstoneClick(ev) {
@@ -357,51 +295,12 @@ export default class MessageComposer extends React.Component {
         }
     }
 
-    renderFormatBar() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const {marks, blockType} = this.state.inputState;
-        const formatButtons = formatButtonList.map((name) => {
-            // special-case to match the md serializer and the special-case in MessageComposerInput.js
-            const markName = name === 'inline-code' ? 'code' : name;
-            const active = marks.some(mark => mark.type === markName) || blockType === name;
-            const suffix = active ? '-on' : '';
-            const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-            const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
-            return (
-                <img className={className}
-                    title={_t(name)}
-                    onMouseDown={onFormatButtonClicked}
-                    key={name}
-                    src={require(`../../../../res/img/button-text-${name}${suffix}.svg`)}
-                    height="17"
-                />
-            );
-        })
-
-        return (
-            <div className="mx_MessageComposer_formatbar_wrapper">
-                <div className="mx_MessageComposer_formatbar">
-                { formatButtons }
-                <div style={{ flex: 1 }}></div>
-                <AccessibleButton
-                    className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
-                    onClick={this.onToggleMarkdownClicked}
-                    title={_t("Markdown is disabled")}
-                />
-                <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
-                    onClick={this.onToggleFormattingClicked}
-                    className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                    src={require("../../../../res/img/icon-text-cancel.svg")}
-                />
-                </div>
-            </div>
-        );
-    }
-
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
-            this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
+            this.props.e2eStatus ?
+                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
+                null,
         ];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
@@ -409,20 +308,16 @@ export default class MessageComposer extends React.Component {
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
 
-            const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
-            const showFormattingButton = this.state.inputState.isRichTextEnabled;
+            const SendMessageComposer = sdk.getComponent("rooms.SendMessageComposer");
             const callInProgress = this.props.callState && this.props.callState !== 'ended';
 
             controls.push(
-                <MessageComposerInput
+                <SendMessageComposer
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
-                    onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
-                showFormattingButton ? <FormattingButton key="controls_formatting"
-                    showFormatting={this.state.showFormatting} onClickHandler={this.onToggleFormattingClicked} /> : null,
                 <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
@@ -458,8 +353,6 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const showFormatBar = this.state.showFormatting && this.state.inputState.isRichTextEnabled;
-
         const wrapperClasses = classNames({
             mx_MessageComposer_wrapper: true,
             mx_MessageComposer_hasE2EIcon: !!this.props.e2eStatus,
@@ -471,7 +364,6 @@ export default class MessageComposer extends React.Component {
                         { controls }
                     </div>
                 </div>
-                { showFormatBar ? this.renderFormatBar() : null }
             </div>
         );
     }
@@ -485,5 +377,5 @@ MessageComposer.propTypes = {
     callState: PropTypes.string,
 
     // string representing the current room app drawer state
-    showApps: PropTypes.bool
+    showApps: PropTypes.bool,
 };

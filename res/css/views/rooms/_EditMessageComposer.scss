@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageEditor {
-    border-radius: 4px;
+.mx_EditMessageComposer {
+
     padding: 3px;
     // this is to try not make the text move but still have some
     // padding around and in the editor.
@@ -23,47 +24,20 @@ limitations under the License.
     margin: -7px -10px -5px -10px;
     overflow: visible !important;   // override mx_EventTile_content
 
-    .mx_MessageEditor_editor {
+
+    .mx_BasicMessageComposer_input {
         border-radius: 4px;
         border: solid 1px $primary-hairline-color;
         background-color: $primary-bg-color;
-        padding: 3px 6px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        outline: none;
         max-height: 200px;
-        overflow-x: auto;
+        padding: 3px 6px;
 
         &:focus {
             border-color: $accent-color-50pct;
         }
-
-        span.mx_UserPill, span.mx_RoomPill {
-            padding-left: 21px;
-            position: relative;
-
-            // avatar psuedo element
-            &::before {
-                position: absolute;
-                left: 2px;
-                top: 2px;
-                content: var(--avatar-letter);
-                width: 16px;
-                height: 16px;
-                background: var(--avatar-background), $avatar-bg-color;
-                color: $avatar-initial-color;
-                background-repeat: no-repeat;
-                background-size: 16px;
-                border-radius: 8px;
-                text-align: center;
-                font-weight: normal;
-                line-height: 16px;
-                font-size: 10.4px;
-            }
-        }
     }
 
-    .mx_MessageEditor_buttons {
+    .mx_EditMessageComposer_buttons {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -81,14 +55,9 @@ limitations under the License.
             padding: 5px 40px;
         }
     }
-
-    .mx_MessageEditor_AutoCompleteWrapper {
-        position: relative;
-        height: 0;
-    }
 }
 
-.mx_EventTile_last .mx_MessageEditor_buttons {
+.mx_EventTile_last .mx_EditMessageComposer_buttons {
     position: static;
     margin-right: -147px;
 }

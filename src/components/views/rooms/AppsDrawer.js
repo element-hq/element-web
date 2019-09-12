@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
@@ -29,12 +28,13 @@ import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
-import { showIntegrationsManager } from '../../../integrations/integrations';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
@@ -128,10 +128,11 @@ module.exports = React.createClass({
     },
 
     _launchManageIntegrations: function() {
-        showIntegrationsManager({
-            room: this.props.room,
-            screen: 'add_integ',
-        });
+        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll();
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
+        }
     },
 
     onClickAddWidget: function(e) {

@@ -114,6 +114,19 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_cider_composer": {
+        isFeature: true,
+        displayName: _td("Use the new, faster, but still experimental composer " +
+            "for writing messages (requires refresh)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_many_integration_managers": {
+        isFeature: true,
+        displayName: _td("Multiple integration managers"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
@@ -371,5 +384,21 @@ export const SETTINGS = {
         displayName: _td('Low bandwidth mode'),
         default: false,
         controller: new LowBandwidthController(),
+    },
+    "fallbackICEServerAllowed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td(
+            "Allow fallback call assist server turn.matrix.org when your homeserver " +
+            "does not offer one (your IP address would be shared during a call)",
+        ),
+        // This is a tri-state value, where `null` means "prompt the user".
+        default: null,
+    },
+    "sendReadReceipts": {
+        supportedLevels: LEVELS_ROOM_SETTINGS,
+        displayName: _td(
+            "Send read receipts for messages (requires compatible homeserver to disable)",
+        ),
+        default: true,
     },
 };

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +17,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
-import MatrixClientPeg from "../../../MatrixClientPeg";
-import Field from "../elements/Field";
-import AccessibleButton from "../elements/AccessibleButton";
-import AddThreepid from "../../../AddThreepid";
-import CountryDropdown from "../auth/CountryDropdown";
-const sdk = require('../../../index');
-const Modal = require("../../../Modal");
+import {_t} from "../../../../languageHandler";
+import MatrixClientPeg from "../../../../MatrixClientPeg";
+import Field from "../../elements/Field";
+import AccessibleButton from "../../elements/AccessibleButton";
+import AddThreepid from "../../../../AddThreepid";
+import CountryDropdown from "../../auth/CountryDropdown";
+import sdk from '../../../../index';
+import Modal from '../../../../Modal';
 
 /*
 TODO: Improve the UX for everything in here.
@@ -81,15 +82,15 @@ export class ExistingPhoneNumber extends React.Component {
             return (
                 <div className="mx_ExistingPhoneNumber">
                     <span className="mx_ExistingPhoneNumber_promptText">
-                        {_t("Are you sure?")}
+                        {_t("Remove %(phone)s?", {phone: this.props.msisdn.address})}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
+                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
                                       className="mx_ExistingPhoneNumber_confirmBtn">
-                        {_t("Yes")}
+                        {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
+                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
                                       className="mx_ExistingPhoneNumber_confirmBtn">
-                        {_t("No")}
+                        {_t("Cancel")}
                     </AccessibleButton>
                 </div>
             );
@@ -107,11 +108,15 @@ export class ExistingPhoneNumber extends React.Component {
 }
 
 export default class PhoneNumbers extends React.Component {
-    constructor() {
-        super();
+    static propTypes = {
+        msisdns: PropTypes.array.isRequired,
+        onMsisdnsChange: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
 
         this.state = {
-            msisdns: [],
             verifying: false,
             verifyError: false,
             verifyMsisdn: "",
@@ -123,16 +128,9 @@ export default class PhoneNumbers extends React.Component {
         };
     }
 
-    componentWillMount(): void {
-        const client = MatrixClientPeg.get();
-
-        client.getThreePids().then((addresses) => {
-            this.setState({msisdns: addresses.threepids.filter((a) => a.medium === 'msisdn')});
-        });
-    }
-
     _onRemoved = (address) => {
-        this.setState({msisdns: this.state.msisdns.filter((e) => e !== address)});
+        const msisdns = this.props.msisdns.filter((e) => e !== address);
+        this.props.onMsisdnsChange(msisdns);
     };
 
     _onChangeNewPhoneNumber = (e) => {
@@ -160,7 +158,7 @@ export default class PhoneNumbers extends React.Component {
         const task = new AddThreepid();
         this.setState({verifying: true, continueDisabled: true, addTask: task});
 
-        task.addMsisdn(phoneCountry, phoneNumber, true).then((response) => {
+        task.addMsisdn(phoneCountry, phoneNumber, false).then((response) => {
             this.setState({continueDisabled: false, verifyMsisdn: response.msisdn});
         }).catch((err) => {
             console.error("Unable to add phone number " + phoneNumber + " " + err);
@@ -180,7 +178,6 @@ export default class PhoneNumbers extends React.Component {
         const token = this.state.newPhoneNumberCode;
         this.state.addTask.haveMsisdnToken(token).then(() => {
             this.setState({
-                msisdns: [...this.state.msisdns, {address: this.state.verifyMsisdn, medium: "msisdn"}],
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
@@ -189,6 +186,11 @@ export default class PhoneNumbers extends React.Component {
                 newPhoneNumber: "",
                 newPhoneNumberCode: "",
             });
+            const msisdns = [
+                ...this.props.msisdns,
+                { address: this.state.verifyMsisdn, medium: "msisdn" },
+            ];
+            this.props.onMsisdnsChange(msisdns);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
@@ -209,7 +211,7 @@ export default class PhoneNumbers extends React.Component {
     };
 
     render() {
-        const existingPhoneElements = this.state.msisdns.map((p) => {
+        const existingPhoneElements = this.props.msisdns.map((p) => {
             return <ExistingPhoneNumber msisdn={p} onRemoved={this._onRemoved} key={p.address} />;
         });
 
@@ -224,7 +226,7 @@ export default class PhoneNumbers extends React.Component {
                 <div>
                     <div>
                         {_t("A text message has been sent to +%(msisdn)s. " +
-                            "Please enter the verification code it contains", { msisdn: msisdn })}
+                            "Please enter the verification code it contains.", { msisdn: msisdn })}
                         <br />
                         {this.state.verifyError}
                     </div>

@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
@@ -34,7 +35,7 @@ import TagOrderStore from '../../../stores/TagOrderStore';
 //  - Rooms that are part of the group
 //  - Direct messages with members of the group
 // with the intention that this could be expanded to arbitrary tags in future.
-export default React.createClass({
+export default createReactClass({
     displayName: 'TagTile',
 
     propTypes: {

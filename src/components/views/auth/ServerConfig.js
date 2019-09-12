@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +24,8 @@ import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
+import { createClient } from 'matrix-js-sdk/lib/matrix';
+import classNames from 'classnames';
 
 /*
  * A pure UI component which displays the HS and IS to use.
@@ -46,6 +49,10 @@ export default class ServerConfig extends React.PureComponent {
         // Optional class for the submit button. Only applies if the submit button
         // is to be rendered.
         submitClass: PropTypes.string,
+
+        // Whether the flow this component is embedded in requires an identity
+        // server when the homeserver says it will need one. Default false.
+        showIdentityServerIfRequiredByHomeserver: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -61,6 +68,7 @@ export default class ServerConfig extends React.PureComponent {
             errorText: "",
             hsUrl: props.serverConfig.hsUrl,
             isUrl: props.serverConfig.isUrl,
+            showIdentityServer: false,
         };
     }
 
@@ -75,14 +83,41 @@ export default class ServerConfig extends React.PureComponent {
         // TODO: Do we want to support .well-known lookups here?
         // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
         // find their homeserver without demanding they use "https://matrix.org"
-        return this.validateAndApplyServer(this.state.hsUrl, this.state.isUrl);
+        const result = this.validateAndApplyServer(this.state.hsUrl, this.state.isUrl);
+        if (!result) {
+            return result;
+        }
+
+        // If the UI flow this component is embedded in requires an identity
+        // server when the homeserver says it will need one, check first and
+        // reveal this field if not already shown.
+        // XXX: This a backward compatibility path for homeservers that require
+        // an identity server to be passed during certain flows.
+        // See also https://github.com/matrix-org/synapse/pull/5868.
+        if (
+            this.props.showIdentityServerIfRequiredByHomeserver &&
+            !this.state.showIdentityServer &&
+            await this.isIdentityServerRequiredByHomeserver()
+        ) {
+            this.setState({
+                showIdentityServer: true,
+            });
+            return null;
+        }
+
+        return result;
     }
 
     async validateAndApplyServer(hsUrl, isUrl) {
         // Always try and use the defaults first
         const defaultConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
         if (defaultConfig.hsUrl === hsUrl && defaultConfig.isUrl === isUrl) {
-            this.setState({busy: false, errorText: ""});
+            this.setState({
+                hsUrl: defaultConfig.hsUrl,
+                isUrl: defaultConfig.isUrl,
+                busy: false,
+                errorText: "",
+            });
             this.props.onServerConfigChange(defaultConfig);
             return defaultConfig;
         }
@@ -124,6 +159,15 @@ export default class ServerConfig extends React.PureComponent {
                 return null;
             }
         }
+    }
+
+    async isIdentityServerRequiredByHomeserver() {
+        // XXX: We shouldn't have to create a whole new MatrixClient just to
+        // check if the homeserver requires an identity server... Should it be
+        // extracted to a static utils function...?
+        return createClient({
+            baseUrl: this.state.hsUrl,
+        }).doesServerRequireIdServerParam();
     }
 
     onHomeserverBlur = (ev) => {
@@ -171,8 +215,49 @@ export default class ServerConfig extends React.PureComponent {
         Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
     };
 
-    render() {
+    _renderHomeserverSection() {
         const Field = sdk.getComponent('elements.Field');
+        return <div>
+            {_t("Enter your custom homeserver URL <a>What does this mean?</a>", {}, {
+                a: sub => <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
+                    {sub}
+                </a>,
+            })}
+            <Field id="mx_ServerConfig_hsUrl"
+                label={_t("Homeserver URL")}
+                placeholder={this.props.serverConfig.hsUrl}
+                value={this.state.hsUrl}
+                onBlur={this.onHomeserverBlur}
+                onChange={this.onHomeserverChange}
+                disabled={this.state.busy}
+            />
+        </div>;
+    }
+
+    _renderIdentityServerSection() {
+        const Field = sdk.getComponent('elements.Field');
+        const classes = classNames({
+            "mx_ServerConfig_identityServer": true,
+            "mx_ServerConfig_identityServer_shown": this.state.showIdentityServer,
+        });
+        return <div className={classes}>
+            {_t("Enter your custom identity server URL <a>What does this mean?</a>", {}, {
+                a: sub => <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
+                    {sub}
+            </a>,
+            })}
+            <Field id="mx_ServerConfig_isUrl"
+                label={_t("Identity Server URL")}
+                placeholder={this.props.serverConfig.isUrl}
+                value={this.state.isUrl || ''}
+                onBlur={this.onIdentityServerBlur}
+                onChange={this.onIdentityServerChange}
+                disabled={this.state.busy}
+            />
+        </div>;
+    }
+
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const errorText = this.state.errorText
@@ -191,31 +276,10 @@ export default class ServerConfig extends React.PureComponent {
         return (
             <div className="mx_ServerConfig">
                 <h3>{_t("Other servers")}</h3>
-                {_t("Enter custom server URLs <a>What does this mean?</a>", {}, {
-                    a: sub => <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
-                        { sub }
-                    </a>,
-                })}
                 {errorText}
+                {this._renderHomeserverSection()}
+                {this._renderIdentityServerSection()}
                 <form onSubmit={this.onSubmit} autoComplete={false} action={null}>
-                    <div className="mx_ServerConfig_fields">
-                        <Field id="mx_ServerConfig_hsUrl"
-                            label={_t("Homeserver URL")}
-                            placeholder={this.props.serverConfig.hsUrl}
-                            value={this.state.hsUrl}
-                            onBlur={this.onHomeserverBlur}
-                            onChange={this.onHomeserverChange}
-                            disabled={this.state.busy}
-                        />
-                        <Field id="mx_ServerConfig_isUrl"
-                            label={_t("Identity Server URL")}
-                            placeholder={this.props.serverConfig.isUrl}
-                            value={this.state.isUrl || ''}
-                            onBlur={this.onIdentityServerBlur}
-                            onChange={this.onIdentityServerChange}
-                            disabled={this.state.busy}
-                        />
-                    </div>
                     {submitButton}
                 </form>
             </div>

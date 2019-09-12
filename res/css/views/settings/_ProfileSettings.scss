@@ -43,7 +43,6 @@ limitations under the License.
     height: 88px;
     margin-left: 13px;
     position: relative;
-    cursor: pointer;
 }
 
 .mx_ProfileSettings_avatar > * {
@@ -71,6 +70,7 @@ limitations under the License.
     text-align: center;
     vertical-align: middle;
     font-size: 10px;
+    cursor: pointer;
 }
 
 .mx_ProfileSettings_avatar:hover .mx_ProfileSettings_avatarOverlay:not(.mx_ProfileSettings_avatarOverlay_disabled) {

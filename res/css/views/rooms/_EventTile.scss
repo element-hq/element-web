@@ -296,6 +296,25 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     overflow-y: hidden;
 }
 
+/* Spoiler stuff */
+.mx_EventTile_spoiler {
+    cursor: pointer;
+}
+
+.mx_EventTile_spoiler_reason {
+    color: $event-timestamp-color;
+    font-size: 11px;
+}
+
+.mx_EventTile_spoiler_content {
+    filter: blur(5px) saturate(0.1) sepia(1);
+    transition-duration: 0.5s;
+}
+
+.mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content {
+    filter: none;
+}
+
 .mx_EventTile_e2eIcon {
     display: block;
     position: absolute;

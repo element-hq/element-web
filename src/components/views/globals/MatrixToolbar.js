@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import Notifier from '../../../Notifier';
 import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MatrixToolbar',
 
     hideToolbar: function() {

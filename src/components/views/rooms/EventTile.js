@@ -17,12 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import ReplyThread from "../elements/ReplyThread";
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 const classNames = require("classnames");
 import { _t, _td } from '../../../languageHandler';
 const Modal = require('../../../Modal');
@@ -84,7 +83,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'EventTile',
 
     propTypes: {

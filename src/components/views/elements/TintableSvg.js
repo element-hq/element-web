@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require("react-dom");
+import React from 'react';
 import PropTypes from 'prop-types';
-const Tinter = require("../../../Tinter");
+import createReactClass from 'create-react-class';
+import Tinter from "../../../Tinter";
 
-var TintableSvg = React.createClass({
+const TintableSvg = createReactClass({
     displayName: 'TintableSvg',
 
     propTypes: {

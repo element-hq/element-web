@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
@@ -31,7 +32,7 @@ const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
 const REGEX_LOCAL_MATRIXTO = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
 
-const Pill = React.createClass({
+const Pill = createReactClass({
     statics: {
         isPillUrl: (url) => {
             return !!REGEX_MATRIXTO.exec(url);

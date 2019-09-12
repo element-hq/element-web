@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -67,7 +68,7 @@ const UserSummaryType = PropTypes.shape({
     }).isRequired,
 });
 
-const CategoryRoomList = React.createClass({
+const CategoryRoomList = createReactClass({
     displayName: 'CategoryRoomList',
 
     props: {
@@ -119,7 +120,7 @@ const CategoryRoomList = React.createClass({
                     });
                 });
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     },
 
     render: function() {
@@ -156,7 +157,7 @@ const CategoryRoomList = React.createClass({
     },
 });
 
-const FeaturedRoom = React.createClass({
+const FeaturedRoom = createReactClass({
     displayName: 'FeaturedRoom',
 
     props: {
@@ -244,7 +245,7 @@ const FeaturedRoom = React.createClass({
     },
 });
 
-const RoleUserList = React.createClass({
+const RoleUserList = createReactClass({
     displayName: 'RoleUserList',
 
     props: {
@@ -296,7 +297,7 @@ const RoleUserList = React.createClass({
                     });
                 });
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     },
 
     render: function() {
@@ -327,7 +328,7 @@ const RoleUserList = React.createClass({
     },
 });
 
-const FeaturedUser = React.createClass({
+const FeaturedUser = createReactClass({
     displayName: 'FeaturedUser',
 
     props: {
@@ -399,7 +400,7 @@ const FeaturedUser = React.createClass({
 const GROUP_JOINPOLICY_OPEN = "open";
 const GROUP_JOINPOLICY_INVITE = "invite";
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'GroupView',
 
     propTypes: {

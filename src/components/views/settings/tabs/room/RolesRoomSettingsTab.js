@@ -30,6 +30,8 @@ const plEventsToLabels = {
     "m.room.history_visibility": _td("Change history visibility"),
     "m.room.power_levels": _td("Change permissions"),
     "m.room.topic": _td("Change topic"),
+    "m.room.tombstone": _td("Upgrade the room"),
+    "m.room.encryption": _td("Enable room encryption"),
 
     "im.vector.modular.widgets": _td("Modify widgets"),
 };
@@ -42,6 +44,8 @@ const plEventsToShow = {
     "m.room.history_visibility": {isState: true},
     "m.room.power_levels": {isState: true},
     "m.room.topic": {isState: true},
+    "m.room.tombstone": {isState: true},
+    "m.room.encryption": {isState: true},
 
     "im.vector.modular.widgets": {isState: true},
 };
@@ -144,7 +148,45 @@ export default class RolesRoomSettingsTab extends React.Component {
             parentObj[keyPath[keyPath.length - 1]] = value;
         }
 
-        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent);
+        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
+            console.error(e);
+
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
+                title: _t('Error changing power level requirement'),
+                description: _t(
+                    "An error occurred changing the room's power level requirements. Ensure you have sufficient " +
+                    "permissions and try again.",
+                ),
+            });
+        });
+    };
+
+    _onUserPowerLevelChanged = (value, powerLevelKey) => {
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(this.props.roomId);
+        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        let plContent = plEvent ? (plEvent.getContent() || {}) : {};
+
+        // Clone the power levels just in case
+        plContent = Object.assign({}, plContent);
+
+        // powerLevelKey should be a user ID
+        if (!plContent['users']) plContent['users'] = {};
+        plContent['users'][powerLevelKey] = value;
+
+        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
+            console.error(e);
+
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
+                title: _t('Error changing power level'),
+                description: _t(
+                    "An error occurred changing the user's power level. Ensure you have sufficient " +
+                    "permissions and try again.",
+                ),
+            });
+        });
     };
 
     render() {
@@ -216,15 +258,29 @@ export default class RolesRoomSettingsTab extends React.Component {
             const privilegedUsers = [];
             const mutedUsers = [];
 
-            Object.keys(userLevels).forEach(function(user) {
+            Object.keys(userLevels).forEach((user) => {
                 const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
-                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                        <PowerSelector
+                            value={userLevels[user]}
+                            disabled={!canChange}
+                            label={user}
+                            key={user}
+                            powerLevelKey={user} // Will be sent as the second parameter to `onChange`
+                            onChange={this._onUserPowerLevelChanged}
+                        />,
                     );
                 } else if (userLevels[user] < defaultUserLevel) { // muted
                     mutedUsers.push(
-                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                        <PowerSelector
+                            value={userLevels[user]}
+                            disabled={!canChange}
+                            label={user}
+                            key={user}
+                            powerLevelKey={user} // Will be sent as the second parameter to `onChange`
+                            onChange={this._onUserPowerLevelChanged}
+                        />,
                     );
                 }
             });
@@ -301,6 +357,11 @@ export default class RolesRoomSettingsTab extends React.Component {
                 />
             </div>;
         });
+
+        // hide the power level selector for enabling E2EE if it the room is already encrypted
+        if (client.isRoomEncrypted(this.props.roomId)) {
+            delete eventsLevels["m.room.encryption"];
+        }
 
         const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
             let label = plEventsToLabels[eventType];

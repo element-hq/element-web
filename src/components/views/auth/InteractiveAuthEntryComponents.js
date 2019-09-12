@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import url from 'url';
 import classnames from 'classnames';
@@ -63,7 +64,7 @@ import SettingsStore from "../../../settings/SettingsStore";
  *    focus: set the input focus appropriately in the form.
  */
 
-export const PasswordAuthEntry = React.createClass({
+export const PasswordAuthEntry = createReactClass({
     displayName: 'PasswordAuthEntry',
 
     statics: {
@@ -162,7 +163,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 });
 
-export const RecaptchaAuthEntry = React.createClass({
+export const RecaptchaAuthEntry = createReactClass({
     displayName: 'RecaptchaAuthEntry',
 
     statics: {
@@ -212,7 +213,7 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 });
 
-export const TermsAuthEntry = React.createClass({
+export const TermsAuthEntry = createReactClass({
     displayName: 'TermsAuthEntry',
 
     statics: {
@@ -351,7 +352,7 @@ export const TermsAuthEntry = React.createClass({
     },
 });
 
-export const EmailIdentityAuthEntry = React.createClass({
+export const EmailIdentityAuthEntry = createReactClass({
     displayName: 'EmailIdentityAuthEntry',
 
     statics: {
@@ -393,7 +394,7 @@ export const EmailIdentityAuthEntry = React.createClass({
     },
 });
 
-export const MsisdnAuthEntry = React.createClass({
+export const MsisdnAuthEntry = createReactClass({
     displayName: 'MsisdnAuthEntry',
 
     statics: {
@@ -540,7 +541,7 @@ export const MsisdnAuthEntry = React.createClass({
     },
 });
 
-export const FallbackAuthEntry = React.createClass({
+export const FallbackAuthEntry = createReactClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {

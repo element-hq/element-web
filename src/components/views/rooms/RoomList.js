@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
 import SettingsStore from "../../../settings/SettingsStore";
 import Timer from "../../../utils/Timer";
 
-const React = require("react");
-const ReactDOM = require("react-dom");
+import React from "react";
+import ReactDOM from "react-dom";
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -64,7 +64,7 @@ function phraseForSection(section) {
     }
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomList',
 
     propTypes: {
@@ -758,7 +758,7 @@ module.exports = React.createClass({
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
-                onAddRoom: () => {dis.dispatch({action: 'view_room_directory'})},
+                onAddRoom: () => {dis.dispatch({action: 'view_create_room'});},
             },
         ];
         const tagSubLists = Object.keys(this.state.lists)

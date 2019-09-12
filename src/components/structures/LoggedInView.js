@@ -18,6 +18,7 @@ limitations under the License.
 
 import { MatrixClient } from 'matrix-js-sdk';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
@@ -58,7 +59,7 @@ function canElementReceiveInput(el) {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-const LoggedInView = React.createClass({
+const LoggedInView = createReactClass({
     displayName: 'LoggedInView',
 
     propTypes: {
@@ -349,7 +350,8 @@ const LoggedInView = React.createClass({
 
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
-        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
+        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
+            ev.key === "Alt" || ev.key === "Control" || ev.key === "Meta" || ev.key === "Shift";
 
         switch (ev.keyCode) {
             case KeyCode.PAGE_UP:

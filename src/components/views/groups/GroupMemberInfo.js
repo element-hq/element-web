@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -26,7 +27,7 @@ import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'GroupMemberInfo',
 
     contextTypes: {

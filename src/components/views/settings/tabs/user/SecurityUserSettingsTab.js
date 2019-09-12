@@ -258,6 +258,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Devices")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
+                        {_t("A device's public name is visible to people you communicate with")}
                         <DevicesPanel />
                     </div>
                 </div>
