@@ -19,9 +19,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
+import sdk from "../../../index";
 
 module.exports = createReactClass({
     displayName: 'MemberEventListSummary',
@@ -43,12 +43,6 @@ module.exports = createReactClass({
         startExpanded: PropTypes.bool,
     },
 
-    getInitialState: function() {
-        return {
-            expanded: Boolean(this.props.startExpanded),
-        };
-    },
-
     getDefaultProps: function() {
         return {
             summaryLength: 1,
@@ -57,37 +51,27 @@ module.exports = createReactClass({
         };
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps) {
         // Update if
         //  - The number of summarised events has changed
-        //  - or if the summary is currently expanded
         //  - or if the summary is about to toggle to become collapsed
         //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
         return (
             nextProps.events.length !== this.props.events.length ||
-            this.state.expanded || nextState.expanded ||
             nextProps.events.length < this.props.threshold
         );
     },
 
-    _toggleSummary: function() {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-        this.props.onToggle();
-    },
-
     /**
-     * Render the JSX for users aggregated by their transition sequences (`eventAggregates`) where
+     * Generate the text for users aggregated by their transition sequences (`eventAggregates`) where
      * the sequences are ordered by `orderedTransitionSequences`.
      * @param {object[]} eventAggregates a map of transition sequence to array of user display names
      * or user IDs.
      * @param {string[]} orderedTransitionSequences an array which is some ordering of
      * `Object.keys(eventAggregates)`.
-     * @returns {ReactElement} a single <span> containing the textual summary of the aggregated
-     * events that occurred.
+     * @returns {string} the textual summary of the aggregated events that occurred.
      */
-    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
+    _generateSummary: function(eventAggregates, orderedTransitionSequences) {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this._renderNameList(userNames);
@@ -118,11 +102,7 @@ module.exports = createReactClass({
             return null;
         }
 
-        return (
-            <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                { summaries.join(", ") }
-            </span>
-        );
+        return summaries.join(", ");
     },
 
     /**
@@ -208,7 +188,7 @@ module.exports = createReactClass({
      * For a certain transition, t, describe what happened to the users that
      * underwent the transition.
      * @param {string} t the transition type.
-     * @param {integer} userCount number of usernames
+     * @param {number} userCount number of usernames
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
@@ -286,19 +266,6 @@ module.exports = createReactClass({
         }
 
         return res;
-    },
-
-    _renderAvatars: function(roomMembers) {
-        const avatars = roomMembers.slice(0, this.props.avatarsMaxLength).map((m) => {
-            return (
-                <MemberAvatar key={m.userId} member={m} width={14} height={14} />
-            );
-        });
-        return (
-            <span className="mx_MemberEventListSummary_avatars" onClick={this._toggleSummary}>
-                { avatars }
-            </span>
-        );
     },
 
     _getTransitionSequence: function(events) {
@@ -396,22 +363,6 @@ module.exports = createReactClass({
 
     render: function() {
         const eventsToRender = this.props.events;
-        const eventIds = eventsToRender.map((e) => e.getId()).join(',');
-        const fewEvents = eventsToRender.length < this.props.threshold;
-        const expanded = this.state.expanded || fewEvents;
-
-        let expandedEvents = null;
-        if (expanded) {
-            expandedEvents = this.props.children;
-        }
-
-        if (fewEvents) {
-            return (
-                <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                    { expandedEvents }
-                </div>
-            );
-        }
 
         // Map user IDs to an array of objects:
         const userEvents = {
@@ -455,30 +406,14 @@ module.exports = createReactClass({
             (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2],
         );
 
-        let summaryContainer = null;
-        if (!expanded) {
-            summaryContainer = (
-                <div className="mx_EventTile_line">
-                    <div className="mx_EventTile_info">
-                        { this._renderAvatars(avatarMembers) }
-                        { this._renderSummary(aggregate.names, orderedTransitionSequences) }
-                    </div>
-                </div>
-            );
-        }
-        const toggleButton = (
-            <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                { expanded ? _t('collapse') : _t('expand') }
-            </div>
-        );
-
-        return (
-            <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                { toggleButton }
-                { summaryContainer }
-                { expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null }
-                { expandedEvents }
-            </div>
-        );
+        const EventListSummary = sdk.getComponent("views.elements.EventListSummary");
+        return <EventListSummary
+            events={this.props.events}
+            threshold={this.props.threshold}
+            onToggle={this.props.onToggle}
+            startExpanded={this.props.startExpanded}
+            children={this.props.children}
+            summaryMembers={avatarMembers}
+            summaryText={this._generateSummary(aggregate.names, orderedTransitionSequences)} />;
     },
 });
