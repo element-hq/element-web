@@ -126,7 +126,7 @@ module.exports = createReactClass({
         if (this.props.collapsed) {
             return null;
         }
-        const clearButton = !this.state.blurred ?
+        const clearButton = (!this.state.blurred || this.state.searchTerm) ?
             (<AccessibleButton key="button"
                     className="mx_SearchBox_closeButton"
                     onClick={ () => {this._clearSearch("button"); } }>
