@@ -29,11 +29,12 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {_t} from "../../../languageHandler";
 
 const MAX_ROOMS = 20;
+const MIN_ROOMS_BEFORE_ENABLED = 10;
 
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {rooms: []};
+        this.state = {rooms: [], enabled: false};
 
         this.onAction = this.onAction.bind(this);
         this._dispatcherRef = null;
@@ -47,10 +48,13 @@ export default class RoomBreadcrumbs extends React.Component {
 
         this._settingWatchRef = SettingsStore.watchSetting("breadcrumb_rooms", null, this.onBreadcrumbsChanged);
 
+        this.setState({enabled: this._shouldEnable()});
+
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
+        MatrixClientPeg.get().on("Room", this.onRoomMembershipChanged);
     }
 
     componentWillUnmount() {
@@ -64,6 +68,7 @@ export default class RoomBreadcrumbs extends React.Component {
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
+            client.removeListener("Room", this.onRoomMembershipChanged);
         }
     }
 
@@ -104,6 +109,7 @@ export default class RoomBreadcrumbs extends React.Component {
                 this.setState({rooms});
             }
         }
+        this.onRoomMembershipChanged();
     };
 
     onRoomReceipt = (event, room) => {
@@ -142,6 +148,20 @@ export default class RoomBreadcrumbs extends React.Component {
 
         this._loadRoomIds(value);
     };
+
+    onRoomMembershipChanged = () => {
+        if (!this.state.enabled && this._shouldEnable()) {
+            this.setState({enabled: true});
+        }
+    }
+
+    _shouldEnable() {
+        const client = MatrixClientPeg.get();
+        const joinedRoomCount = client.getRooms().reduce((count, r) => {
+            return count + (r.getMyMembership() === "join" ? 1 : 0);
+        }, 0);
+        return joinedRoomCount >= MIN_ROOMS_BEFORE_ENABLED;
+    }
 
     _loadRoomIds(roomIds) {
         if (!roomIds || roomIds.length <= 0) return; // Skip updates with no rooms
@@ -283,7 +303,7 @@ export default class RoomBreadcrumbs extends React.Component {
 
         // check for collapsed here and not at parent so we keep rooms in our state
         // when collapsing and expanding
-        if (this.props.collapsed) {
+        if (this.props.collapsed || !this.state.enabled) {
             return null;
         }
 
