@@ -1159,7 +1159,7 @@
     "Description": "설명",
     "Community %(groupId)s not found": "%(groupId)s 커뮤니티를 찾을 수 없음",
     "This Home server does not support communities": "이 홈 서버는 커뮤니티를 지원하지 않습니다.",
-    "Failed to load %(groupId)s": "%(groupId)s 불러오기에 시패함",
+    "Failed to load %(groupId)s": "%(groupId)s 불러오기에 실패함",
     "Can't leave Server Notices room": "서버 알림 방을 떠날 수는 없음",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "이 방은 홈서버로부터 중요한 메시지를 받는 데 쓰이므로 떠날 수 없습니다.",
     "Terms and Conditions": "이용 약관",
@@ -2027,5 +2027,14 @@
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아, 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
     "Remove %(count)s messages|other": "%(count)s개의 메시지 삭제",
     "Remove recent messages": "최근 메시지 삭제",
-    "Send read receipts for messages (requires compatible homeserver to disable)": "메시지 읽은 기록 보내기 (이 기능을 끄려면 그것을 호환하는 홈서버이어야 함)"
+    "Send read receipts for messages (requires compatible homeserver to disable)": "메시지 읽은 기록 보내기 (이 기능을 끄려면 그것을 호환하는 홈서버이어야 함)",
+    "Explore": "검색",
+    "Filter": "필터",
+    "Filter rooms…": "방 필터…",
+    "Preview": "미리 보기",
+    "View": "보기",
+    "Find a room…": "방 찾기…",
+    "Find a room… (e.g. %(exampleRoom)s)": "방 찾기... (예: %(exampleRoom)s)",
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "원하는 방을 찾을 수 없다면, 초대를 요청하거나 <a>새 방 만들기</a>를 요청하세요.",
+    "Explore rooms": "방 검색"
 }
