@@ -120,7 +120,7 @@ const CategoryRoomList = createReactClass({
                     });
                 });
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     },
 
     render: function() {
@@ -297,7 +297,7 @@ const RoleUserList = createReactClass({
                     });
                 });
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     },
 
     render: function() {

@@ -171,7 +171,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
         color: $input-darker-fg-color;
-        background-color: $input-darker-bg-color;
+        background-color: $primary-bg-color;
         border: none;
     }
 }
@@ -330,7 +330,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_header {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .mx_Dialog_title {

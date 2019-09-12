@@ -23,8 +23,8 @@ import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
-const sdk = require('../../../../index');
-const Modal = require("../../../../Modal");
+import sdk from '../../../../index';
+import Modal from '../../../../Modal';
 
 /*
 TODO: Improve the UX for everything in here.
@@ -113,11 +113,15 @@ export class ExistingEmailAddress extends React.Component {
 }
 
 export default class EmailAddresses extends React.Component {
-    constructor() {
-        super();
+    static propTypes = {
+        emails: PropTypes.array.isRequired,
+        onEmailsChange: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
 
         this.state = {
-            emails: [],
             verifying: false,
             addTask: null,
             continueDisabled: false,
@@ -125,16 +129,9 @@ export default class EmailAddresses extends React.Component {
         };
     }
 
-    componentWillMount(): void {
-        const client = MatrixClientPeg.get();
-
-        client.getThreePids().then((addresses) => {
-            this.setState({emails: addresses.threepids.filter((a) => a.medium === 'email')});
-        });
-    }
-
     _onRemoved = (address) => {
-        this.setState({emails: this.state.emails.filter((e) => e !== address)});
+        const emails = this.props.emails.filter((e) => e !== address);
+        this.props.onEmailsChange(emails);
     };
 
     _onChangeNewEmailAddress = (e) => {
@@ -184,12 +181,16 @@ export default class EmailAddresses extends React.Component {
         this.state.addTask.checkEmailLinkClicked().then(() => {
             const email = this.state.newEmailAddress;
             this.setState({
-                emails: [...this.state.emails, {address: email, medium: "email"}],
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
                 newEmailAddress: "",
             });
+            const emails = [
+                ...this.props.emails,
+                { address: email, medium: "email" },
+            ];
+            this.props.onEmailsChange(emails);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
@@ -204,7 +205,7 @@ export default class EmailAddresses extends React.Component {
     };
 
     render() {
-        const existingEmailElements = this.state.emails.map((e) => {
+        const existingEmailElements = this.props.emails.map((e) => {
             return <ExistingEmailAddress email={e} onRemoved={this._onRemoved} key={e.address} />;
         });
 

@@ -23,7 +23,6 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
-import { getThreepidBindStatus } from '../../../../boundThreepids';
 
 /*
 TODO: Improve the UX for everything in here.
@@ -49,6 +48,11 @@ export class PhoneNumber extends React.Component {
             continueDisabled: false,
             bound,
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { bound } = nextProps.msisdn;
+        this.setState({ bound });
     }
 
     async changeBinding({ bind, label, errorTitle }) {
@@ -206,27 +210,14 @@ export class PhoneNumber extends React.Component {
 }
 
 export default class PhoneNumbers extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            loaded: false,
-            msisdns: [],
-        };
-    }
-
-    async componentWillMount() {
-        const client = MatrixClientPeg.get();
-
-        const msisdns = await getThreepidBindStatus(client, 'msisdn');
-
-        this.setState({ msisdns });
+    static propTypes = {
+        msisdns: PropTypes.array.isRequired,
     }
 
     render() {
         let content;
-        if (this.state.msisdns.length > 0) {
-            content = this.state.msisdns.map((e) => {
+        if (this.props.msisdns.length > 0) {
+            content = this.props.msisdns.map((e) => {
                 return <PhoneNumber msisdn={e} key={e.address} />;
             });
         } else {

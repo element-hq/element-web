@@ -23,7 +23,6 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
-import { getThreepidBindStatus } from '../../../../boundThreepids';
 
 /*
 TODO: Improve the UX for everything in here.
@@ -57,6 +56,11 @@ export class EmailAddress extends React.Component {
             continueDisabled: false,
             bound,
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { bound } = nextProps.email;
+        this.setState({ bound });
     }
 
     async changeBinding({ bind, label, errorTitle }) {
@@ -187,27 +191,14 @@ export class EmailAddress extends React.Component {
 }
 
 export default class EmailAddresses extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            loaded: false,
-            emails: [],
-        };
-    }
-
-    async componentWillMount() {
-        const client = MatrixClientPeg.get();
-
-        const emails = await getThreepidBindStatus(client, 'email');
-
-        this.setState({ emails });
+    static propTypes = {
+        emails: PropTypes.array.isRequired,
     }
 
     render() {
         let content;
-        if (this.state.emails.length > 0) {
-            content = this.state.emails.map((e) => {
+        if (this.props.emails.length > 0) {
+            content = this.props.emails.map((e) => {
                 return <EmailAddress email={e} key={e.address} />;
             });
         } else {
