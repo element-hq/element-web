@@ -112,6 +112,10 @@ export default class EditMessageComposer extends React.Component {
         super(props, context);
         this.model = null;
         this._editorRef = null;
+
+        this.state = {
+            saveDisabled: true,
+        };
     }
 
     _setEditorRef = ref => {
@@ -160,7 +164,7 @@ export default class EditMessageComposer extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
-    _isModifiedOrSameAsOld(newContent) {
+    _isContentModified(newContent) {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
         if (!this._editorRef.isModified() ||
@@ -176,16 +180,18 @@ export default class EditMessageComposer extends React.Component {
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
-        if (!this._isModifiedOrSameAsOld(newContent)) {
-            return;
-        }
-        const roomId = editedEvent.getRoomId();
-        this._cancelPreviousPendingEdit();
-        this.context.matrixClient.sendMessage(roomId, editContent);
 
+        // If content is modified then send an updated event into the room
+        if (this._isContentModified(newContent)) {
+            const roomId = editedEvent.getRoomId();
+            this._cancelPreviousPendingEdit();
+            this.context.matrixClient.sendMessage(roomId, editContent);
+        }
+
+        // close the event editing and focus composer
         dis.dispatch({action: "edit_event", event: null});
         dis.dispatch({action: 'focus_composer'});
-    }
+    };
 
     _cancelPreviousPendingEdit() {
         const originalEvent = this.props.editState.getEvent();
@@ -240,6 +246,16 @@ export default class EditMessageComposer extends React.Component {
         return caretPosition;
     }
 
+    _onChange = () => {
+        if (!this.state.saveDisabled || !this._editorRef || !this._editorRef.isModified()) {
+            return;
+        }
+
+        this.setState({
+            saveDisabled: false,
+        });
+    };
+
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (<div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this._onKeyDown}>
@@ -249,10 +265,13 @@ export default class EditMessageComposer extends React.Component {
                 room={this._getRoom()}
                 initialCaret={this.props.editState.getCaret()}
                 label={_t("Edit message")}
+                onChange={this._onChange}
             />
             <div className="mx_EditMessageComposer_buttons">
                 <AccessibleButton kind="secondary" onClick={this._cancelEdit}>{_t("Cancel")}</AccessibleButton>
-                <AccessibleButton kind="primary" onClick={this._sendEdit}>{_t("Save")}</AccessibleButton>
+                <AccessibleButton kind="primary" onClick={this._sendEdit} disabled={this.state.saveDisabled}>
+                    {_t("Save")}
+                </AccessibleButton>
             </div>
         </div>);
     }
