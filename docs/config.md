@@ -80,6 +80,7 @@ For a good example, see https://riot.im/develop/config.json.
 1. `defaultCountryCode`: The ISO 3166 alpha2 country code to use when showing
    country selectors, like the phone number input on the registration page.
    Defaults to `GB` if the given code is unknown or not provided.
+1. `disable_custom_urls`: disallow the user to change the default homeserver when signing up or logging in.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
