@@ -1,3 +1,12 @@
+Changes in [1.5.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.1) (2019-09-12)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.2...v1.5.3-rc.1)
+
+ * Fix: only hide clear filter button when blurred & no more search term
+   [\#3435](https://github.com/matrix-org/matrix-react-sdk/pull/3435)
+ * Dont wrap text in room directory buttons
+   [\#3434](https://github.com/matrix-org/matrix-react-sdk/pull/3434)
+
 Changes in [1.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.2) (2019-09-12)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.2-rc.1...v1.5.2)
