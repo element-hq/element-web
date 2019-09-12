@@ -28,6 +28,7 @@ import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import {_t} from "../../languageHandler";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -323,6 +324,7 @@ module.exports = createReactClass({
 
     _getEventTiles: function() {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
@@ -381,6 +383,91 @@ module.exports = createReactClass({
             const mxEv = this.props.events[i];
             const eventId = mxEv.getId();
             const last = (mxEv === lastShownEvent);
+
+            // Wrap initial room creation events into an EventListSummary
+            // Grouping only events sent by the same user that sent the `m.room.create` and only until
+            // the first non-state event or membership event which is not regarding the sender of the `m.room.create` event
+            const shouldGroup = (ev) => {
+               if (ev.getType() === "m.room.member"
+                   && (ev.getStateKey() !== mxEv.getSender() || ev.getContent()["membership"] !== "join")) {
+                   return false;
+               }
+               if (ev.isState() && ev.getSender() === mxEv.getSender()) {
+                   return true;
+               }
+               return false;
+            };
+            if (mxEv.getType() === "m.room.create") {
+                let readMarkerInSummary = false;
+                const ts1 = mxEv.getTs();
+
+                if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
+                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} /></li>;
+                    ret.push(dateSeparator);
+                }
+
+                // If RM event is the first in the summary, append the RM after the summary
+                if (mxEv.getId() === this.props.readMarkerEventId) {
+                    readMarkerInSummary = true;
+                }
+
+                const summarisedEvents = []; // Don't add m.room.create here as we don't want it inside the summary
+                for (;i + 1 < this.props.events.length; i++) {
+                    const collapsedMxEv = this.props.events[i + 1];
+
+                    // Ignore redacted/hidden member events
+                    if (!this._shouldShowEvent(collapsedMxEv)) {
+                        // If this hidden event is the RM and in or at end of a summary put RM after the summary.
+                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                            readMarkerInSummary = true;
+                        }
+                        continue;
+                    }
+
+                    if (!shouldGroup(collapsedMxEv) || this._wantsDateSeparator(mxEv, collapsedMxEv.getDate())) {
+                        break;
+                    }
+
+                    // If RM event is in the summary mark it as such and the RM will be appended after the summary.
+                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                        readMarkerInSummary = true;
+                    }
+
+                    summarisedEvents.push(collapsedMxEv);
+                }
+
+                // At this point, i = the index of the last event in the summary sequence
+                let eventTiles = summarisedEvents.map((e) => {
+                    // In order to prevent DateSeparators from appearing in the expanded form
+                    // of EventListSummary, render each member event as if the previous
+                    // one was itself. This way, the timestamp of the previous event === the
+                    // timestamp of the current event, and no DateSeparator is inserted.
+                    return this._getTilesForEvent(e, e, e === lastShownEvent);
+                }).reduce((a, b) => a.concat(b));
+
+                if (eventTiles.length === 0) {
+                    eventTiles = null;
+                }
+
+                ret.push(<EventListSummary
+                    key="roomcreationsummary"
+                    events={summarisedEvents}
+                    onToggle={this._onHeightChanged} // Update scroll state
+                    summaryMembers={[mxEv.sender]}
+                    summaryText={_t("%(creator)s created and configured the room.", {
+                        creator: mxEv.sender ? mxEv.sender.name : mxEv.getSender(),
+                    })}
+                >
+                    { eventTiles }
+                </EventListSummary>);
+
+                if (readMarkerInSummary) {
+                    ret.push(this._getReadMarkerTile(visible));
+                }
+
+                prevEvent = mxEv;
+                continue;
+            }
 
             const wantTile = this._shouldShowEvent(mxEv);
 
