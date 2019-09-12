@@ -41,7 +41,7 @@
     "Sign In": "Bejelentkezés",
     "Create Account": "Fiók készítés",
     "Need help?": "Segíthetünk?",
-    "Explore rooms": "Szobák felfedezése",
+    "Explore rooms": "Szobák felderítése",
     "Room Directory": "Szoba lista",
     "Unexpected error preparing the app. See console for details.": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért nézd meg a konzolt.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Érvénytelen konfiguráció: csak egyet lehet megadni a default_server_config, default_server_name és default_hs_url közül.",
