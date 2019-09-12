@@ -679,9 +679,6 @@ module.exports = createReactClass({
             redactMessages: false,
         };
 
-        // Calculate permissions for Synapse before doing the PL checks
-        can.synapseDeactivate = await this.context.matrixClient.isSynapseAdministrator();
-
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
             //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
