@@ -99,10 +99,18 @@ export default class ReportEventDialog extends PureComponent {
             <BaseDialog
                 className="mx_BugReportDialog"
                 onFinished={this.props.onFinished}
-                title={_t('Report Content')}
+                title={_t('Report Content to Your Homeserver Administrator')}
                 contentId='mx_ReportEventDialog'
             >
                 <div className="mx_ReportEventDialog" id="mx_ReportEventDialog">
+                    <p>
+                        {
+                            _t("Reporting this message will send its unique 'event ID' to the administrator of " +
+                                "your homeserver. If messages in this room are encrypted, your homeserver " +
+                                "administrator will not be able to read the message text or view any files or images.")
+                        }
+                    </p>
+
                     <Field
                         id="mx_ReportEventDialog_reason"
                         className="mx_ReportEventDialog_reason"
