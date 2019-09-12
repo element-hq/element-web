@@ -5049,10 +5049,10 @@ mathml-tag-names@^2.0.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
-matrix-js-sdk@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.3.0.tgz#ed04172add2e31c532dc87e2f38c26c2a63191c6"
-  integrity sha512-jeswie7cWK7+XxcD+pQ7LplWnWkOQDa+x6y7FUUnxCdEvaj38cE5Obo9bPMjFgOln2hISlLdR8fzMNE9F4oUJA==
+matrix-js-sdk@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.3.1.tgz#c0ebe90d43611cf28422317ec0c04f5d41acb2ad"
+  integrity sha512-lf2pGHp0o4bDVrSZ5ReLAkMMiX9PngGMxNAtzztdDvQ20lfYZvhwif9PUbi3tt8kwXlfs7s34eWxz5Rg37mdGg==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
