@@ -132,11 +132,12 @@ limitations under the License.
     .mx_SearchBox {
         flex: 1 1 0;
         min-width: 0;
+        margin: 4px 9px 1px 9px;
     }
 }
 
 .mx_LeftPanel_explore {
-    flex: 0 0 40%;
+    flex: 0 0 50%;
     overflow: hidden;
     transition: flex-basis 0.2s;
     box-sizing: border-box;
@@ -147,8 +148,7 @@ limitations under the License.
 
     .mx_AccessibleButton {
         font-size: 14px;
-        margin: 9px;
-        margin-right: 0;
+        margin: 4px 0 1px 9px;
         padding: 9px;
         padding-left: 42px;
         font-weight: 600;
