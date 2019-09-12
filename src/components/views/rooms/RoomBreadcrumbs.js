@@ -29,6 +29,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {_t} from "../../../languageHandler";
 
 const MAX_ROOMS = 20;
+const MIN_ROOMS_BEFORE_ENABLED = 10;
 
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
@@ -159,7 +160,7 @@ export default class RoomBreadcrumbs extends React.Component {
         const joinedRoomCount = client.getRooms().reduce((count, r) => {
             return count + (r.getMyMembership() === "join" ? 1 : 0);
         }, 0);
-        return joinedRoomCount >= 10;
+        return joinedRoomCount >= MIN_ROOMS_BEFORE_ENABLED;
     }
 
     _loadRoomIds(roomIds) {
