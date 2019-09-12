@@ -125,3 +125,53 @@ limitations under the License.
         margin-top: 12px;
     }
 }
+
+.mx_LeftPanel_exploreAndFilterRow {
+    display: flex;
+
+    .mx_SearchBox {
+        flex: 1 1 0;
+        min-width: 0;
+        margin: 4px 9px 1px 9px;
+    }
+}
+
+.mx_LeftPanel_explore {
+    flex: 0 0 50%;
+    overflow: hidden;
+    transition: flex-basis 0.2s;
+    box-sizing: border-box;
+
+    &.mx_LeftPanel_explore_hidden {
+        flex-basis: 0;
+    }
+
+    .mx_AccessibleButton {
+        font-size: 14px;
+        margin: 4px 0 1px 9px;
+        padding: 9px;
+        padding-left: 42px;
+        font-weight: 600;
+        color: $notice-secondary-color;
+        position: relative;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: $primary-bg-color;
+        }
+
+        &::before {
+            cursor: pointer;
+            mask: url('$(res)/img/explore.svg');
+            mask-repeat: no-repeat;
+            mask-position: center center;
+            content: "";
+            left: 14px;
+            top: 10px;
+            width: 16px;
+            height: 16px;
+            background-color: $notice-secondary-color;
+            position: absolute;
+        }
+    }
+}

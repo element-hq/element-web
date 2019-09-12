@@ -1,3 +1,23 @@
+Changes in [1.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.2) (2019-09-12)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.2-rc.1...v1.5.2)
+
+ * Fix register page selector buttons growing too wide
+   [\#3427](https://github.com/matrix-org/matrix-react-sdk/pull/3427)
+ * Left panel: visual fixes
+   [\#3426](https://github.com/matrix-org/matrix-react-sdk/pull/3426)
+ * Hide the change HS url button on SSO login flow if custom urls disabled
+   [\#3425](https://github.com/matrix-org/matrix-react-sdk/pull/3425)
+ * RoomDirectory: show spinner if loading more results
+   [\#3424](https://github.com/matrix-org/matrix-react-sdk/pull/3424)
+
+Changes in [1.5.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.2-rc.1) (2019-09-11)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.1...v1.5.2-rc.1)
+
+ * Merge first pass of First Time User Experience to release branch
+   [\#3420](https://github.com/matrix-org/matrix-react-sdk/pull/3420)
+
 Changes in [1.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.1) (2019-08-05)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.0-rc.1...v1.5.1)
