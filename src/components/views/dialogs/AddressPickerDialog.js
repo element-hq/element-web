@@ -77,6 +77,12 @@ module.exports = createReactClass({
     },
 
     getInitialState: function() {
+        let validAddressTypes = this.props.validAddressTypes;
+        // Remove email from validAddressTypes if no IS is configured. It may be added at a later stage by the user
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes("email")) {
+            validAddressTypes = validAddressTypes.splice(validAddressTypes.indexOf("email"), 1);
+        }
+
         return {
             // Whether to show an error message because of an invalid address
             invalidAddressError: false,
@@ -95,8 +101,8 @@ module.exports = createReactClass({
             // auto-completion results for the current search query.
             suggestedList: [],
             // List of address types initialised from props, but may change while the
-            // dialog is open.
-            validAddressTypes: this.props.validAddressTypes,
+            // dialog is open and represents the supported list of address types at this time.
+            validAddressTypes,
         };
     },
 
@@ -678,7 +684,9 @@ module.exports = createReactClass({
         }
 
         let identityServer;
-        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')) {
+        // If picker cannot currently accept e-mail but should be able to
+        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')
+            && this.props.validAddressTypes.includes('email')) {
             const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
             if (defaultIdentityServerUrl) {
                 identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(

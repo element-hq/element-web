@@ -43,11 +43,6 @@ function inviteMultipleToRoom(roomId, addrs) {
 export function showStartChatInviteDialog() {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
 
-    const validAddressTypes = ['mx-user-id'];
-    if (MatrixClientPeg.get().getIdentityServerUrl()) {
-        validAddressTypes.push('email');
-    }
-
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
@@ -59,7 +54,7 @@ export function showStartChatInviteDialog() {
             }
             return _t("Name or Matrix ID");
         },
-        validAddressTypes,
+        validAddressTypes: ['mx-user-id', 'email'],
         button: _t("Start Chat"),
         onFinished: _onStartDmFinished,
     }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -67,11 +62,6 @@ export function showStartChatInviteDialog() {
 
 export function showRoomInviteDialog(roomId) {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
-
-    const validAddressTypes = ['mx-user-id'];
-    if (MatrixClientPeg.get().getIdentityServerUrl()) {
-        validAddressTypes.push('email');
-    }
 
     Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
         title: _t('Invite new room members'),
@@ -84,7 +74,7 @@ export function showRoomInviteDialog(roomId) {
             }
             return _t("Name or Matrix ID");
         },
-        validAddressTypes,
+        validAddressTypes: ['mx-user-id', 'email'],
         onFinished: (shouldInvite, addrs) => {
             _onRoomInviteFinished(roomId, shouldInvite, addrs);
         },
