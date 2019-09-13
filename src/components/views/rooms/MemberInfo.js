@@ -641,10 +641,15 @@ module.exports = createReactClass({
     },
 
     _calculateOpsPermissions: async function(member) {
+        let canDeactivate = false;
+        if (this.context.matrixClient) {
+            canDeactivate = await this.context.matrixClient.isSynapseAdministrator();
+        }
+
         const defaultPerms = {
             can: {
                 // Calculate permissions for Synapse before doing the PL checks
-                synapseDeactivate: await this.context.matrixClient.isSynapseAdministrator(),
+                synapseDeactivate: canDeactivate,
             },
             muted: false,
         };
@@ -668,7 +673,7 @@ module.exports = createReactClass({
         };
     },
 
-    _calculateCanPermissions: async function(me, them, powerLevels) {
+    _calculateCanPermissions: function(me, them, powerLevels) {
         const isMe = me.userId === them.userId;
         const can = {
             kick: false,
