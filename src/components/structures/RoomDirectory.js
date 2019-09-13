@@ -369,25 +369,27 @@ module.exports = React.createClass({
         }
     },
 
-    onPreviewClick: function(room) {
+    onPreviewClick: function(ev, room) {
         this.props.onFinished();
         dis.dispatch({
             action: 'view_room',
             room_id: room.room_id,
             should_peek: true,
         });
+        ev.stopPropagation();
     },
 
-    onViewClick: function(room) {
+    onViewClick: function(ev, room) {
         this.props.onFinished();
         dis.dispatch({
             action: 'view_room',
             room_id: room.room_id,
             should_peek: false,
         });
+        ev.stopPropagation();
     },
 
-    onJoinClick: function(room) {
+    onJoinClick: function(ev, room) {
         this.props.onFinished();
         MatrixClientPeg.get().joinRoom(room.room_id);
         dis.dispatch({
@@ -395,6 +397,7 @@ module.exports = React.createClass({
             room_id: room.room_id,
             joining: true,
         });
+        ev.stopPropagation();
     },
 
     onCreateRoomClick: function(room) {
@@ -458,16 +461,16 @@ module.exports = React.createClass({
 
         if (room.world_readable && !hasJoinedRoom) {
             previewButton = (
-                <AccessibleButton kind="secondary" onClick={() => this.onPreviewClick(room)}>{_t("Preview")}</AccessibleButton>
+                <AccessibleButton kind="secondary" onClick={(ev) => this.onPreviewClick(ev, room)}>{_t("Preview")}</AccessibleButton>
             );
         }
         if (hasJoinedRoom) {
             joinOrViewButton = (
-                <AccessibleButton kind="secondary" onClick={() => this.onViewClick(room)}>{_t("View")}</AccessibleButton>
+                <AccessibleButton kind="secondary" onClick={(ev) => this.onViewClick(ev, room)}>{_t("View")}</AccessibleButton>
             );
         } else if (!isGuest || room.guest_can_join) {
             joinOrViewButton = (
-                <AccessibleButton kind="primary" onClick={() => this.onJoinClick(room)}>{_t("Join")}</AccessibleButton>
+                <AccessibleButton kind="primary" onClick={(ev) => this.onJoinClick(ev, room)}>{_t("Join")}</AccessibleButton>
             );
         }
 
