@@ -22,13 +22,14 @@ import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import sdk from "../../../index";
+import {MatrixEvent} from "matrix-js-sdk";
 
 module.exports = createReactClass({
     displayName: 'MemberEventListSummary',
 
     propTypes: {
         // An array of member events to summarise
-        events: PropTypes.array.isRequired,
+        events: PropTypes.arrayOf(PropTypes.instanceOf(MatrixEvent)).isRequired,
         // An array of EventTiles to render when expanded
         children: PropTypes.array.isRequired,
         // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
