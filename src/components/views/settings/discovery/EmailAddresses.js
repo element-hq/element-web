@@ -154,13 +154,13 @@ export class EmailAddress extends React.Component {
         let status;
         if (verifying) {
             status = <span>
-                {_t("Check your inbox, then click Continue")}
+                {_t("Verify the link in your inbox")}
                 <AccessibleButton
                     className="mx_ExistingEmailAddress_confirmBtn"
                     kind="primary_sm"
                     onClick={this.onContinueClick}
                 >
-                    {_t("Continue")}
+                    {_t("Complete")}
                 </AccessibleButton>
             </span>;
         } else if (bound) {
