@@ -20,14 +20,14 @@ module.exports.scrollToTimelineTop = async function(session) {
     session.log.step(`scrolls to the top of the timeline`);
     await session.page.evaluate(() => {
         return Promise.resolve().then(async () => {
-            const timelineScrollView = document.querySelector(".mx_RoomView_timeline .mx_ScrollPanel");
             let timedOut = false;
             let timeoutHandle = null;
             // set scrollTop to 0 in a loop and check every 50ms
             // if content became available (scrollTop not being 0 anymore),
             // assume everything is loaded after 3s
             do {
-                if (timelineScrollView.scrollTop !== 0) {
+                const timelineScrollView = document.querySelector(".mx_RoomView_timeline .mx_ScrollPanel");
+                if (timelineScrollView && timelineScrollView.scrollTop !== 0) {
                     if (timeoutHandle) {
                         clearTimeout(timeoutHandle);
                     }
