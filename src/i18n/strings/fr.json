@@ -2192,5 +2192,12 @@
     "Find a room…": "Trouver un salon…",
     "Find a room… (e.g. %(exampleRoom)s)": "Trouver un salon… (par ex. %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Si vous ne trouvez pas le salon que vous cherchez, demandez une invitation ou <a>créez un nouveau salon</a>.",
-    "Explore rooms": "Explorer les salons"
+    "Explore rooms": "Explorer les salons",
+    "Verify the link in your inbox": "Vérifiez le lien dans votre boîte de réception",
+    "Complete": "Terminer",
+    "Please fill why you're reporting.": "Dites-nous pourquoi vous envoyez un signalement.",
+    "Report Content to Your Homeserver Administrator": "Signaler le contenu à l’administrateur de votre serveur d’accueil",
+    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Le signalement de ce message enverra son « event ID » unique à l’administrateur de votre serveur d’accueil. Si les messages dans ce salon sont chiffrés, l’administrateur ne pourra pas lire le texte du message ou voir les fichiers ou les images.",
+    "Send report": "Envoyer le signalement",
+    "Report Content": "Signaler le contenu"
 }
