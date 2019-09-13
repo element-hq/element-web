@@ -487,7 +487,7 @@ module.exports = React.createClass({
                             );
         return (
             <tr key={ room.room_id }
-                onClick={() => this.onRoomClicked(room)}
+                onClick={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
                 onMouseDown={(ev) => {ev.preventDefault();}}
             >
