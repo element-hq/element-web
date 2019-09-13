@@ -2154,5 +2154,17 @@
     "Bold": "Удебелено",
     "Italics": "Наклонено",
     "Strikethrough": "Задраскано",
-    "Code block": "Блок с код"
+    "Code block": "Блок с код",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "Изпращай потвърждения за прочетени съобщения (изключването изисква сървър поддържащ това)",
+    "Please fill why you're reporting.": "Въведете защо докладвате.",
+    "Report Content to Your Homeserver Administrator": "Докладвай съдържание до администратора на сървъра",
+    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете.",
+    "Send report": "Изпрати доклад",
+    "Report Content": "Докладвай съдържание",
+    "Filter": "Филтрирай",
+    "Filter rooms…": "Филтрирай стаите…",
+    "Preview": "Прегледай",
+    "View": "Виж",
+    "Find a room…": "Намери стая…",
+    "Find a room… (e.g. %(exampleRoom)s)": "Намери стая... (напр. %(exampleRoom)s)"
 }
