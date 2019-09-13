@@ -1,3 +1,9 @@
+Changes in [1.5.3-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.3) (2019-09-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3-rc.2...v1.5.3-rc.3)
+
+ * js-sdk rc.1 for report API
+
 Changes in [1.5.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.2) (2019-09-13)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3-rc.1...v1.5.3-rc.2)
