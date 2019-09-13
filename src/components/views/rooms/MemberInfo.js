@@ -636,10 +636,19 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _calculateOpsPermissions: async function(member) {
+        let canDeactivate = false;
+        if (this.context.matrixClient) {
+            try {
+                canDeactivate = await this.context.matrixClient.isSynapseAdministrator();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         const defaultPerms = {
             can: {
                 // Calculate permissions for Synapse before doing the PL checks
-                synapseDeactivate: await this.context.matrixClient.isSynapseAdministrator(),
+                synapseDeactivate: canDeactivate,
             },
             muted: false,
         };
