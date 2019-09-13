@@ -673,7 +673,7 @@ module.exports = createReactClass({
         };
     },
 
-    _calculateCanPermissions: async function(me, them, powerLevels) {
+    _calculateCanPermissions: function(me, them, powerLevels) {
         const isMe = me.userId === them.userId;
         const can = {
             kick: false,
