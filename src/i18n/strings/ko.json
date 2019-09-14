@@ -2041,5 +2041,7 @@
     "Report Content to Your Homeserver Administrator": "홈서버 관리자에게 내용 신고하기",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다.",
     "Send report": "신고 보내기",
-    "Report Content": "내용 신고"
+    "Report Content": "내용 신고",
+    "Verify the link in your inbox": "메일함에 있는 링크로 확인",
+    "Complete": "완료"
 }
