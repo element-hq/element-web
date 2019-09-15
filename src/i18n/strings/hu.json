@@ -2182,5 +2182,12 @@
     "Find a room…": "Szoba keresése…",
     "Find a room… (e.g. %(exampleRoom)s)": "Szoba keresése… (pl.: %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Ha nem találod a szobát amit keresel kérj egy meghívót vagy <a>Készíts egy új szobát</a>.",
-    "Explore rooms": "Szobák felderítése"
+    "Explore rooms": "Szobák felderítése",
+    "Verify the link in your inbox": "Ellenőrizd a hivatkozást a bejövő leveleid között",
+    "Complete": "Kiegészít",
+    "Please fill why you're reporting.": "Add meg amiért jelentesz.",
+    "Report Content to Your Homeserver Administrator": "Tartalom bejelentése a matrix szervered adminisztrátorának",
+    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Ennek az üzenetnek a jelentése egy egyedi 'esemény azonosítót' küld el a matrix szerver adminisztrátorának. Ha az üzenetek titkosítottak a szobában, akkor a matrix szerver adminisztrátora nem tudja elolvasni az üzenetet vagy megnézni bármely fájlt vagy képet.",
+    "Send report": "Jelentés küldése",
+    "Report Content": "Tartalom jelentése"
 }
