@@ -327,7 +327,7 @@ class RoomListStore extends Store {
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
-        } else {
+        } else if (myMembership === 'leave') {
             tags.push("im.vector.fake.archived");
         }
 
