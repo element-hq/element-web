@@ -390,7 +390,6 @@ module.exports = React.createClass({
     },
 
     onJoinClick: function(ev, room) {
-        this.props.onFinished();
         this.showRoom(room, null, true);
         ev.stopPropagation();
     },
