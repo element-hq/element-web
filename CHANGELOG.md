@@ -1,3 +1,9 @@
+Changes in [1.3.5](https://github.com/vector-im/riot-web/releases/tag/v1.3.5) (2019-09-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.5-rc.3...v1.3.5)
+
+ * Updated js-sdk and react-sdk for some more minor bugfixes
+
 Changes in [1.3.5-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.3.5-rc.3) (2019-09-13)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.5-rc.2...v1.3.5-rc.3)
