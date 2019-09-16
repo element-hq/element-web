@@ -108,6 +108,9 @@ module.exports = class RiotSession {
     async replaceInputText(input, text) {
         // click 3 times to select all text
         await input.click({clickCount: 3});
+        // waiting here solves not having selected all the text by the 3x click above,
+        // presumably because of the Field label animation.
+        await this.delay(300);
         // then remove it with backspace
         await input.press('Backspace');
         // and type the new text
