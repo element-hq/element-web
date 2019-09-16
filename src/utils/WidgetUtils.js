@@ -100,11 +100,14 @@ export default class WidgetUtils {
         }
 
         const testUrl = url.parse(testUrlString);
-
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
             const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
-            if (defaultManager) scalarUrls = [defaultManager.apiUrl];
+            if (defaultManager) {
+                scalarUrls = [defaultManager.apiUrl];
+            } else {
+                scalarUrls = [];
+            }
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
