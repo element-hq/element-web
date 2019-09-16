@@ -389,13 +389,7 @@ module.exports = createReactClass({
     },
 
     onJoinClick: function(ev, room) {
-        this.props.onFinished();
-        MatrixClientPeg.get().joinRoom(room.room_id);
-        dis.dispatch({
-            action: 'view_room',
-            room_id: room.room_id,
-            joining: true,
-        });
+        this.showRoom(room, null, true);
         ev.stopPropagation();
     },
 
