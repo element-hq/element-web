@@ -107,6 +107,7 @@ limitations under the License.
 .mx_RoomDirectory_join, .mx_RoomDirectory_preview {
     width: 80px;
     text-align: center;
+    white-space: nowrap;
 }
 
 .mx_RoomDirectory_name {
