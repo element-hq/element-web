@@ -5049,10 +5049,9 @@ mathml-tag-names@^2.0.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
-matrix-js-sdk@2.3.2:
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "2.3.2"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.3.2.tgz#341491e8396edbfe93cd034bce34acc6841af322"
-  integrity sha512-sWSqIvB0qEQgl3hPXLvhL0QPyH8161i37266yb6IAkprsJj4n0V/fiwzPd6Oft3Rv8ti4hBqsLN93dzYDPcupA==
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/55b4595bbf52cdbf91edd7d326f72aabd6709dac"
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -6389,9 +6388,9 @@ react-dom@^16.4.2, react-dom@^16.9.0:
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#f644523":
+"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#d3a2b21":
   version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/f64452388011d37d8a4427ba769153c30700ab8c"
+  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/d3a2b211016dd1af689341a6a2d348757b842f6b"
   dependencies:
     gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
