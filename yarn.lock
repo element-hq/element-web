@@ -5814,22 +5814,6 @@ matrix-js-sdk@2.3.2:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
-matrix-js-sdk@2.3.0-rc.1:
-  version "2.3.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.3.0-rc.1.tgz#fe90e3c60f17dacea6454786269a1ba497d8d401"
-  integrity sha512-lxk/aBNrTklG5Ya8vhc8kbBL2jrPU1vvDZ87GXVMGL3L1Cg3oNnClJXqyf/MwnY8egfqHWLrMsQRSerOPVgnEQ==
-  dependencies:
-    another-json "^0.2.0"
-    babel-runtime "^6.26.0"
-    bluebird "^3.5.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.2"
-    loglevel "1.6.1"
-    qs "^6.5.2"
-    request "^2.88.0"
-    unhomoglyph "^1.0.2"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -8674,7 +8658,7 @@ terser@^3.14.1:
     source-map "~0.6.1"
     source-map-support "~0.5.10"
 
-terser@^4.0.0:
+terser@^4.1.2:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/terser/-/terser-4.3.1.tgz#09820bcb3398299c4b48d9a86aefc65127d0ed65"
   integrity sha512-pnzH6dnFEsR2aa2SJaKb1uSCl3QmIsJ8dEkj0Fky+2AwMMcC9doMqLOQIH6wVTEKaVfKVvLSk5qxPBEZT9mywg==
