@@ -19,10 +19,23 @@ const assert = require('assert');
 module.exports = async function signup(session, username, password, homeserver) {
     session.log.step("signs up");
     await session.goto(session.url('/#/register'));
-    // change the homeserver by clicking the "Change" link.
+    // change the homeserver by clicking the advanced section
     if (homeserver) {
         const advancedButton = await session.query('.mx_ServerTypeSelector_type_Advanced');
         await advancedButton.click();
+
+        // depending on what HS is configured as the default, the advanced registration
+        // goes the HS/IS entry directly (for matrix.org) or takes you to the user/pass entry (not matrix.org).
+        // To work with both, we look for the "Change" link in the user/pass entry but don't fail when we can't find it
+        // As this link should be visible immediately, and to not slow down the case where it isn't present,
+        // pick a lower timeout of 5000ms
+        try {
+            const changeHsField = await session.query('.mx_AuthBody_editServerDetails', 5000);
+            if (changeHsField) {
+                await changeHsField.click();
+            }
+        } catch (err) {}
+
         const hsInputField = await session.query('#mx_ServerConfig_hsUrl');
         await session.replaceInputText(hsInputField, homeserver);
         const nextButton = await session.query('.mx_Login_submit');

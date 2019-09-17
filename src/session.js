@@ -117,8 +117,7 @@ module.exports = class RiotSession {
         await input.type(text);
     }
 
-    query(selector) {
-        const timeout = DEFAULT_TIMEOUT;
+    query(selector, timeout = DEFAULT_TIMEOUT) {
         return this.page.waitForSelector(selector, {visible: true, timeout});
     }
 
