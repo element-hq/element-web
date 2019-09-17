@@ -4076,9 +4076,9 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-"gemini-scrollbar@github:matrix-org/gemini-scrollbar#b302279", gemini-scrollbar@matrix-org/gemini-scrollbar#b302279:
+"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566":
   version "1.4.3"
-  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/b302279810d05319ac5ff1bd34910bff32325c7b"
+  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/91e1e566fa33324188f278801baf4a79f9f554ab"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
