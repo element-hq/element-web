@@ -1798,5 +1798,5 @@
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "Read Marker lifetime (ms)": "Read Marker lifetime (ms)",
-    "Read Marker off-screen lifetime (ms)": "Read Marker off-screen lifetime (ms)",
+    "Read Marker off-screen lifetime (ms)": "Read Marker off-screen lifetime (ms)"
 }
