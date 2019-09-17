@@ -97,7 +97,7 @@
     "react-addons-css-transition-group": "15.6.2",
     "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^16.9.0",
-    "react-gemini-scrollbar": "github:matrix-org/react-gemini-scrollbar#d3a2b21",
+    "react-gemini-scrollbar": "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594",
     "resize-observer-polyfill": "^1.5.0",
     "sanitize-html": "^1.18.4",
     "slate": "^0.41.2",

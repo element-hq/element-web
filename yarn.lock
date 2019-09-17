@@ -6388,9 +6388,9 @@ react-dom@^16.4.2, react-dom@^16.9.0:
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#d3a2b21":
+"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594":
   version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/d3a2b211016dd1af689341a6a2d348757b842f6b"
+  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
   dependencies:
     gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
