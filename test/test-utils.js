@@ -9,6 +9,7 @@ import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
 import {makeType} from "../src/utils/TypeUtils";
 import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
+import ShallowRenderer from 'react-test-renderer/shallow';
 const MatrixEvent = jssdk.MatrixEvent;
 
 /**
@@ -31,6 +32,10 @@ export function beforeEach(context) {
     console.log(new Array(1 + desc.length).join("="));
 }
 
+export function getRenderer() {
+    // Old: ReactTestUtils.createRenderer();
+    return new ShallowRenderer();
+}
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to

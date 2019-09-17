@@ -150,6 +150,7 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "mocha": "^5.0.5",
+    "react-test-renderer": "^16.9.0",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
     "sinon": "^5.0.7",
