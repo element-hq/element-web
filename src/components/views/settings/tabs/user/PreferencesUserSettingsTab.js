@@ -69,7 +69,12 @@ export default class PreferencesUserSettingsTab extends React.Component {
             alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
-            autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
+            autocompleteDelay:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
+            readMarkerInViewThresholdMs:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'readMarkerInViewThresholdMs').toString(10),
+            readMarkerOutOfViewThresholdMs:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'readMarkerOutOfViewThresholdMs').toString(10),
         };
     }
 
@@ -122,6 +127,16 @@ export default class PreferencesUserSettingsTab extends React.Component {
     _onAutocompleteDelayChange = (e) => {
         this.setState({autocompleteDelay: e.target.value});
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
+    };
+
+    _onReadMarkerInViewThresholdMs = (e) => {
+        this.setState({readMarkerInViewThresholdMs: e.target.value});
+        SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
+    };
+
+    _onReadMarkerOutOfViewThresholdMs = (e) => {
+        this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
+        SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
     _renderGroup(settingIds) {
@@ -178,6 +193,18 @@ export default class PreferencesUserSettingsTab extends React.Component {
                         type='number'
                         value={this.state.autocompleteDelay}
                         onChange={this._onAutocompleteDelayChange} />
+                    <Field
+                        id={"readMarkerInViewThresholdMs"}
+                        label={_t('Read Marker lifetime (ms)')}
+                        type='number'
+                        value={this.state.readMarkerInViewThresholdMs}
+                        onChange={this._onReadMarkerInViewThresholdMs} />
+                    <Field
+                        id={"readMarkerOutOfViewThresholdMs"}
+                        label={_t('Read Marker off-screen lifetime (ms)')}
+                        type='number'
+                        value={this.state.readMarkerOutOfViewThresholdMs}
+                        onChange={this._onReadMarkerOutOfViewThresholdMs} />
                 </div>
             </div>
         );
