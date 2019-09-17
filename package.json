@@ -84,7 +84,7 @@
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.17.14",
-    "lolex": "2.3.2",
+    "lolex": "4.2",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
