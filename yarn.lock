@@ -4930,10 +4930,10 @@ loglevel@1.6.1:
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
   integrity sha1-4PyVEztu8nbNyIh82vJKpvFW+Po=
 
-lolex@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.3.2.tgz#85f9450425103bf9e7a60668ea25dc43274ca807"
-  integrity sha512-A5pN2tkFj7H0dGIAM6MFvHKMJcPnjZsOMvR7ujCjfgW5TbV6H9vb1PgxLtHvjqNZTHsUolz+6/WEO0N1xNx2ng==
+lolex@4.2:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lolex/-/lolex-4.2.0.tgz#ddbd7f6213ca1ea5826901ab1222b65d714b3cd7"
+  integrity sha512-gKO5uExCXvSm6zbF562EvM+rd1kQDnB9AZBbiQVzf1ZmdDpxUSvpnAaVOP83N/31mRK8Ml8/VE8DMvsAZQ+7wg==
 
 lolex@^2.4.2:
   version "2.7.5"
@@ -6404,6 +6404,11 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
+react-is@^16.9.0:
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
+  integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
+
 react-lifecycles-compat@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
@@ -6430,6 +6435,16 @@ react-redux@^5.0.6:
     prop-types "^15.6.1"
     react-is "^16.6.0"
     react-lifecycles-compat "^3.0.0"
+
+react-test-renderer@^16.9.0:
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.9.0.tgz#7ed657a374af47af88f66f33a3ef99c9610c8ae9"
+  integrity sha512-R62stB73qZyhrJo7wmCW9jgl/07ai+YzvouvCXIJLBkRlRqLx4j9RqcLEAfNfU3OxTGucqR2Whmn3/Aad6L3hQ==
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    react-is "^16.9.0"
+    scheduler "^0.15.0"
 
 react-transition-group@^1.2.0:
   version "1.2.1"
