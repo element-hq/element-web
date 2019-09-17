@@ -636,6 +636,8 @@
     "Timeline": "Timeline",
     "Room list": "Room list",
     "Autocomplete delay (ms)": "Autocomplete delay (ms)",
+    "Read Marker lifetime (ms)": "Read Marker lifetime (ms)",
+    "Read Marker off-screen lifetime (ms)": "Read Marker off-screen lifetime (ms)",
     "Unignore": "Unignore",
     "<not supported>": "<not supported>",
     "Import E2E room keys": "Import E2E room keys",
