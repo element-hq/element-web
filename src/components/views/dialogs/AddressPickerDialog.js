@@ -80,7 +80,7 @@ module.exports = createReactClass({
         let validAddressTypes = this.props.validAddressTypes;
         // Remove email from validAddressTypes if no IS is configured. It may be added at a later stage by the user
         if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes("email")) {
-            validAddressTypes = validAddressTypes.splice(validAddressTypes.indexOf("email"), 1);
+            validAddressTypes = validAddressTypes.filter(type => type !== "email");
         }
 
         return {
