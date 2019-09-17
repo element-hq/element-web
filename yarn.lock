@@ -2028,6 +2028,11 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+chain-function@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/chain-function/-/chain-function-1.0.1.tgz#c63045e5b4b663fb86f1c6e186adaf1de402a1cc"
+  integrity sha512-SxltgMwL9uCko5/ZCLiyG2B7R9fY4pDZUw7hJ4MhirdjBLosoDqkWABi3XMucddHdLiFJMb7PD2MZifZriuMTg==
+
 chalk@2.4.2, "chalk@^1.1.3 || 2.x", chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
@@ -2945,6 +2950,13 @@ dom-converter@^0.2:
   integrity sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA==
   dependencies:
     utila "~0.4"
+
+dom-helpers@^3.2.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
+  integrity sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
 
 dom-serialize@^2.2.0:
   version "2.2.1"
@@ -4076,7 +4088,7 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566":
+"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566", gemini-scrollbar@matrix-org/gemini-scrollbar#91e1e566:
   version "1.4.3"
   resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/91e1e566fa33324188f278801baf4a79f9f554ab"
 
@@ -5798,10 +5810,9 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.3.2:
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "2.3.2"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.3.2.tgz#341491e8396edbfe93cd034bce34acc6841af322"
-  integrity sha512-sWSqIvB0qEQgl3hPXLvhL0QPyH8161i37266yb6IAkprsJj4n0V/fiwzPd6Oft3Rv8ti4hBqsLN93dzYDPcupA==
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/55b4595bbf52cdbf91edd7d326f72aabd6709dac"
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5822,10 +5833,9 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.5.3:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "1.5.3"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.5.3.tgz#778b819c5861940dc2fa19e37580a4f496b959c9"
-  integrity sha512-gvddTW9An0+cWCo5G78TjvRBUMiV6JoaFPv/DxJDF+McLNaVQxKC83keuN95jC02KwRFrb2vzqY4ZSEysHjU+g==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/3facb9be82f4a9c4cc1d6f71a9d59daa30cfde7b"
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5836,6 +5846,7 @@ matrix-react-sdk@1.5.3:
     classnames "^2.1.2"
     commonmark "^0.28.1"
     counterpart "^0.18.0"
+    create-react-class "^15.6.0"
     diff-dom "^4.1.3"
     diff-match-patch "^1.0.4"
     emojibase-data "^4.0.1"
@@ -5845,7 +5856,7 @@ matrix-react-sdk@1.5.3:
     flux "2.1.1"
     focus-trap-react "^3.0.5"
     fuse.js "^2.2.0"
-    gemini-scrollbar "github:matrix-org/gemini-scrollbar#b302279"
+    gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
     glob "^5.0.14"
     highlight.js "^9.15.8"
@@ -5854,7 +5865,7 @@ matrix-react-sdk@1.5.3:
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
     lolex "2.3.2"
-    matrix-js-sdk "2.3.2"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
@@ -5862,11 +5873,11 @@ matrix-react-sdk@1.5.3:
     qrcode-react "^0.1.16"
     qs "^6.6.0"
     querystring "^0.2.0"
-    react "^15.6.0"
-    react-addons-css-transition-group "15.3.2"
+    react "^16.9.0"
+    react-addons-css-transition-group "15.6.2"
     react-beautiful-dnd "^4.0.1"
-    react-dom "^15.6.0"
-    react-gemini-scrollbar "github:matrix-org/react-gemini-scrollbar#5e97aef"
+    react-dom "^16.9.0"
+    react-gemini-scrollbar "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     slate "^0.41.2"
@@ -7140,7 +7151,7 @@ promise@^7.0.3, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -7327,10 +7338,12 @@ rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-addons-css-transition-group@15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/react-addons-css-transition-group/-/react-addons-css-transition-group-15.3.2.tgz#d8fa52bec9bb61bdfde8b9e4652b80297cbff667"
-  integrity sha1-2PpSvsm7Yb396LnkZSuAKXy/9mc=
+react-addons-css-transition-group@15.6.2:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/react-addons-css-transition-group/-/react-addons-css-transition-group-15.6.2.tgz#9e4376bcf40b5217d14ec68553081cee4b08a6d6"
+  integrity sha1-nkN2vPQLUhfRTsaFUwgc7ksIptY=
+  dependencies:
+    react-transition-group "^1.2.0"
 
 react-beautiful-dnd@^4.0.1:
   version "4.0.1"
@@ -7348,16 +7361,6 @@ react-beautiful-dnd@^4.0.1:
     redux-thunk "^2.2.0"
     reselect "^3.0.1"
 
-react-dom@^15.6.0:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
-  integrity sha1-Qc+t9pO3V/rycIRDodH9WgK+9zA=
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
-
 react-dom@^16.4.2, react-dom@^16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.9.0.tgz#5e65527a5e26f22ae3701131bcccaee9fb0d3962"
@@ -7368,11 +7371,11 @@ react-dom@^16.4.2, react-dom@^16.9.0:
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#5e97aef":
+"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594":
   version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/5e97aef7e034efc8db1431f4b0efe3b26e249ae9"
+  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
   dependencies:
-    gemini-scrollbar matrix-org/gemini-scrollbar#b302279
+    gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
 react-immutable-proptypes@^2.1.0:
   version "2.1.0"
@@ -7411,16 +7414,16 @@ react-redux@^5.0.6:
     react-is "^16.6.0"
     react-lifecycles-compat "^3.0.0"
 
-react@^15.6.0:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
-  integrity sha1-26BDSrQ5z+gvEI8PURZjkIF5qnI=
+react-transition-group@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.1.tgz#e11f72b257f921b213229a774df46612346c7ca6"
+  integrity sha512-CWaL3laCmgAFdxdKbhhps+c0HRGF4c+hdM4H23+FI1QBNUyx/AMeIJGWorehPNSaKnQNOAxL7PQmqMu78CDj3Q==
   dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
+    chain-function "^1.0.0"
+    dom-helpers "^3.2.0"
+    loose-envify "^1.3.1"
+    prop-types "^15.5.6"
+    warning "^3.0.0"
 
 react@^16.4.2, react@^16.9.0:
   version "16.9.0"
@@ -9109,6 +9112,13 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
+
+warning@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
+  integrity sha1-MuU3fLVy3kqwR1O9+IIcAe1gW3w=
+  dependencies:
+    loose-envify "^1.0.0"
 
 watchpack@^1.5.0:
   version "1.6.0"
