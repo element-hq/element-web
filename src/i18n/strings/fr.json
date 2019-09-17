@@ -2199,5 +2199,7 @@
     "Report Content to Your Homeserver Administrator": "Signaler le contenu à l’administrateur de votre serveur d’accueil",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Le signalement de ce message enverra son « event ID » unique à l’administrateur de votre serveur d’accueil. Si les messages dans ce salon sont chiffrés, l’administrateur ne pourra pas lire le texte du message ou voir les fichiers ou les images.",
     "Send report": "Envoyer le signalement",
-    "Report Content": "Signaler le contenu"
+    "Report Content": "Signaler le contenu",
+    "Read Marker lifetime (ms)": "Durée de vie du repère de lecture (ms)",
+    "Read Marker off-screen lifetime (ms)": "Durée de vie du repère de lecture en dehors de l’écran (ms)"
 }
