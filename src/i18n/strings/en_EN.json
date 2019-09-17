@@ -636,6 +636,8 @@
     "Timeline": "Timeline",
     "Room list": "Room list",
     "Autocomplete delay (ms)": "Autocomplete delay (ms)",
+    "Read Marker lifetime (ms)": "Read Marker lifetime (ms)",
+    "Read Marker off-screen lifetime (ms)": "Read Marker off-screen lifetime (ms)",
     "Unignore": "Unignore",
     "<not supported>": "<not supported>",
     "Import E2E room keys": "Import E2E room keys",
@@ -1796,7 +1798,5 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
-    "Read Marker lifetime (ms)": "Read Marker lifetime (ms)",
-    "Read Marker off-screen lifetime (ms)": "Read Marker off-screen lifetime (ms)"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }
