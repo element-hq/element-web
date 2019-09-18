@@ -71,7 +71,7 @@ describe('Registration', function() {
 
         // Set non-empty flows & matrixClient to get past the loading spinner
         root.setState({
-            flows: [],
+            flows: [{}],
             matrixClient: {},
             busy: false,
         });
