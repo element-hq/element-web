@@ -2043,5 +2043,7 @@
     "Send report": "신고 보내기",
     "Report Content": "내용 신고",
     "Verify the link in your inbox": "메일함에 있는 링크로 확인",
-    "Complete": "완료"
+    "Complete": "완료",
+    "Read Marker lifetime (ms)": "이전 대화 경계선 표시 시간 (ms)",
+    "Read Marker off-screen lifetime (ms)": "이전 대화 경계선 사라지는 시간 (ms)"
 }
