@@ -286,7 +286,10 @@ export default createReactClass({
         // the first thing to do is to try the token params in the query-string
         // if the session isn't soft logged out (ie: is a clean session being logged in)
         if (!Lifecycle.isSoftLogout()) {
-            Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
+            Lifecycle.attemptTokenLogin(
+                this.props.realQueryParams,
+                this.props.defaultDeviceDisplayName,
+            ).then((loggedIn) => {
                 if (loggedIn) {
                     this.props.onTokenLoginCompleted();
 
