@@ -2189,5 +2189,7 @@
     "Report Content to Your Homeserver Administrator": "Tartalom bejelentése a matrix szervered adminisztrátorának",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Ennek az üzenetnek a jelentése egy egyedi 'esemény azonosítót' küld el a matrix szerver adminisztrátorának. Ha az üzenetek titkosítottak a szobában, akkor a matrix szerver adminisztrátora nem tudja elolvasni az üzenetet vagy megnézni bármely fájlt vagy képet.",
     "Send report": "Jelentés küldése",
-    "Report Content": "Tartalom jelentése"
+    "Report Content": "Tartalom jelentése",
+    "Read Marker lifetime (ms)": "Olvasás visszajelzés érvényesség (ms)",
+    "Read Marker off-screen lifetime (ms)": "Olvasás visszajelzés érvényessége képernyőn kívül (ms)"
 }
