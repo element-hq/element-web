@@ -2171,5 +2171,7 @@
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Ако не намирате търсената стая, попитайте за покана или <a>Създайте нова стая</a>.",
     "Explore rooms": "Открий стаи",
     "Verify the link in your inbox": "Потвърдете линка във вашата пощенска кутия",
-    "Complete": "Завърши"
+    "Complete": "Завърши",
+    "Read Marker lifetime (ms)": "Живот на маркера за прочитане (мсек)",
+    "Read Marker off-screen lifetime (ms)": "Живот на маркера за прочитане извън екрана (мсек)"
 }
