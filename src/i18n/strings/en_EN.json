@@ -156,6 +156,7 @@
     "Upgrade": "Upgrade",
     "Changes your display nickname": "Changes your display nickname",
     "Changes your display nickname in the current room only": "Changes your display nickname in the current room only",
+    "Changes the avatar of the current room": "Changes the avatar of the current room",
     "Changes your avatar in this current room only": "Changes your avatar in this current room only",
     "Changes your avatar in all rooms": "Changes your avatar in all rooms",
     "Gets or sets the room topic": "Gets or sets the room topic",
