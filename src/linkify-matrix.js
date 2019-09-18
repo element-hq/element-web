@@ -44,7 +44,7 @@ function matrixLinkify(linkify) {
     const S_ROOMALIAS_COLON = new linkify.parser.State();
     const S_ROOMALIAS_COLON_NUM = new linkify.parser.State(ROOMALIAS);
 
-    const roomname_tokens = [
+    const roomnameTokens = [
         TT.DOT,
         TT.PLUS,
         TT.NUM,
@@ -58,8 +58,8 @@ function matrixLinkify(linkify) {
         TT.LOCALHOST,
     ];
 
-    S_HASH.on(roomname_tokens, S_HASH_NAME);
-    S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
+    S_HASH.on(roomnameTokens, S_HASH_NAME);
+    S_HASH_NAME.on(roomnameTokens, S_HASH_NAME);
     S_HASH_NAME.on(TT.DOMAIN, S_HASH_NAME);
 
     S_HASH_NAME.on(TT.COLON, S_HASH_NAME_COLON);
@@ -92,7 +92,7 @@ function matrixLinkify(linkify) {
     const S_USERID_COLON = new linkify.parser.State();
     const S_USERID_COLON_NUM = new linkify.parser.State(USERID);
 
-    const username_tokens = [
+    const usernameTokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -100,12 +100,12 @@ function matrixLinkify(linkify) {
         TT.DOMAIN,
         TT.TLD,
 
-        // as in roomname_tokens
+        // as in roomnameTokens
         TT.LOCALHOST,
     ];
 
-    S_AT.on(username_tokens, S_AT_NAME);
-    S_AT_NAME.on(username_tokens, S_AT_NAME);
+    S_AT.on(usernameTokens, S_AT_NAME);
+    S_AT_NAME.on(usernameTokens, S_AT_NAME);
     S_AT_NAME.on(TT.DOMAIN, S_AT_NAME);
 
     S_AT_NAME.on(TT.COLON, S_AT_NAME_COLON);
@@ -138,7 +138,7 @@ function matrixLinkify(linkify) {
     const S_GROUPID_COLON = new linkify.parser.State();
     const S_GROUPID_COLON_NUM = new linkify.parser.State(GROUPID);
 
-    const groupid_tokens = [
+    const groupIdTokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -146,12 +146,12 @@ function matrixLinkify(linkify) {
         TT.DOMAIN,
         TT.TLD,
 
-        // as in roomname_tokens
+        // as in roomnameTokens
         TT.LOCALHOST,
     ];
 
-    S_PLUS.on(groupid_tokens, S_PLUS_NAME);
-    S_PLUS_NAME.on(groupid_tokens, S_PLUS_NAME);
+    S_PLUS.on(groupIdTokens, S_PLUS_NAME);
+    S_PLUS_NAME.on(groupIdTokens, S_PLUS_NAME);
     S_PLUS_NAME.on(TT.DOMAIN, S_PLUS_NAME);
 
     S_PLUS_NAME.on(TT.COLON, S_PLUS_NAME_COLON);
@@ -179,14 +179,14 @@ const escapeRegExp = function(string) {
 
 // Recognise URLs from both our local vector and official vector as vector.
 // anyone else really should be using matrix.to.
-matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
+matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?://)?(?:"
     + escapeRegExp(window.location.host + window.location.pathname) + "|"
     + "(?:www\\.)?(?:riot|vector)\\.im/(?:app|beta|staging|develop)/"
     + ")(#.*)";
 
-matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/(([#@!+]).*)";
+matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?://)?(?:www\\.)?matrix\\.to/#/(([#@!+]).*)";
 matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
-    '\\[([^\\]]*)\\]\\((?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
+    '\\[([^\\]]*)\\]\\((?:https?://)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 
 const matrixToEntityMap = {

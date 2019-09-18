@@ -26,7 +26,7 @@ export function levelRoleMap(usersDefault) {
 }
 
 export function textualPowerLevel(level, usersDefault) {
-    const LEVEL_ROLE_MAP = this.levelRoleMap(usersDefault);
+    const LEVEL_ROLE_MAP = levelRoleMap(usersDefault);
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${usersDefault})`);
     } else {
