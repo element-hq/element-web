@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-"use strict";
-
 import Promise from 'bluebird';
-const Matrix = require("matrix-js-sdk");
-const Room = Matrix.Room;
-const CallHandler = require('./CallHandler');
+import {createNewMatrixCall, Room} from "matrix-js-sdk";
+import CallHandler from './CallHandler';
+import MatrixClientPeg from "./MatrixClientPeg";
 
 // FIXME: this is Riot (Vector) specific code, but will be removed shortly when
 // we switch over to jitsi entirely for video conferencing.
@@ -45,7 +43,7 @@ ConferenceCall.prototype.setup = function() {
         // return a call for *this* room to be placed. We also tack on
         // confUserId to speed up lookups (else we'd need to loop every room
         // looking for a 1:1 room with this conf user ID!)
-        const call = Matrix.createNewMatrixCall(self.client, room.roomId);
+        const call = createNewMatrixCall(self.client, room.roomId);
         call.confUserId = self.confUserId;
         call.groupRoomId = self.groupRoomId;
         return call;
@@ -84,7 +82,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
         preset: "private_chat",
         invite: [this.confUserId],
     }).then(function(res) {
-        return new Room(res.room_id, null, client.getUserId());
+        return new Room(res.room_id, null, MatrixClientPeg.get().getUserId());
     });
 };
 
