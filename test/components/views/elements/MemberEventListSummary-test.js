@@ -1,7 +1,6 @@
 import expect from 'expect';
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import ShallowRenderer from "react-test-renderer/shallow";
 import sdk from 'matrix-react-sdk';
 import * as languageHandler from '../../../../src/languageHandler';
 import * as testUtils from '../../../test-utils';
