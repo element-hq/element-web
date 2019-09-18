@@ -238,11 +238,15 @@ module.exports = createReactClass({
             } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
                 this.setState({
                     errorText: _t("Registration has been disabled on this homeserver."),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
                 });
             } else {
                 console.log("Unable to query for supported registration methods.", e);
                 this.setState({
                     errorText: _t("Unable to query for supported registration methods."),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
                 });
             }
         }
@@ -542,7 +546,7 @@ module.exports = createReactClass({
             return <div className="mx_AuthBody_spinner">
                 <Spinner />
             </div>;
-        } else {
+        } else if (this.state.flows.length) {
             let onEditServerDetailsClick = null;
             // If custom URLs are allowed and we haven't selected the Free server type, wire
             // up the server details edit link.
