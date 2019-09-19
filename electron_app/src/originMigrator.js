@@ -33,7 +33,7 @@ async function migrateFromOldOrigin() {
                 webgl: false,
             },
         });
-        ipcMain.on('origin_migration_complete', (e, success, sentSummary, storedSummary) => {
+        ipcMain.once('origin_migration_complete', (e, success, sentSummary, storedSummary) => {
             if (success) {
                 console.log("Origin migration completed successfully!");
             } else {
@@ -44,7 +44,7 @@ async function migrateFromOldOrigin() {
             migrateWindow.close();
             resolve();
         });
-        ipcMain.on('origin_migration_nodata', (e) => {
+        ipcMain.once('origin_migration_nodata', (e) => {
             console.log("No session to migrate from old origin");
             migrateWindow.close();
             resolve();
