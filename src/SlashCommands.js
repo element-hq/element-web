@@ -271,7 +271,7 @@ export const CommandMap = {
 
             return success(promise.then((url) => {
                 if (!url) return;
-                return MatrixClientPeg.get().sendStateEvent(this.props.roomId, 'm.room.avatar', {url}, '');
+                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', {url}, '');
             }));
         },
         category: CommandCategories.actions,
