@@ -161,7 +161,7 @@ export default class EmailAddresses extends React.Component {
         const task = new AddThreepid();
         this.setState({verifying: true, continueDisabled: true, addTask: task});
 
-        task.addEmailAddress(email, false).then(() => {
+        task.addEmailAddress(email).then(() => {
             this.setState({continueDisabled: false});
         }).catch((err) => {
             console.error("Unable to add email address " + email + " " + err);

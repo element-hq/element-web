@@ -82,7 +82,11 @@ export class EmailAddress extends React.Component {
             // it with IS binding enabled.
             // See https://github.com/matrix-org/matrix-doc/pull/2140/files#r311462052
             await MatrixClientPeg.get().deleteThreePid(medium, address);
-            await task.addEmailAddress(address, bind);
+            if (bind) {
+                await task.bindEmailAddress(address);
+            } else {
+                await task.addEmailAddress(address);
+            }
             this.setState({
                 continueDisabled: false,
                 bound: bind,

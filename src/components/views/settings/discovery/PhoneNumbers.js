@@ -78,7 +78,11 @@ export class PhoneNumber extends React.Component {
             // a leading plus sign to a number in E.164 format (which the 3PID
             // address is), but this goes against the spec.
             // See https://github.com/matrix-org/matrix-doc/issues/2222
-            await task.addMsisdn(null, `+${address}`, bind);
+            if (bind) {
+                await task.bindMsisdn(null, `+${address}`);
+            } else {
+                await task.addMsisdn(null, `+${address}`);
+            }
             this.setState({
                 continueDisabled: false,
                 bound: bind,
