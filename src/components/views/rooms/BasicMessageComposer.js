@@ -179,6 +179,7 @@ export default class BasicMessageEditor extends React.Component {
         const {partCreator} = model;
         const text = event.clipboardData.getData("text/plain");
         if (text) {
+            this._modifiedFlag = true;
             const range = getRangeForSelection(this._editorRef, model, document.getSelection());
             const parts = parsePlainTextMessage(text, partCreator);
             replaceRangeAndMoveCaret(range, parts);

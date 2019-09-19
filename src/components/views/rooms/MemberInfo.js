@@ -643,7 +643,11 @@ module.exports = createReactClass({
     _calculateOpsPermissions: async function(member) {
         let canDeactivate = false;
         if (this.context.matrixClient) {
-            canDeactivate = await this.context.matrixClient.isSynapseAdministrator();
+            try {
+                canDeactivate = await this.context.matrixClient.isSynapseAdministrator();
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         const defaultPerms = {

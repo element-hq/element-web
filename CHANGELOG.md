@@ -1,3 +1,39 @@
+Changes in [1.5.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3) (2019-09-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3-rc.3...v1.5.3)
+
+ * Release: Directory should use the alias or server information to join the
+   room
+   [\#3448](https://github.com/matrix-org/matrix-react-sdk/pull/3448)
+
+Changes in [1.5.3-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.3) (2019-09-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3-rc.2...v1.5.3-rc.3)
+
+ * js-sdk rc.1 for report API
+
+Changes in [1.5.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.2) (2019-09-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3-rc.1...v1.5.3-rc.2)
+
+ * Fix: stop propagation click handler for <TR> doesn't run
+   [\#3443](https://github.com/matrix-org/matrix-react-sdk/pull/3443)
+ * Add way to report the content of a message
+   [\#3442](https://github.com/matrix-org/matrix-react-sdk/pull/3442)
+ * Fix synapse deactivate button for release
+   [\#3436](https://github.com/matrix-org/matrix-react-sdk/pull/3436)
+ * Fix: clicking on a room directory item takes you to the room
+   [\#3440](https://github.com/matrix-org/matrix-react-sdk/pull/3440)
+
+Changes in [1.5.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.3-rc.1) (2019-09-12)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.2...v1.5.3-rc.1)
+
+ * Fix: only hide clear filter button when blurred & no more search term
+   [\#3435](https://github.com/matrix-org/matrix-react-sdk/pull/3435)
+ * Dont wrap text in room directory buttons
+   [\#3434](https://github.com/matrix-org/matrix-react-sdk/pull/3434)
+
 Changes in [1.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.5.2) (2019-09-12)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.2-rc.1...v1.5.2)

@@ -112,7 +112,7 @@ describe('MemberEventListSummary', function() {
             threshold: 3,
         };
 
-        const renderer = ReactTestUtils.createRenderer();
+        const renderer = testUtils.getRenderer();
         renderer.render(<MemberEventListSummary {...props} />);
         const result = renderer.getRenderOutput();
 
@@ -134,7 +134,7 @@ describe('MemberEventListSummary', function() {
             threshold: 3,
         };
 
-        const renderer = ReactTestUtils.createRenderer();
+        const renderer = testUtils.getRenderer();
         renderer.render(<MemberEventListSummary {...props} />);
         const result = renderer.getRenderOutput();
 

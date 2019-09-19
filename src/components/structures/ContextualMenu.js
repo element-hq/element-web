@@ -20,6 +20,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {focusCapturedRef} from "../../utils/Accessibility";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -82,6 +83,9 @@ export default class ContextualMenu extends React.Component {
     collectContextMenuRect(element) {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
+
+        // For screen readers to find the thing
+        focusCapturedRef(element);
 
         this.setState({
             contextMenuRect: element.getBoundingClientRect(),
@@ -206,7 +210,7 @@ export default class ContextualMenu extends React.Component {
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         return <div className={className} style={{...position, ...wrapperStyle}}>
-            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
+            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} tabIndex={0}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>

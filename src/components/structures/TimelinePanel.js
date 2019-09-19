@@ -42,8 +42,6 @@ import EditorStateTransfer from '../../utils/EditorStateTransfer';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
-const READ_MARKER_INVIEW_THRESHOLD_MS = 1 * 1000;
-const READ_MARKER_OUTOFVIEW_THRESHOLD_MS = 30 * 1000;
 const READ_RECEIPT_INTERVAL_MS = 500;
 
 const DEBUG = false;
@@ -191,6 +189,12 @@ const TimelinePanel = createReactClass({
 
             // always show timestamps on event tiles?
             alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
+
+            // how long to show the RM for when it's visible in the window
+            readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
+
+            // how long to show the RM for when it's scrolled off-screen
+            readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
         };
     },
 
@@ -593,8 +597,8 @@ const TimelinePanel = createReactClass({
 
     _readMarkerTimeout(readMarkerPosition) {
         return readMarkerPosition === 0 ?
-            READ_MARKER_INVIEW_THRESHOLD_MS :
-            READ_MARKER_OUTOFVIEW_THRESHOLD_MS;
+            this.state.readMarkerInViewThresholdMs :
+            this.state.readMarkerOutOfViewThresholdMs;
     },
 
     updateReadMarkerOnUserActivity: async function() {

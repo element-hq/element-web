@@ -176,6 +176,7 @@ export default class PhoneNumbers extends React.Component {
 
         this.setState({continueDisabled: true});
         const token = this.state.newPhoneNumberCode;
+        const address = this.state.verifyMsisdn;
         this.state.addTask.haveMsisdnToken(token).then(() => {
             this.setState({
                 addTask: null,
@@ -188,7 +189,7 @@ export default class PhoneNumbers extends React.Component {
             });
             const msisdns = [
                 ...this.props.msisdns,
-                { address: this.state.verifyMsisdn, medium: "msisdn" },
+                { address, medium: "msisdn" },
             ];
             this.props.onMsisdnsChange(msisdns);
         }).catch((err) => {
@@ -272,8 +273,8 @@ export default class PhoneNumbers extends React.Component {
                             onChange={this._onChangeNewPhoneNumber}
                         />
                     </div>
-                    {addVerifySection}
                 </form>
+                {addVerifySection}
             </div>
         );
     }

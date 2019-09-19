@@ -112,7 +112,7 @@ const Notifier = {
             console.warn(`${roomId} has custom notification sound event, but no url key`);
             return null;
         }
-        
+
         if (!content.url.startsWith("mxc://")) {
             console.warn(`${roomId} has custom notification sound event, but url is not a mxc url`);
             return null;
@@ -203,7 +203,8 @@ const Notifier = {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
                     const description = result === 'denied'
-                        ? _t('Riot does not have permission to send you notifications - please check your browser settings')
+                        ? _t('Riot does not have permission to send you notifications - ' +
+                            'please check your browser settings')
                         : _t('Riot was not given permission to send notifications - please try again');
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {

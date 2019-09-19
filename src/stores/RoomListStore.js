@@ -327,7 +327,7 @@ class RoomListStore extends Store {
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
-        } else {
+        } else if (myMembership) { // null-guard as null means it was peeked
             tags.push("im.vector.fake.archived");
         }
 
