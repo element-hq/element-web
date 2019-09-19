@@ -34,7 +34,7 @@ async function migrateFromOldOrigin() {
             },
         });
         const onOriginMigrationComplete = (e, success, sentSummary, storedSummary) => {
-            // we use once but we'll only get once of these events,
+            // we use once but we'll only get one of these events,
             // so remove the listener for the other one
             ipcMain.removeListener('origin_migration_nodata', onOriginMigrationNoData);
 
