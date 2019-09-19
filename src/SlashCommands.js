@@ -259,6 +259,24 @@ export const CommandMap = {
         category: CommandCategories.actions,
     }),
 
+    roomavatar: new Command({
+        name: 'roomavatar',
+        args: '[<mxc_url>]',
+        description: _td('Changes the avatar of the current room'),
+        runFn: function(roomId, args) {
+            let promise = Promise.resolve(args);
+            if (!args) {
+                promise = singleMxcUpload();
+            }
+
+            return success(promise.then((url) => {
+                if (!url) return;
+                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', {url}, '');
+            }));
+        },
+        category: CommandCategories.actions,
+    }),
+
     myroomavatar: new Command({
         name: 'myroomavatar',
         args: '[<mxc_url>]',
