@@ -33,7 +33,11 @@ async function migrateFromOldOrigin() {
                 webgl: false,
             },
         });
-        ipcMain.on('origin_migration_complete', (e, success, sentSummary, storedSummary) => {
+        const onOriginMigrationComplete = (e, success, sentSummary, storedSummary) => {
+            // we use once but we'll only get one of these events,
+            // so remove the listener for the other one
+            ipcMain.removeListener('origin_migration_nodata', onOriginMigrationNoData);
+
             if (success) {
                 console.log("Origin migration completed successfully!");
             } else {
@@ -43,12 +47,18 @@ async function migrateFromOldOrigin() {
             console.error("Data stored", storedSummary);
             migrateWindow.close();
             resolve();
-        });
-        ipcMain.on('origin_migration_nodata', (e) => {
+        };
+        const onOriginMigrationNoData = (e, success, sentSummary, storedSummary) => {
+            ipcMain.removeListener('origin_migration_complete', onOriginMigrationComplete);
+
             console.log("No session to migrate from old origin");
             migrateWindow.close();
             resolve();
-        });
+        };
+
+        ipcMain.once('origin_migration_complete', onOriginMigrationComplete);
+        ipcMain.once('origin_migration_nodata', onOriginMigrationNoData);
+
         // Normalise the path because in the distribution, __dirname will be inside the
         // electron asar.
         const sourcePagePath = path.normalize(__dirname + '/../../origin_migrator/source.html');
