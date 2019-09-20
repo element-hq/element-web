@@ -21,6 +21,7 @@ import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -34,6 +35,7 @@ export default createReactClass({
             isPublic: false,
             name: "",
             topic: "",
+            alias: "",
             detailsOpen: false,
             noFederate: config.default_federate === false,
             nameIsValid: false,
@@ -48,6 +50,10 @@ export default createReactClass({
             createOpts.preset = "public_chat";
             // to prevent createRoom from enabling guest access
             createOpts['initial_state'] = [];
+            const {alias} = this.state;
+            const localPart = alias.substr(1, alias.indexOf(":") - 1);
+            createOpts['room_alias_name'] = localPart;
+        }
         if (this.state.topic) {
             createOpts.topic = this.state.topic;
         }
@@ -85,6 +91,9 @@ export default createReactClass({
         this.setState({isPublic});
     },
 
+    onAliasChange(alias) {
+        this.setState({alias});
+    },
 
     onDetailsToggled(ev) {
         this.setState({detailsOpen: ev.target.open});
@@ -119,10 +128,19 @@ export default createReactClass({
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
         const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
+        const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
+
         let privateLabel;
         let publicLabel;
+        let aliasField;
         if (this.state.isPublic) {
             publicLabel = (<p>{_t("Set a room alias to easily share your room with other people.")}</p>);
+            const domain = MatrixClientPeg.get().getDomain();
+            aliasField = (
+                <div className="mx_CreateRoomDialog_aliasContainer">
+                    <RoomAliasField id="alias" ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} />
+                </div>
+            );
         } else {
             privateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
         }
@@ -139,6 +157,7 @@ export default createReactClass({
                         <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
                         { privateLabel }
                         { publicLabel }
+                        { aliasField }
                         <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
                             <LabelledToggleSwitch label={ _t('Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)')} onChange={this.onNoFederateChange} value={this.state.noFederate} />
