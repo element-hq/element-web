@@ -34,6 +34,7 @@ export default createReactClass({
             isPublic: false,
             name: "",
             topic: "",
+            detailsOpen: false,
             noFederate: config.default_federate === false,
             nameIsValid: false,
         };
