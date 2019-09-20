@@ -27,6 +27,10 @@ import IdentityAuthClient from './IdentityAuthClient';
  * This involves getting an email token from the identity server to "prove" that
  * the client owns the given email address, which is then passed to the
  * add threepid API on the homeserver.
+ *
+ * Diagrams of the intended API flows here are available at:
+ *
+ * https://gist.github.com/jryans/839a09bf0c5a70e2f36ed990d50ed928
  */
 export default class AddThreepid {
     constructor() {
@@ -59,10 +63,30 @@ export default class AddThreepid {
      * @param {string} emailAddress The email address to add
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    bindEmailAddress(emailAddress) {
+    async bindEmailAddress(emailAddress) {
         this.bind = true;
-        // TODO: Actually use a different API here
-        return this.addEmailAddress(emailAddress);
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            // For separate bind, request a token directly from the IS.
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken();
+            return MatrixClientPeg.get().requestEmailToken(
+                emailAddress, this.clientSecret, 1,
+                undefined, undefined, identityAccessToken,
+            ).then((res) => {
+                this.sessionId = res.sid;
+                return res;
+            }, function(err) {
+                if (err.errcode === 'M_THREEPID_IN_USE') {
+                    err.message = _t('This email address is already in use');
+                } else if (err.httpStatus) {
+                    err.message = err.message + ` (Status ${err.httpStatus})`;
+                }
+                throw err;
+            });
+        } else {
+            // For tangled bind, request a token via the HS.
+            return this.addEmailAddress(emailAddress);
+        }
     }
 
     /**
@@ -107,20 +131,40 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    checkEmailLinkClicked() {
+    async checkEmailLinkClicked() {
         const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
-        return MatrixClientPeg.get().addThreePid({
-            sid: this.sessionId,
-            client_secret: this.clientSecret,
-            id_server: identityServerDomain,
-        }, this.bind).catch(function(err) {
+        try {
+            if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+                if (this.bind) {
+                    const authClient = new IdentityAuthClient();
+                    const identityAccessToken = await authClient.getAccessToken();
+                    await MatrixClientPeg.get().bindThreePid({
+                        sid: this.sessionId,
+                        client_secret: this.clientSecret,
+                        id_server: identityServerDomain,
+                        id_access_token: identityAccessToken,
+                    });
+                } else {
+                    await MatrixClientPeg.get().addThreePidOnly({
+                        sid: this.sessionId,
+                        client_secret: this.clientSecret,
+                    });
+                }
+            } else {
+                await MatrixClientPeg.get().addThreePid({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                    id_server: identityServerDomain,
+                }, this.bind);
+            }
+        } catch (err) {
             if (err.httpStatus === 401) {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             } else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;
             }
             throw err;
-        });
+        }
     }
 
     /**
