@@ -2201,5 +2201,6 @@
     "Send report": "Envoyer le signalement",
     "Report Content": "Signaler le contenu",
     "Read Marker lifetime (ms)": "Durée de vie du repère de lecture (ms)",
-    "Read Marker off-screen lifetime (ms)": "Durée de vie du repère de lecture en dehors de l’écran (ms)"
+    "Read Marker off-screen lifetime (ms)": "Durée de vie du repère de lecture en dehors de l’écran (ms)",
+    "Changes the avatar of the current room": "Change l’avatar du salon actuel"
 }
