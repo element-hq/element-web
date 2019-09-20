@@ -32,6 +32,7 @@ export default createReactClass({
         const config = SdkConfig.get();
         return {
             name: "",
+            topic: "",
             noFederate: config.default_federate === false,
             nameIsValid: false,
         };
@@ -40,6 +41,9 @@ export default createReactClass({
     _roomCreateOptions() {
         const createOpts = {};
         createOpts.name = this.state.name;
+        if (this.state.topic) {
+            createOpts.topic = this.state.topic;
+        }
         if (this.state.noFederate) {
             createOpts.creation_content = {'m.federate': false};
         }
@@ -64,6 +68,10 @@ export default createReactClass({
 
     onNameChange(ev) {
         this.setState({name: ev.target.value});
+    },
+
+    onTopicChange(ev) {
+        this.setState({topic: ev.target.value});
     },
 
 
@@ -107,6 +115,7 @@ export default createReactClass({
                 <form onSubmit={this.onOk}>
                     <div className="mx_Dialog_content">
                         <Field id="name" ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
+                        <Field id="topic" label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
                         <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
                             <LabelledToggleSwitch label={ _t('Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)')} onChange={this.onNoFederateChange} value={this.state.noFederate} />
