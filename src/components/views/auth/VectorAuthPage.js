@@ -26,14 +26,8 @@ export default class VectorAuthPage extends React.PureComponent {
     render() {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
-        const brandingConfig = SdkConfig.get().branding;
-        let backgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
-        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
-            backgroundUrl = brandingConfig.welcomeBackgroundUrl;
-        }
-
         const pageStyle = {
-            background: `center/cover fixed url(${backgroundUrl})`,
+            background: '#374c72',
         };
 
         const modalStyle = {
