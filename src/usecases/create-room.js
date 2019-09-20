@@ -35,7 +35,7 @@ async function createRoom(session, roomName) {
     await addRoomButton.click();
 
 
-    const roomNameInput = await session.query('.mx_CreateRoomDialog_input');
+    const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');
     await session.replaceInputText(roomNameInput, roomName);
 
     const createButton = await session.query('.mx_Dialog_primary');
