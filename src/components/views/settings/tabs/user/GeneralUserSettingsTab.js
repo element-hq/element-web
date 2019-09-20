@@ -51,7 +51,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
-            serverRequiresIdServer: null,
+            serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
             requiredPolicyInfo: {       // This object is passed along to a component for handling
                 hasTerms: false,
@@ -69,8 +69,8 @@ export default class GeneralUserSettingsTab extends React.Component {
     async componentWillMount() {
         const cli = MatrixClientPeg.get();
 
-        const serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
-        this.setState({serverRequiresIdServer});
+        const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
+        this.setState({serverSupportsSeparateAddAndBind});
 
         this._getThreepidState();
     }
@@ -222,7 +222,12 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         let threepidSection = null;
 
-        if (this.state.haveIdServer || this.state.serverRequiresIdServer === false) {
+        // For older homeservers without separate 3PID add and bind methods (MSC2290),
+        // we use a combo add with bind option API which requires an identity server to
+        // validate 3PID ownership even if we're just adding to the homeserver only.
+        // For newer homeservers with separate 3PID add and bind methods (MSC2290),
+        // there is no such concern, so we can always show the HS account 3PIDs.
+        if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
             threepidSection = <div>
                 <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
                 <EmailAddresses
@@ -236,7 +241,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     onMsisdnsChange={this._onMsisdnsChange}
                 />
             </div>;
-        } else if (this.state.serverRequiresIdServer === null) {
+        } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
         }
 

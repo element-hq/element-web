@@ -64,6 +64,44 @@ export class EmailAddress extends React.Component {
     }
 
     async changeBinding({ bind, label, errorTitle }) {
+        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            return this.changeBindingTangledAddBind({ bind, label, errorTitle });
+        }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const { medium, address } = this.props.email;
+
+        try {
+            if (bind) {
+                const task = new AddThreepid();
+                this.setState({
+                    verifying: true,
+                    continueDisabled: true,
+                    addTask: task,
+                });
+                await task.bindEmailAddress(address);
+                this.setState({
+                    continueDisabled: false,
+                });
+            } else {
+                await MatrixClientPeg.get().unbindThreePid(medium, address);
+            }
+            this.setState({ bound: bind });
+        } catch (err) {
+            console.error(`Unable to ${label} email address ${address} ${err}`);
+            this.setState({
+                verifying: false,
+                continueDisabled: false,
+                addTask: null,
+            });
+            Modal.createTrackedDialog(`Unable to ${label} email address`, '', ErrorDialog, {
+                title: errorTitle,
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        }
+    }
+
+    async changeBindingTangledAddBind({ bind, label, errorTitle }) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.email;
 
@@ -75,14 +113,12 @@ export class EmailAddress extends React.Component {
         });
 
         try {
-            // XXX: Unfortunately, at the moment we can't just bind via the HS
-            // in a single operation, at it will error saying the 3PID is in use
-            // even though it's in use by the current user. For the moment, we
-            // work around this by removing the 3PID from the HS and re-adding
-            // it with IS binding enabled.
-            // See https://github.com/matrix-org/matrix-doc/pull/2140/files#r311462052
             await MatrixClientPeg.get().deleteThreePid(medium, address);
-            await task.addEmailAddress(address, bind);
+            if (bind) {
+                await task.bindEmailAddress(address);
+            } else {
+                await task.addEmailAddress(address);
+            }
             this.setState({
                 continueDisabled: false,
                 bound: bind,

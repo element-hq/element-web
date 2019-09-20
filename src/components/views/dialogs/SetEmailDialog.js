@@ -62,9 +62,7 @@ export default createReactClass({
             return;
         }
         this._addThreepid = new AddThreepid();
-        // we always bind emails when registering, so let's do the
-        // same here.
-        this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
+        this._addThreepid.addEmailAddress(emailAddress).done(() => {
             Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                 title: _t("Verification Pending"),
                 description: _t(

@@ -56,6 +56,48 @@ export class PhoneNumber extends React.Component {
     }
 
     async changeBinding({ bind, label, errorTitle }) {
+        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            return this.changeBindingTangledAddBind({ bind, label, errorTitle });
+        }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const { medium, address } = this.props.msisdn;
+
+        try {
+            if (bind) {
+                const task = new AddThreepid();
+                this.setState({
+                    verifying: true,
+                    continueDisabled: true,
+                    addTask: task,
+                });
+                // XXX: Sydent will accept a number without country code if you add
+                // a leading plus sign to a number in E.164 format (which the 3PID
+                // address is), but this goes against the spec.
+                // See https://github.com/matrix-org/matrix-doc/issues/2222
+                await task.bindMsisdn(null, `+${address}`);
+                this.setState({
+                    continueDisabled: false,
+                });
+            } else {
+                await MatrixClientPeg.get().unbindThreePid(medium, address);
+            }
+            this.setState({ bound: bind });
+        } catch (err) {
+            console.error(`Unable to ${label} phone number ${address} ${err}`);
+            this.setState({
+                verifying: false,
+                continueDisabled: false,
+                addTask: null,
+            });
+            Modal.createTrackedDialog(`Unable to ${label} phone number`, '', ErrorDialog, {
+                title: errorTitle,
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        }
+    }
+
+    async changeBindingTangledAddBind({ bind, label, errorTitle }) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.msisdn;
 
@@ -67,18 +109,16 @@ export class PhoneNumber extends React.Component {
         });
 
         try {
-            // XXX: Unfortunately, at the moment we can't just bind via the HS
-            // in a single operation, at it will error saying the 3PID is in use
-            // even though it's in use by the current user. For the moment, we
-            // work around this by removing the 3PID from the HS and re-adding
-            // it with IS binding enabled.
-            // See https://github.com/matrix-org/matrix-doc/pull/2140/files#r311462052
             await MatrixClientPeg.get().deleteThreePid(medium, address);
             // XXX: Sydent will accept a number without country code if you add
             // a leading plus sign to a number in E.164 format (which the 3PID
             // address is), but this goes against the spec.
             // See https://github.com/matrix-org/matrix-doc/issues/2222
-            await task.addMsisdn(null, `+${address}`, bind);
+            if (bind) {
+                await task.bindMsisdn(null, `+${address}`);
+            } else {
+                await task.addMsisdn(null, `+${address}`);
+            }
             this.setState({
                 continueDisabled: false,
                 bound: bind,

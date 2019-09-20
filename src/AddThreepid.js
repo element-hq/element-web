@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,10 @@ import IdentityAuthClient from './IdentityAuthClient';
  * This involves getting an email token from the identity server to "prove" that
  * the client owns the given email address, which is then passed to the
  * add threepid API on the homeserver.
+ *
+ * Diagrams of the intended API flows here are available at:
+ *
+ * https://gist.github.com/jryans/839a09bf0c5a70e2f36ed990d50ed928
  */
 export default class AddThreepid {
     constructor() {
@@ -33,14 +38,12 @@ export default class AddThreepid {
     }
 
     /**
-     * Attempt to add an email threepid. This will trigger a side-effect of
-     * sending an email to the provided email address.
+     * Attempt to add an email threepid to the homeserver.
+     * This will trigger a side-effect of sending an email to the provided email address.
      * @param {string} emailAddress The email address to add
-     * @param {boolean} bind If True, bind this email to this mxid on the Identity Server
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    addEmailAddress(emailAddress, bind) {
-        this.bind = bind;
+    addEmailAddress(emailAddress) {
         return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
             return res;
@@ -55,15 +58,45 @@ export default class AddThreepid {
     }
 
     /**
-     * Attempt to add a msisdn threepid. This will trigger a side-effect of
-     * sending a test message to the provided phone number.
+     * Attempt to bind an email threepid on the identity server via the homeserver.
+     * This will trigger a side-effect of sending an email to the provided email address.
+     * @param {string} emailAddress The email address to add
+     * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
+     */
+    async bindEmailAddress(emailAddress) {
+        this.bind = true;
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            // For separate bind, request a token directly from the IS.
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken();
+            return MatrixClientPeg.get().requestEmailToken(
+                emailAddress, this.clientSecret, 1,
+                undefined, undefined, identityAccessToken,
+            ).then((res) => {
+                this.sessionId = res.sid;
+                return res;
+            }, function(err) {
+                if (err.errcode === 'M_THREEPID_IN_USE') {
+                    err.message = _t('This email address is already in use');
+                } else if (err.httpStatus) {
+                    err.message = err.message + ` (Status ${err.httpStatus})`;
+                }
+                throw err;
+            });
+        } else {
+            // For tangled bind, request a token via the HS.
+            return this.addEmailAddress(emailAddress);
+        }
+    }
+
+    /**
+     * Attempt to add a MSISDN threepid to the homeserver.
+     * This will trigger a side-effect of sending an SMS to the provided phone number.
      * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
      * @param {string} phoneNumber The national or international formatted phone number to add
-     * @param {boolean} bind If True, bind this phone number to this mxid on the Identity Server
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
-    addMsisdn(phoneCountry, phoneNumber, bind) {
-        this.bind = bind;
+    addMsisdn(phoneCountry, phoneNumber) {
         return MatrixClientPeg.get().requestAdd3pidMsisdnToken(
             phoneCountry, phoneNumber, this.clientSecret, 1,
         ).then((res) => {
@@ -80,25 +113,78 @@ export default class AddThreepid {
     }
 
     /**
+     * Attempt to bind a MSISDN threepid on the identity server via the homeserver.
+     * This will trigger a side-effect of sending an SMS to the provided phone number.
+     * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
+     * @param {string} phoneNumber The national or international formatted phone number to add
+     * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
+     */
+    async bindMsisdn(phoneCountry, phoneNumber) {
+        this.bind = true;
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            // For separate bind, request a token directly from the IS.
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken();
+            return MatrixClientPeg.get().requestMsisdnToken(
+                phoneCountry, phoneNumber, this.clientSecret, 1,
+                undefined, undefined, identityAccessToken,
+            ).then((res) => {
+                this.sessionId = res.sid;
+                return res;
+            }, function(err) {
+                if (err.errcode === 'M_THREEPID_IN_USE') {
+                    err.message = _t('This phone number is already in use');
+                } else if (err.httpStatus) {
+                    err.message = err.message + ` (Status ${err.httpStatus})`;
+                }
+                throw err;
+            });
+        } else {
+            // For tangled bind, request a token via the HS.
+            return this.addMsisdn(phoneCountry, phoneNumber);
+        }
+    }
+
+    /**
      * Checks if the email link has been clicked by attempting to add the threepid
      * @return {Promise} Resolves if the email address was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    checkEmailLinkClicked() {
+    async checkEmailLinkClicked() {
         const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
-        return MatrixClientPeg.get().addThreePid({
-            sid: this.sessionId,
-            client_secret: this.clientSecret,
-            id_server: identityServerDomain,
-        }, this.bind).catch(function(err) {
+        try {
+            if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+                if (this.bind) {
+                    const authClient = new IdentityAuthClient();
+                    const identityAccessToken = await authClient.getAccessToken();
+                    await MatrixClientPeg.get().bindThreePid({
+                        sid: this.sessionId,
+                        client_secret: this.clientSecret,
+                        id_server: identityServerDomain,
+                        id_access_token: identityAccessToken,
+                    });
+                } else {
+                    await MatrixClientPeg.get().addThreePidOnly({
+                        sid: this.sessionId,
+                        client_secret: this.clientSecret,
+                    });
+                }
+            } else {
+                await MatrixClientPeg.get().addThreePid({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                    id_server: identityServerDomain,
+                }, this.bind);
+            }
+        } catch (err) {
             if (err.httpStatus === 401) {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             } else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;
             }
             throw err;
-        });
+        }
     }
 
     /**
@@ -123,10 +209,28 @@ export default class AddThreepid {
         }
 
         const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
-        return MatrixClientPeg.get().addThreePid({
-            sid: this.sessionId,
-            client_secret: this.clientSecret,
-            id_server: identityServerDomain,
-        }, this.bind);
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            if (this.bind) {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                await MatrixClientPeg.get().bindThreePid({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                    id_server: identityServerDomain,
+                    id_access_token: identityAccessToken,
+                });
+            } else {
+                await MatrixClientPeg.get().addThreePidOnly({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                });
+            }
+        } else {
+            await MatrixClientPeg.get().addThreePid({
+                sid: this.sessionId,
+                client_secret: this.clientSecret,
+                id_server: identityServerDomain,
+            }, this.bind);
+        }
     }
 }
