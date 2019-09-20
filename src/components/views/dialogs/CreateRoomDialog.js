@@ -31,6 +31,7 @@ export default createReactClass({
     getInitialState() {
         const config = SdkConfig.get();
         return {
+            isPublic: false,
             name: "",
             topic: "",
             noFederate: config.default_federate === false,
@@ -41,6 +42,11 @@ export default createReactClass({
     _roomCreateOptions() {
         const createOpts = {};
         createOpts.name = this.state.name;
+        if (this.state.isPublic) {
+            createOpts.visibility = "public";
+            createOpts.preset = "public_chat";
+            // to prevent createRoom from enabling guest access
+            createOpts['initial_state'] = [];
         if (this.state.topic) {
             createOpts.topic = this.state.topic;
         }
@@ -72,6 +78,10 @@ export default createReactClass({
 
     onTopicChange(ev) {
         this.setState({topic: ev.target.value});
+    },
+
+    onPublicChange(isPublic) {
+        this.setState({isPublic});
     },
 
 
@@ -108,14 +118,26 @@ export default createReactClass({
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
         const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
+        let privateLabel;
+        let publicLabel;
+        if (this.state.isPublic) {
+            publicLabel = (<p>{_t("Set a room alias to easily share your room with other people.")}</p>);
+        } else {
+            privateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
+        }
+
+        const title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
-                title={_t('Create Room')}
+                title={title}
             >
                 <form onSubmit={this.onOk}>
                     <div className="mx_Dialog_content">
                         <Field id="name" ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
                         <Field id="topic" label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
+                        <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
+                        { privateLabel }
+                        { publicLabel }
                         <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
                             <LabelledToggleSwitch label={ _t('Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)')} onChange={this.onNoFederateChange} value={this.state.noFederate} />
