@@ -119,10 +119,30 @@ export default class AddThreepid {
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
-    bindMsisdn(phoneCountry, phoneNumber) {
+    async bindMsisdn(phoneCountry, phoneNumber) {
         this.bind = true;
-        // TODO: Actually use a different API here
-        return this.addMsisdn(phoneCountry, phoneNumber);
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            // For separate bind, request a token directly from the IS.
+            const authClient = new IdentityAuthClient();
+            const identityAccessToken = await authClient.getAccessToken();
+            return MatrixClientPeg.get().requestMsisdnToken(
+                phoneCountry, phoneNumber, this.clientSecret, 1,
+                undefined, undefined, identityAccessToken,
+            ).then((res) => {
+                this.sessionId = res.sid;
+                return res;
+            }, function(err) {
+                if (err.errcode === 'M_THREEPID_IN_USE') {
+                    err.message = _t('This phone number is already in use');
+                } else if (err.httpStatus) {
+                    err.message = err.message + ` (Status ${err.httpStatus})`;
+                }
+                throw err;
+            });
+        } else {
+            // For tangled bind, request a token via the HS.
+            return this.addMsisdn(phoneCountry, phoneNumber);
+        }
     }
 
     /**
@@ -189,10 +209,28 @@ export default class AddThreepid {
         }
 
         const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
-        return MatrixClientPeg.get().addThreePid({
-            sid: this.sessionId,
-            client_secret: this.clientSecret,
-            id_server: identityServerDomain,
-        }, this.bind);
+        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+            if (this.bind) {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                await MatrixClientPeg.get().bindThreePid({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                    id_server: identityServerDomain,
+                    id_access_token: identityAccessToken,
+                });
+            } else {
+                await MatrixClientPeg.get().addThreePidOnly({
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                });
+            }
+        } else {
+            await MatrixClientPeg.get().addThreePid({
+                sid: this.sessionId,
+                client_secret: this.clientSecret,
+                id_server: identityServerDomain,
+            }, this.bind);
+        }
     }
 }
