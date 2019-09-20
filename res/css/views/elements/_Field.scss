@@ -31,6 +31,10 @@ limitations under the License.
     border-right: 1px solid $input-border-color;
 }
 
+.mx_Field_postfix {
+    border-left: 1px solid $input-border-color;
+}
+
 .mx_Field input,
 .mx_Field select,
 .mx_Field textarea {

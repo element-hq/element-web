@@ -41,6 +41,8 @@ export default class Field extends React.PureComponent {
         value: PropTypes.string.isRequired,
         // Optional component to include inside the field before the input.
         prefix: PropTypes.node,
+        // Optional component to include inside the field after the input.
+        postfix: PropTypes.node,
         // The callback called whenever the contents of the field
         // changes.  Returns an object with `valid` boolean field
         // and a `feedback` react component field to provide feedback
@@ -54,6 +56,8 @@ export default class Field extends React.PureComponent {
         // If specified alongside tooltipContent, the class name to apply to the
         // tooltip itself.
         tooltipClassName: PropTypes.string,
+        // If specified, an additional class name to apply to the field container
+        className: PropTypes.string,
         // All other props pass through to the <input>.
     };
 
@@ -143,8 +147,8 @@ export default class Field extends React.PureComponent {
 
     render() {
         const {
-            element, prefix, onValidate, children, tooltipContent, flagInvalid,
-            tooltipClassName, ...inputProps} = this.props;
+            element, prefix, postfix, className, onValidate, children,
+            tooltipContent, flagInvalid, tooltipClassName, ...inputProps} = this.props;
 
         const inputElement = element || "input";
 
@@ -163,9 +167,13 @@ export default class Field extends React.PureComponent {
         if (prefix) {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
+        let postfixContainer = null;
+        if (postfix) {
+            postfixContainer = <span className="mx_Field_postfix">{postfix}</span>;
+        }
 
         const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
-        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
+        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, className, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
@@ -192,6 +200,7 @@ export default class Field extends React.PureComponent {
             {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
+            {postfixContainer}
             {fieldTooltip}
         </div>;
     }
