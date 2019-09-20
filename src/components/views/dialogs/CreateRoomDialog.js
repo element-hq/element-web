@@ -72,7 +72,31 @@ export default createReactClass({
     },
 
     onOk: async function() {
+        const activeElement = document.activeElement;
+        if (activeElement) {
+            activeElement.blur();
+        }
+        await this._nameFieldRef.validate({allowEmpty: false});
+        if (this._aliasFieldRef) {
+            await this._aliasFieldRef.validate({allowEmpty: false});
+        }
+        // Validation and state updates are async, so we need to wait for them to complete
+        // first. Queue a `setState` callback and wait for it to resolve.
+        await new Promise(resolve => this.setState({}, resolve));
+        if (this.state.nameIsValid && (!this._aliasFieldRef || this._aliasFieldRef.isValid)) {
             this.props.onFinished(true, this._roomCreateOptions());
+        } else {
+            let field;
+            if (!this.state.nameIsValid) {
+                field = this._nameFieldRef;
+            } else if (this._aliasFieldRef && !this._aliasFieldRef.isValid) {
+                field = this._aliasFieldRef;
+            }
+            if (field) {
+                field.focus();
+                field.validate({ allowEmpty: false, focused: true });
+            }
+        }
     },
 
     onCancel: function() {
