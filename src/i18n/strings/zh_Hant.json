@@ -2192,5 +2192,8 @@
     "Find a room…": "尋找聊天室……",
     "Find a room… (e.g. %(exampleRoom)s)": "尋找聊天室……（例如 %(exampleRoom)s）",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "如果您找不到您正在尋找的聊天室，請要求一份邀請或<a>建立新的聊天室</a>。",
-    "Explore rooms": "探索聊天室"
+    "Explore rooms": "探索聊天室",
+    "Changes the avatar of the current room": "變更目前聊天室的大頭貼",
+    "Read Marker lifetime (ms)": "讀取標記生命週期（毫秒）",
+    "Read Marker off-screen lifetime (ms)": "畫面外讀取標記的生命週期（毫秒）"
 }
