@@ -2191,5 +2191,6 @@
     "Send report": "Jelentés küldése",
     "Report Content": "Tartalom jelentése",
     "Read Marker lifetime (ms)": "Olvasás visszajelzés érvényesség (ms)",
-    "Read Marker off-screen lifetime (ms)": "Olvasás visszajelzés érvényessége képernyőn kívül (ms)"
+    "Read Marker off-screen lifetime (ms)": "Olvasás visszajelzés érvényessége képernyőn kívül (ms)",
+    "Changes the avatar of the current room": "Profilkép megváltoztatása az adott szobában"
 }
