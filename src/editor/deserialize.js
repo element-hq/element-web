@@ -206,10 +206,6 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 
         parts.push(...newParts);
 
-        // extra newline after quote, only if there something behind it...
-        if (lastNode && lastNode.nodeName === "BLOCKQUOTE") {
-            parts.push(partCreator.newline());
-        }
         const decend = checkDecendInto(n);
         // when not decending (like for PRE), onNodeLeave won't be called to set lastNode
         // so do that here.
