@@ -76,7 +76,7 @@ function parseHeader(el, partCreator) {
     return partCreator.plain("#".repeat(depth) + " ");
 }
 
-function parseElement(n, partCreator, state) {
+function parseElement(n, partCreator, lastNode, state) {
     switch (n.nodeName) {
         case "H1":
         case "H2":
@@ -90,7 +90,7 @@ function parseElement(n, partCreator, state) {
         case "BR":
             return partCreator.newline();
         case "EM":
-            return partCreator.plain(`*${n.textContent}*`);
+            return partCreator.plain(`_${n.textContent}_`);
         case "STRONG":
             return partCreator.plain(`**${n.textContent}**`);
         case "PRE":
@@ -106,6 +106,12 @@ function parseElement(n, partCreator, state) {
             } else {
                 return partCreator.plain(`${indent}- `);
             }
+        }
+        case "P": {
+            if (lastNode) {
+                return partCreator.newline();
+            }
+            break;
         }
         case "OL":
         case "UL":
@@ -183,7 +189,7 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
         if (n.nodeType === Node.TEXT_NODE) {
             newParts.push(...parseAtRoomMentions(n.nodeValue, partCreator));
         } else if (n.nodeType === Node.ELEMENT_NODE) {
-            const parseResult = parseElement(n, partCreator, state);
+            const parseResult = parseElement(n, partCreator, lastNode, state);
             if (parseResult) {
                 if (Array.isArray(parseResult)) {
                     newParts.push(...parseResult);
@@ -200,10 +206,6 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 
         parts.push(...newParts);
 
-        // extra newline after quote, only if there something behind it...
-        if (lastNode && lastNode.nodeName === "BLOCKQUOTE") {
-            parts.push(partCreator.newline());
-        }
         const decend = checkDecendInto(n);
         // when not decending (like for PRE), onNodeLeave won't be called to set lastNode
         // so do that here.
