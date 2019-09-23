@@ -2046,5 +2046,20 @@
     "Complete": "완료",
     "Read Marker lifetime (ms)": "이전 대화 경계선 표시 시간 (ms)",
     "Read Marker off-screen lifetime (ms)": "이전 대화 경계선 사라지는 시간 (ms)",
-    "Changes the avatar of the current room": "현재 방의 아바타 변경하기"
+    "Changes the avatar of the current room": "현재 방의 아바타 변경하기",
+    "Room alias": "방 별칭",
+    "e.g. my-room": "예: my-room",
+    "Please provide a room alias": "방 별칭을 제공해주세요",
+    "This alias is available to use": "이 별칭은 사용할 수 있습니다",
+    "This alias is already in use": "이 별칭은 이미 사용 중입니다",
+    "Please enter a name for the room": "방 이름을 입력해주세요",
+    "Set a room alias to easily share your room with other people.": "다른 사람들과 방을 쉽게 공유할 수 있도록 방 별칭을 설정하세요.",
+    "This room is private, and can only be joined by invitation.": "이 방은 개인입니다, 오직 초대로만 참가할 수 있습니다.",
+    "Create a public room": "공개 방 만들기",
+    "Create a private room": "개인 방 만들기",
+    "Topic (optional)": "주제 (선택)",
+    "Make this room public": "이 방 주제를 정하기",
+    "Hide advanced": "고급 숨기기",
+    "Show advanced": "고급 보이기",
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "다른 매트릭스 홈서버에서 이 방에 참가하려는 사용자를 막기 (이 설정은 이후 변경할 수 없습니다!)"
 }
