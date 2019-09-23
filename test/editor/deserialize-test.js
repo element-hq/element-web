@@ -94,7 +94,7 @@ describe('editor/deserialize', function() {
             const html = "<strong>bold</strong> and <em>emphasized</em> text";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(1);
-            expect(parts[0]).toStrictEqual({type: "plain", text: "**bold** and *emphasized* text"});
+            expect(parts[0]).toStrictEqual({type: "plain", text: "**bold** and _emphasized_ text"});
         });
         it('hyperlink', function() {
             const html = 'click <a href="http://example.com/">this</a>!';
@@ -105,10 +105,11 @@ describe('editor/deserialize', function() {
         it('multiple lines with paragraphs', function() {
             const html = '<p>hello</p><p>world</p>';
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
-            expect(parts.length).toBe(3);
+            expect(parts.length).toBe(4);
             expect(parts[0]).toStrictEqual({type: "plain", text: "hello"});
             expect(parts[1]).toStrictEqual({type: "newline", text: "\n"});
-            expect(parts[2]).toStrictEqual({type: "plain", text: "world"});
+            expect(parts[2]).toStrictEqual({type: "newline", text: "\n"});
+            expect(parts[3]).toStrictEqual({type: "plain", text: "world"});
         });
         it('multiple lines with line breaks', function() {
             const html = 'hello<br>world';
@@ -121,18 +122,19 @@ describe('editor/deserialize', function() {
         it('multiple lines mixing paragraphs and line breaks', function() {
             const html = '<p>hello<br>warm</p><p>world</p>';
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
-            expect(parts.length).toBe(5);
+            expect(parts.length).toBe(6);
             expect(parts[0]).toStrictEqual({type: "plain", text: "hello"});
             expect(parts[1]).toStrictEqual({type: "newline", text: "\n"});
             expect(parts[2]).toStrictEqual({type: "plain", text: "warm"});
             expect(parts[3]).toStrictEqual({type: "newline", text: "\n"});
-            expect(parts[4]).toStrictEqual({type: "plain", text: "world"});
+            expect(parts[4]).toStrictEqual({type: "newline", text: "\n"});
+            expect(parts[5]).toStrictEqual({type: "plain", text: "world"});
         });
         it('quote', function() {
             const html = '<blockquote><p><em>wise</em><br><strong>words</strong></p></blockquote><p>indeed</p>';
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(6);
-            expect(parts[0]).toStrictEqual({type: "plain", text: "> *wise*"});
+            expect(parts[0]).toStrictEqual({type: "plain", text: "> _wise_"});
             expect(parts[1]).toStrictEqual({type: "newline", text: "\n"});
             expect(parts[2]).toStrictEqual({type: "plain", text: "> **words**"});
             expect(parts[3]).toStrictEqual({type: "newline", text: "\n"});
@@ -159,7 +161,7 @@ describe('editor/deserialize', function() {
             const html = "<em>formatted</em> message for @room";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(2);
-            expect(parts[0]).toStrictEqual({type: "plain", text: "*formatted* message for "});
+            expect(parts[0]).toStrictEqual({type: "plain", text: "_formatted_ message for "});
             expect(parts[1]).toStrictEqual({type: "at-room-pill", text: "@room"});
         });
         it('inline code', function() {
@@ -220,7 +222,7 @@ describe('editor/deserialize', function() {
             const html = "says <em>DON'T SHOUT</em>!";
             const parts = normalize(parseEvent(htmlMessage(html, "m.emote"), createPartCreator()));
             expect(parts.length).toBe(1);
-            expect(parts[0]).toStrictEqual({type: "plain", text: "/me says *DON'T SHOUT*!"});
+            expect(parts[0]).toStrictEqual({type: "plain", text: "/me says _DON'T SHOUT_!"});
         });
     });
 });
