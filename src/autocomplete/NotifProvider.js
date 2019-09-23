@@ -42,6 +42,7 @@ export default class NotifProvider extends AutocompleteProvider {
             return [{
                 completion: '@room',
                 completionId: '@room',
+                type: "at-room",
                 suffix: ' ',
                 component: (
                     <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={this.room} />} title="@room" description={_t("Notify the whole room")} />

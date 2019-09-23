@@ -100,19 +100,21 @@ export default class AutocompleteWrapperModel {
     _partForCompletion(completion) {
         const {completionId} = completion;
         const text = completion.completion;
-        const firstChr = completionId && completionId[0];
-        switch (firstChr) {
-            case "@": {
-                if (completionId === "@room") {
-                    return [this._partCreator.atRoomPill(completionId)];
-                } else {
-                    return this._partCreator.createMentionParts(this._partIndex, text, completionId);
-                }
-            }
-            case "#":
-                return [this._partCreator.roomPill(completionId)];
-            // used for emoji and command completion replacement
+        switch (completion.type) {
+            case "room":
+                return [this._partCreator.roomPill(completionId), this._partCreator.plain(completion.suffix)];
+            case "at-room":
+                return [this._partCreator.atRoomPill(completionId), this._partCreator.plain(completion.suffix)];
+            case "user":
+                // not using suffix here, because we also need to calculate
+                // the suffix when clicking a display name to insert a mention,
+                // which happens in createMentionParts
+                return this._partCreator.createMentionParts(this._partIndex, text, completionId);
+            case "command":
+                // command needs special handling for auto complete, but also renders as plain texts
+                return [this._partCreator.command(text)];
             default:
+                // used for emoji and other plain text completion replacement
                 return [this._partCreator.plain(text)];
         }
     }

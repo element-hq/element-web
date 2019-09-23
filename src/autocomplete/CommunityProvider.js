@@ -84,6 +84,7 @@ export default class CommunityProvider extends AutocompleteProvider {
             ]).map(({avatarUrl, groupId, name}) => ({
                 completion: groupId,
                 suffix: ' ',
+                type: "community",
                 href: makeGroupPermalink(groupId),
                 component: (
                     <PillCompletion initialComponent={
