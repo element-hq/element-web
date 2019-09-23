@@ -21,6 +21,11 @@ limitations under the License.
         font-weight: 600;
         cursor: pointer;
         color: $accent-color;
+
+        // list-style doesn't do it for webkit
+        &::-webkit-details-marker {
+            display: none;
+        }
     }
 
     > div {
