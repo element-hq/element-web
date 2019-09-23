@@ -64,6 +64,7 @@ export default class CommandProvider extends AutocompleteProvider {
         return matches.map((result) => ({
             // If the command is the same as the one they entered, we don't want to discard their arguments
             completion: result.command === command[1] ? command[0] : (result.command + ' '),
+            type: "command",
             component: <TextualCompletion
                 title={result.command}
                 subtitle={result.args}

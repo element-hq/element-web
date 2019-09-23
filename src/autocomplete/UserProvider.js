@@ -114,6 +114,7 @@ export default class UserProvider extends AutocompleteProvider {
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName,
                     completionId: user.userId,
+                    type: "user",
                     suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (

@@ -456,15 +456,20 @@ export class CommandPartCreator extends PartCreator {
     createPartForInput(text, partIndex) {
         // at beginning and starts with /? create
         if (partIndex === 0 && text[0] === "/") {
-            return new CommandPart("", this._autoCompleteCreator);
+            // text will be inserted by model, so pass empty string
+            return this.command("");
         } else {
             return super.createPartForInput(text, partIndex);
         }
     }
 
+    command(text) {
+        return new CommandPart(text, this._autoCompleteCreator);
+    }
+
     deserializePart(part) {
         if (part.type === "command") {
-            return new CommandPart(part.text, this._autoCompleteCreator);
+            return this.command(part.text);
         } else {
             return super.deserializePart(part);
         }
