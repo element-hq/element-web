@@ -90,7 +90,7 @@ function parseElement(n, partCreator, state) {
         case "BR":
             return partCreator.newline();
         case "EM":
-            return partCreator.plain(`*${n.textContent}*`);
+            return partCreator.plain(`_${n.textContent}_`);
         case "STRONG":
             return partCreator.plain(`**${n.textContent}**`);
         case "PRE":
