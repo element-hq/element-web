@@ -35,6 +35,8 @@ import IdentityAuthClient from './IdentityAuthClient';
 export default class AddThreepid {
     constructor() {
         this.clientSecret = MatrixClientPeg.get().generateClientSecret();
+        this.sessionId = null;
+        this.submitUrl = null;
     }
 
     /**
@@ -101,6 +103,7 @@ export default class AddThreepid {
             phoneCountry, phoneNumber, this.clientSecret, 1,
         ).then((res) => {
             this.sessionId = res.sid;
+            this.submitUrl = res.submit_url;
             return res;
         }, function(err) {
             if (err.errcode === 'M_THREEPID_IN_USE') {
@@ -197,13 +200,23 @@ export default class AddThreepid {
      */
     async haveMsisdnToken(msisdnToken) {
         const authClient = new IdentityAuthClient();
-        const identityAccessToken = await authClient.getAccessToken();
-        const result = await MatrixClientPeg.get().submitMsisdnToken(
-            this.sessionId,
-            this.clientSecret,
-            msisdnToken,
-            identityAccessToken,
-        );
+
+        let result;
+        if (this.submitUrl) {
+            result = await MatrixClientPeg.get().submitMsisdnTokenOtherUrl(
+                this.submitUrl,
+                this.sessionId,
+                this.clientSecret,
+                msisdnToken,
+            );
+        } else {
+            result = await MatrixClientPeg.get().submitMsisdnToken(
+                this.sessionId,
+                this.clientSecret,
+                msisdnToken,
+                await authClient.getAccessToken(),
+            );
+        }
         if (result.errcode) {
             throw result;
         }
@@ -211,13 +224,11 @@ export default class AddThreepid {
         const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             if (this.bind) {
-                const authClient = new IdentityAuthClient();
-                const identityAccessToken = await authClient.getAccessToken();
                 await MatrixClientPeg.get().bindThreePid({
                     sid: this.sessionId,
                     client_secret: this.clientSecret,
                     id_server: identityServerDomain,
-                    id_access_token: identityAccessToken,
+                    id_access_token: await authClient.getAccessToken(),
                 });
             } else {
                 await MatrixClientPeg.get().addThreePidOnly({
