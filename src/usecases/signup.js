@@ -41,7 +41,6 @@ module.exports = async function signup(session, username, password, homeserver) 
         const nextButton = await session.query('.mx_Login_submit');
         // accept homeserver
         await nextButton.click();
-        await session.query('.mx_ServerConfig_identityServer_shown');
         // accept default identity server
         await nextButton.click();
     }
