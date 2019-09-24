@@ -940,5 +940,12 @@
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s is typing …",
     "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)s others are typing …",
-    "Your Riot is misconfigured": "Your Riot is misconfigured"
+    "Your Riot is misconfigured": "Your Riot is misconfigured",
+    "Call failed due to misconfigured server": "Call failed due to misconfigured server",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
+    "Try using turn.matrix.org": "Try using turn.matrix.org",
+    "Failed to start chat": "Failed to start chat",
+    "Messages": "Messages",
+    "Actions": "Actions",
+    "Other": "Other"
 }
