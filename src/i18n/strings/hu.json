@@ -2192,5 +2192,20 @@
     "Report Content": "Tartalom jelentése",
     "Read Marker lifetime (ms)": "Olvasás visszajelzés érvényesség (ms)",
     "Read Marker off-screen lifetime (ms)": "Olvasás visszajelzés érvényessége képernyőn kívül (ms)",
-    "Changes the avatar of the current room": "Profilkép megváltoztatása az adott szobában"
+    "Changes the avatar of the current room": "Profilkép megváltoztatása az adott szobában",
+    "Room alias": "Szoba álnév",
+    "e.g. my-room": "pl.: szobam",
+    "Please provide a room alias": "Kérlek adj meg egy álnevet a szobához",
+    "This alias is available to use": "Az álnév használható",
+    "This alias is already in use": "Az álnév már használatban van",
+    "Please enter a name for the room": "Kérlek adj meg egy nevet a szobához",
+    "Set a room alias to easily share your room with other people.": "A szoba emberekkel való könnyebb megosztásához állíts be álnevet.",
+    "This room is private, and can only be joined by invitation.": "A szoba zárt, csak meghívóval lehet belépni.",
+    "Create a public room": "Nyilvános szoba készítése",
+    "Create a private room": "Zárt szoba készítése",
+    "Topic (optional)": "Téma (nem kötelező)",
+    "Make this room public": "A szoba legyen nyilvános",
+    "Hide advanced": "Haladó elrejtése",
+    "Show advanced": "Haladó megmutatása",
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Felhasználók más matrix szerverekről a szobába való belépésének megakadályozása (Ezt a beállítást később nem lehet megváltoztatni!)"
 }
