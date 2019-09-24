@@ -1835,7 +1835,6 @@ export default createReactClass({
             if (room) {
                 subtitle = `| ${ room.name } ${subtitle}`;
             }
-            console.log(`updating subtitle as ${subtitle}`);
         }
         document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle} ${this.subTitleStatus}`;
     },
