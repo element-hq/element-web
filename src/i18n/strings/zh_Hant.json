@@ -2195,5 +2195,20 @@
     "Explore rooms": "探索聊天室",
     "Changes the avatar of the current room": "變更目前聊天室的大頭貼",
     "Read Marker lifetime (ms)": "讀取標記生命週期（毫秒）",
-    "Read Marker off-screen lifetime (ms)": "畫面外讀取標記的生命週期（毫秒）"
+    "Read Marker off-screen lifetime (ms)": "畫面外讀取標記的生命週期（毫秒）",
+    "Room alias": "聊天室別名",
+    "e.g. my-room": "例如：my-room",
+    "Please provide a room alias": "請提供聊天室別名",
+    "This alias is available to use": "此別名可用",
+    "This alias is already in use": "此別名已被使用",
+    "Please enter a name for the room": "請輸入聊天室名稱",
+    "Set a room alias to easily share your room with other people.": "設定聊天室別名可以讓您的聊天室比較容易分享給其他人。",
+    "This room is private, and can only be joined by invitation.": "此聊天室是私人聊天室，僅能透過邀請加入。",
+    "Create a public room": "建立公開聊天室",
+    "Create a private room": "建立私人聊天室",
+    "Topic (optional)": "主題（選擇性）",
+    "Make this room public": "讓聊天室公開",
+    "Hide advanced": "隱藏進階的",
+    "Show advanced": "顯示進階的",
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）"
 }
