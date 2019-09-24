@@ -874,9 +874,10 @@ export default createReactClass({
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
-            this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
-            this.setState(newState);
+            this.setState(newState, ()=>{
+                this.notifyNewScreen('room/' + presentedId);
+            });
         });
     },
 
