@@ -1830,7 +1830,8 @@ export default createReactClass({
 
     _setPageSubtitle: function(subtitle='') {
         if (this.state.currentRoomId) {
-            const room = MatrixClientPeg.get().getRoom(this.state.currentRoomId);
+            const client = MatrixClientPeg.get();
+            const room = client && client.getRoom(this.state.currentRoomId);
             if (room) {
                 subtitle = `| ${ room.name } ${subtitle}`;
             }
