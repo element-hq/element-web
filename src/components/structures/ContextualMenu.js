@@ -167,6 +167,7 @@ export default class ContextualMenu extends React.Component {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
+            'mx_HiddenFocusable': true, // hide browser outline
             'mx_ContextualMenu_left': !hasChevron && position.left,
             'mx_ContextualMenu_right': !hasChevron && position.right,
             'mx_ContextualMenu_top': !hasChevron && position.top,
