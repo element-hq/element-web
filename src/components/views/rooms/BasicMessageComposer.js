@@ -177,6 +177,8 @@ export default class BasicMessageEditor extends React.Component {
         }, 0);
     }
 
+    shouldIgnoreKeyDownEvents() {
+        return this._isIMEComposing;
     }
 
     _onPaste = (event) => {

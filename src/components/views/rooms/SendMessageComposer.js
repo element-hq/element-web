@@ -104,6 +104,9 @@ export default class SendMessageComposer extends React.Component {
     };
 
     _onKeyDown = (event) => {
+        if (this._editorRef.shouldIgnoreKeyDownEvents()) {
+            return;
+        }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
         if (event.key === "Enter" && !hasModifier) {
             this._sendMessage();
