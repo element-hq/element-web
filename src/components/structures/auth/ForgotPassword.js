@@ -117,17 +117,18 @@ module.exports = createReactClass({
         });
     },
 
-    onVerify: function(ev) {
+    onVerify: async function(ev) {
         ev.preventDefault();
         if (!this.reset) {
             console.error("onVerify called before submitPasswordReset!");
             return;
         }
-        this.reset.checkEmailLinkClicked().done((res) => {
+        try {
+            await this.reset.checkEmailLinkClicked();
             this.setState({ phase: PHASE_DONE });
-        }, (err) => {
+        } catch (err) {
             this.showErrorDialog(err.message);
-        });
+        }
     },
 
     onSubmitForm: async function(ev) {
