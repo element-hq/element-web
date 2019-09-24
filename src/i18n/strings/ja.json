@@ -1299,5 +1299,9 @@
     "Sequences like abc or 6543 are easy to guess": "abc や 6543 のような規則的な文字列は推測されやすいです",
     "Recent years are easy to guess": "最近の年号は推測されやすいです",
     "Dates are often easy to guess": "たいていの日付は推測されやすいです",
-    "Whether or not you're logged in (we don't record your username)": "ログインしているか否か（私たちはあなたのユーザー名を記録しません）"
+    "Whether or not you're logged in (we don't record your username)": "ログインしているか否か（私たちはあなたのユーザー名を記録しません）",
+    "Upgrade": "アップグレード",
+    "Sets the room name": "部屋名を設定する",
+    "Change room name": "部屋名を変える",
+    "Room Name": "部屋名"
 }
