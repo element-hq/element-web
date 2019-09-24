@@ -127,7 +127,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _onKeyDown = (event) => {
-        if (this._editorRef.shouldIgnoreKeyDownEvents()) {
+        if (this._editorRef.isComposing(event)) {
             return;
         }
         if (event.metaKey || event.altKey || event.shiftKey) {

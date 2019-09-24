@@ -173,12 +173,12 @@ export default class BasicMessageEditor extends React.Component {
         // so trigger a model update after the composition is done by calling the input handler.
         // do this async though, as modifying the DOM from the compositionend event might confuse the composition.
         setTimeout(() => {
-            this._onInput({inputType: "insertCompositionText"});
+            this._onInput({inputType: "insertCompositionText"}, true);
         }, 0);
     }
 
-    shouldIgnoreKeyDownEvents() {
-        return this._isIMEComposing;
+    isComposing(event) {
+        return !!(this._isIMEComposing || event.isComposing);
     }
 
     _onPaste = (event) => {
