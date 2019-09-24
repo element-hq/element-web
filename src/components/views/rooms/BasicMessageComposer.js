@@ -170,8 +170,13 @@ export default class BasicMessageEditor extends React.Component {
     _onCompositionEnd = (event) => {
         this._isIMEComposing = false;
         // some browsers (chromium) don't fire an input event after ending a composition
-        // so trigger a model update after the composition is done by calling the input handler
-        this._onInput({inputType: "insertCompositionText"});
+        // so trigger a model update after the composition is done by calling the input handler.
+        // do this async though, as modifying the DOM from the compositionend event might confuse the composition.
+        setTimeout(() => {
+            this._onInput({inputType: "insertCompositionText"});
+        }, 0);
+    }
+
     }
 
     _onPaste = (event) => {
