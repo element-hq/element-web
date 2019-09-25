@@ -169,9 +169,32 @@ export default class BasicMessageEditor extends React.Component {
 
     _onCompositionEnd = (event) => {
         this._isIMEComposing = false;
-        // some browsers (chromium) don't fire an input event after ending a composition
-        // so trigger a model update after the composition is done by calling the input handler
-        this._onInput({inputType: "insertCompositionText"});
+        // some browsers (Chrome) don't fire an input event after ending a composition,
+        // so trigger a model update after the composition is done by calling the input handler.
+
+        // however, modifying the DOM (caused by the editor model update) from the compositionend handler seems
+        // to confuse the IME in Chrome, likely causing https://github.com/vector-im/riot-web/issues/10913 ,
+        // so we do it async
+
+        // however, doing this async seems to break things in Safari for some reason, so browser sniff.
+
+        const ua = navigator.userAgent.toLowerCase();
+        const isSafari = ua.includes('safari/') && !ua.includes('chrome/');
+
+        if (isSafari) {
+            this._onInput({inputType: "insertCompositionText"});
+        } else {
+            setTimeout(() => {
+                this._onInput({inputType: "insertCompositionText"});
+            }, 0);
+        }
+    }
+
+    isComposing(event) {
+        // checking the event.isComposing flag just in case any browser out there
+        // emits events related to the composition after compositionend
+        // has been fired
+        return !!(this._isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
     }
 
     _onPaste = (event) => {

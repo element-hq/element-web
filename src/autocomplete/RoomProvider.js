@@ -89,6 +89,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 return {
                     completion: displayAlias,
                     completionId: displayAlias,
+                    type: "room",
                     suffix: ' ',
                     href: makeRoomPermalink(displayAlias),
                     component: (

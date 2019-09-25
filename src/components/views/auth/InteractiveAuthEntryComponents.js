@@ -420,6 +420,7 @@ export const MsisdnAuthEntry = createReactClass({
     },
 
     componentWillMount: function() {
+        this._submitUrl = null;
         this._sid = null;
         this._msisdn = null;
         this._tokenBox = null;
@@ -442,6 +443,7 @@ export const MsisdnAuthEntry = createReactClass({
             this.props.clientSecret,
             1, // TODO: Multiple send attempts?
         ).then((result) => {
+            this._submitUrl = result.submit_url;
             this._sid = result.sid;
             this._msisdn = result.msisdn;
         });
@@ -453,45 +455,52 @@ export const MsisdnAuthEntry = createReactClass({
         });
     },
 
-    _onFormSubmit: function(e) {
+    _onFormSubmit: async function(e) {
         e.preventDefault();
         if (this.state.token == '') return;
 
-            this.setState({
-                errorText: null,
-            });
+        this.setState({
+            errorText: null,
+        });
 
-        this.props.matrixClient.submitMsisdnToken(
-            this._sid, this.props.clientSecret, this.state.token,
-        ).then((result) => {
-            if (result.success) {
-                const idServerParsedUrl = url.parse(
-                    this.props.matrixClient.getIdentityServerUrl(),
+        try {
+            let result;
+            if (this._submitUrl) {
+                result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
+                    this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
                 );
+            } else {
+                result = await this.props.matrixClient.submitMsisdnToken(
+                    this._sid, this.props.clientSecret, this.state.token,
+                );
+            }
+            if (result.success) {
+                const creds = {
+                    sid: this._sid,
+                    client_secret: this.props.clientSecret,
+                };
+                if (await this.props.matrixClient.doesServerRequireIdServerParam()) {
+                    const idServerParsedUrl = url.parse(
+                        this.props.matrixClient.getIdentityServerUrl(),
+                    );
+                    creds.id_server = idServerParsedUrl.host;
+                }
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     // TODO: Remove `threepid_creds` once servers support proper UIA
                     // See https://github.com/vector-im/riot-web/issues/10312
-                    threepid_creds: {
-                        sid: this._sid,
-                        client_secret: this.props.clientSecret,
-                        id_server: idServerParsedUrl.host,
-                    },
-                    threepidCreds: {
-                        sid: this._sid,
-                        client_secret: this.props.clientSecret,
-                        id_server: idServerParsedUrl.host,
-                    },
+                    threepid_creds: creds,
+                    threepidCreds: creds,
                 });
             } else {
                 this.setState({
                     errorText: _t("Token incorrect"),
                 });
             }
-        }).catch((e) => {
+        } catch (e) {
             this.props.fail(e);
             console.log("Failed to submit msisdn token");
-        }).done();
+        }
     },
 
     render: function() {

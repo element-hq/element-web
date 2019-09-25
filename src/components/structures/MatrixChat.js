@@ -271,6 +271,10 @@ export default createReactClass({
 
         this.focusComposer = false;
 
+        // object field used for tracking the status info appended to the title tag.
+        // we don't do it as react state as i'm scared about triggering needless react refreshes.
+        this.subTitleStatus = '';
+
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
         if (this.onAliasClick) {
@@ -870,9 +874,10 @@ export default createReactClass({
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
-            this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
-            this.setState(newState);
+            this.setState(newState, ()=>{
+                this.notifyNewScreen('room/' + presentedId);
+            });
         });
     },
 
@@ -962,11 +967,8 @@ export default createReactClass({
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
 
-        const [shouldCreate, name, noFederate] = await modal.finished;
+        const [shouldCreate, createOpts] = await modal.finished;
         if (shouldCreate) {
-            const createOpts = {};
-            if (name) createOpts.name = name;
-            if (noFederate) createOpts.creation_content = {'m.federate': false};
             createRoom({createOpts}).done();
         }
     },
@@ -1300,6 +1302,7 @@ export default createReactClass({
             collapsedRhs: false,
             currentRoomId: null,
         });
+        this.subTitleStatus = '';
         this._setPageSubtitle();
     },
 
@@ -1315,6 +1318,7 @@ export default createReactClass({
             collapsedRhs: false,
             currentRoomId: null,
         });
+        this.subTitleStatus = '';
         this._setPageSubtitle();
     },
 
@@ -1709,6 +1713,7 @@ export default createReactClass({
         if (this.props.onNewScreen) {
             this.props.onNewScreen(screen);
         }
+        this._setPageSubtitle();
     },
 
     onAliasClick: function(event, alias) {
@@ -1824,7 +1829,14 @@ export default createReactClass({
     },
 
     _setPageSubtitle: function(subtitle='') {
-        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
+        if (this.state.currentRoomId) {
+            const client = MatrixClientPeg.get();
+            const room = client && client.getRoom(this.state.currentRoomId);
+            if (room) {
+                subtitle = `| ${ room.name } ${subtitle}`;
+            }
+        }
+        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle} ${this.subTitleStatus}`;
     },
 
     updateStatusIndicator: function(state, prevState) {
@@ -1835,15 +1847,15 @@ export default createReactClass({
             PlatformPeg.get().setNotificationCount(notifCount);
         }
 
-        let subtitle = '';
+        this.subTitleStatus = '';
         if (state === "ERROR") {
-            subtitle += `[${_t("Offline")}] `;
+            this.subTitleStatus += `[${_t("Offline")}] `;
         }
         if (notifCount > 0) {
-            subtitle += `[${notifCount}]`;
+            this.subTitleStatus += `[${notifCount}]`;
         }
 
-        this._setPageSubtitle(subtitle);
+        this._setPageSubtitle();
     },
 
     onCloseAllSettings() {

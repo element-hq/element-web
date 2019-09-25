@@ -104,6 +104,10 @@ export default class SendMessageComposer extends React.Component {
     };
 
     _onKeyDown = (event) => {
+        // ignore any keypress while doing IME compositions
+        if (this._editorRef.isComposing(event)) {
+            return;
+        }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
         if (event.key === "Enter" && !hasModifier) {
             this._sendMessage();
