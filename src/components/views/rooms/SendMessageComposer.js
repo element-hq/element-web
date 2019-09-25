@@ -170,7 +170,19 @@ export default class SendMessageComposer extends React.Component {
 
     _isSlashCommand() {
         const parts = this.model.parts;
-        return parts.length && parts[0].type === "command";
+        const firstPart = parts[0];
+        if (firstPart) {
+            if (firstPart.type === "command") {
+                return true;
+            }
+            // be extra resilient when somehow the AutocompleteWrapperModel or
+            // CommandPartCreator fails to insert a command part, so we don't send
+            // a command as a message
+            if (firstPart.type === "plain" && firstPart.text.startsWith("/")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     async _runSlashCommand() {
