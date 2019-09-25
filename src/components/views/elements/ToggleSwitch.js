@@ -74,7 +74,8 @@ export default class ToggleSwitch extends React.Component {
                 role="checkbox"
                 aria-checked={this.state.checked}
                 aria-disabled={disabled}
-                tabIndex={0}>
+                tabIndex={0}
+            >
                 <div className="mx_ToggleSwitch_ball" />
             </div>
         );
