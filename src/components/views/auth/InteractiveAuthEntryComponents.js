@@ -420,6 +420,7 @@ export const MsisdnAuthEntry = createReactClass({
     },
 
     componentWillMount: function() {
+        this._submitUrl = null;
         this._sid = null;
         this._msisdn = null;
         this._tokenBox = null;
@@ -442,6 +443,7 @@ export const MsisdnAuthEntry = createReactClass({
             this.props.clientSecret,
             1, // TODO: Multiple send attempts?
         ).then((result) => {
+            this._submitUrl = result.submit_url;
             this._sid = result.sid;
             this._msisdn = result.msisdn;
         });
@@ -462,9 +464,16 @@ export const MsisdnAuthEntry = createReactClass({
         });
 
         try {
-            const result = await this.props.matrixClient.submitMsisdnToken(
-                this._sid, this.props.clientSecret, this.state.token,
-            );
+            let result;
+            if (this._submitUrl) {
+                result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
+                    this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
+                );
+            } else {
+                result = await this.props.matrixClient.submitMsisdnToken(
+                    this._sid, this.props.clientSecret, this.state.token,
+                );
+            }
             if (result.success) {
                 const creds = {
                     sid: this._sid,
