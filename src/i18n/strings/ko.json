@@ -2061,5 +2061,6 @@
     "Make this room public": "이 방 주제를 정하기",
     "Hide advanced": "고급 숨기기",
     "Show advanced": "고급 보이기",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "다른 매트릭스 홈서버에서 이 방에 참가하려는 사용자를 막기 (이 설정은 이후 변경할 수 없습니다!)"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "다른 매트릭스 홈서버에서 이 방에 참가하려는 사용자를 막기 (이 설정은 이후 변경할 수 없습니다!)",
+    "Close dialog": "대화 상자 닫기"
 }
