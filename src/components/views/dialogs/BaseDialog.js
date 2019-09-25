@@ -26,6 +26,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
 
 /**
  * Basic container for modal dialogs.
@@ -114,8 +115,9 @@ export default createReactClass({
     render: function() {
         let cancelButton;
         if (this.props.hasCancel) {
-            cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
-            </AccessibleButton>;
+            cancelButton = (
+                <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton" aria-label={_t("Close dialog")} />
+            );
         }
 
         return (

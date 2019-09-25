@@ -78,7 +78,7 @@ module.exports = createReactClass({
         return (
             <div className="mx_SettingsFlag">
                 <span className="mx_SettingsFlag_label">{label}</span>
-                <ToggleSwitch checked={value} onChange={this.onChange} disabled={!canChange} />
+                <ToggleSwitch checked={value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
             </div>
         );
     },
