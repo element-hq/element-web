@@ -194,7 +194,7 @@ export default class BasicMessageEditor extends React.Component {
         // checking the event.isComposing flag just in case any browser out there
         // emits events related to the composition after compositionend
         // has been fired
-        return !!(this._isIMEComposing || event.isComposing);
+        return !!(this._isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
     }
 
     _onPaste = (event) => {
