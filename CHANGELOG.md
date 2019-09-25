@@ -1,3 +1,58 @@
+Changes in [1.4.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.0-rc.1) (2019-09-25)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.6...v1.4.0-rc.1)
+
+ * Update from Weblate
+   [\#10961](https://github.com/vector-im/riot-web/pull/10961)
+ * Don't log query parameters as they may contain secrets
+   [\#10929](https://github.com/vector-im/riot-web/pull/10929)
+ * Document more shortcuts
+   [\#10906](https://github.com/vector-im/riot-web/pull/10906)
+ * Point to #develop and use the same gemini-scrollbar version as the react-sdk
+   [\#10893](https://github.com/vector-im/riot-web/pull/10893)
+ * Tweak lock file to pull in only one React version
+   [\#10874](https://github.com/vector-im/riot-web/pull/10874)
+ * document disable_custom_urls
+   [\#10844](https://github.com/vector-im/riot-web/pull/10844)
+ * Install guide tweaks
+   [\#10838](https://github.com/vector-im/riot-web/pull/10838)
+ * Switch to React 16
+   [\#10480](https://github.com/vector-im/riot-web/pull/10480)
+ * Update install guide
+   [\#10810](https://github.com/vector-im/riot-web/pull/10810)
+ * Clarify that HTTPS is not just needed for VoIP
+   [\#6146](https://github.com/vector-im/riot-web/pull/6146)
+ * Bump eslint-utils from 1.4.0 to 1.4.2
+   [\#10692](https://github.com/vector-im/riot-web/pull/10692)
+ * Add docs for tabbed integration managers labs flag
+   [\#10641](https://github.com/vector-im/riot-web/pull/10641)
+ * Change integrations_widgets_urls default configuration
+   [\#10656](https://github.com/vector-im/riot-web/pull/10656)
+ * Add docs for the CIDER composer flag
+   [\#10638](https://github.com/vector-im/riot-web/pull/10638)
+ * add cider composer labs flag
+   [\#10626](https://github.com/vector-im/riot-web/pull/10626)
+ * Upgrade to Electron 6.0.3
+   [\#10601](https://github.com/vector-im/riot-web/pull/10601)
+ * Upgrade to Electron 6
+   [\#10596](https://github.com/vector-im/riot-web/pull/10596)
+ * Update from Weblate
+   [\#10591](https://github.com/vector-im/riot-web/pull/10591)
+ * Upgrade electron-builder to 21.2.0
+   [\#10579](https://github.com/vector-im/riot-web/pull/10579)
+ * Set SUID bit on chrome-sandbox for Debian
+   [\#10580](https://github.com/vector-im/riot-web/pull/10580)
+ * Load config.json before loading language so default can apply
+   [\#10551](https://github.com/vector-im/riot-web/pull/10551)
+ * Bump matrix-react-test-utils for React 16 compatibility
+   [\#10543](https://github.com/vector-im/riot-web/pull/10543)
+ * Add --help to electron app
+   [\#10530](https://github.com/vector-im/riot-web/pull/10530)
+ * Allow setting electron autoHideMenuBar and persist it
+   [\#10503](https://github.com/vector-im/riot-web/pull/10503)
+ * Upgrade dependencies
+   [\#10475](https://github.com/vector-im/riot-web/pull/10475)
+
 Changes in [1.3.6](https://github.com/vector-im/riot-web/releases/tag/v1.3.6) (2019-09-19)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.5...v1.3.6)
