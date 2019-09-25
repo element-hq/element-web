@@ -182,10 +182,10 @@ export default class BasicMessageEditor extends React.Component {
         const isSafari = ua.includes('safari/') && !ua.includes('chrome/');
 
         if (isSafari) {
-            this._onInput({inputType: "insertCompositionText"}, true);
+            this._onInput({inputType: "insertCompositionText"});
         } else {
             setTimeout(() => {
-                this._onInput({inputType: "insertCompositionText"}, true);
+                this._onInput({inputType: "insertCompositionText"});
             }, 0);
         }
     }
