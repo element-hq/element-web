@@ -187,6 +187,10 @@ export default class SendMessageComposer extends React.Component {
 
     async _runSlashCommand() {
         const commandText = this.model.parts.reduce((text, part) => {
+            // use mxid to textify user pills in a command
+            if (part.type === "user-pill") {
+                return text + part.resourceId;
+            }
             return text + part.text;
         }, "");
         const cmd = processCommandInput(this.props.room.roomId, commandText);
