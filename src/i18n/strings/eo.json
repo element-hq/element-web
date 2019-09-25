@@ -1916,5 +1916,18 @@
     "Service": "Servo",
     "Summary": "Resumo",
     "Terms": "Kondiĉoj",
-    "This account has been deactivated.": "Tiu ĉi konto malaktiviĝis."
+    "This account has been deactivated.": "Tiu ĉi konto malaktiviĝis.",
+    "Call failed due to misconfigured server": "Voko malsukcesis pro misagordita servilo",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Bonvolu peti la administranton de via hejmservilo (<code>%(homeserverDomain)s</code>) agordi TURN-servilon, por ke vokoj funkciu dependeble.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternative, vi povas prove uzi la publikan servilon je <code>turn.matrix.org</code>, sed tio ne estas same dependebla, kaj ĝi havigos vian IP-adreson al tiu servilo. Vi povas administri tion ankaŭ en Agordoj.",
+    "Try using turn.matrix.org": "Provu uzi servilon turn.matrix.org",
+    "Sends a message as plain text, without interpreting it as markdown": "Sendas mesaĝon kiel platan tekston, sen interpreto al MarkDown",
+    "You do not have the required permissions to use this command.": "Vi ne havas sufiĉajn permesojn por uzi ĉi tiun komandon.",
+    "Changes the avatar of the current room": "Ŝanĝas la profilbildon de la nuna ĉambro",
+    "Use an identity server": "Uzi identigan servilon",
+    "Use an identity server to invite by email. Manage in Settings.": "Uzi identigan servilon por inviti retpoŝte. Administru en Agordoj.",
+    "ID": "Identigilo",
+    "Public Name": "Publika nomo",
+    "Do not use an identity server": "Ne uzi identigan servilon",
+    "Enter a new identity server": "Enigi novan identigan servilon"
 }
