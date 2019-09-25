@@ -65,6 +65,8 @@ export default createReactClass({
 
     componentDidMount() {
         this._detailsRef.addEventListener("toggle", this.onDetailsToggled);
+        // move focus to first field when showing dialog
+        this._nameFieldRef.focus();
     },
 
     componentWillUnmount() {
