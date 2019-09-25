@@ -64,7 +64,12 @@ export default class ToggleSwitch extends React.Component {
             "mx_ToggleSwitch_enabled": !this.props.disabled,
         });
         return (
-            <div className={classes} onClick={this._onClick}>
+            <div
+                className={classes}
+                onClick={this._onClick}
+                role="checkbox"
+                aria-checked={this.state.checked}
+                aria-disabled={this.props.disabled}>
                 <div className="mx_ToggleSwitch_ball" />
             </div>
         );
