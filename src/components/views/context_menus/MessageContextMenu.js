@@ -31,27 +31,10 @@ import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
-import {KeyCode} from "../../../Keyboard";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
-
-const DropdownButton = ({children, onClick}) => {
-    const onKeyDown = (e) => {
-        if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            onClick();
-        }
-    };
-    return (
-        <div className="mx_MessageContextMenu_field" onClick={onClick} onKeyDown={onKeyDown} role="button" tabIndex={0}>
-            { children }
-        </div>
-    );
-};
-
 
 module.exports = createReactClass({
     displayName: 'MessageContextMenu',
@@ -306,6 +289,8 @@ module.exports = createReactClass({
     },
 
     render: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const cli = MatrixClientPeg.get();
         const me = cli.getUserId();
         const mxEvent = this.props.mxEvent;
@@ -337,89 +322,89 @@ module.exports = createReactClass({
         if (!mxEvent.isRedacted()) {
             if (eventStatus === EventStatus.NOT_SENT) {
                 resendButton = (
-                    <DropdownButton onClick={this.onResendClick}>
+                    <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
                         { _t('Resend') }
-                    </DropdownButton>
+                    </AccessibleButton>
                 );
             }
 
             if (editStatus === EventStatus.NOT_SENT) {
                 resendEditButton = (
-                    <DropdownButton onClick={this.onResendEditClick}>
+                    <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onResendEditClick}>
                         { _t('Resend edit') }
-                    </DropdownButton>
+                    </AccessibleButton>
                 );
             }
 
             if (unsentReactionsCount !== 0) {
                 resendReactionsButton = (
-                    <DropdownButton onClick={this.onResendReactionsClick}>
+                    <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
                         { _t('Resend %(unsentCount)s reaction(s)', {unsentCount: unsentReactionsCount}) }
-                    </DropdownButton>
+                    </AccessibleButton>
                 );
             }
         }
 
         if (redactStatus === EventStatus.NOT_SENT) {
             resendRedactionButton = (
-                <DropdownButton onClick={this.onResendRedactionClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onResendRedactionClick}>
                     { _t('Resend removal') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         if (isSent && this.state.canRedact) {
             redactButton = (
-                <DropdownButton onClick={this.onRedactClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         if (allowCancel) {
             cancelButton = (
-                <DropdownButton onClick={this.onCancelSendClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     { _t('Cancel Sending') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         if (isContentActionable(mxEvent)) {
             forwardButton = (
-                <DropdownButton onClick={this.onForwardClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
                     { _t('Forward Message') }
-                </DropdownButton>
+                </AccessibleButton>
             );
 
             if (this.state.canPin) {
                 pinButton = (
-                    <DropdownButton onClick={this.onPinClick}>
+                    <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
                         { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
-                    </DropdownButton>
+                    </AccessibleButton>
                 );
             }
         }
 
         const viewSourceButton = (
-            <DropdownButton onClick={this.onViewSourceClick}>
+            <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
                 { _t('View Source') }
-            </DropdownButton>
+            </AccessibleButton>
         );
 
         if (mxEvent.getType() !== mxEvent.getWireType()) {
             viewClearSourceButton = (
-                <DropdownButton onClick={this.onViewClearSourceClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
                     { _t('View Decrypted Source') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
-                    <DropdownButton onClick={this.onUnhidePreviewClick}>
+                    <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
                         { _t('Unhide Preview') }
-                    </DropdownButton>
+                    </AccessibleButton>
                 );
             }
         }
@@ -430,19 +415,19 @@ module.exports = createReactClass({
         }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
-            <DropdownButton>
+            <AccessibleButton className="mx_MessageContextMenu_field">
                 <a href={permalink} target="_blank" rel="noopener" onClick={this.onPermalinkClick} tabIndex={-1}>
                     { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
                         ? _t('Share Permalink') : _t('Share Message') }
                 </a>
-            </DropdownButton>
+            </AccessibleButton>
         );
 
         if (this.props.eventTileOps && this.props.eventTileOps.getInnerText) {
             quoteButton = (
-                <DropdownButton onClick={this.onQuoteClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
                     { _t('Quote') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
@@ -452,7 +437,7 @@ module.exports = createReactClass({
             isUrlPermitted(mxEvent.event.content.external_url)
         ) {
             externalURLButton = (
-                <DropdownButton>
+                <AccessibleButton className="mx_MessageContextMenu_field">
                     <a
                         href={mxEvent.event.content.external_url}
                         target="_blank"
@@ -462,33 +447,33 @@ module.exports = createReactClass({
                     >
                         { _t('Source URL') }
                     </a>
-                </DropdownButton>
+                </AccessibleButton>
           );
         }
 
         if (this.props.collapseReplyThread) {
             collapseReplyThread = (
-                <DropdownButton onClick={this.onCollapseReplyThreadClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onCollapseReplyThreadClick}>
                     { _t('Collapse Reply Thread') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         let e2eInfo;
         if (this.props.e2eInfoCallback) {
             e2eInfo = (
-                <DropdownButton onClick={this.e2eInfoClicked}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.e2eInfoClicked}>
                     { _t('End-to-end encryption information') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 
         let reportEventButton;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
-                <DropdownButton onClick={this.onReportEventClick}>
+                <AccessibleButton className="mx_MessageContextMenu_field" onClick={this.onReportEventClick}>
                     { _t('Report Content') }
-                </DropdownButton>
+                </AccessibleButton>
             );
         }
 

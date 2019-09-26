@@ -17,9 +17,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {_t} from '../../languageHandler';
-import {KeyCode} from "../../Keyboard";
+import {_t} from '../../languageHandler';``
 import PropTypes from "prop-types";
+import sdk from "../../index";
 
 /**
  * Represents a tab for the TabbedView.
@@ -72,6 +72,8 @@ export class TabbedView extends React.Component {
     }
 
     _renderTabLabel(tab) {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         let classes = "mx_TabbedView_tabLabel ";
 
         const idx = this.props.tabs.indexOf(tab);
@@ -83,30 +85,15 @@ export class TabbedView extends React.Component {
         }
 
         const onClickHandler = () => this._setActiveTab(tab);
-        const onKeyDownHandler = (e) => {
-            if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
-                e.stopPropagation();
-                e.preventDefault();
-                this._setActiveTab(tab);
-            }
-        };
 
         const label = _t(tab.label);
         return (
-            <span
-                className={classes}
-                key={"tab_label_" + tab.label}
-                onClick={onClickHandler}
-                onKeyDown={onKeyDownHandler}
-                role="button"
-                aria-label={label}
-                tabIndex={0}
-            >
+            <AccessibleButton className={classes} key={"tab_label_" + tab.label} onClick={onClickHandler}>
                 {tabIcon}
                 <span className="mx_TabbedView_tabLabel_text">
                     { label }
                 </span>
-            </span>
+            </AccessibleButton>
         );
     }
 
