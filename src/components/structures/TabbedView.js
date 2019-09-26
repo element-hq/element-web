@@ -84,9 +84,9 @@ export class TabbedView extends React.Component {
 
         const onClickHandler = () => this._setActiveTab(tab);
         const onKeyDownHandler = (e) => {
-            e.stopPropagation();
-            e.preventDefault();
             if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
+                e.stopPropagation();
+                e.preventDefault();
                 this._setActiveTab(tab);
             }
         };

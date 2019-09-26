@@ -166,9 +166,11 @@ export default class MessageActionBar extends React.PureComponent {
             {reactButton}
             {replyButton}
             {editButton}
-            <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+            <span
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}
+                aria-haspopup={true}
             />
         </div>;
     }
