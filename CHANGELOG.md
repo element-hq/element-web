@@ -9,6 +9,7 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3...v1.6.0-rc.1)
 
+ * Upgrade to JS SDK 2.4.0-rc.1
  * Update from Weblate
    [\#3480](https://github.com/matrix-org/matrix-react-sdk/pull/3480)
  * Fix: latin input through Chinese IME
