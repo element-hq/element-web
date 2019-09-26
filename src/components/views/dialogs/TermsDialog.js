@@ -184,7 +184,7 @@ export default class TermsDialog extends React.PureComponent {
                 hasCancel={false}
             >
                 <div id='mx_Dialog_content'>
-                    <p>{_t("To continue you need to accept the Terms of this service.")}</p>
+                    <p>{_t("To continue you need to accept the terms of this service.")}</p>
 
                     <table className="mx_TermsDialog_termsTable"><tbody>
                         <tr className="mx_TermsDialog_termsTableHeader">
