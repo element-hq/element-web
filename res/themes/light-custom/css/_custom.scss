@@ -1,0 +1,85 @@
+// accent color
+$accent-color: var(--accent-color);
+$button-bg-color: var(--accent-color);
+$button-link-fg-color: var(--accent-color);
+$button-primary-bg-color: var(--accent-color);
+$input-valid-border-color: var(--accent-color);
+$reaction-row-button-selected-border-color: var(--accent-color);
+$roomsublist-chevron-color: var(--accent-color);
+$tab-label-active-bg-color: var(--accent-color);
+$togglesw-on-color: var(--accent-color);
+$username-variant3-color: var(--accent-color);
+$accent-color-50pct: var(--accent-color)"7F"; // uses #rrggbbaa notation, alpha at .5
+// background color
+$authpage-body-bg-color: var(--background-color);
+$avatar-bg-color: var(--background-color);
+$button-secondary-bg-color: var(--background-color);
+$field-focused-label-bg-color: var(--background-color);
+$lightbox-border-color: var(--background-color);
+$menu-bg-color: var(--background-color);
+$message-action-bar-bg-color: var(--background-color);
+$primary-bg-color: var(--background-color);
+$roomtile-focused-bg-color: var(--background-color);
+$roomtile-selected-bg-color: var(--background-color);
+$tab-label-active-icon-bg-color: var(--background-color);
+$togglesw-ball-color: var(--background-color);
+$droptarget-bg-color: var(--background-color)"7F"; // uses #rrggbbaa notation, alpha at .5
+$authpage-modal-bg-color: var(--background-color)"CF"; // uses #rrggbbaa notation, alpha at .59
+// base color
+$interactive-tooltip-bg-color: var(--base-color);
+$tagpanel-bg-color: var(--base-color);
+$tooltip-timeline-bg-color: var(--base-color);
+// panel color
+$event-selected-color: var(--panel-color);
+$header-panel-bg-color: var(--panel-color);
+$reaction-row-button-bg-color: var(--panel-color);
+$panel-gradient: var(--panel-color)"00", var(--panel-color)"FF";
+// these were #f2f5f8 instead of #f3f8fd, but close enough
+$dark-panel-bg-color: var(--panel-color);
+$input-lighter-bg-color: var(--panel-color);
+$plinth-bg-color: var(--panel-color);
+$roomsublist-background: var(--panel-color);
+$secondary-accent-color: var(--panel-color);
+$selected-color: var(--panel-color);
+$widget-menu-bar-bg-color: var(--panel-color);
+// panel contrast color
+$input-darker-bg-color: var(--panel-contrast-color);
+$panel-divider-color: var(--panel-contrast-color);// originally #dee1f3, not #e3e8f0, but close enough
+// body text color
+$message-action-bar-fg-color: var(--body-text-color);
+$primary-fg-color: var(--body-text-color);
+$settings-profile-overlay-placeholder-fg-color: var(--body-text-color);
+$dialog-backdrop-color: var(--body-text-color)"82";  // uses #rrggbbaa notation, alpha at .38
+// body contrast color
+$authpage-secondary-color: var(--body-contrast-color);
+$memberstatus-placeholder-color: var(--body-contrast-color);
+$notice-secondary-color: var(--body-contrast-color);
+$pinned-color: var(--body-contrast-color);
+$roomsublist-label-fg-color: var(--body-contrast-color);
+$roomtile-name-color: var(--body-contrast-color);
+$settings-subsection-fg-color: var(--body-contrast-color);
+// primary color
+$accent-color-alt: var(--primary-color);
+$input-focused-border-color: var(--primary-color);
+// warning color
+$button-danger-bg-color: var(--warning-color);
+$event-highlight-fg-color: var(--warning-color);
+$input-invalid-border-color: var(--warning-color);
+$mention-user-pill-bg-color: var(--warning-color);
+$notice-primary-color: var(--warning-color);
+$pinned-unread-color: var(--warning-color);
+$warning-color: var(--warning-color);
+$button-danger-disabled-bg-color: var(--warning-color)"7C";
+
+// defaults
+body {
+    --accent-color: #03b381;
+    --background-color: #ffffff;
+    --base-color: #27303a;
+    --panel-color: #f3f8fd;
+    --panel-contrast-color: #e3e8f0;
+    --body-text-color: #2e2f32;
+    --body-contrast-color: #61708b;
+    --primary-color: #368bd6;
+    --warning-color: #ff4b55;
+}
