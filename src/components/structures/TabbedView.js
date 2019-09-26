@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {_t} from '../../languageHandler';``
+import {_t} from '../../languageHandler';
 import PropTypes from "prop-types";
 import sdk from "../../index";
 
