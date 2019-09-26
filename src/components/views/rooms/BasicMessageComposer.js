@@ -323,25 +323,35 @@ export default class BasicMessageEditor extends React.Component {
             this._insertText("\n");
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
-        } else if (!(event.metaKey || event.altKey || event.shiftKey)) {
+        } else {
+            const metaOrAltPressed = event.metaKey || event.altKey;
+            const modifierPressed = metaOrAltPressed || event.shiftKey;
             if (model.autoComplete && model.autoComplete.hasCompletions()) {
                 const autoComplete = model.autoComplete;
                 switch (event.key) {
                     case "ArrowUp":
-                        autoComplete.onUpArrow(event);
-                        handled = true;
+                        if (!modifierPressed) {
+                            autoComplete.onUpArrow(event);
+                            handled = true;
+                        }
                         break;
                     case "ArrowDown":
-                        autoComplete.onDownArrow(event);
-                        handled = true;
+                        if (!modifierPressed) {
+                            autoComplete.onDownArrow(event);
+                            handled = true;
+                        }
                         break;
                     case "Tab":
-                        autoComplete.onTab(event);
-                        handled = true;
+                        if (!metaOrAltPressed) {
+                            autoComplete.onTab(event);
+                            handled = true;
+                        }
                         break;
                     case "Escape":
-                        autoComplete.onEscape(event);
-                        handled = true;
+                        if (!modifierPressed) {
+                            autoComplete.onEscape(event);
+                            handled = true;
+                        }
                         break;
                     default:
                         return; // don't preventDefault on anything else
