@@ -1,3 +1,10 @@
+Changes in [1.6.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.0-rc.2) (2019-09-26)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.0-rc.1...v1.6.0-rc.2)
+
+ * Settings a11y tweaks
+   [\#3475](https://github.com/matrix-org/matrix-react-sdk/pull/3475)
+
 Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.0-rc.1) (2019-09-25)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.5.3...v1.6.0-rc.1)
