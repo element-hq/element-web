@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 
 import * as React from "react";
 import {_t} from '../../languageHandler';
+import {KeyCode} from "../../Keyboard";
 import PropTypes from "prop-types";
 
 /**
@@ -81,6 +83,13 @@ export class TabbedView extends React.Component {
         }
 
         const onClickHandler = () => this._setActiveTab(tab);
+        const onKeyDownHandler = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
+                this._setActiveTab(tab);
+            }
+        };
 
         const label = _t(tab.label);
         return (
@@ -88,6 +97,7 @@ export class TabbedView extends React.Component {
                 className={classes}
                 key={"tab_label_" + tab.label}
                 onClick={onClickHandler}
+                onKeyDown={onKeyDownHandler}
                 role="button"
                 aria-label={label}
                 tabIndex={0}
