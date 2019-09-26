@@ -21,4 +21,5 @@ export const DEFAULT_THEME = "light";
 export const THEMES = {
     "light": _td("Light theme"),
     "dark": _td("Dark theme"),
+    "light-custom": _td("Custom theme (light)"),
 };

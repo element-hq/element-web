@@ -263,6 +263,7 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "Light theme": "Light theme",
     "Dark theme": "Dark theme",
+    "Custom theme (light)": "Custom theme (light)",
     "%(displayName)s is typing …": "%(displayName)s is typing …",
     "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)s others are typing …",
     "%(names)s and %(count)s others are typing …|one": "%(names)s and one other is typing …",
