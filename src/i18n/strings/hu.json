@@ -2207,5 +2207,6 @@
     "Make this room public": "A szoba legyen nyilvános",
     "Hide advanced": "Haladó elrejtése",
     "Show advanced": "Haladó megmutatása",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Felhasználók más matrix szerverekről a szobába való belépésének megakadályozása (Ezt a beállítást később nem lehet megváltoztatni!)"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Felhasználók más matrix szerverekről a szobába való belépésének megakadályozása (Ezt a beállítást később nem lehet megváltoztatni!)",
+    "Close dialog": "Ablak bezárása"
 }
