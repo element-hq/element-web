@@ -234,7 +234,7 @@ $tab-label-active-fg-color: #ffffff;
 $tab-label-bg-color: transparent;
 $tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: #454545;
-$tab-label-active-icon-bg-color: #ffffff;
+$tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 
 // Buttons
 $button-primary-fg-color: #ffffff;
