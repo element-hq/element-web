@@ -58,13 +58,24 @@ export default class ToggleSwitch extends React.Component {
     };
 
     render() {
+        // eslint-disable-next-line no-unused-vars
+        const {checked, disabled, onChange, ...props} = this.props;
+
         const classes = classNames({
             "mx_ToggleSwitch": true,
             "mx_ToggleSwitch_on": this.state.checked,
             "mx_ToggleSwitch_enabled": !this.props.disabled,
         });
         return (
-            <div className={classes} onClick={this._onClick}>
+            <div
+                {...props}
+                className={classes}
+                onClick={this._onClick}
+                role="checkbox"
+                aria-checked={this.state.checked}
+                aria-disabled={disabled}
+                tabIndex={0}
+            >
                 <div className="mx_ToggleSwitch_ball" />
             </div>
         );

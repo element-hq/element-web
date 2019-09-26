@@ -82,12 +82,19 @@ export class TabbedView extends React.Component {
 
         const onClickHandler = () => this._setActiveTab(tab);
 
+        const label = _t(tab.label);
         return (
-            <span className={classes} key={"tab_label_" + tab.label}
-                  onClick={onClickHandler}>
+            <span
+                className={classes}
+                key={"tab_label_" + tab.label}
+                onClick={onClickHandler}
+                role="button"
+                aria-label={label}
+                tabIndex={0}
+            >
                 {tabIcon}
                 <span className="mx_TabbedView_tabLabel_text">
-                    {_t(tab.label)}
+                    { label }
                 </span>
             </span>
         );
