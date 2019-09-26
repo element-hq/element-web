@@ -39,6 +39,8 @@ import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 
+import Picker from 'vanilla-picker';
+
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -270,6 +272,21 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderThemeSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        let customSection;
+        if (this.state.theme === "light-custom") {
+            customSection = (<div class="mx_GeneralUserSettingsTab_customColors">
+                <span className="mx_SettingsTab_subheading">{_t("Custom theme colors")}</span>
+                <CustomThemeColorField name="accent-color" label={_t("Accent color")} />
+                <CustomThemeColorField name="background-color" label={_t("Background color")} />
+                <CustomThemeColorField name="base-color" label={_t("Base color")} />
+                <CustomThemeColorField name="panel-color" label={_t("Panel color")} />
+                <CustomThemeColorField name="panel-contrast-color" label={_t("Panel Contrast color")} />
+                <CustomThemeColorField name="body-text-color" label={_t("Body Text color")} />
+                <CustomThemeColorField name="body-contrast-color" label={_t("Body contrast color")} />
+                <CustomThemeColorField name="primary-color" label={_t("Primary color")} />
+                <CustomThemeColorField name="warning-color" label={_t("Warning color")} />
+            </div>);
+        }
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -280,6 +297,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
+                { customSection }
             </div>
         );
     }
@@ -377,5 +395,38 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderManagementSection()}
             </div>
         );
+    }
+}
+
+class CustomThemeColorField extends React.Component {
+    componentDidMount() {
+        setTimeout(() => {
+            this.value = window.getComputedStyle(document.body).getPropertyValue(`--${this.props.name}`);
+            this._buttonRef.style.background = this.value;
+        }, 3000);
+    }
+
+    _onClick = (event) => {
+        const button = event.target;
+        if (button.tagName !== "BUTTON") {
+            console.log("target is", button);
+            return;
+        }
+        console.log("clicked color " + this.props.name);
+        const picker = new Picker({parent: button, alpha: false, color: this.value});
+        picker.onChange = color => this._onColorChanged(color);
+    }
+
+    _onColorChanged(color) {
+        const hex = color.hex.substr(0, 7);
+        document.body.style.setProperty(`--${this.props.name}`, hex);
+        document.body.style.setProperty(`--${this.props.name}-0pct`, hex + "00");
+        document.body.style.setProperty(`--${this.props.name}-50pct`, hex + "7F");
+        this._buttonRef.style.background = hex;
+        this.value = hex;
+    }
+
+    render() {
+        return (<button ref={ref => this._buttonRef = ref} onClick={this._onClick}>{this.props.label}</button>);
     }
 }
