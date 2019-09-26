@@ -49,12 +49,26 @@ $widget-menu-bar-bg-color: var(--panel-color);
 // PALETTE COLOR: panel contrast color
 $input-darker-bg-color: var(--panel-contrast-color);
 $panel-divider-color: var(--panel-contrast-color);// originally #dee1f3, not #e3e8f0, but close enough
+$primary-hairline-color: var(--panel-contrast-color);// originally #e5e5e5, not #e3e8f0, but close enough
 //
 // PALETTE COLOR: body text color
 $message-action-bar-fg-color: var(--body-text-color);
 $primary-fg-color: var(--body-text-color);
 $settings-profile-overlay-placeholder-fg-color: var(--body-text-color);
 $dialog-backdrop-color: var(--body-text-color-50pct); //still needs alpha at .38
+$roomtopic-color: var(--body-text-color-50pct); //still needs alpha at .5
+$tab-label-fg-color: var(--body-text-color);
+$tab-label-icon-bg-color: var(--body-text-color);   //was #454545
+// was #212121
+$roomtile-notified-color: var(--body-text-color);
+$roomtile-selected-color: var(--body-text-color);
+$topleftmenu-color: var(--body-text-color);
+// was #45474a
+$dialog-title-fg-color: var(--body-text-color);
+$roomheader-color: var(--body-text-color);
+$tab-label-fg-color: var(--body-text-color);
+// was #4e5054
+$authpage-lang-color: var(--body-text-color);
 //
 // PALETTE COLOR: body contrast color
 $authpage-secondary-color: var(--body-contrast-color);
@@ -64,6 +78,15 @@ $pinned-color: var(--body-contrast-color);
 $roomsublist-label-fg-color: var(--body-contrast-color);
 $roomtile-name-color: var(--body-contrast-color);
 $settings-subsection-fg-color: var(--body-contrast-color);
+$roomheader-addroom-bg-color: var(--body-contrast-color);
+// was #747474
+$light-fg-color: var(--body-contrast-color);
+// was #777777
+$blockquote-fg-color: var(--body-contrast-color);
+// was #888888
+$greyed-fg-color: var(--body-contrast-color);
+$info-plinth-fg-color: var(--body-contrast-color);
+$preview-widget-fg-color: var(--body-contrast-color);
 //
 // PALETTE COLOR: primary color
 $accent-color-alt: var(--primary-color);
@@ -77,5 +100,4 @@ $mention-user-pill-bg-color: var(--warning-color);
 $notice-primary-color: var(--warning-color);
 $pinned-unread-color: var(--warning-color);
 $warning-color: var(--warning-color);
-
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5
