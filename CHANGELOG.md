@@ -2,6 +2,7 @@ Changes in [1.4.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.3.6...v1.4.0-rc.1)
 
+ * Upgrade to React SDK 1.6.0-rc.1 and JS SDK 2.4.0-rc.1
  * Update from Weblate
    [\#10961](https://github.com/vector-im/riot-web/pull/10961)
  * Don't log query parameters as they may contain secrets
