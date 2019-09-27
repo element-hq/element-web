@@ -190,7 +190,7 @@ export default class TermsDialog extends React.PureComponent {
                         <tr className="mx_TermsDialog_termsTableHeader">
                             <th>{_t("Service")}</th>
                             <th>{_t("Summary")}</th>
-                            <th>{_t("Terms")}</th>
+                            <th>{_t("Document")}</th>
                             <th>{_t("Accept")}</th>
                         </tr>
                         {rows}
