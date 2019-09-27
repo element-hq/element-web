@@ -24,6 +24,7 @@ import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from "../../../index";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {
@@ -57,6 +58,8 @@ export class TopLeftMenu extends React.Component {
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const isGuest = MatrixClientPeg.get().isGuest();
 
         const hostingSignupLink = getHostingLink('user-context-menu');
@@ -77,25 +80,33 @@ export class TopLeftMenu extends React.Component {
 
         let homePageItem = null;
         if (this.hasHomePage()) {
-            homePageItem = <li className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage} tabIndex={0}>
-                {_t("Home")}
-            </li>;
+            homePageItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>
+                    {_t("Home")}
+                </AccessibleButton>
+            );
         }
 
         let signInOutItem;
         if (isGuest) {
-            signInOutItem = <li className="mx_TopLeftMenu_icon_signin" onClick={this.signIn} tabIndex={0}>
-                {_t("Sign in")}
-            </li>;
+            signInOutItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>
+                    {_t("Sign in")}
+                </AccessibleButton>
+            );
         } else {
-            signInOutItem = <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut} tabIndex={0}>
-                {_t("Sign out")}
-            </li>;
+            signInOutItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>
+                    {_t("Sign out")}
+                </AccessibleButton>
+            );
         }
 
-        const settingsItem = <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings} tabIndex={0}>
-            {_t("Settings")}
-        </li>;
+        const settingsItem = (
+            <AccessibleButton element="li" className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>
+                {_t("Settings")}
+            </AccessibleButton>
+        );
 
         return <div className="mx_TopLeftMenu mx_HiddenFocusable" tabIndex={0} ref={this.props.containerRef}>
             <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true}>

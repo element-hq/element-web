@@ -18,7 +18,7 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_AccessibleButton:focus {
+.mx_AccessibleButton:focus:not(.focus-visible) {
     outline: 0;
 }
 

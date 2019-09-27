@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -227,6 +228,8 @@ module.exports = createReactClass({
     },
 
     _renderNotifMenu: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const alertMeClasses = classNames({
             'mx_RoomTileContextMenu_notif_field': true,
             'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES_LOUD,
@@ -249,29 +252,29 @@ module.exports = createReactClass({
 
         return (
             <div className="mx_RoomTileContextMenu">
-                <div className="mx_RoomTileContextMenu_notif_picker" >
+                <div className="mx_RoomTileContextMenu_notif_picker">
                     <img src={require("../../../../res/img/notif-slider.svg")} width="20" height="107" />
                 </div>
-                <div className={alertMeClasses} onClick={this._onClickAlertMe} >
+                <AccessibleButton className={alertMeClasses} onClick={this._onClickAlertMe}>
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off-copy.svg")} width="16" height="12" />
                     { _t('All messages (noisy)') }
-                </div>
-                <div className={allNotifsClasses} onClick={this._onClickAllNotifs} >
+                </AccessibleButton>
+                <AccessibleButton className={allNotifsClasses} onClick={this._onClickAllNotifs}>
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off.svg")} width="16" height="12" />
                     { _t('All messages') }
-                </div>
-                <div className={mentionsClasses} onClick={this._onClickMentions} >
+                </AccessibleButton>
+                <AccessibleButton className={mentionsClasses} onClick={this._onClickMentions}>
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-mentions.svg")} width="16" height="12" />
                     { _t('Mentions only') }
-                </div>
-                <div className={muteNotifsClasses} onClick={this._onClickMute} >
+                </AccessibleButton>
+                <AccessibleButton className={muteNotifsClasses} onClick={this._onClickMute}>
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute.svg")} width="16" height="12" />
                     { _t('Mute') }
-                </div>
+                </AccessibleButton>
             </div>
         );
     },
@@ -287,12 +290,13 @@ module.exports = createReactClass({
     },
 
     _renderSettingsMenu: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div>
-                <div className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings} >
+                <AccessibleButton className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" />
                     { _t('Settings') }
-                </div>
+                </AccessibleButton>
             </div>
         );
     },
@@ -301,6 +305,8 @@ module.exports = createReactClass({
         if (!membership) {
             return null;
         }
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let leaveClickHandler = null;
         let leaveText = null;
@@ -323,15 +329,17 @@ module.exports = createReactClass({
 
         return (
             <div>
-                <div className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler} >
+                <AccessibleButton className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
                     { leaveText }
-                </div>
+                </AccessibleButton>
             </div>
         );
     },
 
     _renderRoomTagMenu: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const favouriteClasses = classNames({
             'mx_RoomTileContextMenu_tag_field': true,
             'mx_RoomTileContextMenu_tag_fieldSet': this.state.isFavourite,
@@ -352,21 +360,21 @@ module.exports = createReactClass({
 
         return (
             <div>
-                <div className={favouriteClasses} onClick={this._onClickFavourite} >
+                <AccessibleButton className={favouriteClasses} onClick={this._onClickFavourite} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_fave.svg")} width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_fave_on.svg")} width="15" height="15" />
                     { _t('Favourite') }
-                </div>
-                <div className={lowPriorityClasses} onClick={this._onClickLowPriority} >
+                </AccessibleButton>
+                <AccessibleButton className={lowPriorityClasses} onClick={this._onClickLowPriority} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_low.svg")} width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_low_on.svg")} width="15" height="15" />
                     { _t('Low Priority') }
-                </div>
-                <div className={dmClasses} onClick={this._onClickDM} >
+                </AccessibleButton>
+                <AccessibleButton className={dmClasses} onClick={this._onClickDM} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_person.svg")} width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_person_on.svg")} width="15" height="15" />
                     { _t('Direct Chat') }
-                </div>
+                </AccessibleButton>
             </div>
         );
     },

@@ -140,6 +140,8 @@ export default class MessageActionBar extends React.PureComponent {
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         let reactButton;
         let replyButton;
         let editButton;
@@ -149,14 +151,16 @@ export default class MessageActionBar extends React.PureComponent {
                 reactButton = this.renderReactButton();
             }
             if (this.context.room.canReply) {
-                replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                replyButton = <AccessibleButton
+                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}
                     onClick={this.onReplyClick}
                 />;
             }
         }
         if (canEditContent(this.props.mxEvent)) {
-            editButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+            editButton = <AccessibleButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
                 title={_t("Edit")}
                 onClick={this.onEditClick}
             />;
@@ -166,9 +170,11 @@ export default class MessageActionBar extends React.PureComponent {
             {reactButton}
             {replyButton}
             {editButton}
-            <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+            <AccessibleButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}
+                aria-haspopup={true}
             />
         </div>;
     }

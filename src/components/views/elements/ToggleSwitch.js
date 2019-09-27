@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
+import {KeyCode} from "../../../Keyboard";
 
 export default class ToggleSwitch extends React.Component {
     static propTypes = {
@@ -44,16 +45,29 @@ export default class ToggleSwitch extends React.Component {
         }
     }
 
-    _onClick = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-
+    _toggle = () => {
         if (this.props.disabled) return;
 
         const newState = !this.state.checked;
         this.setState({checked: newState});
         if (this.props.onChange) {
             this.props.onChange(newState);
+        }
+    };
+
+    _onClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        this._toggle();
+    };
+
+    _onKeyDown = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
+            this._toggle();
         }
     };
 
@@ -71,6 +85,7 @@ export default class ToggleSwitch extends React.Component {
                 {...props}
                 className={classes}
                 onClick={this._onClick}
+                onKeyDown={this._onKeyDown}
                 role="checkbox"
                 aria-checked={this.state.checked}
                 aria-disabled={disabled}
