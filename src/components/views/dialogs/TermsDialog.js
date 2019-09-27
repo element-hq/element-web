@@ -90,21 +90,17 @@ export default class TermsDialog extends React.PureComponent {
         }
     }
 
-    _summaryForServiceType(serviceType, docName) {
+    _summaryForServiceType(serviceType) {
         switch (serviceType) {
             case Matrix.SERVICE_TYPES.IS:
                 return <div>
                     {_t("Find others by phone or email")}
                     <br />
                     {_t("Be found by phone or email")}
-                    {docName !== null ? <br /> : ''}
-                    {docName !== null ? '('+docName+')' : ''}
                 </div>;
             case Matrix.SERVICE_TYPES.IM:
                 return <div>
                     {_t("Use bots, bridges, widgets and sticker packs")}
-                    {docName !== null ? <br /> : ''}
-                    {docName !== null ? '('+docName+')' : ''}
                 </div>;
         }
     }
@@ -133,14 +129,13 @@ export default class TermsDialog extends React.PureComponent {
                 }
                 const summary = this._summaryForServiceType(
                     policiesAndService.service.serviceType,
-                    policyValues.length > 1 ? termDoc[termsLang].name : null,
                 );
 
                 rows.push(<tr key={termDoc[termsLang].url}>
                     <td className="mx_TermsDialog_service">{serviceName}</td>
                     <td className="mx_TermsDialog_summary">{summary}</td>
-                    <td><a rel="noopener" target="_blank" href={termDoc[termsLang].url}>
-                        <div className="mx_TermsDialog_link" />
+                    <td>{termDoc[termsLang].name} <a rel="noopener" target="_blank" href={termDoc[termsLang].url}>
+                        <span className="mx_TermsDialog_link" />
                     </a></td>
                     <td><TermsCheckbox
                         url={termDoc[termsLang].url}
