@@ -2189,5 +2189,6 @@
     "Make this room public": "Направи стаята публична",
     "Hide advanced": "Скрий разширени настройки",
     "Show advanced": "Покажи разширени настройки",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Блокирай присъединяването на потребители от други Matrix сървъри в тази стая (Тази настройка не може да се промени по-късно!)"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Блокирай присъединяването на потребители от други Matrix сървъри в тази стая (Тази настройка не може да се промени по-късно!)",
+    "Close dialog": "Затвори прозореца"
 }
