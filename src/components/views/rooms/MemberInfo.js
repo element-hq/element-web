@@ -685,7 +685,7 @@ module.exports = createReactClass({
             mute: false,
             modifyLevel: false,
             modifyLevelMax: 0,
-            redactMessages: false,
+            redactMessages: me.powerLevel >= powerLevels.redact,
         };
 
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
@@ -704,7 +704,6 @@ module.exports = createReactClass({
         can.mute = me.powerLevel >= editPowerLevel;
         can.modifyLevel = me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel);
         can.modifyLevelMax = me.powerLevel;
-        can.redactMessages = me.powerLevel >= powerLevels.redact;
 
         return can;
     },
