@@ -3934,6 +3934,11 @@ focus-trap@^2.0.1:
   dependencies:
     tabbable "^1.0.3"
 
+focus-visible@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.0.2.tgz#4fae9cf40458b73c10701c9774c462e3ccd53caf"
+  integrity sha512-zT2fj/bmOgEBjqGbURGlowTmCwsIs3bRDMr/sFZz8Ly7VkEiwuCn9swNTL3pPuf8Oua2de7CLuKdnuNajWdDsQ==
+
 follow-redirects@^1.0.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.7.0.tgz#489ebc198dc0e7f64167bd23b03c4c19b5784c76"
@@ -5810,10 +5815,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.4.0-rc.1:
-  version "2.4.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.0-rc.1.tgz#b5ae67126d46c6aa3182aed88c6ae49d5b0b6e3b"
-  integrity sha512-YZEBPivFMCymq+69f3h480PV6wKjBd2MZ1vTCXYi4vL/Fb7GPw4hO41n69YfUkAtrHivZPkQqxGXOOIYDKr+5A==
+matrix-js-sdk@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.0.tgz#cce30af79fac9ec176695afc9affa2fff377e0e3"
+  integrity sha512-X0sdegRum7hzNXBT/vfxF05BiaXeZ8nZE3lO4hvE2UnnSqjDJLFM79muWuv6a0xrITcV4C8kKW7sH+oJb4d93Q==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5834,10 +5839,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.6.0-rc.2:
-  version "1.6.0-rc.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.6.0-rc.2.tgz#ffab3b861c05c3484cf80f06fe4992ef2b75b926"
-  integrity sha512-J5TYeSMQO9mIyJrSs+LSX1FPIvop/rv51IGXAOdUsabqwzvTrbidbezm3zmsq9cPt/nCpxdWfvQnugZvEelI9w==
+matrix-react-sdk@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.6.0.tgz#0e5b9a2a699602823a609b5684749cf2ff2bab38"
+  integrity sha512-w23R0BIOr1ovQzFZryiCk3NKVHbA3/8MGPdTHOr+pZkj83N9ijp9DmFwmiY+T/O7dlLAO/E1Kn5uqzHGETkszg==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5857,6 +5862,7 @@ matrix-react-sdk@1.6.0-rc.2:
     filesize "3.5.6"
     flux "2.1.1"
     focus-trap-react "^3.0.5"
+    focus-visible "^5.0.2"
     fuse.js "^2.2.0"
     gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
@@ -5867,7 +5873,7 @@ matrix-react-sdk@1.6.0-rc.2:
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
     lolex "4.2"
-    matrix-js-sdk "2.4.0-rc.1"
+    matrix-js-sdk "2.4.0"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
