@@ -21,6 +21,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {focusCapturedRef} from "../../utils/Accessibility";
+import {KeyCode} from "../../Keyboard";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -67,7 +68,7 @@ export default class ContextualMenu extends React.Component {
         // on resize callback
         windowResize: PropTypes.func,
         // method to close menu
-        closeMenu: PropTypes.func,
+        closeMenu: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -113,6 +114,14 @@ export default class ContextualMenu extends React.Component {
             });
         }
     }
+
+    _onKeyDown = (ev) => {
+        if (ev.keyCode === KeyCode.ESCAPE) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.props.closeMenu();
+        }
+    };
 
     render() {
         const position = {};
@@ -210,7 +219,7 @@ export default class ContextualMenu extends React.Component {
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
-        return <div className={className} style={{...position, ...wrapperStyle}}>
+        return <div className={className} style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
             <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} tabIndex={0}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />

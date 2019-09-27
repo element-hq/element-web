@@ -1,5 +1,6 @@
 /*
 Copyright 2018 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -77,11 +78,12 @@ export default class GroupInviteTileContextMenu extends React.Component {
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div>
-            <div className="mx_RoomTileContextMenu_leave" onClick={this._onClickReject} >
+            <AccessibleButton className="mx_RoomTileContextMenu_leave" onClick={this._onClickReject} >
                 <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
                 { _t('Reject') }
-            </div>
+            </AccessibleButton>
         </div>;
     }
 }

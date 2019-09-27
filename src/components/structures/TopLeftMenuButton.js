@@ -109,10 +109,11 @@ export default class TopLeftMenuButton extends React.Component {
         return (
             <AccessibleButton
                 className="mx_TopLeftMenuButton"
-                role="button"
                 onClick={this.onToggleMenu}
                 inputRef={(r) => this._buttonRef = r}
                 aria-label={_t("Your profile")}
+                aria-haspopup={true}
+                aria-expanded={this.state.menuDisplayed}
             >
                 <BaseAvatar
                     idName={MatrixClientPeg.get().getUserId()}

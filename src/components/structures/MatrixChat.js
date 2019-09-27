@@ -24,6 +24,9 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from "matrix-js-sdk";
 
+// focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
+import 'focus-visible';
+
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import MatrixClientPeg from "../../MatrixClientPeg";
@@ -41,7 +44,7 @@ import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
-require('../../stores/LifecycleStore');
+import '../../stores/LifecycleStore';
 import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
