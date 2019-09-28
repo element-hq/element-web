@@ -409,4 +409,9 @@ export const SETTINGS = {
         ),
         default: true,
     },
+    "showImages": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show previews/thumbnails for images"),
+        default: true,
+    },
 };

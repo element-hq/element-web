@@ -19,10 +19,15 @@ limitations under the License.
 import React from 'react';
 import MImageBody from './MImageBody';
 import sdk from '../../../index';
+import {_t} from "../../../languageHandler";
 
 export default class MStickerBody extends MImageBody {
-    // Empty to prevent default behaviour of MImageBody
-    onClick() {
+    // Mostly empty to prevent default behaviour of MImageBody
+    onClick(ev) {
+        ev.preventDefault();
+        if (!this.state.showImage) {
+            this.showImage();
+        }
     }
 
     // MStickerBody doesn't need a wrapping `<a href=...>`, but it does need extra padding
@@ -34,6 +39,14 @@ export default class MStickerBody extends MImageBody {
     // Placeholder to show in place of the sticker image if
     // img onLoad hasn't fired yet.
     getPlaceholder() {
+        if (!this.state.showImage) {
+            return (
+                <a className="mx_MStickerBody_hidden" onClick={this.onClick} href="#">
+                    <span>{_t("Click to show sticker")}</span>
+                </a>
+            );
+        }
+
         const TintableSVG = sdk.getComponent('elements.TintableSvg');
         return <TintableSVG src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
     }

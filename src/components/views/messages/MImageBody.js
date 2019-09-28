@@ -64,6 +64,7 @@ export default class MImageBody extends React.Component {
             imgLoaded: false,
             loadedImageDimensions: null,
             hover: false,
+            showImage: SettingsStore.getValue("showImages"),
         };
     }
 
@@ -86,9 +87,19 @@ export default class MImageBody extends React.Component {
         }
     }
 
+    showImage() {
+        localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
+        this.setState({showImage: true});
+    }
+
     onClick(ev) {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
+            if (!this.state.showImage) {
+                this.showImage();
+                return;
+            }
+
             const content = this.props.mxEvent.getContent();
             const httpUrl = this._getContentUrl();
             const ImageView = sdk.getComponent("elements.ImageView");
@@ -120,7 +131,7 @@ export default class MImageBody extends React.Component {
     onImageEnter(e) {
         this.setState({ hover: true });
 
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
@@ -130,7 +141,7 @@ export default class MImageBody extends React.Component {
     onImageLeave(e) {
         this.setState({ hover: false });
 
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
@@ -280,6 +291,12 @@ export default class MImageBody extends React.Component {
                 });
             }).done();
         }
+
+        // Remember that the user wanted to show this particular image
+        if (!this.state.showImage && localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true") {
+            this.setState({showImage: true});
+        }
+
         this._afterComponentDidMount();
     }
 
@@ -321,13 +338,21 @@ export default class MImageBody extends React.Component {
             // By doing this, the image "pops" into the timeline, but is still restricted
             // by the same width and height logic below.
             if (!this.state.loadedImageDimensions) {
-                return this.wrapImage(contentUrl,
+                let imageElement = (
                     <img style={{display: 'none'}} src={thumbUrl} ref="image"
-                        alt={content.body}
-                        onError={this.onImageError}
-                        onLoad={this.onImageLoad}
-                    />,
+                         alt={content.body}
+                         onError={this.onImageError}
+                         onLoad={this.onImageLoad}
+                    />
                 );
+                if (!this.state.showImage) {
+                    imageElement = (
+                        <div className="mx_MImageBody_hidden">
+                            <span>{_t("Click to show image")}</span>
+                        </div>
+                    );
+                }
+                return this.wrapImage(contentUrl, imageElement);
             }
             infoWidth = this.state.loadedImageDimensions.naturalWidth;
             infoHeight = this.state.loadedImageDimensions.naturalHeight;
@@ -362,13 +387,22 @@ export default class MImageBody extends React.Component {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
-            img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                style={{ maxWidth: maxWidth + "px" }}
-                alt={content.body}
-                onError={this.onImageError}
-                onLoad={this.onImageLoad}
-                onMouseEnter={this.onImageEnter}
-                onMouseLeave={this.onImageLeave} />;
+            img = (
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                     style={{ maxWidth: maxWidth + "px" }}
+                     alt={content.body}
+                     onError={this.onImageError}
+                     onLoad={this.onImageLoad}
+                     onMouseEnter={this.onImageEnter}
+                     onMouseLeave={this.onImageLeave} />
+            );
+            if (!this.state.showImage) {
+                img = (
+                    <div style={{ maxWidth: maxWidth + "px" }} className="mx_MImageBody_hidden">
+                        <span>{_t("Click to show image")}</span>
+                    </div>
+                );
+            }
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
