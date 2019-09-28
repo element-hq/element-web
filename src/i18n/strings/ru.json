@@ -1882,7 +1882,6 @@
     "Your Recovery Key has been <b>copied to your clipboard</b>, paste it to:": "Ваш ключ восстановления <b>скопирован в буфер обмена</b>, вставьте его в:",
     "Your Recovery Key is in your <b>Downloads</b> folder.": "Ваш ключ восстановления находится в папке <b>Загрузки</b>.",
     "<b>Print it</b> and store it somewhere safe": "<b>Распечатайте его</b> и храните в безопасном месте",
-    "Okay": "ОК",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "Без настройки безопасного восстановления сообщений вы не сможете восстановить историю зашифрованных сообщений, если выйдете из системы или используете другое устройство.",
     "Secure your backup with a passphrase": "Защитите вашу резервную копию паролем",
     "Confirm your passphrase": "Подтвердите свой пароль",

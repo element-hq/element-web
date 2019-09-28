@@ -1757,7 +1757,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "Ключът за възстановяване дава допълнителна сигурност - може да го използвате за да възстановите достъпа до шифрованите съобщения, в случай че забравите паролата.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Пазете ключът за възстановяване на много сигурно място, например в password manager програма или сейф",
     "Your keys are being backed up (the first backup could take a few minutes).": "Прави се резервно копие на ключовете Ви (първото копие може да отнеме няколко минути).",
-    "Okay": "Добре",
     "Secure your backup with a passphrase": "Защитете резервното копие с парола",
     "Confirm your passphrase": "Потвърдете паролата",
     "Recovery key": "Ключ за възстановяване",

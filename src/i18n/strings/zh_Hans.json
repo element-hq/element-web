@@ -1701,7 +1701,6 @@
     "<b>Save it</b> on a USB key or backup drive": "<b>保存</b> 在 U 盘或备份磁盘中",
     "<b>Copy it</b> to your personal cloud storage": "<b>复制</b> 到您的个人云端存储",
     "Your keys are being backed up (the first backup could take a few minutes).": "正在备份您的密钥（第一次备份可能会花费几分钟时间）。",
-    "Okay": "好",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "如果您登出账号或使用其他设备而没有设置安全消息恢复，您将不能还原您的加密消息历史记录。",
     "Set up Secure Message Recovery": "设置安全消息恢复",
     "Secure your backup with a passphrase": "使用密码保护您的备份",

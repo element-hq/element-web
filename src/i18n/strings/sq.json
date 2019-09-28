@@ -1734,7 +1734,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "Kyçi juaj i rikthimeve është një rrjet sigurie - mund ta përdorni për rikthim hyrjeje te mesazhet tuaj të fshehtëzuar, nëse harroni frazëkalimin tuaj.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Mbajeni kyçin tuaj të rikthimeve diku në një vend shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)",
     "Your keys are being backed up (the first backup could take a few minutes).": "Kyçet tuaj po kopjeruhen (kopjeruajtja e parë mund të hajë disa minuta).",
-    "Okay": "Në rregull",
     "Secure your backup with a passphrase": "Sigurojeni kopjeruajtjen tuaj me një frazëkalim",
     "Confirm your passphrase": "Ripohoni frazëkalimin tuaj",
     "Recovery key": "Kyç rikthimesh",
