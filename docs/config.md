@@ -82,6 +82,10 @@ For a good example, see https://riot.im/develop/config.json.
    Defaults to `GB` if the given code is unknown or not provided.
 1. `disable_custom_urls`: disallow the user to change the
    default homeserver when signing up or logging in.
+1. `permalinkPrefix`: Used to change the URL that Riot generates permalinks with.
+   By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
+   Set this to your Riot instance URL if you run an unfederated server (eg: 
+   "https://riot.example.org").
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
