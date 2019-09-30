@@ -28,7 +28,7 @@ import {
     replaceRangeAndMoveCaret,
 } from '../../../editor/operations';
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
-import Autocomplete from '../rooms/Autocomplete';
+import Autocomplete, {generateCompletionDomId} from '../rooms/Autocomplete';
 import {autoCompleteCreator} from '../../../editor/parts';
 import {parsePlainTextMessage} from '../../../editor/deserialize';
 import {renderModel} from '../../../editor/render';
@@ -432,8 +432,9 @@ export default class BasicMessageEditor extends React.Component {
         this.props.model.autoComplete.onComponentConfirm(completion);
     }
 
-    _onAutoCompleteSelectionChange = (completion) => {
+    _onAutoCompleteSelectionChange = (completion, completionIndex) => {
         this.props.model.autoComplete.onComponentSelectionChange(completion);
+        this.setState({completionIndex});
     }
 
     componentWillUnmount() {
@@ -535,6 +536,8 @@ export default class BasicMessageEditor extends React.Component {
             quote: ctrlShortcutLabel(">"),
         };
 
+        const {completionIndex} = this.state;
+
         return (<div className={classes}>
             { autoComplete }
             <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} shortcuts={shortcuts} />
@@ -548,7 +551,13 @@ export default class BasicMessageEditor extends React.Component {
                 onKeyDown={this._onKeyDown}
                 ref={ref => this._editorRef = ref}
                 aria-label={this.props.label}
-            ></div>
+                role="textbox"
+                aria-multiline="true"
+                aria-autocomplete="both"
+                aria-haspopup="listbox"
+                aria-expanded={Boolean(this.state.autoComplete)}
+                aria-activedescendant={completionIndex >= 0 ? generateCompletionDomId(completionIndex) : undefined}
+            />
         </div>);
     }
 

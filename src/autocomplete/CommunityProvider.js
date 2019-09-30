@@ -105,8 +105,14 @@ export default class CommunityProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            { completions }
-        </div>;
+        return (
+            <div
+                className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
+                role="listbox"
+                aria-label={_t("Community Autocomplete")}
+            >
+                { completions }
+            </div>
+        );
     }
 }
