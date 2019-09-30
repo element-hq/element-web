@@ -39,8 +39,6 @@ import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 
-import Picker from 'vanilla-picker';
-
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -399,34 +397,34 @@ export default class GeneralUserSettingsTab extends React.Component {
 }
 
 class CustomThemeColorField extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {color: ""};
+    }
+
     componentDidMount() {
         setTimeout(() => {
-            this.value = window.getComputedStyle(document.body).getPropertyValue(`--${this.props.name}`);
-            this._buttonRef.style.background = this.value;
+            const value = window.getComputedStyle(document.body).getPropertyValue(`--${this.props.name}`).trim();
+            this.setState({color: value});
         }, 3000);
     }
 
-    _onClick = (event) => {
-        const button = event.target;
-        if (button.tagName !== "BUTTON") {
-            console.log("target is", button);
-            return;
-        }
-        console.log("clicked color " + this.props.name);
-        const picker = new Picker({parent: button, alpha: false, color: this.value});
-        picker.onChange = color => this._onColorChanged(color);
-    }
-
-    _onColorChanged(color) {
-        const hex = color.hex.substr(0, 7);
+    _onColorChanged = (event) => {
+        const hex = event.target.value;
         document.body.style.setProperty(`--${this.props.name}`, hex);
         document.body.style.setProperty(`--${this.props.name}-0pct`, hex + "00");
         document.body.style.setProperty(`--${this.props.name}-50pct`, hex + "7F");
-        this._buttonRef.style.background = hex;
-        this.value = hex;
+        this.setState({color: hex});
     }
 
     render() {
-        return (<button ref={ref => this._buttonRef = ref} onClick={this._onClick}>{this.props.label}</button>);
+        const id = `color-picker-${this.props.name}`;
+        return (<div>
+            <input type="color" value={this.state.color}
+                onChange={this._onColorChanged}
+                onInput={this._onColorChanged}
+                id={id} />
+            <label htmlFor={id}>{this.props.label}</label>
+        </div>);
     }
 }

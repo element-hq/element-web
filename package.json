@@ -106,7 +106,6 @@
     "slate-react": "^0.18.10",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
-    "vanilla-picker": "^2.10.0",
     "velocity-animate": "^1.5.2",
     "whatwg-fetch": "^1.1.1",
     "zxcvbn": "^4.4.2"
