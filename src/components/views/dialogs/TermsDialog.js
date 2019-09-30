@@ -124,12 +124,13 @@ export default class TermsDialog extends React.PureComponent {
                 const termDoc = policyValues[i];
                 const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== 'version'));
                 let serviceName;
+                let summary;
                 if (i === 0) {
                     serviceName = this._nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
+                    summary = this._summaryForServiceType(
+                        policiesAndService.service.serviceType,
+                    );
                 }
-                const summary = this._summaryForServiceType(
-                    policiesAndService.service.serviceType,
-                );
 
                 rows.push(<tr key={termDoc[termsLang].url}>
                     <td className="mx_TermsDialog_service">{serviceName}</td>
