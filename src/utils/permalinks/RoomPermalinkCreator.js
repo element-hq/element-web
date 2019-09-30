@@ -17,9 +17,7 @@ limitations under the License.
 import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
-
-export const host = "matrix.to";
-export const baseUrl = `https://${host}`;
+import {host as matrixtoHost, baseUrl as matrixtoBaseUrl} from "SpecPermalinks";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -123,15 +121,19 @@ export class RoomPermalinkCreator {
         return this._started;
     }
 
+    isPermalinkHost(host: string): boolean {
+        return host === matrixtoHost;
+    }
+
     forEvent(eventId) {
         const roomId = this._roomId;
-        const permalinkBase = `${baseUrl}/#/${roomId}/${eventId}`;
+        const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}/${eventId}`;
         return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
     }
 
     forRoom() {
         const roomId = this._roomId;
-        const permalinkBase = `${baseUrl}/#/${roomId}`;
+        const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}`;
         return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
     }
 
@@ -255,11 +257,11 @@ export class RoomPermalinkCreator {
 }
 
 export function makeUserPermalink(userId) {
-    return `${baseUrl}/#/${userId}`;
+    return `${matrixtoBaseUrl}/#/${userId}`;
 }
 
 export function makeRoomPermalink(roomId) {
-    const permalinkBase = `${baseUrl}/#/${roomId}`;
+    const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}`;
 
     if (!roomId) {
         throw new Error("can't permalink a falsey roomId");
@@ -280,7 +282,7 @@ export function makeRoomPermalink(roomId) {
 }
 
 export function makeGroupPermalink(groupId) {
-    return `${baseUrl}/#/${groupId}`;
+    return `${matrixtoBaseUrl}/#/${groupId}`;
 }
 
 export function encodeServerCandidates(candidates) {
