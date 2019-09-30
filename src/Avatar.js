@@ -67,7 +67,12 @@ module.exports = {
      * @return {string} the first letter
      */
     getInitialLetter(name) {
-        if (!name || name.length < 1) {
+        if (!name) {
+            // XXX: We should find out what causes the name to sometimes be falsy.
+            console.trace("`name` argument to `getInitialLetter` not supplied");
+            return undefined;
+        }
+        if (name.length < 1) {
             return undefined;
         }
 
