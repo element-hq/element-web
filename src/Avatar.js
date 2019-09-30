@@ -67,7 +67,7 @@ module.exports = {
      * @return {string} the first letter
      */
     getInitialLetter(name) {
-        if (name.length < 1) {
+        if (!name || name.length < 1) {
             return undefined;
         }
 
