@@ -14,15 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const host = "matrix.to";
-export const baseUrl = `https://${host}`;
-
 /**
- * Generates matrix.to permalinks
+ * Interface for classes that actually produce permalinks (strings).
+ * TODO: Convert this to a real TypeScript interface
  */
-export default class SpecPermalinks {
-    constructor() {
+export default class PermalinkConstructor {
+    forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
+        throw new Error("Not implemented");
     }
 
-    // TODO: The class
+    forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
+        throw new Error("Not implemented");
+    }
+
+    forGroup(groupId: string): string {
+        throw new Error("Not implemented");
+    }
+
+    forUser(userId: string): string {
+        throw new Error("Not implemented");
+    }
 }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {baseUrl} from "./utils/permalinks/SpecPermalinks";
+import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
 
 function matrixLinkify(linkify) {
     // Text tokens

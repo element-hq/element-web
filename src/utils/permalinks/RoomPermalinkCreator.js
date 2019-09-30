@@ -17,7 +17,13 @@ limitations under the License.
 import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
-import {host as matrixtoHost, baseUrl as matrixtoBaseUrl} from "SpecPermalinks";
+import SpecPermalinkConstructor, {
+    baseUrl as matrixtoBaseUrl,
+    host as matrixtoHost
+} from "./SpecPermalinkConstructor";
+import PermalinkConstructor from "./PermalinkConstructor";
+
+const SdkConfig = require("../../SdkConfig");
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -71,7 +77,7 @@ export class RoomPermalinkCreator {
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
     // permalink to a room which the MatrixClient doesn't know about.
-    constructor(room, roomId=null) {
+    constructor(room, roomId = null) {
         this._room = room;
         this._roomId = room ? room.roomId : roomId;
         this._highestPlUserId = null;
@@ -126,15 +132,11 @@ export class RoomPermalinkCreator {
     }
 
     forEvent(eventId) {
-        const roomId = this._roomId;
-        const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}/${eventId}`;
-        return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
+        return getPermalinkConstructor().forEvent(this._roomId, eventId, this._serverCandidates);
     }
 
     forRoom() {
-        const roomId = this._roomId;
-        const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}`;
-        return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
+        return getPermalinkConstructor().forRoom(this._roomId, this._serverCandidates);
     }
 
     onRoomState(event) {
@@ -184,8 +186,8 @@ export class RoomPermalinkCreator {
                         }
                         const serverName = getServerName(userId);
                         return !isHostnameIpAddress(serverName) &&
-                               !isHostInRegex(serverName, this._bannedHostsRegexps) &&
-                               isHostInRegex(serverName, this._allowedHostsRegexps);
+                            !isHostInRegex(serverName, this._bannedHostsRegexps) &&
+                            isHostInRegex(serverName, this._allowedHostsRegexps);
                     });
                     const maxEntry = allowedEntries.reduce((max, entry) => {
                         return (entry[1] > max[1]) ? entry : max;
@@ -223,7 +225,7 @@ export class RoomPermalinkCreator {
     }
 
     _updatePopulationMap() {
-        const populationMap: {[server:string]:number} = {};
+        const populationMap: { [server: string]: number } = {};
         for (const member of this._room.getJoinedMembers()) {
             const serverName = getServerName(member.userId);
             if (!populationMap[serverName]) {
@@ -244,9 +246,9 @@ export class RoomPermalinkCreator {
             .sort((a, b) => this._populationMap[b] - this._populationMap[a])
             .filter(a => {
                 return !candidates.includes(a) &&
-                       !isHostnameIpAddress(a) &&
-                       !isHostInRegex(a, this._bannedHostsRegexps) &&
-                       isHostInRegex(a, this._allowedHostsRegexps);
+                    !isHostnameIpAddress(a) &&
+                    !isHostInRegex(a, this._bannedHostsRegexps) &&
+                    isHostInRegex(a, this._allowedHostsRegexps);
             });
 
         const remainingServers = serversByPopulation.slice(0, MAX_SERVER_CANDIDATES - candidates.length);
@@ -257,24 +259,22 @@ export class RoomPermalinkCreator {
 }
 
 export function makeUserPermalink(userId) {
-    return `${matrixtoBaseUrl}/#/${userId}`;
+    return getPermalinkConstructor().forUser(userId);
 }
 
 export function makeRoomPermalink(roomId) {
-    const permalinkBase = `${matrixtoBaseUrl}/#/${roomId}`;
-
     if (!roomId) {
         throw new Error("can't permalink a falsey roomId");
     }
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
-    if (roomId[0] !== '!') return permalinkBase;
+    if (roomId[0] !== '!') return getPermalinkConstructor().forRoom(roomId, []);
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
     if (!room) {
-        return permalinkBase;
+        return getPermalinkConstructor().forRoom(roomId, []);
     }
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
@@ -282,12 +282,15 @@ export function makeRoomPermalink(roomId) {
 }
 
 export function makeGroupPermalink(groupId) {
-    return `${matrixtoBaseUrl}/#/${groupId}`;
+    return getPermalinkConstructor().forGroup(groupId);
 }
 
-export function encodeServerCandidates(candidates) {
-    if (!candidates || candidates.length === 0) return '';
-    return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
+function getPermalinkConstructor(): PermalinkConstructor {
+    if (SdkConfig.get()['useRiotToCreatePermalinks']) {
+        // TODO: Return a RiotPermalinkConstructor
+    }
+
+    return new SpecPermalinkConstructor();
 }
 
 function getServerName(userId) {
