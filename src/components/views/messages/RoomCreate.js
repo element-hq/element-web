@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import dis from '../../../dispatcher';
-import { RoomPermalinkCreator } from '../../../matrix-to';
+import { RoomPermalinkCreator } from '../../../utils/permalinks/RoomPermalinkCreator';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 

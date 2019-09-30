@@ -30,7 +30,7 @@ import { _t } from '../../../languageHandler';
 import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
-import {host as matrixtoHost} from '../../../matrix-to';
+import {host as matrixtoHost} from '../../../utils/permalinks/RoomPermalinkCreator';
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 

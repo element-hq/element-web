@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {baseUrl} from "./matrix-to";
+import {baseUrl} from "./utils/permalinks/RoomPermalinkCreator";
 
 function matrixLinkify(linkify) {
     // Text tokens

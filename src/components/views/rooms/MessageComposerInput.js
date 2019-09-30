@@ -54,7 +54,7 @@ import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {makeUserPermalink} from "../../../matrix-to";
+import {makeUserPermalink} from "../../../utils/permalinks/RoomPermalinkCreator";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";

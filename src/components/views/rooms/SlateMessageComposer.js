@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
-import { makeRoomPermalink } from '../../../matrix-to';
+import { makeRoomPermalink } from '../../../utils/permalinks/RoomPermalinkCreator';
 import ContentMessages from '../../../ContentMessages';
 import classNames from 'classnames';
 

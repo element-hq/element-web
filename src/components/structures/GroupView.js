@@ -36,7 +36,7 @@ import classnames from 'classnames';
 import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
-import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
+import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/RoomPermalinkCreator";
 import {Group} from "matrix-js-sdk";
 
 const LONG_DESC_PLACEHOLDER = _td(

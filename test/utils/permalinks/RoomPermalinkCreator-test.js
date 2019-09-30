@@ -11,15 +11,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-import peg from '../src/MatrixClientPeg';
+import expect from 'expect/build/index';
+import peg from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
     RoomPermalinkCreator,
-} from "../src/matrix-to";
-import * as testUtils from "./test-utils";
+} from "../../../src/utils/permalinks/RoomPermalinkCreator";
+import * as testUtils from "../../test-utils";
 
 function mockRoom(roomId, members, serverACL) {
     members.forEach(m => m.membership = "join");
