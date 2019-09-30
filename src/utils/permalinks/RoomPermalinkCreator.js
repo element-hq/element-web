@@ -18,7 +18,7 @@ import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
-import PermalinkConstructor from "./PermalinkConstructor";
+import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
 
 const SdkConfig = require("../../SdkConfig");
@@ -289,6 +289,17 @@ function getPermalinkConstructor(): PermalinkConstructor {
     }
 
     return new SpecPermalinkConstructor();
+}
+
+export function parsePermalink(fullUrl: string): PermalinkParts {
+    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (fullUrl.startsWith(matrixtoBaseUrl)) {
+        return new SpecPermalinkConstructor().parsePermalink(fullUrl);
+    } else if (riotPrefix && fullUrl.startsWith(riotPrefix)) {
+        return new RiotPermalinkConstructor(riotPrefix).parsePermalink(fullUrl);
+    }
+
+    return null; // not a permalink we can handle
 }
 
 function getServerName(userId) {
