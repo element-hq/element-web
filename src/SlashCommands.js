@@ -23,8 +23,6 @@ import dis from './dispatcher';
 import sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
-import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
-import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
@@ -34,6 +32,7 @@ import Promise from "bluebird";
 import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
+import {isPermalinkHost, parsePermalink} from "./utils/permalinks/RoomPermalinkCreator";
 
 const singleMxcUpload = async () => {
     return new Promise((resolve) => {
@@ -441,7 +440,19 @@ export const CommandMap = {
                 const params = args.split(' ');
                 if (params.length < 1) return reject(this.getUsage());
 
-                const matrixToMatches = params[0].match(MATRIXTO_URL_PATTERN);
+                let isPermalink = false;
+                if (params[0].startsWith("http:") || params[0].startsWith("https:")) {
+                    // It's at least a URL - try and pull out a hostname to check against the
+                    // permalink handler
+                    const parsedUrl = new URL(params[0]);
+                    const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
+
+                    // if we're using a Riot permalink handler, this will catch it before we get much further.
+                    // see below where we make assumptions about parsing the URL.
+                    if (isPermalinkHost(hostname)) {
+                        isPermalink = true;
+                    }
+                }
                 if (params[0][0] === '#') {
                     let roomAlias = params[0];
                     if (!roomAlias.includes(':')) {
@@ -469,28 +480,24 @@ export const CommandMap = {
                         auto_join: true,
                     });
                     return success();
-                } else if (matrixToMatches) {
-                    let entity = matrixToMatches[1];
-                    let eventId = null;
-                    let viaServers = [];
+                } else if (isPermalink) {
+                    const permalinkParts = parsePermalink(params[0]);
 
-                    if (entity[0] !== '!' && entity[0] !== '#') return reject(this.getUsage());
-
-                    if (entity.indexOf('?') !== -1) {
-                        const parts = entity.split('?');
-                        entity = parts[0];
-
-                        const parsed = querystring.parse(parts[1]);
-                        viaServers = parsed["via"];
-                        if (typeof viaServers === 'string') viaServers = [viaServers];
+                    // This check technically isn't needed because we already did our
+                    // safety checks up above. However, for good measure, let's be sure.
+                    if (!permalinkParts) {
+                        return reject(this.getUsage());
                     }
 
-                    // We quietly support event ID permalinks too
-                    if (entity.indexOf('/$') !== -1) {
-                        const parts = entity.split("/$");
-                        entity = parts[0];
-                        eventId = `$${parts[1]}`;
+                    // If for some reason someone wanted to join a group or user, we should
+                    // stop them now.
+                    if (!permalinkParts.roomIdOrAlias) {
+                        return reject(this.getUsage());
                     }
+
+                    const entity = permalinkParts.roomIdOrAlias;
+                    const viaServers = permalinkParts.viaServers;
+                    const eventId = permalinkParts.eventId;
 
                     const dispatch = {
                         action: 'view_room',
