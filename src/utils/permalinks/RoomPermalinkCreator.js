@@ -287,8 +287,9 @@ export function isPermalinkHost(host: string): boolean {
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
-    if (SdkConfig.get()['permalinkPrefix'] && SdkConfig.get()['permalinkPrefix'] !== matrixtoBaseUrl) {
-        return new RiotPermalinkConstructor(SdkConfig.get()['permalinkPrefix']);
+    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (riotPrefix && riotPrefix !== matrixtoBaseUrl) {
+        return new RiotPermalinkConstructor(riotPrefix);
     }
 
     return new SpecPermalinkConstructor();
