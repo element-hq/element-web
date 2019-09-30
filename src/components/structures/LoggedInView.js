@@ -22,7 +22,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import { Key, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
@@ -353,23 +353,23 @@ const LoggedInView = createReactClass({
         const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
             ev.key === "Alt" || ev.key === "Control" || ev.key === "Meta" || ev.key === "Shift";
 
-        switch (ev.keyCode) {
-            case KeyCode.PAGE_UP:
-            case KeyCode.PAGE_DOWN:
+        switch (ev.key) {
+            case Key.PAGE_UP:
+            case Key.PAGE_DOWN:
                 if (!hasModifier) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
                 break;
 
-            case KeyCode.HOME:
-            case KeyCode.END:
+            case Key.HOME:
+            case Key.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
                 break;
-            case KeyCode.KEY_K:
+            case Key.K:
                 if (ctrlCmdOnly) {
                     dis.dispatch({
                         action: 'focus_room_filter',
@@ -377,7 +377,9 @@ const LoggedInView = createReactClass({
                     handled = true;
                 }
                 break;
-            case KeyCode.KEY_BACKTICK:
+            case Key.BACKTICK:
+                if (ev.key !== "`") break;
+
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
                 // was previously chosen but conflicted with italics in
