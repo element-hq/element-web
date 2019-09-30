@@ -32,7 +32,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {isPermalinkHost} from "../../../utils/permalinks/RoomPermalinkCreator";
 
 module.exports = createReactClass({
     displayName: 'TextualBody',
@@ -251,10 +251,7 @@ module.exports = createReactClass({
             // never preview matrix.to links (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
-            if (this.props.mxEvent && this.props.mxEvent.getRoom()) {
-                const permalinks = new RoomPermalinkCreator(this.props.mxEvent.getRoom());
-                if (permalinks.isPermalinkHost(host)) return false;
-            }
+            if (isPermalinkHost(host)) return false;
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link

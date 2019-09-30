@@ -17,10 +17,7 @@ limitations under the License.
 import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
-import SpecPermalinkConstructor, {
-    baseUrl as matrixtoBaseUrl,
-    host as matrixtoHost
-} from "./SpecPermalinkConstructor";
+import SpecPermalinkConstructor from "./SpecPermalinkConstructor";
 import PermalinkConstructor from "./PermalinkConstructor";
 
 const SdkConfig = require("../../SdkConfig");
@@ -125,10 +122,6 @@ export class RoomPermalinkCreator {
 
     isStarted() {
         return this._started;
-    }
-
-    isPermalinkHost(host: string): boolean {
-        return host === matrixtoHost;
     }
 
     forEvent(eventId) {
@@ -283,6 +276,10 @@ export function makeRoomPermalink(roomId) {
 
 export function makeGroupPermalink(groupId) {
     return getPermalinkConstructor().forGroup(groupId);
+}
+
+export function isPermalinkHost(host: string): boolean {
+    return getPermalinkConstructor().isPermalinkHost(host);
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {

@@ -43,6 +43,10 @@ export default class SpecPermalinkConstructor extends PermalinkConstructor {
         return `${baseUrl}/#/${groupId}`;
     }
 
+    isPermalinkHost(testHost: string): boolean {
+        return testHost === host;
+    }
+
     encodeServerCandidates(candidates: string[]) {
         if (!candidates || candidates.length === 0) return '';
         return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;

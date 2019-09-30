@@ -34,4 +34,8 @@ export default class PermalinkConstructor {
     forUser(userId: string): string {
         throw new Error("Not implemented");
     }
+
+    isPermalinkHost(host: string): boolean {
+        throw new Error("Not implemented");
+    }
 }
