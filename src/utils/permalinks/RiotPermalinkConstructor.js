@@ -57,4 +57,46 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
         if (!candidates || candidates.length === 0) return '';
         return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
     }
+
+    // Heavily inspired by/borrowed from the matrix-bot-sdk (with permission):
+    // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L33-L61
+    // Adapted for Riot's URL format
+    parsePermalink(fullUrl: string): PermalinkParts {
+        if (!fullUrl || !fullUrl.startsWith(this._riotUrl)) {
+            throw new Error("Does not appear to be a permalink");
+        }
+
+        const parts = fullUrl.substring(`${this._riotUrl}/#/`.length).split("/");
+        if (parts.length < 2) { // we're expecting an entity and an ID of some kind at least
+            throw new Error("URL is missing parts");
+        }
+
+        const entityType = parts[0];
+        const entity = parts[1];
+        if (entityType === 'user') {
+            // Probably a user, no further parsing needed.
+            return PermalinkParts.forUser(entity);
+        } else if (entityType === 'group') {
+            // Probably a group, no further parsing needed.
+            return PermalinkParts.forGroup(entity);
+        } else if (entityType === 'room') {
+            if (parts.length === 2) {
+                return PermalinkParts.forRoom(entity, []);
+            }
+
+            // rejoin the rest because v3 events can have slashes (annoyingly)
+            const eventIdAndQuery = parts.length > 2 ? parts.slice(2).join('/') : "";
+            const secondaryParts = eventIdAndQuery.split("?");
+
+            const eventId = secondaryParts[0];
+            const query = secondaryParts.length > 1 ? secondaryParts[1] : "";
+
+            // TODO: Verify Riot works with via args
+            const via = query.split("via=").filter(p => !!p);
+
+            return PermalinkParts.forEvent(entity, eventId, via);
+        } else {
+            throw new Error("Unknown entity type in permalink");
+        }
+    }
 }
