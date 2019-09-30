@@ -1256,5 +1256,10 @@
     "Username": "Корисничко име",
     "You need to enter a username.": "Морате унети корисничко име.",
     "Not sure of your password? <a>Set a new one</a>": "Не сећате се лозинке? <a>Поставите нову</a>",
-    "Are you sure you want to sign out?": "Да ли сте сигурни да се желите одјавити?"
+    "Are you sure you want to sign out?": "Да ли сте сигурни да се желите одјавити?",
+    "Call failed due to misconfigured server": "Позив није успео због погрешно подешеног сервера",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Замолите администратора вашег сервера (<code>%(homeserverDomain)s</code>) да подеси TURN сервер како би позиви радили поуздано.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Или, можете покушати да користите јавни сервер на  <code>turn.matrix.org</code>, али ово неће бити толико поуздано, и поделиће вашу IP адресу са тим сервером. Ово такође можете мењати у Подешавањима.",
+    "Try using turn.matrix.org": "Покушајте да користите turn.matrix.org",
+    "A conference call could not be started because the integrations server is not available": "Конференцијски позив није могао бити започет јер интеграциони сервер није расположив"
 }
