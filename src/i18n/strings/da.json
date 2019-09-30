@@ -112,7 +112,7 @@
     "No rooms to show": "Ingen rum at vise",
     "This email address is already in use": "Denne emailadresse er allerede i brug",
     "This phone number is already in use": "Dette telefonnummer er allerede i brug",
-    "Failed to verify email address: make sure you clicked the link in the email": "Kunne ikke bekræfte emailaddressen: vær sikker på at du klikke på linket i emailen",
+    "Failed to verify email address: make sure you clicked the link in the email": "Kunne ikke bekræfte emailaddressen: vær sikker på at klikke på linket i emailen",
     "Call Timeout": "Opkalds Timeout",
     "The remote side failed to pick up": "Den anden side tog den ikke",
     "Unable to capture screen": "Kunne ikke optage skærm",
@@ -397,5 +397,9 @@
     "View Community": "Vis community",
     "%(count)s Members|one": "%(count)s medlem",
     "Notes:": "Noter:",
-    "Preparing to send logs": "Forbereder afsendelse af logfiler"
+    "Preparing to send logs": "Forbereder afsendelse af logfiler",
+    "The platform you're on": "Den platform du bruger",
+    "The version of Riot.im": "Versionen af Riot.im",
+    "Whether or not you're logged in (we don't record your username)": "Om du er logget på eller ej (vi logger ikke dit brugernavn)",
+    "Your language of choice": "Dit foretrukne sprog"
 }

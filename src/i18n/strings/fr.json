@@ -2202,5 +2202,21 @@
     "Report Content": "Signaler le contenu",
     "Read Marker lifetime (ms)": "Durée de vie du repère de lecture (ms)",
     "Read Marker off-screen lifetime (ms)": "Durée de vie du repère de lecture en dehors de l’écran (ms)",
-    "Changes the avatar of the current room": "Change l’avatar du salon actuel"
+    "Changes the avatar of the current room": "Change l’avatar du salon actuel",
+    "Room alias": "Alias du salon",
+    "e.g. my-room": "par ex. mon-salon",
+    "Please provide a room alias": "Veuillez renseigner un alias de salon",
+    "This alias is available to use": "Cet alias est disponible",
+    "This alias is already in use": "Cet alias est déjà utilisé",
+    "Close dialog": "Fermer la boîte de dialogue",
+    "Please enter a name for the room": "Veuillez renseigner un nom pour le salon",
+    "Set a room alias to easily share your room with other people.": "Définissez un alias de salon pour partager facilement votre salon avec d’autres personnes.",
+    "This room is private, and can only be joined by invitation.": "Ce salon est privé et ne peut être rejoint que sur invitation.",
+    "Create a public room": "Créer un salon public",
+    "Create a private room": "Créer un salon privé",
+    "Topic (optional)": "Sujet (facultatif)",
+    "Make this room public": "Rendre ce salon public",
+    "Hide advanced": "Masquer les informations avancées",
+    "Show advanced": "Afficher les informations avancées",
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Empêcher les utilisateurs d’autres serveurs d’accueil matrix de rejoindre ce salon (Ce paramètre ne peut pas être modifié plus tard !)"
 }

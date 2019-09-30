@@ -2210,5 +2210,6 @@
     "Make this room public": "讓聊天室公開",
     "Hide advanced": "隱藏進階的",
     "Show advanced": "顯示進階的",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）",
+    "Close dialog": "關閉對話框"
 }
