@@ -1771,7 +1771,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "Kľúč obnovenia je bezpečnostný mechanizmus - môžete ho použiť na prístup k šifrovacím kľúčom v prípade, ak zabudnete vaše heslo obnovenia.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Kľúč obnovenia si bezpečne uchovajte, použite napr. správcu hesiel (alebo ho schovajte v trezore)",
     "Your keys are being backed up (the first backup could take a few minutes).": "Zálohovanie kľúčov máte aktívne (prvé zálohovanie môže trvať niekoľko minút).",
-    "Okay": "OK",
     "Secure your backup with a passphrase": "Zabezpečte si zálohu zadaním hesla obnovenia",
     "Confirm your passphrase": "Potvrdiť heslo obnovenia",
     "Recovery key": "Kľúč obnovenia",

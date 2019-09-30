@@ -1768,7 +1768,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "A Visszaállítási Kulcs egy olyan biztonsági elem amivel visszaállíthatod a hozzáférésed a titkosított üzenetekhez még akkor is, ha a jelmondatot elfelejtetted.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "A Visszaállítási Kulcsot nagyon biztonságos helyen tárold, mint pl. egy jelszókezelőben (vagy széfben)",
     "Your keys are being backed up (the first backup could take a few minutes).": "A kulcsaid mentése folyamatban van (az első mentés több percig is eltarthat).",
-    "Okay": "Rendben",
     "Secure your backup with a passphrase": "Védd a mentést egy jelmondattal",
     "Confirm your passphrase": "Erősítsd meg a jelmondatot",
     "Recovery key": "Visszaállítási Kulcs",

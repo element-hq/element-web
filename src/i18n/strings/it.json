@@ -1777,7 +1777,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "La tua chiave di ripristino è una rete di sicurezza - puoi usarla per recuperare l'accesso ai tuoi messaggi cifrati se dimentichi la tua password.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Conserva la chiave di ripristino in un luogo molto sicuro, come un password manager (o una cassaforte)",
     "Your keys are being backed up (the first backup could take a few minutes).": "Il backup delle chiavi è in corso (il primo backup potrebbe richiedere qualche minuto).",
-    "Okay": "Okay",
     "Secure your backup with a passphrase": "Proteggi il tuo backup con una password",
     "Confirm your passphrase": "Conferma la tua password",
     "Recovery key": "Chiave di ripristino",

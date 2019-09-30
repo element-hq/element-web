@@ -1768,7 +1768,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "Votre clé de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase de passe.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Conservez votre clé de récupération dans un endroit très sécurisé, comme un gestionnaire de mots de passe (ou un coffre-fort)",
     "Your keys are being backed up (the first backup could take a few minutes).": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
-    "Okay": "OK",
     "Secure your backup with a passphrase": "Protégez votre sauvegarde avec une phrase de passe",
     "Confirm your passphrase": "Confirmez votre phrase de passe",
     "Recovery key": "Clé de récupération",

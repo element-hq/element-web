@@ -1739,7 +1739,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "Berreskuratze gakoa badaezpadako bat da, zure zifratutako mezuetara sarbidea berreskuratzeko erabili dezakezu pasaesaldia ahaztuz gero.",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "Gorde berreskuratze gakoa toki oso seguru batean, pasaesaldi kudeatzaile batean esaterako (edo gordailu kutxa batean)",
     "Your keys are being backed up (the first backup could take a few minutes).": "Zure gakoen babes-kopia egiten ari da (lehen babes-kopiak minutu batzuk behar ditzake).",
-    "Okay": "Ados",
     "Success!": "Ongi!",
     "A new recovery passphrase and key for Secure Messages have been detected.": "Berreskuratze pasaesaldi eta mezu seguruen gako berriak antzeman dira.",
     "This device is encrypting history using the new recovery method.": "Gailu honek historiala berreskuratze metodo berriarekin zifratzen du.",
