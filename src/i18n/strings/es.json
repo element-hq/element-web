@@ -1608,5 +1608,6 @@
     "You cannot modify widgets in this room.": "No puedes modificar widgets en esta sala.",
     "Displays list of commands with usages and descriptions": "Muestra lista de comandos con usos y descripciones",
     "Use the new, faster, but still experimental composer for writing messages (requires refresh)": "Usar el compositor nuevo y más rapido para escribir mensajes, pero todavía experimental (requiere que refresques la página)",
-    "Multiple integration managers": "Administradores de integración múltiples"
+    "Multiple integration managers": "Administradores de integración múltiples",
+    "Room upgrade confirmation": "Confirmación de actualización de sala"
 }
