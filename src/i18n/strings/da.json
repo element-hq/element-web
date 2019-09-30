@@ -34,5 +34,19 @@
     "Support for those using, running and writing other bridges": "Hjælp til dem der bruger, driver og skriver andre bridges",
     "Contributing code to Matrix and Riot": "Biddrag med kode til Matrix og Riot",
     "Dev chat for the Riot/Web dev team": "Udviklerchat til Riot/Web udviklerholdet",
-    "Dev chat for the Dendrite dev team": "Udviklerchat til Dendrite udviklerholdet"
+    "Dev chat for the Dendrite dev team": "Udviklerchat til Dendrite udviklerholdet",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Din Riot konfiguration indeholder ugyldig JSON. Venligst korrigér problemet og opdatér siden.",
+    "The message from the parser is: %(message)s": "Beskeden fra parseren er: %(message)s",
+    "Invalid JSON": "Ugyldig JSON",
+    "Your Riot is misconfigured": "Din Riot er fejlkonfigureret",
+    "Unexpected error preparing the app. See console for details.": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfiguration: kan kun angive en af default_server_config, default_server_name eller default_hs_url.",
+    "Invalid configuration: no default server specified.": "Ugyldig konfiguration: ingen standardserver angivet.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruge de brugertilpassede serverindstillinger til at logge på andre Matrix servere ved at angive en anden homeserver URL. Dette giver dig mulighed for at bruge Riot med en eksisterende Matrix konto på en anden homeserver.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan også indstille en brugertilpasset identitetsserver, men så vil du ikke kunne invitere brugere pr. e-mail eller selv kunne inviteres pr. e-mail.",
+    "Sign In": "Log på",
+    "Create Account": "Opret konto",
+    "Need help?": "Brug for hjælp?",
+    "Explore rooms": "Udforsk rum",
+    "Room Directory": "Rumliste"
 }

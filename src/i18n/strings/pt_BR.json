@@ -42,5 +42,12 @@
     "Create Account": "Criar Conta",
     "Need help?": "Precisa de ajuda?",
     "Explore rooms": "Explore as salas",
-    "Room Directory": "Diretório de salas"
+    "Room Directory": "Diretório de salas",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Sua configuração do Riot contém JSON inválido. Por favor corrija o erro e atualize a página.",
+    "The message from the parser is: %(message)s": "A mensagem do parser é: %(message)s",
+    "Invalid JSON": "JSON inválido",
+    "Your Riot is misconfigured": "Riot possui um erro de configuração",
+    "Unexpected error preparing the app. See console for details.": "Erro inesperado preparando o aplicativo. Veja o console para mais detalhes.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuração inválida: somente se pode especificar um valor entre default_server_config, default_server_name, ou default_hs_url.",
+    "Invalid configuration: no default server specified.": "Configuração inválida: servidor padrão não especificado."
 }

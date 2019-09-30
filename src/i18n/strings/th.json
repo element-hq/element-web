@@ -4,7 +4,7 @@
     "Dismiss": "ไม่สนใจ",
     "Unknown device": "อุปกรณ์ที่ไม่รู้จัก",
     "You need to be using HTTPS to place a screen-sharing call.": "คุณต้องใช้ HTTPS เพื่อเริ่มติดต่อแบบแบ่งปันหน้าจอ",
-    "Riot Desktop on %(platformName)s": "Riot เดสก์ทอปบน %(platformName)s",
+    "Riot Desktop on %(platformName)s": "Riot Desktop บน %(platformName)s",
     "Riot is not supported on mobile web. Install the app?": "Riot ไม่รองรับเว็บบนอุปกรณ์พกพา ติดตั้งแอป?",
     "Custom Server Options": "กำหนดเซิร์ฟเวอร์เอง",
     "Welcome to Riot.im": "ยินดีต้อนรับสู่ Riot.im",
@@ -33,5 +33,13 @@
     "Design and implementation of E2E in Matrix": "การออกแบบและใช้งาน E2E ใน Matrix",
     "Discussion of the Identity Service API": "พูดคุยเกี่ยวกับ Identity Service API",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "ระบบแชทและประสานงาน ไร้ศูนย์กลางและเข้ารหัสได้ โดยใช้เทคโนโลยีจาก [matrix]",
-    "General discussion about Matrix and Riot": "พูดคุยเรื่องทั่วไป ทั้ง Matrix และ Riot"
+    "General discussion about Matrix and Riot": "พูดคุยเรื่องทั่วไป ทั้ง Matrix และ Riot",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "การตั้งค่า Riot ของคุณมี JSON ที่ไม่ถูกต้อง โปรดแก้ปัญหาและโหลดเพจอีกครั้ง",
+    "The message from the parser is: %(message)s": "ข้อความจากparserคือ:%(message)s",
+    "Invalid JSON": "JSON ไม่ถูกต้อง",
+    "Your Riot is misconfigured": "Riotของคุณตั้งค่าไม่ถูกต้อง",
+    "Sign In": "เข้าสู่ระบบ",
+    "Create Account": "สร้างบัญชี",
+    "Need help?": "ต้องการความช่วยเหลือ?",
+    "Explore rooms": "สำรวจห้อง"
 }
