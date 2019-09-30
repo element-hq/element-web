@@ -280,6 +280,9 @@ export function makeGroupPermalink(groupId) {
 }
 
 export function isPermalinkHost(host: string): boolean {
+    // Always check if the permalink is a spec permalink (callers are likely to call
+    // parsePermalink after this function).
+    if (new SpecPermalinkConstructor().isPermalinkHost(host)) return true;
     return getPermalinkConstructor().isPermalinkHost(host);
 }
 
