@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PermalinkConstructor from "./PermalinkConstructor";
+import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 
 /**
  * Generates permalinks that self-reference the running webapp
@@ -26,31 +26,31 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
     constructor(riotUrl: string) {
         super();
         this._riotUrl = riotUrl;
+
+        if (!this._riotUrl.startsWith("http:") && !this._riotUrl.startsWith("https:")) {
+            throw new Error("Riot prefix URL does not appear to be an HTTP(S) URL");
+        }
     }
 
     forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
-        // TODO: Fix URL
-        return `${this._riotUrl}/#/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this._riotUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
-        // TODO: Fix URL
-        return `${this._riotUrl}/#/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this._riotUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forUser(userId: string): string {
-        // TODO: Fix URL
-        return `${this._riotUrl}/#/${userId}`;
+        return `${this._riotUrl}/#/user/${userId}`;
     }
 
     forGroup(groupId: string): string {
-        // TODO: Fix URL
-        return `${this._riotUrl}/#/${groupId}`;
+        return `${this._riotUrl}/#/group/${groupId}`;
     }
 
     isPermalinkHost(testHost: string): boolean {
-        // TODO: Actual check
-        return testHost === this._riotUrl;
+        const parsedUrl = new URL(this._riotUrl);
+        return testHost === (parsedUrl.host || parsedUrl.hostname); // one of the hosts should match
     }
 
     encodeServerCandidates(candidates: string[]) {
