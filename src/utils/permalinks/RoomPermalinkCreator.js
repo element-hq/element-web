@@ -17,8 +17,9 @@ limitations under the License.
 import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
-import SpecPermalinkConstructor from "./SpecPermalinkConstructor";
+import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor from "./PermalinkConstructor";
+import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
 
 const SdkConfig = require("../../SdkConfig");
 
@@ -283,8 +284,8 @@ export function isPermalinkHost(host: string): boolean {
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
-    if (SdkConfig.get()['useRiotToCreatePermalinks']) {
-        // TODO: Return a RiotPermalinkConstructor
+    if (SdkConfig.get()['permalinkPrefix'] && SdkConfig.get()['permalinkPrefix'] !== matrixtoBaseUrl) {
+        return new RiotPermalinkConstructor(SdkConfig.get()['permalinkPrefix']);
     }
 
     return new SpecPermalinkConstructor();
