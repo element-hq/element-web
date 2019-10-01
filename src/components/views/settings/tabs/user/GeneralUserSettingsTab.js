@@ -27,7 +27,7 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
-import {THEMES} from "../../../../../themes";
+import {enumerateThemes} from "../../../../../theme";
 import PlatformPeg from "../../../../../PlatformPeg";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
@@ -275,8 +275,8 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    {Object.entries(THEMES).map(([theme, text]) => {
-                        return <option key={theme} value={theme}>{_t(text)}</option>;
+                    {Object.entries(enumerateThemes()).map(([theme, text]) => {
+                        return <option key={theme} value={theme}>{text}</option>;
                     })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
