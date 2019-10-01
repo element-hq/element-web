@@ -43,6 +43,10 @@ export default class SpecPermalinkConstructor extends PermalinkConstructor {
         return `${baseUrl}/#/${groupId}`;
     }
 
+    forEntity(entityId: string): string {
+        return `${baseUrl}/#/${entityId}`;
+    }
+
     isPermalinkHost(testHost: string): boolean {
         return testHost === host;
     }

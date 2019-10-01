@@ -48,6 +48,16 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
         return `${this._riotUrl}/#/group/${groupId}`;
     }
 
+    forEntity(entityId: string): string {
+        if (entityId[0] === '!' || entityId[0] === '#') {
+            return this.forRoom(entityId);
+        } else if (entityId[0] === '@') {
+            return this.forUser(entityId);
+        } else if (entityId[0] === '+') {
+            return this.forGroup(entityId);
+        } else throw new Error("Unrecognized entity");
+    }
+
     isPermalinkHost(testHost: string): boolean {
         const parsedUrl = new URL(this._riotUrl);
         return testHost === (parsedUrl.host || parsedUrl.hostname); // one of the hosts should match

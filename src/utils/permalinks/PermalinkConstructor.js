@@ -35,6 +35,10 @@ export default class PermalinkConstructor {
         throw new Error("Not implemented");
     }
 
+    forEntity(entityId: string): string {
+        throw new Error("Not implemented");
+    }
+
     isPermalinkHost(host: string): boolean {
         throw new Error("Not implemented");
     }

@@ -253,6 +253,10 @@ export class RoomPermalinkCreator {
     }
 }
 
+export function makeGenericPermalink(entityId: string): string {
+    return getPermalinkConstructor().forEntity(entityId);
+}
+
 export function makeUserPermalink(userId) {
     return getPermalinkConstructor().forUser(userId);
 }
