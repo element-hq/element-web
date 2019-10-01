@@ -30,11 +30,22 @@ export function enumerateThemes() {
     for (const {name} of customThemes) {
         customThemeNames[`custom-${name}`] = name;
     }
-    console.log("customThemeNames", customThemeNames);
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
-function setCustomThemeVars(themeName) {
+function setCustomThemeVars(customTheme) {
+    const {style} = document.body;
+    if (customTheme.colors) {
+        for (const [name, hexColor] of Object.entries(customTheme.colors)) {
+            style.setProperty(`--${name}`, hexColor);
+            // uses #rrggbbaa to define the color with alpha values at 0% and 50%
+            style.setProperty(`--${name}-0pct`, hexColor + "00");
+            style.setProperty(`--${name}-50pct`, hexColor + "7F");
+        }
+    }
+}
+
+function getCustomTheme(themeName) {
     // set css variables
     const customThemes = SettingsStore.getValue("custom_themes");
     if (!customThemes) {
@@ -45,15 +56,7 @@ function setCustomThemeVars(themeName) {
         const knownNames = customThemes.map(t => t.name).join(", ");
         throw new Error(`Can't find custom theme "${themeName}", only know ${knownNames}`);
     }
-    const {style} = document.body;
-    if (customTheme.colors) {
-        for (const [name, hexColor] of Object.entries(customTheme.colors)) {
-            style.setProperty(`--${name}`, hexColor);
-            // uses #rrggbbaa to define the color with alpha values at 0% and 50%
-            style.setProperty(`--${name}-0pct`, hexColor + "00");
-            style.setProperty(`--${name}-50pct`, hexColor + "7F");
-        }
-    }
+    return customTheme;
 }
 
 /**
@@ -67,9 +70,9 @@ export function setTheme(theme) {
     }
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
-        stylesheetName = "light-custom";
-        const themeName = theme.substr(7);
-        setCustomThemeVars(themeName);
+        const customTheme = getCustomTheme(theme.substr(7));
+        stylesheetName = customTheme.is_dark ? "dark-custom" : "light-custom";
+        setCustomThemeVars(customTheme);
     }
 
     // look for the stylesheet elements.
