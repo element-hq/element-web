@@ -447,10 +447,12 @@ export function bodyToHtml(content, highlights, opts={}) {
         const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length &&
                     // Prevent user pills expanding for users with only emoji in
-                    // their username
+                    // their username. Permalinks (links in pills) can be any URL
+                    // now, so we just check for an HTTP-looking thing.
                     (
                         content.formatted_body == undefined ||
-                        !content.formatted_body.includes("https://matrix.to/")
+                        !content.formatted_body.includes("http:") ||
+                        !content.formatted_body.includes("https:")
                     );
     }
 
