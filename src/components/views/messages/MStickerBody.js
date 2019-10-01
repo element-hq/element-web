@@ -33,20 +33,16 @@ export default class MStickerBody extends MImageBody {
     // MStickerBody doesn't need a wrapping `<a href=...>`, but it does need extra padding
     // which is added by mx_MStickerBody_wrapper
     wrapImage(contentUrl, children) {
-        return <div className="mx_MStickerBody_wrapper"> { children } </div>;
+        let onClick = null;
+        if (!this.state.showImage) {
+            onClick = this.onClick;
+        }
+        return <div className="mx_MStickerBody_wrapper" onClick={onClick}> { children } </div>;
     }
 
     // Placeholder to show in place of the sticker image if
     // img onLoad hasn't fired yet.
     getPlaceholder() {
-        if (!this.state.showImage) {
-            return (
-                <a className="mx_MStickerBody_hidden" onClick={this.onClick} href="#">
-                    <span>{_t("Click to show sticker")}</span>
-                </a>
-            );
-        }
-
         const TintableSVG = sdk.getComponent('elements.TintableSvg');
         return <TintableSVG src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
     }

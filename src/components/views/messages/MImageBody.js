@@ -346,11 +346,7 @@ export default class MImageBody extends React.Component {
                     />
                 );
                 if (!this.state.showImage) {
-                    imageElement = (
-                        <div className="mx_MImageBody_hidden">
-                            <span>{_t("Click to show image")}</span>
-                        </div>
-                    );
+                    imageElement = <HiddenImagePlaceholder />;
                 }
                 return this.wrapImage(contentUrl, imageElement);
             }
@@ -381,7 +377,7 @@ export default class MImageBody extends React.Component {
             placeholder = this.getPlaceholder();
         }
 
-        const showPlaceholder = Boolean(placeholder);
+        let showPlaceholder = Boolean(placeholder);
 
         if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
@@ -396,13 +392,11 @@ export default class MImageBody extends React.Component {
                      onMouseEnter={this.onImageEnter}
                      onMouseLeave={this.onImageLeave} />
             );
-            if (!this.state.showImage) {
-                img = (
-                    <div style={{ maxWidth: maxWidth + "px" }} className="mx_MImageBody_hidden">
-                        <span>{_t("Click to show image")}</span>
-                    </div>
-                );
-            }
+        }
+
+        if (!this.state.showImage) {
+            img = <HiddenImagePlaceholder style={{ maxWidth: maxWidth + "px" }} />;
+            showPlaceholder = false; // because we're hiding the image, so don't show the sticker icon.
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
@@ -486,5 +480,24 @@ export default class MImageBody extends React.Component {
             { thumbnail }
             { fileBody }
         </span>;
+    }
+}
+
+export class HiddenImagePlaceholder extends React.PureComponent {
+    static propTypes = {
+        hover: PropTypes.bool,
+    };
+
+    render() {
+        let className = 'mx_HiddenImagePlaceholder';
+        if (this.props.hover) className += ' mx_HiddenImagePlaceholder_hover';
+        return (
+            <div className={className}>
+                <div className='mx_HiddenImagePlaceholder_button'>
+                    <img src={require("../../../../res/img/feather-customised/eye.svg")} width={17} height={12} />
+                    <span>{_t("Show image")}</span>
+                </div>
+            </div>
+        );
     }
 }
