@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import MImageBody from './MImageBody';
 import sdk from '../../../index';
-import {_t} from "../../../languageHandler";
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
