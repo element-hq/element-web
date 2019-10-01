@@ -536,7 +536,7 @@ export default class MessageComposerInput extends React.Component {
 
         const textWithMdPills = this.plainWithMdPills.serialize(editorState);
         const markdown = new Markdown(textWithMdPills);
-        // HTML deserialize has custom rules to turn matrix.to links into pill objects.
+        // HTML deserialize has custom rules to turn permalinks into pill objects.
         return this.html.deserialize(markdown.toHTML());
     }
 

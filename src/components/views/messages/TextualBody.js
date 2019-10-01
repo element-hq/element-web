@@ -248,7 +248,7 @@ module.exports = createReactClass({
             const url = node.getAttribute("href");
             const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
 
-            // never preview matrix.to links (if anything we should give a smart
+            // never preview permalinks (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
             if (isPermalinkHost(host)) return false;
