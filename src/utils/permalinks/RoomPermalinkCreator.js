@@ -20,6 +20,7 @@ import utils from 'matrix-js-sdk/lib/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
+import * as matrixLinkify from "../../linkify-matrix";
 
 const SdkConfig = require("../../SdkConfig");
 
@@ -284,6 +285,40 @@ export function isPermalinkHost(host: string): boolean {
     // parsePermalink after this function).
     if (new SpecPermalinkConstructor().isPermalinkHost(host)) return true;
     return getPermalinkConstructor().isPermalinkHost(host);
+}
+
+/**
+ * Transforms a permalink (or possible permalink) into a local URL if possible. If
+ * the given permalink is found to not be a permalink, it'll be returned unaltered.
+ */
+export function tryTransformPermalinkToLocalHref(permalink: string): string {
+    if (!permalink.startsWith("http:") && !permalink.startsWith("https:")) {
+        return permalink;
+    }
+
+    let m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+    if (m) {
+        return m[1];
+    }
+
+    // A bit of a hack to convert permalinks of unknown origin to Riot links
+    try {
+        const permalinkParts = parsePermalink(permalink);
+        if (permalinkParts) {
+            if (permalinkParts.roomIdOrAlias) {
+                const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
+                permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
+            } else if (permalinkParts.groupId) {
+                permalink = `#/group/${permalinkParts.groupId}`;
+            } else if (permalinkParts.userId) {
+                permalink = `#/user/${permalinkParts.userId}`;
+            } // else not a valid permalink for our purposes - do not handle
+        }
+    } catch (e) {
+        // Not an href we need to care about
+    }
+
+    return permalink;
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
