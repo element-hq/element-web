@@ -270,21 +270,6 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderThemeSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        let customSection;
-        if (this.state.theme === "light-custom") {
-            customSection = (<div class="mx_GeneralUserSettingsTab_customColors">
-                <span className="mx_SettingsTab_subheading">{_t("Custom theme colors")}</span>
-                <CustomThemeColorField name="accent-color" label={_t("Accent color")} />
-                <CustomThemeColorField name="background-color" label={_t("Background color")} />
-                <CustomThemeColorField name="base-color" label={_t("Base color")} />
-                <CustomThemeColorField name="panel-color" label={_t("Panel color")} />
-                <CustomThemeColorField name="panel-contrast-color" label={_t("Panel Contrast color")} />
-                <CustomThemeColorField name="body-text-color" label={_t("Body Text color")} />
-                <CustomThemeColorField name="body-contrast-color" label={_t("Body contrast color")} />
-                <CustomThemeColorField name="primary-color" label={_t("Primary color")} />
-                <CustomThemeColorField name="warning-color" label={_t("Warning color")} />
-            </div>);
-        }
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -295,7 +280,6 @@ export default class GeneralUserSettingsTab extends React.Component {
                     })}
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
-                { customSection }
             </div>
         );
     }
@@ -393,38 +377,5 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderManagementSection()}
             </div>
         );
-    }
-}
-
-class CustomThemeColorField extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {color: ""};
-    }
-
-    componentDidMount() {
-        setTimeout(() => {
-            const value = window.getComputedStyle(document.body).getPropertyValue(`--${this.props.name}`).trim();
-            this.setState({color: value});
-        }, 3000);
-    }
-
-    _onColorChanged = (event) => {
-        const hex = event.target.value;
-        document.body.style.setProperty(`--${this.props.name}`, hex);
-        document.body.style.setProperty(`--${this.props.name}-0pct`, hex + "00");
-        document.body.style.setProperty(`--${this.props.name}-50pct`, hex + "7F");
-        this.setState({color: hex});
-    }
-
-    render() {
-        const id = `color-picker-${this.props.name}`;
-        return (<div>
-            <input type="color" value={this.state.color}
-                onChange={this._onColorChanged}
-                onInput={this._onColorChanged}
-                id={id} />
-            <label htmlFor={id}>{this.props.label}</label>
-        </div>);
     }
 }
