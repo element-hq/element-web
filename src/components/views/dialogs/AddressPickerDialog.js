@@ -52,7 +52,7 @@ module.exports = createReactClass({
         // Extra node inserted after picker input, dropdown and errors
         extraNode: PropTypes.node,
         value: PropTypes.string,
-        placeholder: PropTypes.oneOfType(PropTypes.string, PropTypes.func),
+        placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         roomId: PropTypes.string,
         button: PropTypes.string,
         focus: PropTypes.bool,

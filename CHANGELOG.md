@@ -1,3 +1,29 @@
+Changes in [1.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.1) (2019-10-01)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.0...v1.6.1)
+
+ * Upgrade to JS SDK 2.4.1 to ignore crypto events with empty content
+ * Update from Weblate
+   [\#3502](https://github.com/matrix-org/matrix-react-sdk/pull/3502)
+ * Adjust details of terms dialog
+   [\#3489](https://github.com/matrix-org/matrix-react-sdk/pull/3489)
+ * Okay -> OK
+   [\#3491](https://github.com/matrix-org/matrix-react-sdk/pull/3491)
+ * Guard against falsy names in getInitialLetter
+   [\#3498](https://github.com/matrix-org/matrix-react-sdk/pull/3498)
+ * Update from Weblate
+   [\#3495](https://github.com/matrix-org/matrix-react-sdk/pull/3495)
+ * Upgrade deps
+   [\#3488](https://github.com/matrix-org/matrix-react-sdk/pull/3488)
+ * Fix: allow mass redaction for members with same or larger power level
+   [\#3487](https://github.com/matrix-org/matrix-react-sdk/pull/3487)
+ * Truncate debug logs at the start, not the end
+   [\#3484](https://github.com/matrix-org/matrix-react-sdk/pull/3484)
+ * Fix: don't block Shift+Tab in CIDER autocomplete
+   [\#3481](https://github.com/matrix-org/matrix-react-sdk/pull/3481)
+ * Fix: make command detection more resilient
+   [\#3479](https://github.com/matrix-org/matrix-react-sdk/pull/3479)
+
 Changes in [1.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.0) (2019-09-27)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.0-rc.2...v1.6.0)

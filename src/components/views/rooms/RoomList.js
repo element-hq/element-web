@@ -805,7 +805,7 @@ module.exports = createReactClass({
         const subListComponents = this._mapSubListProps(subLists);
 
         return (
-            <div ref={this._collectResizeContainer} className="mx_RoomList"
+            <div ref={this._collectResizeContainer} className="mx_RoomList" role="listbox" aria-label={_t("Rooms")}
                  onMouseMove={this.onMouseMove} onMouseLeave={this.onMouseLeave}>
                 { subListComponents }
             </div>

@@ -1684,7 +1684,6 @@
     "<b>Save it</b> on a USB key or backup drive": "<b>Tallenna se</b> muistitikulle tai varmuuskopiolevylle",
     "<b>Copy it</b> to your personal cloud storage": "<b>Kopioi se</b> henkilökohtaiseen pilvitallennustilaasi",
     "Your keys are being backed up (the first backup could take a few minutes).": "Avaimiasi varmuuskopioidaan (ensimmäinen varmuuskopio voi viedä muutaman minuutin).",
-    "Okay": "OK",
     "Unable to create key backup": "Avaimen varmuuskopiota ei voi luoda",
     "A verification email will be sent to your inbox to confirm setting your new password.": "Ottaaksesi käyttöön uuden salasanasi, seuraa ohjeita sinulle lähetettävässä vahvistussähköpostissa.",
     "Room upgrade confirmation": "Huoneen päivitysvarmistus",

@@ -68,7 +68,7 @@ export default function AccessibleButton(props) {
     delete restProps.inputRef;
 
     restProps.tabIndex = restProps.tabIndex || "0";
-    restProps.role = "button";
+    restProps.role = restProps.role || "button";
     restProps.className = (restProps.className ? restProps.className + " " : "") + "mx_AccessibleButton";
 
     if (kind) {

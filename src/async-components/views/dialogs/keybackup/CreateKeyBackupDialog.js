@@ -446,7 +446,7 @@ export default createReactClass({
             <p>{_t(
                 "Your keys are being backed up (the first backup could take a few minutes).",
             )}</p>
-            <DialogButtons primaryButton={_t('Okay')}
+            <DialogButtons primaryButton={_t('OK')}
                 onPrimaryButtonClick={this._onDone}
                 hasCancel={false}
             />

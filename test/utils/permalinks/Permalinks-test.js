@@ -1,5 +1,7 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -12,14 +14,14 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import peg from '../src/MatrixClientPeg';
+import peg from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
     RoomPermalinkCreator,
-} from "../src/matrix-to";
-import * as testUtils from "./test-utils";
+} from "../../../src/utils/permalinks/Permalinks";
+import * as testUtils from "../../test-utils";
 
 function mockRoom(roomId, members, serverACL) {
     members.forEach(m => m.membership = "join");
@@ -62,7 +64,7 @@ function mockRoom(roomId, members, serverACL) {
     };
 }
 
-describe('matrix-to', function() {
+describe('Permalinks', function() {
     let sandbox;
 
     beforeEach(function() {

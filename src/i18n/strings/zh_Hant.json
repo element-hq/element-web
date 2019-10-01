@@ -1768,7 +1768,6 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.": "您的復原金鑰是安全網，如果您忘記您的通關密語的話，您還可以使用它來復原您對加密訊息的存取權。",
     "Keep your recovery key somewhere very secure, like a password manager (or a safe)": "把您的復原金鑰放在安全的地方，像是密碼管理員（或保險箱）",
     "Your keys are being backed up (the first backup could take a few minutes).": "您的金鑰正在備份（第一次備份會花費數分鐘）。",
-    "Okay": "好",
     "Secure your backup with a passphrase": "使用通關密語保障您備份的安全",
     "Confirm your passphrase": "確認您的通關密語",
     "Recovery key": "復原金鑰",
@@ -2210,5 +2209,6 @@
     "Make this room public": "讓聊天室公開",
     "Hide advanced": "隱藏進階的",
     "Show advanced": "顯示進階的",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）",
+    "Close dialog": "關閉對話框"
 }

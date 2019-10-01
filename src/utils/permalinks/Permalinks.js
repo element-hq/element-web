@@ -14,12 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from "./MatrixClientPeg";
+import MatrixClientPeg from "../../MatrixClientPeg";
 import isIp from "is-ip";
 import utils from 'matrix-js-sdk/lib/utils';
+import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
+import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
+import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
+import * as matrixLinkify from "../../linkify-matrix";
 
-export const host = "matrix.to";
-export const baseUrl = `https://${host}`;
+const SdkConfig = require("../../SdkConfig");
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -73,7 +76,7 @@ export class RoomPermalinkCreator {
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
     // permalink to a room which the MatrixClient doesn't know about.
-    constructor(room, roomId=null) {
+    constructor(room, roomId = null) {
         this._room = room;
         this._roomId = room ? room.roomId : roomId;
         this._highestPlUserId = null;
@@ -124,15 +127,11 @@ export class RoomPermalinkCreator {
     }
 
     forEvent(eventId) {
-        const roomId = this._roomId;
-        const permalinkBase = `${baseUrl}/#/${roomId}/${eventId}`;
-        return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
+        return getPermalinkConstructor().forEvent(this._roomId, eventId, this._serverCandidates);
     }
 
     forRoom() {
-        const roomId = this._roomId;
-        const permalinkBase = `${baseUrl}/#/${roomId}`;
-        return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
+        return getPermalinkConstructor().forRoom(this._roomId, this._serverCandidates);
     }
 
     onRoomState(event) {
@@ -182,8 +181,8 @@ export class RoomPermalinkCreator {
                         }
                         const serverName = getServerName(userId);
                         return !isHostnameIpAddress(serverName) &&
-                               !isHostInRegex(serverName, this._bannedHostsRegexps) &&
-                               isHostInRegex(serverName, this._allowedHostsRegexps);
+                            !isHostInRegex(serverName, this._bannedHostsRegexps) &&
+                            isHostInRegex(serverName, this._allowedHostsRegexps);
                     });
                     const maxEntry = allowedEntries.reduce((max, entry) => {
                         return (entry[1] > max[1]) ? entry : max;
@@ -221,7 +220,7 @@ export class RoomPermalinkCreator {
     }
 
     _updatePopulationMap() {
-        const populationMap: {[server:string]:number} = {};
+        const populationMap: { [server: string]: number } = {};
         for (const member of this._room.getJoinedMembers()) {
             const serverName = getServerName(member.userId);
             if (!populationMap[serverName]) {
@@ -242,9 +241,9 @@ export class RoomPermalinkCreator {
             .sort((a, b) => this._populationMap[b] - this._populationMap[a])
             .filter(a => {
                 return !candidates.includes(a) &&
-                       !isHostnameIpAddress(a) &&
-                       !isHostInRegex(a, this._bannedHostsRegexps) &&
-                       isHostInRegex(a, this._allowedHostsRegexps);
+                    !isHostnameIpAddress(a) &&
+                    !isHostInRegex(a, this._bannedHostsRegexps) &&
+                    isHostInRegex(a, this._allowedHostsRegexps);
             });
 
         const remainingServers = serversByPopulation.slice(0, MAX_SERVER_CANDIDATES - candidates.length);
@@ -254,25 +253,27 @@ export class RoomPermalinkCreator {
     }
 }
 
+export function makeGenericPermalink(entityId: string): string {
+    return getPermalinkConstructor().forEntity(entityId);
+}
+
 export function makeUserPermalink(userId) {
-    return `${baseUrl}/#/${userId}`;
+    return getPermalinkConstructor().forUser(userId);
 }
 
 export function makeRoomPermalink(roomId) {
-    const permalinkBase = `${baseUrl}/#/${roomId}`;
-
     if (!roomId) {
         throw new Error("can't permalink a falsey roomId");
     }
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
-    if (roomId[0] !== '!') return permalinkBase;
+    if (roomId[0] !== '!') return getPermalinkConstructor().forRoom(roomId, []);
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
     if (!room) {
-        return permalinkBase;
+        return getPermalinkConstructor().forRoom(roomId, []);
     }
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
@@ -280,12 +281,96 @@ export function makeRoomPermalink(roomId) {
 }
 
 export function makeGroupPermalink(groupId) {
-    return `${baseUrl}/#/${groupId}`;
+    return getPermalinkConstructor().forGroup(groupId);
 }
 
-export function encodeServerCandidates(candidates) {
-    if (!candidates || candidates.length === 0) return '';
-    return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
+export function isPermalinkHost(host: string): boolean {
+    // Always check if the permalink is a spec permalink (callers are likely to call
+    // parsePermalink after this function).
+    if (new SpecPermalinkConstructor().isPermalinkHost(host)) return true;
+    return getPermalinkConstructor().isPermalinkHost(host);
+}
+
+/**
+ * Transforms a permalink (or possible permalink) into a local URL if possible. If
+ * the given permalink is found to not be a permalink, it'll be returned unaltered.
+ * @param {string} permalink The permalink to try and transform.
+ * @returns {string} The transformed permalink or original URL if unable.
+ */
+export function tryTransformPermalinkToLocalHref(permalink: string): string {
+    if (!permalink.startsWith("http:") && !permalink.startsWith("https:")) {
+        return permalink;
+    }
+
+    const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+    if (m) {
+        return m[1];
+    }
+
+    // A bit of a hack to convert permalinks of unknown origin to Riot links
+    try {
+        const permalinkParts = parsePermalink(permalink);
+        if (permalinkParts) {
+            if (permalinkParts.roomIdOrAlias) {
+                const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
+                permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
+            } else if (permalinkParts.groupId) {
+                permalink = `#/group/${permalinkParts.groupId}`;
+            } else if (permalinkParts.userId) {
+                permalink = `#/user/${permalinkParts.userId}`;
+            } // else not a valid permalink for our purposes - do not handle
+        }
+    } catch (e) {
+        // Not an href we need to care about
+    }
+
+    return permalink;
+}
+
+export function getPrimaryPermalinkEntity(permalink: string): string {
+    try {
+        let permalinkParts = parsePermalink(permalink);
+
+        // If not a permalink, try the vector patterns.
+        if (!permalinkParts) {
+            const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+            if (m) {
+                // A bit of a hack, but it gets the job done
+                const handler = new RiotPermalinkConstructor("http://localhost");
+                const entityInfo = m[1].split('#').slice(1).join('#');
+                permalinkParts = handler.parsePermalink(`http://localhost/#${entityInfo}`);
+            }
+        }
+
+        if (!permalinkParts) return null; // not processable
+        if (permalinkParts.userId) return permalinkParts.userId;
+        if (permalinkParts.groupId) return permalinkParts.groupId;
+        if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
+    } catch (e) {
+        // no entity - not a permalink
+    }
+
+    return null;
+}
+
+function getPermalinkConstructor(): PermalinkConstructor {
+    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (riotPrefix && riotPrefix !== matrixtoBaseUrl) {
+        return new RiotPermalinkConstructor(riotPrefix);
+    }
+
+    return new SpecPermalinkConstructor();
+}
+
+export function parsePermalink(fullUrl: string): PermalinkParts {
+    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (fullUrl.startsWith(matrixtoBaseUrl)) {
+        return new SpecPermalinkConstructor().parsePermalink(fullUrl);
+    } else if (riotPrefix && fullUrl.startsWith(riotPrefix)) {
+        return new RiotPermalinkConstructor(riotPrefix).parsePermalink(fullUrl);
+    }
+
+    return null; // not a permalink we can handle
 }
 
 function getServerName(userId) {

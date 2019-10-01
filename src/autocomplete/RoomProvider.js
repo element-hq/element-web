@@ -26,7 +26,7 @@ import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
-import {makeRoomPermalink} from "../matrix-to";
+import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";
 
 const ROOM_REGEX = /\B#\S*/g;
@@ -109,8 +109,14 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            { completions }
-        </div>;
+        return (
+            <div
+                className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
+                role="listbox"
+                aria-label={_t("Room Autocomplete")}
+            >
+                { completions }
+            </div>
+        );
     }
 }

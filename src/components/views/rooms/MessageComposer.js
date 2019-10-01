@@ -23,7 +23,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import Stickerpicker from './Stickerpicker';
-import { makeRoomPermalink } from '../../../matrix-to';
+import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import classNames from 'classnames';
 import E2EIcon from './E2EIcon';

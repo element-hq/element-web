@@ -40,6 +40,7 @@ limitations under the License.
 }
 
 .mx_TermsDialog_link {
+    display: inline-block;
     mask-image: url('$(res)/img/external-link.svg');
     background-color: $accent-color;
     width: 10px;

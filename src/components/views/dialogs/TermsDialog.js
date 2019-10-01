@@ -90,21 +90,17 @@ export default class TermsDialog extends React.PureComponent {
         }
     }
 
-    _summaryForServiceType(serviceType, docName) {
+    _summaryForServiceType(serviceType) {
         switch (serviceType) {
             case Matrix.SERVICE_TYPES.IS:
                 return <div>
                     {_t("Find others by phone or email")}
                     <br />
                     {_t("Be found by phone or email")}
-                    {docName !== null ? <br /> : ''}
-                    {docName !== null ? '('+docName+')' : ''}
                 </div>;
             case Matrix.SERVICE_TYPES.IM:
                 return <div>
                     {_t("Use bots, bridges, widgets and sticker packs")}
-                    {docName !== null ? <br /> : ''}
-                    {docName !== null ? '('+docName+')' : ''}
                 </div>;
         }
     }
@@ -128,19 +124,19 @@ export default class TermsDialog extends React.PureComponent {
                 const termDoc = policyValues[i];
                 const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== 'version'));
                 let serviceName;
+                let summary;
                 if (i === 0) {
                     serviceName = this._nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
+                    summary = this._summaryForServiceType(
+                        policiesAndService.service.serviceType,
+                    );
                 }
-                const summary = this._summaryForServiceType(
-                    policiesAndService.service.serviceType,
-                    policyValues.length > 1 ? termDoc[termsLang].name : null,
-                );
 
                 rows.push(<tr key={termDoc[termsLang].url}>
                     <td className="mx_TermsDialog_service">{serviceName}</td>
                     <td className="mx_TermsDialog_summary">{summary}</td>
-                    <td><a rel="noopener" target="_blank" href={termDoc[termsLang].url}>
-                        <div className="mx_TermsDialog_link" />
+                    <td>{termDoc[termsLang].name} <a rel="noopener" target="_blank" href={termDoc[termsLang].url}>
+                        <span className="mx_TermsDialog_link" />
                     </a></td>
                     <td><TermsCheckbox
                         url={termDoc[termsLang].url}
@@ -184,13 +180,13 @@ export default class TermsDialog extends React.PureComponent {
                 hasCancel={false}
             >
                 <div id='mx_Dialog_content'>
-                    <p>{_t("To continue you need to accept the Terms of this service.")}</p>
+                    <p>{_t("To continue you need to accept the terms of this service.")}</p>
 
                     <table className="mx_TermsDialog_termsTable"><tbody>
                         <tr className="mx_TermsDialog_termsTableHeader">
                             <th>{_t("Service")}</th>
                             <th>{_t("Summary")}</th>
-                            <th>{_t("Terms")}</th>
+                            <th>{_t("Document")}</th>
                             <th>{_t("Accept")}</th>
                         </tr>
                         {rows}
