@@ -321,6 +321,32 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
     return permalink;
 }
 
+export function getPrimaryPermalinkEntity(permalink: string): string {
+    try {
+        let permalinkParts = parsePermalink(permalink);
+
+        // If not a permalink, try the vector patterns.
+        if (!permalinkParts) {
+            let m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+            if (m) {
+                // A bit of a hack, but it gets the job done
+                const handler = new RiotPermalinkConstructor("http://localhost");
+                const entityInfo = m[1].split('#').slice(1).join('#');
+                permalinkParts = handler.parsePermalink(`http://localhost/#${entityInfo}`);
+            }
+        }
+
+        if (!permalinkParts) return null; // not processable
+        if (permalinkParts.userId) return permalinkParts.userId;
+        if (permalinkParts.groupId) return permalinkParts.groupId;
+        if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
+    } catch (e) {
+        // no entity - not a permalink
+    }
+
+    return null;
+}
+
 function getPermalinkConstructor(): PermalinkConstructor {
     const riotPrefix = SdkConfig.get()['permalinkPrefix'];
     if (riotPrefix && riotPrefix !== matrixtoBaseUrl) {

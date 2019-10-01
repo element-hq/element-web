@@ -48,13 +48,11 @@ import Markdown from '../../../Markdown';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 import ContentMessages from '../../../ContentMessages';
 
-import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
-
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {makeUserPermalink} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {getPrimaryPermalinkEntity, makeUserPermalink} from "../../../utils/permalinks/RoomPermalinkCreator";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
@@ -224,18 +222,15 @@ export default class MessageComposerInput extends React.Component {
                         // special case links
                         if (tag === 'a') {
                             const href = el.getAttribute('href');
-                            let m;
-                            if (href) {
-                                m = href.match(MATRIXTO_URL_PATTERN);
-                            }
-                            if (m) {
+                            const permalinkEntity = getPrimaryPermalinkEntity(href);
+                            if (permalinkEntity) {
                                 return {
                                     object: 'inline',
                                     type: 'pill',
                                     data: {
                                         href,
                                         completion: el.innerText,
-                                        completionId: m[1],
+                                        completionId: permalinkEntity,
                                     },
                                 };
                             } else {
