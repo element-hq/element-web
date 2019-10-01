@@ -20,7 +20,6 @@ import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
  * Generates permalinks that self-reference the running webapp
  */
 export default class RiotPermalinkConstructor extends PermalinkConstructor {
-
     _riotUrl: string;
 
     constructor(riotUrl: string) {

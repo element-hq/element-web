@@ -294,13 +294,15 @@ export function isPermalinkHost(host: string): boolean {
 /**
  * Transforms a permalink (or possible permalink) into a local URL if possible. If
  * the given permalink is found to not be a permalink, it'll be returned unaltered.
+ * @param {string} permalink The permalink to try and transform.
+ * @returns {string} The transformed permalink or original URL if unable.
  */
 export function tryTransformPermalinkToLocalHref(permalink: string): string {
     if (!permalink.startsWith("http:") && !permalink.startsWith("https:")) {
         return permalink;
     }
 
-    let m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+    const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
     if (m) {
         return m[1];
     }
@@ -331,7 +333,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 
         // If not a permalink, try the vector patterns.
         if (!permalinkParts) {
-            let m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+            const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
             if (m) {
                 // A bit of a hack, but it gets the job done
                 const handler = new RiotPermalinkConstructor("http://localhost");

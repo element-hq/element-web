@@ -191,13 +191,6 @@ matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
     '\\[([^\\]]*)\\]\\((?:https?://)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 
-const matrixToEntityMap = {
-    '@': '#/user/',
-    '#': '#/room/',
-    '!': '#/room/',
-    '+': '#/group/',
-};
-
 matrixLinkify.options = {
     events: function(href, type) {
         switch (type) {
