@@ -1,3 +1,17 @@
+Changes in [1.4.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.1) (2019-10-01)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.0...v1.4.1)
+
+ * Upgrade to React SDK 1.6.1 to fix critical 
+   [blank screen issue](https://github.com/vector-im/riot-web/issues/10983)
+ * Upgrade to JS SDK 2.4.1 to to ignore crypto events with empty content
+ * Update from Weblate
+   [\#11010](https://github.com/vector-im/riot-web/pull/11010)
+ * Update from Weblate
+   [\#11001](https://github.com/vector-im/riot-web/pull/11001)
+ * Upgrade deps
+   [\#10980](https://github.com/vector-im/riot-web/pull/10980)
+
 Changes in [1.4.0](https://github.com/vector-im/riot-web/releases/tag/v1.4.0) (2019-09-27)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.0-rc.2...v1.4.0)
