@@ -451,8 +451,8 @@ export function bodyToHtml(content, highlights, opts={}) {
                     // now, so we just check for an HTTP-looking thing.
                     (
                         content.formatted_body == undefined ||
-                        !content.formatted_body.includes("http:") ||
-                        !content.formatted_body.includes("https:")
+                        (!content.formatted_body.includes("http:") &&
+                        !content.formatted_body.includes("https:"))
                     );
     }
 
