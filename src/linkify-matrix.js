@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {baseUrl} from "./matrix-to";
+import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens
@@ -189,13 +191,6 @@ matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
     '\\[([^\\]]*)\\]\\((?:https?://)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 
-const matrixToEntityMap = {
-    '@': '#/user/',
-    '#': '#/room/',
-    '!': '#/room/',
-    '+': '#/group/',
-};
-
 matrixLinkify.options = {
     events: function(href, type) {
         switch (type) {
@@ -225,20 +220,8 @@ matrixLinkify.options = {
             case 'roomalias':
             case 'userid':
             case 'groupid':
-                return matrixLinkify.MATRIXTO_BASE_URL + '/#/' + href;
             default: {
-                // FIXME: horrible duplication with HtmlUtils' transform tags
-                let m = href.match(matrixLinkify.VECTOR_URL_PATTERN);
-                if (m) {
-                    return m[1];
-                }
-                m = href.match(matrixLinkify.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    const entity = m[1];
-                    if (matrixToEntityMap[entity[0]]) return matrixToEntityMap[entity[0]] + entity;
-                }
-
-                return href;
+                return tryTransformPermalinkToLocalHref(href);
             }
         }
     },
@@ -249,8 +232,8 @@ matrixLinkify.options = {
 
     target: function(href, type) {
         if (type === 'url') {
-            if (href.match(matrixLinkify.VECTOR_URL_PATTERN) ||
-                href.match(matrixLinkify.MATRIXTO_URL_PATTERN)) {
+            const transformed = tryTransformPermalinkToLocalHref(href);
+            if (transformed !== href || href.match(matrixLinkify.VECTOR_URL_PATTERN)) {
                 return null;
             } else {
                 return '_blank';

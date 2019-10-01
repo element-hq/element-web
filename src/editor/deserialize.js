@@ -15,11 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MATRIXTO_URL_PATTERN } from '../linkify-matrix';
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
-
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {getPrimaryPermalinkEntity} from "../utils/permalinks/Permalinks";
 
 function parseAtRoomMentions(text, partCreator) {
     const ATROOM = "@room";
@@ -41,9 +39,8 @@ function parseAtRoomMentions(text, partCreator) {
 
 function parseLink(a, partCreator) {
     const {href} = a;
-    const pillMatch = REGEX_MATRIXTO.exec(href) || [];
-    const resourceId = pillMatch[1]; // The room/user ID
-    const prefix = pillMatch[2]; // The first character of prefix
+    const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
+    const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
     switch (prefix) {
         case "@":
             return partCreator.userPill(a.textContent, resourceId);

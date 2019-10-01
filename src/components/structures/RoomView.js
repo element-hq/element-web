@@ -31,7 +31,7 @@ import Promise from 'bluebird';
 import classNames from 'classnames';
 import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
-import {RoomPermalinkCreator} from '../../matrix-to';
+import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
 import ContentMessages from '../../ContentMessages';

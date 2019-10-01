@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import url from 'url';
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOJIBASE_REGEX from 'emojibase-regex';
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 linkifyMatrix(linkify);
 
@@ -158,30 +160,10 @@ const transformTags = { // custom to matrix
         if (attribs.href) {
             attribs.target = '_blank'; // by default
 
-            let m;
-            // FIXME: horrible duplication with linkify-matrix
-            m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
-            if (m) {
-                attribs.href = m[1];
+            const transformed = tryTransformPermalinkToLocalHref(attribs.href);
+            if (transformed !== attribs.href || attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN)) {
+                attribs.href = transformed;
                 delete attribs.target;
-            } else {
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    const entity = m[1];
-                    switch (entity[0]) {
-                        case '@':
-                            attribs.href = '#/user/' + entity;
-                            break;
-                        case '+':
-                            attribs.href = '#/group/' + entity;
-                            break;
-                        case '#':
-                        case '!':
-                            attribs.href = '#/room/' + entity;
-                            break;
-                    }
-                    delete attribs.target;
-                }
             }
         }
         attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
@@ -465,10 +447,12 @@ export function bodyToHtml(content, highlights, opts={}) {
         const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length &&
                     // Prevent user pills expanding for users with only emoji in
-                    // their username
+                    // their username. Permalinks (links in pills) can be any URL
+                    // now, so we just check for an HTTP-looking thing.
                     (
                         content.formatted_body == undefined ||
-                        !content.formatted_body.includes("https://matrix.to/")
+                        (!content.formatted_body.includes("http:") &&
+                        !content.formatted_body.includes("https:"))
                     );
     }
 

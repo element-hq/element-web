@@ -26,7 +26,7 @@ import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
-import {makeRoomPermalink} from "../matrix-to";
+import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";
 
 const ROOM_REGEX = /\B#\S*/g;

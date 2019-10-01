@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import Markdown from '../Markdown';
+import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 
 export function mdSerialize(model) {
     return model.parts.reduce((html, part) => {
@@ -29,7 +30,7 @@ export function mdSerialize(model) {
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `[${part.text}](https://matrix.to/#/${part.resourceId})`;
+                return html + `[${part.text}](${makeGenericPermalink(part.resourceId)})`;
         }
     }, "");
 }
