@@ -34,6 +34,8 @@ module.exports = {
             return false;
         } else if (ev.getType() == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
+        } else if (ev.getType() == 'm.room.aliases' || ev.getType() == 'm.room.canonical_alias') {
+            return false;
         }
         const EventTile = sdk.getComponent('rooms.EventTile');
         return EventTile.haveTileForEvent(ev);
