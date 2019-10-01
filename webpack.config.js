@@ -19,6 +19,7 @@ module.exports = {
         "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
         "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
+        "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
     },
     module: {
         rules: [
