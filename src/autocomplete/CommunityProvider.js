@@ -23,7 +23,7 @@ import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
-import {makeGroupPermalink} from "../utils/permalinks/RoomPermalinkCreator";
+import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 

@@ -18,7 +18,7 @@ import {
     makeRoomPermalink,
     makeUserPermalink,
     RoomPermalinkCreator,
-} from "../../../src/utils/permalinks/RoomPermalinkCreator";
+} from "../../../src/utils/permalinks/Permalinks";
 import * as testUtils from "../../test-utils";
 
 function mockRoom(roomId, members, serverACL) {

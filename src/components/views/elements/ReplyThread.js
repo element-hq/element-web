@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
-import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to

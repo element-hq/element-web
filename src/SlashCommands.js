@@ -32,7 +32,7 @@ import Promise from "bluebird";
 import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
-import {isPermalinkHost, parsePermalink} from "./utils/permalinks/RoomPermalinkCreator";
+import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 
 const singleMxcUpload = async () => {
     return new Promise((resolve) => {

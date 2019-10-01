@@ -52,7 +52,7 @@ import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {getPrimaryPermalinkEntity, makeUserPermalink} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {getPrimaryPermalinkEntity, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";

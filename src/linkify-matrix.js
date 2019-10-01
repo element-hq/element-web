@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
-import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/RoomPermalinkCreator";
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens

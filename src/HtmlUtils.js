@@ -34,7 +34,7 @@ import url from 'url';
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOJIBASE_REGEX from 'emojibase-regex';
-import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/RoomPermalinkCreator";
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 linkifyMatrix(linkify);
 

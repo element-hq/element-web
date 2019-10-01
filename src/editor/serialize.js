@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import Markdown from '../Markdown';
-import {makeGenericPermalink} from "../utils/permalinks/RoomPermalinkCreator";
+import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 
 export function mdSerialize(model) {
     return model.parts.reduce((html, part) => {

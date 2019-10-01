@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
-import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)

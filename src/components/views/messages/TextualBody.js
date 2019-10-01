@@ -32,7 +32,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {isPermalinkHost} from "../../../utils/permalinks/RoomPermalinkCreator";
+import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 
 module.exports = createReactClass({
     displayName: 'TextualBody',

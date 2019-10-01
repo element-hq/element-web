@@ -17,7 +17,7 @@ limitations under the License.
 
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
-import {getPrimaryPermalinkEntity} from "../utils/permalinks/RoomPermalinkCreator";
+import {getPrimaryPermalinkEntity} from "../utils/permalinks/Permalinks";
 
 function parseAtRoomMentions(text, partCreator) {
     const ATROOM = "@room";
