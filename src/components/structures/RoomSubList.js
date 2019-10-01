@@ -307,11 +307,11 @@ const RoomSubList = createReactClass({
             });
 
             if (isCollapsed) {
-                return <div ref="subList" className={subListClasses}>
+                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
             } else if (this._canUseLazyListRendering()) {
-                return <div ref="subList" className={subListClasses}>
+                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
                     {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
                         <LazyRenderList
@@ -325,7 +325,7 @@ const RoomSubList = createReactClass({
             } else {
                 const roomTiles = this.props.list.map(r => this.makeRoomTile(r));
                 const tiles = roomTiles.concat(this.props.extraTiles);
-                return <div ref="subList" className={subListClasses}>
+                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
                     {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
                         { tiles }
@@ -340,7 +340,7 @@ const RoomSubList = createReactClass({
             }
 
             return (
-                <div ref="subList" className="mx_RoomSubList">
+                <div ref="subList" className="mx_RoomSubList" role="group" aria-label={this.props.label}>
                     { this._getHeaderJsx(isCollapsed) }
                     { content }
                 </div>

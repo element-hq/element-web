@@ -58,7 +58,17 @@ export const KeyCode = {
     KEY_X: 88,
     KEY_Y: 89,
     KEY_Z: 90,
-    KEY_BACKTICK: 223,
+    KEY_BACKTICK: 223, // DO NOT USE THIS: browsers disagree on backtick 192 vs 223
+};
+
+export const Key = {
+    HOME: "Home",
+    End: "End",
+    PAGE_UP: "PageUp",
+    PAGE_DOWN: "PageDown",
+    BACKTICK: "`",
+
+    K: "k",
 };
 
 export function isOnlyCtrlOrCmdKeyEvent(ev) {
