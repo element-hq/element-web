@@ -3,37 +3,3 @@
 @import "../../light/css/_light.scss";
 @import "_custom.scss";
 @import "../../../../res/css/_components.scss";
-
-// defaults
-body {
-    // fully opaque
-    --accent-color: #03b381;
-    --background-color: #ffffff;
-    --base-color: #27303a;
-    --panel-color: #f3f8fd;
-    --panel-contrast-color: #e3e8f0;
-    --body-text-color: #2e2f32;
-    --body-contrast-color: #61708b;
-    --primary-color: #368bd6;
-    --warning-color: #ff4b55;
-    // 0% opaque
-    --accent-color-0pct: #03b38100;
-    --background-color-0pct: #ffffff00;
-    --base-color-0pct: #27303a00;
-    --panel-color-0pct: #f3f8fd00;
-    --panel-contrast-color-0pct: #e3e8f000;
-    --body-text-color-0pct: #2e2f3200;
-    --body-contrast-color-0pct: #61708b00;
-    --primary-color-0pct: #368bd600;
-    --warning-color-0pct: #ff4b5500;
-    // 50% opaque
-    --accent-color-50pct: #03b3817f;
-    --background-color-50pct: #ffffff7f;
-    --base-color-50pct: #27303a7f;
-    --panel-color-50pct: #f3f8fd7f;
-    --panel-contrast-color-50pct: #e3e8f07f;
-    --body-text-color-50pct: #2e2f327f;
-    --body-contrast-color-50pct: #61708b7f;
-    --primary-color-50pct: #368bd67f;
-    --warning-color-50pct: #ff4b557f;
-}
