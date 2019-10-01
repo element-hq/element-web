@@ -215,7 +215,7 @@ export const CommandMap = {
                     button: _t("Upgrade"),
                 });
 
-                return success(finished.then((confirm) => {
+                return success(finished.then(([confirm]) => {
                     if (!confirm) return;
 
                     return cli.upgradeRoom(roomId, args);
