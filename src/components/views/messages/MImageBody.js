@@ -496,7 +496,7 @@ export class HiddenImagePlaceholder extends React.PureComponent {
         return (
             <div className={className}>
                 <div className='mx_HiddenImagePlaceholder_button'>
-                    <img src={require("../../../../res/img/feather-customised/eye.svg")} width={17} height={12} />
+                    <span className='mx_HiddenImagePlaceholder_eye' />
                     <span>{_t("Show image")}</span>
                 </div>
             </div>
