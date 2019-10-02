@@ -338,15 +338,17 @@ export default class MImageBody extends React.Component {
             // By doing this, the image "pops" into the timeline, but is still restricted
             // by the same width and height logic below.
             if (!this.state.loadedImageDimensions) {
-                let imageElement = (
-                    <img style={{display: 'none'}} src={thumbUrl} ref="image"
-                         alt={content.body}
-                         onError={this.onImageError}
-                         onLoad={this.onImageLoad}
-                    />
-                );
+                let imageElement;
                 if (!this.state.showImage) {
                     imageElement = <HiddenImagePlaceholder />;
+                } else {
+                    imageElement = (
+                        <img style={{display: 'none'}} src={thumbUrl} ref="image"
+                             alt={content.body}
+                             onError={this.onImageError}
+                             onLoad={this.onImageLoad}
+                        />
+                    );
                 }
                 return this.wrapImage(contentUrl, imageElement);
             }
