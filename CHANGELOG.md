@@ -1,3 +1,12 @@
+Changes in [1.4.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.2-rc.1) (2019-10-02)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.1...v1.4.2-rc.1)
+
+ * Custom themes MVP
+   [\#11017](https://github.com/vector-im/riot-web/pull/11017)
+ * Document permalinkPrefix setting
+   [\#11007](https://github.com/vector-im/riot-web/pull/11007)
+
 Changes in [1.4.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.1) (2019-10-01)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.0...v1.4.1)
