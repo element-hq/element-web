@@ -1,3 +1,26 @@
+Changes in [1.6.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2-rc.1) (2019-10-02)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.1...v1.6.2-rc.1)
+
+ * Custom theming MVP
+   [\#3503](https://github.com/matrix-org/matrix-react-sdk/pull/3503)
+ * Don't mark a room as unread when someone adds an alias
+   [\#3505](https://github.com/matrix-org/matrix-react-sdk/pull/3505)
+ * Fix upgraderoom slashcommand
+   [\#3504](https://github.com/matrix-org/matrix-react-sdk/pull/3504)
+ * Update stripped emoji and bump emojidata to 4.0.2
+   [\#3501](https://github.com/matrix-org/matrix-react-sdk/pull/3501)
+ * Support local permalinks for unfederated instances
+   [\#3500](https://github.com/matrix-org/matrix-react-sdk/pull/3500)
+ * Accessibility fixes to the LeftPanel
+   [\#3499](https://github.com/matrix-org/matrix-react-sdk/pull/3499)
+ * Make Autocomplete more accessible to screen reader users
+   [\#3497](https://github.com/matrix-org/matrix-react-sdk/pull/3497)
+ * Fix: even more resilience to detect slash commands
+   [\#3496](https://github.com/matrix-org/matrix-react-sdk/pull/3496)
+ * Fix PropTypes usage, sdk import path and GroupMemberTile letter-avatar
+   [\#3486](https://github.com/matrix-org/matrix-react-sdk/pull/3486)
+
 Changes in [1.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.1) (2019-10-01)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.0...v1.6.1)
