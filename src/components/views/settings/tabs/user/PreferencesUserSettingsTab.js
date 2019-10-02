@@ -43,6 +43,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showJoinLeaves',
         'showAvatarChanges',
         'showDisplaynameChanges',
+        'showImages',
     ];
 
     static ROOM_LIST_SETTINGS = [
