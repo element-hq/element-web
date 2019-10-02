@@ -364,9 +364,9 @@ module.exports = createReactClass({
         if (!room) {
             return;
         }
-        let timeline = room.getLiveTimeline();
+        const timelineSet = room.getUnfilteredTimelineSet();
         let eventsToRedact = [];
-        while (timeline) {
+        for (const timeline of timelineSet.getTimelines()) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
                 if (event.getSender() === userId && !event.isRedacted()) {
                     return events.concat(event);
@@ -374,7 +374,6 @@ module.exports = createReactClass({
                     return events;
                 }
             }, eventsToRedact);
-            timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
         }
 
         const count = eventsToRedact.length;
