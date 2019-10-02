@@ -70,10 +70,10 @@ limitations under the License.
 .mx_RoomSubList_badge {
     flex: 0 0 auto;
     border-radius: 8px;
-    color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
     padding: 0 5px;
+    color: $roomtile-badge-fg-color;
     background-color: $roomtile-name-color;
     cursor: pointer;
 }
@@ -104,6 +104,7 @@ limitations under the License.
 }
 
 .mx_RoomSubList_badgeHighlight {
+    color: $accent-fg-color;
     background-color: $warning-color;
 }
 

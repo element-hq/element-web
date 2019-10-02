@@ -110,7 +110,7 @@ limitations under the License.
     flex: 0 1 content;
     border-radius: 0.8em;
     padding: 0 0.4em;
-    color: $accent-fg-color;
+    color: $roomtile-badge-fg-color;
     font-weight: 600;
     font-size: 12px;
 }
@@ -156,6 +156,7 @@ limitations under the License.
 
 .mx_RoomTile_highlight .mx_RoomTile_badge,
 .mx_RoomTile_badge.mx_RoomTile_badgeRed {
+    color: $accent-fg-color;
     background-color: $warning-color;
 }
 

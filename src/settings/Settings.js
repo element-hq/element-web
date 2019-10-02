@@ -245,6 +245,10 @@ export const SETTINGS = {
         default: "light",
         controller: new ThemeController(),
     },
+    "custom_themes": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
+    },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Allow Peer-to-Peer for 1:1 calls'),

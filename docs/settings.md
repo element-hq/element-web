@@ -15,7 +15,7 @@ order of prioirty, are:
 * `room-account` - The current user's account, but only when in a specific room
 * `account` - The current user's account
 * `room` - A specific room (setting for all members of the room)
-* `config` - Values are defined by `config.json`
+* `config` - Values are defined by the `settingDefaults` key (usually) in `config.json`
 * `default` - The hardcoded default for the settings
 
 Individual settings may control which levels are appropriate for them as part of the defaults. This is often to ensure 
