@@ -271,8 +271,8 @@ export default class InteractiveTooltip extends React.Component {
 
     renderTooltip() {
         const { contentRect, visible } = this.state;
-            ReactDOM.unmountComponentAtNode(getOrCreateContainer());
         if (this.props.forceHidden === true || !visible) {
+            ReactDOM.render(null, getOrCreateContainer());
             return null;
         }
 
