@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-
+import classNames from 'classnames';
 
 export default class MessageComposerFormatBar extends React.PureComponent {
     static propTypes = {
@@ -26,18 +26,26 @@ export default class MessageComposerFormatBar extends React.PureComponent {
         shortcuts: PropTypes.object.isRequired,
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {visible: false};
+    }
+
     render() {
-        return (<div className="mx_MessageComposerFormatBar" ref={ref => this._formatBarRef = ref}>
-            <FormatButton shortcut={this.props.shortcuts.bold} label={_t("Bold")} onClick={() => this.props.onAction("bold")} icon="Bold" />
-            <FormatButton shortcut={this.props.shortcuts.italics} label={_t("Italics")} onClick={() => this.props.onAction("italics")} icon="Italic" />
-            <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction("strikethrough")} icon="Strikethrough" />
-            <FormatButton label={_t("Code block")} onClick={() => this.props.onAction("code")} icon="Code" />
-            <FormatButton shortcut={this.props.shortcuts.quote} label={_t("Quote")} onClick={() => this.props.onAction("quote")} icon="Quote" />
+        const classes = classNames("mx_MessageComposerFormatBar", {
+            "mx_MessageComposerFormatBar_shown": this.state.visible,
+        });
+        return (<div className={classes} ref={ref => this._formatBarRef = ref}>
+            <FormatButton label={_t("Bold")} onClick={() => this.props.onAction("bold")} icon="Bold" shortcut={this.props.shortcuts.bold} visible={this.state.visible} />
+            <FormatButton label={_t("Italics")} onClick={() => this.props.onAction("italics")} icon="Italic" shortcut={this.props.shortcuts.italics} visible={this.state.visible} />
+            <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction("strikethrough")} icon="Strikethrough" visible={this.state.visible} />
+            <FormatButton label={_t("Code block")} onClick={() => this.props.onAction("code")} icon="Code" visible={this.state.visible} />
+            <FormatButton label={_t("Quote")} onClick={() => this.props.onAction("quote")} icon="Quote" shortcut={this.props.shortcuts.quote} visible={this.state.visible} />
         </div>);
     }
 
     showAt(selectionRect) {
-        this._formatBarRef.classList.add("mx_MessageComposerFormatBar_shown");
+        this.setState({visible: true});
         const parentRect = this._formatBarRef.parentElement.getBoundingClientRect();
         this._formatBarRef.style.left = `${selectionRect.left - parentRect.left}px`;
         // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
@@ -45,7 +53,7 @@ export default class MessageComposerFormatBar extends React.PureComponent {
     }
 
     hide() {
-        this._formatBarRef.classList.remove("mx_MessageComposerFormatBar_shown");
+        this.setState({visible: false});
     }
 }
 
@@ -55,6 +63,7 @@ class FormatButton extends React.PureComponent {
         onClick: PropTypes.func.isRequired,
         icon: PropTypes.string.isRequired,
         shortcut: PropTypes.string,
+        visible: PropTypes.bool,
     }
 
     render() {
@@ -72,7 +81,7 @@ class FormatButton extends React.PureComponent {
         );
 
         return (
-            <InteractiveTooltip content={tooltipContent}>
+            <InteractiveTooltip content={tooltipContent} forceHidden={!this.props.visible}>
                 <span aria-label={this.props.label}
                    role="button"
                    onClick={this.props.onClick}
