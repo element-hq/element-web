@@ -1808,28 +1808,26 @@ export default createReactClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
+        let view;
+
         if (
             this.state.view === VIEWS.LOADING ||
             this.state.view === VIEWS.LOGGING_IN
         ) {
             const Spinner = sdk.getComponent('elements.Spinner');
-            return (
+            view = (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
                 </div>
             );
-        }
-
-        // needs to be before normal PageTypes as you are logged in technically
-        if (this.state.view === VIEWS.POST_REGISTRATION) {
+        } else if (this.state.view === VIEWS.POST_REGISTRATION) {
+            // needs to be before normal PageTypes as you are logged in technically
             const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
-            return (
+            view = (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
             );
-        }
-
-        if (this.state.view === VIEWS.LOGGED_IN) {
+        } else if (this.state.view === VIEWS.LOGGED_IN) {
             // store errors stop the client syncing and require user intervention, so we'll
             // be showing a dialog. Don't show anything else.
             const isStoreError = this.state.syncError && this.state.syncError instanceof Matrix.InvalidStoreError;
@@ -1843,8 +1841,8 @@ export default createReactClass({
                  * as using something like redux to avoid having a billion bits of state kicking around.
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
-                return (
-                   <LoggedInView ref={this._collectLoggedInView} matrixClient={MatrixClientPeg.get()}
+                view = (
+                    <LoggedInView ref={this._collectLoggedInView} matrixClient={MatrixClientPeg.get()}
                         onRoomCreated={this.onRoomCreated}
                         onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
@@ -1863,26 +1861,22 @@ export default createReactClass({
                         {messageForSyncError(this.state.syncError)}
                     </div>;
                 }
-                return (
+                view = (
                     <div className="mx_MatrixChat_splash">
                         {errorBox}
                         <Spinner />
                         <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
-                        { _t('Logout') }
+                            {_t('Logout')}
                         </a>
                     </div>
                 );
             }
-        }
-
-        if (this.state.view === VIEWS.WELCOME) {
+        } else if (this.state.view === VIEWS.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            return <Welcome />;
-        }
-
-        if (this.state.view === VIEWS.REGISTER) {
+            view = <Welcome />;
+        } else if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
-            return (
+            view = (
                 <Registration
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
@@ -1896,12 +1890,9 @@ export default createReactClass({
                     {...this.getServerProperties()}
                 />
             );
-        }
-
-
-        if (this.state.view === VIEWS.FORGOT_PASSWORD) {
+        } else if (this.state.view === VIEWS.FORGOT_PASSWORD) {
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
-            return (
+            view = (
                 <ForgotPassword
                     onComplete={this.onLoginClick}
                     onLoginClick={this.onLoginClick}
@@ -1909,11 +1900,9 @@ export default createReactClass({
                     {...this.getServerProperties()}
                 />
             );
-        }
-
-        if (this.state.view === VIEWS.LOGIN) {
+        } else if (this.state.view === VIEWS.LOGIN) {
             const Login = sdk.getComponent('structures.auth.Login');
-            return (
+            view = (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
@@ -1924,18 +1913,21 @@ export default createReactClass({
                     {...this.getServerProperties()}
                 />
             );
-        }
-
-        if (this.state.view === VIEWS.SOFT_LOGOUT) {
+        } else if (this.state.view === VIEWS.SOFT_LOGOUT) {
             const SoftLogout = sdk.getComponent('structures.auth.SoftLogout');
-            return (
+            view = (
                 <SoftLogout
                     realQueryParams={this.props.realQueryParams}
                     onTokenLoginCompleted={this.props.onTokenLoginCompleted}
                 />
             );
+        } else {
+            console.error(`Unknown view ${this.state.view}`);
         }
 
-        console.error(`Unknown view ${this.state.view}`);
+        const ErrorBoundary = sdk.getComponent('elements.ErrorBoundary');
+        return <ErrorBoundary>
+            {view}
+        </ErrorBoundary>;
     },
 });

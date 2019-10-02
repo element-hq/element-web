@@ -226,7 +226,7 @@ export default class HelpUserSettingsTab extends React.Component {
                         </div>
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
-                                {_t("Clear Cache and Reload")}
+                                {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>
                     </div>
