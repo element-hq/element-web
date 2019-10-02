@@ -2210,5 +2210,15 @@
     "Hide advanced": "隱藏進階的",
     "Show advanced": "顯示進階的",
     "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "阻擋其他 matrix 伺服器上的使用加入此聊天室（此設定無法在之後變更！）",
-    "Close dialog": "關閉對話框"
+    "Close dialog": "關閉對話框",
+    "It has %(count)s unread messages including mentions.|other": "包含提及共有 %(count)s 則未讀訊息。",
+    "It has %(count)s unread messages.|other": "有 %(count)s 則未讀訊息。",
+    "It has unread mentions.": "有未讀的提及。",
+    "To continue you need to accept the terms of this service.": "要繼續，您必須同意本服務的條款。",
+    "Document": "文件",
+    "Community Autocomplete": "社群自動完成",
+    "Emoji Autocomplete": "顏文字自動完成",
+    "Notification Autocomplete": "通知自動完成",
+    "Room Autocomplete": "聊天室自動完成",
+    "User Autocomplete": "使用者自動完成"
 }
