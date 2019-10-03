@@ -1417,7 +1417,8 @@ module.exports = createReactClass({
 
         const scrollState = messagePanel.getScrollState();
 
-        if (scrollState.stuckAtBottom) {
+        // getScrollState on TimelinePanel *may* return null, so guard against that
+        if (!scrollState || scrollState.stuckAtBottom) {
             // we don't really expect to be in this state, but it will
             // occasionally happen when no scroll state has been set on the
             // messagePanel (ie, we didn't have an initial event (so it's
