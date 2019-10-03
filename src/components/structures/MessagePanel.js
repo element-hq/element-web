@@ -445,19 +445,17 @@ module.exports = createReactClass({
                     return this._getTilesForEvent(e, e, e === lastShownEvent);
                 }).reduce((a, b) => a.concat(b));
 
-                if (eventTiles.length > 0) {
-                    ret.push(<EventListSummary
-                        key="roomcreationsummary"
-                        events={summarisedEvents}
-                        onToggle={this._onHeightChanged} // Update scroll state
-                        summaryMembers={[mxEv.sender]}
-                        summaryText={_t("%(creator)s created and configured the room.", {
-                            creator: mxEv.sender ? mxEv.sender.name : mxEv.getSender(),
-                        })}
-                    >
-                        { eventTiles }
-                    </EventListSummary>);
-                }
+                ret.push(<EventListSummary
+                    key="roomcreationsummary"
+                    events={summarisedEvents}
+                    onToggle={this._onHeightChanged} // Update scroll state
+                    summaryMembers={[mxEv.sender]}
+                    summaryText={_t("%(creator)s created and configured the room.", {
+                        creator: mxEv.sender ? mxEv.sender.name : mxEv.getSender(),
+                    })}
+                >
+                    { eventTiles }
+                </EventListSummary>);
 
                 if (readMarkerInSummary) {
                     ret.push(this._getReadMarkerTile(visible));
