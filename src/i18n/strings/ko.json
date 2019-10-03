@@ -2071,5 +2071,7 @@
     "Emoji Autocomplete": "이모지 자동 완성",
     "Notification Autocomplete": "알림 자동 완성",
     "Room Autocomplete": "방 자동 완성",
-    "User Autocomplete": "사용자 자동 완성"
+    "User Autocomplete": "사용자 자동 완성",
+    "Show previews/thumbnails for images": "이미지로 미리 보기/썸네일 보이기",
+    "Show image": "이미지 보이기"
 }
