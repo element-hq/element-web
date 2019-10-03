@@ -183,7 +183,7 @@ module.exports = createReactClass({
 
         const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
-            <div className="mx_MemberInfo">
+            <div className="mx_MemberInfo" role="tabpanel">
                 <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />

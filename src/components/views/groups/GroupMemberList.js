@@ -222,7 +222,7 @@ export default createReactClass({
         }
 
         return (
-            <div className="mx_MemberList">
+            <div className="mx_MemberList" role="tabpanel">
                 { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true}>
                     { joined }

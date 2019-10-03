@@ -46,12 +46,13 @@ const NotificationPanel = createReactClass({
                     showUrlPreview={false}
                     tileShape="notif"
                     empty={_t('You have no visible notifications')}
+                    role="tabpanel"
                 />
             );
         } else {
             console.error("No notifTimelineSet available!");
             return (
-                <div className="mx_NotificationPanel">
+                <div className="mx_NotificationPanel" role="tabpanel">
                     <Loader />
                 </div>
             );

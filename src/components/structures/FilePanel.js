@@ -126,11 +126,12 @@ const FilePanel = createReactClass({
                     tileShape="file_grid"
                     resizeNotifier={this.props.resizeNotifier}
                     empty={_t('There are no visible files in this room')}
+                    role="tabpanel"
                 />
             );
         } else {
             return (
-                <div className="mx_FilePanel">
+                <div className="mx_FilePanel" role="tabpanel">
                     <Loader />
                 </div>
             );
