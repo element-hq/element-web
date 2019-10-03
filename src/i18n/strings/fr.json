@@ -2227,5 +2227,7 @@
     "Emoji Autocomplete": "Autocomplétion d’émoji",
     "Notification Autocomplete": "Autocomplétion de notification",
     "Room Autocomplete": "Autocomplétion de salon",
-    "User Autocomplete": "Autocomplétion d’utilisateur"
+    "User Autocomplete": "Autocomplétion d’utilisateur",
+    "Show previews/thumbnails for images": "Afficher les aperçus/vignettes pour les images",
+    "Show image": "Afficher l’image"
 }
