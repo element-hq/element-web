@@ -2165,5 +2165,19 @@
     "Find a room…": "Trova una stanza…",
     "Find a room… (e.g. %(exampleRoom)s)": "Trova una stanza… (es. %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Se non trovi la stanza che stai cercando, chiedi un invito o <a>Crea una stanza nuova</a>.",
-    "Explore rooms": "Esplora stanze"
+    "Explore rooms": "Esplora stanze",
+    "Show previews/thumbnails for images": "Mostra anteprime/miniature per le immagini",
+    "Clear cache and reload": "Svuota la cache e ricarica",
+    "%(count)s unread messages including mentions.|other": "%(count)s messaggi non letti incluse le menzioni.",
+    "%(count)s unread messages.|other": "%(count)s messaggi non letti.",
+    "Unread mentions.": "Menzioni non lette.",
+    "Show image": "Mostra immagine",
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Segnala un nuovo problema</newIssueLink> su GitHub in modo che possiamo indagare su questo errore.",
+    "To continue you need to accept the terms of this service.": "Per continuare devi accettare le condizioni di servizio.",
+    "Document": "Documento",
+    "Community Autocomplete": "Autocompletamento comunità",
+    "Emoji Autocomplete": "Autocompletamento emoji",
+    "Notification Autocomplete": "Autocompletamento notifiche",
+    "Room Autocomplete": "Autocompletamento stanze",
+    "User Autocomplete": "Autocompletamento utenti"
 }

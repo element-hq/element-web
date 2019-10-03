@@ -2174,5 +2174,9 @@
     "Send report": "Dërgoje raportin",
     "To continue you need to accept the terms of this service.": "Që të vazhdohet, lypset të pranoni kushtet e këtij shërbimi.",
     "Document": "Dokument",
-    "Report Content": "Raportoni Lëndë"
+    "Report Content": "Raportoni Lëndë",
+    "It has %(count)s unread messages including mentions.|other": "Ka %(count)s mesazhe të palexuar, përfshi përmendje.",
+    "It has %(count)s unread messages.|other": "Ka %(count)s mesazhe të palexuar.",
+    "It has unread mentions.": "Ka përmendje të palexuara.",
+    "Community Autocomplete": "Vetëplotësim Nga të Bashkësisë"
 }
