@@ -401,6 +401,12 @@ const LoggedInView = createReactClass({
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === "Space" || ev.key === "Enter");
 
+            // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
+            if (ev.key === "Backspace") {
+                ev.stopPropagation();
+                return;
+            }
+
             if (!isClickShortcut && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
