@@ -2217,5 +2217,17 @@
     "Make this room public": "Rendre ce salon public",
     "Hide advanced": "Masquer les informations avancées",
     "Show advanced": "Afficher les informations avancées",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Empêcher les utilisateurs d’autres serveurs d’accueil matrix de rejoindre ce salon (Ce paramètre ne peut pas être modifié plus tard !)"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Empêcher les utilisateurs d’autres serveurs d’accueil matrix de rejoindre ce salon (Ce paramètre ne peut pas être modifié plus tard !)",
+    "It has %(count)s unread messages including mentions.|other": "Il a %(count)s messages non lus y compris les mentions.",
+    "It has %(count)s unread messages.|other": "Il a %(count)s messages non lus.",
+    "It has unread mentions.": "Il a des mentions non lues.",
+    "To continue you need to accept the terms of this service.": "Pour continuer vous devez accepter les conditions de ce service.",
+    "Document": "Document",
+    "Community Autocomplete": "Autocomplétion de communauté",
+    "Emoji Autocomplete": "Autocomplétion d’émoji",
+    "Notification Autocomplete": "Autocomplétion de notification",
+    "Room Autocomplete": "Autocomplétion de salon",
+    "User Autocomplete": "Autocomplétion d’utilisateur",
+    "Show previews/thumbnails for images": "Afficher les aperçus/vignettes pour les images",
+    "Show image": "Afficher l’image"
 }
