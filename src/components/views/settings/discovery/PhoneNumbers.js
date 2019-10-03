@@ -207,11 +207,7 @@ export class PhoneNumber extends React.Component {
                     <br />
                     {this.state.verifyError}
                 </span>
-                <form
-                    onSubmit={this.onContinueClick}
-                    autoComplete={false}
-                    noValidate={true}
-                >
+                <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
                     <Field id="mx_PhoneNumbers_newPhoneNumberCode"
                         type="text"
                         label={_t("Verification code")}

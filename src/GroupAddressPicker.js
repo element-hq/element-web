@@ -61,7 +61,7 @@ export function showGroupAddRoomDialog(groupId) {
         </div>;
 
         const checkboxContainer = <label className="mx_GroupAddressPicker_checkboxContainer">
-            <input type="checkbox" onClick={onCheckboxClicked} />
+            <input type="checkbox" onChange={onCheckboxClicked} />
             <div>
                 { _t("Show these rooms to non-members on the community page and room list?") }
             </div>

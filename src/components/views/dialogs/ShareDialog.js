@@ -153,7 +153,7 @@ export default class ShareDialog extends React.Component {
                     <input type="checkbox"
                            id="mx_ShareDialog_checkbox"
                            checked={this.state.linkSpecificEvent}
-                           onClick={this.onLinkSpecificEventCheckboxClick} />
+                           onChange={this.onLinkSpecificEventCheckboxClick} />
                     <label htmlFor="mx_ShareDialog_checkbox">
                         { _t('Link to most recent message') }
                     </label>
