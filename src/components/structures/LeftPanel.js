@@ -52,9 +52,9 @@ const LeftPanel = createReactClass({
     componentWillMount: function() {
         this.focusedElement = null;
 
-        this._settingWatchRef = SettingsStore.watchSetting(
+        this._breadcrumbsWatcherRef = SettingsStore.watchSetting(
             "breadcrumbs", null, this._onBreadcrumbsChanged);
-        this._settingWatchRef1 = SettingsStore.watchSetting(
+        this._tagPanelWatcherRef = SettingsStore.watchSetting(
             "TagPanel.enableTagPanel", null, () => this.forceUpdate());
 
         const useBreadcrumbs = !!SettingsStore.getValue("breadcrumbs");
@@ -63,8 +63,8 @@ const LeftPanel = createReactClass({
     },
 
     componentWillUnmount: function() {
-        SettingsStore.unwatchSetting(this._settingWatchRef);
-        SettingsStore.unwatchSetting(this._settingWatchRef1);
+        SettingsStore.unwatchSetting(this._breadcrumbsWatcherRef);
+        SettingsStore.unwatchSetting(this._tagPanelWatcherRef);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
