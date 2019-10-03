@@ -258,7 +258,7 @@ const RoomSubList = createReactClass({
         const tabindex = this.props.isFiltered ? "0" : "-1";
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
+                <AccessibleButton onClick={this.onClick} className="mx_RoomSubList_label" tabIndex={tabindex} aria-expanded={!isCollapsed}>
                     { chevron }
                     <span>{this.props.label}</span>
                     { incomingCall }

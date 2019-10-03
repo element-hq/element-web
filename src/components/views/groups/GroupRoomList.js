@@ -153,7 +153,7 @@ export default createReactClass({
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
-            <div className="mx_GroupRoomList">
+            <div className="mx_GroupRoomList" role="tabpanel">
                 { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
