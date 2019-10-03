@@ -54,6 +54,8 @@ const LeftPanel = createReactClass({
 
         this._settingWatchRef = SettingsStore.watchSetting(
             "breadcrumbs", null, this._onBreadcrumbsChanged);
+        this._settingWatchRef1 = SettingsStore.watchSetting(
+            "TagPanel.enableTagPanel", null, () => this.forceUpdate());
 
         const useBreadcrumbs = !!SettingsStore.getValue("breadcrumbs");
         Analytics.setBreadcrumbs(useBreadcrumbs);
@@ -62,6 +64,7 @@ const LeftPanel = createReactClass({
 
     componentWillUnmount: function() {
         SettingsStore.unwatchSetting(this._settingWatchRef);
+        SettingsStore.unwatchSetting(this._settingWatchRef1);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
