@@ -544,6 +544,9 @@ export function softLogout() {
     // been soft logged out, despite having credentials and data for a MatrixClient).
     localStorage.setItem("mx_soft_logout", "true");
 
+    // Dev note: please keep this log line around. It can be useful for track down
+    // random clients stopping in the middle of the logs.
+    console.log("Soft logout initiated");
     _isLoggingOut = true; // to avoid repeated flags
     stopMatrixClient(/*unsetClient=*/false);
     dis.dispatch({action: 'on_client_not_viable'}); // generic version of on_logged_out
