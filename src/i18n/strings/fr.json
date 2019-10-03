@@ -2229,5 +2229,10 @@
     "Room Autocomplete": "Autocomplétion de salon",
     "User Autocomplete": "Autocomplétion d’utilisateur",
     "Show previews/thumbnails for images": "Afficher les aperçus/vignettes pour les images",
-    "Show image": "Afficher l’image"
+    "Show image": "Afficher l’image",
+    "Clear cache and reload": "Vider le cache et recharger",
+    "%(count)s unread messages including mentions.|other": "%(count)s messages non lus y compris les mentions.",
+    "%(count)s unread messages.|other": "%(count)s messages non lus.",
+    "Unread mentions.": "Mentions non lues.",
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Veuillez <newIssueLink>créer un nouveau rapport</newIssueLink> sur GitHub afin que l’on enquête sur cette erreur."
 }
