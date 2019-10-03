@@ -233,7 +233,9 @@ export default class WidgetUtils {
         };
 
         const client = MatrixClientPeg.get();
-        const userWidgets = WidgetUtils.getUserWidgets();
+        // Get the current widgets and clone them before we modify them, otherwise
+        // we'll modify the content of the old event.
+        const userWidgets = JSON.parse(JSON.stringify(WidgetUtils.getUserWidgets()));
 
         // Delete existing widget with ID
         try {
