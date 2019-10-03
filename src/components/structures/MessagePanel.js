@@ -437,7 +437,7 @@ module.exports = createReactClass({
                 }
 
                 // At this point, i = the index of the last event in the summary sequence
-                let eventTiles = summarisedEvents.map((e) => {
+                const eventTiles = summarisedEvents.map((e) => {
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of EventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
