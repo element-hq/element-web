@@ -1,3 +1,10 @@
+Changes in [1.4.2](https://github.com/vector-im/riot-web/releases/tag/v1.4.2) (2019-10-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.2-rc.1...v1.4.2)
+
+ * Document troubleshooting for memory leaks and getting profiles
+   [\#11031](https://github.com/vector-im/riot-web/pull/11031)
+
 Changes in [1.4.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.4.2-rc.1) (2019-10-02)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.1...v1.4.2-rc.1)
