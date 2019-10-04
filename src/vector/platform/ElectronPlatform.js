@@ -100,6 +100,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+
+        this._tryPersistStorage();
+    }
+
+    async _tryPersistStorage() {
+        if (navigator.storage && navigator.storage.persist) {
+            const granted = await navigator.storage.persist();
+            const persisted = await navigator.storage.persisted();
+            console.log("Storage persist request granted: " + granted + " persisted: " + persisted);
+        }
     }
 
     async getConfig(): Promise<{}> {
