@@ -42,7 +42,7 @@ limitations under the License.
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
-        overflow-x: auto;
+        overflow-x: hidden;
 
         span.mx_UserPill, span.mx_RoomPill {
             padding-left: 21px;

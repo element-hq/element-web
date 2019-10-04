@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -102,6 +103,9 @@ module.exports = createReactClass({
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         let image = p["og:image"];
+        if (!SettingsStore.getValue("showImages")) {
+            image = null; // Don't render a button to show the image, just hide it outright
+        }
         const imageMaxWidth = 100; const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);

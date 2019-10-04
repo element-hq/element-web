@@ -71,6 +71,9 @@ export default class HelpUserSettingsTab extends React.Component {
     _onClearCacheAndReload = (e) => {
         if (!PlatformPeg.get()) return;
 
+        // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
+        // stopping in the middle of the logs.
+        console.log("Clear cache & reload clicked");
         MatrixClientPeg.get().stopClient();
         MatrixClientPeg.get().store.deleteAllData().done(() => {
             PlatformPeg.get().reload();
@@ -226,7 +229,7 @@ export default class HelpUserSettingsTab extends React.Component {
                         </div>
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
-                                {_t("Clear Cache and Reload")}
+                                {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>
                     </div>

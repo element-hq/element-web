@@ -382,14 +382,15 @@ module.exports = createReactClass({
             />;
         }
 
+        // The following labels are written in such a fashion to increase screen reader efficiency (speed).
         if (notifBadges && mentionBadges && !isInvite) {
-            ariaLabel += " " + _t("It has %(count)s unread messages including mentions.", {
+            ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
                 count: notificationCount,
             });
         } else if (notifBadges) {
-            ariaLabel += " " + _t("It has %(count)s unread messages.", { count: notificationCount });
+            ariaLabel += " " + _t("%(count)s unread messages.", { count: notificationCount });
         } else if (mentionBadges && !isInvite) {
-            ariaLabel += " " + _t("It has unread mentions.");
+            ariaLabel += " " + _t("Unread mentions.");
         }
 
         return <AccessibleButton tabIndex="0"

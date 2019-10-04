@@ -91,7 +91,7 @@ export default class HeaderButtons extends React.Component {
 
     render() {
         // inline style as this will be swapped around in future commits
-        return <div className="mx_HeaderButtons">
+        return <div className="mx_HeaderButtons" role="tablist">
             { this.renderButtons() }
         </div>;
     }

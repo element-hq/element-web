@@ -121,7 +121,7 @@ export default class ThirdPartyMemberInfo extends React.Component {
 
         // We shamelessly rip off the MemberInfo styles here.
         return (
-            <div className="mx_MemberInfo">
+            <div className="mx_MemberInfo" role="tabpanel">
                 <div className="mx_MemberInfo_name">
                     <AccessibleButton className="mx_MemberInfo_cancel"
                         onClick={this.onCancel}

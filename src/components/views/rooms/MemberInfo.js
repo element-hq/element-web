@@ -1124,35 +1124,35 @@ module.exports = createReactClass({
         }
 
         return (
-            <div className="mx_MemberInfo">
-                    <div className="mx_MemberInfo_name">
-                        { backButton }
-                        { e2eIconElement }
-                        <h2>{ memberName }</h2>
+            <div className="mx_MemberInfo" role="tabpanel">
+                <div className="mx_MemberInfo_name">
+                    { backButton }
+                    { e2eIconElement }
+                    <h2>{ memberName }</h2>
+                </div>
+                { avatarElement }
+                <div className="mx_MemberInfo_container">
+
+                    <div className="mx_MemberInfo_profile">
+                        <div className="mx_MemberInfo_profileField">
+                            { this.props.member.userId }
+                        </div>
+                        { roomMemberDetails }
                     </div>
-                    { avatarElement }
+                </div>
+                <AutoHideScrollbar className="mx_MemberInfo_scrollContainer">
                     <div className="mx_MemberInfo_container">
+                        { this._renderUserOptions() }
 
-                        <div className="mx_MemberInfo_profile">
-                            <div className="mx_MemberInfo_profileField">
-                                { this.props.member.userId }
-                            </div>
-                            { roomMemberDetails }
-                        </div>
+                        { adminTools }
+
+                        { startChat }
+
+                        { this._renderDevices() }
+
+                        { spinner }
                     </div>
-                    <AutoHideScrollbar className="mx_MemberInfo_scrollContainer">
-                        <div className="mx_MemberInfo_container">
-                            { this._renderUserOptions() }
-
-                            { adminTools }
-
-                            { startChat }
-
-                            { this._renderDevices() }
-
-                            { spinner }
-                        </div>
-                    </AutoHideScrollbar>
+                </AutoHideScrollbar>
             </div>
         );
     },

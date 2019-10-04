@@ -409,9 +409,9 @@ export default class Stickerpicker extends React.Component {
                 >
                 </AccessibleButton>;
         }
-        return <div>
+        return <React.Fragment>
             {stickersButton}
             {this.state.showStickers && stickerPicker}
-        </div>;
+        </React.Fragment>;
     }
 }

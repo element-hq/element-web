@@ -14,21 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import MImageBody from './MImageBody';
 import sdk from '../../../index';
 
 export default class MStickerBody extends MImageBody {
-    // Empty to prevent default behaviour of MImageBody
-    onClick() {
+    // Mostly empty to prevent default behaviour of MImageBody
+    onClick(ev) {
+        ev.preventDefault();
+        if (!this.state.showImage) {
+            this.showImage();
+        }
     }
 
     // MStickerBody doesn't need a wrapping `<a href=...>`, but it does need extra padding
     // which is added by mx_MStickerBody_wrapper
     wrapImage(contentUrl, children) {
-        return <div className="mx_MStickerBody_wrapper"> { children } </div>;
+        let onClick = null;
+        if (!this.state.showImage) {
+            onClick = this.onClick;
+        }
+        return <div className="mx_MStickerBody_wrapper" onClick={onClick}> { children } </div>;
     }
 
     // Placeholder to show in place of the sticker image if
