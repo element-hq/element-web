@@ -2073,5 +2073,10 @@
     "Room Autocomplete": "방 자동 완성",
     "User Autocomplete": "사용자 자동 완성",
     "Show previews/thumbnails for images": "이미지로 미리 보기/썸네일 보이기",
-    "Show image": "이미지 보이기"
+    "Show image": "이미지 보이기",
+    "Clear cache and reload": "캐시 지우기 및 새로고침",
+    "%(count)s unread messages including mentions.|other": "언급을 포함한 %(count)s개의 읽지 않은 메시지.",
+    "%(count)s unread messages.|other": "%(count)s개의 읽지 않은 메시지.",
+    "Unread mentions.": "읽지 않은 언급.",
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요."
 }
