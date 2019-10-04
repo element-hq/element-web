@@ -204,7 +204,7 @@ module.exports = createReactClass({
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
 
-        this.setState({useCider: SettingsStore.getValue("useCiderComposer")});
+        this._onCiderUpdated();
         this._ciderWatcherRef = SettingsStore.watchSetting(
             "useCiderComposer", null, this._onCiderUpdated);
     },

@@ -121,7 +121,6 @@ export const SETTINGS = {
         default: false,
     },
     "useCiderComposer": {
-        isFeature: true,
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
