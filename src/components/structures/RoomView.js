@@ -166,6 +166,8 @@ module.exports = createReactClass({
 
             canReact: false,
             canReply: false,
+
+            useCider: false,
         };
     },
 
@@ -201,6 +203,14 @@ module.exports = createReactClass({
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
+
+        this.setState({useCider: SettingsStore.getValue("useCiderComposer")});
+        this._ciderWatcherRef = SettingsStore.watchSetting(
+            "useCiderComposer", null, this._onCiderUpdated);
+    },
+
+    _onCiderUpdated: function() {
+        this.setState({useCider: SettingsStore.getValue("useCiderComposer")});
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -478,6 +488,8 @@ module.exports = createReactClass({
         //
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
+
+        SettingsStore.unwatchSetting(this._ciderWatcherRef);
 
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
@@ -1793,7 +1805,7 @@ module.exports = createReactClass({
             myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
-            if (SettingsStore.isFeatureEnabled("feature_cider_composer")) {
+            if (this.state.useCider) {
                 const MessageComposer = sdk.getComponent('rooms.MessageComposer');
                 messageComposer =
                     <MessageComposer

@@ -114,18 +114,17 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_cider_composer": {
-        isFeature: true,
-        displayName: _td("Use the new, faster, but still experimental composer " +
-            "for writing messages (requires refresh)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_many_integration_managers": {
         isFeature: true,
         displayName: _td("Multiple integration managers"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+    },
+    "useCiderComposer": {
+        isFeature: true,
+        displayName: _td("Use the new, faster, composer for writing messages"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
