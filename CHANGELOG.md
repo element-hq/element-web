@@ -1,3 +1,52 @@
+Changes in [1.6.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2) (2019-10-04)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.2-rc.1...v1.6.2)
+
+ * Handle null from TimelinePanel.getScrollState in RoomView _getScrollState
+   [\#3518](https://github.com/matrix-org/matrix-react-sdk/pull/3518)
+ * Fix Community Panel preference not taking effect until some refreshing
+   [\#3517](https://github.com/matrix-org/matrix-react-sdk/pull/3517)
+ * Fix backspace without slate focus killing everything
+   [\#3515](https://github.com/matrix-org/matrix-react-sdk/pull/3515)
+ * Fix integration manager not updating when set
+   [\#3510](https://github.com/matrix-org/matrix-react-sdk/pull/3510)
+ * Various ARIA a11y fixes.
+   [\#3514](https://github.com/matrix-org/matrix-react-sdk/pull/3514)
+ * Add a bit of debugging for where MatrixClient stops
+   [\#3511](https://github.com/matrix-org/matrix-react-sdk/pull/3511)
+ * Add error boundaries to catch rendering errors
+   [\#3512](https://github.com/matrix-org/matrix-react-sdk/pull/3512)
+ * Add an option to hide image previews
+   [\#3492](https://github.com/matrix-org/matrix-react-sdk/pull/3492)
+ * Fix:  stuck tooltip with composer formatting bar
+   [\#3507](https://github.com/matrix-org/matrix-react-sdk/pull/3507)
+ * Fix: don't let composer placeholder show horizontal scrollbar when too
+   narrow
+   [\#3506](https://github.com/matrix-org/matrix-react-sdk/pull/3506)
+
+Changes in [1.6.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2-rc.1) (2019-10-02)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.1...v1.6.2-rc.1)
+
+ * Custom theming MVP
+   [\#3503](https://github.com/matrix-org/matrix-react-sdk/pull/3503)
+ * Don't mark a room as unread when someone adds an alias
+   [\#3505](https://github.com/matrix-org/matrix-react-sdk/pull/3505)
+ * Fix upgraderoom slashcommand
+   [\#3504](https://github.com/matrix-org/matrix-react-sdk/pull/3504)
+ * Update stripped emoji and bump emojidata to 4.0.2
+   [\#3501](https://github.com/matrix-org/matrix-react-sdk/pull/3501)
+ * Support local permalinks for unfederated instances
+   [\#3500](https://github.com/matrix-org/matrix-react-sdk/pull/3500)
+ * Accessibility fixes to the LeftPanel
+   [\#3499](https://github.com/matrix-org/matrix-react-sdk/pull/3499)
+ * Make Autocomplete more accessible to screen reader users
+   [\#3497](https://github.com/matrix-org/matrix-react-sdk/pull/3497)
+ * Fix: even more resilience to detect slash commands
+   [\#3496](https://github.com/matrix-org/matrix-react-sdk/pull/3496)
+ * Fix PropTypes usage, sdk import path and GroupMemberTile letter-avatar
+   [\#3486](https://github.com/matrix-org/matrix-react-sdk/pull/3486)
+
 Changes in [1.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.1) (2019-10-01)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.0...v1.6.1)
