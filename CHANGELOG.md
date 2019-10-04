@@ -1,3 +1,29 @@
+Changes in [1.6.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2) (2019-10-04)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.2-rc.1...v1.6.2)
+
+ * Handle null from TimelinePanel.getScrollState in RoomView _getScrollState
+   [\#3518](https://github.com/matrix-org/matrix-react-sdk/pull/3518)
+ * Fix Community Panel preference not taking effect until some refreshing
+   [\#3517](https://github.com/matrix-org/matrix-react-sdk/pull/3517)
+ * Fix backspace without slate focus killing everything
+   [\#3515](https://github.com/matrix-org/matrix-react-sdk/pull/3515)
+ * Fix integration manager not updating when set
+   [\#3510](https://github.com/matrix-org/matrix-react-sdk/pull/3510)
+ * Various ARIA a11y fixes.
+   [\#3514](https://github.com/matrix-org/matrix-react-sdk/pull/3514)
+ * Add a bit of debugging for where MatrixClient stops
+   [\#3511](https://github.com/matrix-org/matrix-react-sdk/pull/3511)
+ * Add error boundaries to catch rendering errors
+   [\#3512](https://github.com/matrix-org/matrix-react-sdk/pull/3512)
+ * Add an option to hide image previews
+   [\#3492](https://github.com/matrix-org/matrix-react-sdk/pull/3492)
+ * Fix:  stuck tooltip with composer formatting bar
+   [\#3507](https://github.com/matrix-org/matrix-react-sdk/pull/3507)
+ * Fix: don't let composer placeholder show horizontal scrollbar when too
+   narrow
+   [\#3506](https://github.com/matrix-org/matrix-react-sdk/pull/3506)
+
 Changes in [1.6.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2-rc.1) (2019-10-02)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.1...v1.6.2-rc.1)
