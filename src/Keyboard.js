@@ -66,7 +66,10 @@ export const Key = {
     End: "End",
     PAGE_UP: "PageUp",
     PAGE_DOWN: "PageDown",
+    BACKSPACE: "Backspace",
     BACKTICK: "`",
+    SPACE: " ",
+    ENTER: "Enter",
 
     K: "k",
 };
