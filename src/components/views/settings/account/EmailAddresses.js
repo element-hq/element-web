@@ -229,7 +229,7 @@ export default class EmailAddresses extends React.Component {
         return (
             <div className="mx_EmailAddresses">
                 {existingEmailElements}
-                <form onSubmit={this._onAddClick} autoComplete={false}
+                <form onSubmit={this._onAddClick} autoComplete="off"
                       noValidate={true} className="mx_EmailAddresses_new">
                     <Field id="mx_EmailAddressses_newEmailAddress"
                         type="text"

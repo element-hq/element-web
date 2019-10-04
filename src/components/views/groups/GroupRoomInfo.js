@@ -181,7 +181,7 @@ module.exports = createReactClass({
                             <input type="radio"
                                 value="public"
                                 checked={this.state.groupRoom.isPublic}
-                                onClick={this._changeGroupRoomPublicity}
+                                onChange={this._changeGroupRoomPublicity}
                             />
                             <div className="mx_MemberInfo_label_text">
                                 { _t('Visible to everyone') }
@@ -193,7 +193,7 @@ module.exports = createReactClass({
                             <input type="radio"
                                 value="private"
                                 checked={!this.state.groupRoom.isPublic}
-                                onClick={this._changeGroupRoomPublicity}
+                                onChange={this._changeGroupRoomPublicity}
                             />
                             <div className="mx_MemberInfo_label_text">
                                 { _t('Only visible to community members') }

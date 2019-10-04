@@ -279,7 +279,7 @@ export default class ServerConfig extends React.PureComponent {
                 {errorText}
                 {this._renderHomeserverSection()}
                 {this._renderIdentityServerSection()}
-                <form onSubmit={this.onSubmit} autoComplete={false} action={null}>
+                <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
                     {submitButton}
                 </form>
             </div>

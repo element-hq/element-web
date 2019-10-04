@@ -409,10 +409,6 @@ export default createReactClass({
         groupIsNew: PropTypes.bool,
     },
 
-    childContextTypes: {
-        groupStore: PropTypes.instanceOf(GroupStore),
-    },
-
     getInitialState: function() {
         return {
             summary: null,
