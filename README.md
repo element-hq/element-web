@@ -318,28 +318,32 @@ the maintainers if you share your changes in a pull request.
 
 Run it with:
 
-    # build image
-    docker build --tag vectorim/riot-web:develop --file Dockerfile.develop .
+```bash
+# build image
+docker build --tag vectorim/riot-web:develop --file Dockerfile.develop .
 
-    # remove old container or do nothing
-    docker rm -f riot || true
+# remove old container or do nothing
+docker rm -f riot || true
 
-    # run a new container with src folder mounted from git repository
-    # located on the host machine. You can mount additional folders
-    # such as res with additional --volume $PWD/res:/src/res
-    docker run --detach --interactive --tty \
-        --publish <port-on-host>:8080 \
-        --volume $PWD/src:/src/src \
-        --name riot \
-        vectorim/riot-web:develop
+# run a new container with src folder mounted from git repository
+# located on the host machine. You can mount additional folders
+# such as res with additional --volume $PWD/res:/src/res
+docker run --detach --interactive --tty \
+    --publish <port-on-host>:8080 \
+    --volume $PWD/src:/src/src \
+    --name riot \
+    vectorim/riot-web:develop
+```
 
 And access ``yarn`` and other commands from inside of the container:
 
-    # run shell process from container
-    docker exec -it riot sh
+```bash
+# run shell process from container
+docker exec -it riot sh
 
-    # run yarn process from container
-    docker exec -it riot yarn
+# run yarn process from container
+docker exec -it riot yarn
+```
 
 Running the tests
 -----------------
