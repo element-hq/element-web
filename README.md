@@ -290,6 +290,9 @@ bundle.css.map   116 kB       0  [emitted]  main
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
 
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
 Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
 ___
