@@ -34,7 +34,7 @@ General Style
 - UpperCamelCase for class and type names
 - lowerCamelCase for functions and variables.
 - Single line ternary operators are fine.
-- UPPER_CAMEL_CASE for constants
+- UPPER_SNAKE_CASE for constants
 - Single quotes for strings by default, for consistency with most JavaScript styles:
 
   ```javascript
