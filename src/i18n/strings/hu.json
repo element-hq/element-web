@@ -2222,5 +2222,6 @@
     "Emoji Autocomplete": "Emoji automatikus kiegészítése",
     "Notification Autocomplete": "Értesítés automatikus kiegészítése",
     "Room Autocomplete": "Szoba automatikus kiegészítése",
-    "User Autocomplete": "Felhasználó automatikus kiegészítése"
+    "User Autocomplete": "Felhasználó automatikus kiegészítése",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "A matrix szerveren hiányzik a captcha-hoz a nyilvános kulcs. Kérlek értesítsd a matrix szerver adminisztrátorát."
 }
