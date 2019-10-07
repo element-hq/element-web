@@ -2070,5 +2070,14 @@
     "Create a private room": "Luo yksityinen huone",
     "Topic (optional)": "Aihe (valinnainen)",
     "Make this room public": "Tee tästä huoneesta julkinen",
-    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Estä muiden Matrix-kotipalvelimien käyttäjiä liittymästä tähän huoneeseen (Tätä valintaa ei voi muuttaa jälkikäteen!)"
+    "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Estä muiden Matrix-kotipalvelimien käyttäjiä liittymästä tähän huoneeseen (Tätä valintaa ei voi muuttaa jälkikäteen!)",
+    "Show previews/thumbnails for images": "Näytä kuvien esikatselut/pienoiskuvat",
+    "Clear cache and reload": "Tyhjennä välimuisti ja lataa uudelleen",
+    "%(count)s unread messages including mentions.|other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
+    "%(count)s unread messages.|other": "%(count)s lukematonta viestiä.",
+    "Unread mentions.": "Lukemattomat maininnat.",
+    "Show image": "Näytä kuva",
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Luo uusi issue</newIssueLink> GitHubissa, jotta voimme tutkia tätä ongelmaa.",
+    "Close dialog": "Sulje dialogi",
+    "To continue you need to accept the terms of this service.": "Sinun täytyy hyväksyä palvelun käyttöehdot jatkaaksesi."
 }
