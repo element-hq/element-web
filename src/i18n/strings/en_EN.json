@@ -759,6 +759,8 @@
     "Invalid Email Address": "Invalid Email Address",
     "This doesn't appear to be a valid email address": "This doesn't appear to be a valid email address",
     "Unable to add email address": "Unable to add email address",
+    "Your e-mail address hasn't been verified yet": "Your e-mail address hasn't been verified yet",
+    "Click the link in the e-mail you received to verify, and then click continue again.": "Click the link in the e-mail you received to verify, and then click continue again.",
     "Add": "Add",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.",
     "Email Address": "Email Address",
