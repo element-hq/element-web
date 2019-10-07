@@ -1478,6 +1478,7 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.",
     "To continue, please enter your password.": "To continue, please enter your password.",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.",
     "Please review and accept all of the homeserver's policies": "Please review and accept all of the homeserver's policies",
     "Please review and accept the policies of this homeserver:": "Please review and accept the policies of this homeserver:",
     "An email has been sent to %(emailAddress)s": "An email has been sent to %(emailAddress)s",
