@@ -596,6 +596,7 @@ module.exports = createReactClass({
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useDefaultIdentityServer();
 
         // Add email as a valid address type.

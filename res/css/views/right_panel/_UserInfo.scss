@@ -1,0 +1,175 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.mx_UserInfo_profile .mx_E2EIcon {
+    display: inline;
+    margin: auto;
+    padding-right: 25px;
+    mask-size: contain;
+}
+
+.mx_UserInfo_cancel {
+    height: 16px;
+    width: 16px;
+    padding: 10px 0 10px 10px;
+    cursor: pointer;
+    mask-image: url('$(res)/img/minimise.svg');
+    mask-repeat: no-repeat;
+    mask-position: 16px center;
+    background-color: $rightpanel-button-color;
+}
+
+.mx_UserInfo_profile h2 {
+    flex: 1;
+    overflow-x: auto;
+    max-height: 50px;
+}
+
+.mx_UserInfo h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 16px 0 8px 0;
+}
+
+.mx_UserInfo_container {
+    padding: 0 16px 16px 16px;
+    border-bottom: 1px solid lightgray;
+}
+
+.mx_UserInfo_memberDetailsContainer {
+    padding-bottom: 0;
+}
+
+.mx_UserInfo .mx_RoomTile_nameContainer {
+    width: 154px;
+}
+
+.mx_UserInfo .mx_RoomTile_badge {
+    display: none;
+}
+
+.mx_UserInfo .mx_RoomTile_name {
+    width: 160px;
+}
+
+.mx_UserInfo_avatar {
+    background: $tagpanel-bg-color;
+}
+
+.mx_UserInfo_avatar > img {
+    height: auto;
+    width: 100%;
+    max-height: 30vh;
+    object-fit: contain;
+    display: block;
+}
+
+.mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
+    cursor: zoom-in;
+}
+
+.mx_UserInfo h3 {
+    text-transform: uppercase;
+    color: $input-darker-fg-color;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+.mx_UserInfo_profileField {
+    font-size: 15px;
+    position: relative;
+    text-align: center;
+}
+
+.mx_UserInfo_memberDetails {
+    text-align: center;
+}
+
+.mx_UserInfo_field {
+    cursor: pointer;
+    font-size: 15px;
+    color: $primary-fg-color;
+    margin-left: 8px;
+    line-height: 23px;
+}
+
+.mx_UserInfo_createRoom {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.mx_UserInfo_createRoom_label {
+    width: initial !important;
+    cursor: pointer;
+}
+
+.mx_UserInfo_statusMessage {
+    font-size: 11px;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
+.mx_UserInfo .mx_UserInfo_scrollContainer {
+    flex: 1;
+    padding-bottom: 16px;
+}
+
+.mx_UserInfo .mx_UserInfo_scrollContainer .mx_UserInfo_container {
+    padding-top: 16px;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.mx_UserInfo_container_header {
+    display: flex;
+}
+
+.mx_UserInfo_container_header_right {
+    position: relative;
+    margin-left: auto;
+}
+
+.mx_UserInfo_newDmButton {
+    background-color: $roomheader-addroom-bg-color;
+    border-radius: 10px; // 16/2 + 2 padding
+    height: 16px;
+    flex: 0 0 16px;
+
+    &::before {
+        background-color: $roomheader-addroom-fg-color;
+        mask: url('$(res)/img/icons-room-add.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
