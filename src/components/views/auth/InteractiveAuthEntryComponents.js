@@ -124,6 +124,7 @@ export const PasswordAuthEntry = createReactClass({
                 <input type="submit"
                     className="mx_Dialog_primary"
                     disabled={!this.state.password}
+                    value={_t("Continue")}
                 />
             );
         }
