@@ -2078,5 +2078,6 @@
     "%(count)s unread messages including mentions.|other": "언급을 포함한 %(count)s개의 읽지 않은 메시지.",
     "%(count)s unread messages.|other": "%(count)s개의 읽지 않은 메시지.",
     "Unread mentions.": "읽지 않은 언급.",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요."
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요.",
+    "Use the new, faster, composer for writing messages": "메시지 입력으로 새로운, 더 빠른 작성기를 사용"
 }
