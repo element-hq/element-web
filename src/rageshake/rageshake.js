@@ -254,7 +254,8 @@ class IndexedDBLogStore {
         const db = this.db;
 
         // Returns: a string representing the concatenated logs for this ID.
-        function fetchLogs(id) {
+        // Stops adding log fragments when the size exceeds maxSize
+        function fetchLogs(id, maxSize) {
             const objectStore = db.transaction("logs", "readonly").objectStore("logs");
 
             return new Promise((resolve, reject) => {
@@ -269,10 +270,10 @@ class IndexedDBLogStore {
                         resolve(lines);
                         return; // end of results
                     }
-                    if (lines.length + cursor.value.lines.length >= MAX_LOG_SIZE && lines.length > 0) {
+                    lines = cursor.value.lines + lines;
+                    if (lines.length >= maxSize) {
                         resolve(lines);
                     } else {
-                        lines = cursor.value.lines + lines;
                         cursor.continue();
                     }
                 };
@@ -336,22 +337,25 @@ class IndexedDBLogStore {
         const logs = [];
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
-            const lines = await fetchLogs(allLogIds[i]);
+            const lines = await fetchLogs(allLogIds[i], MAX_LOG_SIZE - size);
 
-            // always include at least one log file, but only include
-            // subsequent ones if they won't take us over the MAX_LOG_SIZE
-            if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
+            // always add the log file: fetchLogs will truncate once the maxSize we give it is
+            // exceeded, so we'll go over the max but only by one fragment's worth.
+            logs.push({
+                lines: lines,
+                id: allLogIds[i],
+            });
+            size += lines.length;
+
+            // If fetchLogs truncated we'll now be at or over the size limit,
+            // in which case we should stop and remove the rest of the log files.
+            if (size >= MAX_LOG_SIZE) {
                 // the remaining log IDs should be removed. If we go out of
                 // bounds this is just []
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
 
-            logs.push({
-                lines: lines,
-                id: allLogIds[i],
-            });
-            size += lines.length;
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
