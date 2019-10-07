@@ -195,7 +195,10 @@ export const RecaptchaAuthEntry = createReactClass({
         const CaptchaForm = sdk.getComponent("views.auth.CaptchaForm");
         let sitePublicKey;
         if (!this.props.stageParams || !this.props.stageParams.public_key) {
-            errorText = _t("Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.");
+            errorText = _t(
+                "Missing captcha public key in homeserver configuration. Please report " +
+                "this to your homeserver administrator.",
+            );
         } else {
             sitePublicKey = this.props.stageParams.public_key;
         }
