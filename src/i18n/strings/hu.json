@@ -2223,5 +2223,7 @@
     "Notification Autocomplete": "Értesítés automatikus kiegészítése",
     "Room Autocomplete": "Szoba automatikus kiegészítése",
     "User Autocomplete": "Felhasználó automatikus kiegészítése",
-    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "A matrix szerveren hiányzik a captcha-hoz a nyilvános kulcs. Kérlek értesítsd a matrix szerver adminisztrátorát."
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "A matrix szerveren hiányzik a captcha-hoz a nyilvános kulcs. Kérlek értesítsd a matrix szerver adminisztrátorát.",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "1 üzenetet törölsz ettől a felhasználótól: %(user)s. Ezt nem lehet visszavonni. Folytatod?",
+    "Remove %(count)s messages|one": "1 üzenet törlése"
 }
