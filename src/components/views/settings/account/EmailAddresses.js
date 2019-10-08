@@ -195,7 +195,7 @@ export default class EmailAddresses extends React.Component {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Unable to verify email address: " + err);
+                console.error("Unable to verify email address: ", err);
                 Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
