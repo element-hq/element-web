@@ -254,9 +254,9 @@ export default class AddThreepid {
             throw result;
         }
 
-        const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             if (this.bind) {
+                const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
                 await MatrixClientPeg.get().bindThreePid({
                     sid: this.sessionId,
                     client_secret: this.clientSecret,
@@ -264,12 +264,31 @@ export default class AddThreepid {
                     id_access_token: await authClient.getAccessToken(),
                 });
             } else {
-                await MatrixClientPeg.get().addThreePidOnly({
-                    sid: this.sessionId,
-                    client_secret: this.clientSecret,
-                });
+                try {
+                    await this._makeAddThreepidOnlyRequest();
+
+                    // The spec has always required this to use UI auth but synapse briefly
+                    // implemented it without, so this may just succeed and that's OK.
+                    return;
+                } catch (e) {
+                    if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
+                        // doesn't look like an interactive-auth failure
+                        throw e;
+                    }
+
+                    // pop up an interactive auth dialog
+                    const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+                    Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
+                        title: _t("Add Phone Number"),
+                        matrixClient: MatrixClientPeg.get(),
+                        authData: e.data,
+                        makeRequest: this._makeAddThreepidOnlyRequest,
+                    });
+                }
             }
         } else {
+            const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
             await MatrixClientPeg.get().addThreePid({
                 sid: this.sessionId,
                 client_secret: this.clientSecret,
