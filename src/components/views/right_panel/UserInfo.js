@@ -732,7 +732,7 @@ const useIsSynapseAdmin = (cli) => {
         }, () => {
             setIsAdmin(false);
         });
-    }, []);
+    }, [cli]);
     return isAdmin;
 };
 
