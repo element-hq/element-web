@@ -72,3 +72,5 @@ ToggleSwitch.propTypes = {
     // Called when the checked state changes. First argument will be the new state.
     onChange: PropTypes.func.isRequired,
 };
+
+export default ToggleSwitch;
