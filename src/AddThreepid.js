@@ -224,13 +224,12 @@ export default class AddThreepid {
             throw result;
         }
 
-        const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             if (this.bind) {
                 await MatrixClientPeg.get().bindThreePid({
                     sid: this.sessionId,
                     client_secret: this.clientSecret,
-                    id_server: identityServerDomain,
+                    id_server: getIdServerDomain(),
                     id_access_token: await authClient.getAccessToken(),
                 });
             } else {
@@ -243,7 +242,7 @@ export default class AddThreepid {
             await MatrixClientPeg.get().addThreePid({
                 sid: this.sessionId,
                 client_secret: this.clientSecret,
-                id_server: identityServerDomain,
+                id_server: getIdServerDomain(),
             }, this.bind);
         }
     }
