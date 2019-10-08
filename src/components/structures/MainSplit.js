@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -79,9 +80,12 @@ export default class MainSplit extends React.Component {
         const wasPanelSet = this.props.panel && !prevProps.panel;
         const wasPanelCleared = !this.props.panel && prevProps.panel;
 
-        if (wasExpanded || wasPanelSet) {
+        if (this.resizeContainer && (wasExpanded || wasPanelSet)) {
+            // The resizer can only be created when **both** expanded and the panel is
+            // set. Once both are true, the container ref will mount, which is required
+            // for the resizer to work.
             this._createResizer();
-        } else if (wasCollapsed || wasPanelCleared) {
+        } else if (this.resizer && (wasCollapsed || wasPanelCleared)) {
             this.resizer.detach();
             this.resizer = null;
         }
