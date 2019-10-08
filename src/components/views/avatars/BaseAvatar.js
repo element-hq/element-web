@@ -57,7 +57,7 @@ module.exports = createReactClass({
         return this._getState(this.props);
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this.context.matrixClient.on('sync', this.onClientSync);
     },

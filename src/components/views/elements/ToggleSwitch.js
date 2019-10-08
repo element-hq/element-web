@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,85 +15,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import classNames from "classnames";
+
 import {KeyCode} from "../../../Keyboard";
 
-export default class ToggleSwitch extends React.Component {
-    static propTypes = {
-        // Whether or not this toggle is in the 'on' position. Default false (off).
-        checked: PropTypes.bool,
-
-        // Whether or not the user can interact with the switch
-        disabled: PropTypes.bool,
-
-        // Called when the checked state changes. First argument will be the new state.
-        onChange: PropTypes.func,
+// Controlled Toggle Switch element
+const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
+    const _toggle = () => {
+        if (disabled) return;
+        onChange(!checked);
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            checked: props.checked || false, // default false
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.checked !== this.state.checked) {
-            this.setState({checked: nextProps.checked});
-        }
-    }
-
-    _toggle = () => {
-        if (this.props.disabled) return;
-
-        const newState = !this.state.checked;
-        this.setState({checked: newState});
-        if (this.props.onChange) {
-            this.props.onChange(newState);
-        }
-    };
-
-    _onClick = (e) => {
+    const _onClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
-
-        this._toggle();
+        _toggle();
     };
 
-    _onKeyDown = (e) => {
+    const _onKeyDown = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
         if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
-            this._toggle();
+            _toggle();
         }
     };
 
-    render() {
-        // eslint-disable-next-line no-unused-vars
-        const {checked, disabled, onChange, ...props} = this.props;
+    const classes = classNames({
+        "mx_ToggleSwitch": true,
+        "mx_ToggleSwitch_on": checked,
+        "mx_ToggleSwitch_enabled": !disabled,
+    });
 
-        const classes = classNames({
-            "mx_ToggleSwitch": true,
-            "mx_ToggleSwitch_on": this.state.checked,
-            "mx_ToggleSwitch_enabled": !this.props.disabled,
-        });
-        return (
-            <div
-                {...props}
-                className={classes}
-                onClick={this._onClick}
-                onKeyDown={this._onKeyDown}
-                role="checkbox"
-                aria-checked={this.state.checked}
-                aria-disabled={disabled}
-                tabIndex={0}
-            >
-                <div className="mx_ToggleSwitch_ball" />
-            </div>
-        );
-    }
-}
+    return (
+        <div {...props}
+            className={classes}
+            onClick={_onClick}
+            onKeyDown={_onKeyDown}
+            role="checkbox"
+            aria-checked={checked}
+            aria-disabled={disabled}
+            tabIndex={0}
+        >
+            <div className="mx_ToggleSwitch_ball" />
+        </div>
+    );
+};
+
+ToggleSwitch.propTypes = {
+    // Whether or not this toggle is in the 'on' position.
+    checked: PropTypes.bool.isRequired,
+
+    // Whether or not the user can interact with the switch
+    disabled: PropTypes.bool,
+
+    // Called when the checked state changes. First argument will be the new state.
+    onChange: PropTypes.func.isRequired,
+};

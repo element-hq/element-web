@@ -594,7 +594,7 @@ export default class AppTile extends React.Component {
                                 allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}
-                                allowFullScreen="true"
+                                allowFullScreen={true}
                                 sandbox={sandboxFlags}
                                 onLoad={this._onLoaded} />
                         </div>
