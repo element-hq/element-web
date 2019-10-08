@@ -197,7 +197,7 @@ export default class EmailAddresses extends React.Component {
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
                 Modal.createTrackedDialog("Email hasn't been verified yet", "", ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
-                    description: _t("Click the link in the email you received to verify, " +
+                    description: _t("Click the link in the email you received to verify " +
                         "and then click continue again."),
                 });
             } else {
