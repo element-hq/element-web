@@ -1,6 +1,7 @@
 /*
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,8 +77,22 @@ class ConsoleLogger {
         args = args.map((arg) => {
             if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
-            } else if (typeof(arg) === 'object') {
-                return JSON.stringify(arg);
+            } else if (typeof (arg) === 'object') {
+                try {
+                    return JSON.stringify(arg);
+                } catch (e) {
+                    // In development, it can be useful to log complex cyclic
+                    // objects to the console for inspection. This is fine for
+                    // the console, but default `stringify` can't handle that.
+                    // We workaround this by using a special replacer function
+                    // to only log values of the root object and avoid cycles.
+                    return JSON.stringify(arg, (key, value) => {
+                        if (key && typeof value === "object") {
+                            return "<object>";
+                        }
+                        return value;
+                    });
+                }
             } else {
                 return arg;
             }
