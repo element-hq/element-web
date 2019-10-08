@@ -193,8 +193,14 @@ export default class EmailAddresses extends React.Component {
             this.props.onEmailsChange(emails);
         }).catch((err) => {
             this.setState({continueDisabled: false});
-            if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
+                Modal.createTrackedDialog("Email hasn't been verified yet", "", ErrorDialog, {
+                    title: _t("Your email address hasn't been verified yet"),
+                    description: _t("Click the link in the email you received to verify " +
+                        "and then click continue again."),
+                });
+            } else {
                 console.error("Unable to verify email address: " + err);
                 Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),

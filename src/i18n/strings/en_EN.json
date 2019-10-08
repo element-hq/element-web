@@ -740,6 +740,8 @@
     "Who can read history?": "Who can read history?",
     "Unable to revoke sharing for email address": "Unable to revoke sharing for email address",
     "Unable to share email address": "Unable to share email address",
+    "Your email address hasn't been verified yet": "Your email address hasn't been verified yet",
+    "Click the link in the email you received to verify and then click continue again.": "Click the link in the email you received to verify and then click continue again.",
     "Unable to verify email address.": "Unable to verify email address.",
     "Verify the link in your inbox": "Verify the link in your inbox",
     "Complete": "Complete",
