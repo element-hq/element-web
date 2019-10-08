@@ -2234,5 +2234,7 @@
     "%(count)s unread messages including mentions.|other": "%(count)s messages non lus y compris les mentions.",
     "%(count)s unread messages.|other": "%(count)s messages non lus.",
     "Unread mentions.": "Mentions non lues.",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Veuillez <newIssueLink>créer un nouveau rapport</newIssueLink> sur GitHub afin que l’on enquête sur cette erreur."
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Veuillez <newIssueLink>créer un nouveau rapport</newIssueLink> sur GitHub afin que l’on enquête sur cette erreur.",
+    "Use the new, faster, composer for writing messages": "Utilisez le nouveau compositeur plus rapide pour écrire des messages",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Clé public du captcha manquante dans la configuration du serveur d’accueil. Veuillez le signaler à l’administrateur de votre serveur d’accueil."
 }
