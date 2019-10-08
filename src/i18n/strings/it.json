@@ -2180,5 +2180,8 @@
     "Notification Autocomplete": "Autocompletamento notifiche",
     "Room Autocomplete": "Autocompletamento stanze",
     "User Autocomplete": "Autocompletamento utenti",
-    "Use the new, faster, composer for writing messages": "Usa il compositore nuovo e più veloce per scrivere messaggi"
+    "Use the new, faster, composer for writing messages": "Usa il compositore nuovo e più veloce per scrivere messaggi",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "Stai per rimuovere 1 messaggio da %(user)s. Non può essere annullato. Vuoi continuare?",
+    "Remove %(count)s messages|one": "Rimuovi 1 messaggio",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Chiave pubblica di Captcha mancante nella configurazione dell'homeserver. Segnalalo all'amministratore dell'homeserver."
 }
