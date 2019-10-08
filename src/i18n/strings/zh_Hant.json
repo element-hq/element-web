@@ -2227,5 +2227,7 @@
     "%(count)s unread messages.|other": "%(count)s 則未讀訊息。",
     "Unread mentions.": "未讀提及。",
     "Show image": "顯示圖片",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "請在 GitHub 上<newIssueLink>建立新議題</newIssueLink>，這樣我們才能調查這個臭蟲。"
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "請在 GitHub 上<newIssueLink>建立新議題</newIssueLink>，這樣我們才能調查這個臭蟲。",
+    "Use the new, faster, composer for writing messages": "使用更新更快的 composer 來編寫訊息",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "家伺服器設定中遺失驗證碼公開金鑰。請向您的家伺服器管理員回報。"
 }
