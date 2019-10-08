@@ -511,12 +511,7 @@ export function logout() {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
         // if we abort the login
-
-        // use settimeout to avoid racing with react unmounting components
-        // which need a valid matrixclientpeg
-        setTimeout(()=>{
-            onLoggedOut();
-        }, 0);
+        onLoggedOut();
         return;
     }
 
@@ -548,8 +543,11 @@ export function softLogout() {
     // random clients stopping in the middle of the logs.
     console.log("Soft logout initiated");
     _isLoggingOut = true; // to avoid repeated flags
-    stopMatrixClient(/*unsetClient=*/false);
+    // Ensure that we dispatch a view change **before** stopping the client so
+    // so that React components unmount first. This avoids React soft crashes
+    // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_client_not_viable'}); // generic version of on_logged_out
+    stopMatrixClient(/*unsetClient=*/false);
 
     // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
 }
@@ -609,9 +607,12 @@ async function startMatrixClient(startSyncing=true) {
  */
 export function onLoggedOut() {
     _isLoggingOut = false;
+    // Ensure that we dispatch a view change **before** stopping the client so
+    // so that React components unmount first. This avoids React soft crashes
+    // that can occur when components try to use a null client.
+    dis.dispatch({action: 'on_logged_out'});
     stopMatrixClient();
     _clearStorage().done();
-    dis.dispatch({action: 'on_logged_out'});
 }
 
 /**
