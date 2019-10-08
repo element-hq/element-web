@@ -73,6 +73,14 @@ export default createReactClass({
         this._detailsRef.removeEventListener("toggle", this.onDetailsToggled);
     },
 
+    _onKeyDown: function(event) {
+        if (event.key === "Enter") {
+            this.onOk();
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    },
+
     onOk: async function() {
         const activeElement = document.activeElement;
         if (activeElement) {
@@ -176,7 +184,7 @@ export default createReactClass({
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
                 title={title}
             >
-                <form onSubmit={this.onOk}>
+                <form onSubmit={this.onOk} onKeyDown={this._onKeyDown}>
                     <div className="mx_Dialog_content">
                         <Field id="name" ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
                         <Field id="topic" label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />

@@ -22,6 +22,10 @@ import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
 
+function getIdServerDomain() {
+    return MatrixClientPeg.get().idBaseUrl.split("://")[1];
+}
+
 /**
  * Allows a user to add a third party identifier to their homeserver and,
  * optionally, the identity servers.
@@ -166,7 +170,7 @@ export default class AddThreepid {
                     await MatrixClientPeg.get().bindThreePid({
                         sid: this.sessionId,
                         client_secret: this.clientSecret,
-                        id_server: identityServerDomain,
+                        id_server: getIdServerDomain(),
                         id_access_token: identityAccessToken,
                     });
                 } else {
@@ -198,7 +202,7 @@ export default class AddThreepid {
                 await MatrixClientPeg.get().addThreePid({
                     sid: this.sessionId,
                     client_secret: this.clientSecret,
-                    id_server: identityServerDomain,
+                    id_server: getIdServerDomain(),
                 }, this.bind);
             }
         } catch (err) {
@@ -260,7 +264,7 @@ export default class AddThreepid {
                 await MatrixClientPeg.get().bindThreePid({
                     sid: this.sessionId,
                     client_secret: this.clientSecret,
-                    id_server: identityServerDomain,
+                    id_server: getIdServerDomain(),
                     id_access_token: await authClient.getAccessToken(),
                 });
             } else {
@@ -292,7 +296,7 @@ export default class AddThreepid {
             await MatrixClientPeg.get().addThreePid({
                 sid: this.sessionId,
                 client_secret: this.clientSecret,
-                id_server: identityServerDomain,
+                id_server: getIdServerDomain(),
             }, this.bind);
         }
     }
