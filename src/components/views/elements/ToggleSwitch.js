@@ -23,23 +23,21 @@ import {KeyCode} from "../../../Keyboard";
 
 // Controlled Toggle Switch element
 const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
-    const _toggle = () => {
-        if (disabled) return;
-        onChange(!checked);
-    };
-
     const _onClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        _toggle();
+        if (disabled) return;
+
+        onChange(!checked);
     };
 
     const _onKeyDown = (e) => {
         e.stopPropagation();
         e.preventDefault();
+        if (disabled) return;
 
         if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
-            _toggle();
+            onChange(!checked);
         }
     };
 
