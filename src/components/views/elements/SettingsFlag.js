@@ -30,7 +30,6 @@ module.exports = createReactClass({
         label: PropTypes.string, // untranslated
         onChange: PropTypes.func,
         isExplicit: PropTypes.bool,
-        manualSave: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -47,7 +46,7 @@ module.exports = createReactClass({
     onChange: function(checked) {
         if (this.props.group && !checked) return;
 
-        if (!this.props.manualSave) this.save(checked);
+        this.save(checked);
         this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
     },
