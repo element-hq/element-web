@@ -1,7 +1,7 @@
 const { notarize } = require('electron-notarize');
 
 exports.default = async function(context) {
-    const { electronPlatformName, appOutDir } = context;  
+    const { electronPlatformName, appOutDir } = context;
     if (electronPlatformName !== 'darwin') {
         return;
     }
@@ -13,9 +13,9 @@ exports.default = async function(context) {
     if (userId === undefined) {
         throw new Exception("User ID not found. Set NOTARIZE_APPLE_ID.");
     }
- 
+
     const appName = context.packager.appInfo.productFilename;
- 
+
     return await notarize({
         appBundleId: 'im.riot.app',
         appPath: `${appOutDir}/${appName}.app`,
