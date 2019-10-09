@@ -1,3 +1,26 @@
+Changes in [1.5.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.0-rc.1) (2019-10-09)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.2...v1.5.0-rc.1)
+
+ * Update from Weblate
+   [\#11104](https://github.com/vector-im/riot-web/pull/11104)
+ * Bump Olm to 3.1.4 for olm_session_describe
+   [\#11103](https://github.com/vector-im/riot-web/pull/11103)
+ * Enable Webpack production mode for start:js:prod
+   [\#11098](https://github.com/vector-im/riot-web/pull/11098)
+ * add settingDefaults to sample config
+   [\#9919](https://github.com/vector-im/riot-web/pull/9919)
+ * Add config.json copy instruction to 'Development' as well
+   [\#11062](https://github.com/vector-im/riot-web/pull/11062)
+ * Revert "Run yarn upgrade"
+   [\#11055](https://github.com/vector-im/riot-web/pull/11055)
+ * Run yarn upgrade
+   [\#11050](https://github.com/vector-im/riot-web/pull/11050)
+ * Request persistent storage on Electron
+   [\#11052](https://github.com/vector-im/riot-web/pull/11052)
+ * Remove docs for CIDER feature
+   [\#11047](https://github.com/vector-im/riot-web/pull/11047)
+
 Changes in [1.4.2](https://github.com/vector-im/riot-web/releases/tag/v1.4.2) (2019-10-04)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.2-rc.1...v1.4.2)
