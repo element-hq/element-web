@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+BASE_DIR=$(cd $(dirname $0) && pwd)
+pushd $BASE_DIR
 has_custom_riot=$(node has_custom_riot.js $@)
 
 stop_servers() {
