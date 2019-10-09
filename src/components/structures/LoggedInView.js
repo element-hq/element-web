@@ -351,7 +351,7 @@ const LoggedInView = createReactClass({
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
         const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
-            ev.key === "Alt" || ev.key === "Control" || ev.key === "Meta" || ev.key === "Shift";
+            ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
 
         switch (ev.key) {
             case Key.PAGE_UP:

@@ -39,6 +39,7 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
+import {Key} from "../../../Keyboard";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -109,12 +110,12 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        if (event.key === "Enter" && !hasModifier) {
+        if (event.key === Key.ENTER && !hasModifier) {
             this._sendMessage();
             event.preventDefault();
-        } else if (event.key === "ArrowUp") {
+        } else if (event.key === Key.ARROW_UP) {
             this.onVerticalArrow(event, true);
-        } else if (event.key === "ArrowDown") {
+        } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
         }
     }

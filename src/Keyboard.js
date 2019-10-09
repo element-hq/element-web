@@ -63,15 +63,29 @@ export const KeyCode = {
 
 export const Key = {
     HOME: "Home",
-    End: "End",
+    END: "End",
     PAGE_UP: "PageUp",
     PAGE_DOWN: "PageDown",
     BACKSPACE: "Backspace",
+    ARROW_UP: "ArrowUp",
+    ARROW_DOWN: "ArrowDown",
+    TAB: "Tab",
+    ESCAPE: "Escape",
+    ENTER: "Enter",
+    ALT: "Alt",
+    CONTROL: "Control",
+    META: "Meta",
+    SHIFT: "Shift",
+
+    LESS_THAN: "<",
+    GREATER_THAN: ">",
     BACKTICK: "`",
     SPACE: " ",
-    ENTER: "Enter",
-
+    B: "b",
+    I: "i",
     K: "k",
+    Y: "y",
+    Z: "z",
 };
 
 export function isOnlyCtrlOrCmdKeyEvent(ev) {

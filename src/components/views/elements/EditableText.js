@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+import {Key} from "../../../Keyboard";
 
 module.exports = createReactClass({
     displayName: 'EditableText',
@@ -133,7 +134,7 @@ module.exports = createReactClass({
             this.showPlaceholder(false);
         }
 
-        if (ev.key === "Enter") {
+        if (ev.key === Key.ENTER) {
             ev.stopPropagation();
             ev.preventDefault();
         }
@@ -150,9 +151,9 @@ module.exports = createReactClass({
             this.value = ev.target.textContent;
         }
 
-        if (ev.key === "Enter") {
+        if (ev.key === Key.ENTER) {
             this.onFinish(ev);
-        } else if (ev.key === "Escape") {
+        } else if (ev.key === Key.ESCAPE) {
             this.cancelEdit();
         }
 
@@ -184,7 +185,7 @@ module.exports = createReactClass({
 
     onFinish: function(ev, shouldSubmit) {
         const self = this;
-        const submit = (ev.key === "Enter") || shouldSubmit;
+        const submit = (ev.key === Key.ENTER) || shouldSubmit;
         this.setState({
             phase: this.Phases.Display,
         }, () => {
