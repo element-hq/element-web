@@ -96,4 +96,4 @@ module.exports = async function changeRoomSettings(session, settings) {
     await closeButton.click();
 
     session.log.endGroup();
-}
+};

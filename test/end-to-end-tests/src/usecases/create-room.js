@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const assert = require('assert');
-
 async function openRoomDirectory(session) {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_explore .mx_AccessibleButton');
     await roomDirectoryButton.click();

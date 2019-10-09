@@ -31,4 +31,4 @@ module.exports = async function sendMessage(session, message) {
     // wait for the message to appear sent
     await session.query(".mx_EventTile_last:not(.mx_EventTile_sending)");
     session.log.done();
-}
+};

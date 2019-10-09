@@ -22,7 +22,8 @@ async function openSettings(session, section) {
     const settingsItem = await session.query(".mx_TopLeftMenu_icon_settings");
     await settingsItem.click();
     if (section) {
-        const sectionButton = await session.query(`.mx_UserSettingsDialog .mx_TabbedView_tabLabels .mx_UserSettingsDialog_${section}Icon`);
+        const sectionButton = await session.query(
+            `.mx_UserSettingsDialog .mx_TabbedView_tabLabels .mx_UserSettingsDialog_${section}Icon`);
         await sectionButton.click();
     }
 }
@@ -37,7 +38,7 @@ module.exports.enableLazyLoading = async function(session) {
     const closeButton = await session.query(".mx_RoomHeader_cancelButton");
     await closeButton.click();
     session.log.done();
-}
+};
 
 module.exports.getE2EDeviceFromSettings = async function(session) {
     session.log.step(`gets e2e device/key from settings`);
@@ -50,4 +51,4 @@ module.exports.getE2EDeviceFromSettings = async function(session) {
     await closeButton.click();
     session.log.done();
     return {id, key};
-}
+};

@@ -59,4 +59,4 @@ module.exports = class Logger {
         this.muted = false;
         return this;
     }
-}
+};

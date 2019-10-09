@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const assert = require('assert');
-
 module.exports = async function invite(session, userId) {
     session.log.step(`invites "${userId}" to room`);
     await session.delay(1000);
@@ -27,4 +25,4 @@ module.exports = async function invite(session, userId) {
     const confirmButton = await session.query(".mx_Dialog_primary");
     await confirmButton.click();
     session.log.done();
-}
+};

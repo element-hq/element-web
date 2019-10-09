@@ -20,12 +20,11 @@ const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
 const {
     checkTimelineContains,
-    scrollToTimelineTop
+    scrollToTimelineTop,
 } = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
 const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
-const {enableLazyLoading} = require('../usecases/settings');
 const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
@@ -43,7 +42,7 @@ module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     await delay(1000);
     await checkMemberListLacksCharlies(alice, charlies);
     await checkMemberListLacksCharlies(bob, charlies);
-}
+};
 
 const room = "Lazy Loading Test";
 const alias = "#lltest:localhost";
@@ -60,7 +59,7 @@ async function setupRoomWithBobAliceAndCharlies(alice, bob, charlies) {
     await charlyMembers.talk(charlyMsg1);
     await charlyMembers.talk(charlyMsg2);
     bob.log.step("sends 20 messages").mute();
-    for(let i = 20; i >= 1; --i) {
+    for (let i = 20; i >= 1; --i) {
         await sendMessage(bob, `I will only say this ${i} time(s)!`);
     }
     bob.log.unmute().done();
@@ -112,7 +111,7 @@ async function joinCharliesWhileAliceIsOffline(alice, charly6to10) {
     const members6to10 = await charly6to10.join(alias);
     const member6 = members6to10.rooms[0];
     member6.log.step("sends 20 messages").mute();
-    for(let i = 20; i >= 1; --i) {
+    for (let i = 20; i >= 1; --i) {
         await member6.talk("where is charly?");
     }
     member6.log.unmute().done();

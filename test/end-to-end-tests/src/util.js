@@ -20,8 +20,8 @@ module.exports.range = function(start, amount, step = 1) {
         r.push(start + (i * step));
     }
     return r;
-}
+};
 
 module.exports.delay = function(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};

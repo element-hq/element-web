@@ -21,10 +21,9 @@ module.exports = class LogBuffer {
             const result = eventMapper(arg);
             if (reduceAsync) {
                 result.then((r) => this.buffer += r);
-            }
-            else {
+            } else {
                 this.buffer += result;
             }
         });
     }
-}
+};

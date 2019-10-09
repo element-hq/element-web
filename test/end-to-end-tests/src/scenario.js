@@ -42,7 +42,7 @@ module.exports = async function scenario(createSession, restCreator) {
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
-}
+};
 
 async function createRestUsers(restCreator) {
     const usernames = range(1, 10).map((i) => `charly-${i}`);

@@ -57,13 +57,13 @@ module.exports = class RestSessionCreator {
             `-u ${username}`,
             `-p ${password}`,
             '--no-admin',
-            this.hsUrl
+            this.hsUrl,
         ];
         const registerCmd = `./register_new_matrix_user ${registerArgs.join(' ')}`;
         const allCmds = [
             `cd ${this.synapseSubdir}`,
             ". ./activate",
-            registerCmd
+            registerCmd,
         ].join(' && ');
 
         await execAsync(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
@@ -74,9 +74,9 @@ module.exports = class RestSessionCreator {
           "type": "m.login.password",
           "identifier": {
             "type": "m.id.user",
-            "user": username
+            "user": username,
           },
-          "password": password
+          "password": password,
         };
         const url = `${this.hsUrl}/_matrix/client/r0/login`;
         const responseBody = await request.post({url, json: true, body: requestBody});
@@ -88,4 +88,4 @@ module.exports = class RestSessionCreator {
             hsUrl: this.hsUrl,
         };
     }
-}
+};

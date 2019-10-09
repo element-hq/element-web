@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const request = require('request-promise-native');
-const RestRoom = require('./room');
-const {approveConsent} = require('./consent');
 const Logger = require('../logger');
 
 module.exports = class RestMultiSession {
@@ -31,7 +28,7 @@ module.exports = class RestMultiSession {
 
     pop(userName) {
         const idx = this.sessions.findIndex((s) => s.userName() === userName);
-        if(idx === -1) {
+        if (idx === -1) {
             throw new Error(`user ${userName} not found`);
         }
         const session = this.sessions.splice(idx, 1)[0];
@@ -39,7 +36,7 @@ module.exports = class RestMultiSession {
     }
 
     async setDisplayName(fn) {
-        this.log.step("set their display name")
+        this.log.step("set their display name");
         await Promise.all(this.sessions.map(async (s) => {
             s.log.mute();
             await s.setDisplayName(fn(s));
@@ -49,10 +46,10 @@ module.exports = class RestMultiSession {
     }
 
     async join(roomIdOrAlias) {
-        this.log.step(`join ${roomIdOrAlias}`)
+        this.log.step(`join ${roomIdOrAlias}`);
         const rooms = await Promise.all(this.sessions.map(async (s) => {
             s.log.mute();
-            const room =  await s.join(roomIdOrAlias);
+            const room = await s.join(roomIdOrAlias);
             s.log.unmute();
             return room;
         }));
@@ -64,7 +61,7 @@ module.exports = class RestMultiSession {
         const rooms = this.sessions.map(s => s.room(roomIdOrAlias));
         return new RestMultiRoom(rooms, roomIdOrAlias, this.log);
     }
-}
+};
 
 class RestMultiRoom {
     constructor(rooms, roomIdOrAlias, log) {
@@ -74,7 +71,7 @@ class RestMultiRoom {
     }
 
     async talk(message) {
-        this.log.step(`say "${message}" in ${this.roomIdOrAlias}`)
+        this.log.step(`say "${message}" in ${this.roomIdOrAlias}`);
         await Promise.all(this.rooms.map(async (r) => {
             r.log.mute();
             await r.talk(message);
@@ -84,7 +81,7 @@ class RestMultiRoom {
     }
 
     async leave() {
-        this.log.step(`leave ${this.roomIdOrAlias}`)
+        this.log.step(`leave ${this.roomIdOrAlias}`);
         await Promise.all(this.rooms.map(async (r) => {
             r.log.mute();
             await r.leave();

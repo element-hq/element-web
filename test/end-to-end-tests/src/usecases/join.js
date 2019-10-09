@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const assert = require('assert');
 const {openRoomDirectory} = require('./create-room');
 
 module.exports = async function join(session, roomName) {
@@ -27,4 +26,4 @@ module.exports = async function join(session, roomName) {
     await joinFirstLink.click();
     await session.query('.mx_MessageComposer');
     session.log.done();
-}
+};

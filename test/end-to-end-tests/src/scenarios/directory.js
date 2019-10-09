@@ -30,7 +30,7 @@ module.exports = async function roomDirectoryScenarios(alice, bob) {
     const bobMessage = "hi Alice!";
     await sendMessage(bob, bobMessage);
     await receiveMessage(alice, {sender: "bob", body: bobMessage});
-    const aliceMessage = "hi Bob, welcome!"
+    const aliceMessage = "hi Bob, welcome!";
     await sendMessage(alice, aliceMessage);
     await receiveMessage(bob, {sender: "alice", body: aliceMessage});
-}
+};

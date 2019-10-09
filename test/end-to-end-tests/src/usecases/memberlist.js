@@ -22,7 +22,7 @@ async function openMemberInfo(session, name) {
         return m.displayName === name;
     }).map((m) => m.label)[0];
     await matchingLabel.click();
-};
+}
 
 module.exports.openMemberInfo = openMemberInfo;
 
@@ -39,10 +39,11 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     // expect "Verify device" dialog and click "Begin Verification"
     const dialogHeader = await session.innerText(await session.query(".mx_Dialog .mx_Dialog_title"));
     assert(dialogHeader, "Verify device");
-    const beginVerificationButton = await session.query(".mx_Dialog .mx_Dialog_primary")
+    const beginVerificationButton = await session.query(".mx_Dialog .mx_Dialog_primary");
     await beginVerificationButton.click();
     // get emoji SAS labels
-    const sasLabelElements = await session.queryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
+    const sasLabelElements = await session.queryAll(
+        ".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     console.log("my sas labels", sasLabels);
 
@@ -58,7 +59,7 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
     await closeMemberInfo.click();
     session.log.done();
-}
+};
 
 async function getMembersInMemberlist(session) {
     const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");

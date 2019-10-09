@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const assert = require('assert');
 const RiotSession = require('./src/session');
 const scenario = require('./src/scenario');
 const RestSessionCreator = require('./src/rest/creator');
@@ -35,7 +34,7 @@ program
 const hsUrl = 'http://localhost:5005';
 
 async function runTests() {
-    let sessions = [];
+    const sessions = [];
     const options = {
         slowMo: program.slowMo ? 20 : undefined,
         devtools: program.devTools,
@@ -54,7 +53,7 @@ async function runTests() {
     const restCreator = new RestSessionCreator(
         'synapse/installations/consent/env/bin',
         hsUrl,
-        __dirname
+        __dirname,
     );
 
     async function createSession(username) {
@@ -66,7 +65,7 @@ async function runTests() {
     let failure = false;
     try {
         await scenario(createSession, restCreator);
-    } catch(err) {
+    } catch (err) {
         failure = true;
         console.log('failure: ', err);
         if (program.logDirectory) {
@@ -90,15 +89,15 @@ async function runTests() {
 }
 
 async function writeLogs(sessions, dir) {
-    let logs = "";
-    for(let i = 0; i < sessions.length; ++i) {
+    const logs = "";
+    for (let i = 0; i < sessions.length; ++i) {
         const session = sessions[i];
         const userLogDir = `${dir}/${session.username}`;
         fs.mkdirSync(userLogDir);
         const consoleLogName = `${userLogDir}/console.log`;
         const networkLogName = `${userLogDir}/network.log`;
         const appHtmlName = `${userLogDir}/app.html`;
-        documentHtml = await session.page.content();
+        const documentHtml = await session.page.content();
         fs.writeFileSync(appHtmlName, documentHtml);
         fs.writeFileSync(networkLogName, session.networkLogs());
         fs.writeFileSync(consoleLogName, session.consoleLogs());

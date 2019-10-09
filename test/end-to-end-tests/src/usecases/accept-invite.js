@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const assert = require('assert');
-const {acceptDialogMaybe} = require('./dialog');
-
 module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
     //TODO: brittle selector
@@ -35,4 +32,4 @@ module.exports = async function acceptInvite(session, name) {
     await acceptInvitationLink.click();
 
     session.log.done();
-}
+};

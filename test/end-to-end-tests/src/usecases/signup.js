@@ -60,8 +60,8 @@ module.exports = async function signup(session, username, password, homeserver) 
     // Password validation is async, wait for it to complete before submit
     await session.query(".mx_Field_valid #mx_RegistrationForm_password");
     //check no errors
-    const error_text = await session.tryGetInnertext('.mx_Login_error');
-    assert.strictEqual(!!error_text, false);
+    const errorText = await session.tryGetInnertext('.mx_Login_error');
+    assert.strictEqual(!!errorText, false);
     //submit form
     //await page.screenshot({path: "beforesubmit.png", fullPage: true});
     await registerButton.click();
@@ -87,4 +87,4 @@ module.exports = async function signup(session, username, password, homeserver) 
     });
     assert(foundHomeUrl);
     session.log.done();
-}
+};

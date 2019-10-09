@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-const {delay} = require('../util');
-const {acceptDialogMaybe} = require('../usecases/dialog');
-const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
 const acceptInvite = require('../usecases/accept-invite');
 const invite = require('../usecases/invite');
@@ -43,10 +39,10 @@ module.exports = async function e2eEncryptionScenarios(alice, bob) {
     const [bobSas, aliceSas] = await Promise.all([bobSasPromise, aliceSasPromise]);
     assert.deepEqual(bobSas, aliceSas);
     bob.log.done(`done (match for ${bobSas.join(", ")})`);
-    const aliceMessage = "Guess what I just heard?!"
+    const aliceMessage = "Guess what I just heard?!";
     await sendMessage(alice, aliceMessage);
     await receiveMessage(bob, {sender: "alice", body: aliceMessage, encrypted: true});
     const bobMessage = "You've got to tell me!";
     await sendMessage(bob, bobMessage);
     await receiveMessage(alice, {sender: "bob", body: bobMessage, encrypted: true});
-}
+};

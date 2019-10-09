@@ -43,17 +43,17 @@ module.exports = class RestSession {
         this.log.step(`sets their display name to ${displayName}`);
         this._displayName = displayName;
         await this._put(`/profile/${this._credentials.userId}/displayname`, {
-            displayname: displayName
+            displayname: displayName,
         });
         this.log.done();
     }
 
     async join(roomIdOrAlias) {
         this.log.step(`joins ${roomIdOrAlias}`);
-        const {room_id} = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`);
+        const roomId = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`).room_id;
         this.log.done();
-        const room = new RestRoom(this, room_id, this.log);
-        this._rooms[room_id] = room;
+        const room = new RestRoom(this, roomId, this.log);
+        this._rooms[roomId] = room;
         this._rooms[roomIdOrAlias] = room;
         return room;
     }
@@ -86,9 +86,9 @@ module.exports = class RestSession {
             body.topic = options.topic;
         }
 
-        const {room_id} = await this._post(`/createRoom`, body);
+        const roomId = await this._post(`/createRoom`, body).room_id;
         this.log.done();
-        return new RestRoom(this, room_id, this.log);
+        return new RestRoom(this, roomId, this.log);
     }
 
     _post(csApiPath, body) {
@@ -105,23 +105,22 @@ module.exports = class RestSession {
                 url: `${this._credentials.hsUrl}/_matrix/client/r0${csApiPath}`,
                 method,
                 headers: {
-                    "Authorization": `Bearer ${this._credentials.accessToken}`
+                    "Authorization": `Bearer ${this._credentials.accessToken}`,
                 },
                 json: true,
-                body
+                body,
             });
             return responseBody;
-
-        } catch(err) {
+        } catch (err) {
             const responseBody = err.response.body;
             if (responseBody.errcode === 'M_CONSENT_NOT_GIVEN') {
                 await approveConsent(responseBody.consent_uri);
                 return this._request(method, csApiPath, body);
-            } else if(responseBody && responseBody.error) {
+            } else if (responseBody && responseBody.error) {
                 throw new Error(`${method} ${csApiPath}: ${responseBody.error}`);
             } else {
                 throw new Error(`${method} ${csApiPath}: ${err.response.statusCode}`);
             }
         }
     }
-}
+};

@@ -36,11 +36,11 @@ module.exports.scrollToTimelineTop = async function(session) {
                 } else {
                     await new Promise((resolve) => setTimeout(resolve, 50));
                 }
-            } while (!timedOut)
+            } while (!timedOut);
         });
-    })
+    });
     session.log.done();
-}
+};
 
 module.exports.receiveMessage = async function(session, expectedMessage) {
     session.log.step(`receives message "${expectedMessage.body}" from ${expectedMessage.sender}`);
@@ -56,7 +56,7 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     await session.poll(async () => {
         try {
             lastMessage = await getLastMessage();
-        } catch(err) {
+        } catch (err) {
             return false;
         }
         // stop polling when found the expected message
@@ -66,10 +66,10 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     });
     assertMessage(lastMessage, expectedMessage);
     session.log.done();
-}
+};
 
 
-module.exports.checkTimelineContains = async function (session, expectedMessages, sendersDescription) {
+module.exports.checkTimelineContains = async function(session, expectedMessages, sendersDescription) {
     session.log.step(`checks timeline contains ${expectedMessages.length} ` +
         `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);
     const eventTiles = await getAllEventTiles(session);
@@ -94,14 +94,14 @@ module.exports.checkTimelineContains = async function (session, expectedMessages
         });
         try {
             assertMessage(foundMessage, expectedMessage);
-        } catch(err) {
+        } catch (err) {
             console.log("timelineMessages", timelineMessages);
             throw err;
         }
     });
 
     session.log.done();
-}
+};
 
 function assertMessage(foundMessage, expectedMessage) {
     assert(foundMessage, `message ${JSON.stringify(expectedMessage)} not found in timeline`);

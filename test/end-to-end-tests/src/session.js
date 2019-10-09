@@ -42,7 +42,7 @@ module.exports = class RiotSession {
         const page = await browser.newPage();
         await page.setViewport({
             width: 1280,
-            height: 800
+            height: 800,
         });
         if (throttleCpuFactor !== 1) {
             const client = await page.target().createCDPSession();
@@ -55,8 +55,8 @@ module.exports = class RiotSession {
     async tryGetInnertext(selector) {
         const field = await this.page.$(selector);
         if (field != null) {
-            const text_handle = await field.getProperty('innerText');
-            return await text_handle.jsonValue();
+            const textHandle = await field.getProperty('innerText');
+            return await textHandle.jsonValue();
         }
         return null;
     }
@@ -70,7 +70,7 @@ module.exports = class RiotSession {
         return this.getElementProperty(field, 'innerText');
     }
 
-    getOuterHTML(element_handle) {
+    getOuterHTML(field) {
         return this.getElementProperty(field, 'outerHTML');
     }
 
@@ -97,12 +97,12 @@ module.exports = class RiotSession {
         return {
             logs() {
                 return buffer;
-            }
-        }
+            },
+        };
     }
 
     async printElements(label, elements) {
-        console.log(label, await Promise.all(elements.map(getOuterHTML)));
+        console.log(label, await Promise.all(elements.map(this.getOuterHTML)));
     }
 
     async replaceInputText(input, text) {
@@ -210,7 +210,7 @@ module.exports = class RiotSession {
     async poll(callback, interval = 100) {
         const timeout = DEFAULT_TIMEOUT;
         let waited = 0;
-        while(waited < timeout) {
+        while (waited < timeout) {
             await this.delay(interval);
             waited += interval;
             if (await callback()) {
@@ -219,4 +219,4 @@ module.exports = class RiotSession {
         }
         return false;
     }
-}
+};

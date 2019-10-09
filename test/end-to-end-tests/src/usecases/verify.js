@@ -31,7 +31,8 @@ async function startVerification(session, name) {
 }
 
 async function getSasCodes(session) {
-    const sasLabelElements = await session.queryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
+    const sasLabelElements = await session.queryAll(
+        ".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     return sasLabels;
 }
