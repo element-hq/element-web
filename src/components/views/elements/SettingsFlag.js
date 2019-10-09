@@ -48,7 +48,7 @@ module.exports = createReactClass({
         if (this.props.group && !checked) return;
 
         if (!this.props.manualSave) this.save(checked);
-        else this.setState({ value: checked });
+        this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
     },
 
