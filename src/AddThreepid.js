@@ -17,6 +17,8 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
+import sdk from './index';
+import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
 
@@ -171,10 +173,29 @@ export default class AddThreepid {
                         id_access_token: identityAccessToken,
                     });
                 } else {
-                    await MatrixClientPeg.get().addThreePidOnly({
-                        sid: this.sessionId,
-                        client_secret: this.clientSecret,
-                    });
+                    try {
+                        await this._makeAddThreepidOnlyRequest();
+
+                        // The spec has always required this to use UI auth but synapse briefly
+                        // implemented it without, so this may just succeed and that's OK.
+                        return;
+                    } catch (e) {
+                        if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
+                            // doesn't look like an interactive-auth failure
+                            throw e;
+                        }
+
+                        // pop up an interactive auth dialog
+                        const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+                        const { finished } = Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
+                            title: _t("Add Email Address"),
+                            matrixClient: MatrixClientPeg.get(),
+                            authData: e.data,
+                            makeRequest: this._makeAddThreepidOnlyRequest,
+                        });
+                        return finished;
+                    }
                 }
             } else {
                 await MatrixClientPeg.get().addThreePid({
@@ -191,6 +212,18 @@ export default class AddThreepid {
             }
             throw err;
         }
+    }
+
+    /**
+     * @param {Object} auth UI auth object
+     * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
+     */
+    _makeAddThreepidOnlyRequest = (auth) => {
+        return MatrixClientPeg.get().addThreePidOnly({
+            sid: this.sessionId,
+            client_secret: this.clientSecret,
+            auth,
+        });
     }
 
     /**
@@ -233,10 +266,29 @@ export default class AddThreepid {
                     id_access_token: await authClient.getAccessToken(),
                 });
             } else {
-                await MatrixClientPeg.get().addThreePidOnly({
-                    sid: this.sessionId,
-                    client_secret: this.clientSecret,
-                });
+                try {
+                    await this._makeAddThreepidOnlyRequest();
+
+                    // The spec has always required this to use UI auth but synapse briefly
+                    // implemented it without, so this may just succeed and that's OK.
+                    return;
+                } catch (e) {
+                    if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
+                        // doesn't look like an interactive-auth failure
+                        throw e;
+                    }
+
+                    // pop up an interactive auth dialog
+                    const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+                    const { finished } = Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
+                        title: _t("Add Phone Number"),
+                        matrixClient: MatrixClientPeg.get(),
+                        authData: e.data,
+                        makeRequest: this._makeAddThreepidOnlyRequest,
+                    });
+                    return finished;
+                }
             }
         } else {
             await MatrixClientPeg.get().addThreePid({

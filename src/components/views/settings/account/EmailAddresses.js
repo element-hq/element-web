@@ -201,7 +201,7 @@ export default class EmailAddresses extends React.Component {
                         "and then click continue again."),
                 });
             } else {
-                console.error("Unable to verify email address: " + err);
+                console.error("Unable to verify email address: ", err);
                 Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
