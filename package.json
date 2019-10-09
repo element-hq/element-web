@@ -188,6 +188,7 @@
       "buildResources": "electron_app/build",
       "output": "electron_app/dist",
       "app": "electron_app"
-    }
+    },
+    "afterSign": "scripts/electron_afterSign.js"
   }
 }
