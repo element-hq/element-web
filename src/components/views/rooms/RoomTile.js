@@ -146,19 +146,17 @@ module.exports = createReactClass({
         });
     },
 
-    componentWillMount: function() {
-        MatrixClientPeg.get().on("accountData", this.onAccountData);
-        MatrixClientPeg.get().on("Room.name", this.onRoomName);
+    componentDidMount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.on("accountData", this.onAccountData);
+        cli.on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
 
         if (this._shouldShowStatusMessage()) {
             const statusUser = this._getStatusMessageUser();
             if (statusUser) {
-                statusUser.on(
-                    "User._unstable_statusMessage",
-                    this._onStatusMessageCommitted,
-                );
+                statusUser.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
             }
         }
     },

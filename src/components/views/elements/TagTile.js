@@ -57,7 +57,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
             FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
