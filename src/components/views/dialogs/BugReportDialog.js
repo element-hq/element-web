@@ -2,6 +2,7 @@
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,6 +72,7 @@ export default class BugReportDialog extends React.Component {
                 userText,
                 sendLogs: true,
                 progressCallback: this._sendProgressCallback,
+                label: this.props.label,
             }).then(() => {
                 if (!this._unmounted) {
                     this.props.onFinished(false);
