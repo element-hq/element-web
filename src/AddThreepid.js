@@ -188,12 +188,13 @@ export default class AddThreepid {
                         // pop up an interactive auth dialog
                         const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-                        Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
+                        const { finished } = Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
                             title: _t("Add Email Address"),
                             matrixClient: MatrixClientPeg.get(),
                             authData: e.data,
                             makeRequest: this._makeAddThreepidOnlyRequest,
                         });
+                        return finished;
                     }
                 }
             } else {
@@ -280,12 +281,13 @@ export default class AddThreepid {
                     // pop up an interactive auth dialog
                     const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-                    Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
+                    const { finished } = Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
                         title: _t("Add Phone Number"),
                         matrixClient: MatrixClientPeg.get(),
                         authData: e.data,
                         makeRequest: this._makeAddThreepidOnlyRequest,
                     });
+                    return finished;
                 }
             }
         } else {
