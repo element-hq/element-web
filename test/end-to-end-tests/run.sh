@@ -3,7 +3,18 @@ set -e
 
 BASE_DIR=$(cd $(dirname $0) && pwd)
 pushd $BASE_DIR
+
+if [ ! -d "synapse/installations" ] || [ ! -d "node_modules" ]; then
+    echo "please, first run $BASE_DIR/install.sh"
+    exit 1
+fi
+
 has_custom_riot=$(node has_custom_riot.js $@)
+
+if [ ! -d "riot/riot-web" ] && [ $has_custom_riot -ne "1" ]; then
+    echo "please provide an instance of riot to test against by passing --riot-url <url> or running $BASE_DIR/riot/install.sh"
+    exit 1
+fi
 
 stop_servers() {
     if [ $has_custom_riot -ne "1" ]; then
