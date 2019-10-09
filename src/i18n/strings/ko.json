@@ -2082,5 +2082,7 @@
     "Use the new, faster, composer for writing messages": "메시지 입력으로 새로운, 더 빠른 작성기를 사용",
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "%(user)s님의 1개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
     "Remove %(count)s messages|one": "1개의 메시지 삭제",
-    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요."
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요.",
+    "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
+    "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요."
 }
