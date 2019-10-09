@@ -1211,7 +1211,7 @@
     "Revoke widget access": "위젯 접근 취소",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s이 %(count)s번 떠나고 다시 참가했습니다",
-    "<a>In reply to</a> <pill>": "<a>질문한 사람</a> <pill>",
+    "<a>In reply to</a> <pill>": "<a>관련 대화</a> <pill>",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "계정을 비활성화할 때 보낸 모든 메시지는 지워주세요 (<b>경고:</b> 이후 이용자들은 불완전한 대화 목록을 볼 수 있을 겁니다)",
     "Explore Account Data": "계정 정보 탐색",
     "Updating Riot": "Riot 업데이트 중",
@@ -2023,7 +2023,7 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "이전 타임라인이 있는지 위로 스크롤하세요.",
     "Remove recent messages by %(user)s": "%(user)s님의 최근 메시지 삭제",
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "%(user)s님의 %(count)s개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아, 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
+    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아서 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
     "Remove %(count)s messages|other": "%(count)s개의 메시지 삭제",
     "Remove recent messages": "최근 메시지 삭제",
     "Send read receipts for messages (requires compatible homeserver to disable)": "메시지 읽은 기록 보내기 (이 기능을 끄려면 그것을 호환하는 홈서버이어야 함)",
@@ -2078,5 +2078,11 @@
     "%(count)s unread messages including mentions.|other": "언급을 포함한 %(count)s개의 읽지 않은 메시지.",
     "%(count)s unread messages.|other": "%(count)s개의 읽지 않은 메시지.",
     "Unread mentions.": "읽지 않은 언급.",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요."
+    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요.",
+    "Use the new, faster, composer for writing messages": "메시지 입력으로 새로운, 더 빠른 작성기를 사용",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "%(user)s님의 1개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
+    "Remove %(count)s messages|one": "1개의 메시지 삭제",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요.",
+    "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
+    "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요."
 }
