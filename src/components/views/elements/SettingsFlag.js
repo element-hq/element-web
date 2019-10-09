@@ -62,13 +62,6 @@ module.exports = createReactClass({
     },
 
     render: function() {
-        const value = this.props.manualSave ? this.state.value : SettingsStore.getValueAt(
-            this.props.level,
-            this.props.name,
-            this.props.roomId,
-            this.props.isExplicit,
-        );
-
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         let label = this.props.label;
@@ -78,7 +71,7 @@ module.exports = createReactClass({
         return (
             <div className="mx_SettingsFlag">
                 <span className="mx_SettingsFlag_label">{label}</span>
-                <ToggleSwitch checked={value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
+                <ToggleSwitch checked={this.state.value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
             </div>
         );
     },
