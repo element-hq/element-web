@@ -64,7 +64,9 @@ export default class ErrorBoundary extends React.PureComponent {
         if (!BugReportDialog) {
             return;
         }
-        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
+        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
+            label: 'react-soft-crash',
+        });
     };
 
     render() {
