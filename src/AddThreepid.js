@@ -188,20 +188,11 @@ export default class AddThreepid {
                         // pop up an interactive auth dialog
                         const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-                        return new Promise((resolve, reject) => {
-                            Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
-                                title: _t("Add Email Address"),
-                                matrixClient: MatrixClientPeg.get(),
-                                authData: e.data,
-                                makeRequest: this._makeAddThreepidOnlyRequest,
-                                onFinished: (success) => {
-                                    if (success) {
-                                        resolve();
-                                    } else {
-                                        reject();
-                                    }
-                                },
-                            });
+                        Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
+                            title: _t("Add Email Address"),
+                            matrixClient: MatrixClientPeg.get(),
+                            authData: e.data,
+                            makeRequest: this._makeAddThreepidOnlyRequest,
                         });
                     }
                 }
@@ -289,20 +280,11 @@ export default class AddThreepid {
                     // pop up an interactive auth dialog
                     const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-                    return new Promise((resolve, reject) => {
-                        Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
-                            title: _t("Add Phone Number"),
-                            matrixClient: MatrixClientPeg.get(),
-                            authData: e.data,
-                            makeRequest: this._makeAddThreepidOnlyRequest,
-                            onFinished: (success) => {
-                                if (success) {
-                                    resolve();
-                                } else {
-                                    reject();
-                                }
-                            },
-                        });
+                    Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
+                        title: _t("Add Phone Number"),
+                        matrixClient: MatrixClientPeg.get(),
+                        authData: e.data,
+                        makeRequest: this._makeAddThreepidOnlyRequest,
                     });
                 }
             }
