@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
+has_custom_riot=$(node has_custom_riot.js $@)
+
 stop_servers() {
-	./riot/stop.sh
-	./synapse/stop.sh
+    if [ $has_custom_riot -ne "1" ]; then
+	   ./riot/stop.sh
+	fi
+    ./synapse/stop.sh
 }
 
 handle_error() {
@@ -15,6 +19,8 @@ handle_error() {
 trap 'handle_error' ERR
 
 ./synapse/start.sh
-./riot/start.sh
+if [ $has_custom_riot -ne "1" ]; then
+    ./riot/start.sh
+fi
 node start.js $@
 stop_servers
