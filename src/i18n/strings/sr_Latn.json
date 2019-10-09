@@ -1,1 +1,24 @@
-{}
+{
+    "This email address is already in use": "Ova adresa elektronske pošte se već koristi",
+    "This phone number is already in use": "Ovaj broj telefona se već koristi",
+    "Add Email Address": "Dodajte adresu elektronske pošte",
+    "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
+    "Add Phone Number": "Dodajte broj telefona",
+    "The platform you're on": "Platforma koju koristite",
+    "The version of Riot.im": "Verzija Riot.im",
+    "Whether or not you're logged in (we don't record your username)": "Da li ste prijavljeni ili ne (ne beležimo vaše korisničko ime)",
+    "Your language of choice": "Vaš izbor jezika",
+    "Which officially provided instance you are using, if any": "Koju zvaničnu instancu koristite, ako koristite",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Da li koristite režim bogatog teksta u uređivaču bogatog teksta",
+    "Your homeserver's URL": "URL vašeg kućnog servera",
+    "Your identity server's URL": "URL vašeg servera identiteta",
+    "e.g. %(exampleValue)s": "npr. %(exampleValue)s",
+    "Dismiss": "Odbaci",
+    "Your Riot is misconfigured": "Vaš Riot nije dobro podešen",
+    "Chat with Riot Bot": "Ćaskajte sa Riot botom",
+    "Sign In": "Prijavite se",
+    "powered by Matrix": "pokreće Matriks",
+    "Custom Server Options": "Prilagođene opcije servera",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Takođe, možete podesiti prilagođeni server identiteta, ali tada nećete moći da pozivate korisnike preko adrese elektronske pošte ili da i sami budete pozvani preko adrese elektronske pošte.",
+    "Explore rooms": "Istražite sobe"
+}
