@@ -1,6 +1,5 @@
 {
-    "default_hs_url": "https://matrix.org",
-    "default_is_url": "https://vector.im",
+    "default_server_name": "matrix.org",
     "brand": "Riot",
     "integrations_ui_url": "https://scalar-staging.vector.im/",
     "integrations_rest_url": "https://scalar-staging.vector.im/api",
