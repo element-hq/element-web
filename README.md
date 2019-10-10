@@ -162,13 +162,13 @@ override the desktop app's default settings if desired.
 Running from Docker
 ===================
 
-The Docker image can be used to serve riot-web as a web server. The easiest way to use 
+The Docker image can be used to serve riot-web as a web server. The easiest way to use
 it is to use the prebuilt image:
 ```bash
 docker run -p 80:80 vectorim/riot-web
-``` 
+```
 
-To supply your own custom `config.json`, map a volume to `/app/config.json`. For example, 
+To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
 if your custom config was located at `/etc/riot-web/config.json` then your Docker command
 would be:
 ```bash
@@ -325,6 +325,10 @@ You can also tell karma to run the tests in a loop (every time the source
 changes), in an instance of Chrome on your desktop, with `yarn
 test-multi`. This also gives you the option of running the tests in 'debug'
 mode, which is useful for stepping through the tests in the developer tools.
+
+### End-to-End tests
+
+See the README.md in `matrix-react-sdk` how to run the end-to-end tests.
 
 Translations
 ============
