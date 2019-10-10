@@ -50,7 +50,7 @@ module.exports = class RestSession {
 
     async join(roomIdOrAlias) {
         this.log.step(`joins ${roomIdOrAlias}`);
-        const roomId = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`).room_id;
+        const roomId = (await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`)).room_id;
         this.log.done();
         const room = new RestRoom(this, roomId, this.log);
         this._rooms[roomId] = room;
@@ -86,7 +86,7 @@ module.exports = class RestSession {
             body.topic = options.topic;
         }
 
-        const roomId = await this._post(`/createRoom`, body).room_id;
+        const roomId = (await this._post(`/createRoom`, body)).room_id;
         this.log.done();
         return new RestRoom(this, roomId, this.log);
     }
