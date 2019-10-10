@@ -92,6 +92,10 @@ function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
 // gets the caret position details, ignoring and adjusting to
 // the ZWS if you're typing in a caret node
 function getCaret(node, offsetToNode, offsetWithinNode) {
+    // if no node is selected, return an offset at the start
+    if (!node) {
+        return new DocumentOffset(0, false);
+    }
     let atNodeEnd = offsetWithinNode === node.textContent.length;
     if (node.nodeType === Node.TEXT_NODE && isCaretNode(node.parentElement)) {
         const zwsIdx = node.nodeValue.indexOf(CARET_NODE_CHAR);
