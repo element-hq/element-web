@@ -1210,7 +1210,7 @@
     "deleted": "обрисано",
     "underlined": "подвучено",
     "You have no historical rooms": "Ваша историја соба је празна",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Такође, можете подесити прилагођени сервер идентитета али у том случају нећете моћи да позивате кориснике преко мејла адресе или да сами будете позвани преко мејл адресе.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Такође, можете подесити прилагођени сервер идентитета али у том случају нећете моћи да позивате кориснике преко мејл адресе или да сами будете позвани преко мејл адресе.",
     "Whether or not you're logged in (we don't record your username)": "Да ли сте пријављени (не бележимо ваше корисничко име)",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Датотека „%(fileName)s“ премашује ограничење величине отпремања на овом кућном серверу",
     "Unable to load! Check your network connectivity and try again.": "Нисам могао да учитам! Проверите вашу мрежну везу и пробајте поново.",
