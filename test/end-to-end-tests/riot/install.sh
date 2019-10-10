@@ -2,6 +2,14 @@
 set -e
 RIOT_BRANCH=develop
 
+with_riot=1
+
+for i in $@; do
+    if [ "$i" == "--without-riot" ] ; then
+        with_riot=0
+    fi
+done
+
 BASE_DIR=$(cd $(dirname $0) && pwd)
 cd $BASE_DIR
 # Install ComplexHttpServer (a drop in replacement for Python's SimpleHttpServer
@@ -26,10 +34,12 @@ if [ -d $BASE_DIR/riot-web ]; then
     exit
 fi
 
-curl -L https://github.com/vector-im/riot-web/archive/${RIOT_BRANCH}.zip --output riot.zip
-unzip -q riot.zip
-rm riot.zip
-mv riot-web-${RIOT_BRANCH} riot-web
-cd riot-web
-yarn install
-yarn run build
+if [ $with_riot -eq 1 ]; then
+    curl -L https://github.com/vector-im/riot-web/archive/${RIOT_BRANCH}.zip --output riot.zip
+    unzip -q riot.zip
+    rm riot.zip
+    mv riot-web-${RIOT_BRANCH} riot-web
+    cd riot-web
+    yarn install
+    yarn run build
+fi

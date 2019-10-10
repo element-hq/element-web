@@ -34,6 +34,8 @@ ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 echo "--- Install synapse & other dependencies"
 ./install.sh
+# install (only) static webserver to server symlinked local copy of riot
+./riot/install.sh --without-riot
 mkdir logs
 echo "+++ Running end-to-end tests"
 TESTS_STARTED=1
