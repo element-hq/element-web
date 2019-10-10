@@ -553,7 +553,7 @@ export default class BasicMessageEditor extends React.Component {
             <div
                 className="mx_BasicMessageComposer_input"
                 contentEditable="true"
-                tabIndex="1"
+                tabIndex="0"
                 onBlur={this._onBlur}
                 onFocus={this._onFocus}
                 onPaste={this._onPaste}
