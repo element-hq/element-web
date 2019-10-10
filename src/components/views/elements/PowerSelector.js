@@ -20,6 +20,7 @@ import createReactClass from 'create-react-class';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
+import {Key} from "../../../Keyboard";
 
 module.exports = createReactClass({
     displayName: 'PowerSelector',
@@ -113,7 +114,7 @@ module.exports = createReactClass({
     },
 
     onCustomKeyDown: function(event) {
-        if (event.key === "Enter") {
+        if (event.key === Key.ENTER) {
             event.preventDefault();
             event.stopPropagation();
 

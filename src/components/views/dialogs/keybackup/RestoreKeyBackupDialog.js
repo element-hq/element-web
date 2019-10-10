@@ -23,6 +23,7 @@ import Modal from '../../../../Modal';
 import { MatrixClient } from 'matrix-js-sdk';
 
 import { _t } from '../../../../languageHandler';
+import {Key} from "../../../../Keyboard";
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
@@ -136,13 +137,13 @@ export default createReactClass({
     },
 
     _onPassPhraseKeyPress: function(e) {
-        if (e.key === "Enter") {
+        if (e.key === Key.ENTER) {
             this._onPassPhraseNext();
         }
     },
 
     _onRecoveryKeyKeyPress: function(e) {
-        if (e.key === "Enter" && this.state.recoveryKeyValid) {
+        if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
             this._onRecoveryKeyNext();
         }
     },

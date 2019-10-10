@@ -30,6 +30,7 @@ import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
+import {Key} from "../../../Keyboard";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -134,12 +135,12 @@ export default class EditMessageComposer extends React.Component {
         if (event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
-        if (event.key === "Enter") {
+        if (event.key === Key.ENTER) {
             this._sendEdit();
             event.preventDefault();
-        } else if (event.key === "Escape") {
+        } else if (event.key === Key.ESCAPE) {
             this._cancelEdit();
-        } else if (event.key === "ArrowUp") {
+        } else if (event.key === Key.ARROW_UP) {
             if (this._editorRef.isModified() || !this._editorRef.isCaretAtStart()) {
                 return;
             }
@@ -148,7 +149,7 @@ export default class EditMessageComposer extends React.Component {
                 dis.dispatch({action: 'edit_event', event: previousEvent});
                 event.preventDefault();
             }
-        } else if (event.key === "ArrowDown") {
+        } else if (event.key === Key.ARROW_DOWN) {
             if (this._editorRef.isModified() || !this._editorRef.isCaretAtEnd()) {
                 return;
             }
