@@ -210,9 +210,18 @@ export default class EditMessageComposer extends React.Component {
     }
 
     componentWillUnmount() {
+        // store caret and serialized parts in the
+        // editorstate so it can be restored when the remote echo event tile gets rendered
+        // in case we're currently editing a pending event
         const sel = document.getSelection();
-        const {caret} = getCaretOffsetAndText(this._editorRef, sel);
+        let caret;
+        if (sel.focusNode) {
+            caret = getCaretOffsetAndText(this._editorRef, sel).caret;
+        }
         const parts = this.model.serializeParts();
+        // if caret is undefined because for some reason there isn't a valid selection,
+        // then when mounting the editor again with the same editor state,
+        // it will set the cursor at the end.
         this.props.editState.setEditorState(caret, parts);
     }
 
@@ -239,7 +248,7 @@ export default class EditMessageComposer extends React.Component {
     _getInitialCaretPosition() {
         const {editState} = this.props;
         let caretPosition;
-        if (editState.hasEditorState()) {
+        if (editState.hasEditorState() && editState.getCaret()) {
             // if restoring state from a previous editor,
             // restore caret position from the state
             const caret = editState.getCaret();
