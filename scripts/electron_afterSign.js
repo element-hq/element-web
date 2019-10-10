@@ -20,6 +20,6 @@ exports.default = async function(context) {
         appBundleId: 'im.riot.app',
         appPath: `${appOutDir}/${appName}.app`,
         appleId: userId,
-        appleIdPassword: '@keychain:NOTARIZE_CREDS,
+        appleIdPassword: '@keychain:NOTARIZE_CREDS',
     });
 };
