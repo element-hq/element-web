@@ -412,11 +412,13 @@ export function bodyToHtml(content, highlights, opts={}) {
             };
         }
 
-        let formattedBody = content.formatted_body;
-        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
-        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
+        let formattedBody = typeof content.formatted_body === 'string' ? content.formatted_body : null;
+        const plainBody = typeof content.body === 'string' ? content.body : null;
 
-        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : content.body);
+        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
+        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(plainBody) : plainBody;
+
+        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : plainBody);
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
