@@ -1223,7 +1223,7 @@ export default createReactClass({
                      blurToCancel={false}
                      initialValue={this.state.profileForm.name}
                      onValueChanged={this._onNameChange}
-                     tabIndex="1"
+                     tabIndex="0"
                      dir="auto" />;
 
                 shortDescNode = <EditableText ref="descriptionEditor"
@@ -1233,7 +1233,7 @@ export default createReactClass({
                      blurToCancel={false}
                      initialValue={this.state.profileForm.short_description}
                      onValueChanged={this._onShortDescChange}
-                     tabIndex="2"
+                     tabIndex="0"
                      dir="auto" />;
             } else {
                 const onGroupHeaderItemClick = this.state.isUserMember ? this._onEditClick : null;

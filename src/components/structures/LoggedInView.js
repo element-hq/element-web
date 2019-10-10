@@ -408,7 +408,7 @@ const LoggedInView = createReactClass({
                 return;
             }
 
-            if (!isClickShortcut && !canElementReceiveInput(ev.target)) {
+            if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
                 ev.stopPropagation();

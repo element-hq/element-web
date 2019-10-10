@@ -108,7 +108,7 @@ export class TopLeftMenu extends React.Component {
             </AccessibleButton>
         );
 
-        return <div className="mx_TopLeftMenu mx_HiddenFocusable" tabIndex={0} ref={this.props.containerRef}>
+        return <div className="mx_TopLeftMenu" ref={this.props.containerRef}>
             <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true}>
                 <div>{this.props.displayName}</div>
                 <div className="mx_TopLeftMenu_greyedText" aria-hidden={true}>{this.props.userId}</div>
