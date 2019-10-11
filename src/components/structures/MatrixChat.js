@@ -1221,7 +1221,15 @@ export default createReactClass({
     /**
      * Called when the session is logged out
      */
-    _onLoggedOut: function() {
+    _onLoggedOut: async function() {
+        const platform = PlatformPeg.get();
+
+        if (platform.supportsEventIndexing()) {
+            console.log("Seshat: Deleting event index.");
+            this.crawlerRef.cancel();
+            await platform.deleteEventIndex();
+        }
+
         this.notifyNewScreen('login');
         this.setStateForNewView({
             view: VIEWS.LOGIN,
