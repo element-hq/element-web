@@ -294,15 +294,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async initEventIndex(user_id: string): void {
-        return this._ipcCall('initEventIndex', user_id);
+    async initEventIndex(userId: string): void {
+        return this._ipcCall('initEventIndex', userId);
     }
 
     supportsEventIndexing(): boolean {
-        return true
+        return true;
     }
 
-    async addEventToIndex(ev: {}, profile: {}) {
+    async addEventToIndex(ev: {}, profile: {}): void {
         return this._ipcCall('addEventToIndex', ev, profile);
     }
 
@@ -318,7 +318,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('searchEventIndex', term);
     }
 
-    async addHistoricEvents(events: string, checkpoint = null, oldCheckpoint = null): Promise<{}> {
+    async addHistoricEvents(events: string, checkpoint: {} = null, oldCheckpoint: {} = null): Promise<{}> {
         return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
     }
 
