@@ -2086,5 +2086,6 @@
     "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
     "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요.",
     "Add Email Address": "이메일 주소 추가",
-    "Add Phone Number": "전화번호 추가"
+    "Add Phone Number": "전화번호 추가",
+    "%(creator)s created and configured the room.": "%(creator)s님이 방을 만드고 설정했습니다."
 }
