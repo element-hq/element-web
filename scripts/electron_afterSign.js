@@ -16,6 +16,7 @@ exports.default = async function(context) {
 
     const appName = context.packager.appInfo.productFilename;
 
+    console.log("Notarising macOS app. This may be some time.");
     return await notarize({
         appBundleId: 'im.riot.app',
         appPath: `${appOutDir}/${appName}.app`,
