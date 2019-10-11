@@ -1281,8 +1281,11 @@ export default createReactClass({
         // particularly noticeable when there are lots of 'limited' /sync responses
         // such as when laptops unsleep.
         // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
-        cli.setCanResetTimelineCallback(function(roomId) {
+        cli.setCanResetTimelineCallback(async function(roomId) {
             console.log("Request to reset timeline in room ", roomId, " viewing:", self.state.currentRoomId);
+            // TODO is there a better place to plug this in
+            await self.addCheckpointForLimitedRoom(roomId);
+
             if (roomId !== self.state.currentRoomId) {
                 // It is safe to remove events from rooms we are not viewing.
                 return true;
@@ -2233,5 +2236,42 @@ export default createReactClass({
         }
 
         console.log("Seshat: Stopping crawler function");
+    },
+
+    async addCheckpointForLimitedRoom(roomId) {
+        const platform = PlatformPeg.get();
+        if (!platform.supportsEventIndexing()) return;
+        if (!MatrixClientPeg.get().isRoomEncrypted(roomId)) return;
+
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(roomId);
+
+        if (room === null) return;
+
+        const timeline = room.getLiveTimeline();
+        const token = timeline.getPaginationToken("b");
+
+        const backwardsCheckpoint = {
+            roomId: room.roomId,
+            token: token,
+            fullCrawl: false,
+            direction: "b",
+        };
+
+        const forwardsCheckpoint = {
+            roomId: room.roomId,
+            token: token,
+            fullCrawl: false,
+            direction: "f",
+        };
+
+        console.log("Seshat: Added checkpoint because of a limited timeline",
+            backwardsCheckpoint, forwardsCheckpoint);
+
+        await platform.addCrawlerCheckpoint(backwardsCheckpoint);
+        await platform.addCrawlerCheckpoint(forwardsCheckpoint);
+
+        this.crawlerChekpoints.push(backwardsCheckpoint);
+        this.crawlerChekpoints.push(forwardsCheckpoint);
     },
 });
