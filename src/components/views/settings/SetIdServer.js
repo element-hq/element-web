@@ -249,20 +249,55 @@ export default class SetIdServer extends React.Component {
     };
 
     async _showServerChangeWarning({ title, unboundMessage, button }) {
-        const threepids = await getThreepidsWithBindStatus(MatrixClientPeg.get());
+        const { currentClientIdServer } = this.state;
+
+        let threepids = [];
+        let currentServerReachable = true;
+        try {
+            threepids = await getThreepidsWithBindStatus(MatrixClientPeg.get());
+        } catch (e) {
+            currentServerReachable = false;
+            console.warn(
+                `Unable to reach identity server at ${currentClientIdServer} to check ` +
+                `for 3PIDs during IS change flow`,
+            );
+            console.warn(e);
+        }
 
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;
         let danger = false;
-        if (boundThreepids.length) {
+        const messageElements = {
+            idserver: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
+            b: sub => <b>{sub}</b>,
+        };
+        if (!currentServerReachable) {
+            message = <div>
+                <p>{_t(
+                    "You should <b>remove your personal data</b> from identity server " +
+                    "<idserver /> before disconnecting. Unfortunately, identity server " +
+                    "<idserver /> is currently offline or cannot be reached.",
+                    {}, messageElements,
+                )}</p>
+                <p>{_t("You should:")}</p>
+                <ul>
+                    <li>{_t(
+                        "check your browser plugins for anything that might block " +
+                        "the identity server (such as Privacy Badger)",
+                    )}</li>
+                    <li>{_t("contact the administrators of identity server <idserver />", {}, {
+                        idserver: messageElements.idserver,
+                    })}</li>
+                    <li>{_t("wait and try again later")}</li>
+                </ul>
+            </div>;
+            danger = true;
+            button = _t("Disconnect anyway");
+        } else if (boundThreepids.length) {
             message = <div>
                 <p>{_t(
                     "You are still <b>sharing your personal data</b> on the identity " +
-                    "server <idserver />.", {},
-                    {
-                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                        b: sub => <b>{sub}</b>,
-                    },
+                    "server <idserver />.", {}, messageElements,
                 )}</p>
                 <p>{_t(
                     "We recommend that you remove your email addresses and phone numbers " +
