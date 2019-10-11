@@ -43,7 +43,7 @@ const INCLUDE_LANGS = [
     {'value': 'sv', 'label': 'Svenska'},
     {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'th', 'label': 'ไทย'},
-    {'value': 'tr', 'label': 'Türk'},
+    {'value': 'tr', 'label': 'Türkçe'},
     {'value': 'vls', 'label': 'West-Vlaams'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
