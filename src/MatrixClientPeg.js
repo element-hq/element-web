@@ -30,6 +30,7 @@ import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
+import PlatformPeg from "./PlatformPeg";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -221,6 +222,9 @@ class MatrixClientPeg {
         };
 
         this.matrixClient = createMatrixClient(opts);
+
+        const platform = PlatformPeg.get();
+        if (platform.supportsEventIndexing()) platform.initEventIndex(creds.userId);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
