@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberEventListSummary {
+.mx_EventListSummary {
     position: relative;
 }
 
-.mx_TextualEvent.mx_MemberEventListSummary_summary {
+.mx_TextualEvent.mx_EventListSummary_summary {
     font-size: 14px;
     display: inline-flex;
 }
 
-.mx_MemberEventListSummary_avatars {
+.mx_EventListSummary_avatars {
     display: inline-block;
     margin-right: 8px;
     padding-top: 8px;
     line-height: 12px;
 }
 
-.mx_MemberEventListSummary_avatars .mx_BaseAvatar {
+.mx_EventListSummary_avatars .mx_BaseAvatar {
     margin-right: -4px;
     cursor: pointer;
 }
 
-.mx_MemberEventListSummary_toggle {
+.mx_EventListSummary_toggle {
     color: $accent-color;
     cursor: pointer;
     float: right;
@@ -43,29 +43,29 @@ limitations under the License.
     margin-top: 8px;
 }
 
-.mx_MemberEventListSummary_line {
+.mx_EventListSummary_line {
     border-bottom: 1px solid $primary-hairline-color;
     margin-left: 63px;
     line-height: 30px;
 }
 
 .mx_MatrixChat_useCompactLayout {
-    .mx_MemberEventListSummary {
+    .mx_EventListSummary {
         font-size: 13px;
         .mx_EventTile_line {
             line-height: 20px;
         }
     }
 
-    .mx_MemberEventListSummary_line {
+    .mx_EventListSummary_line {
         line-height: 22px;
     }
 
-    .mx_MemberEventListSummary_toggle {
+    .mx_EventListSummary_toggle {
         margin-top: 3px;
     }
 
-    .mx_TextualEvent.mx_MemberEventListSummary_summary {
+    .mx_TextualEvent.mx_EventListSummary_summary {
         font-size: 13px;
     }
 }
