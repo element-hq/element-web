@@ -43,5 +43,10 @@
     "Need help?": "Potrebujete pomoc?",
     "Explore rooms": "Preskúmať miestnosti",
     "Room Directory": "Adresár miestností",
-    "Your Riot is misconfigured": "Váš Riot nie je nastavený správne"
+    "Your Riot is misconfigured": "Váš Riot nie je nastavený správne",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Tvoja RIOT konfigurácia obsahuje neplatný JSON. Prosím, oprav daný problém a načítaj stránku znova.",
+    "The message from the parser is: %(message)s": "Správa z parsera je: %(message)s",
+    "Invalid JSON": "Neplatný JSON",
+    "Unexpected error preparing the app. See console for details.": "Neočakávaná chyba počas pripravovania aplikácie. Pre podrobnosti pozri konzolu.",
+    "Invalid configuration: no default server specified.": "Neplatné nastavenie: nebol určený východiskový server."
 }
