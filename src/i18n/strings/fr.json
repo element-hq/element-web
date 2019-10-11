@@ -2242,5 +2242,6 @@
     "Your email address hasn't been verified yet": "Votre adresse e-mail n’a pas encore été vérifiée",
     "Click the link in the email you received to verify and then click continue again.": "Cliquez sur le lien dans l’e-mail que vous avez reçu pour la vérifier et cliquez encore sur continuer.",
     "Add Email Address": "Ajouter une adresse e-mail",
-    "Add Phone Number": "Ajouter un numéro de téléphone"
+    "Add Phone Number": "Ajouter un numéro de téléphone",
+    "%(creator)s created and configured the room.": "%(creator)s a créé et configuré le salon."
 }
