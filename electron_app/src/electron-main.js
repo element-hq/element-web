@@ -39,6 +39,8 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
+const seshat = require('seshat-node');
+const makeDir = require('make-dir');
 
 if (argv["help"]) {
     console.log("Options:");
@@ -82,7 +84,11 @@ try {
     // Could not load local config, this is expected in most cases.
 }
 
+
+const eventStorePath = path.join(app.getPath('userData'), 'EventStore');
 const store = new Store({ name: "electron-config" });
+
+let eventIndex = null;
 
 let mainWindow = null;
 global.appQuitting = false;
@@ -149,6 +155,17 @@ autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName, releaseDate,
 ipcMain.on('ipcCall', async function(ev, payload) {
     if (!mainWindow) return;
 
+    const send_error = (id, e) => {
+        const error = {
+            message: e.message
+        }
+
+        mainWindow.webContents.send('ipcReply', {
+            id:id,
+            error: error
+        });
+    }
+
     const args = payload.args || [];
     let ret;
 
@@ -200,6 +217,105 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'getConfig':
             ret = vectorConfig;
             break;
+
+        case 'initEventIndex':
+            if (args[0] && eventIndex === null) {
+                let p = path.normalize(path.join(eventStorePath, args[0]));
+                try {
+                    await makeDir(p);
+                    eventIndex = new seshat(p);
+                    console.log("Initialized event store");
+                } catch (e) {
+                    send_error(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'deleteEventIndex':
+            await eventIndex.delete();
+            eventIndex = null;
+
+        case 'isEventIndexEmpty':
+            if (eventIndex === null) ret = true;
+            else ret = await eventIndex.isEmpty();
+            break;
+
+        case 'addEventToIndex':
+            try {
+                eventIndex.addEvent(args[0], args[1]);
+            } catch (e) {
+                send_error(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'commitLiveEvents':
+            try {
+                ret = await eventIndex.commit();
+            } catch (e) {
+                send_error(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'searchEventIndex':
+            try {
+                ret = await eventIndex.search(args[0]);
+            } catch (e) {
+                send_error(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'addHistoricEvents':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addHistoricEvents(
+                        args[0], args[1], args[2]);
+                } catch (e) {
+                    send_error(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'removeCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.removeCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    send_error(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'addCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    send_error(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'loadCheckpoints':
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadCheckpoints();
+                } catch (e) {
+                    ret = [];
+                }
+            }
+            break;
+
         default:
             mainWindow.webContents.send('ipcReply', {
                 id: payload.id,

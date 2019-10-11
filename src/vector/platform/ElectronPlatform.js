@@ -293,4 +293,48 @@ export default class ElectronPlatform extends VectorBasePlatform {
             callbacks.resolve(payload.reply);
         }
     }
+
+    async initEventIndex(user_id: string): void {
+        return this._ipcCall('initEventIndex', user_id);
+    }
+
+    supportsEventIndexing(): boolean {
+        return true
+    }
+
+    async addEventToIndex(ev: {}, profile: {}) {
+        return this._ipcCall('addEventToIndex', ev, profile);
+    }
+
+    async isEventIndexEmpty(): Promise<boolean> {
+        return this._ipcCall('isEventIndexEmpty');
+    }
+
+    async commitLiveEvents(): Promise<{}> {
+        return this._ipcCall('commitLiveEvents');
+    }
+
+    async searchEventIndex(term: string): Promise<{}> {
+        return this._ipcCall('searchEventIndex', term);
+    }
+
+    async addHistoricEvents(events: string, checkpoint = null, oldCheckpoint = null): Promise<{}> {
+        return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
+    }
+
+    async addCrawlerCheckpoint(checkpoint: {}): Promise<{}> {
+        return this._ipcCall('addCrawlerCheckpoint', checkpoint);
+    }
+
+    async removeCrawlerCheckpoint(checkpoint: {}): Promise<{}> {
+        return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
+    }
+
+    async loadCheckpoints(checkpoint: {}): Promise<[{}]> {
+        return this._ipcCall('loadCheckpoints');
+    }
+
+    async deleteEventIndex(): Promise<> {
+        return this._ipcCall('deleteEventIndex');
+    }
 }

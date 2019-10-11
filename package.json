@@ -148,7 +148,9 @@
     "source-map-loader": "^0.2.4",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.11"
+    "webpack-dev-server": "^3.1.11",
+    "electron-build-env": "^0.2.0",
+    "neon-cli": "^0.3.1"
   },
   "build": {
     "appId": "im.riot.app",
