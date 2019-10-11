@@ -46,7 +46,7 @@ exports.default = async function(context) {
         return new Promise((resolve, reject) => {
             let cmdLine = 'osslsigncode sign ';
             if (process.env.OSSLSIGNCODE_SIGNARGS) {
-                cmdLine += process.env.OSSLSIGNCODE_SIGNARGS + '';
+                cmdLine += process.env.OSSLSIGNCODE_SIGNARGS + ' ';
             }
             const tmpFile = 'tmp_' + Math.random().toString(36).substring(2, 15) + '.exe';
             cmdLine += shellescape([
@@ -54,7 +54,6 @@ exports.default = async function(context) {
                 '-in', `${appOutDir}/${appName}.exe`,
                 '-out', `${appOutDir}/${tmpFile}`,
             ]);
-            console.log(cmdLine);
 
             const signproc = exec(cmdLine, {}, (error, stdout) => {
                 console.log(stdout);
