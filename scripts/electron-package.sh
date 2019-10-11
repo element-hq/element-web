@@ -67,6 +67,14 @@ if [ ! -f package.json ]; then
     exit
 fi
 
+if [ -z "$NOTARIZE_APPLE_ID" ]; then
+    echo "NOTARIZE_APPLE_ID is not set"
+    exit
+fi
+
+# Test that altool can get its credentials for notarising the mac app
+xcrun altool -u "$NOTARIZE_APPLE_ID" -p '@keychain:NOTARIZE_CREDS' --list-apps || exit
+
 echo "Building $version using Update base URL $update_base_url"
 
 projdir=`pwd`
