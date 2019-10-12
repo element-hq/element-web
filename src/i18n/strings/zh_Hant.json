@@ -2233,5 +2233,8 @@
     "Your email address hasn't been verified yet": "您的電子郵件位置尚未被驗證",
     "Click the link in the email you received to verify and then click continue again.": "點擊您收到的電子郵件中的連結以驗證然後再次點擊繼續。",
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "您將要移除 %(user)s 的 1 則訊息。這無法復原。您想要繼續嗎？",
-    "Remove %(count)s messages|one": "移除 1 則訊息"
+    "Remove %(count)s messages|one": "移除 1 則訊息",
+    "Add Email Address": "新增電子郵件地址",
+    "Add Phone Number": "新增電話號碼",
+    "%(creator)s created and configured the room.": "%(creator)s 建立並設定了聊天室。"
 }
