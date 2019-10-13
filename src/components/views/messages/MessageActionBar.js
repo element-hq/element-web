@@ -25,6 +25,7 @@ import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
@@ -84,6 +85,45 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
+    onReactClick = (ev) => {
+        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
+        const buttonRect = ev.target.getBoundingClientRect();
+
+        const menuOptions = {
+            reactions: this.props.reactions,
+            chevronFace: "none",
+            onFinished: () => this.onFocusChange(false),
+            onChoose: reaction => {
+                this.onFocusChange(false);
+                MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), "m.reaction", {
+                    "m.relates_to": {
+                        "rel_type": "m.annotation",
+                        "event_id": this.props.mxEvent.getId(),
+                        "key": reaction,
+                    },
+                });
+            },
+        };
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const buttonRight = buttonRect.right + window.pageXOffset;
+        const buttonBottom = buttonRect.bottom + window.pageYOffset;
+        const buttonTop = buttonRect.top + window.pageYOffset;
+        // Align the right edge of the menu to the right edge of the button
+        menuOptions.right = window.innerWidth - buttonRight;
+        // Align the menu vertically on whichever side of the button has more
+        // space available.
+        if (buttonBottom < window.innerHeight / 2) {
+            menuOptions.top = buttonBottom;
+        } else {
+            menuOptions.bottom = window.innerHeight - buttonTop;
+        }
+
+        createMenu(EmojiPicker, menuOptions);
+
+        this.onFocusChange(true);
+    };
+
     onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         const buttonRect = ev.target.getBoundingClientRect();
@@ -128,17 +168,6 @@ export default class MessageActionBar extends React.PureComponent {
         this.onFocusChange(true);
     };
 
-    renderReactButton() {
-        const ReactMessageAction = sdk.getComponent('messages.ReactMessageAction');
-        const { mxEvent, reactions } = this.props;
-
-        return <ReactMessageAction
-            mxEvent={mxEvent}
-            reactions={reactions}
-            onFocusChange={this.onFocusChange}
-        />;
-    }
-
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
@@ -148,7 +177,11 @@ export default class MessageActionBar extends React.PureComponent {
 
         if (isContentActionable(this.props.mxEvent)) {
             if (this.context.room.canReact) {
-                reactButton = this.renderReactButton();
+                reactButton = <AccessibleButton
+                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
+                    title={_t("React")}
+                    onClick={this.onReactClick}
+                />;
             }
             if (this.context.room.canReply) {
                 replyButton = <AccessibleButton

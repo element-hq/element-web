@@ -1,0 +1,157 @@
+/*
+Copyright 2019 Tulir Asokan <tulir@maunium.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EmojiPicker {
+    width: 340px;
+    height: 450px;
+
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_EmojiPicker_body {
+    flex: 1;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.mx_EmojiPicker_header {
+    padding: 4px 8px 0;
+    border-bottom: 1px solid $message-action-bar-border-color;
+}
+
+.mx_EmojiPicker_anchor {
+    border: none;
+    padding: 8px 8px 6px;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 4px 4px 0 0;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        fill: $primary-fg-color;
+    }
+
+    &:hover {
+        background-color: $focus-bg-color;
+        border-bottom: 2px solid $button-bg-color;
+    }
+
+    .mx_EmojiPicker_anchor_selected {
+        border-bottom: 2px solid $button-bg-color;
+    }
+}
+
+.mx_EmojiPicker_search {
+    margin: 8px;
+    border-radius: 4px;
+    border: 1px solid $input-border-color;
+    background-color: $primary-bg-color;
+    display: flex;
+
+    input {
+        flex: 1;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px 0;
+    }
+
+    svg {
+        align-self: center;
+        width: 16px;
+        height: 16px;
+        margin: 8px;
+    }
+}
+
+.mx_EmojiPicker_category {
+    padding: 0 12px;
+}
+
+.mx_EmojiPicker_category_label, .mx_EmojiPicker_preview_name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.mx_EmojiPicker_list {
+    padding: 0;
+    margin: 0;
+    // TODO the emoji rows need to be center-aligned, but the individual emojis shouldn't be.
+    //text-align: center;
+}
+
+.mx_EmojiPicker_item {
+    list-style: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 1px;
+    padding: 4px 0;
+    width: 36px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $focus-bg-color;
+    }
+}
+
+.mx_EmojiPicker_footer {
+    border-top: 1px solid $message-action-bar-border-color;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+}
+
+.mx_EmojiPicker_preview_emoji {
+    font-size: 32px;
+    padding: 8px 16px;
+}
+
+.mx_EmojiPicker_preview_text {
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_EmojiPicker_name {
+    text-transform: capitalize;
+}
+
+.mx_EmojiPicker_shortcode {
+    color: $light-fg-color;
+    font-size: 14px;
+
+    &::before, &::after {
+        content: ":";
+    }
+}
+
+.mx_EmojiPicker_quick {
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+}
+
+.mx_EmojiPicker_quick_header .mx_EmojiPicker_name {
+    margin-right: 4px;
+}

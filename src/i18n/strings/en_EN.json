@@ -1829,5 +1829,15 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Quick Reactions": "Quick Reactions",
+    "Frequently Used": "Frequently Used",
+    "Smileys & People": "Smileys & People",
+    "Animals & Nature": "Animals & Nature",
+    "Food & Drink": "Food & Drink",
+    "Activities": "Activities",
+    "Travel & Places": "Travel & Places",
+    "Objects": "Objects",
+    "Symbols": "Symbols",
+    "Flags": "Flags"
 }
