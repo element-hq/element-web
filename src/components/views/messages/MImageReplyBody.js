@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Vector Creations Ltd
+Copyright 2019 Tulir Asokan <tulir@maunium.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReplyThread {
-    margin-top: 0;
-}
+import React from 'react';
+import MImageBody from './MImageBody';
 
-.mx_ReplyThread_show {
-    cursor: pointer;
-}
+export default class MImageReplyBody extends MImageBody {
+    onClick(ev) {
+        ev.preventDefault();
+    }
 
-blockquote.mx_ReplyThread {
-    margin-left: 0;
-    margin-bottom: 8px;
-    padding-left: 10px;
-    border-left: 4px solid $button-bg-color;
+    wrapImage(contentUrl, children) {
+        return children;
+    }
+
+    // Don't show "Download this_file.png ..."
+    getFileBody() {
+        return null;
+    }
 }

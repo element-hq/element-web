@@ -304,20 +304,11 @@ export default class ReplyThread extends React.Component {
             header = <Spinner w={16} h={16} />;
         }
 
-        const EventTile = sdk.getComponent('views.rooms.EventTile');
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const ReplyTile = sdk.getComponent('views.rooms.ReplyTile');
         const evTiles = this.state.events.map((ev) => {
-            let dateSep = null;
-
-            if (wantsDateSeparator(this.props.parentEv.getDate(), ev.getDate())) {
-                dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
-            }
-
             return <blockquote className="mx_ReplyThread" key={ev.getId()}>
-                { dateSep }
-                <EventTile
+                <ReplyTile
                     mxEvent={ev}
-                    tileShape="reply"
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
                     isRedacted={ev.isRedacted()}
@@ -325,7 +316,7 @@ export default class ReplyThread extends React.Component {
             </blockquote>;
         });
 
-        return <div>
+        return <div className="mx_ReplyThread_wrapper">
             <div>{ header }</div>
             <div>{ evTiles }</div>
         </div>;

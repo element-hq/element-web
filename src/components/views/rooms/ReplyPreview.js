@@ -68,7 +68,7 @@ export default class ReplyPreview extends React.Component {
     render() {
         if (!this.state.event) return null;
 
-        const EventTile = sdk.getComponent('rooms.EventTile');
+        const ReplyTile = sdk.getComponent('rooms.ReplyTile');
 
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
@@ -80,11 +80,11 @@ export default class ReplyPreview extends React.Component {
                          onClick={cancelQuoting} />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
-                <EventTile last={true}
-                           tileShape="reply_preview"
-                           mxEvent={this.state.event}
-                           permalinkCreator={this.props.permalinkCreator}
-                           isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
+                <div className="mx_ReplyPreview_tile">
+                    <ReplyTile isRedacted={this.state.event.isRedacted()}
+                               mxEvent={this.state.event}
+                               permalinkCreator={this.props.permalinkCreator} />
+                </div>
             </div>
         </div>;
     }
