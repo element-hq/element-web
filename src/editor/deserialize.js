@@ -108,7 +108,9 @@ function parseElement(n, partCreator, lastNode, state) {
         case "LI": {
             const indent = "  ".repeat(state.listDepth - 1);
             if (n.parentElement.nodeName === "OL") {
-                return partCreator.plain(`${indent}1. `);
+                // The markdown parser doesn't do nested indexed lists at all, but this supports it anyway.
+                let index = state.listIndex[state.listIndex.length - 1]++;
+                return partCreator.plain(`${indent}${index}. `);
             } else {
                 return partCreator.plain(`${indent}- `);
             }
@@ -120,9 +122,11 @@ function parseElement(n, partCreator, lastNode, state) {
             break;
         }
         case "OL":
+            state.listIndex.push(n.start || 1);
+            // fallthrough
         case "UL":
             state.listDepth = (state.listDepth || 0) + 1;
-        // es-lint-disable-next-line no-fallthrough
+            // fallthrough
         default:
             // don't textify block nodes we'll descend into
             if (!checkDescendInto(n)) {
@@ -177,7 +181,9 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     const parts = [];
     let lastNode;
     let inQuote = isQuotedMessage;
-    const state = {};
+    const state = {
+        listIndex: [],
+    };
 
     function onNodeEnter(n) {
         if (checkIgnored(n)) {
@@ -228,6 +234,8 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
                 inQuote = false;
                 break;
             case "OL":
+                state.listIndex.pop();
+                // fallthrough
             case "UL":
                 state.listDepth -= 1;
                 break;
