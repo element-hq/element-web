@@ -58,7 +58,16 @@ function parseLink(a, partCreator) {
 
 function parseCodeBlock(n, partCreator) {
     const parts = [];
-    const preLines = ("```\n" + n.textContent + "```").split("\n");
+    let language = "";
+    if (n.firstChild && n.firstChild.nodeName === "CODE") {
+        for (const className of n.firstChild.classList) {
+            if (className.startsWith("language-")) {
+                language = className.substr("language-".length);
+                break;
+            }
+        }
+    }
+    const preLines = ("```" + language + "\n" + n.textContent + "```").split("\n");
     preLines.forEach((l, i) => {
         parts.push(partCreator.plain(l));
         if (i < preLines.length - 1) {
