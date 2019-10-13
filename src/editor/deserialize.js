@@ -124,19 +124,19 @@ function parseElement(n, partCreator, lastNode, state) {
             state.listDepth = (state.listDepth || 0) + 1;
         // es-lint-disable-next-line no-fallthrough
         default:
-            // don't textify block nodes we'll decend into
-            if (!checkDecendInto(n)) {
+            // don't textify block nodes we'll descend into
+            if (!checkDescendInto(n)) {
                 return partCreator.plain(n.textContent);
             }
     }
 }
 
-function checkDecendInto(node) {
+function checkDescendInto(node) {
     switch (node.nodeName) {
         case "PRE":
             // a code block is textified in parseCodeBlock
             // as we don't want to preserve markup in it,
-            // so no need to decend into it
+            // so no need to descend into it
             return false;
         default:
             return checkBlockNode(node);
@@ -212,11 +212,11 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 
         parts.push(...newParts);
 
-        const decend = checkDecendInto(n);
-        // when not decending (like for PRE), onNodeLeave won't be called to set lastNode
+        const descend = checkDescendInto(n);
+        // when not descending (like for PRE), onNodeLeave won't be called to set lastNode
         // so do that here.
-        lastNode = decend ? null : n;
-        return decend;
+        lastNode = descend ? null : n;
+        return descend;
     }
 
     function onNodeLeave(n) {
