@@ -57,8 +57,8 @@ const RoomSubList = createReactClass({
         onHeaderClick: PropTypes.func,
         incomingCall: PropTypes.object,
         isFiltered: PropTypes.bool,
-        headerItems: PropTypes.node, // content shown in the sublist header
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
+        forceExpand: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -299,21 +299,20 @@ const RoomSubList = createReactClass({
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
         const isCollapsed = this.state.hidden && !this.props.forceExpand;
-        if (len) {
-            const subListClasses = classNames({
-                "mx_RoomSubList": true,
-                "mx_RoomSubList_hidden": isCollapsed,
-                "mx_RoomSubList_nonEmpty": len && !isCollapsed,
-            });
 
+        const subListClasses = classNames({
+            "mx_RoomSubList": true,
+            "mx_RoomSubList_hidden": len && isCollapsed,
+            "mx_RoomSubList_nonEmpty": len && !isCollapsed,
+        });
+
+        let content;
+        if (len) {
             if (isCollapsed) {
-                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
-                    {this._getHeaderJsx(isCollapsed)}
-                </div>;
+                // no body
             } else if (this._canUseLazyListRendering()) {
-                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
-                    {this._getHeaderJsx(isCollapsed)}
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
+                content = (
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
                         <LazyRenderList
                             scrollTop={this.state.scrollTop }
                             height={ this.state.scrollerHeight }
@@ -321,31 +320,35 @@ const RoomSubList = createReactClass({
                             itemHeight={34}
                             items={ this.props.list } />
                     </IndicatorScrollbar>
-                </div>;
+                );
             } else {
                 const roomTiles = this.props.list.map(r => this.makeRoomTile(r));
                 const tiles = roomTiles.concat(this.props.extraTiles);
-                return <div ref="subList" className={subListClasses} role="group" aria-label={this.props.label}>
-                    {this._getHeaderJsx(isCollapsed)}
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
+                content = (
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
                         { tiles }
                     </IndicatorScrollbar>
-                </div>;
+                );
             }
         } else {
-            const Loader = sdk.getComponent("elements.Spinner");
-            let content;
             if (this.props.showSpinner && !isCollapsed) {
+                const Loader = sdk.getComponent("elements.Spinner");
                 content = <Loader />;
             }
-
-            return (
-                <div ref="subList" className="mx_RoomSubList" role="group" aria-label={this.props.label}>
-                    { this._getHeaderJsx(isCollapsed) }
-                    { content }
-                </div>
-            );
         }
+
+        return (
+            <div
+                ref="subList"
+                className={subListClasses}
+                role="group"
+                aria-label={this.props.label}
+                aria-expanded={!isCollapsed}
+            >
+                { this._getHeaderJsx(isCollapsed) }
+                { content }
+            </div>
+        );
     },
 });
 
