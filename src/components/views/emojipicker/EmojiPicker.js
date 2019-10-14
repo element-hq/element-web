@@ -61,6 +61,7 @@ EMOJIBASE.forEach(emoji => {
 class EmojiPicker extends React.Component {
     static propTypes = {
         onChoose: PropTypes.func.isRequired,
+        closeMenu: PropTypes.func,
     };
 
     constructor(props) {
@@ -202,11 +203,11 @@ class EmojiPicker extends React.Component {
     }
 
     onClickEmoji(emoji) {
-        this.props.onChoose(emoji.unicode);
         recent.add(emoji.unicode);
-        this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
-        this.memoizedDataByCategory.recent = this.recentlyUsed.filter(emoji =>
-            emoji.filterString.includes(this.state.filter))
+        this.props.onChoose(emoji.unicode);
+        if (this.props.closeMenu) {
+            this.props.closeMenu();
+        }
     }
 
     render() {
