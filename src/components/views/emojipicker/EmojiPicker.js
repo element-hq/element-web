@@ -168,7 +168,6 @@ class EmojiPicker extends React.Component {
     }
 
     scrollToCategory(category) {
-        const index = this.categories.findIndex(cat => cat.id === category);
         this.bodyRef.current.querySelector(`[data-category-id="${category}"]`).scrollIntoView();
     }
 
@@ -179,7 +178,10 @@ class EmojiPicker extends React.Component {
                 emojis = id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[id];
             }
             this.memoizedDataByCategory[id] = emojis.filter(emoji => emoji.filterString.includes(filter));
-            this.categories.find(cat => cat.id === id).enabled = this.memoizedDataByCategory[id].length > 0;
+            const cat = this.categories.find(cat => cat.id === id);
+            cat.enabled = this.memoizedDataByCategory[id].length > 0;
+            // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
+            cat.ref.current.disabled = !cat.enabled;
         }
         this.setState({ filter });
         // Header underlines need to be updated, but updating requires knowing

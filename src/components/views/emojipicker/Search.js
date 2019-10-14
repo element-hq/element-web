@@ -30,7 +30,8 @@ class Search extends React.PureComponent {
             <div className="mx_EmojiPicker_search">
                 <input type="text" placeholder="Search" value={this.props.query}
                     onChange={ev => this.props.onChange(ev.target.value)}/>
-                <button onClick={() => this.props.onChange("")}>
+                <button onClick={() => this.props.onChange("")}
+                    className={this.props.query ? "mx_EmojiPicker_search_clear" : ""}>
                     {this.props.query ? icons.search.delete() : icons.search.search()}
                 </button>
             </div>

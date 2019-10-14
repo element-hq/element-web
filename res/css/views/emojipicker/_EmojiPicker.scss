@@ -36,6 +36,16 @@ limitations under the License.
     border-bottom: 1px solid $message-action-bar-border-color;
 }
 
+.mx_EmojiPicker button > svg {
+    width: 100%;
+    height: 100%;
+    fill: $primary-fg-color;
+}
+
+.mx_EmojiPicker button:disabled > svg {
+    fill: $focus-bg-color;
+}
+
 .mx_EmojiPicker_anchor {
     border: none;
     padding: 8px 8px 6px;
@@ -43,14 +53,11 @@ limitations under the License.
     background-color: transparent;
     border-radius: 4px 4px 0 0;
 
-    svg {
-        width: 20px;
-        height: 20px;
-        fill: $primary-fg-color;
-    }
+    width: 36px;
+    height: 38px;
 
-    &:disabled svg {
-        fill: $focus-bg-color;
+    &:not(:disabled) {
+        cursor: pointer;
     }
 
     &:not(:disabled):hover {
@@ -80,32 +87,33 @@ limitations under the License.
     button {
         border: none;
         background-color: inherit;
-        padding: 0;
-        margin: 8px;
-
-        svg {
-            align-self: center;
-            width: 16px;
-            height: 16px;
-        }
+        margin: 0;
+        padding: 8px;
+        align-self: center;
+        width: 32px;
+        height: 32px;
     }
+}
+
+.mx_EmojiPicker_search_clear {
+    cursor: pointer;
 }
 
 .mx_EmojiPicker_category {
     padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.mx_EmojiPicker_category_label, .mx_EmojiPicker_preview_name {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
+.mx_EmojiPicker_category_label {
+    width: 304px;
 }
 
 .mx_EmojiPicker_list {
+    width: 304px;
     padding: 0;
     margin: 0;
-    // TODO the emoji rows need to be center-aligned, but the individual emojis shouldn't be.
-    //text-align: center;
 }
 
 .mx_EmojiPicker_item {
@@ -123,6 +131,12 @@ limitations under the License.
     &:hover {
         background-color: $focus-bg-color;
     }
+}
+
+.mx_EmojiPicker_category_label, .mx_EmojiPicker_preview_name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
 }
 
 .mx_EmojiPicker_footer {
