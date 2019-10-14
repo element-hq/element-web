@@ -2011,5 +2011,11 @@
     "Explore": "Исследовать",
     "Filter": "Фильтровать",
     "Filter rooms…": "Фильтровать комнаты…",
-    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Если не удаётся найти комнату, то можно запросить приглашение или <a>Создать новую комнату</a>."
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Если не удаётся найти комнату, то можно запросить приглашение или <a>Создать новую комнату</a>.",
+    "Room alias": "Псевдоним комнаты",
+    "Set a room alias to easily share your room with other people.": "Присвоить комнате адрес, чтобы было проще приглашать в неё людей.",
+    "Create a public room": "Создать публичную комнату",
+    "Create a private room": "Создать приватную комнату",
+    "Topic (optional)": "Тема (опционально)",
+    "Make this room public": "Сделать комнату публичной"
 }
