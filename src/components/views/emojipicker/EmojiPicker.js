@@ -173,14 +173,17 @@ class EmojiPicker extends React.Component {
     }
 
     onChangeFilter(filter) {
-        for (let [id, emojis] of Object.entries(this.memoizedDataByCategory)) {
+        for (const cat of this.categories) {
+            let emojis;
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
-            if (!filter.includes(this.state.filter)) {
-                emojis = id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[id];
+            if (filter.includes(this.state.filter)) {
+                emojis = this.memoizedDataByCategory[cat.id];
+            } else {
+                emojis = cat.id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[cat.id];
             }
-            this.memoizedDataByCategory[id] = emojis.filter(emoji => emoji.filterString.includes(filter));
-            const cat = this.categories.find(cat => cat.id === id);
-            cat.enabled = this.memoizedDataByCategory[id].length > 0;
+            emojis = emojis.filter(emoji => emoji.filterString.includes(filter));
+            this.memoizedDataByCategory[cat.id] = emojis;
+            cat.enabled = emojis.length > 0;
             // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
             cat.ref.current.disabled = !cat.enabled;
         }
