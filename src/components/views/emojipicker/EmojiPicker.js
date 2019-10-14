@@ -82,7 +82,7 @@ class EmojiPicker extends React.Component {
             id: "recent",
             name: _t("Frequently Used"),
             enabled: this.recentlyUsed.length > 0,
-            visible: true,
+            visible: this.recentlyUsed.length > 0,
             ref: React.createRef(),
         }, {
             id: "people",
