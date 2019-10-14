@@ -19,33 +19,20 @@ import PropTypes from 'prop-types';
 
 import * as icons from "./icons";
 
-class Header extends React.Component {
+class Header extends React.PureComponent {
     static propTypes = {
         categories: PropTypes.arrayOf(PropTypes.object).isRequired,
         onAnchorClick: PropTypes.func.isRequired,
-        defaultCategory: PropTypes.string,
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: props.defaultCategory || props.categories[0].id,
-        };
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(selected) {
-        this.setState({selected});
-        this.props.onAnchorClick(selected);
+        refs: PropTypes.object,
     };
 
     render() {
         return (
             <nav className="mx_EmojiPicker_header">
                 {this.props.categories.map(category => (
-                    <button disabled={!category.enabled} key={category.id} className={`mx_EmojiPicker_anchor ${
-                        this.state.selected === category.id ? 'mx_EmojiPicker_anchor_selected' : ''}`}
-                        onClick={() => this.handleClick(category.id)} title={category.name}>
+                    <button disabled={!category.enabled} key={category.id} ref={category.ref}
+                        className={`mx_EmojiPicker_anchor ${category.visible ? 'mx_EmojiPicker_anchor_visible' : ''}`}
+                        onClick={() => this.props.onAnchorClick(category.id)} title={category.name}>
                         {icons.categories[category.id]()}
                     </button>
                 ))}

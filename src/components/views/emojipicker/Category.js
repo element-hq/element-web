@@ -30,7 +30,7 @@ class Category extends React.PureComponent {
     };
 
     render() {
-        const { onClick, onMouseEnter, onMouseLeave, emojis, name, filter } = this.props;
+        const { onClick, onMouseEnter, onMouseLeave, emojis, name } = this.props;
         if (!emojis || emojis.length === 0) {
             return null;
         }

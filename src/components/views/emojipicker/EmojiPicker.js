@@ -71,8 +71,6 @@ class EmojiPicker extends React.Component {
             previewEmoji: null,
         };
 
-        this.bodyRef = React.createRef();
-
         this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
@@ -83,47 +81,90 @@ class EmojiPicker extends React.Component {
             id: "recent",
             name: _t("Frequently Used"),
             enabled: this.recentlyUsed.length > 0,
+            visible: true,
+            ref: React.createRef(),
         }, {
             id: "people",
             name: _t("Smileys & People"),
             enabled: true,
+            visible: true,
+            ref: React.createRef(),
         }, {
             id: "nature",
             name: _t("Animals & Nature"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "foods",
             name: _t("Food & Drink"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "activity",
             name: _t("Activities"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "places",
             name: _t("Travel & Places"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "objects",
             name: _t("Objects"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "symbols",
             name: _t("Symbols"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }, {
             id: "flags",
             name: _t("Flags"),
             enabled: true,
+            visible: false,
+            ref: React.createRef(),
         }];
+
+        this.bodyRef = React.createRef();
 
         this.onChangeFilter = this.onChangeFilter.bind(this);
         this.onHoverEmoji = this.onHoverEmoji.bind(this);
         this.onHoverEmojiEnd = this.onHoverEmojiEnd.bind(this);
         this.onClickEmoji = this.onClickEmoji.bind(this);
         this.scrollToCategory = this.scrollToCategory.bind(this);
+        this.updateVisibility = this.updateVisibility.bind(this);
 
         window.bodyRef = this.bodyRef;
+    }
+
+    updateVisibility() {
+        const rect = this.bodyRef.current.getBoundingClientRect();
+        for (const cat of this.categories) {
+            const elem = this.bodyRef.current.querySelector(`[data-category-id="${cat.id}"]`);
+            if (!elem) {
+                cat.visible = false;
+                cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                continue;
+            }
+            const elemRect = elem.getBoundingClientRect();
+            const y = elemRect.y - rect.y;
+            const yEnd = elemRect.y + elemRect.height - rect.y;
+            cat.visible = y < rect.height && yEnd > 0;
+            // We update this here instead of through React to avoid re-render on scroll.
+            if (cat.visible) {
+                cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
+            } else {
+                cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+            }
+        }
     }
 
     scrollToCategory(category) {
@@ -141,6 +182,9 @@ class EmojiPicker extends React.Component {
             this.categories.find(cat => cat.id === id).enabled = this.memoizedDataByCategory[id].length > 0;
         }
         this.setState({ filter });
+        // Header underlines need to be updated, but updating requires knowing
+        // where the categories are, so we wait for a tick.
+        setTimeout(this.updateVisibility, 0);
     }
 
     onHoverEmoji(emoji) {
@@ -173,7 +217,7 @@ class EmojiPicker extends React.Component {
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory}/>
                 <Search query={this.state.filter} onChange={this.onChangeFilter}/>
-                <div className="mx_EmojiPicker_body" ref={this.bodyRef}>
+                <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.updateVisibility}>
                     {this.categories.map(category => (
                         <Category key={category.id} id={category.id} name={category.name}
                             emojis={this.memoizedDataByCategory[category.id]} onClick={this.onClickEmoji}

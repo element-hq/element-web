@@ -57,10 +57,10 @@ limitations under the License.
         background-color: $focus-bg-color;
         border-bottom: 2px solid $button-bg-color;
     }
+}
 
-    .mx_EmojiPicker_anchor_selected {
-        border-bottom: 2px solid $button-bg-color;
-    }
+.mx_EmojiPicker_anchor_visible {
+    border-bottom: 2px solid $button-bg-color;
 }
 
 .mx_EmojiPicker_search {
