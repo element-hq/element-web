@@ -89,19 +89,35 @@ export default class MessageActionBar extends React.PureComponent {
         const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
         const buttonRect = ev.target.getBoundingClientRect();
 
+        const getReactions = () => {
+            const userId = MatrixClientPeg.get().getUserId();
+            const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId];
+            return Object.fromEntries([...myAnnotations]
+                .filter(event => !event.isRedacted())
+                .map(event => [event.getRelation().key, event.getId()]))
+        };
+
         const menuOptions = {
             reactions: this.props.reactions,
             chevronFace: "none",
             onFinished: () => this.onFocusChange(false),
             onChoose: reaction => {
                 this.onFocusChange(false);
-                MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), "m.reaction", {
-                    "m.relates_to": {
-                        "rel_type": "m.annotation",
-                        "event_id": this.props.mxEvent.getId(),
-                        "key": reaction,
-                    },
-                });
+                const myReactions = getReactions();
+                if (myReactions.hasOwnProperty(reaction)) {
+                    MatrixClientPeg.get().redactEvent(
+                        this.props.mxEvent.getRoomId(),
+                        myReactions[reaction],
+                    );
+                } else {
+                    MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), "m.reaction", {
+                        "m.relates_to": {
+                            "rel_type": "m.annotation",
+                            "event_id": this.props.mxEvent.getId(),
+                            "key": reaction,
+                        },
+                    });
+                }
             },
         };
 
