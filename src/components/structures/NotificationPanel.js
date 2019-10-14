@@ -38,16 +38,16 @@ const NotificationPanel = createReactClass({
         const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
         if (timelineSet) {
             return (
-                <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
-                    className="mx_NotificationPanel"
-                    manageReadReceipts={false}
-                    manageReadMarkers={false}
-                    timelineSet={timelineSet}
-                    showUrlPreview={false}
-                    tileShape="notif"
-                    empty={_t('You have no visible notifications')}
-                    role="tabpanel"
-                />
+                <div className="mx_NotificationPanel" role="tabpanel">
+                    <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
+                        manageReadReceipts={false}
+                        manageReadMarkers={false}
+                        timelineSet={timelineSet}
+                        showUrlPreview={false}
+                        tileShape="notif"
+                        empty={_t('You have no visible notifications')}
+                    />
+                </div>
             );
         } else {
             console.error("No notifTimelineSet available!");
