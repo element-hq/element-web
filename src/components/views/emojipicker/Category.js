@@ -23,31 +23,27 @@ class Category extends React.PureComponent {
     static propTypes = {
         emojis: PropTypes.arrayOf(PropTypes.object).isRequired,
         name: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
         onMouseEnter: PropTypes.func.isRequired,
         onMouseLeave: PropTypes.func.isRequired,
         onClick: PropTypes.func.isRequired,
-        filter: PropTypes.string,
     };
 
     render() {
         const { onClick, onMouseEnter, onMouseLeave, emojis, name, filter } = this.props;
-
-        const Emoji = sdk.getComponent("emojipicker.Emoji");
-        const renderedEmojis = (emojis || []).map(emoji => !filter || emoji.filterString.includes(filter) ? (
-            <Emoji key={emoji.hexcode} emoji={emoji}
-                onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />
-        ) : null).filter(component => component !== null);
-        if (renderedEmojis.length === 0) {
+        if (!emojis || emojis.length === 0) {
             return null;
         }
 
+        const Emoji = sdk.getComponent("emojipicker.Emoji");
         return (
-            <section className="mx_EmojiPicker_category">
+            <section className="mx_EmojiPicker_category" data-category-id={this.props.id}>
                 <h2 className="mx_EmojiPicker_category_label">
                     {name}
                 </h2>
                 <ul className="mx_EmojiPicker_list">
-                    {renderedEmojis}
+                    {emojis.map(emoji => <Emoji key={emoji.hexcode} emoji={emoji}
+                        onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />)}
                 </ul>
             </section>
         )

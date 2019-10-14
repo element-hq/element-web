@@ -49,7 +49,11 @@ limitations under the License.
         fill: $primary-fg-color;
     }
 
-    &:hover {
+    &:disabled svg {
+        fill: $focus-bg-color;
+    }
+
+    &:not(:disabled):hover {
         background-color: $focus-bg-color;
         border-bottom: 2px solid $button-bg-color;
     }
@@ -73,11 +77,17 @@ limitations under the License.
         border-radius: 4px 0;
     }
 
-    svg {
-        align-self: center;
-        width: 16px;
-        height: 16px;
+    button {
+        border: none;
+        background-color: inherit;
+        padding: 0;
         margin: 8px;
+
+        svg {
+            align-self: center;
+            width: 16px;
+            height: 16px;
+        }
     }
 }
 

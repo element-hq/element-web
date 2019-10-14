@@ -16,10 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import EMOJIBASE from 'emojibase-data/en/compact.json';
+
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+
+import * as recent from './recent';
 
 const EMOJIBASE_CATEGORY_IDS = [
     "people", // smileys
@@ -43,11 +45,15 @@ const DATA_BY_CATEGORY = {
     "objects": [],
     "symbols": [],
     "flags": [],
-    "control": [],
 };
+const DATA_BY_EMOJI = {};
 
 EMOJIBASE.forEach(emoji => {
-    DATA_BY_CATEGORY[EMOJIBASE_CATEGORY_IDS[emoji.group]].push(emoji);
+    DATA_BY_EMOJI[emoji.unicode] = emoji;
+    const categoryId = EMOJIBASE_CATEGORY_IDS[emoji.group];
+    if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
+        DATA_BY_CATEGORY[categoryId].push(emoji);
+    }
     // This is used as the string to match the query against when filtering emojis.
     emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`;
 });
@@ -65,49 +71,76 @@ class EmojiPicker extends React.Component {
             previewEmoji: null,
         };
 
+        this.bodyRef = React.createRef();
+
+        this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
+        this.memoizedDataByCategory = {
+            recent: this.recentlyUsed,
+            ...DATA_BY_CATEGORY,
+        };
+
         this.categories = [{
             id: "recent",
             name: _t("Frequently Used"),
+            enabled: this.recentlyUsed.length > 0,
         }, {
             id: "people",
             name: _t("Smileys & People"),
+            enabled: true,
         }, {
             id: "nature",
             name: _t("Animals & Nature"),
+            enabled: true,
         }, {
             id: "foods",
             name: _t("Food & Drink"),
+            enabled: true,
         }, {
             id: "activity",
             name: _t("Activities"),
+            enabled: true,
         }, {
             id: "places",
             name: _t("Travel & Places"),
+            enabled: true,
         }, {
             id: "objects",
             name: _t("Objects"),
+            enabled: true,
         }, {
             id: "symbols",
             name: _t("Symbols"),
+            enabled: true,
         }, {
             id: "flags",
             name: _t("Flags"),
+            enabled: true,
         }];
 
         this.onChangeFilter = this.onChangeFilter.bind(this);
         this.onHoverEmoji = this.onHoverEmoji.bind(this);
         this.onHoverEmojiEnd = this.onHoverEmojiEnd.bind(this);
         this.onClickEmoji = this.onClickEmoji.bind(this);
+        this.scrollToCategory = this.scrollToCategory.bind(this);
+
+        window.bodyRef = this.bodyRef;
     }
 
-    scrollToCategory() {
-        // TODO
+    scrollToCategory(category) {
+        const index = this.categories.findIndex(cat => cat.id === category);
+        this.bodyRef.current.querySelector(`[data-category-id="${category}"]`).scrollIntoView();
     }
 
-    onChangeFilter(ev) {
-        this.setState({
-            filter: ev.target.value,
-        });
+    onChangeFilter(filter) {
+        for (let [id, emojis] of Object.entries(this.memoizedDataByCategory)) {
+            // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
+            if (!filter.includes(this.state.filter)) {
+                emojis = id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[id];
+            }
+            this.memoizedDataByCategory[id] = emojis.filter(emoji => emoji.filterString.includes(filter));
+            this.categories.find(cat => cat.id === id).enabled = this.memoizedDataByCategory[id].length > 0;
+        }
+        this.setState({ filter });
     }
 
     onHoverEmoji(emoji) {
@@ -124,6 +157,10 @@ class EmojiPicker extends React.Component {
 
     onClickEmoji(emoji) {
         this.props.onChoose(emoji.unicode);
+        recent.add(emoji.unicode);
+        this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
+        this.memoizedDataByCategory.recent = this.recentlyUsed.filter(emoji =>
+            emoji.filterString.includes(this.state.filter))
     }
 
     render() {
@@ -136,10 +173,10 @@ class EmojiPicker extends React.Component {
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory}/>
                 <Search query={this.state.filter} onChange={this.onChangeFilter}/>
-                <div className="mx_EmojiPicker_body">
+                <div className="mx_EmojiPicker_body" ref={this.bodyRef}>
                     {this.categories.map(category => (
-                        <Category key={category.id} emojis={DATA_BY_CATEGORY[category.id]} name={category.name}
-                            filter={this.state.filter} onClick={this.onClickEmoji}
+                        <Category key={category.id} id={category.id} name={category.name}
+                            emojis={this.memoizedDataByCategory[category.id]} onClick={this.onClickEmoji}
                             onMouseEnter={this.onHoverEmoji} onMouseLeave={this.onHoverEmojiEnd} />
                     ))}
                 </div>

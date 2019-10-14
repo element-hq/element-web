@@ -34,8 +34,7 @@ class Header extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(ev) {
-        const selected = ev.target.getAttribute("data-category-id");
+    handleClick(selected) {
         this.setState({selected});
         this.props.onAnchorClick(selected);
     };
@@ -44,9 +43,9 @@ class Header extends React.Component {
         return (
             <nav className="mx_EmojiPicker_header">
                 {this.props.categories.map(category => (
-                    <button key={category.id} className={`mx_EmojiPicker_anchor ${
+                    <button disabled={!category.enabled} key={category.id} className={`mx_EmojiPicker_anchor ${
                         this.state.selected === category.id ? 'mx_EmojiPicker_anchor_selected' : ''}`}
-                        onClick={this.handleClick} data-category-id={category.id} title={category.name}>
+                        onClick={() => this.handleClick(category.id)} title={category.name}>
                         {icons.categories[category.id]()}
                     </button>
                 ))}

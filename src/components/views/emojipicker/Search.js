@@ -28,8 +28,11 @@ class Search extends React.PureComponent {
     render() {
         return (
             <div className="mx_EmojiPicker_search">
-                <input type="text" placeholder="Search" value={this.props.query} onChange={this.props.onChange}/>
-                {icons.search.search()}
+                <input type="text" placeholder="Search" value={this.props.query}
+                    onChange={ev => this.props.onChange(ev.target.value)}/>
+                <button onClick={() => this.props.onChange("")}>
+                    {this.props.query ? icons.search.delete() : icons.search.search()}
+                </button>
             </div>
         )
     }
