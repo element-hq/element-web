@@ -178,7 +178,8 @@
       "afterInstall": "electron_app/build/linux/after-install.tpl"
     },
     "mac": {
-      "category": "public.app-category.social-networking"
+      "category": "public.app-category.social-networking",
+      "darkModeSupport": true
     },
     "win": {
       "target": {
