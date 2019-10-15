@@ -142,8 +142,6 @@ class EmojiPicker extends React.Component {
         this.onClickEmoji = this.onClickEmoji.bind(this);
         this.scrollToCategory = this.scrollToCategory.bind(this);
         this.updateVisibility = this.updateVisibility.bind(this);
-
-        window.bodyRef = this.bodyRef;
     }
 
     updateVisibility() {

@@ -90,11 +90,14 @@ export default class MessageActionBar extends React.PureComponent {
         const buttonRect = ev.target.getBoundingClientRect();
 
         const getReactions = () => {
+            if (!this.props.reactions) {
+                return [];
+            }
             const userId = MatrixClientPeg.get().getUserId();
             const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId];
             return Object.fromEntries([...myAnnotations]
                 .filter(event => !event.isRedacted())
-                .map(event => [event.getRelation().key, event.getId()]))
+                .map(event => [event.getRelation().key, event.getId()]));
         };
 
         const menuOptions = {

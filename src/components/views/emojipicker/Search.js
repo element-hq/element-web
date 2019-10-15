@@ -25,11 +25,21 @@ class Search extends React.PureComponent {
         onChange: PropTypes.func.isRequired,
     };
 
+    constructor(props) {
+        super(props);
+        this.inputRef = React.createRef();
+    }
+
+    componentDidMount() {
+        // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a setTimeout
+        setTimeout(() => this.inputRef.current.focus(), 0);
+    }
+
     render() {
         return (
             <div className="mx_EmojiPicker_search">
-                <input type="text" placeholder="Search" value={this.props.query}
-                    onChange={ev => this.props.onChange(ev.target.value)}/>
+                <input autoFocus type="text" placeholder="Search" value={this.props.query}
+                    onChange={ev => this.props.onChange(ev.target.value)} ref={this.inputRef}/>
                 <button onClick={() => this.props.onChange("")}
                     className={this.props.query ? "mx_EmojiPicker_search_clear" : ""}>
                     {this.props.query ? icons.search.delete() : icons.search.search()}
