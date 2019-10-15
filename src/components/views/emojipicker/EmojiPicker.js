@@ -61,7 +61,8 @@ EMOJIBASE.forEach(emoji => {
 class EmojiPicker extends React.Component {
     static propTypes = {
         onChoose: PropTypes.func.isRequired,
-        closeMenu: PropTypes.func,
+        selectedEmojis: PropTypes.instanceOf(Set),
+        showQuickReactions: PropTypes.bool,
     };
 
     constructor(props) {
@@ -204,10 +205,8 @@ class EmojiPicker extends React.Component {
     }
 
     onClickEmoji(emoji) {
-        recent.add(emoji.unicode);
-        this.props.onChoose(emoji.unicode);
-        if (this.props.closeMenu) {
-            this.props.closeMenu();
+        if (this.props.onChoose(emoji.unicode) !== false) {
+            recent.add(emoji.unicode);
         }
     }
 
@@ -225,14 +224,15 @@ class EmojiPicker extends React.Component {
                     {this.categories.map(category => (
                         <Category key={category.id} id={category.id} name={category.name}
                             emojis={this.memoizedDataByCategory[category.id]} onClick={this.onClickEmoji}
-                            onMouseEnter={this.onHoverEmoji} onMouseLeave={this.onHoverEmojiEnd} />
+                            onMouseEnter={this.onHoverEmoji} onMouseLeave={this.onHoverEmojiEnd}
+                            selectedEmojis={this.props.selectedEmojis} />
                     ))}
                 </div>
-                {this.state.previewEmoji
+                {this.state.previewEmoji || !this.props.showQuickReactions
                     ? <Preview emoji={this.state.previewEmoji} />
-                    : <QuickReactions onClick={this.onClickEmoji} /> }
+                    : <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} /> }
             </div>
-        )
+        );
     }
 }
 

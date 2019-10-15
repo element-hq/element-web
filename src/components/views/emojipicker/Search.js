@@ -45,7 +45,7 @@ class Search extends React.PureComponent {
                     {this.props.query ? icons.search.delete() : icons.search.search()}
                 </button>
             </div>
-        )
+        );
     }
 }
 

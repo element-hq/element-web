@@ -19,21 +19,26 @@ import PropTypes from 'prop-types';
 
 class Preview extends React.PureComponent {
     static propTypes = {
-        emoji: PropTypes.object.isRequired,
+        emoji: PropTypes.object,
     };
 
     render() {
+        const {
+            unicode = "",
+            annotation = "",
+            shortcodes: [shortcode = ""]
+        } = this.props.emoji || {};
         return (
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
                 <div className="mx_EmojiPicker_preview_emoji">
-                    {this.props.emoji.unicode}
+                    {unicode}
                 </div>
                 <div className="mx_EmojiPicker_preview_text">
                     <div className="mx_EmojiPicker_name mx_EmojiPicker_preview_name">
-                        {this.props.emoji.annotation}
+                        {annotation}
                     </div>
                     <div className="mx_EmojiPicker_shortcode">
-                        {this.props.emoji.shortcodes[0]}
+                        {shortcode}
                     </div>
                 </div>
             </div>

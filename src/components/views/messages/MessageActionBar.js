@@ -85,45 +85,9 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
-    onReactClick = (ev) => {
-        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
+    getMenuOptions = (ev) => {
+        const menuOptions = {};
         const buttonRect = ev.target.getBoundingClientRect();
-
-        const getReactions = () => {
-            if (!this.props.reactions) {
-                return [];
-            }
-            const userId = MatrixClientPeg.get().getUserId();
-            const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId];
-            return Object.fromEntries([...myAnnotations]
-                .filter(event => !event.isRedacted())
-                .map(event => [event.getRelation().key, event.getId()]));
-        };
-
-        const menuOptions = {
-            reactions: this.props.reactions,
-            chevronFace: "none",
-            onFinished: () => this.onFocusChange(false),
-            onChoose: reaction => {
-                this.onFocusChange(false);
-                const myReactions = getReactions();
-                if (myReactions.hasOwnProperty(reaction)) {
-                    MatrixClientPeg.get().redactEvent(
-                        this.props.mxEvent.getRoomId(),
-                        myReactions[reaction],
-                    );
-                } else {
-                    MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), "m.reaction", {
-                        "m.relates_to": {
-                            "rel_type": "m.annotation",
-                            "event_id": this.props.mxEvent.getId(),
-                            "key": reaction,
-                        },
-                    });
-                }
-            },
-        };
-
         // The window X and Y offsets are to adjust position when zoomed in to page
         const buttonRight = buttonRect.right + window.pageXOffset;
         const buttonBottom = buttonRect.bottom + window.pageYOffset;
@@ -137,15 +101,27 @@ export default class MessageActionBar extends React.PureComponent {
         } else {
             menuOptions.bottom = window.innerHeight - buttonTop;
         }
+        return menuOptions;
+    };
 
-        createMenu(EmojiPicker, menuOptions);
+    onReactClick = (ev) => {
+        const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
+
+        const menuOptions = {
+            ...this.getMenuOptions(ev),
+            mxEvent: this.props.mxEvent,
+            reactions: this.props.reactions,
+            chevronFace: "none",
+            onFinished: () => this.onFocusChange(false),
+        };
+
+        createMenu(ReactionPicker, menuOptions);
 
         this.onFocusChange(true);
     };
 
     onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-        const buttonRect = ev.target.getBoundingClientRect();
 
         const { getTile, getReplyThread } = this.props;
         const tile = getTile && getTile();
@@ -157,6 +133,7 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         const menuOptions = {
+            ...this.getMenuOptions(ev),
             mxEvent: this.props.mxEvent,
             chevronFace: "none",
             permalinkCreator: this.props.permalinkCreator,
@@ -167,20 +144,6 @@ export default class MessageActionBar extends React.PureComponent {
                 this.onFocusChange(false);
             },
         };
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const buttonRight = buttonRect.right + window.pageXOffset;
-        const buttonBottom = buttonRect.bottom + window.pageYOffset;
-        const buttonTop = buttonRect.top + window.pageYOffset;
-        // Align the right edge of the menu to the right edge of the button
-        menuOptions.right = window.innerWidth - buttonRight;
-        // Align the menu vertically on whichever side of the button has more
-        // space available.
-        if (buttonBottom < window.innerHeight / 2) {
-            menuOptions.top = buttonBottom;
-        } else {
-            menuOptions.bottom = window.innerHeight - buttonTop;
-        }
 
         createMenu(MessageContextMenu, menuOptions);
 

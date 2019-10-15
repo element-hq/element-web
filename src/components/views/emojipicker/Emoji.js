@@ -23,18 +23,20 @@ class Emoji extends React.PureComponent {
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
         emoji: PropTypes.object.isRequired,
+        selectedEmojis: PropTypes.instanceOf(Set),
     };
 
     render() {
-        const { onClick, onMouseEnter, onMouseLeave, emoji } = this.props;
+        const { onClick, onMouseEnter, onMouseLeave, emoji, selectedEmojis } = this.props;
+        const isSelected = selectedEmojis && selectedEmojis.has(emoji.unicode);
         return (
             <li onClick={() => onClick(emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
-                className="mx_EmojiPicker_item">
+                className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
                 {emoji.unicode}
             </li>
-        )
+        );
     }
 }
 

@@ -27,10 +27,11 @@ class Category extends React.PureComponent {
         onMouseEnter: PropTypes.func.isRequired,
         onMouseLeave: PropTypes.func.isRequired,
         onClick: PropTypes.func.isRequired,
+        selectedEmojis: PropTypes.instanceOf(Set),
     };
 
     render() {
-        const { onClick, onMouseEnter, onMouseLeave, emojis, name } = this.props;
+        const { onClick, onMouseEnter, onMouseLeave, emojis, name, selectedEmojis } = this.props;
         if (!emojis || emojis.length === 0) {
             return null;
         }
@@ -42,11 +43,11 @@ class Category extends React.PureComponent {
                     {name}
                 </h2>
                 <ul className="mx_EmojiPicker_list">
-                    {emojis.map(emoji => <Emoji key={emoji.hexcode} emoji={emoji}
+                    {emojis.map(emoji => <Emoji key={emoji.hexcode} emoji={emoji} selectedEmojis={selectedEmojis}
                         onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />)}
                 </ul>
             </section>
-        )
+        );
     }
 }
 

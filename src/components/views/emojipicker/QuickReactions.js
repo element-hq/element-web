@@ -32,6 +32,7 @@ EMOJIBASE.forEach(emoji => {
 class QuickReactions extends React.Component {
     static propTypes = {
         onClick: PropTypes.func.isRequired,
+        selectedEmojis: PropTypes.instanceOf(Set),
     };
 
     constructor(props) {
@@ -72,7 +73,8 @@ class QuickReactions extends React.Component {
                 <ul className="mx_EmojiPicker_list">
                     {QUICK_REACTIONS.map(emoji => <Emoji
                         key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
-                        onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}/>)}
+                        onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
+                        selectedEmojis={this.props.selectedEmojis}/>)}
                 </ul>
             </section>
         )
