@@ -1910,7 +1910,7 @@
     "Joining room …": "Szobához csatlakozás …",
     "Loading …": "Betöltés …",
     "Rejecting invite …": "Meghívó elutasítása …",
-    "Join the conversation with an account": "Beszélgetéshez csatlakozás felhasználói fiókkal",
+    "Join the conversation with an account": "Beszélgetéshez való csatlakozás felhasználói fiókkal lehetséges",
     "Sign Up": "Fiók készítés",
     "Sign In": "Bejelentkezés",
     "You were kicked from %(roomName)s by %(memberName)s": "Téged kirúgott %(memberName)s ebből a szobából: %(roomName)s",
