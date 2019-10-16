@@ -75,7 +75,7 @@ class ReactionPicker extends React.Component {
             return {};
         }
         const userId = MatrixClientPeg.get().getUserId();
-        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId];
+        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || [];
         return Object.fromEntries([...myAnnotations]
             .filter(event => !event.isRedacted())
             .map(event => [event.getRelation().key, event.getId()]));
