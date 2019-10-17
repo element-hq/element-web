@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import sdk from '../../index';
@@ -25,7 +26,7 @@ import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import IndicatorScrollbar from './IndicatorScrollbar';
-import { KeyCode } from '../../Keyboard';
+import {Key, KeyCode} from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
@@ -56,7 +57,6 @@ const RoomSubList = createReactClass({
         collapsed: PropTypes.bool.isRequired, // is LeftPanel collapsed?
         onHeaderClick: PropTypes.func,
         incomingCall: PropTypes.object,
-        isFiltered: PropTypes.bool,
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
         forceExpand: PropTypes.bool,
     },
@@ -80,6 +80,7 @@ const RoomSubList = createReactClass({
     },
 
     componentWillMount: function() {
+        this._headerButton = createRef();
         this.dispatcherRef = dis.register(this.onAction);
     },
 
@@ -87,9 +88,9 @@ const RoomSubList = createReactClass({
         dis.unregister(this.dispatcherRef);
     },
 
-    // The header is collapsable if it is hidden or not stuck
+    // The header is collapsible if it is hidden or not stuck
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
-    isCollapsableOnClick: function() {
+    isCollapsibleOnClick: function() {
         const stuck = this.refs.header.dataset.stuck;
         if (!this.props.forceExpand && (this.state.hidden || stuck === undefined || stuck === "none")) {
             return true;
@@ -114,8 +115,8 @@ const RoomSubList = createReactClass({
     },
 
     onClick: function(ev) {
-        if (this.isCollapsableOnClick()) {
-            // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
+        if (this.isCollapsibleOnClick()) {
+            // The header isCollapsible, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
             this.setState({hidden: isHidden}, () => {
                 this.props.onHeaderClick(isHidden);
@@ -123,6 +124,30 @@ const RoomSubList = createReactClass({
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
+        }
+        this._headerButton.current.focus();
+    },
+
+    onKeyDown: function(ev) {
+        switch (ev.key) {
+            case Key.TAB:
+                // Prevent LeftPanel handling Tab if focus is on the sublist header itself
+                ev.stopPropagation();
+                break;
+            case Key.ARROW_LEFT:
+                ev.stopPropagation();
+                if (!this.state.hidden && !this.props.forceExpand) {
+                    this.onClick();
+                }
+                break;
+            case Key.ARROW_RIGHT:
+                ev.stopPropagation();
+                if (this.state.hidden && !this.props.forceExpand) {
+                    this.onClick();
+                } else {
+                    // TODO go to first element in subtree
+                }
+                break;
         }
     },
 
@@ -193,6 +218,11 @@ const RoomSubList = createReactClass({
         }
     },
 
+    onAddRoom: function(e) {
+        e.stopPropagation();
+        if (this.props.onAddRoom) this.props.onAddRoom();
+    },
+
     _getHeaderJsx: function(isCollapsed) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AccessibleTooltipButton = sdk.getComponent('elements.AccessibleTooltipButton');
@@ -209,12 +239,18 @@ const RoomSubList = createReactClass({
                 'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
             });
             if (subListNotifCount > 0) {
-                badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
-                    { FormattingUtils.formatCount(subListNotifCount) }
-                </div>;
+                badge = (
+                    <AccessibleButton className={badgeClasses} onClick={this._onNotifBadgeClick} aria-label={_t("Jump to first unread room.")}>
+                        { FormattingUtils.formatCount(subListNotifCount) }
+                    </AccessibleButton>
+                );
             } else if (this.props.isInvite && this.props.list.length) {
                 // no notifications but highlight anyway because this is an invite badge
-                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>{this.props.list.length}</div>;
+                badge = (
+                    <AccessibleButton className={badgeClasses} onClick={this._onInviteBadgeClick} aria-label={_t("Jump to first invite.")}>
+                        { this.props.list.length }
+                    </AccessibleButton>
+                );
             }
         }
 
@@ -237,7 +273,7 @@ const RoomSubList = createReactClass({
         if (this.props.onAddRoom) {
             addRoomButton = (
                 <AccessibleTooltipButton
-                    onClick={ this.props.onAddRoom }
+                    onClick={this.onAddRoom}
                     className="mx_RoomSubList_addRoom"
                     title={this.props.addRoomLabel || _t("Add room")}
                 />
@@ -255,10 +291,17 @@ const RoomSubList = createReactClass({
             chevron = (<div className={chevronClasses} />);
         }
 
-        const tabindex = this.props.isFiltered ? "0" : "-1";
         return (
-            <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <AccessibleButton onClick={this.onClick} className="mx_RoomSubList_label" tabIndex={tabindex} aria-expanded={!isCollapsed}>
+            <div className="mx_RoomSubList_labelContainer" title={title} ref="header">
+                <AccessibleButton
+                    onClick={this.onClick}
+                    className="mx_RoomSubList_label"
+                    tabIndex={0}
+                    aria-expanded={!isCollapsed}
+                    inputRef={this._headerButton}
+                    // cancel out role so this button behaves as the toggle-header of this group
+                    role="none"
+                >
                     { chevron }
                     <span>{this.props.label}</span>
                     { incomingCall }
@@ -344,6 +387,7 @@ const RoomSubList = createReactClass({
                 role="group"
                 aria-label={this.props.label}
                 aria-expanded={!isCollapsed}
+                onKeyDown={this.onKeyDown}
             >
                 { this._getHeaderJsx(isCollapsed) }
                 { content }

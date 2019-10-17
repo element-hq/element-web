@@ -398,7 +398,8 @@ module.exports = createReactClass({
                                  onMouseLeave={this.onMouseLeave}
                                  onContextMenu={this.onContextMenu}
                                  aria-label={ariaLabel}
-                                 role="option"
+                                 aria-selected={this.state.selected}
+                                 role="treeitem"
         >
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
