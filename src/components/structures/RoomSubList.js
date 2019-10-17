@@ -386,7 +386,6 @@ const RoomSubList = createReactClass({
                 className={subListClasses}
                 role="group"
                 aria-label={this.props.label}
-                aria-expanded={!isCollapsed}
                 onKeyDown={this.onKeyDown}
             >
                 { this._getHeaderJsx(isCollapsed) }
