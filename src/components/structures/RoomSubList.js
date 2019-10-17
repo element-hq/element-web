@@ -133,14 +133,50 @@ const RoomSubList = createReactClass({
                 // Prevent LeftPanel handling Tab if focus is on the sublist header itself
                 ev.stopPropagation();
                 break;
-            case Key.ARROW_RIGHT:
+            case Key.ARROW_RIGHT: {
                 ev.stopPropagation();
                 if (this.state.hidden && !this.props.forceExpand) {
+                    // sublist is collapsed, expand it
                     this.onClick();
-                } else {
-                    // TODO go to first element in subtree
+                } else if (!this.props.forceExpand) {
+                    // sublist is expanded, go to first room
+                    let element = document.activeElement;
+                    let descending = true;
+                    let classes;
+
+                    do {
+                        const child = element.firstElementChild;
+                        const sibling = element.nextElementSibling;
+
+                        if (descending) {
+                            if (child) {
+                                element = child;
+                            } else if (sibling) {
+                                element = sibling;
+                            } else {
+                                descending = false;
+                                element = element.parentElement;
+                            }
+                        } else {
+                            if (sibling) {
+                                element = sibling;
+                                descending = true;
+                            } else {
+                                element = element.parentElement;
+                            }
+                        }
+
+                        if (element) {
+                            classes = element.classList;
+                        }
+                    } while (element && !classes.contains("mx_RoomTile"));
+
+                    if (element) {
+                        element.focus();
+                    }
                 }
                 break;
+            }
         }
     },
 
