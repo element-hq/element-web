@@ -374,6 +374,230 @@ const useRoomPowerLevels = (room) => {
     return powerLevels;
 };
 
+const RoomKickButton = withLegacyMatrixClient(({cli, member, startUpdating, stopUpdating}) => {
+    const onKick = async () => {
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        const {finished} = Modal.createTrackedDialog(
+            'Confirm User Action Dialog',
+            'onKick',
+            ConfirmUserActionDialog,
+            {
+                member,
+                action: member.membership === "invite" ? _t("Disinvite") : _t("Kick"),
+                title: member.membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
+                askReason: member.membership === "join",
+                danger: true,
+            },
+        );
+
+        const [proceed, reason] = await finished;
+        if (!proceed) return;
+
+        startUpdating();
+        cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Kick success");
+        }, function(err) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Kick error: " + err);
+            Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
+                title: _t("Failed to kick"),
+                description: ((err && err.message) ? err.message : "Operation failed"),
+            });
+        }).finally(() => {
+            stopUpdating();
+        });
+    };
+
+    const kickLabel = member.membership === "invite" ? _t("Disinvite") : _t("Kick");
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onKick}>
+        { kickLabel }
+    </AccessibleButton>;
+});
+
+const RedactMessagesButton = withLegacyMatrixClient(({cli, member}) => {
+    const onRedactAllMessages = async () => {
+        const {roomId, userId} = member;
+        const room = cli.getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        let timeline = room.getLiveTimeline();
+        let eventsToRedact = [];
+        while (timeline) {
+            eventsToRedact = timeline.getEvents().reduce((events, event) => {
+                if (event.getSender() === userId && !event.isRedacted()) {
+                    return events.concat(event);
+                } else {
+                    return events;
+                }
+            }, eventsToRedact);
+            timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
+        }
+
+        const count = eventsToRedact.length;
+        const user = member.name;
+
+        if (count === 0) {
+            const InfoDialog = sdk.getComponent("dialogs.InfoDialog");
+            Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
+                title: _t("No recent messages by %(user)s found", {user}),
+                description:
+                    <div>
+                        <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
+                    </div>,
+            });
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            const {finished} = Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
+                title: _t("Remove recent messages by %(user)s", {user}),
+                description:
+                    <div>
+                        <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
+                        <p>{ _t("For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
+                    </div>,
+                button: _t("Remove %(count)s messages", {count}),
+            });
+
+            const [confirmed] = await finished;
+            if (!confirmed) {
+                return;
+            }
+
+            // Submitting a large number of redactions freezes the UI,
+            // so first yield to allow to rerender after closing the dialog.
+            await Promise.resolve();
+
+            console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
+            await Promise.all(eventsToRedact.map(async event => {
+                try {
+                    await cli.redactEvent(roomId, event.getId());
+                } catch (err) {
+                    // log and swallow errors
+                    console.error("Could not redact", event.getId());
+                    console.error(err);
+                }
+            }));
+            console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
+        }
+    };
+
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onRedactAllMessages}>
+        { _t("Remove recent messages") }
+    </AccessibleButton>;
+});
+
+const BanToggleButton = withLegacyMatrixClient(({cli, member, startUpdating, stopUpdating}) => {
+    const onBanOrUnban = async () => {
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        const {finished} = Modal.createTrackedDialog(
+            'Confirm User Action Dialog',
+            'onBanOrUnban',
+            ConfirmUserActionDialog,
+            {
+                member,
+                action: member.membership === 'ban' ? _t("Unban") : _t("Ban"),
+                title: member.membership === 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
+                askReason: member.membership !== 'ban',
+                danger: member.membership !== 'ban',
+            },
+        );
+
+        const [proceed, reason] = await finished;
+        if (!proceed) return;
+
+        startUpdating();
+        let promise;
+        if (member.membership === 'ban') {
+            promise = cli.unban(member.roomId, member.userId);
+        } else {
+            promise = cli.ban(member.roomId, member.userId, reason || undefined);
+        }
+        promise.then(() => {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Ban success");
+        }, function(err) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Ban error: " + err);
+            Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Failed to ban user"),
+            });
+        }).finally(() => {
+            stopUpdating();
+        });
+    };
+
+    let label = _t("Ban");
+    if (member.membership === 'ban') {
+        label = _t("Unban");
+    }
+
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onBanOrUnban}>
+        { label }
+    </AccessibleButton>;
+});
+
+const MuteToggleButton = withLegacyMatrixClient(({cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
+    const isMuted = _isMuted(member, powerLevels);
+    const onMuteToggle = async () => {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const roomId = member.roomId;
+        const target = member.userId;
+
+        // if muting self, warn as it may be irreversible
+        if (target === cli.getUserId()) {
+            try {
+                if (!(await _warnSelfDemote())) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+                return;
+            }
+        }
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
+        const powerLevels = powerLevelEvent.getContent();
+        const levelToSend = (
+            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+            powerLevels.events_default
+        );
+        let level;
+        if (isMuted) { // unmute
+            level = levelToSend;
+        } else { // mute
+            level = levelToSend - 1;
+        }
+        level = parseInt(level);
+
+        if (!isNaN(level)) {
+            startUpdating();
+            cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mute toggle success");
+            }, function(err) {
+                console.error("Mute error: " + err);
+                Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
+                    title: _t("Error"),
+                    description: _t("Failed to mute user"),
+                });
+            }).finally(() => {
+                stopUpdating();
+            });
+        }
+    };
+
+    const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onMuteToggle}>
+        { muteLabel }
+    </AccessibleButton>;
+});
+
 const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, member, startUpdating, stopUpdating}) => {
     let kickButton;
     let banButton;
@@ -389,235 +613,27 @@ const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, me
     const me = room.getMember(cli.getUserId());
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
-    const membership = member.membership;
 
     if (canAffectUser && me.powerLevel >= powerLevels.kick) {
-        const onKick = async () => {
-            const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-            const {finished} = Modal.createTrackedDialog(
-                'Confirm User Action Dialog',
-                'onKick',
-                ConfirmUserActionDialog,
-                {
-                    member,
-                    action: membership === "invite" ? _t("Disinvite") : _t("Kick"),
-                    title: membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
-                    askReason: membership === "join",
-                    danger: true,
-                },
-            );
-
-            const [proceed, reason] = await finished;
-            if (!proceed) return;
-
-            startUpdating();
-            cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Kick success");
-            }, function(err) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Kick error: " + err);
-                Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
-                    title: _t("Failed to kick"),
-                    description: ((err && err.message) ? err.message : "Operation failed"),
-                });
-            }).finally(() => {
-                stopUpdating();
-            });
-        };
-
-        const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
-        kickButton = (
-            <AccessibleButton className="mx_UserInfo_field"
-                              onClick={onKick}>
-                { kickLabel }
-            </AccessibleButton>
-        );
+        kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (me.powerLevel >= powerLevels.redact) {
-        const onRedactAllMessages = async () => {
-            const {roomId, userId} = member;
-            const room = cli.getRoom(roomId);
-            if (!room) {
-                return;
-            }
-            let timeline = room.getLiveTimeline();
-            let eventsToRedact = [];
-            while (timeline) {
-                eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                    if (event.getSender() === userId && !event.isRedacted()) {
-                        return events.concat(event);
-                    } else {
-                        return events;
-                    }
-                }, eventsToRedact);
-                timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
-            }
-
-            const count = eventsToRedact.length;
-            const user = member.name;
-
-            if (count === 0) {
-                const InfoDialog = sdk.getComponent("dialogs.InfoDialog");
-                Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
-                    title: _t("No recent messages by %(user)s found", {user}),
-                    description:
-                        <div>
-                            <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
-                        </div>,
-                });
-            } else {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-                const {finished} = Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
-                    title: _t("Remove recent messages by %(user)s", {user}),
-                    description:
-                        <div>
-                            <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
-                            <p>{ _t("For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
-                        </div>,
-                    button: _t("Remove %(count)s messages", {count}),
-                });
-
-                const [confirmed] = await finished;
-                if (!confirmed) {
-                    return;
-                }
-
-                // Submitting a large number of redactions freezes the UI,
-                // so first yield to allow to rerender after closing the dialog.
-                await Promise.resolve();
-
-                console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
-                await Promise.all(eventsToRedact.map(async event => {
-                    try {
-                        await cli.redactEvent(roomId, event.getId());
-                    } catch (err) {
-                        // log and swallow errors
-                        console.error("Could not redact", event.getId());
-                        console.error(err);
-                    }
-                }));
-                console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
-            }
-        };
-
         redactButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={onRedactAllMessages}>
-                { _t("Remove recent messages") }
-            </AccessibleButton>
+            <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
     if (canAffectUser && me.powerLevel >= powerLevels.ban) {
-        const onBanOrUnban = async () => {
-            const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-            const {finished} = Modal.createTrackedDialog(
-                'Confirm User Action Dialog',
-                'onBanOrUnban',
-                ConfirmUserActionDialog,
-                {
-                    member,
-                    action: membership === 'ban' ? _t("Unban") : _t("Ban"),
-                    title: membership === 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
-                    askReason: membership !== 'ban',
-                    danger: membership !== 'ban',
-                },
-            );
-
-            const [proceed, reason] = await finished;
-            if (!proceed) return;
-
-            startUpdating();
-            let promise;
-            if (membership === 'ban') {
-                promise = cli.unban(member.roomId, member.userId);
-            } else {
-                promise = cli.ban(member.roomId, member.userId, reason || undefined);
-            }
-            promise.then(() => {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Ban success");
-            }, function(err) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Ban error: " + err);
-                Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
-                    title: _t("Error"),
-                    description: _t("Failed to ban user"),
-                });
-            }).finally(() => {
-                stopUpdating();
-            });
-        };
-
-        let label = _t("Ban");
-        if (membership === 'ban') {
-            label = _t("Unban");
-        }
-        banButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={onBanOrUnban}>
-                { label }
-            </AccessibleButton>
-        );
+        banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (canAffectUser && me.powerLevel >= editPowerLevel) {
-        const isMuted = _isMuted(member, powerLevels);
-        const onMuteToggle = async () => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            const roomId = member.roomId;
-            const target = member.userId;
-
-            // if muting self, warn as it may be irreversible
-            if (target === cli.getUserId()) {
-                try {
-                    if (!(await _warnSelfDemote())) return;
-                } catch (e) {
-                    console.error("Failed to warn about self demotion: ", e);
-                    return;
-                }
-            }
-
-            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-            if (!powerLevelEvent) return;
-
-            const powerLevels = powerLevelEvent.getContent();
-            const levelToSend = (
-                (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
-                powerLevels.events_default
-            );
-            let level;
-            if (isMuted) { // unmute
-                level = levelToSend;
-            } else { // mute
-                level = levelToSend - 1;
-            }
-            level = parseInt(level);
-
-            if (!isNaN(level)) {
-                startUpdating();
-                cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
-                    console.log("Mute toggle success");
-                }, function(err) {
-                    console.error("Mute error: " + err);
-                    Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
-                        title: _t("Error"),
-                        description: _t("Failed to mute user"),
-                    });
-                }).finally(() => {
-                    stopUpdating();
-                });
-            }
-        };
-
-        const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
         muteButton = (
-            <AccessibleButton className="mx_UserInfo_field"
-                              onClick={onMuteToggle}>
-                { muteLabel }
-            </AccessibleButton>
+            <MuteToggleButton
+                member={member}
+                room={room}
+                powerLevels={powerLevels}
+                startUpdating={startUpdating}
+                stopUpdating={stopUpdating}
+            />
         );
     }
 
