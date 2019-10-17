@@ -133,6 +133,13 @@ const RoomSubList = createReactClass({
                 // Prevent LeftPanel handling Tab if focus is on the sublist header itself
                 ev.stopPropagation();
                 break;
+            case Key.ARROW_LEFT:
+                // On ARROW_LEFT collapse the room sublist
+                if (!this.state.hidden && !this.props.forceExpand) {
+                    this.onClick();
+                }
+                ev.stopPropagation();
+                break;
             case Key.ARROW_RIGHT: {
                 ev.stopPropagation();
                 if (this.state.hidden && !this.props.forceExpand) {
@@ -181,13 +188,10 @@ const RoomSubList = createReactClass({
     },
 
     onKeyDown: function(ev) {
-        // On ARROW_LEFT collapse the room sublist
+        // On ARROW_LEFT go to the sublist header
         if (ev.key === Key.ARROW_LEFT) {
             ev.stopPropagation();
-            if (!this.state.hidden && !this.props.forceExpand) {
-                this.onClick();
-                this._headerButton.current.focus();
-            }
+            this._headerButton.current.focus();
         }
     },
 
