@@ -125,7 +125,6 @@ const RoomSubList = createReactClass({
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
         }
-        this._headerButton.current.focus();
     },
 
     onHeaderKeyDown: function(ev) {
@@ -134,18 +133,25 @@ const RoomSubList = createReactClass({
                 // Prevent LeftPanel handling Tab if focus is on the sublist header itself
                 ev.stopPropagation();
                 break;
-            case Key.ARROW_LEFT:
-                ev.stopPropagation();
-                if (!this.state.hidden && !this.props.forceExpand) {
-                    this.onClick();
-                }
-                break;
             case Key.ARROW_RIGHT:
                 ev.stopPropagation();
                 if (this.state.hidden && !this.props.forceExpand) {
                     this.onClick();
+                } else {
+                    // TODO go to first element in subtree
                 }
                 break;
+        }
+    },
+
+    onKeyDown: function(ev) {
+        // On ARROW_LEFT collapse the room sublist
+        if (ev.key === Key.ARROW_LEFT) {
+            ev.stopPropagation();
+            if (!this.state.hidden && !this.props.forceExpand) {
+                this.onClick();
+                this._headerButton.current.focus();
+            }
         }
     },
 
@@ -389,6 +395,7 @@ const RoomSubList = createReactClass({
                 className={subListClasses}
                 role="group"
                 aria-label={this.props.label}
+                onKeyDown={this.onKeyDown}
             >
                 { this._getHeaderJsx(isCollapsed) }
                 { content }
