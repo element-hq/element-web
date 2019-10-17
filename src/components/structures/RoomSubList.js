@@ -128,7 +128,7 @@ const RoomSubList = createReactClass({
         this._headerButton.current.focus();
     },
 
-    onKeyDown: function(ev) {
+    onHeaderKeyDown: function(ev) {
         switch (ev.key) {
             case Key.TAB:
                 // Prevent LeftPanel handling Tab if focus is on the sublist header itself
@@ -297,7 +297,7 @@ const RoomSubList = createReactClass({
         }
 
         return (
-            <div className="mx_RoomSubList_labelContainer" title={title} ref="header">
+            <div className="mx_RoomSubList_labelContainer" title={title} ref="header" onKeyDown={this.onHeaderKeyDown}>
                 <AccessibleButton
                     onClick={this.onClick}
                     className="mx_RoomSubList_label"
@@ -391,7 +391,6 @@ const RoomSubList = createReactClass({
                 className={subListClasses}
                 role="group"
                 aria-label={this.props.label}
-                onKeyDown={this.onKeyDown}
             >
                 { this._getHeaderJsx(isCollapsed) }
                 { content }
