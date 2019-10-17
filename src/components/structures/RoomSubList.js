@@ -238,17 +238,22 @@ const RoomSubList = createReactClass({
                 'mx_RoomSubList_badge': true,
                 'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
             });
+            // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
             if (subListNotifCount > 0) {
                 badge = (
                     <AccessibleButton className={badgeClasses} onClick={this._onNotifBadgeClick} aria-label={_t("Jump to first unread room.")}>
-                        { FormattingUtils.formatCount(subListNotifCount) }
+                        <div>
+                            { FormattingUtils.formatCount(subListNotifCount) }
+                        </div>
                     </AccessibleButton>
                 );
             } else if (this.props.isInvite && this.props.list.length) {
                 // no notifications but highlight anyway because this is an invite badge
                 badge = (
                     <AccessibleButton className={badgeClasses} onClick={this._onInviteBadgeClick} aria-label={_t("Jump to first invite.")}>
-                        { this.props.list.length }
+                        <div>
+                            { this.props.list.length }
+                        </div>
                     </AccessibleButton>
                 );
             }

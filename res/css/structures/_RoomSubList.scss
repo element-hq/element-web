@@ -67,7 +67,7 @@ limitations under the License.
     margin-left: 8px;
 }
 
-.mx_RoomSubList_badge {
+.mx_RoomSubList_badge > div {
     flex: 0 0 auto;
     border-radius: 8px;
     font-weight: 600;
@@ -103,7 +103,7 @@ limitations under the License.
     }
 }
 
-.mx_RoomSubList_badgeHighlight {
+.mx_RoomSubList_badgeHighlight > div {
     color: $accent-fg-color;
     background-color: $warning-color;
 }
