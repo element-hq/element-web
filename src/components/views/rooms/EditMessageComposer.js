@@ -75,7 +75,7 @@ function createEditContent(model, editedEvent) {
 
     const newContent = {
         "msgtype": isEmote ? "m.emote" : "m.text",
-        "body": plainPrefix + body,
+        "body": body,
     };
     const contentBody = {
         msgtype: newContent.msgtype,
@@ -85,7 +85,7 @@ function createEditContent(model, editedEvent) {
     const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: isReply});
     if (formattedBody) {
         newContent.format = "org.matrix.custom.html";
-        newContent.formatted_body = htmlPrefix + formattedBody;
+        newContent.formatted_body = formattedBody;
         contentBody.format = newContent.format;
         contentBody.formatted_body = `${htmlPrefix} * ${formattedBody}`;
     }
