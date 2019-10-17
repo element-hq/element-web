@@ -21,7 +21,7 @@ import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import useEventListener from '@use-it/event-listener';
-import {Group, MatrixClient, RoomMember, User} from 'matrix-js-sdk';
+import {Group, RoomMember, User} from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -39,6 +39,7 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
+import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -57,22 +58,12 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const withLegacyMatrixClient = (Component) => class extends React.PureComponent {
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
-
-    render() {
-        return <Component {...this.props} cli={this.context.matrixClient} />;
-    }
-};
-
 const _getE2EStatus = (devices) => {
     const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
     return hasUnverifiedDevice ? "warning" : "verified";
 };
 
-const DevicesSection = withLegacyMatrixClient(({devices, userId, loading}) => {
+const DevicesSection = ({devices, userId, loading}) => {
     const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
     const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -95,7 +86,7 @@ const DevicesSection = withLegacyMatrixClient(({devices, userId, loading}) => {
             </div>
         </div>
     );
-});
+};
 
 const onRoomTileClick = (roomId) => {
     dis.dispatch({
@@ -104,7 +95,7 @@ const onRoomTileClick = (roomId) => {
     });
 };
 
-const DirectChatsSection = withLegacyMatrixClient(({cli, userId, startUpdating, stopUpdating}) => {
+const DirectChatsSection = withLegacyMatrixClient(({matrixClient: cli, userId, startUpdating, stopUpdating}) => {
     const onNewDMClick = async () => {
         startUpdating();
         await createRoom({dmUserId: userId});
@@ -195,7 +186,7 @@ const DirectChatsSection = withLegacyMatrixClient(({cli, userId, startUpdating, 
     );
 });
 
-const UserOptionsSection = withLegacyMatrixClient(({cli, member, isIgnored, canInvite}) => {
+const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite}) => {
     let ignoreButton = null;
     let insertPillButton = null;
     let inviteUserButton = null;
@@ -374,7 +365,7 @@ const useRoomPowerLevels = (room) => {
     return powerLevels;
 };
 
-const RoomKickButton = withLegacyMatrixClient(({cli, member, startUpdating, stopUpdating}) => {
+const RoomKickButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
     const onKick = async () => {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         const {finished} = Modal.createTrackedDialog(
@@ -416,7 +407,7 @@ const RoomKickButton = withLegacyMatrixClient(({cli, member, startUpdating, stop
     </AccessibleButton>;
 });
 
-const RedactMessagesButton = withLegacyMatrixClient(({cli, member}) => {
+const RedactMessagesButton = withLegacyMatrixClient(({matrixClient: cli, member}) => {
     const onRedactAllMessages = async () => {
         const {roomId, userId} = member;
         const room = cli.getRoom(roomId);
@@ -489,7 +480,7 @@ const RedactMessagesButton = withLegacyMatrixClient(({cli, member}) => {
     </AccessibleButton>;
 });
 
-const BanToggleButton = withLegacyMatrixClient(({cli, member, startUpdating, stopUpdating}) => {
+const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
     const onBanOrUnban = async () => {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         const {finished} = Modal.createTrackedDialog(
@@ -541,7 +532,7 @@ const BanToggleButton = withLegacyMatrixClient(({cli, member, startUpdating, sto
     </AccessibleButton>;
 });
 
-const MuteToggleButton = withLegacyMatrixClient(({cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
+const MuteToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
     const isMuted = _isMuted(member, powerLevels);
     const onMuteToggle = async () => {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -598,7 +589,7 @@ const MuteToggleButton = withLegacyMatrixClient(({cli, member, room, powerLevels
     </AccessibleButton>;
 });
 
-const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, member, startUpdating, stopUpdating}) => {
+const RoomAdminToolsContainer = withLegacyMatrixClient(({matrixClient: cli, room, children, member, startUpdating, stopUpdating}) => {
     let kickButton;
     let banButton;
     let muteButton;
@@ -651,7 +642,7 @@ const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, me
 });
 
 const GroupAdminToolsSection = withLegacyMatrixClient(
-    ({cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
+    ({matrixClient: cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
         const [isPrivileged, setIsPrivileged] = useState(false);
         const [isInvited, setIsInvited] = useState(false);
 
@@ -753,7 +744,7 @@ const useIsSynapseAdmin = (cli) => {
 };
 
 // cli is injected by withLegacyMatrixClient
-const UserInfo = withLegacyMatrixClient(({cli, user, groupId, roomId, onClose}) => {
+const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, roomId, onClose}) => {
     // Load room if we are given a room id and memoize it
     const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
 
