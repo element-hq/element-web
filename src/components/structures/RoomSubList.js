@@ -144,8 +144,6 @@ const RoomSubList = createReactClass({
                 ev.stopPropagation();
                 if (this.state.hidden && !this.props.forceExpand) {
                     this.onClick();
-                } else {
-                    // TODO go to first element in subtree
                 }
                 break;
         }
