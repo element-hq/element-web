@@ -2001,7 +2001,21 @@
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Кроме того, вы можете попытаться использовать общедоступный сервер по адресу <code> turn.matrix.org </code>, но это не будет настолько надежным, и он предоставит ваш IP-адрес этому серверу. Вы также можете управлять этим в настройках.",
     "Sends a message as plain text, without interpreting it as markdown": "Посылает сообщение в виде простого текста, не интерпретируя его как разметку",
     "Use an identity server": "Используйте сервер идентификации",
-    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Используйте идентификационный сервер для приглашения по электронной почте. Нажмите «Продолжить», чтобы использовать сервер идентификации по умолчанию (% (defaultIdentityServerName)s) или измените его в настройках.",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Используйте идентификационный сервер для приглашения по электронной почте. Нажмите «Продолжить», чтобы использовать сервер идентификации по умолчанию (%(defaultIdentityServerName)s) или измените его в настройках.",
     "Use an identity server to invite by email. Manage in Settings.": "Используйте идентификационный сервер для приглашения по электронной почте. Управление в меню Настройки.",
-    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Разрешить резервный вызов поддержки сервера turn.matrix.org, когда ваш домашний сервер не предлагает такой поддержки (ваш IP-адрес будет использоваться во время вызова)"
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Разрешить резервный вызов поддержки сервера turn.matrix.org, когда ваш домашний сервер не предлагает такой поддержки (ваш IP-адрес будет использоваться во время вызова)",
+    "Add Email Address": "Добавить адрес Email",
+    "Add Phone Number": "Добавить номер телефона",
+    "Changes the avatar of the current room": "Меняет аватарку текущей комнаты",
+    "Change identity server": "Изменить сервер идентификации",
+    "Explore": "Исследовать",
+    "Filter": "Поиск",
+    "Filter rooms…": "Поиск комнат…",
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Если не удаётся найти комнату, то можно запросить приглашение или <a>Создать новую комнату</a>.",
+    "Room alias": "Псевдоним комнаты",
+    "Set a room alias to easily share your room with other people.": "Присвоить комнате адрес, чтобы было проще приглашать в неё людей.",
+    "Create a public room": "Создать публичную комнату",
+    "Create a private room": "Создать приватную комнату",
+    "Topic (optional)": "Тема (опционально)",
+    "Make this room public": "Сделать комнату публичной"
 }
