@@ -2189,5 +2189,6 @@
     "Your email address hasn't been verified yet": "Il tuo indirizzo email non è ancora stato verificato",
     "Click the link in the email you received to verify and then click continue again.": "Clicca il link nell'email che hai ricevuto per verificare e poi clicca di nuovo Continua.",
     "Read Marker lifetime (ms)": "Durata delle conferme di lettura (ms)",
-    "Read Marker off-screen lifetime (ms)": "Durata della conferma di lettura off-screen (ms)"
+    "Read Marker off-screen lifetime (ms)": "Durata della conferma di lettura off-screen (ms)",
+    "%(creator)s created and configured the room.": "%(creator)s ha creato e configurato la stanza."
 }
