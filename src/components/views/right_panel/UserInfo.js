@@ -532,114 +532,118 @@ const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, star
     </AccessibleButton>;
 });
 
-const MuteToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
-    const isMuted = _isMuted(member, powerLevels);
-    const onMuteToggle = async () => {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        const roomId = member.roomId;
-        const target = member.userId;
+const MuteToggleButton = withLegacyMatrixClient(
+    ({matrixClient: cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
+        const isMuted = _isMuted(member, powerLevels);
+        const onMuteToggle = async () => {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const roomId = member.roomId;
+            const target = member.userId;
 
-        // if muting self, warn as it may be irreversible
-        if (target === cli.getUserId()) {
-            try {
-                if (!(await _warnSelfDemote())) return;
-            } catch (e) {
-                console.error("Failed to warn about self demotion: ", e);
-                return;
+            // if muting self, warn as it may be irreversible
+            if (target === cli.getUserId()) {
+                try {
+                    if (!(await _warnSelfDemote())) return;
+                } catch (e) {
+                    console.error("Failed to warn about self demotion: ", e);
+                    return;
+                }
             }
-        }
 
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        if (!powerLevelEvent) return;
+            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+            if (!powerLevelEvent) return;
 
-        const powerLevels = powerLevelEvent.getContent();
-        const levelToSend = (
-            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
-            powerLevels.events_default
-        );
-        let level;
-        if (isMuted) { // unmute
-            level = levelToSend;
-        } else { // mute
-            level = levelToSend - 1;
-        }
-        level = parseInt(level);
+            const powerLevels = powerLevelEvent.getContent();
+            const levelToSend = (
+                (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+                powerLevels.events_default
+            );
+            let level;
+            if (isMuted) { // unmute
+                level = levelToSend;
+            } else { // mute
+                level = levelToSend - 1;
+            }
+            level = parseInt(level);
 
-        if (!isNaN(level)) {
-            startUpdating();
-            cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Mute toggle success");
-            }, function(err) {
-                console.error("Mute error: " + err);
-                Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
-                    title: _t("Error"),
-                    description: _t("Failed to mute user"),
+            if (!isNaN(level)) {
+                startUpdating();
+                cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
+                    // NO-OP; rely on the m.room.member event coming down else we could
+                    // get out of sync if we force setState here!
+                    console.log("Mute toggle success");
+                }, function(err) {
+                    console.error("Mute error: " + err);
+                    Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
+                        title: _t("Error"),
+                        description: _t("Failed to mute user"),
+                    });
+                }).finally(() => {
+                    stopUpdating();
                 });
-            }).finally(() => {
-                stopUpdating();
-            });
+            }
+        };
+
+        const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
+        return <AccessibleButton className="mx_UserInfo_field" onClick={onMuteToggle}>
+            { muteLabel }
+        </AccessibleButton>;
+    },
+);
+
+const RoomAdminToolsContainer = withLegacyMatrixClient(
+    ({matrixClient: cli, room, children, member, startUpdating, stopUpdating}) => {
+        let kickButton;
+        let banButton;
+        let muteButton;
+        let redactButton;
+
+        const powerLevels = useRoomPowerLevels(room);
+        const editPowerLevel = (
+            (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
+            powerLevels.state_default
+        );
+
+        const me = room.getMember(cli.getUserId());
+        const isMe = me.userId === member.userId;
+        const canAffectUser = member.powerLevel < me.powerLevel || isMe;
+
+        if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+            kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
         }
-    };
+        if (me.powerLevel >= powerLevels.redact) {
+            redactButton = (
+                <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
+            );
+        }
+        if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+            banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+        }
+        if (canAffectUser && me.powerLevel >= editPowerLevel) {
+            muteButton = (
+                <MuteToggleButton
+                    member={member}
+                    room={room}
+                    powerLevels={powerLevels}
+                    startUpdating={startUpdating}
+                    stopUpdating={stopUpdating}
+                />
+            );
+        }
 
-    const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
-    return <AccessibleButton className="mx_UserInfo_field" onClick={onMuteToggle}>
-        { muteLabel }
-    </AccessibleButton>;
-});
+        if (kickButton || banButton || muteButton || redactButton || children) {
+            return <GenericAdminToolsContainer>
+                { muteButton }
+                { kickButton }
+                { banButton }
+                { redactButton }
+                { children }
+            </GenericAdminToolsContainer>;
+        }
 
-const RoomAdminToolsContainer = withLegacyMatrixClient(({matrixClient: cli, room, children, member, startUpdating, stopUpdating}) => {
-    let kickButton;
-    let banButton;
-    let muteButton;
-    let redactButton;
-
-    const powerLevels = useRoomPowerLevels(room);
-    const editPowerLevel = (
-        (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
-        powerLevels.state_default
-    );
-
-    const me = room.getMember(cli.getUserId());
-    const isMe = me.userId === member.userId;
-    const canAffectUser = member.powerLevel < me.powerLevel || isMe;
-
-    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
-        kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
-    }
-    if (me.powerLevel >= powerLevels.redact) {
-        redactButton = (
-            <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
-        );
-    }
-    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
-        banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
-    }
-    if (canAffectUser && me.powerLevel >= editPowerLevel) {
-        muteButton = (
-            <MuteToggleButton
-                member={member}
-                room={room}
-                powerLevels={powerLevels}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}
-            />
-        );
-    }
-
-    if (kickButton || banButton || muteButton || redactButton || children) {
-        return <GenericAdminToolsContainer>
-            { muteButton }
-            { kickButton }
-            { banButton }
-            { redactButton }
-            { children }
-        </GenericAdminToolsContainer>;
-    }
-
-    return <div />;
-});
+        return <div />;
+    },
+);
 
 const GroupAdminToolsSection = withLegacyMatrixClient(
     ({matrixClient: cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
