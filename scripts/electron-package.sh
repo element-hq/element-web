@@ -81,7 +81,7 @@ if [ -z "$NOTARIZE_APPLE_ID" ]; then
 fi
 
 osslsigncode -h 2> /dev/null
-if [ $? -ne 255 ]; then # osslsigncode exits with 255 after printing usgae...
+if [ $? -ne 255 ]; then # osslsigncode exits with 255 after printing usage...
     echo "osslsigncode not found"
     exit
 fi
