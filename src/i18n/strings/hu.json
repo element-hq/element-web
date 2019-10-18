@@ -1910,7 +1910,7 @@
     "Joining room …": "Szobához csatlakozás …",
     "Loading …": "Betöltés …",
     "Rejecting invite …": "Meghívó elutasítása …",
-    "Join the conversation with an account": "Beszélgetéshez csatlakozás felhasználói fiókkal",
+    "Join the conversation with an account": "Beszélgetéshez való csatlakozás felhasználói fiókkal lehetséges",
     "Sign Up": "Fiók készítés",
     "Sign In": "Bejelentkezés",
     "You were kicked from %(roomName)s by %(memberName)s": "Téged kirúgott %(memberName)s ebből a szobából: %(roomName)s",
@@ -2229,5 +2229,6 @@
     "Your email address hasn't been verified yet": "Az e-mail címed még nincs ellenőrizve",
     "Click the link in the email you received to verify and then click continue again.": "Ellenőrzéshez kattints a linkre az e-mailben amit kaptál és itt kattints a folytatásra újra.",
     "Add Email Address": "E-mail cím hozzáadása",
-    "Add Phone Number": "Telefonszám hozzáadása"
+    "Add Phone Number": "Telefonszám hozzáadása",
+    "%(creator)s created and configured the room.": "%(creator)s elkészítette és beállította a szobát."
 }
