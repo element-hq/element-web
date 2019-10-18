@@ -5,7 +5,7 @@ BASE_DIR=$(cd $(dirname $0) && pwd)
 pushd $BASE_DIR
 
 if [ ! -d "synapse/installations" ] || [ ! -d "node_modules" ]; then
-    echo "please, first run $BASE_DIR/install.sh"
+echo "Please first run $BASE_DIR/install.sh"
     exit 1
 fi
 
