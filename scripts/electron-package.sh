@@ -169,8 +169,13 @@ cp $distdir/*_amd64.deb "$projdir/electron_app/dist/"
 # is signed in the electron afteSign hook)
 echo "Signing Windows installers..."
 
-osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$distdir/squirrel-windows-ia32/*.exe" -out "$projdir/electron_app/dist/unsigned/ia32/"
-osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$distdir/squirrel-windows/*.exe" -out "$projdir/electron_app/dist/unsigned/x64/"
+exe32=( "$distdir"/squirrel-windows-ia32/*.exe )
+basename32=`basename "$exe32"`
+osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$exe32" -out "$projdir/electron_app/pub/install/win32/ia32/$basename32"
+
+exe64=( "$distdir"/squirrel-windows/*.exe )
+basename64=`basename "$exe64"`
+osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$exe64" -out "$projdir/electron_app/pub/install/win32/x64/$basename64"
 
 echo "Installers signed"
 
