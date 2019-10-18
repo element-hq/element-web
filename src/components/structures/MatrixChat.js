@@ -2146,7 +2146,10 @@ export default createReactClass({
             // Convert the plain JSON events into Matrix events so they get
             // decrypted if necessary.
             const matrixEvents = res.chunk.map(eventMapper);
-            const stateEvents = res.state.map(eventMapper);
+            let stateEvents = [];
+            if (res.state !== undefined) {
+                stateEvents = res.state.map(eventMapper);
+            }
 
             const profiles = {};
 
