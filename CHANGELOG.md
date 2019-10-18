@@ -1,3 +1,15 @@
+Changes in [1.5.0](https://github.com/vector-im/riot-web/releases/tag/v1.5.0) (2019-10-18)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.0-rc.1...v1.5.0)
+
+ * Upgrade to JS SDK v2.4.2 and React SDK v1.7.0
+ * Port Windows signing and macOS notarization to release
+   [\#11158](https://github.com/vector-im/riot-web/pull/11158)
+ * Sign main Windows executable
+   [\#11126](https://github.com/vector-im/riot-web/pull/11126)
+ * Notarise the macOS app
+   [\#11119](https://github.com/vector-im/riot-web/pull/11119)
+
 Changes in [1.5.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.0-rc.1) (2019-10-09)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.4.2...v1.5.0-rc.1)
