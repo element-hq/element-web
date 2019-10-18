@@ -1,6 +1,6 @@
 # Matrix React SDK End-to-End tests
 
-This repository contains tests for the matrix-react-sdk web app. The tests fire up a headless chrome and simulate user interaction (end-to-end). Note that end-to-end has little to do with the end-to-end encryption matrix supports, just that we test the full stack, going from user interaction to expected DOM in the browser.
+This directory contains tests for matrix-react-sdk. The tests fire up a headless Chrome and simulate user interaction (end-to-end). Note that end-to-end has little to do with the end-to-end encryption Matrix supports, just that we test the full stack, going from user interaction to expected DOM in the browser.
 
 ## Setup
 
