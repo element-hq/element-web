@@ -28,6 +28,9 @@ import {SERVICE_TYPES} from "matrix-js-sdk";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl } from '../../../utils/IdentityServerUtils';
 
+// We'll wait up to this long when checking for 3PID bindings on the IS.
+const REACHABILITY_TIMEOUT = 10000; // ms
+
 /**
  * Check an IS URL is valid, including liveness check
  *
@@ -254,7 +257,14 @@ export default class SetIdServer extends React.Component {
         let threepids = [];
         let currentServerReachable = true;
         try {
-            threepids = await getThreepidsWithBindStatus(MatrixClientPeg.get());
+            threepids = await Promise.race([
+                getThreepidsWithBindStatus(MatrixClientPeg.get()),
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject(new Error("Timeout attempting to reach identity server"));
+                    }, REACHABILITY_TIMEOUT);
+                }),
+            ]);
         } catch (e) {
             currentServerReachable = false;
             console.warn(
@@ -263,7 +273,6 @@ export default class SetIdServer extends React.Component {
             );
             console.warn(e);
         }
-
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;
         let danger = false;
