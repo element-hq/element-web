@@ -12,7 +12,7 @@ fi
 has_custom_riot=$(node has_custom_riot.js $@)
 
 if [ ! -d "riot/riot-web" ] && [ $has_custom_riot -ne "1" ]; then
-    echo "please provide an instance of riot to test against by passing --riot-url <url> or running $BASE_DIR/riot/install.sh"
+    echo "Please provide an instance of riot to test against by passing --riot-url <url> or running $BASE_DIR/riot/install.sh"
     exit 1
 fi
 
