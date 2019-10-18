@@ -26,7 +26,7 @@ It's important to always stop and start synapse before each run of the tests to 
 
 start.js accepts these parameters (and more, see `node start.js --help`) that can help running the tests locally:
 
- - `--riot-url <url>` don't use the riot copy and static server provided by the tests, but use a running server like the webpack watch server to run the tests against. Make sure to have the following local config:
+ - `--riot-url <url>` don't use the Riot copy and static server provided by the tests, but use a running server like the Webpack watch server to run the tests against. Make sure to have the following local config:
    - `welcomeUserId` disabled as the tests assume there is no riot-bot currently.
  - `--slow-mo` type at a human speed, useful with `--windowed`.
  - `--throttle-cpu <factor>` throttle cpu in the browser by the given factor. Useful to reproduce failures because of insufficient timeouts happening on the slower CI server.
