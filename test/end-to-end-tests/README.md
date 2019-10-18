@@ -6,7 +6,7 @@ This directory contains tests for matrix-react-sdk. The tests fire up a headless
 
 Run `./install.sh`. This will:
  - install synapse, fetches the master branch at the moment. If anything fails here, please refer to the synapse README to see if you're missing one of the prerequisites.
- - install riot, this fetches the master branch at the moment.
+ - install Riot, this fetches the master branch at the moment.
  - install dependencies (will download copy of chrome)
 
 ## Running the tests
