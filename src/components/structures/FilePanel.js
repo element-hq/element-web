@@ -117,17 +117,17 @@ const FilePanel = createReactClass({
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <TimelinePanel key={"filepanel_" + this.props.roomId}
-                    className="mx_FilePanel"
-                    manageReadReceipts={false}
-                    manageReadMarkers={false}
-                    timelineSet={this.state.timelineSet}
-                    showUrlPreview = {false}
-                    tileShape="file_grid"
-                    resizeNotifier={this.props.resizeNotifier}
-                    empty={_t('There are no visible files in this room')}
-                    role="tabpanel"
-                />
+                <div className="mx_FilePanel" role="tabpanel">
+                    <TimelinePanel key={"filepanel_" + this.props.roomId}
+                        manageReadReceipts={false}
+                        manageReadMarkers={false}
+                        timelineSet={this.state.timelineSet}
+                        showUrlPreview = {false}
+                        tileShape="file_grid"
+                        resizeNotifier={this.props.resizeNotifier}
+                        empty={_t('There are no visible files in this room')}
+                    />
+                </div>
             );
         } else {
             return (
