@@ -102,7 +102,17 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         // Need to get 3PIDs generally for Account section and possibly also for
         // Discovery (assuming we have an IS and terms are agreed).
-        const threepids = await getThreepidsWithBindStatus(cli);
+        let threepids = [];
+        try {
+            threepids = await getThreepidsWithBindStatus(cli);
+        } catch (e) {
+            const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
+            console.warn(
+                `Unable to reach identity server at ${idServerUrl} to check ` +
+                `for 3PIDs bindings in Settings`,
+            );
+            console.warn(e);
+        }
         this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
         this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
     }
@@ -115,32 +125,40 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         // By starting the terms flow we get the logic for checking which terms the user has signed
         // for free. So we might as well use that for our own purposes.
+        const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
         const authClient = new IdentityAuthClient();
         const idAccessToken = await authClient.getAccessToken({ check: false });
-        startTermsFlow([new Service(
-            SERVICE_TYPES.IS,
-            MatrixClientPeg.get().getIdentityServerUrl(),
-            idAccessToken,
-        )], (policiesAndServices, agreedUrls, extraClassNames) => {
-            return new Promise((resolve, reject) => {
-               this.setState({
-                   idServerName: abbreviateUrl(MatrixClientPeg.get().getIdentityServerUrl()),
-                   requiredPolicyInfo: {
-                       hasTerms: true,
-                       policiesAndServices,
-                       agreedUrls,
-                       resolve,
-                   },
-               });
+        try {
+            await startTermsFlow([new Service(
+                SERVICE_TYPES.IS,
+                idServerUrl,
+                idAccessToken,
+            )], (policiesAndServices, agreedUrls, extraClassNames) => {
+                return new Promise((resolve, reject) => {
+                    this.setState({
+                        idServerName: abbreviateUrl(idServerUrl),
+                        requiredPolicyInfo: {
+                            hasTerms: true,
+                            policiesAndServices,
+                            agreedUrls,
+                            resolve,
+                        },
+                    });
+                });
             });
-        }).then(() => {
             // User accepted all terms
             this.setState({
                 requiredPolicyInfo: {
                     hasTerms: false,
                 },
             });
-        });
+        } catch (e) {
+            console.warn(
+                `Unable to reach identity server at ${idServerUrl} to check ` +
+                `for terms in Settings`,
+            );
+            console.warn(e);
+        }
     }
 
     _onLanguageChange = (newLanguage) => {
