@@ -22,7 +22,7 @@ Run tests with `./run.sh`.
 ./synapse/start.sh && \
 node start.js <parameters>
 ```
-It's important to always stop and start synapse before each run of the tests to clear the in-memory sqlite database it uses, as the tests assume a blank slate.
+It's important to always stop and start Synapse before each run of the tests to clear the in-memory SQLite database it uses, as the tests assume a blank slate.
 
 start.js accepts these parameters (and more, see `node start.js --help`) that can help running the tests locally:
 
