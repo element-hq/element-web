@@ -1,3 +1,62 @@
+Changes in [1.7.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.0) (2019-10-18)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.0-rc.1...v1.7.0)
+
+ * Upgrade to JS SDK v2.4.2
+ * Fix: edit unmount when no selection
+   [\#3545](https://github.com/matrix-org/matrix-react-sdk/pull/3545)
+ * "SettingsFlag always run ToggleSwitch fully controlled" to release
+   [\#3542](https://github.com/matrix-org/matrix-react-sdk/pull/3542)
+
+Changes in [1.7.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.0-rc.1) (2019-10-09)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.2...v1.7.0-rc.1)
+
+ * Update from Weblate
+   [\#3539](https://github.com/matrix-org/matrix-react-sdk/pull/3539)
+ * React error/warning cleanup
+   [\#3529](https://github.com/matrix-org/matrix-react-sdk/pull/3529)
+ * Add label to rageshakes for React soft crashes
+   [\#3535](https://github.com/matrix-org/matrix-react-sdk/pull/3535)
+ * Support UI Auth on adding email addresses & phone numbers
+   [\#3534](https://github.com/matrix-org/matrix-react-sdk/pull/3534)
+ * Unmount React components before stopping the client
+   [\#3533](https://github.com/matrix-org/matrix-react-sdk/pull/3533)
+ * Fix soft crash on room join
+   [\#3532](https://github.com/matrix-org/matrix-react-sdk/pull/3532)
+ * Fix:  Unable to verify email address error
+   [\#3528](https://github.com/matrix-org/matrix-react-sdk/pull/3528)
+ * Fix: submit create room dialog when pressing enter
+   [\#3509](https://github.com/matrix-org/matrix-react-sdk/pull/3509)
+ * Allow cyclic objects in console logs
+   [\#3531](https://github.com/matrix-org/matrix-react-sdk/pull/3531)
+ * Fix: watch emoticon autoreplace setting
+   [\#3530](https://github.com/matrix-org/matrix-react-sdk/pull/3530)
+ * Make "remove recent messages" more robust
+   [\#3508](https://github.com/matrix-org/matrix-react-sdk/pull/3508)
+ * Label submit button in UI auth password prompt
+   [\#3527](https://github.com/matrix-org/matrix-react-sdk/pull/3527)
+ * Null-guard the recaptcha setup
+   [\#3526](https://github.com/matrix-org/matrix-react-sdk/pull/3526)
+ * Use a mask instead of an img for "Show image" eye
+   [\#3513](https://github.com/matrix-org/matrix-react-sdk/pull/3513)
+ * Only limit the rageshake log size in one place
+   [\#3523](https://github.com/matrix-org/matrix-react-sdk/pull/3523)
+ * Rename UPPER_CAMEL_CASE to UPPER_SNAKE_CASE in Coding Style
+   [\#3525](https://github.com/matrix-org/matrix-react-sdk/pull/3525)
+ * Revert "Run yarn upgrade"
+   [\#3524](https://github.com/matrix-org/matrix-react-sdk/pull/3524)
+ * Run yarn upgrade
+   [\#3521](https://github.com/matrix-org/matrix-react-sdk/pull/3521)
+ * Limit Backspace-consuming workaround to just Slate, tidy Keyboard :)
+   [\#3522](https://github.com/matrix-org/matrix-react-sdk/pull/3522)
+ * Enable CIDER composer by default
+   [\#3519](https://github.com/matrix-org/matrix-react-sdk/pull/3519)
+ * Update from Weblate
+   [\#3520](https://github.com/matrix-org/matrix-react-sdk/pull/3520)
+ * Cull some easily fixable errors which make the console a mess
+   [\#3516](https://github.com/matrix-org/matrix-react-sdk/pull/3516)
+
 Changes in [1.6.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.6.2) (2019-10-04)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.6.2-rc.1...v1.6.2)
