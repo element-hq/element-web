@@ -15,7 +15,7 @@ Run tests with `./run.sh`.
 
 ### Debug tests locally.
 
-`./run.sh` will run the tests against the riot copy present in `riot/riot-web` served by a static python http server. You can symlink your `riot-web` develop copy here but that doesn't work well with webpack recompiling. You can run the test runner directly and specify parameters to get more insight into a failure or run the tests against your local webpack server.
+`./run.sh` will run the tests against the Riot copy present in `riot/riot-web` served by a static Python HTTP server. You can symlink your `riot-web` develop copy here but that doesn't work well with Webpack recompiling. You can run the test runner directly and specify parameters to get more insight into a failure or run the tests against your local Webpack server.
 
 ```
 ./synapse/stop.sh && \
