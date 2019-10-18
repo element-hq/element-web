@@ -2240,5 +2240,8 @@
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "Vous êtes sur le point de supprimer 1 message de %(user)s. Ça ne peut pas être annulé. Voulez-vous continuer ?",
     "Remove %(count)s messages|one": "Supprimer 1 message",
     "Your email address hasn't been verified yet": "Votre adresse e-mail n’a pas encore été vérifiée",
-    "Click the link in the email you received to verify and then click continue again.": "Cliquez sur le lien dans l’e-mail que vous avez reçu pour la vérifier et cliquez encore sur continuer."
+    "Click the link in the email you received to verify and then click continue again.": "Cliquez sur le lien dans l’e-mail que vous avez reçu pour la vérifier et cliquez encore sur continuer.",
+    "Add Email Address": "Ajouter une adresse e-mail",
+    "Add Phone Number": "Ajouter un numéro de téléphone",
+    "%(creator)s created and configured the room.": "%(creator)s a créé et configuré le salon."
 }
