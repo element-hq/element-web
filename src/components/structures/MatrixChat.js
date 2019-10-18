@@ -2123,8 +2123,17 @@ export default createReactClass({
             const eventMapper = client.getEventMapper();
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
-            const res = await client._createMessagesRequest(checkpoint.roomId,
-                checkpoint.token, 100, checkpoint.direction);
+            let res;
+
+            try {
+                res = await client._createMessagesRequest(
+                    checkpoint.roomId, checkpoint.token, 100,
+                    checkpoint.direction);
+            } catch (e) {
+                console.log("Seshat: Error crawling events:", e)
+                this.crawlerChekpoints.push(checkpoint);
+                continue
+            }
 
             if (res.chunk.length === 0) {
                 console.log("Seshat: Done with the checkpoint", checkpoint)
