@@ -20,7 +20,6 @@ limitations under the License.
 import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import useEventListener from '@use-it/event-listener';
 import {Group, MatrixClient, RoomMember, User} from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -39,6 +38,7 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -129,8 +129,7 @@ const DirectChatsSection = withLegacyMatrixClient(({cli, userId, startUpdating, 
             setDmRooms(dmRoomMap.getDMRoomsForUserId(userId));
         }
     }, [cli, userId]);
-
-    useEventListener("accountData", accountDataHandler, cli);
+    useEventEmitter(cli, "accountData", accountDataHandler);
 
     const RoomTile = sdk.getComponent("rooms.RoomTile");
 
@@ -220,9 +219,7 @@ const UserOptionsSection = withLegacyMatrixClient(({cli, member, isIgnored, canI
                 ignoredUsers.push(member.userId);
             }
 
-            cli.setIgnoredUsers(ignoredUsers).then(() => {
-                // return this.setState({isIgnoring: !this.state.isIgnoring});
-            });
+            cli.setIgnoredUsers(ignoredUsers);
         };
 
         ignoreButton = (
@@ -364,7 +361,7 @@ const useRoomPowerLevels = (room) => {
         };
     }, [room]);
 
-    useEventListener("RoomState.events", update, room);
+    useEventEmitter(room, "RoomState.events", update);
     useEffect(() => {
         update();
         return () => {
@@ -759,7 +756,7 @@ const UserInfo = withLegacyMatrixClient(({cli, user, groupId, roomId, onClose}) 
             setIsIgnored(cli.isUserIgnored(user.userId));
         }
     }, [cli, user.userId]);
-    useEventListener("accountData", accountDataHandler, cli);
+    useEventEmitter(cli, "accountData", accountDataHandler);
 
     // Count of how many operations are currently in progress, if > 0 then show a Spinner
     const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
@@ -806,7 +803,7 @@ const UserInfo = withLegacyMatrixClient(({cli, user, groupId, roomId, onClose}) 
             modifyLevelMax,
         });
     }, [cli, user, room]);
-    useEventListener("RoomState.events", updateRoomPermissions, cli);
+    useEventEmitter(cli, "RoomState.events", updateRoomPermissions);
     useEffect(() => {
         updateRoomPermissions();
         return () => {
