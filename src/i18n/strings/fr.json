@@ -2243,5 +2243,12 @@
     "Click the link in the email you received to verify and then click continue again.": "Cliquez sur le lien dans l’e-mail que vous avez reçu pour la vérifier et cliquez encore sur continuer.",
     "Add Email Address": "Ajouter une adresse e-mail",
     "Add Phone Number": "Ajouter un numéro de téléphone",
-    "%(creator)s created and configured the room.": "%(creator)s a créé et configuré le salon."
+    "%(creator)s created and configured the room.": "%(creator)s a créé et configuré le salon.",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Vous devriez <b>supprimer vos données personnelles</b> du serveur d’identité <idserver /> avant de vous déconnecter. Malheureusement, le serveur d’identité <idserver /> est actuellement hors ligne ou injoignable.",
+    "You should:": "Vous devriez :",
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "vérifier qu’aucune des extensions de votre navigateur ne bloque le serveur d’identité (comme Privacy Badger)",
+    "contact the administrators of identity server <idserver />": "contacter les administrateurs du serveur d’identité <idserver />",
+    "wait and try again later": "attendre et réessayer plus tard",
+    "Command Autocomplete": "Autocomplétion de commande",
+    "DuckDuckGo Results": "Résultats de DuckDuckGo"
 }
