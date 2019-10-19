@@ -20,7 +20,7 @@ limitations under the License.
 import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Group, MatrixClient, RoomMember, User} from 'matrix-js-sdk';
+import {Group, RoomMember, User} from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -38,6 +38,7 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
+import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 
 const _disambiguateDevices = (devices) => {
@@ -57,22 +58,12 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const withLegacyMatrixClient = (Component) => class extends React.PureComponent {
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
-
-    render() {
-        return <Component {...this.props} cli={this.context.matrixClient} />;
-    }
-};
-
 const _getE2EStatus = (devices) => {
     const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
     return hasUnverifiedDevice ? "warning" : "verified";
 };
 
-const DevicesSection = withLegacyMatrixClient(({devices, userId, loading}) => {
+const DevicesSection = ({devices, userId, loading}) => {
     const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
     const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -95,7 +86,7 @@ const DevicesSection = withLegacyMatrixClient(({devices, userId, loading}) => {
             </div>
         </div>
     );
-});
+};
 
 const onRoomTileClick = (roomId) => {
     dis.dispatch({
@@ -104,7 +95,7 @@ const onRoomTileClick = (roomId) => {
     });
 };
 
-const DirectChatsSection = withLegacyMatrixClient(({cli, userId, startUpdating, stopUpdating}) => {
+const DirectChatsSection = withLegacyMatrixClient(({matrixClient: cli, userId, startUpdating, stopUpdating}) => {
     const onNewDMClick = async () => {
         startUpdating();
         await createRoom({dmUserId: userId});
@@ -194,7 +185,7 @@ const DirectChatsSection = withLegacyMatrixClient(({cli, userId, startUpdating, 
     );
 });
 
-const UserOptionsSection = withLegacyMatrixClient(({cli, member, isIgnored, canInvite}) => {
+const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite}) => {
     let ignoreButton = null;
     let insertPillButton = null;
     let inviteUserButton = null;
@@ -371,194 +362,175 @@ const useRoomPowerLevels = (room) => {
     return powerLevels;
 };
 
-const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, member, startUpdating, stopUpdating}) => {
-    let kickButton;
-    let banButton;
-    let muteButton;
-    let redactButton;
-
-    const powerLevels = useRoomPowerLevels(room);
-    const editPowerLevel = (
-        (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
-        powerLevels.state_default
-    );
-
-    const me = room.getMember(cli.getUserId());
-    const isMe = me.userId === member.userId;
-    const canAffectUser = member.powerLevel < me.powerLevel || isMe;
-    const membership = member.membership;
-
-    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
-        const onKick = async () => {
-            const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-            const {finished} = Modal.createTrackedDialog(
-                'Confirm User Action Dialog',
-                'onKick',
-                ConfirmUserActionDialog,
-                {
-                    member,
-                    action: membership === "invite" ? _t("Disinvite") : _t("Kick"),
-                    title: membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
-                    askReason: membership === "join",
-                    danger: true,
-                },
-            );
-
-            const [proceed, reason] = await finished;
-            if (!proceed) return;
-
-            startUpdating();
-            cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Kick success");
-            }, function(err) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Kick error: " + err);
-                Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
-                    title: _t("Failed to kick"),
-                    description: ((err && err.message) ? err.message : "Operation failed"),
-                });
-            }).finally(() => {
-                stopUpdating();
-            });
-        };
-
-        const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
-        kickButton = (
-            <AccessibleButton className="mx_UserInfo_field"
-                              onClick={onKick}>
-                { kickLabel }
-            </AccessibleButton>
+const RoomKickButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
+    const onKick = async () => {
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        const {finished} = Modal.createTrackedDialog(
+            'Confirm User Action Dialog',
+            'onKick',
+            ConfirmUserActionDialog,
+            {
+                member,
+                action: member.membership === "invite" ? _t("Disinvite") : _t("Kick"),
+                title: member.membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
+                askReason: member.membership === "join",
+                danger: true,
+            },
         );
-    }
-    if (me.powerLevel >= powerLevels.redact) {
-        const onRedactAllMessages = async () => {
-            const {roomId, userId} = member;
-            const room = cli.getRoom(roomId);
-            if (!room) {
+
+        const [proceed, reason] = await finished;
+        if (!proceed) return;
+
+        startUpdating();
+        cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Kick success");
+        }, function(err) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Kick error: " + err);
+            Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
+                title: _t("Failed to kick"),
+                description: ((err && err.message) ? err.message : "Operation failed"),
+            });
+        }).finally(() => {
+            stopUpdating();
+        });
+    };
+
+    const kickLabel = member.membership === "invite" ? _t("Disinvite") : _t("Kick");
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onKick}>
+        { kickLabel }
+    </AccessibleButton>;
+});
+
+const RedactMessagesButton = withLegacyMatrixClient(({matrixClient: cli, member}) => {
+    const onRedactAllMessages = async () => {
+        const {roomId, userId} = member;
+        const room = cli.getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        let timeline = room.getLiveTimeline();
+        let eventsToRedact = [];
+        while (timeline) {
+            eventsToRedact = timeline.getEvents().reduce((events, event) => {
+                if (event.getSender() === userId && !event.isRedacted()) {
+                    return events.concat(event);
+                } else {
+                    return events;
+                }
+            }, eventsToRedact);
+            timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
+        }
+
+        const count = eventsToRedact.length;
+        const user = member.name;
+
+        if (count === 0) {
+            const InfoDialog = sdk.getComponent("dialogs.InfoDialog");
+            Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
+                title: _t("No recent messages by %(user)s found", {user}),
+                description:
+                    <div>
+                        <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
+                    </div>,
+            });
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            const {finished} = Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
+                title: _t("Remove recent messages by %(user)s", {user}),
+                description:
+                    <div>
+                        <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
+                        <p>{ _t("For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
+                    </div>,
+                button: _t("Remove %(count)s messages", {count}),
+            });
+
+            const [confirmed] = await finished;
+            if (!confirmed) {
                 return;
             }
-            let timeline = room.getLiveTimeline();
-            let eventsToRedact = [];
-            while (timeline) {
-                eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                    if (event.getSender() === userId && !event.isRedacted()) {
-                        return events.concat(event);
-                    } else {
-                        return events;
-                    }
-                }, eventsToRedact);
-                timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
-            }
 
-            const count = eventsToRedact.length;
-            const user = member.name;
+            // Submitting a large number of redactions freezes the UI,
+            // so first yield to allow to rerender after closing the dialog.
+            await Promise.resolve();
 
-            if (count === 0) {
-                const InfoDialog = sdk.getComponent("dialogs.InfoDialog");
-                Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
-                    title: _t("No recent messages by %(user)s found", {user}),
-                    description:
-                        <div>
-                            <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
-                        </div>,
-                });
-            } else {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-                const {finished} = Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
-                    title: _t("Remove recent messages by %(user)s", {user}),
-                    description:
-                        <div>
-                            <p>{ _t("You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?", {count, user}) }</p>
-                            <p>{ _t("For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.") }</p>
-                        </div>,
-                    button: _t("Remove %(count)s messages", {count}),
-                });
-
-                const [confirmed] = await finished;
-                if (!confirmed) {
-                    return;
+            console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
+            await Promise.all(eventsToRedact.map(async event => {
+                try {
+                    await cli.redactEvent(roomId, event.getId());
+                } catch (err) {
+                    // log and swallow errors
+                    console.error("Could not redact", event.getId());
+                    console.error(err);
                 }
-
-                // Submitting a large number of redactions freezes the UI,
-                // so first yield to allow to rerender after closing the dialog.
-                await Promise.resolve();
-
-                console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
-                await Promise.all(eventsToRedact.map(async event => {
-                    try {
-                        await cli.redactEvent(roomId, event.getId());
-                    } catch (err) {
-                        // log and swallow errors
-                        console.error("Could not redact", event.getId());
-                        console.error(err);
-                    }
-                }));
-                console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
-            }
-        };
-
-        redactButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={onRedactAllMessages}>
-                { _t("Remove recent messages") }
-            </AccessibleButton>
-        );
-    }
-    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
-        const onBanOrUnban = async () => {
-            const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-            const {finished} = Modal.createTrackedDialog(
-                'Confirm User Action Dialog',
-                'onBanOrUnban',
-                ConfirmUserActionDialog,
-                {
-                    member,
-                    action: membership === 'ban' ? _t("Unban") : _t("Ban"),
-                    title: membership === 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
-                    askReason: membership !== 'ban',
-                    danger: membership !== 'ban',
-                },
-            );
-
-            const [proceed, reason] = await finished;
-            if (!proceed) return;
-
-            startUpdating();
-            let promise;
-            if (membership === 'ban') {
-                promise = cli.unban(member.roomId, member.userId);
-            } else {
-                promise = cli.ban(member.roomId, member.userId, reason || undefined);
-            }
-            promise.then(() => {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Ban success");
-            }, function(err) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Ban error: " + err);
-                Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
-                    title: _t("Error"),
-                    description: _t("Failed to ban user"),
-                });
-            }).finally(() => {
-                stopUpdating();
-            });
-        };
-
-        let label = _t("Ban");
-        if (membership === 'ban') {
-            label = _t("Unban");
+            }));
+            console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
         }
-        banButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={onBanOrUnban}>
-                { label }
-            </AccessibleButton>
+    };
+
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onRedactAllMessages}>
+        { _t("Remove recent messages") }
+    </AccessibleButton>;
+});
+
+const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
+    const onBanOrUnban = async () => {
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        const {finished} = Modal.createTrackedDialog(
+            'Confirm User Action Dialog',
+            'onBanOrUnban',
+            ConfirmUserActionDialog,
+            {
+                member,
+                action: member.membership === 'ban' ? _t("Unban") : _t("Ban"),
+                title: member.membership === 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
+                askReason: member.membership !== 'ban',
+                danger: member.membership !== 'ban',
+            },
         );
+
+        const [proceed, reason] = await finished;
+        if (!proceed) return;
+
+        startUpdating();
+        let promise;
+        if (member.membership === 'ban') {
+            promise = cli.unban(member.roomId, member.userId);
+        } else {
+            promise = cli.ban(member.roomId, member.userId, reason || undefined);
+        }
+        promise.then(() => {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Ban success");
+        }, function(err) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Ban error: " + err);
+            Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Failed to ban user"),
+            });
+        }).finally(() => {
+            stopUpdating();
+        });
+    };
+
+    let label = _t("Ban");
+    if (member.membership === 'ban') {
+        label = _t("Unban");
     }
-    if (canAffectUser && me.powerLevel >= editPowerLevel) {
+
+    return <AccessibleButton className="mx_UserInfo_field" onClick={onBanOrUnban}>
+        { label }
+    </AccessibleButton>;
+});
+
+const MuteToggleButton = withLegacyMatrixClient(
+    ({matrixClient: cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
         const isMuted = _isMuted(member, powerLevels);
         const onMuteToggle = async () => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -610,29 +582,68 @@ const RoomAdminToolsContainer = withLegacyMatrixClient(({cli, room, children, me
         };
 
         const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
-        muteButton = (
-            <AccessibleButton className="mx_UserInfo_field"
-                              onClick={onMuteToggle}>
-                { muteLabel }
-            </AccessibleButton>
+        return <AccessibleButton className="mx_UserInfo_field" onClick={onMuteToggle}>
+            { muteLabel }
+        </AccessibleButton>;
+    },
+);
+
+const RoomAdminToolsContainer = withLegacyMatrixClient(
+    ({matrixClient: cli, room, children, member, startUpdating, stopUpdating}) => {
+        let kickButton;
+        let banButton;
+        let muteButton;
+        let redactButton;
+
+        const powerLevels = useRoomPowerLevels(room);
+        const editPowerLevel = (
+            (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
+            powerLevels.state_default
         );
-    }
 
-    if (kickButton || banButton || muteButton || redactButton || children) {
-        return <GenericAdminToolsContainer>
-            { muteButton }
-            { kickButton }
-            { banButton }
-            { redactButton }
-            { children }
-        </GenericAdminToolsContainer>;
-    }
+        const me = room.getMember(cli.getUserId());
+        const isMe = me.userId === member.userId;
+        const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    return <div />;
-});
+        if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+            kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+        }
+        if (me.powerLevel >= powerLevels.redact) {
+            redactButton = (
+                <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
+            );
+        }
+        if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+            banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+        }
+        if (canAffectUser && me.powerLevel >= editPowerLevel) {
+            muteButton = (
+                <MuteToggleButton
+                    member={member}
+                    room={room}
+                    powerLevels={powerLevels}
+                    startUpdating={startUpdating}
+                    stopUpdating={stopUpdating}
+                />
+            );
+        }
+
+        if (kickButton || banButton || muteButton || redactButton || children) {
+            return <GenericAdminToolsContainer>
+                { muteButton }
+                { kickButton }
+                { banButton }
+                { redactButton }
+                { children }
+            </GenericAdminToolsContainer>;
+        }
+
+        return <div />;
+    },
+);
 
 const GroupAdminToolsSection = withLegacyMatrixClient(
-    ({cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
+    ({matrixClient: cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
         const [isPrivileged, setIsPrivileged] = useState(false);
         const [isInvited, setIsInvited] = useState(false);
 
@@ -734,7 +745,7 @@ const useIsSynapseAdmin = (cli) => {
 };
 
 // cli is injected by withLegacyMatrixClient
-const UserInfo = withLegacyMatrixClient(({cli, user, groupId, roomId, onClose}) => {
+const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, roomId, onClose}) => {
     // Load room if we are given a room id and memoize it
     const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
 
