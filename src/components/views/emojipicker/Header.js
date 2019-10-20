@@ -17,8 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as icons from "./icons";
-
 class Header extends React.PureComponent {
     static propTypes = {
         categories: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -31,13 +29,12 @@ class Header extends React.PureComponent {
             <nav className="mx_EmojiPicker_header">
                 {this.props.categories.map(category => (
                     <button disabled={!category.enabled} key={category.id} ref={category.ref}
-                        className={`mx_EmojiPicker_anchor ${category.visible ? 'mx_EmojiPicker_anchor_visible' : ''}`}
-                        onClick={() => this.props.onAnchorClick(category.id)} title={category.name}>
-                        {icons.categories[category.id]()}
-                    </button>
+                        className={`mx_EmojiPicker_anchor ${category.visible ? 'mx_EmojiPicker_anchor_visible' : ''}
+                            mx_EmojiPicker_anchor_${category.id}`}
+                        onClick={() => this.props.onAnchorClick(category.id)} title={category.name} />
                 ))}
             </nav>
-        )
+        );
     }
 }
 

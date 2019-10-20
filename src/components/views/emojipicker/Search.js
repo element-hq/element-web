@@ -17,8 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as icons from "./icons";
-
 class Search extends React.PureComponent {
     static propTypes = {
         query: PropTypes.string.isRequired,
@@ -39,11 +37,10 @@ class Search extends React.PureComponent {
         return (
             <div className="mx_EmojiPicker_search">
                 <input autoFocus type="text" placeholder="Search" value={this.props.query}
-                    onChange={ev => this.props.onChange(ev.target.value)} ref={this.inputRef}/>
+                    onChange={ev => this.props.onChange(ev.target.value)} ref={this.inputRef} />
                 <button onClick={() => this.props.onChange("")}
-                    className={this.props.query ? "mx_EmojiPicker_search_clear" : ""}>
-                    {this.props.query ? icons.search.delete() : icons.search.search()}
-                </button>
+                    className={`mx_EmojiPicker_search_icon ${this.props.query ? "mx_EmojiPicker_search_clear" : ""}`}
+                    title={this.props.query ? "Cancel search" : "Search"} />
             </div>
         );
     }
