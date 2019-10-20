@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 
 class Search extends React.PureComponent {
     static propTypes = {
@@ -40,7 +41,7 @@ class Search extends React.PureComponent {
                     onChange={ev => this.props.onChange(ev.target.value)} ref={this.inputRef} />
                 <button onClick={() => this.props.onChange("")}
                     className={`mx_EmojiPicker_search_icon ${this.props.query ? "mx_EmojiPicker_search_clear" : ""}`}
-                    title={this.props.query ? "Cancel search" : "Search"} />
+                    title={this.props.query ? _t("Cancel search") : _t("Search")} />
             </div>
         );
     }
