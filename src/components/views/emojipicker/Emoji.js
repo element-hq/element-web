@@ -33,8 +33,10 @@ class Emoji extends React.PureComponent {
             <li onClick={() => onClick(emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
-                className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
-                {emoji.unicode}
+                className="mx_EmojiPicker_item_wrapper">
+                <div className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
+                    {emoji.unicode}
+                </div>
             </li>
         );
     }
