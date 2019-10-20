@@ -2084,5 +2084,15 @@
     "Remove %(count)s messages|one": "1개의 메시지 삭제",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요.",
     "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
-    "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요."
+    "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요.",
+    "Add Email Address": "이메일 주소 추가",
+    "Add Phone Number": "전화번호 추가",
+    "%(creator)s created and configured the room.": "%(creator)s님이 방을 만드고 설정했습니다.",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "계정을 해제하기 전에 ID 서버 <idserver />에서 <b>개인 정보를 삭제</b>해야 합니다. 불행하게도 ID 서버 <idserver />가 현재 오프라인이거나 접근할 수 없는 상태입니다.",
+    "You should:": "이렇게 하세요:",
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "브라우저 플러그인을 확인하고 (Privacy Badger같은) ID 서버를 막는 것이 있는지 확인하세요",
+    "contact the administrators of identity server <idserver />": "ID 서버 <idserver />의 관리자와 연락하세요",
+    "wait and try again later": "기다리고 나중에 다시 시도하세요",
+    "Command Autocomplete": "명령어 자동 완성",
+    "DuckDuckGo Results": "DuckDuckGo 결과"
 }
