@@ -2250,5 +2250,17 @@
     "contact the administrators of identity server <idserver />": "contacter les administrateurs du serveur d’identité <idserver />",
     "wait and try again later": "attendre et réessayer plus tard",
     "Command Autocomplete": "Autocomplétion de commande",
-    "DuckDuckGo Results": "Résultats de DuckDuckGo"
+    "DuckDuckGo Results": "Résultats de DuckDuckGo",
+    "Quick Reactions": "Réactions rapides",
+    "Frequently Used": "Utilisé fréquemment",
+    "Smileys & People": "Émoticônes & personnes",
+    "Animals & Nature": "Animaux & nature",
+    "Food & Drink": "Nourriture & boisson",
+    "Activities": "Activités",
+    "Travel & Places": "Voyage & lieux",
+    "Objects": "Objets",
+    "Symbols": "Symboles",
+    "Flags": "Drapeaux",
+    "React": "Réagir",
+    "Cancel search": "Annuler la recherche"
 }
