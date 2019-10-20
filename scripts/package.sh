@@ -13,15 +13,18 @@ else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
-npm run clean
-npm run build$dev
+yarn clean
+yarn build$dev
 
 # include the sample config in the tarball. Arguably this should be done by
-# `npm run build`, but it's just too painful.
+# `yarn build`, but it's just too painful.
 cp config.sample.json webapp/
 
 mkdir -p dist
 cp -r webapp riot-$version
+
+# Just in case you have a local config, remove it before packaging
+rm riot-$version/config.json || true
 
 # if $version looks like semver with leading v, strip it before writing to file
 if [[ ${version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-.+)?$ ]]; then

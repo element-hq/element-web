@@ -1,0 +1,16 @@
+
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Experiments" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Home" transform="translate(-672.000000, -577.000000)" stroke="#000000" stroke-width="1.6">
+            <g id="Group-11" transform="translate(621.000000, 176.000000)">
+                <g id="Group-10" transform="translate(39.000000, 391.000000)">
+                    <g id="help-circle" transform="translate(13.000000, 11.000000)">
+                        <circle id="Oval" cx="10" cy="10" r="10"></circle>
+                        <path d="M7.09,7 C7.57543688,5.62004444 8.98538362,4.79140632 10.4271763,5.0387121 C11.868969,5.28601788 12.9221794,6.53715293 12.92,8 C12.92,10 9.92,11 9.92,11" id="Path"></path>
+                        <path d="M10,15 L10.0050017,15.0050017" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

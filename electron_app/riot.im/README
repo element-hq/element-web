@@ -1,4 +1,6 @@
 This directory contains the config file for the official riot.im distribution
-of Riot Desktop. You probably do not want to build with this config unless
-you're building the official riot.im distribution, or you'll find your builds
-will replace themselves with the riot.im build.
+of Riot Desktop.
+
+You probably do not want to build with this config unless you're building the
+official riot.im distribution, or you'll find your builds will replace
+themselves with the riot.im build.
