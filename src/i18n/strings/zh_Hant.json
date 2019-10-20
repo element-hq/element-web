@@ -2236,5 +2236,12 @@
     "Remove %(count)s messages|one": "移除 1 則訊息",
     "Add Email Address": "新增電子郵件地址",
     "Add Phone Number": "新增電話號碼",
-    "%(creator)s created and configured the room.": "%(creator)s 建立並設定了聊天室。"
+    "%(creator)s created and configured the room.": "%(creator)s 建立並設定了聊天室。",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "您應該在斷線前從身份識別伺服器 <idserver /> 上<b>移除您的個人資料</b>。不幸的是，身份識別伺服器 <idserver /> 目前離線中或無法連線。",
+    "You should:": "您應該：",
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "檢查您的瀏覽器，看有沒有任何可能阻擋身份識別伺服器的外掛程式（如 Privacy Badger）",
+    "contact the administrators of identity server <idserver />": "聯絡身份識別伺服器 <idserver /> 的管理員",
+    "wait and try again later": "稍候並再試一次",
+    "Command Autocomplete": "指令自動完成",
+    "DuckDuckGo Results": "DuckDuckGo 結果"
 }
