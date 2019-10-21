@@ -2094,5 +2094,17 @@
     "contact the administrators of identity server <idserver />": "ID 서버 <idserver />의 관리자와 연락하세요",
     "wait and try again later": "기다리고 나중에 다시 시도하세요",
     "Command Autocomplete": "명령어 자동 완성",
-    "DuckDuckGo Results": "DuckDuckGo 결과"
+    "DuckDuckGo Results": "DuckDuckGo 결과",
+    "Quick Reactions": "빠른 리액션",
+    "Frequently Used": "자주 사용함",
+    "Smileys & People": "표정 & 사람",
+    "Animals & Nature": "동물 & 자연",
+    "Food & Drink": "음식 & 음료",
+    "Activities": "활동",
+    "Travel & Places": "여행 & 장소",
+    "Objects": "물건",
+    "Symbols": "기호",
+    "Flags": "깃발",
+    "React": "리액션",
+    "Cancel search": "검색 취소"
 }
