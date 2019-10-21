@@ -332,7 +332,7 @@ docker rm -f riot || true
 # run a new container with src folder mounted from git repository
 # located on the host machine. You can mount additional folders
 # such as res with additional --volume $PWD/res:/src/res
-docker run --detach --interactive --tty \
+docker run --interactive --tty \
     --publish <port-on-host>:8080 \
     --volume $PWD/src:/riot/src \
     --name riot \
