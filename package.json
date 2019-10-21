@@ -54,7 +54,8 @@
     "clean": "rimraf lib",
     "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
     "test": "karma start --single-run=true --browsers VectorChromeHeadless",
-    "test-multi": "karma start"
+    "test-multi": "karma start",
+    "e2etests": "./test/end-to-end-tests/run.sh --riot-url http://localhost:8080"
   },
   "dependencies": {
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
