@@ -27,6 +27,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
+import SettingsStore from "../../settings/SettingsStore";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -165,6 +166,7 @@ export default class RightPanel extends React.Component {
     render() {
         const MemberList = sdk.getComponent('rooms.MemberList');
         const MemberInfo = sdk.getComponent('rooms.MemberInfo');
+        const UserInfo = sdk.getComponent('right_panel.UserInfo');
         const ThirdPartyMemberInfo = sdk.getComponent('rooms.ThirdPartyMemberInfo');
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
@@ -183,14 +185,46 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
-            panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
+            if (SettingsStore.isFeatureEnabled("feature_user_info_panel")) {
+                const onClose = () => {
+                    dis.dispatch({
+                        action: "view_user",
+                        member: null,
+                    });
+                };
+                panel = <UserInfo
+                    user={this.state.member}
+                    roomId={this.props.roomId}
+                    key={this.props.roomId || this.state.member.userId}
+                    onClose={onClose}
+                />;
+            } else {
+                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
+            }
         } else if (this.state.phase === RightPanel.Phase.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
         } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
-            panel = <GroupMemberInfo
-                groupMember={this.state.member}
-                groupId={this.props.groupId}
-                key={this.state.member.user_id} />;
+            if (SettingsStore.isFeatureEnabled("feature_user_info_panel")) {
+                const onClose = () => {
+                    dis.dispatch({
+                        action: "view_user",
+                        member: null,
+                    });
+                };
+                panel = <UserInfo
+                    user={this.state.member}
+                    groupId={this.props.groupId}
+                    key={this.state.member.userId}
+                    onClose={onClose} />;
+            } else {
+                panel = (
+                    <GroupMemberInfo
+                        groupMember={this.state.member}
+                        groupId={this.props.groupId}
+                        key={this.state.member.user_id}
+                    />
+                );
+            }
         } else if (this.state.phase === RightPanel.Phase.GroupRoomInfo) {
             panel = <GroupRoomInfo
                 groupRoomId={this.state.groupRoomId}

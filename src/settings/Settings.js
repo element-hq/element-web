@@ -120,6 +120,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_user_info_panel": {
+        isFeature: true,
+        displayName: _td("Use the new, consistent UserInfo panel for Room Members and Group Members"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
