@@ -349,6 +349,27 @@ docker exec -it riot sh
 docker exec -it riot yarn
 ```
 
+In case you want to use own clones of
+[matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk)
+or
+[matrix-js-sdk](https://github.com/matrix-org/matrix-js-sdk)
+set additional environment variable ``USE_CUSTOM_SDKS`` in ``docker build``
+if it's a one-time operation. In case you want to use own clone and edit
+it at the same time as you edit ``riot-web``, set the environement
+variable in ``docker run`` command.
+
+```bash
+docker run --interactive --tty \
+    --publish <port-on-host>:8080 \
+    --volume $PWD/src:/riot/src \
+    --volume <path-to-matrix-js-sdk>:/riot/js-sdk \
+    --volume <path-to-matrix-react-sdk>:/riot/react-sdk \
+    --env USE_CUSTOM_SDKS=true \
+    --env NO_CLONE=true \
+    --name riot \
+    vectorim/riot-web:develop
+```
+
 Running the tests
 -----------------
 
