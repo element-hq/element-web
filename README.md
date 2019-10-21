@@ -313,6 +313,10 @@ and at the same time allows to plug in the folder with source files so that
 you can edit outside of Docker container and let it compile inside where
 it is safely separated from your machine or any custom configuration.
 
+Note that hot-reloading via an open websocket might not work out of the box
+on Windows, check [WebPack ``watchOptions.poll``](https://webpack.js.org/configuration/watch/)
+as a workaround.
+
 Using this approach provides a reproducible environment between you and
 the maintainers if you share your changes in a pull request.
 
