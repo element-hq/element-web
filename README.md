@@ -334,7 +334,7 @@ docker rm -f riot || true
 # such as res with additional --volume $PWD/res:/src/res
 docker run --detach --interactive --tty \
     --publish <port-on-host>:8080 \
-    --volume $PWD/src:/src/src \
+    --volume $PWD/src:/riot/src \
     --name riot \
     vectorim/riot-web:develop
 ```
