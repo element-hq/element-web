@@ -1920,5 +1920,6 @@
     "Disconnect from the identity server <idserver />?": "Verbindung zum Identitätsserver <idserver /> trennen?",
     "Add Email Address": "E-Mail-Adresse hinzufügen",
     "Add Phone Number": "Telefonnummer hinzufügen",
-    "Changes the avatar of the current room": "Ändert den Avatar für diesen Raum"
+    "Changes the avatar of the current room": "Ändert den Avatar für diesen Raum",
+    "Deactivate account": "Benutzerkonto schließen"
 }
