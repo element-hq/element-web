@@ -38,6 +38,7 @@ COPY . /riot
 # and runs webpack server. Mount volume to /src/src for developing.
 RUN echo 'mkdir /riot/webapp' >> /entry.sh \
     && echo 'cp /riot/config.sample.json /riot/webapp/config.json' >> /entry.sh \
+    && echo 'sh /riot/scripts/docker-link-repos.sh' >> /entry.sh \
     && echo 'yarn start' >> /entry.sh \
     && chmod +x /entry.sh
 
