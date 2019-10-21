@@ -1333,7 +1333,7 @@
     "Copy to clipboard": "In Zwischenablage kopieren",
     "Download": "Herunterladen",
     "I've made a copy": "Ich habe eine Kopie gemacht",
-    "<b>Print it</b> and store it somewhere safe": "<b>Drucke ihn aus</b> und lagere ihn, wo er sicher ist",
+    "<b>Print it</b> and store it somewhere safe": "<b>Drucke ihn aus</b> und lagere ihn an einem sicheren Ort",
     "<b>Save it</b> on a USB key or backup drive": "<b>Speichere ihn</b> auf einem USB-Schlüssel oder Sicherungsslaufwerk",
     "<b>Copy it</b> to your personal cloud storage": "<b>Kopiere ihn</b> in deinen persönlichen Cloud-Speicher",
     "Got it": "Verstanden",
@@ -1921,5 +1921,12 @@
     "Add Email Address": "E-Mail-Adresse hinzufügen",
     "Add Phone Number": "Telefonnummer hinzufügen",
     "Changes the avatar of the current room": "Ändert den Avatar für diesen Raum",
-    "Deactivate account": "Benutzerkonto schließen"
+    "Deactivate account": "Benutzerkonto schließen",
+    "Show previews/thumbnails for images": "Zeige eine Vorschau für Bilder",
+    "A device's public name is visible to people you communicate with": "Der Gerätename ist sichtbar für die Personen mit denen du kommunizierst",
+    "Clear all data on this device?": "Alle Daten auf diesem Gerät löschen?",
+    "View": "Vorschau",
+    "Find a room…": "Suche einen Raum…",
+    "Find a room… (e.g. %(exampleRoom)s)": "Suche einen Raum… (z.B. %(exampleRoom)s)",
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Wenn du den gesuchten Raum nicht finden kannst, frage nach einer Einladung für den Raum oder <a>Erstelle einen neuen Raum</a>."
 }
