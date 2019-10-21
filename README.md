@@ -328,7 +328,7 @@ mode, which is useful for stepping through the tests in the developer tools.
 
 ### End-to-End tests
 
-See the README.md in `matrix-react-sdk` how to run the end-to-end tests.
+See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) how to run the end-to-end tests.
 
 Translations
 ============
