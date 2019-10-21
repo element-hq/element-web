@@ -677,6 +677,11 @@ module.exports = createReactClass({
             debuglog("updateHeight getting straight to business, no scrolling going on.");
         }
 
+        // We might have unmounted since the timer finished, so abort if so.
+        if (this.unmounted) {
+            return;
+        }
+
         const sn = this._getScrollNode();
         const itemlist = this.refs.itemlist;
         const contentHeight = this._getMessagesHeight();
