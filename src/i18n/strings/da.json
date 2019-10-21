@@ -586,5 +586,15 @@
     "Please contact your homeserver administrator.": "Kontakt venligst din homeserver administrator.",
     "Failed to join room": "Kunne ikke betræde rummet",
     "Message Pinning": "Fastgørelse af beskeder",
-    "Custom user status messages": "Tilpassede bruger-statusbeskeder"
+    "Custom user status messages": "Tilpassede bruger-statusbeskeder",
+    "Add Email Address": "Tilføj e-mail adresse",
+    "Add Phone Number": "Tilføj telefonnummer",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s ændret af %(senderName)s",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "Gruppér og filtrér rum efter egne tags (opdater for at anvende ændringerne)",
+    "Render simple counters in room header": "Vis simple tællere i rumhovedet",
+    "Multiple integration managers": "Flere integrationsmanagere",
+    "Use the new, faster, composer for writing messages": "Brug den nye, hurtigere editor for at forfatte beskeder",
+    "Enable Emoji suggestions while typing": "Aktiver emoji forslag under indtastning",
+    "Use compact timeline layout": "Brug kompakt tidslinje",
+    "Show a placeholder for removed messages": "Vis en pladsholder for fjernede beskeder"
 }
