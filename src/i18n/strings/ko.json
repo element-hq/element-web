@@ -228,7 +228,7 @@
     "Join Room": "방에 참가",
     "%(targetName)s joined the room.": "%(targetName)s님이 방에 참가했습니다.",
     "Joins room with given alias": "받은 별칭으로 방에 들어가기",
-    "Jump to first unread message.": "읽지 않은 첫 메시지로 이동하려면 누르세요.",
+    "Jump to first unread message.": "읽지 않은 첫 메시지로 건너뜁니다.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s님이 %(targetName)s님을 추방했습니다.",
     "Kick": "추방",
     "Kicks user with given id": "받은 ID로 사용자 추방하기",
@@ -2112,5 +2112,7 @@
     "Direct messages": "다이렉트 메시지",
     "Failed to deactivate user": "사용자 비활성화에 실패함",
     "This client does not support end-to-end encryption.": "이 클라이언트는 종단간 암호화를 지원하지 않습니다.",
-    "Messages in this room are not end-to-end encrypted.": "이 방의 메시지는 종단간 암호화가 되지 않았습니다."
+    "Messages in this room are not end-to-end encrypted.": "이 방의 메시지는 종단간 암호화가 되지 않았습니다.",
+    "Jump to first unread room.": "읽지 않은 첫 방으로 건너뜁니다.",
+    "Jump to first invite.": "첫 초대로 건너뜁니다."
 }
