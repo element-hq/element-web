@@ -26,7 +26,7 @@ class Preview extends React.PureComponent {
         const {
             unicode = "",
             annotation = "",
-            shortcodes: [shortcode = ""]
+            shortcodes: [shortcode = ""],
         } = this.props.emoji || {};
         return (
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
@@ -42,7 +42,7 @@ class Preview extends React.PureComponent {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

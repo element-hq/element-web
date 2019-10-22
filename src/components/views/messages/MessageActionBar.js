@@ -25,7 +25,6 @@ import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
-import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {

@@ -79,11 +79,11 @@ class ReactionPicker extends React.Component {
         return Object.fromEntries([...myAnnotations]
             .filter(event => !event.isRedacted())
             .map(event => [event.getRelation().key, event.getId()]));
-    };
+    }
 
     onReactionsChange() {
         this.setState({
-            selectedEmojis: new Set(Object.keys(this.getReactions()))
+            selectedEmojis: new Set(Object.keys(this.getReactions())),
         });
     }
 
@@ -112,9 +112,12 @@ class ReactionPicker extends React.Component {
     }
 
     render() {
-        return <EmojiPicker onChoose={this.onChoose} selectedEmojis={this.state.selectedEmojis}
-            showQuickReactions={true}/>
+        return <EmojiPicker
+            onChoose={this.onChoose}
+            selectedEmojis={this.state.selectedEmojis}
+            showQuickReactions={true}
+        />;
     }
 }
 
-export default ReactionPicker
+export default ReactionPicker;

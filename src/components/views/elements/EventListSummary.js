@@ -29,7 +29,7 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
         if (onToggle) {
             onToggle();
         }
-    }, [expanded]);
+    }, [expanded]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const eventIds = events.map((e) => e.getId()).join(',');
 

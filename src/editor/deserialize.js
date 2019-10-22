@@ -109,7 +109,7 @@ function parseElement(n, partCreator, lastNode, state) {
             const indent = "  ".repeat(state.listDepth - 1);
             if (n.parentElement.nodeName === "OL") {
                 // The markdown parser doesn't do nested indexed lists at all, but this supports it anyway.
-                let index = state.listIndex[state.listIndex.length - 1];
+                const index = state.listIndex[state.listIndex.length - 1];
                 state.listIndex[state.listIndex.length - 1] += 1;
                 return partCreator.plain(`${indent}${index}. `);
             } else {

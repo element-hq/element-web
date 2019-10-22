@@ -218,8 +218,8 @@ class EmojiPicker extends React.Component {
         const QuickReactions = sdk.getComponent("emojipicker.QuickReactions");
         return (
             <div className="mx_EmojiPicker">
-                <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory}/>
-                <Search query={this.state.filter} onChange={this.onChangeFilter}/>
+                <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory} />
+                <Search query={this.state.filter} onChange={this.onChangeFilter} />
                 <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.updateVisibility}>
                     {this.categories.map(category => (
                         <Category key={category.id} id={category.id} name={category.name}
