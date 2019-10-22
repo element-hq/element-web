@@ -2255,5 +2255,7 @@
     "Symbols": "Szimbólumok",
     "Flags": "Zászlók",
     "React": "Reakció",
-    "Cancel search": "Keresés megszakítása"
+    "Cancel search": "Keresés megszakítása",
+    "Jump to first unread room.": "Az első olvasatlan szobába ugrás.",
+    "Jump to first invite.": "Az első meghívóra ugrás."
 }
