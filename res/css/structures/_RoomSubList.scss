@@ -46,8 +46,13 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     flex: 0 0 auto;
-    margin: 0 16px;
+    margin: 0 8px;
+    padding: 0 8px;
     height: 36px;
+}
+
+.mx_RoomSubList_labelContainer:focus-within {
+    background-color: $roomtile-focused-bg-color;
 }
 
 .mx_RoomSubList_label {

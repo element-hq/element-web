@@ -147,37 +147,7 @@ const RoomSubList = createReactClass({
                     this.onClick();
                 } else if (!this.props.forceExpand) {
                     // sublist is expanded, go to first room
-                    let element = document.activeElement;
-                    let descending = true;
-                    let classes;
-
-                    do {
-                        const child = element.firstElementChild;
-                        const sibling = element.nextElementSibling;
-
-                        if (descending) {
-                            if (child) {
-                                element = child;
-                            } else if (sibling) {
-                                element = sibling;
-                            } else {
-                                descending = false;
-                                element = element.parentElement;
-                            }
-                        } else {
-                            if (sibling) {
-                                element = sibling;
-                                descending = true;
-                            } else {
-                                element = element.parentElement;
-                            }
-                        }
-
-                        if (element) {
-                            classes = element.classList;
-                        }
-                    } while (element && !classes.contains("mx_RoomTile"));
-
+                    const element = this.refs.subList && this.refs.subList.querySelector(".mx_RoomTile");
                     if (element) {
                         element.focus();
                     }
@@ -188,10 +158,15 @@ const RoomSubList = createReactClass({
     },
 
     onKeyDown: function(ev) {
-        // On ARROW_LEFT go to the sublist header
-        if (ev.key === Key.ARROW_LEFT) {
-            ev.stopPropagation();
-            this._headerButton.current.focus();
+        switch (ev.key) {
+            // On ARROW_LEFT go to the sublist header
+            case Key.ARROW_LEFT:
+                ev.stopPropagation();
+                this._headerButton.current.focus();
+                break;
+            // Consume ARROW_RIGHT so it doesn't cause focus to get sent to composer
+            case Key.ARROW_RIGHT:
+                ev.stopPropagation();
         }
     },
 
@@ -348,8 +323,7 @@ const RoomSubList = createReactClass({
                     tabIndex={0}
                     aria-expanded={!isCollapsed}
                     inputRef={this._headerButton}
-                    // cancel out role so this button behaves as the toggle-header of this group
-                    role="none"
+                    role="treeitem"
                 >
                     { chevron }
                     <span>{this.props.label}</span>
