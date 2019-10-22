@@ -74,10 +74,10 @@ class QuickReactions extends React.Component {
                     {QUICK_REACTIONS.map(emoji => <Emoji
                         key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
                         onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-                        selectedEmojis={this.props.selectedEmojis}/>)}
+                        selectedEmojis={this.props.selectedEmojis} />)}
                 </ul>
             </section>
-        )
+        );
     }
 }
 
