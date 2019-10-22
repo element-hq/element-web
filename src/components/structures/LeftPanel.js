@@ -186,6 +186,7 @@ const LeftPanel = createReactClass({
             }
         } while (element && !(
             classes.contains("mx_RoomTile") ||
+            classes.contains("mx_RoomSubList_label") ||
             classes.contains("mx_textinput_search")));
 
         if (element) {
