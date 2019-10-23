@@ -705,7 +705,7 @@ module.exports = createReactClass({
                                 { timestamp }
                             </a>
                         </div>
-                        <div className="mx_EventTile_line" >
+                        <div className="mx_EventTile_line">
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
@@ -719,7 +719,7 @@ module.exports = createReactClass({
             case 'file_grid': {
                 return (
                     <div className={classes}>
-                        <div className="mx_EventTile_line" >
+                        <div className="mx_EventTile_line">
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}

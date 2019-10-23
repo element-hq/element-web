@@ -30,6 +30,7 @@ module.exports = createReactClass({
     propTypes: {
         onSearch: PropTypes.func,
         onCleared: PropTypes.func,
+        onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
 
@@ -93,6 +94,7 @@ module.exports = createReactClass({
                 this._clearSearch("keyboard");
                 break;
         }
+        if (this.props.onKeyDown) this.props.onKeyDown(ev);
     },
 
     _onFocus: function(ev) {

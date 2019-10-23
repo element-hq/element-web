@@ -35,13 +35,22 @@ class Search extends React.PureComponent {
     }
 
     render() {
+        let rightButton;
+        if (this.props.query) {
+            rightButton = (
+                <button onClick={() => this.props.onChange("")}
+                        className="mx_EmojiPicker_search_icon mx_EmojiPicker_search_clear"
+                        title={_t("Cancel search")} />
+            );
+        } else {
+            rightButton = <span className="mx_EmojiPicker_search_icon" />;
+        }
+
         return (
             <div className="mx_EmojiPicker_search">
                 <input autoFocus type="text" placeholder="Search" value={this.props.query}
                     onChange={ev => this.props.onChange(ev.target.value)} ref={this.inputRef} />
-                <button onClick={() => this.props.onChange("")}
-                    className={`mx_EmojiPicker_search_icon ${this.props.query ? "mx_EmojiPicker_search_clear" : ""}`}
-                    title={this.props.query ? _t("Cancel search") : _t("Search")} />
+                {rightButton}
             </div>
         );
     }
