@@ -120,6 +120,7 @@ const LeftPanel = createReactClass({
         if (!this.focusedElement) return;
 
         switch (ev.key) {
+            // On enter of rooms filter select and activate first room if such one exists
             case Key.ENTER: {
                 const firstRoom = ev.target.closest(".mx_LeftPanel").querySelector(".mx_RoomTile");
                 if (firstRoom) {
