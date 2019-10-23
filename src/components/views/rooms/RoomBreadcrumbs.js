@@ -363,7 +363,7 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <div role="list" aria-orientation="horizontal" aria-roledescription={_t("Recent rooms.")}>
+            <div role="list" aria-orientation="horizontal" aria-roledescription={_t("Recent rooms")}>
                 <IndicatorScrollbar
                     ref="scroller"
                     className="mx_RoomBreadcrumbs"
