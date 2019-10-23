@@ -324,6 +324,7 @@ const RoomSubList = createReactClass({
                     aria-expanded={!isCollapsed}
                     inputRef={this._headerButton}
                     role="treeitem"
+                    aria-level="1"
                 >
                     { chevron }
                     <span>{this.props.label}</span>
