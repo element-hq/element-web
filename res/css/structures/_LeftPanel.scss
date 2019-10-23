@@ -48,10 +48,14 @@ limitations under the License.
 
 .mx_LeftPanel {
     flex: 1;
-    overflow-x: hidden;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     min-height: 0;
+}
+
+.mx_LeftPanel .mx_LeftPanel_Rooms {
+    flex: 1 1 0;
 }
 
 .mx_LeftPanel .mx_AppTile_mini {
