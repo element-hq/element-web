@@ -24,7 +24,7 @@ class ReactionPicker extends React.Component {
         mxEvent: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
         closeMenu: PropTypes.func.isRequired,
-        reactions: PropTypes.object.isRequired,
+        reactions: PropTypes.object,
     };
 
     constructor(props) {
