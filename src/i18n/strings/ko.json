@@ -228,7 +228,7 @@
     "Join Room": "방에 참가",
     "%(targetName)s joined the room.": "%(targetName)s님이 방에 참가했습니다.",
     "Joins room with given alias": "받은 별칭으로 방에 들어가기",
-    "Jump to first unread message.": "읽지 않은 첫 메시지로 이동하려면 누르세요.",
+    "Jump to first unread message.": "읽지 않은 첫 메시지로 건너뜁니다.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s님이 %(targetName)s님을 추방했습니다.",
     "Kick": "추방",
     "Kicks user with given id": "받은 ID로 사용자 추방하기",
@@ -2079,7 +2079,7 @@
     "%(count)s unread messages.|other": "%(count)s개의 읽지 않은 메시지.",
     "Unread mentions.": "읽지 않은 언급.",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요.",
-    "Use the new, faster, composer for writing messages": "메시지 입력으로 새로운, 더 빠른 작성기를 사용",
+    "Use the new, faster, composer for writing messages": "메시지 입력으로 새롭고 더 빠른 작성기를 사용하기",
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "%(user)s님의 1개의 메시지를 삭제합니다. 이것은 되돌릴 수 없습니다. 계속하겠습니까?",
     "Remove %(count)s messages|one": "1개의 메시지 삭제",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요.",
@@ -2106,5 +2106,13 @@
     "Symbols": "기호",
     "Flags": "깃발",
     "React": "리액션",
-    "Cancel search": "검색 취소"
+    "Cancel search": "검색 취소",
+    "Use the new, consistent UserInfo panel for Room Members and Group Members": "방 구성원과 그룹 구성원을 위한 새롭고 일관적인 사용자 정보 사용하기",
+    "Trust & Devices": "신뢰 & 기기",
+    "Direct messages": "다이렉트 메시지",
+    "Failed to deactivate user": "사용자 비활성화에 실패함",
+    "This client does not support end-to-end encryption.": "이 클라이언트는 종단간 암호화를 지원하지 않습니다.",
+    "Messages in this room are not end-to-end encrypted.": "이 방의 메시지는 종단간 암호화가 되지 않았습니다.",
+    "Jump to first unread room.": "읽지 않은 첫 방으로 건너뜁니다.",
+    "Jump to first invite.": "첫 초대로 건너뜁니다."
 }
