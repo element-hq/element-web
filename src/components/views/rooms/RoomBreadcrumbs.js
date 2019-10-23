@@ -346,8 +346,15 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             return (
-                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room, i)}
-                    onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
+                <AccessibleButton
+                    className={classes}
+                    key={r.room.roomId}
+                    onClick={() => this._viewRoom(r.room, i)}
+                    onMouseEnter={() => this._onMouseEnter(r.room)}
+                    onMouseLeave={() => this._onMouseLeave(r.room)}
+                    aria-label={_t("Room %(name)s", {name: r.room.name})}
+                    role="listitem"
+                >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
                     {dmIndicator}
@@ -356,10 +363,16 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs"
-                trackHorizontalOverflow={true} verticalScrollsHorizontally={true}>
-                { avatars }
-            </IndicatorScrollbar>
+            <div role="list" aria-orientation="horizontal" aria-roledescription={_t("Recent rooms.")}>
+                <IndicatorScrollbar
+                    ref="scroller"
+                    className="mx_RoomBreadcrumbs"
+                    trackHorizontalOverflow={true}
+                    verticalScrollsHorizontally={true}
+                >
+                    { avatars }
+                </IndicatorScrollbar>
+            </div>
         );
     }
 }
