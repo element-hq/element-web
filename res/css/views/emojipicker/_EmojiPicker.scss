@@ -114,6 +114,15 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_EmojiPicker_search_icon {
+    width: 16px;
+    margin: 8px;
+}
+
+.mx_EmojiPicker_search_icon:not(.mx_EmojiPicker_search_clear) {
+    pointer-events: none;
+}
+
 .mx_EmojiPicker_search_icon::after {
     mask: url('$(res)/img/emojipicker/search.svg') no-repeat;
     mask-size: 100%;
