@@ -116,6 +116,20 @@ const LeftPanel = createReactClass({
         this.focusedElement = null;
     },
 
+    _onFilterKeyDown: function(ev) {
+        if (!this.focusedElement) return;
+
+        switch (ev.key) {
+            case Key.ENTER: {
+                const firstRoom = ev.target.closest(".mx_LeftPanel").querySelector(".mx_RoomTile");
+                if (firstRoom) {
+                    firstRoom.click();
+                }
+                break;
+            }
+        }
+    },
+
     _onKeyDown: function(ev) {
         if (!this.focusedElement) return;
 
@@ -255,6 +269,7 @@ const LeftPanel = createReactClass({
             enableRoomSearchFocus={true}
             blurredPlaceholder={ _t('Filter') }
             placeholder={ _t('Filter rooms…') }
+            onKeyDown={this._onFilterKeyDown}
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
             onFocus={this._onSearchFocus}
@@ -273,18 +288,19 @@ const LeftPanel = createReactClass({
                     <TopLeftMenuButton collapsed={this.props.collapsed} />
                     { breadcrumbs }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
-                    <div className="mx_LeftPanel_Rooms" onKeyDown={this._onKeyDown} onFocus={this._onFocus} onBlur={this._onBlur}>
-                        <div className="mx_LeftPanel_exploreAndFilterRow">
-                            { exploreButton }
-                            { searchBox }
-                        </div>
-                        <RoomList
-                            ref={this.collectRoomList}
-                            resizeNotifier={this.props.resizeNotifier}
-                            collapsed={this.props.collapsed}
-                            searchFilter={this.state.searchFilter}
-                            ConferenceHandler={VectorConferenceHandler} />
+                    <div className="mx_LeftPanel_exploreAndFilterRow" onKeyDown={this._onKeyDown} onFocus={this._onFocus} onBlur={this._onBlur}>
+                        { exploreButton }
+                        { searchBox }
                     </div>
+                    <RoomList
+                        onKeyDown={this._onKeyDown}
+                        onFocus={this._onFocus}
+                        onBlur={this._onBlur}
+                        ref={this.collectRoomList}
+                        resizeNotifier={this.props.resizeNotifier}
+                        collapsed={this.props.collapsed}
+                        searchFilter={this.state.searchFilter}
+                        ConferenceHandler={VectorConferenceHandler} />
                 </aside>
             </div>
         );

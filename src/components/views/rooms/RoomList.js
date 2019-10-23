@@ -770,9 +770,17 @@ module.exports = createReactClass({
 
         const subListComponents = this._mapSubListProps(subLists);
 
+        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, ...props} = this.props; // eslint-disable-line
         return (
-            <div ref={this._collectResizeContainer} className="mx_RoomList" role="tree" aria-label={_t("Rooms")}
-                 onMouseMove={this.onMouseMove} onMouseLeave={this.onMouseLeave}>
+            <div
+                {...props}
+                ref={this._collectResizeContainer}
+                className="mx_RoomList"
+                role="tree"
+                aria-label={_t("Rooms")}
+                onMouseMove={this.onMouseMove}
+                onMouseLeave={this.onMouseLeave}
+            >
                 { subListComponents }
             </div>
         );
