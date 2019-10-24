@@ -2263,5 +2263,7 @@
     "React": "反應",
     "Cancel search": "取消搜尋",
     "Jump to first unread room.": "跳到第一個未讀的聊天室。",
-    "Jump to first invite.": "跳到第一個邀請。"
+    "Jump to first invite.": "跳到第一個邀請。",
+    "Room %(name)s": "聊天室 %(name)s",
+    "Recent rooms": "最近的聊天室"
 }
