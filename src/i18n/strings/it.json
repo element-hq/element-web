@@ -2217,5 +2217,7 @@
     "Jump to first unread room.": "Salta alla prima stanza non letta.",
     "Jump to first invite.": "Salta al primo invito.",
     "Command Autocomplete": "Autocompletamento comando",
-    "DuckDuckGo Results": "Risultati DuckDuckGo"
+    "DuckDuckGo Results": "Risultati DuckDuckGo",
+    "Room %(name)s": "Stanza %(name)s",
+    "Recent rooms": "Stanze recenti"
 }
