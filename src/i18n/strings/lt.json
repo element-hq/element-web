@@ -7,7 +7,7 @@
     "Whether or not you're logged in (we don't record your user name)": "Nesvarbu ar esate prisijungę ar ne (mes neįrašome jūsų naudotojo vardo)",
     "Your language of choice": "Jūsų pasirinkta kalba",
     "Which officially provided instance you are using, if any": "Kurį oficialiai pateiktą egzempliorių naudojate",
-    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Nesvarbu jūs naudojate ar ne raiškiojo teksto režimą Raiškiojo tekto redaktoriuje",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Ar jūs naudojate Raiškiojo Teksto Redaktoriaus Raiškiojo Teksto režimą ar ne",
     "Your homeserver's URL": "Jūsų serverio URL adresas",
     "Your identity server's URL": "Jūsų identifikavimo serverio URL adresas",
     "Analytics": "Statistika",
@@ -991,5 +991,11 @@
     "Got it": "Supratau",
     "Backup created": "Atsarginė kopija sukurta",
     "Recovery Key": "Atkūrimo raktas",
-    "Retry": "Bandyti dar kartą"
+    "Retry": "Bandyti dar kartą",
+    "Add Email Address": "Pridėti el. pašto adresą",
+    "Add Phone Number": "Pridėti telefono numerį",
+    "Whether or not you're logged in (we don't record your username)": "Nepriklausomai nuo to ar jūs prisijungę (mes neįrašome jūsų vartotojo vardo)",
+    "Chat with Riot Bot": "Kalbėtis su Riot botu",
+    "Sign In": "Prisijungti",
+    "Explore rooms": "Peržiūrėti kambarius"
 }
