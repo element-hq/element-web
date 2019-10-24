@@ -2257,5 +2257,7 @@
     "React": "Reakció",
     "Cancel search": "Keresés megszakítása",
     "Jump to first unread room.": "Az első olvasatlan szobába ugrás.",
-    "Jump to first invite.": "Az első meghívóra ugrás."
+    "Jump to first invite.": "Az első meghívóra ugrás.",
+    "Room %(name)s": "Szoba: %(name)s",
+    "Recent rooms": "Legutóbbi szobák"
 }
