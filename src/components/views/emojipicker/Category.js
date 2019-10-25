@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
 import sdk from '../../../index';
+
+const OVERFLOW_ROWS = 3;
 
 class Category extends React.PureComponent {
     static propTypes = {
@@ -30,22 +32,54 @@ class Category extends React.PureComponent {
         selectedEmojis: PropTypes.instanceOf(Set),
     };
 
+    _renderEmojiRow = (rowIndex) => {
+        const { onClick, onMouseEnter, onMouseLeave, selectedEmojis, emojis } = this.props;
+        const emojisForRow = emojis.slice(rowIndex * 8, (rowIndex + 1) * 8);
+        const Emoji = sdk.getComponent("emojipicker.Emoji");
+        return (<div key={rowIndex}>{
+            emojisForRow.map(emoji =>
+                <Emoji key={emoji.hexcode} emoji={emoji} selectedEmojis={selectedEmojis}
+                    onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />)
+        }</div>);
+    };
+
     render() {
-        const { onClick, onMouseEnter, onMouseLeave, emojis, name, selectedEmojis } = this.props;
+        const { emojis, name, heightBefore, viewportHeight, scrollTop } = this.props;
         if (!emojis || emojis.length === 0) {
             return null;
         }
+        const rows = new Array(Math.ceil(emojis.length / EMOJIS_PER_ROW));
+        for (let counter = 0; counter < rows.length; ++counter) {
+            rows[counter] = counter;
+        }
+        const LazyRenderList = sdk.getComponent('elements.LazyRenderList');
 
-        const Emoji = sdk.getComponent("emojipicker.Emoji");
+        const viewportTop = scrollTop;
+        const viewportBottom = viewportTop + viewportHeight;
+        const listTop = heightBefore + CATEGORY_HEADER_HEIGHT;
+        const listBottom = listTop + (rows.length * EMOJI_HEIGHT);
+        const top = Math.max(viewportTop, listTop);
+        const bottom = Math.min(viewportBottom, listBottom);
+        // the viewport height and scrollTop passed to the LazyRenderList
+        // is capped at the intersection with the real viewport, so lists
+        // out of view are passed height 0, so they won't render any items.
+        const localHeight = Math.max(0, bottom - top);
+        const localScrollTop = Math.max(0, scrollTop - listTop);
+
         return (
             <section className="mx_EmojiPicker_category" data-category-id={this.props.id}>
                 <h2 className="mx_EmojiPicker_category_label">
                     {name}
                 </h2>
-                <ul className="mx_EmojiPicker_list">
-                    {emojis.map(emoji => <Emoji key={emoji.hexcode} emoji={emoji} selectedEmojis={selectedEmojis}
-                        onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />)}
-                </ul>
+                <LazyRenderList
+                    element="ul" className="mx_EmojiPicker_list"
+                    itemHeight={EMOJI_HEIGHT} items={rows}
+                    scrollTop={localScrollTop}
+                    height={localHeight}
+                    overflowItems={OVERFLOW_ROWS}
+                    overflowMargin={0}
+                    renderItem={this._renderEmojiRow}>
+                </LazyRenderList>
             </section>
         );
     }

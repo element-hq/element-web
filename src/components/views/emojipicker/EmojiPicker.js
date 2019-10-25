@@ -58,6 +58,10 @@ EMOJIBASE.forEach(emoji => {
     emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`;
 });
 
+export const CATEGORY_HEADER_HEIGHT = 22;
+export const EMOJI_HEIGHT = 37;
+export const EMOJIS_PER_ROW = 8;
+
 class EmojiPicker extends React.Component {
     static propTypes = {
         onChoose: PropTypes.func.isRequired,
@@ -71,6 +75,11 @@ class EmojiPicker extends React.Component {
         this.state = {
             filter: "",
             previewEmoji: null,
+            scrollTop: 0,
+            // initial estimation of height, dialog is hardcoded to 450px height.
+            // should be enough to never have blank rows of emojis as
+            // 3 rows of overflow are also rendered. The actual value is updated on scroll.
+            viewportHeight: 280,
         };
 
         this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
@@ -145,10 +154,20 @@ class EmojiPicker extends React.Component {
         this.updateVisibility = this.updateVisibility.bind(this);
     }
 
+    onScroll = () => {
+        const body = this.bodyRef.current;
+        this.setState({
+            scrollTop: body.scrollTop,
+            viewportHeight: body.clientHeight,
+        });
+        this.updateVisibility();
+    };
+
     updateVisibility() {
-        const rect = this.bodyRef.current.getBoundingClientRect();
+        const body = this.bodyRef.current;
+        const rect = body.getBoundingClientRect();
         for (const cat of this.categories) {
-            const elem = this.bodyRef.current.querySelector(`[data-category-id="${cat.id}"]`);
+            const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
                 cat.visible = false;
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
@@ -210,23 +229,36 @@ class EmojiPicker extends React.Component {
         }
     }
 
+    _categoryHeightForEmojiCount(count) {
+        if (count === 0) {
+            return 0;
+        }
+        return CATEGORY_HEADER_HEIGHT + (Math.ceil(count / EMOJIS_PER_ROW) * EMOJI_HEIGHT);
+    }
+
     render() {
         const Header = sdk.getComponent("emojipicker.Header");
         const Search = sdk.getComponent("emojipicker.Search");
         const Category = sdk.getComponent("emojipicker.Category");
         const Preview = sdk.getComponent("emojipicker.Preview");
         const QuickReactions = sdk.getComponent("emojipicker.QuickReactions");
+        let heightBefore = 0;
         return (
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory} />
                 <Search query={this.state.filter} onChange={this.onChangeFilter} />
-                <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.updateVisibility}>
-                    {this.categories.map(category => (
-                        <Category key={category.id} id={category.id} name={category.name}
-                            emojis={this.memoizedDataByCategory[category.id]} onClick={this.onClickEmoji}
+                <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.onScroll}>
+                    {this.categories.map(category => {
+                        const emojis = this.memoizedDataByCategory[category.id];
+                        const categoryElement = (<Category key={category.id} id={category.id} name={category.name}
+                            heightBefore={heightBefore} viewportHeight={this.state.viewportHeight}
+                            scrollTop={this.state.scrollTop} emojis={emojis} onClick={this.onClickEmoji}
                             onMouseEnter={this.onHoverEmoji} onMouseLeave={this.onHoverEmojiEnd}
-                            selectedEmojis={this.props.selectedEmojis} />
-                    ))}
+                            selectedEmojis={this.props.selectedEmojis} />);
+                        const height = this._categoryHeightForEmojiCount(emojis.length);
+                        heightBefore += height;
+                        return categoryElement;
+                    })}
                 </div>
                 {this.state.previewEmoji || !this.props.showQuickReactions
                     ? <Preview emoji={this.state.previewEmoji} />
