@@ -443,15 +443,17 @@ module.exports = createReactClass({
                     // one was itself. This way, the timestamp of the previous event === the
                     // timestamp of the current event, and no DateSeparator is inserted.
                     return this._getTilesForEvent(e, e, e === lastShownEvent);
-                }).reduce((a, b) => a.concat(b));
+                }).reduce((a, b) => a.concat(b), []);
 
+                // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
+                const ev = this.props.events[i];
                 ret.push(<EventListSummary
                     key="roomcreationsummary"
                     events={summarisedEvents}
                     onToggle={this._onHeightChanged} // Update scroll state
-                    summaryMembers={[mxEv.sender]}
+                    summaryMembers={[ev.sender]}
                     summaryText={_t("%(creator)s created and configured the room.", {
-                        creator: mxEv.sender ? mxEv.sender.name : mxEv.getSender(),
+                        creator: ev.sender ? ev.sender.name : ev.getSender(),
                     })}
                 >
                     { eventTiles }
@@ -529,7 +531,7 @@ module.exports = createReactClass({
                     // one was itself. This way, the timestamp of the previous event === the
                     // timestamp of the current event, and no DateSeparator is inserted.
                     return this._getTilesForEvent(e, e, e === lastShownEvent);
-                }).reduce((a, b) => a.concat(b));
+                }).reduce((a, b) => a.concat(b), []);
 
                 if (eventTiles.length === 0) {
                     eventTiles = null;
