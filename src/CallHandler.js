@@ -387,7 +387,7 @@ async function _startCallApp(roomId, type) {
     // work for us. Better that the user knows before everyone else in the
     // room sees it.
     const managers = IntegrationManagers.sharedInstance();
-    let haveScalar = true;
+    let haveScalar = false;
     if (managers.hasManager()) {
         try {
             const scalarClient = managers.getPrimaryManager().getScalarClient();
@@ -396,8 +396,6 @@ async function _startCallApp(roomId, type) {
         } catch (e) {
             // ignore
         }
-    } else {
-        haveScalar = false;
     }
 
     if (!haveScalar) {
