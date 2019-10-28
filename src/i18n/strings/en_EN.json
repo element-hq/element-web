@@ -1496,7 +1496,6 @@
     "This homeserver would like to make sure you are not a robot.": "This homeserver would like to make sure you are not a robot.",
     "Custom Server Options": "Custom Server Options",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.",
     "To continue, please enter your password.": "To continue, please enter your password.",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.",
     "Please review and accept all of the homeserver's policies": "Please review and accept all of the homeserver's policies",
