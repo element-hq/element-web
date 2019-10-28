@@ -2108,5 +2108,10 @@
     "%(creator)s created and configured the room.": "%(creator)s loi ja määritti huoneen.",
     "Jump to first unread room.": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
     "Jump to first invite.": "Siirry ensimmäiseen kutsuun.",
-    "DuckDuckGo Results": "DuckDuckGo-tulokset"
+    "DuckDuckGo Results": "DuckDuckGo-tulokset",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Tekstiviesti on lähetetty numeroon +%(msisdn)s. Syötä siinä oleva varmistuskoodi.",
+    "Failed to deactivate user": "Käyttäjän deaktivointi epäonnistui",
+    "Hide advanced": "Piilota edistyneet",
+    "Show advanced": "Näytä edistyneet",
+    "Document": "Asiakirja"
 }
