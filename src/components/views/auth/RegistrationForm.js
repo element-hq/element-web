@@ -99,7 +99,7 @@ module.exports = createReactClass({
             let desc;
             if (this.props.serverRequiresIdServer && !haveIs) {
                 desc = _t(
-                    "No Identity Server is configured so you cannot add add an email address in order to " +
+                    "No identity server is configured so you cannot add an email address in order to " +
                     "reset your password in the future.",
                 );
             } else {
@@ -602,8 +602,8 @@ module.exports = createReactClass({
         if (this.props.serverRequiresIdServer && !haveIs) {
             noIsText = <div>
                 {_t(
-                    "No Identity Server is configured: no email addreses can be added. " +
-                    "You will be unable to reset your password.",
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
                 )}
             </div>;
         }
