@@ -13,7 +13,6 @@
     "powered by Matrix": "powered by Matrix",
     "Custom Server Options": "Custom Server Options",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.",
     "Dismiss": "Dismiss",
     "Welcome to Riot.im": "Welcome to Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
