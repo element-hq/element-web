@@ -2262,5 +2262,15 @@
     "Symbols": "Symboles",
     "Flags": "Drapeaux",
     "React": "Réagir",
-    "Cancel search": "Annuler la recherche"
+    "Cancel search": "Annuler la recherche",
+    "Use the new, consistent UserInfo panel for Room Members and Group Members": "Utilisez le nouveau panneau d’informations utilisateur uniforme, pour les membres des salons et des groupes",
+    "Trust & Devices": "Confiance & appareils",
+    "Direct messages": "Messages directs",
+    "Failed to deactivate user": "Échec de la désactivation de l’utilisateur",
+    "This client does not support end-to-end encryption.": "Ce client ne prend pas en charge le chiffrement de bout en bout.",
+    "Messages in this room are not end-to-end encrypted.": "Les messages dans ce salon ne sont pas chiffrés de bout en bout.",
+    "Jump to first unread room.": "Sauter au premier salon non lu.",
+    "Jump to first invite.": "Sauter à la première invitation.",
+    "Room %(name)s": "Salon %(name)s",
+    "Recent rooms": "Salons récents"
 }
