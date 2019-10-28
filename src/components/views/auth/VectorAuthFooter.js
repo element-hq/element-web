@@ -48,6 +48,4 @@ module.exports = () => {
         </div>
     );
 };
-module.exports.statics = {
-    replaces: 'AuthFooter',
-};
+module.exports.replaces = 'AuthFooter';

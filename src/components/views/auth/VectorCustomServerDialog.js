@@ -49,6 +49,4 @@ module.exports = ({onFinished}) => {
         </div>
     );
 };
-module.exports.statics = {
-    replaces: 'CustomServerDialog',
-};
+module.exports.replaces = 'CustomServerDialog';
