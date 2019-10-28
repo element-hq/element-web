@@ -103,7 +103,7 @@ identifiers like emails and phone numbers. It is not used to store your password
 or account information.
 
 As of Riot 1.4.0, all identity server functions are optional and you are
-prompted to agree terms before data is sent to the identity server.
+prompted to agree to terms before data is sent to the identity server.
 
 Riot will check multiple sources when looking for an identity server to use in
 the following order of preference:
