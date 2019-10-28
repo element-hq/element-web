@@ -610,7 +610,7 @@ export function onLoggedOut() {
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({action: 'on_logged_out'});
+    dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
     _clearStorage().done();
 }
