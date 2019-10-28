@@ -2116,5 +2116,6 @@
     "Jump to first unread room.": "읽지 않은 첫 방으로 건너뜁니다.",
     "Jump to first invite.": "첫 초대로 건너뜁니다.",
     "Room %(name)s": "%(name)s 방",
-    "Recent rooms": "최근 방"
+    "Recent rooms": "최근 방",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "설정된 ID 서버가 없어서 이후 비밀번호를 초기화하기 위한 이메일 주소를 추가할 수 없습니다."
 }
