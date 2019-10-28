@@ -42,7 +42,7 @@
     "Create Account": "Создать аккаунт",
     "Need help?": "Помочь?",
     "Room Directory": "Каталог комнат",
-    "Explore rooms": "Исследовать комнаты",
+    "Explore rooms": "Исследуйте комнаты",
     "Unexpected error preparing the app. See console for details.": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Неверная конфигурация: может указывать только один из следующих параметров: default_server_config, default_server_name или default_hs_url.",
     "Invalid configuration: no default server specified.": "Неверная конфигурация: сервер по умолчанию не указан.",

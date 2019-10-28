@@ -2,7 +2,7 @@
     "Unknown device": "Nežinomas įrenginys",
     "powered by Matrix": "veikia su Matrix",
     "Welcome to Riot.im": "Sveiki atvykę į Riot.im",
-    "Chat with Riot Bot": "Kalbėtis su Riot robotu",
+    "Chat with Riot Bot": "Kalbėtis su Riot botu",
     "General discussion about Matrix and Riot": "Bendros diskusijos apie Matrix ir Riot",
     "Matrix technical discussions": "Matrix techninės diskusijos",
     "Riot is not supported on mobile web. Install the app?": "Riot nėra palaikoma naršant svetainėje mobiliaisiais įrenginiais. Įdiegti programėlę?",
@@ -35,5 +35,10 @@
     "Contributing code to Matrix and Riot": "Matrix ir Riot kodo plėtojimas",
     "Dev chat for the Riot/Web dev team": "Kūrėjų pokalbiai, skirti Riot/Web kūrėjų komandai",
     "Dev chat for the Dendrite dev team": "Kūrėjų pokalbiai, skirti Dendrite kūrėjų komandai",
-    "Co-ordination for Riot translators": "Koordinavimas Riot vertėjams"
+    "Co-ordination for Riot translators": "Koordinavimas Riot vertėjams",
+    "Sign In": "Prisijungti",
+    "Create Account": "Sukurti paskyrą",
+    "Need help?": "Reikia pagalbos?",
+    "Explore rooms": "Peržiūrėti kambarius",
+    "Room Directory": "Kambarių katalogas"
 }
