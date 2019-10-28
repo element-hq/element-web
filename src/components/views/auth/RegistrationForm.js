@@ -97,15 +97,15 @@ module.exports = createReactClass({
             const haveIs = Boolean(this.props.serverConfig.isUrl);
 
             let desc;
-            if (haveIs) {
+            if (this.props.serverRequiresIdServer && !haveIs) {
                 desc = _t(
-                    "If you don't specify an email address, you won't be able to reset your password. " +
-                    "Are you sure?",
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
                 );
             } else {
                 desc = _t(
-                    "No Identity Server is configured so you cannot add add an email address in order to " +
-                    "reset your password in the future.",
+                    "If you don't specify an email address, you won't be able to reset your password. " +
+                    "Are you sure?",
                 );
             }
 
@@ -439,7 +439,10 @@ module.exports = createReactClass({
 
     _showEmail() {
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if ((this.props.serverRequiresIdServer && !haveIs) || !this._authStepIsUsed('m.login.email.identity')) {
+        if (
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.email.identity')
+        ) {
             return false;
         }
         return true;
@@ -448,8 +451,11 @@ module.exports = createReactClass({
     _showPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        const haveRequiredIs = this.props.serverRequiresIdServer && !haveIs;
-        if (!threePidLogin || haveRequiredIs || !this._authStepIsUsed('m.login.msisdn')) {
+        if (
+            !threePidLogin ||
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.msisdn')
+        ) {
             return false;
         }
         return true;
@@ -592,12 +598,15 @@ module.exports = createReactClass({
             }
         }
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        const noIsText = haveIs ? null : <div>
-            {_t(
-                "No Identity Server is configured: no email addreses can be added. " +
-                "You will be unable to reset your password.",
-            )}
-        </div>;
+        let noIsText = null;
+        if (this.props.serverRequiresIdServer && !haveIs) {
+            noIsText = <div>
+                {_t(
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
+                )}
+            </div>;
+        }
 
         return (
             <div>
