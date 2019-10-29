@@ -279,6 +279,10 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "integration_provisioning": {
+        supportedLevels: ['account'],
+        default: true,
+    },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Send analytics data'),

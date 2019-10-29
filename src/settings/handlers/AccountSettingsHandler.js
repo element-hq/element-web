@@ -23,6 +23,8 @@ const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
 const BREADCRUMBS_EVENT_TYPES = [BREADCRUMBS_LEGACY_EVENT_TYPE, BREADCRUMBS_EVENT_TYPE];
 
+const INTEG_PROVISIONING_EVENT_TYPE = "im.vector.setting.integration_provisioning";
+
 /**
  * Gets and sets settings at the "account" level for the current user.
  * This handler does not make use of the roomId parameter.
@@ -61,6 +63,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             }
         } else if (BREADCRUMBS_EVENT_TYPES.includes(event.getType())) {
             this._notifyBreadcrumbsUpdate(event);
+        } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
+            let val = event.getContent()['enabled'];
+            this._watchers.notifyUpdate("integration_provisioning", null, SettingLevel.ACCOUNT, val);
         }
     }
 
@@ -85,6 +90,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             }
 
             return content && content['recent_rooms'] ? content['recent_rooms'] : [];
+        }
+
+        // Special case integration manager provisioning
+        if (settingName === "integration_provisioning") {
+            const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE);
+            return content ? content['enabled'] : null;
         }
 
         const settings = this._getSettings() || {};
@@ -118,6 +129,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
             content['recent_rooms'] = newValue;
             return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
+        }
+
+        // Special case integration manager provisioning
+        if (settingName === "integration_provisioning") {
+            const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE) || {};
+            content['enabled'] = newValue;
+            return MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);
         }
 
         const content = this._getSettings() || {};
