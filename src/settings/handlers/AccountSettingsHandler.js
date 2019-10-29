@@ -65,7 +65,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             this._notifyBreadcrumbsUpdate(event);
         } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
             const val = event.getContent()['enabled'];
-            this._watchers.notifyUpdate("integration_provisioning", null, SettingLevel.ACCOUNT, val);
+            this._watchers.notifyUpdate("integrationProvisioning", null, SettingLevel.ACCOUNT, val);
         }
     }
 
@@ -93,7 +93,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         }
 
         // Special case integration manager provisioning
-        if (settingName === "integration_provisioning") {
+        if (settingName === "integrationProvisioning") {
             const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE);
             return content ? content['enabled'] : null;
         }
@@ -132,7 +132,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         }
 
         // Special case integration manager provisioning
-        if (settingName === "integration_provisioning") {
+        if (settingName === "integrationProvisioning") {
             const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE) || {};
             content['enabled'] = newValue;
             return MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);

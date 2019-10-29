@@ -279,7 +279,7 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
-    "integration_provisioning": {
+    "integrationProvisioning": {
         supportedLevels: ['account'],
         default: true,
     },
