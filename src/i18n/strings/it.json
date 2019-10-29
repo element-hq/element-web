@@ -2219,5 +2219,6 @@
     "Command Autocomplete": "Autocompletamento comando",
     "DuckDuckGo Results": "Risultati DuckDuckGo",
     "Room %(name)s": "Stanza %(name)s",
-    "Recent rooms": "Stanze recenti"
+    "Recent rooms": "Stanze recenti",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Nessun server di identità configurato, perciò non puoi aggiungere un indirizzo email per ripristinare la tua password in futuro."
 }
