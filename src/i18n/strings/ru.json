@@ -2155,5 +2155,10 @@
     "Symbols": "Символы",
     "Flags": "Флаги",
     "React": "Реакция",
-    "Cancel search": "Отмена поиска"
+    "Cancel search": "Отмена поиска",
+    "Room %(name)s": "Комната %(name)s",
+    "Recent rooms": "Недавние комнаты",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Сервер идентификации не настроен, поэтому вы не можете добавить адрес электронной почты, чтобы в будущем сбросить пароль.",
+    "Jump to first unread room.": "Перейти в первую непрочитанную комнату.",
+    "Jump to first invite.": "Перейти к первому приглашению."
 }

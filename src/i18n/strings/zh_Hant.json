@@ -2265,5 +2265,6 @@
     "Jump to first unread room.": "跳到第一個未讀的聊天室。",
     "Jump to first invite.": "跳到第一個邀請。",
     "Room %(name)s": "聊天室 %(name)s",
-    "Recent rooms": "最近的聊天室"
+    "Recent rooms": "最近的聊天室",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "未設定身份識別伺服器，所以您無法新增電子郵件以在未來重設您的密碼。"
 }
