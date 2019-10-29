@@ -73,26 +73,11 @@ guide](https://yarnpkg.com/docs/install/) if you do not have it already.
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
 1. Switch to the riot-web directory: `cd riot-web`.
 1. Install the prerequisites: `yarn install`.
-1. If you're using the `develop` branch then it is recommended to set up a proper
-   development environment ("Setting up a dev environment" below) however one can
-   install the develop versions of the dependencies instead:
-   ```bash
-   scripts/fetch-develop.deps.sh
-   ```
-   Whenever you git pull on `riot-web` you will also probably need to force an update
-   to these dependencies - the simplest way is to re-run the script, but you can also
-   manually update and rebuild them:
-   ```bash
-   cd matrix-js-sdk
-   git pull
-   yarn install # re-run to pull in any new dependencies
-   cd ../matrix-react-sdk
-   git pull
-   yarn install
-   ```
-   Or just use https://riot.im/develop - the continuous integration release of the
-   develop branch. (Note that we don't reference the develop versions in git directly
-   due to https://github.com/npm/npm/issues/3055.)
+   *  If you're using the `develop` branch, then it is recommended to set up a
+      proper development environment (see [Setting up a dev
+      environment](#setting-up-a-dev-environment) below). Alternatively, you
+      can use https://riot.im/develop - the continuous integration release of
+      the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](docs/config.md) for details.
 1. `yarn dist` to build a tarball to deploy. Untaring this file will give
