@@ -108,7 +108,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
         // Special case allowed widgets
         if (settingName === "allowedWidgets") {
-            return return MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
+            return MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
         }
 
         const content = this._getSettings(roomId) || {};
