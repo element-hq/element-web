@@ -211,6 +211,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('setAutoHideMenuBarEnabled', enabled);
     }
 
+    supportsTrayIcon(): boolean {
+        // Things other than Mac support tray icons
+        return !navigator.platform.toUpperCase().includes('MAC');
+    }
+
+    async getTrayIconEnabled(): boolean {
+        return this._ipcCall('getTrayIconEnabled');
+    }
+
+    async setTrayIconEnabled(enabled: boolean): void {
+        return this._ipcCall('setTrayIconEnabled', enabled);
+    }
+
     supportsMinimizeToTray(): boolean {
         return true;
     }

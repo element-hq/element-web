@@ -26,6 +26,13 @@ exports.hasTray = function hasTray() {
     return (trayIcon !== null);
 };
 
+exports.destroy = function() {
+    if (trayIcon) {
+        trayIcon.destroy();
+        trayIcon = null;
+    }
+};
+
 exports.create = function(config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) return;

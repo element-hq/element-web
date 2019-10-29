@@ -86,8 +86,16 @@ const store = new Store({ name: "electron-config" });
 
 let mainWindow = null;
 global.appQuitting = false;
-global.minimizeToTray = store.get('minimizeToTray', true);
+global.showTrayIcon = store.get("showTrayIcon", true);
+global.minimizeToTray = global.showTrayIcon && store.get('minimizeToTray', true);
 
+// It's important to call `path.join` so we don't end up with the packaged asar in the final path.
+const iconFile = `riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
+const iconPath = path.join(__dirname, "..", "img", iconFile);
+const trayConfig = {
+    icon_path: iconPath,
+    brand: vectorConfig.brand || 'Riot',
+};
 
 // handle uncaught errors otherwise it displays
 // stack traces in popup dialogs, which is terrible (which
@@ -165,6 +173,20 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             } else {
                 launcher.disable();
             }
+            break;
+        case 'getTrayIconEnabled':
+            ret = global.showTrayIcon;
+            break;
+        case 'setTrayIconEnabled':
+            if (args[0]) {
+                // Create trayIcon icon
+                tray.create(trayConfig);
+            } else {
+                tray.destroy();
+            }
+            store.set('minimizeToTray', global.showTrayIcon = args[0]);
+            // re-evaluate whether we should be minimizing to tray
+            global.minimizeToTray = global.showTrayIcon && store.get('minimizeToTray', true);
             break;
         case 'getMinimizeToTrayEnabled':
             ret = global.minimizeToTray;
@@ -329,11 +351,6 @@ app.on('ready', () => {
         console.log('No update_base_url is defined: auto update is disabled');
     }
 
-    // It's important to call `path.join` so we don't end up with the packaged
-    // asar in the final path.
-    const iconFile = `riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
-    const iconPath = path.join(__dirname, "..", "..", "img", iconFile);
-
     // Load the previous window state with fallback to defaults
     const mainWindowState = windowStateKeeper({
         defaultWidth: 1024,
@@ -371,10 +388,7 @@ app.on('ready', () => {
     mainWindow.hide();
 
     // Create trayIcon icon
-    tray.create({
-        icon_path: iconPath,
-        brand: vectorConfig.brand || 'Riot',
-    });
+    if (global.showTrayIcon) tray.create(trayConfig);
 
     mainWindow.once('ready-to-show', () => {
         mainWindowState.manage(mainWindow);
