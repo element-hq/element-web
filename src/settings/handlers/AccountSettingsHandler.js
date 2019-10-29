@@ -64,7 +64,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (BREADCRUMBS_EVENT_TYPES.includes(event.getType())) {
             this._notifyBreadcrumbsUpdate(event);
         } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
-            let val = event.getContent()['enabled'];
+            const val = event.getContent()['enabled'];
             this._watchers.notifyUpdate("integration_provisioning", null, SettingLevel.ACCOUNT, val);
         }
     }
