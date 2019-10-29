@@ -389,6 +389,8 @@ module.exports = createReactClass({
             ariaLabel += " " + _t("%(count)s unread messages.", { count: notificationCount });
         } else if (mentionBadges && !isInvite) {
             ariaLabel += " " + _t("Unread mentions.");
+        } else if (this.props.unread) {
+            ariaLabel += " " + _t("Unread messages.");
         }
 
         return <AccessibleButton tabIndex="0"
