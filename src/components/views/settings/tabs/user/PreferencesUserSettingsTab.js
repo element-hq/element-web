@@ -69,6 +69,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunchSupported: false,
             alwaysShowMenuBar: true,
             alwaysShowMenuBarSupported: false,
+            showTrayIcon: false,
+            showTrayIconSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
             autocompleteDelay:
@@ -85,21 +87,24 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
         let autoLaunch = false;
-
         if (autoLaunchSupported) {
             autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
         const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
         let alwaysShowMenuBar = true;
-
         if (alwaysShowMenuBarSupported) {
             alwaysShowMenuBar = !await platform.getAutoHideMenuBarEnabled();
         }
 
+        const showTrayIconSupported = await platform.supportsTrayIcon();
+        let showTrayIcon = true;
+        if (showTrayIconSupported) {
+            showTrayIcon = await platform.getTrayIconEnabled();
+        }
+
         const minimizeToTraySupported = await platform.supportsMinimizeToTray();
         let minimizeToTray = true;
-
         if (minimizeToTraySupported) {
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
@@ -109,6 +114,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunchSupported,
             alwaysShowMenuBarSupported,
             alwaysShowMenuBar,
+            showTrayIconSupported,
+            showTrayIcon,
             minimizeToTraySupported,
             minimizeToTray,
         });
@@ -120,6 +127,10 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
     _onAlwaysShowMenuBarChange = (checked) => {
         PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
+    };
+
+    _onShowTrayIconChange = (checked) => {
+        PlatformPeg.get().setTrayIconEnabled(checked).then(() => this.setState({showTrayIcon: checked}));
     };
 
     _onMinimizeToTrayChange = (checked) => {
@@ -163,10 +174,22 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 label={_t('Always show the window menu bar')} />;
         }
 
+        let enableTrayIcon = null;
+        if (this.state.showTrayIconSupported) {
+            enableTrayIcon = <LabelledToggleSwitch
+                value={this.state.showTrayIcon}
+                onChange={this._onShowTrayIconChange}
+                label={_t('Show tray icon')} />;
+        }
+
         let minimizeToTrayOption = null;
         if (this.state.minimizeToTraySupported) {
+            // If tray icon is disabled then this option is not available and forced to off.
+            // Unless tray icon is not supported (darwin)
+            const disableOption = this.state.showTrayIconSupported && !this.state.showTrayIcon;
             minimizeToTrayOption = <LabelledToggleSwitch
-                value={this.state.minimizeToTray}
+                value={!disableOption && this.state.minimizeToTray}
+                disabled={disableOption}
                 onChange={this._onMinimizeToTrayChange}
                 label={_t('Close button should minimize window to tray')} />;
         }
@@ -186,6 +209,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
+                    {enableTrayIcon}
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}

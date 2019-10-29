@@ -140,6 +140,18 @@ export default class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    supportsTrayIcon(): boolean {
+        return false;
+    }
+
+    async getTrayIconEnabled(): boolean {
+        return false;
+    }
+
+    async setTrayIconEnabled(enabled: boolean): void {
+        throw new Error("Unimplemented");
+    }
+
     supportsMinimizeToTray(): boolean {
         return false;
     }
