@@ -212,7 +212,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     supportsMinimizeToTray(): boolean {
-        return true;
+        // Things other than Mac support tray icons
+        return !navigator.platform.toUpperCase().includes('MAC');
     }
 
     async getMinimizeToTrayEnabled(): boolean {
