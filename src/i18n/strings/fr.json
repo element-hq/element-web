@@ -2273,5 +2273,8 @@
     "Jump to first invite.": "Sauter à la première invitation.",
     "Room %(name)s": "Salon %(name)s",
     "Recent rooms": "Salons récents",
-    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Aucun serveur d’identité n’est configuré donc vous ne pouvez pas ajouter une adresse e-mail afin de réinitialiser votre mot de passe dans l’avenir."
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Aucun serveur d’identité n’est configuré donc vous ne pouvez pas ajouter une adresse e-mail afin de réinitialiser votre mot de passe dans l’avenir.",
+    "%(count)s unread messages including mentions.|one": "1 mention non lue.",
+    "%(count)s unread messages.|one": "1 message non lu.",
+    "Unread messages.": "Messages non lus."
 }
