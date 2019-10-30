@@ -86,8 +86,6 @@ const store = new Store({ name: "electron-config" });
 
 let mainWindow = null;
 global.appQuitting = false;
-global.showTrayIcon = store.get("showTrayIcon", true);
-global.minimizeToTray = global.showTrayIcon && store.get('minimizeToTray', true);
 
 // It's important to call `path.join` so we don't end up with the packaged asar in the final path.
 const iconFile = `riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
@@ -174,25 +172,17 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 launcher.disable();
             }
             break;
-        case 'getTrayIconEnabled':
-            ret = global.showTrayIcon;
+        case 'getMinimizeToTrayEnabled':
+            ret = tray.hasTray();
             break;
-        case 'setTrayIconEnabled':
+        case 'setMinimizeToTrayEnabled':
             if (args[0]) {
                 // Create trayIcon icon
                 tray.create(trayConfig);
             } else {
                 tray.destroy();
             }
-            store.set('minimizeToTray', global.showTrayIcon = args[0]);
-            // re-evaluate whether we should be minimizing to tray
-            global.minimizeToTray = global.showTrayIcon && store.get('minimizeToTray', true);
-            break;
-        case 'getMinimizeToTrayEnabled':
-            ret = global.minimizeToTray;
-            break;
-        case 'setMinimizeToTrayEnabled':
-            store.set('minimizeToTray', global.minimizeToTray = args[0]);
+            store.set('minimizeToTray', args[0]);
             break;
         case 'getAutoHideMenuBarEnabled':
             ret = global.mainWindow.isMenuBarAutoHide();
@@ -388,7 +378,7 @@ app.on('ready', () => {
     mainWindow.hide();
 
     // Create trayIcon icon
-    if (global.showTrayIcon) tray.create(trayConfig);
+    if (store.get('minimizeToTray', true)) tray.create(trayConfig);
 
     mainWindow.once('ready-to-show', () => {
         mainWindowState.manage(mainWindow);
@@ -405,7 +395,8 @@ app.on('ready', () => {
         mainWindow = global.mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (global.minimizeToTray && !global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
+        // If we are not quitting and have a tray icon then minimize to tray
+        if (!global.appQuitting && tray.hasTray()) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
