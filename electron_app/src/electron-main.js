@@ -373,10 +373,6 @@ app.on('ready', () => {
     mainWindow.loadURL('vector://vector/webapp/');
     Menu.setApplicationMenu(vectorMenu);
 
-    // explicitly hide because setApplicationMenu on Linux otherwise shows...
-    // https://github.com/electron/electron/issues/9621
-    mainWindow.hide();
-
     // Create trayIcon icon
     if (store.get('minimizeToTray', true)) tray.create(trayConfig);
 
