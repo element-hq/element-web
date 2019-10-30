@@ -118,16 +118,17 @@ ipcMain.on('loudNotification', function() {
     }
 });
 
-let powerSaveBlockerId;
+let powerSaveBlockerId = null;
 ipcMain.on('app_onAction', function(ev, payload) {
     switch (payload.action) {
         case 'call_state':
-            if (powerSaveBlockerId && powerSaveBlocker.isStarted(powerSaveBlockerId)) {
+            if (powerSaveBlockerId !== null && powerSaveBlocker.isStarted(powerSaveBlockerId)) {
                 if (payload.state === 'ended') {
                     powerSaveBlocker.stop(powerSaveBlockerId);
+                    powerSaveBlockerId = null;
                 }
             } else {
-                if (payload.state === 'connected') {
+                if (powerSaveBlockerId === null && payload.state === 'connected') {
                     powerSaveBlockerId = powerSaveBlocker.start('prevent-display-sleep');
                 }
             }
