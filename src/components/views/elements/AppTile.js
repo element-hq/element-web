@@ -190,9 +190,20 @@ export default class AppTile extends React.Component {
 
         // TODO: Pick the right manager for the widget
 
+        const defaultManager = managers.getPrimaryManager();
+        if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
+            console.warn('Non-scalar manager, not setting scalar token!', url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
+            return;
+        }
+
         // Fetch the token before loading the iframe as we need it to mangle the URL
         if (!this._scalarClient) {
-            this._scalarClient = managers.getPrimaryManager().getScalarClient();
+            this._scalarClient = defaultManager.getScalarClient();
         }
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param if not already present

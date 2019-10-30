@@ -205,7 +205,7 @@ function _setCallListeners(call) {
 
 function _setCallState(call, roomId, status) {
     console.log(
-        "Call state in %s changed to %s (%s)", roomId, status, (call ? call.call_state : "-"),
+        `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
     );
     calls[roomId] = call;
 

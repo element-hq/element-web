@@ -2272,5 +2272,6 @@
     "Jump to first unread room.": "Sauter au premier salon non lu.",
     "Jump to first invite.": "Sauter à la première invitation.",
     "Room %(name)s": "Salon %(name)s",
-    "Recent rooms": "Salons récents"
+    "Recent rooms": "Salons récents",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Aucun serveur d’identité n’est configuré donc vous ne pouvez pas ajouter une adresse e-mail afin de réinitialiser votre mot de passe dans l’avenir."
 }
