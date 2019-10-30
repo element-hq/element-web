@@ -85,21 +85,18 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
         let autoLaunch = false;
-
         if (autoLaunchSupported) {
             autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
         const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
         let alwaysShowMenuBar = true;
-
         if (alwaysShowMenuBarSupported) {
             alwaysShowMenuBar = !await platform.getAutoHideMenuBarEnabled();
         }
 
         const minimizeToTraySupported = await platform.supportsMinimizeToTray();
         let minimizeToTray = true;
-
         if (minimizeToTraySupported) {
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
@@ -168,7 +165,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
             minimizeToTrayOption = <LabelledToggleSwitch
                 value={this.state.minimizeToTray}
                 onChange={this._onMinimizeToTrayChange}
-                label={_t('Close button should minimize window to tray')} />;
+                label={_t('Show tray icon and minimize window to it on close')} />;
         }
 
         return (
