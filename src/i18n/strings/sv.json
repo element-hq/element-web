@@ -1812,5 +1812,7 @@
     "Connect this device to Key Backup": "Anslut den här enheten till nyckelsäkerhetskopiering",
     "Backing up %(sessionsRemaining)s keys...": "Säkerhetskopierar %(sessionsRemaining)s nycklar...",
     "All keys backed up": "Alla nycklar säkerhetskopierade",
-    "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.": "Säkerhetskopian har en signatur från <verify>okänd</verify> enhet med ID %(deviceId)s."
+    "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.": "Säkerhetskopian har en signatur från <verify>okänd</verify> enhet med ID %(deviceId)s.",
+    "Add Email Address": "Lägg till e-postadress",
+    "Add Phone Number": "Lägg till telefonnummer"
 }
