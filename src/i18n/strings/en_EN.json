@@ -1094,6 +1094,7 @@
     "Invalid file%(extra)s": "Invalid file%(extra)s",
     "Error decrypting image": "Error decrypting image",
     "Show image": "Show image",
+    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
     "Error decrypting video": "Error decrypting video",
     "Show all": "Show all",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
