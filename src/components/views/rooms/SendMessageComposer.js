@@ -37,7 +37,7 @@ import SendHistoryManager from "../../../SendHistoryManager";
 import {processCommandInput} from '../../../SlashCommands';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
 
@@ -214,12 +214,20 @@ export default class SendMessageComposer extends React.Component {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 // assume the error is a server error when the command is async
                 const isServerError = !!cmd.promise;
-                const title = isServerError ? "Server error" : "Command error";
+                const title = isServerError ? _td("Server error") : _td("Command error");
+
+                let errText;
+                if (typeof error === 'string') {
+                    errText = error;
+                } else if (error.message) {
+                    errText = error.message;
+                } else {
+                    errText = _t("Server unavailable, overloaded, or something else went wrong.");
+                }
+
                 Modal.createTrackedDialog(title, '', ErrorDialog, {
-                    title: isServerError ? _t("Server error") : _t("Command error"),
-                    description: error.message ? error.message : _t(
-                        "Server unavailable, overloaded, or something else went wrong.",
-                    ),
+                    title: _t(title),
+                    description: errText,
                 });
             } else {
                 console.log("Command success.");
