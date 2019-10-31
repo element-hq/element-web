@@ -78,11 +78,13 @@ export class Mjolnir {
             const resp = await MatrixClientPeg.get().createRoom({
                 name: _t("My Ban List"),
                 topic: _t("This is your list of users/servers you have blocked - don't leave the room!"),
-                preset: "private_chat"
+                preset: "private_chat",
             });
             personalRoomId = resp['room_id'];
-            await SettingsStore.setValue("mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
-            await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, [personalRoomId, ...this._roomIds]);
+            await SettingsStore.setValue(
+                "mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
+            await SettingsStore.setValue(
+                "mjolnirRooms", null, SettingLevel.ACCOUNT, [personalRoomId, ...this._roomIds]);
         }
         if (!personalRoomId) {
             throw new Error("Error finding a room ID to use");

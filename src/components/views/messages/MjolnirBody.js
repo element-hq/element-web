@@ -32,7 +32,8 @@ export default class MjolnirBody extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
-        localStorage.setItem(`mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`, "true");
+        const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
+        localStorage.setItem(key, "true");
         this.props.onTileUpdate();
     };
 

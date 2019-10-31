@@ -88,7 +88,8 @@ module.exports = createReactClass({
         }
 
         if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
-            const allowRender = localStorage.getItem(`mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`) === "true";
+            const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
+            const allowRender = localStorage.getItem(key) === "true";
 
             if (!allowRender) {
                 const userDomain = this.props.mxEvent.getSender().split(':').slice(1).join(':');

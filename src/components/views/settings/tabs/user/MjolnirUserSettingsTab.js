@@ -194,7 +194,9 @@ export default class MjolnirUserSettingsTab extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const personalList = Mjolnir.sharedInstance().getPersonalList();
-        const lists = Mjolnir.sharedInstance().lists.filter(b => personalList ? personalList.roomId !== b.roomId : true);
+        const lists = Mjolnir.sharedInstance().lists.filter(b => {
+            return personalList? personalList.roomId !== b.roomId : true;
+        });
         if (!lists || lists.length <= 0) return <i>{_t("You are not subscribed to any lists")}</i>;
 
         const tiles = [];
@@ -239,19 +241,19 @@ export default class MjolnirUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_heading">{_t("Ignored users")}</div>
                 <div className="mx_SettingsTab_section">
                     <div className='mx_SettingsTab_subsectionText'>
-                        <span className='warning'>{_t("⚠ These settings are meant for advanced users.")}</span><br/>
-                        <br/>
+                        <span className='warning'>{_t("⚠ These settings are meant for advanced users.")}</span><br />
+                        <br />
                         {_t(
                             "Add users and servers you want to ignore here. Use asterisks " +
                             "to have Riot match any characters. For example, <code>@bot:*</code> " +
                             "would ignore all users that have the name 'bot' on any server.",
                             {}, {code: (s) => <code>{s}</code>},
-                        )}<br/>
-                        <br/>
+                        )}<br />
+                        <br />
                         {_t(
                             "Ignoring people is done through ban lists which contain rules for " +
                             "who to ban. Subscribing to a ban list means the users/servers blocked by " +
-                            "that list will be hidden from you."
+                            "that list will be hidden from you.",
                         )}
                     </div>
                 </div>

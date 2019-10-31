@@ -50,5 +50,4 @@ export class MatrixGlob {
     test(val: string): boolean {
         return this._regex.test(val);
     }
-
 }
