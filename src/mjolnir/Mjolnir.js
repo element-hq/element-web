@@ -66,7 +66,14 @@ export class Mjolnir {
 
     stop() {
         SettingsStore.unwatchSetting(this._mjolnirWatchRef);
-        dis.unregister(this._dispatcherRef);
+
+        try {
+            if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
+        } catch (e) {
+            console.error(e);
+            // Only the tests cause problems with this particular block of code. We should
+            // never be here in production.
+        }
 
         if (!MatrixClientPeg.get()) return;
         MatrixClientPeg.get().removeListener("RoomState.events", this._onEvent.bind(this));
