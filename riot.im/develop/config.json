@@ -27,7 +27,8 @@
         "feature_sas": "labs",
         "feature_room_breadcrumbs": "labs",
         "feature_state_counters": "labs",
-        "feature_many_integration_managers": "labs"
+        "feature_many_integration_managers": "labs",
+        "feature_mjolnir": "labs"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
