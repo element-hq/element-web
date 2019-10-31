@@ -33,6 +33,14 @@ export class Mjolnir {
     constructor() {
     }
 
+    get roomIds(): string[] {
+        return this._roomIds;
+    }
+
+    get lists(): BanList[] {
+        return this._lists;
+    }
+
     start() {
         this._mjolnirWatchRef = SettingsStore.watchSetting("mjolnirRooms", null, this._onListsChanged.bind(this));
 
@@ -99,6 +107,18 @@ export class Mjolnir {
         // we're just trying to get the caller some utility access to the list
 
         return list;
+    }
+
+    async subscribeToList(roomId: string) {
+        const roomIds = [...this._roomIds, roomId];
+        await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, roomIds);
+        this._lists.push(new BanList(roomId));
+    }
+
+    async unsubscribeFromList(roomId: string) {
+        const roomIds = this._roomIds.filter(r => r !== roomId);
+        await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, roomIds);
+        this._lists = this._lists.filter(b => b.roomId !== roomId);
     }
 
     _onEvent(event) {
