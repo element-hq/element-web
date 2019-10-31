@@ -389,6 +389,8 @@
     "Call invitation": "Call invitation",
     "Messages sent by bot": "Messages sent by bot",
     "When rooms are upgraded": "When rooms are upgraded",
+    "My Ban List": "My Ban List",
+    "This is your list of users/servers you have blocked - don't leave the room!": "This is your list of users/servers you have blocked - don't leave the room!",
     "Active call (%(roomName)s)": "Active call (%(roomName)s)",
     "unknown caller": "unknown caller",
     "Incoming voice call from %(name)s": "Incoming voice call from %(name)s",
