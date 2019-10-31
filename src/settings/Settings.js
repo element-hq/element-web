@@ -126,6 +126,20 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_mjolnir": {
+        isFeature: true,
+        displayName: _td("Try out new ways to ignore people (experimental)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "mjolnirRooms": {
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "mjolnirPersonalRoom": {
+        supportedLevels: ['account'],
+        default: null,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
