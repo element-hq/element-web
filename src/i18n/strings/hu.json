@@ -2263,5 +2263,6 @@
     "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Azonosítási szerver nincs beállítva, így nem tudsz hozzáadni e-mail címet amivel vissza lehetne állítani a jelszót a későbbiekben.",
     "%(count)s unread messages including mentions.|one": "1 olvasatlan megemlítés.",
     "%(count)s unread messages.|one": "1 olvasatlan üzenet.",
-    "Unread messages.": "Olvasatlan üzenetek."
+    "Unread messages.": "Olvasatlan üzenetek.",
+    "Show tray icon and minimize window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor"
 }
