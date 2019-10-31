@@ -20,11 +20,11 @@ RUN dos2unix /riot/scripts/docker-link-repos.sh \
     && sh /riot/scripts/docker-link-repos.sh
 
 # Cache package.json
+COPY src/header /riot/src/
 COPY package.json yarn.lock /riot/
 
 # Remove 'prepare' script because there is NO config in yarn and npm for
 # disabling it and is not necessary for development build
-RUN sed -i -e '/"prepare":/d' /riot/package.json
 RUN yarn --network-timeout=100000 install
 
 # Overlay src files with the original ones in case something was left out
