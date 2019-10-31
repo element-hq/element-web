@@ -16,28 +16,115 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
+import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
+import {ListRule} from "../../../../../mjolnir/ListRule";
+import {RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
+import Modal from "../../../../../Modal";
+
 const sdk = require("../../../../..");
 
 export default class MjolnirUserSettingsTab extends React.Component {
     constructor() {
         super();
+
+        this.state = {
+            busy: false,
+            newPersonalRule: "",
+        };
+    }
+
+    _onPersonalRuleChanged = (e) => {
+        this.setState({newPersonalRule: e.target.value});
+    };
+
+    _onAddPersonalRule = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let kind = RULE_SERVER;
+        if (this.state.newPersonalRule.startsWith("@")) {
+            kind = RULE_USER;
+        }
+
+        this.setState({busy: true});
+        try {
+            const list = await Mjolnir.sharedInstance().getOrCreatePersonalList();
+            await list.banEntity(kind, this.state.newPersonalRule, _t("Ignored/Blocked"));
+            this.setState({newPersonalRule: ""}); // this will also cause the new rule to be rendered
+        } catch (e) {
+            console.error(e);
+
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to remove Mjolnir rule', '', ErrorDialog, {
+                title: _t('Error removing ignored user/server'),
+                description: _t('Something went wrong. Please try again or view your console for hints.'),
+            });
+        } finally {
+            this.setState({busy: false});
+        }
+    };
+
+    async _removePersonalRule(rule: ListRule) {
+        this.setState({busy: true});
+        try {
+            const list = Mjolnir.sharedInstance().getPersonalList();
+            await list.unbanEntity(rule.kind, rule.entity);
+        } catch (e) {
+            console.error(e);
+
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to remove Mjolnir rule', '', ErrorDialog, {
+                title: _t('Error removing ignored user/server'),
+                description: _t('Something went wrong. Please try again or view your console for hints.'),
+            });
+        } finally {
+            this.setState({busy: false});
+        }
+    }
+
+    _renderPersonalBanListRules() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        const list = Mjolnir.sharedInstance().getPersonalList();
+        const rules = list ? [...list.userRules, ...list.serverRules] : [];
+        if (!list || rules.length <= 0) return <i>{_t("You have not ignored anyone.")}</i>;
+
+        const tiles = [];
+        for (const rule of rules) {
+            tiles.push(
+                <li key={rule.entity} className="mx_MjolnirUserSettingsTab_personalRule">
+                    <AccessibleButton kind="danger_sm" onClick={() => this._removePersonalRule(rule)}
+                                      disabled={this.state.busy}>
+                        {_t("Remove")}
+                    </AccessibleButton>&nbsp;
+                    <code>{rule.entity}</code>
+                </li>,
+            );
+        }
+
+        return <div><p>{_t("You are currently ignoring:")}</p>
+            <ul>{tiles}</ul>
+        </div>;
     }
 
     render() {
+        const Field = sdk.getComponent('elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         return (
-            <div className="mx_SettingsTab">
+            <div className="mx_SettingsTab mx_MjolnirUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Ignored users")}</div>
                 <div className="mx_SettingsTab_section">
                     <div className='mx_SettingsTab_subsectionText'>
-                        <span className='warning'>{_t("⚠ These settings are meant for advanced users.")}</span><br />
-                        <br />
+                        <span className='warning'>{_t("⚠ These settings are meant for advanced users.")}</span><br/>
+                        <br/>
                         {_t(
                             "Add users and servers you want to ignore here. Use asterisks " +
                             "to have Riot match any characters. For example, <code>@bot:*</code> " +
                             "would ignore all users that have the name 'bot' on any server.",
                             {}, {code: (s) => <code>{s}</code>},
-                        )}<br />
-                        <br />
+                        )}<br/>
+                        <br/>
                         {_t(
                             "Ignoring people is done through ban lists which contain rules for " +
                             "who to ban. Subscribing to a ban list means the users/servers blocked by " +
@@ -55,7 +142,25 @@ export default class MjolnirUserSettingsTab extends React.Component {
                             "the ban list in effect.",
                         )}
                     </div>
-                    <p>TODO</p>
+                    <div>
+                        {this._renderPersonalBanListRules()}
+                    </div>
+                    <div>
+                        <form onSubmit={this._onAddPersonalRule} autoComplete="off">
+                            <Field
+                                id="mx_MjolnirUserSettingsTab_personalAdd"
+                                type="text"
+                                label={_t("Server or user ID to ignore")}
+                                placeholder={_t("eg: @bot:* or example.org")}
+                                value={this.state.newPersonalRule}
+                                onChange={this._onPersonalRuleChanged}
+                            />
+                            <AccessibleButton type="submit" kind="primary" onClick={this._onAddPersonalRule}
+                                              disabled={this.state.busy}>
+                                {_t("Ignore")}
+                            </AccessibleButton>
+                        </form>
+                    </div>
                 </div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Subscribed lists")}</span>

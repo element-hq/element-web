@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as globToRegexp from "glob-to-regexp";
+import globToRegexp from "glob-to-regexp";
 
 // Taken with permission from matrix-bot-sdk:
 // https://github.com/turt2live/matrix-js-bot-sdk/blob/eb148c2ecec7bf3ade801d73deb43df042d55aef/src/MatrixGlob.ts

@@ -60,17 +60,23 @@ export class BanList {
         return this._rules.filter(r => r.kind === RULE_ROOM);
     }
 
-    banEntity(kind: string, entity: string, reason: string): Promise<any> {
-        return MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {
+    async banEntity(kind: string, entity: string, reason: string): Promise<any> {
+        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {
             entity: entity,
             reason: reason,
             recommendation: recommendationToStable(RECOMMENDATION_BAN, true),
         }, "rule:" + entity);
+        this._rules.push(new ListRule(entity, RECOMMENDATION_BAN, reason, ruleTypeToStable(kind, false)));
     }
 
-    unbanEntity(kind: string, entity: string): Promise<any> {
+    async unbanEntity(kind: string, entity: string): Promise<any> {
         // Empty state event is effectively deleting it.
-        return MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {}, "rule:" + entity);
+        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {}, "rule:" + entity);
+        this._rules = this._rules.filter(r => {
+            if (r.kind !== ruleTypeToStable(kind, false)) return true;
+            if (r.entity !== entity) return true;
+            return false; // we just deleted this rule
+        });
     }
 
     updateList() {
@@ -82,7 +88,7 @@ export class BanList {
         for (const eventType of ALL_RULE_TYPES) {
             const events = room.currentState.getStateEvents(eventType, undefined);
             for (const ev of events) {
-                if (!ev['state_key']) continue;
+                if (!ev.getStateKey()) continue;
 
                 const kind = ruleTypeToStable(eventType, false);
 

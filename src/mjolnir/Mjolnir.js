@@ -18,6 +18,7 @@ import MatrixClientPeg from "../MatrixClientPeg";
 import {ALL_RULE_TYPES, BanList} from "./BanList";
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {_t} from "../languageHandler";
+import dis from "../dispatcher";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
@@ -27,19 +28,39 @@ export class Mjolnir {
     _lists: BanList[] = [];
     _roomIds: string[] = [];
     _mjolnirWatchRef = null;
+    _dispatcherRef = null;
 
     constructor() {
     }
 
     start() {
-        this._updateLists(SettingsStore.getValue("mjolnirRooms"));
         this._mjolnirWatchRef = SettingsStore.watchSetting("mjolnirRooms", null, this._onListsChanged.bind(this));
 
+        this._dispatcherRef = dis.register(this._onAction);
+        dis.dispatch({
+            action: 'do_after_sync_prepared',
+            deferred_action: {action: 'setup_mjolnir'},
+        });
+    }
+
+    _onAction = (payload) => {
+        if (payload['action'] === 'setup_mjolnir') {
+            console.log("Setting up Mjolnir: after sync");
+            this.setup();
+        }
+    };
+
+    setup() {
+        if (!MatrixClientPeg.get()) return;
+        this._updateLists(SettingsStore.getValue("mjolnirRooms"));
         MatrixClientPeg.get().on("RoomState.events", this._onEvent.bind(this));
     }
 
     stop() {
         SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+        dis.unregister(this._dispatcherRef);
+
+        if (!MatrixClientPeg.get()) return;
         MatrixClientPeg.get().removeListener("RoomState.events", this._onEvent.bind(this));
     }
 
@@ -52,8 +73,8 @@ export class Mjolnir {
                 preset: "private_chat"
             });
             personalRoomId = resp['room_id'];
-            SettingsStore.setValue("mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
-            SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, [personalRoomId, ...this._roomIds]);
+            await SettingsStore.setValue("mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
+            await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, [personalRoomId, ...this._roomIds]);
         }
         if (!personalRoomId) {
             throw new Error("Error finding a room ID to use");
@@ -67,7 +88,21 @@ export class Mjolnir {
         return list;
     }
 
+    // get without creating the list
+    getPersonalList(): BanList {
+        const personalRoomId = SettingsStore.getValue("mjolnirPersonalRoom");
+        if (!personalRoomId) return null;
+
+        let list = this._lists.find(b => b.roomId === personalRoomId);
+        if (!list) list = new BanList(personalRoomId);
+        // we don't append the list to the tracked rooms because it should already be there.
+        // we're just trying to get the caller some utility access to the list
+
+        return list;
+    }
+
     _onEvent(event) {
+        if (!MatrixClientPeg.get()) return;
         if (!this._roomIds.includes(event.getRoomId())) return;
         if (!ALL_RULE_TYPES.includes(event.getType())) return;
 
@@ -80,6 +115,9 @@ export class Mjolnir {
     }
 
     _updateLists(listRoomIds: string[]) {
+        if (!MatrixClientPeg.get()) return;
+
+        console.log("Updating Mjolnir ban lists to: " + listRoomIds);
         this._lists = [];
         this._roomIds = listRoomIds || [];
         if (!listRoomIds) return;
