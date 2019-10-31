@@ -129,7 +129,34 @@ export default class MjolnirUserSettingsTab extends React.Component {
     }
 
     _viewListRules(list: BanList) {
-        // TODO
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        const room = MatrixClientPeg.get().getRoom(list.roomId);
+        const name = room ? room.name : list.roomId;
+
+        const renderRules = (rules: ListRule[]) => {
+            if (rules.length === 0) return <i>{_t("None")}</i>;
+
+            const tiles = [];
+            for (const rule of rules) {
+                tiles.push(<li key={rule.kind + rule.entity}><code>{rule.entity}</code></li>);
+            }
+            return <ul>{tiles}</ul>;
+        };
+
+        Modal.createTrackedDialog('View Mjolnir list rules', '', QuestionDialog, {
+            title: _t("Ban list rules - %(roomName)s", {roomName: name}),
+            description: (
+                <div>
+                    <h3>{_t("Server rules")}</h3>
+                    {renderRules(list.serverRules)}
+                    <h3>{_t("User rules")}</h3>
+                    {renderRules(list.userRules)}
+                </div>
+            ),
+            button: _t("Close"),
+            hasCancelButton: false,
+        });
     }
 
     _renderPersonalBanListRules() {
