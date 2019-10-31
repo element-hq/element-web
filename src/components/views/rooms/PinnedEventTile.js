@@ -61,7 +61,9 @@ module.exports = createReactClass({
         return this.props.mxRoom.currentState.mayClientSendStateEvent('m.room.pinned_events', MatrixClientPeg.get());
     },
     render: function() {
-        const sender = this.props.mxRoom.getMember(this.props.mxEvent.getSender());
+        const sender = this.props.mxEvent.getSender();
+        // Get the latest sender profile rather than historical
+        const senderProfile = this.props.mxRoom.getMember(sender);
         const avatarSize = 40;
 
         let unpinButton = null;
@@ -83,10 +85,10 @@ module.exports = createReactClass({
                 </div>
 
                 <span className="mx_PinnedEventTile_senderAvatar">
-                    <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                    <MemberAvatar member={senderProfile} width={avatarSize} height={avatarSize} fallbackUserId={sender} />
                 </span>
                 <span className="mx_PinnedEventTile_sender">
-                    { sender.name }
+                    { senderProfile ? senderProfile.name : sender }
                 </span>
                 <span className="mx_PinnedEventTile_timestamp">
                     { formatFullDate(new Date(this.props.mxEvent.getTs())) }
