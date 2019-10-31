@@ -475,22 +475,26 @@ export const MsisdnAuthEntry = createReactClass({
         });
 
         try {
+            const requiresIdServerParam =
+                await this.props.matrixClient.doesServerRequireIdServerParam();
             let result;
             if (this._submitUrl) {
                 result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
                     this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
                 );
-            } else {
+            } else if (requiresIdServerParam) {
                 result = await this.props.matrixClient.submitMsisdnToken(
                     this._sid, this.props.clientSecret, this.state.token,
                 );
+            } else {
+                throw new Error("The registration with MSISDN flow is misconfigured");
             }
             if (result.success) {
                 const creds = {
                     sid: this._sid,
                     client_secret: this.props.clientSecret,
                 };
-                if (await this.props.matrixClient.doesServerRequireIdServerParam()) {
+                if (requiresIdServerParam) {
                     const idServerParsedUrl = url.parse(
                         this.props.matrixClient.getIdentityServerUrl(),
                     );
