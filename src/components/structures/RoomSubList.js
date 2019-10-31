@@ -67,6 +67,9 @@ const RoomSubList = createReactClass({
             // some values to get LazyRenderList starting
             scrollerHeight: 800,
             scrollTop: 0,
+            // React 16's getDerivedStateFromProps(props, state) doesn't give the previous props so
+            // we have to store the length of the list here so we can see if it's changed or not...
+            listLength: null,
         };
     },
 
@@ -79,9 +82,18 @@ const RoomSubList = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._headerButton = createRef();
         this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    statics: {
+        getDerivedStateFromProps: function(props, state) {
+            return {
+                listLength: props.list.length,
+                scrollTop: props.list.length === state.listLength ? state.scrollTop : 0,
+            };
+        },
     },
 
     componentWillUnmount: function() {
