@@ -181,7 +181,7 @@
     "%(count)s Members|one": "%(count)s narys",
     "Developer Tools": "Programuotojo įrankiai",
     "Unhide Preview": "Rodyti paržiūrą",
-    "Custom Server Options": "Tinkinto serverio parametrai",
+    "Custom Server Options": "Pasirinktiniai Serverio Nustatymai",
     "Event Content": "Įvykio turinys",
     "Thank you!": "Ačiū!",
     "Collapse panel": "Suskleisti skydelį",
@@ -997,5 +997,8 @@
     "Whether or not you're logged in (we don't record your username)": "Nepriklausomai nuo to ar jūs prisijungę (mes neįrašome jūsų vartotojo vardo)",
     "Chat with Riot Bot": "Kalbėtis su Riot botu",
     "Sign In": "Prisijungti",
-    "Explore rooms": "Peržiūrėti kambarius"
+    "Explore rooms": "Peržiūrėti kambarius",
+    "Your Riot is misconfigured": "Jūsų Riot yra neteisingai sukonfigūruotas",
+    "Sign in to your Matrix account on %(serverName)s": "Prisijunkite prie savo paskyros %(serverName)s serveryje",
+    "Sign in to your Matrix account on <underlinedServerName />": "Prisijunkite prie savo paskyros <underlinedServerName /> serveryje"
 }
