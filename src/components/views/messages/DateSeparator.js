@@ -57,7 +57,7 @@ export default class DateSeparator extends React.Component {
 
     render() {
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
-        return <h2 className="mx_DateSeparator" role="separator">
+        return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1}>
             <hr role="none" />
             <div>{ this.getLabel() }</div>
             <hr role="none" />

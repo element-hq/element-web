@@ -180,7 +180,8 @@ export default class MessageActionBar extends React.PureComponent {
             />;
         }
 
-        return <div className="mx_MessageActionBar">
+        // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
+        return <div className="mx_MessageActionBar" role="toolbar" aria-label={_t("Message Actions")} aria-live="off">
             {reactButton}
             {replyButton}
             {editButton}
