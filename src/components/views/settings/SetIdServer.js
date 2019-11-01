@@ -24,9 +24,8 @@ import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
 import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import {SERVICE_TYPES} from "matrix-js-sdk";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
-import { getDefaultIdentityServerUrl } from '../../../utils/IdentityServerUtils';
+import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -162,19 +161,8 @@ export default class SetIdServer extends React.Component {
                 let save = true;
 
                 // Double check that the identity server even has terms of service.
-                let terms;
-                try {
-                    terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
-                } catch (e) {
-                    console.error(e);
-                    if (e.cors === "rejected" || e.httpStatus === 404) {
-                        terms = null;
-                    } else {
-                        throw e;
-                    }
-                }
-
-                if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
+                const hasTerms = await doesIdentityServerHaveTerms(fullUrl);
+                if (!hasTerms) {
                     const [confirmed] = await this._showNoTermsWarning(fullUrl);
                     save = confirmed;
                 }
