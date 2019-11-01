@@ -2223,5 +2223,6 @@
     "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Nessun server di identità configurato, perciò non puoi aggiungere un indirizzo email per ripristinare la tua password in futuro.",
     "%(count)s unread messages including mentions.|one": "1 citazione non letta.",
     "%(count)s unread messages.|one": "1 messaggio non letto.",
-    "Unread messages.": "Messaggi non letti."
+    "Unread messages.": "Messaggi non letti.",
+    "Show tray icon and minimize window to it on close": "Mostra icona in tray e usala alla chiusura della finestra"
 }
