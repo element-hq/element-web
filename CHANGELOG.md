@@ -1,3 +1,10 @@
+Changes in [1.5.1-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.1-rc.2) (2019-11-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.1-rc.1...v1.5.1-rc.2)
+
+ * Updated react-sdk with fix for bug that caused room filtering to
+   omit results.
+
 Changes in [1.5.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.1-rc.1) (2019-10-30)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.0...v1.5.1-rc.1)
