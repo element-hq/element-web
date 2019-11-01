@@ -2269,5 +2269,6 @@
     "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "未設定身份識別伺服器，所以您無法新增電子郵件以在未來重設您的密碼。",
     "%(count)s unread messages including mentions.|one": "1 則未讀的提及。",
     "%(count)s unread messages.|one": "1 則未讀的訊息。",
-    "Unread messages.": "未讀的訊息。"
+    "Unread messages.": "未讀的訊息。",
+    "Show tray icon and minimize window to it on close": "顯示系統匣圖示並在關閉視窗時將其最小化至其中"
 }
