@@ -2121,5 +2121,7 @@
     "%(count)s unread messages including mentions.|one": "1개의 읽지 않은 언급.",
     "%(count)s unread messages.|one": "1개의 읽지 않은 메시지.",
     "Unread messages.": "읽지 않은 메시지.",
-    "Show tray icon and minimize window to it on close": "닫을 때 창을 최소화하고 트레이 아이콘으로 표시하기"
+    "Show tray icon and minimize window to it on close": "닫을 때 창을 최소화하고 트레이 아이콘으로 표시하기",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "이 작업에는 이메일 주소 또는 전화번호를 확인하기 위해 기본 ID 서버 <server />에 접근해야 합니다. 하지만 서버가 서비스 약관을 갖고 있지 않습니다.",
+    "Trust": "신뢰함"
 }
