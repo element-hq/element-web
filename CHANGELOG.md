@@ -1,3 +1,10 @@
+Changes in [1.5.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.2) (2019-11-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.1...v1.5.2)
+
+ * Fix close window behaviour on Macos
+   [\#11311](https://github.com/vector-im/riot-web/pull/11311)
+
 Changes in [1.5.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.1) (2019-11-04)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.1-rc.2...v1.5.1)
