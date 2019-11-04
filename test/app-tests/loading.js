@@ -216,7 +216,7 @@ describe('loading:', function() {
         it('gives a welcome page by default', function(done) {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -231,7 +231,7 @@ describe('loading:', function() {
                 return awaitWelcomeComponent(matrixChat);
             }).then(() => {
                 expect(windowLocation.hash).toEqual("#/welcome");
-            }).then(done, done);
+            });
         });
 
         it('should follow the original link after successful login', function(done) {
@@ -243,7 +243,7 @@ describe('loading:', function() {
             httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
             httpBackend.when("GET", "/api/v1").respond(200, {});
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -272,7 +272,7 @@ describe('loading:', function() {
                 expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual(DEFAULT_HS_URL);
                 expect(localStorage.getItem('mx_is_url')).toEqual(DEFAULT_IS_URL);
-            }).then(done, done);
+            });
         });
 
         it('should not register as a guest when using a #/login link', function() {
@@ -365,7 +365,7 @@ describe('loading:', function() {
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.EmbeddedPage'));
                 expect(windowLocation.hash).toEqual("#/home");
-            }).then(done, done);
+            });
         });
 
         it('shows a room view if we followed a room link', function(done) {
@@ -385,7 +385,7 @@ describe('loading:', function() {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
-            }).then(done, done);
+            });
         });
 
         describe('/#/login link:', function() {
@@ -445,7 +445,7 @@ describe('loading:', function() {
         it('shows a welcome page by default', function(done) {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -469,13 +469,13 @@ describe('loading:', function() {
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('auth.Welcome'));
                 expect(windowLocation.hash).toEqual("#/welcome");
-            }).then(done, done);
+            });
         });
 
         it('uses the default homeserver to register with', function(done) {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -503,14 +503,14 @@ describe('loading:', function() {
                 expect(windowLocation.hash).toEqual("#/welcome");
                 expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
                 expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
-            }).then(done, done);
+            });
         });
 
         it('shows a room view if we followed a room link', function(done) {
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -533,7 +533,7 @@ describe('loading:', function() {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
-            }).then(done, done);
+            });
         });
 
         describe('Login as user', function() {
@@ -616,7 +616,7 @@ describe('loading:', function() {
                 queryString: "?loginToken=secretToken&homeserver=https%3A%2F%2Fhomeserver&identityServer=https%3A%2F%2Fidserver",
             });
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // we expect a spinner while we're logging in
                 assertAtLoadingSpinner(matrixChat);
 
@@ -645,7 +645,7 @@ describe('loading:', function() {
                 expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual('https://homeserver');
                 expect(localStorage.getItem('mx_is_url')).toEqual('https://idserver');
-            }).then(done, done);
+            });
         });
     });
 
