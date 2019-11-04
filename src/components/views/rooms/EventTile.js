@@ -32,6 +32,7 @@ const TextForEvent = require('../../../TextForEvent');
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus, MatrixClient} from 'matrix-js-sdk';
+import {formatTime} from "../../../DateUtils";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -786,14 +787,19 @@ module.exports = createReactClass({
                     this.props.permalinkCreator,
                     'replyThread',
                 );
+                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    <div className={classes}>
+                    <div className={classes} tabIndex={-1}>
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <a
+                                href={permalink}
+                                onClick={this.onPermalinkClicked}
+                                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+                            >
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }

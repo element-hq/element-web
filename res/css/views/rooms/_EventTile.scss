@@ -138,11 +138,13 @@ limitations under the License.
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile_last > div > a > .mx_MessageTimestamp,
 .mx_EventTile:hover > div > a > .mx_MessageTimestamp,
+.mx_EventTile:focus-within > div > a > .mx_MessageTimestamp,
 .mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp {
     visibility: visible;
 }
 
 .mx_EventTile:hover .mx_MessageActionBar,
+.mx_EventTile:focus-within .mx_MessageActionBar,
 .mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar {
     visibility: visible;
 }
@@ -166,6 +168,7 @@ limitations under the License.
 }
 
 .mx_EventTile:hover .mx_EventTile_line,
+.mx_EventTile:focus-within .mx_EventTile_line,
 .mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line {
     background-color: $event-selected-color;
 }
@@ -465,7 +468,8 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     }
 }
 
-.mx_EventTile:hover .mx_EventTile_body pre {
+.mx_EventTile:hover .mx_EventTile_body pre,
+.mx_EventTile:focus-within .mx_EventTile_body pre {
     border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
@@ -487,6 +491,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     background-image: url($copy-button-url);
 }
 
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
 .mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton {
     visibility: visible;
 }
