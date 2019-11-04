@@ -1,3 +1,49 @@
+Changes in [1.5.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.1) (2019-11-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.1-rc.2...v1.5.1)
+
+ * No changes since rc.2
+
+Changes in [1.5.1-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.1-rc.2) (2019-11-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.1-rc.1...v1.5.1-rc.2)
+
+ * Updated react-sdk with fix for bug that caused room filtering to
+   omit results.
+
+Changes in [1.5.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.1-rc.1) (2019-10-30)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.0...v1.5.1-rc.1)
+
+ * Add ability to hide tray icon on non-Mac (which has no tray icon)
+   [\#11258](https://github.com/vector-im/riot-web/pull/11258)
+ * Fix bug preventing display from sleeping after a call
+   [\#11264](https://github.com/vector-im/riot-web/pull/11264)
+ * Remove mention of CI scripts from docs
+   [\#11257](https://github.com/vector-im/riot-web/pull/11257)
+ * Fix skinning replaces being broken since being rewritten as React FC's
+   [\#11254](https://github.com/vector-im/riot-web/pull/11254)
+ * Update config docs about identity servers
+   [\#11249](https://github.com/vector-im/riot-web/pull/11249)
+ * Remove unneeded help about identity servers
+   [\#11248](https://github.com/vector-im/riot-web/pull/11248)
+ * Update from Weblate
+   [\#11243](https://github.com/vector-im/riot-web/pull/11243)
+ * Update sample config for new matrix.org CS API URL
+   [\#11207](https://github.com/vector-im/riot-web/pull/11207)
+ * clarify where the e2e tests are located
+   [\#11115](https://github.com/vector-im/riot-web/pull/11115)
+ * Update from Weblate
+   [\#11171](https://github.com/vector-im/riot-web/pull/11171)
+ * Prevent referrers from being sent
+   [\#6155](https://github.com/vector-im/riot-web/pull/6155)
+ * Add darkModeSupport to allow dark themed title bar.
+   [\#11140](https://github.com/vector-im/riot-web/pull/11140)
+ * Fix the label of Turkish language
+   [\#11124](https://github.com/vector-im/riot-web/pull/11124)
+ * Update default HS config to match well-known
+   [\#11112](https://github.com/vector-im/riot-web/pull/11112)
+
 Changes in [1.5.0](https://github.com/vector-im/riot-web/releases/tag/v1.5.0) (2019-10-18)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.0-rc.1...v1.5.0)
