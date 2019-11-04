@@ -356,7 +356,7 @@ describe('loading:', function() {
 
             loadApp();
 
-            return awaitLoggedIn(matrixChat).then(() => {
+            awaitLoggedIn(matrixChat).then(() => {
                 // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
@@ -376,7 +376,7 @@ describe('loading:', function() {
                 uriFragment: "#/room/!room:id",
             });
 
-            return awaitLoggedIn(matrixChat).then(() => {
+            awaitLoggedIn(matrixChat).then(() => {
                 // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
