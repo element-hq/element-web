@@ -393,7 +393,7 @@ app.on('ready', () => {
     });
     mainWindow.on('close', (e) => {
         // If we are not quitting and have a tray icon then minimize to tray
-        if (!global.appQuitting && tray.hasTray()) {
+        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
