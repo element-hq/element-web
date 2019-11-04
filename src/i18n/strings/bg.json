@@ -2189,5 +2189,20 @@
     "Hide advanced": "Скрий разширени настройки",
     "Show advanced": "Покажи разширени настройки",
     "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "Блокирай присъединяването на потребители от други Matrix сървъри в тази стая (Тази настройка не може да се промени по-късно!)",
-    "Close dialog": "Затвори прозореца"
+    "Close dialog": "Затвори прозореца",
+    "Add Email Address": "Добави имейл адрес",
+    "Add Phone Number": "Добави телефонен номер",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Това действие изисква връзка със сървъра за самоличност <server /> за валидиране на имейл адреса или телефонния номер, но сървърът не предоставя условия за ползване.",
+    "Trust": "Довери се",
+    "Use the new, consistent UserInfo panel for Room Members and Group Members": "Използвай новия UserInfo панел за членове на стаи и групи",
+    "Use the new, faster, composer for writing messages": "Използвай новия, по-бърз редактор за писане на съобщения",
+    "Show previews/thumbnails for images": "Показвай преглед (умален размер) на снимки",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Би било добре да <b>премахнете личните си данни</b> от сървъра за самоличност <idserver /> преди прекъсване на връзката. За съжаление, сървърът за самоличност <idserver /> в момента не е достъпен.",
+    "You should:": "Ще е добре да:",
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "проверите браузър добавките за всичко, което може да блокира връзката със сървъра за самоличност (например Privacy Badge)",
+    "contact the administrators of identity server <idserver />": "се свържете с администратора на сървъра за самоличност <idserver />",
+    "wait and try again later": "изчакате и опитате пак",
+    "Clear cache and reload": "Изчисти кеша и презареди",
+    "Show tray icon and minimize window to it on close": "Показвай икона в лентата и минимизирай прозореца там при затваряне",
+    "Your email address hasn't been verified yet": "Имейл адресът ви все още не е потвърден"
 }

@@ -2273,5 +2273,11 @@
     "Jump to first invite.": "Sauter à la première invitation.",
     "Room %(name)s": "Salon %(name)s",
     "Recent rooms": "Salons récents",
-    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Aucun serveur d’identité n’est configuré donc vous ne pouvez pas ajouter une adresse e-mail afin de réinitialiser votre mot de passe dans l’avenir."
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Aucun serveur d’identité n’est configuré donc vous ne pouvez pas ajouter une adresse e-mail afin de réinitialiser votre mot de passe dans l’avenir.",
+    "%(count)s unread messages including mentions.|one": "1 mention non lue.",
+    "%(count)s unread messages.|one": "1 message non lu.",
+    "Unread messages.": "Messages non lus.",
+    "Show tray icon and minimize window to it on close": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Cette action nécessite l’accès au serveur d’identité par défaut <server /> afin de valider une adresse e-mail ou un numéro de téléphone, mais le serveur n’a aucune condition de service.",
+    "Trust": "Confiance"
 }
