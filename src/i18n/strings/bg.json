@@ -2199,7 +2199,7 @@
     "Show previews/thumbnails for images": "Показвай преглед (умален размер) на снимки",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Би било добре да <b>премахнете личните си данни</b> от сървъра за самоличност <idserver /> преди прекъсване на връзката. За съжаление, сървърът за самоличност <idserver /> в момента не е достъпен.",
     "You should:": "Ще е добре да:",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "проверите браузър добавките за всичко, което може да блокира връзката със сървъра за самоличност (например Privacy Badge)",
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "проверите браузър добавките за всичко, което може да блокира връзката със сървъра за самоличност (например Privacy Badger)",
     "contact the administrators of identity server <idserver />": "се свържете с администратора на сървъра за самоличност <idserver />",
     "wait and try again later": "изчакате и опитате пак",
     "Clear cache and reload": "Изчисти кеша и презареди",
