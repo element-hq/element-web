@@ -5950,10 +5950,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.4.3-rc.1:
-  version "2.4.3-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.3-rc.1.tgz#c06452b89c74976ac0bae0732325c0b359e6f2fa"
-  integrity sha512-aV70H10lSpjAOmnWDXIWc2CP5D1OylwSSfyc61QzjvGhECEYaiQi4rxH4ZFhX9AL3ezPHse7SY6AmKOCfqBQiw==
+matrix-js-sdk@2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.3.tgz#23b78cc707a02eb0ce7eecb3aa50129e46dd5b6e"
+  integrity sha512-8qTqILd/NmTWF24tpaxmDIzkTk/bZhPD5N8h69PlvJ5Y6kMFctpRj+Tud5zZjl5/yhO07+g+JCyDzg+AagiM/A==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5974,10 +5974,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.7.1-rc.2:
-  version "1.7.1-rc.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.7.1-rc.2.tgz#d627390d7f88df23d1ffe89979699dab3cd7aed7"
-  integrity sha512-q3o2U/aZlgm8+sAax0yLBmdfyXehGR5dMZdSxEUmLFIA0BREXwLoasp01uTJBCN5E0XANl2vmGjxNlqyLJV8zg==
+matrix-react-sdk@1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.7.1.tgz#279b556dd24aae1ff13d10b261521055cdf9c7e4"
+  integrity sha512-y5sOCMHZvZRyWcJnaK5bk6oiq6hIO3bSJy3GNqL8yRozt3CPZzHDG9ripf3EQ+hmGilKV9sfPZw173CxZROwDw==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -6008,7 +6008,7 @@ matrix-react-sdk@1.7.1-rc.2:
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
     lolex "4.2"
-    matrix-js-sdk "2.4.3-rc.1"
+    matrix-js-sdk "2.4.3"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
