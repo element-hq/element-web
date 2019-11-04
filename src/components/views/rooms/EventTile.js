@@ -787,6 +787,7 @@ module.exports = createReactClass({
                     this.props.permalinkCreator,
                     'replyThread',
                 );
+                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     <div className={classes} tabIndex={-1}>
                         <div className="mx_EventTile_msgOption">
