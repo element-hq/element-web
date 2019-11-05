@@ -566,6 +566,7 @@ export default class BasicMessageEditor extends React.Component {
                 aria-haspopup="listbox"
                 aria-expanded={Boolean(this.state.autoComplete)}
                 aria-activedescendant={completionIndex >= 0 ? generateCompletionDomId(completionIndex) : undefined}
+                dir="auto"
             />
         </div>);
     }
