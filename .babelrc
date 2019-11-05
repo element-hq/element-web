@@ -13,7 +13,6 @@
         ],
         "transform-class-properties",
         "transform-object-rest-spread",
-        "transform-async-to-promises",
         "transform-runtime",
         "add-module-exports",
         "syntax-dynamic-import"
