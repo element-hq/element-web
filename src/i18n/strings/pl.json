@@ -1645,5 +1645,13 @@
     "Chat with Riot Bot": "Rozmowa z Botem Riota",
     "FAQ": "Najczęściej zadawane pytania",
     "Always show the window menu bar": "Zawsze pokazuj pasek menu okna",
-    "Close button should minimize window to tray": "Przycisk zamknięcia minimalizuje okno do zasobnika"
+    "Close button should minimize window to tray": "Przycisk zamknięcia minimalizuje okno do zasobnika",
+    "Add Email Address": "Dodaj adres e-mail",
+    "Add Phone Number": "Dodaj numer telefonu",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ta czynność wymaga dostępu do domyślnego serwera tożsamości <server /> do walidacji adresu e-mail, czy numeru telefonu, ale serwer nie określa warunków korzystania z usługi.",
+    "Sends a message as plain text, without interpreting it as markdown": "Wysyła wiadomość jako zwykły tekst, bez jego interpretacji jako markdown",
+    "You do not have the required permissions to use this command.": "Nie posiadasz wymaganych uprawnień do użycia tego polecenia.",
+    "Changes the avatar of the current room": "Zmienia awatar dla obecnego pokoju",
+    "Use an identity server": "Użyj serwera tożsamości",
+    "Show previews/thumbnails for images": "Pokaż podgląd/miniatury obrazów"
 }
