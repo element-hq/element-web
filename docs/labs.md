@@ -55,3 +55,7 @@ Exposes a way to access all the integration managers known to Riot. This is an i
 When enabled, a new settings tab appears for users to be able to manage their ban lists. 
 This is a different kind of ignoring where the ignored user's messages still get rendered, 
 but are hidden by default.
+
+Ban lists are rooms within Matrix, proposed as [MSC2313](https://github.com/matrix-org/matrix-doc/pull/2313).
+[Mjolnir](https://github.com/matrix-org/mjolnir) is a set of moderation tools which support
+ban lists.
