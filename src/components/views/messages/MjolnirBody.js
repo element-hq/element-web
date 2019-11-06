@@ -21,7 +21,7 @@ import {_t} from '../../../languageHandler';
 export default class MjolnirBody extends React.Component {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
-        onTileUpdate: PropTypes.func.isRequired,
+        onMessageAllowed: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -34,7 +34,7 @@ export default class MjolnirBody extends React.Component {
 
         const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
         localStorage.setItem(key, "true");
-        this.props.onTileUpdate();
+        this.props.onMessageAllowed();
     };
 
     render() {

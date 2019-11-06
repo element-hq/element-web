@@ -112,7 +112,7 @@ module.exports = createReactClass({
             replacingEventId={this.props.replacingEventId}
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
-            onTileUpdate={this.onTileUpdate}
+            onMessageAllowed={this.onTileUpdate}
         />;
     },
 });
