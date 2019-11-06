@@ -243,4 +243,4 @@ matrixLinkify.options = {
     },
 };
 
-module.exports = matrixLinkify;
+export default matrixLinkify;
