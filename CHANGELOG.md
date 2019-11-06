@@ -1,3 +1,35 @@
+Changes in [1.7.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.2) (2019-11-06)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.1...v1.7.2)
+
+ * Fix softcrash if editing silly events
+   [\#3596](https://github.com/matrix-org/matrix-react-sdk/pull/3596)
+ * Fix: file and notifications panel back-paginating forever.
+   [\#3594](https://github.com/matrix-org/matrix-react-sdk/pull/3594)
+ * Fix focus-within on EventTile and more showing onClick
+   [\#3591](https://github.com/matrix-org/matrix-react-sdk/pull/3591)
+ * Support RTL language in message composer
+   [\#3592](https://github.com/matrix-org/matrix-react-sdk/pull/3592)
+ * Update from Weblate
+   [\#3590](https://github.com/matrix-org/matrix-react-sdk/pull/3590)
+ * Improve A11Y of timeline. Show timestamp & Actions on focus-within
+   [\#3587](https://github.com/matrix-org/matrix-react-sdk/pull/3587)
+ * Fix SVG mask-image usage in a bunch of places for correct outlining
+   [\#3589](https://github.com/matrix-org/matrix-react-sdk/pull/3589)
+ * Handle breadcrumbs, integration manager provisioning, and allowed widgets
+   Riot settings
+   [\#3577](https://github.com/matrix-org/matrix-react-sdk/pull/3577)
+ * Add a prompt when interacting with an identity server without terms
+   [\#3582](https://github.com/matrix-org/matrix-react-sdk/pull/3582)
+ * Fix bug where rooms would not appear when filtering
+   [\#3584](https://github.com/matrix-org/matrix-react-sdk/pull/3584)
+ * Guard against misconfigured homeservers when adding / binding phone numbers
+   [\#3583](https://github.com/matrix-org/matrix-react-sdk/pull/3583)
+ * Fix error message which is shown when unknown slash command attempted
+   [\#3580](https://github.com/matrix-org/matrix-react-sdk/pull/3580)
+ * Attempt to fix soft crash on some pinned events by null guarding member
+   [\#3581](https://github.com/matrix-org/matrix-react-sdk/pull/3581)
+
 Changes in [1.7.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.1) (2019-11-04)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.1-rc.2...v1.7.1)
