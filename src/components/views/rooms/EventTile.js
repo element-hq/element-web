@@ -558,7 +558,8 @@ module.exports = createReactClass({
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === "m.room.message" && msgtype.startsWith("m.key.verification"));
         let isInfoMessage = (
-            !isBubbleMessage && eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
+            !isBubbleMessage && eventType !== 'm.room.message' &&
+            eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
