@@ -20,7 +20,7 @@ import utils from 'matrix-js-sdk/lib/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
-import * as matrixLinkify from "../../linkify-matrix";
+import matrixLinkify from "../../linkify-matrix";
 
 const SdkConfig = require("../../SdkConfig");
 
