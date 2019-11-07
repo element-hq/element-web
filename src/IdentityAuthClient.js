@@ -184,9 +184,9 @@ export default class IdentityAuthClient {
         try {
             const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
             // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
-            const { access_token, token } =
+            const { access_token: accessToken, token } =
                 await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
-            let identityAccessToken = token ? token : access_token;
+            const identityAccessToken = token ? token : accessToken;
             if (check) await this._checkToken(identityAccessToken);
             return identityAccessToken;
         } catch (e) {
