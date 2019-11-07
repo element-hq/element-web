@@ -21,7 +21,7 @@ import EMOJIBASE from 'emojibase-data/en/compact.json';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-const QUICK_REACTIONS = ["👍️", "👎️", "😄", "🎉", "😕", "❤️", "🚀", "👀"];
+const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"];
 EMOJIBASE.forEach(emoji => {
     const index = QUICK_REACTIONS.indexOf(emoji.unicode);
     if (index !== -1) {
