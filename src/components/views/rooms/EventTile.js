@@ -555,8 +555,10 @@ module.exports = createReactClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
+        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+            (eventType === "m.room.message" && msgtype.startsWith("m.key.verification"));
         let isInfoMessage = (
-            eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
+            !isBubbleMessage && eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
@@ -589,6 +591,7 @@ module.exports = createReactClass({
 
         const isEditing = !!this.props.editState;
         const classes = classNames({
+            mx_EventTile_bubbleContainer: isBubbleMessage,
             mx_EventTile: true,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
@@ -624,7 +627,7 @@ module.exports = createReactClass({
         if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
-        } else if (tileHandler === 'messages.RoomCreate') {
+        } else if (tileHandler === 'messages.RoomCreate' || isBubbleMessage) {
             avatarSize = 0;
             needsSenderProfile = false;
         } else if (isInfoMessage) {
@@ -822,7 +825,7 @@ module.exports = createReactClass({
                             { readAvatars }
                         </div>
                         { sender }
-                        <div className="mx_EventTile_line">
+                        <div className={classNames("mx_EventTile_line", {mx_EventTile_bubbleLine: isBubbleMessage})}>
                             <a
                                 href={permalink}
                                 onClick={this.onPermalinkClicked}
