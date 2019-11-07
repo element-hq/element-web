@@ -151,3 +151,20 @@ export default class KeyVerificationStateObserver {
         this.otherPartyUserId = fromUserId === this._client.getUserId() ? toUserId : fromUserId;
     }
 }
+
+export function getNameForEventRoom(userId, mxEvent) {
+    const roomId = mxEvent.getRoomId();
+    const client = MatrixClientPeg.get();
+    const room = client.getRoom(roomId);
+    const member = room.getMember(userId);
+    return member ? member.name : userId;
+}
+
+export function userLabelForEventRoom(userId, mxEvent) {
+    const name = getNameForEventRoom(userId, mxEvent);
+    if (name !== userId) {
+        return _t("%(name)s (%(userId)s)", {name, userId});
+    } else {
+        return userId;
+    }
+}
