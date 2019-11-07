@@ -353,7 +353,6 @@ export default class RoomBreadcrumbs extends React.Component {
                     onMouseEnter={() => this._onMouseEnter(r.room)}
                     onMouseLeave={() => this._onMouseLeave(r.room)}
                     aria-label={_t("Room %(name)s", {name: r.room.name})}
-                    role="listitem"
                 >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
@@ -363,7 +362,7 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <div role="list" aria-orientation="horizontal" aria-roledescription={_t("Recent rooms")}>
+            <div role="toolbar" aria-label={_t("Recent rooms")}>
                 <IndicatorScrollbar
                     ref="scroller"
                     className="mx_RoomBreadcrumbs"
