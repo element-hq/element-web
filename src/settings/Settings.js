@@ -126,6 +126,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_dm_verification": {
+        isFeature: true,
+        displayName: _td("Send verification requests in direct message"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

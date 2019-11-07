@@ -339,6 +339,7 @@
     "Render simple counters in room header": "Render simple counters in room header",
     "Multiple integration managers": "Multiple integration managers",
     "Use the new, consistent UserInfo panel for Room Members and Group Members": "Use the new, consistent UserInfo panel for Room Members and Group Members",
+    "Send verification requests in direct message": "Send verification requests in direct message",
     "Use the new, faster, composer for writing messages": "Use the new, faster, composer for writing messages",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
