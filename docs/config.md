@@ -22,9 +22,10 @@ For a good example, see https://riot.im/develop/config.json.
      `default_hs_url` is specified. When multiple sources are specified, it is unclear
      which should take priority and therefore the application cannot continue.
    * As of Riot 1.4.0, identity servers are optional. See [Identity servers](#identity-servers) below.
-1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
-   in the `labs` section of settings.  The available optional experimental features vary from
-   release to release. The available features are described in [labs.md](labs.md).
+1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or
+   exposed to the user in the `labs` section of settings. The available
+   optional experimental features vary from release to release and are (usually) [documented](labs.md). The feature flag process is
+   [documented](feature-flags.md) as well.
 1. `showLabsSettings`: Shows the "labs" tab of user settings even when no `features` are enabled
    or present. Useful for getting at settings which may be otherwise hidden.
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
