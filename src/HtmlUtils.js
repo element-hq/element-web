@@ -53,7 +53,6 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
-const SINGLE_EMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -73,16 +72,28 @@ function mightContainEmoji(str) {
 }
 
 /**
+ * Find emoji data in emojibase by character.
+ *
+ * @param {String} char The emoji character
+ * @return {Object} The emoji data
+ */
+export function findEmojiData(char) {
+    // Check against both the char and the char with an empty variation selector
+    // appended because that's how emojibase stores its base emojis which have
+    // variations.
+    // See also https://github.com/vector-im/riot-web/issues/9785.
+    const emptyVariation = char + VARIATION_SELECTOR;
+    return EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
+}
+
+/**
  * Returns the shortcode for an emoji character.
  *
  * @param {String} char The emoji character
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    // Check against both the char and the char with an empty variation selector appended because that's how
-    // emoji-base stores its base emojis which have variations. https://github.com/vector-im/riot-web/issues/9785
-    const emptyVariation = char + VARIATION_SELECTOR;
-    const data = EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
+    const data = findEmojiData(char);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
