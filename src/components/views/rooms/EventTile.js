@@ -33,12 +33,15 @@ import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
     'm.sticker': 'messages.MessageEvent',
+    'm.key.verification.cancel': 'messages.MKeyVerificationConclusion',
+    'm.key.verification.done': 'messages.MKeyVerificationConclusion',
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
@@ -68,6 +71,31 @@ const stateEventTileTypes = {
 
 function getHandlerTile(ev) {
     const type = ev.getType();
+
+    // don't show verification requests we're not involved in,
+    // not even when showing hidden events
+    if (type === "m.room.message") {
+        const content = ev.getContent();
+        if (content && content.msgtype === "m.key.verification.request") {
+            const client = MatrixClientPeg.get();
+            const me = client && client.getUserId();
+            if (ev.getSender() !== me && content.to !== me) {
+                return undefined;
+            } else {
+                return "messages.MKeyVerificationRequest";
+            }
+        }
+    }
+    // these events are sent by both parties during verification, but we only want to render one
+    // tile once the verification concludes, so filter out the one from the other party.
+    if (type === "m.key.verification.done") {
+        const client = MatrixClientPeg.get();
+        const me = client && client.getUserId();
+        if (ev.getSender() !== me) {
+            return undefined;
+        }
+    }
+
     return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
 }
 
@@ -527,8 +555,11 @@ module.exports = createReactClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
+        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+            (eventType === "m.room.message" && msgtype.startsWith("m.key.verification"));
         let isInfoMessage = (
-            eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
+            !isBubbleMessage && eventType !== 'm.room.message' &&
+            eventType !== 'm.sticker' && eventType != 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
@@ -561,6 +592,7 @@ module.exports = createReactClass({
 
         const isEditing = !!this.props.editState;
         const classes = classNames({
+            mx_EventTile_bubbleContainer: isBubbleMessage,
             mx_EventTile: true,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
@@ -596,7 +628,7 @@ module.exports = createReactClass({
         if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
-        } else if (tileHandler === 'messages.RoomCreate') {
+        } else if (tileHandler === 'messages.RoomCreate' || isBubbleMessage) {
             avatarSize = 0;
             needsSenderProfile = false;
         } else if (isInfoMessage) {
@@ -794,7 +826,7 @@ module.exports = createReactClass({
                             { readAvatars }
                         </div>
                         { sender }
-                        <div className="mx_EventTile_line">
+                        <div className={classNames("mx_EventTile_line", {mx_EventTile_bubbleLine: isBubbleMessage})}>
                             <a
                                 href={permalink}
                                 onClick={this.onPermalinkClicked}
