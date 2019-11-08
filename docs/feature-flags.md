@@ -34,9 +34,9 @@ clients commit to doing the associated clean up work once a feature stabilises.
 
 When starting work on a feature, we should create a matching feature flag:
 
-* Add a new
-  [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.js)
-  of the form:
+1. Add a new
+   [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.js)
+   of the form:
 ```js
     "feature_cats": {
         isFeature: true,
@@ -45,17 +45,17 @@ When starting work on a feature, we should create a matching feature flag:
         default: false,
     },
 ```
-* Check whether the feature is enabled as appropriate:
+2. Check whether the feature is enabled as appropriate:
 ```js
     SettingsStore.isFeatureEnabled("feature_cats")
 ```
-* Add the feature to the [set of labs on develop](../riot.im/develop/config.json):
+3. Add the feature to the [set of labs on develop](../riot.im/develop/config.json):
 ```json
     "features": {
         "feature_cats": "labs"
     },
 ```
-* Document the feature in the [labs documentation](labs.md)
+4. Document the feature in the [labs documentation](labs.md)
 
 With these steps completed, the feature is disabled by default, but can be
 enabled on develop by interested users for testing.
@@ -81,9 +81,9 @@ Set the feature to `enable` in the [app config](../riot.im/app/config.json).
 
 Once we're confident that a feature is working well, we should remove the flag:
 
-* Remove the [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.js)
-* Remove all `isFeatureEnabled` lines that test for the feature's setting
-* Remove the feature from the [labs documentation](labs.md)
-* Remove feature state from [develop](../riot.im/develop/config.json) and
+1. Remove the [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.js)
+2. Remove all `isFeatureEnabled` lines that test for the feature's setting
+3. Remove the feature from the [labs documentation](labs.md)
+4. Remove feature state from [develop](../riot.im/develop/config.json) and
   [app](../riot.im/app/config.json) configs
-* Celebrate! 🥳
+5. Celebrate! 🥳
