@@ -2279,5 +2279,6 @@
     "Unread messages.": "Messages non lus.",
     "Show tray icon and minimize window to it on close": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Cette action nécessite l’accès au serveur d’identité par défaut <server /> afin de valider une adresse e-mail ou un numéro de téléphone, mais le serveur n’a aucune condition de service.",
-    "Trust": "Confiance"
+    "Trust": "Confiance",
+    "Message Actions": "Actions de message"
 }
