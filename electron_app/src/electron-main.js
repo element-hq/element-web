@@ -39,7 +39,7 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
-const seshat = require('seshat-node');
+const Seshat = require('seshat-node');
 const makeDir = require('make-dir');
 
 if (argv["help"]) {
@@ -223,7 +223,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 let p = path.normalize(path.join(eventStorePath, args[0]));
                 try {
                     await makeDir(p);
-                    eventIndex = new seshat(p);
+                    eventIndex = new Seshat(p);
                     console.log("Initialized event store");
                 } catch (e) {
                     sendError(payload.id, e);
