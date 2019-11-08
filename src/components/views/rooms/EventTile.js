@@ -556,10 +556,10 @@ module.exports = createReactClass({
 
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype.startsWith("m.key.verification"));
+            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification"));
         let isInfoMessage = (
             !isBubbleMessage && eventType !== 'm.room.message' &&
-            eventType !== 'm.sticker' && eventType != 'm.room.create'
+            eventType !== 'm.sticker' && eventType !== 'm.room.create'
         );
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
