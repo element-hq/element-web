@@ -49,3 +49,7 @@ That's it. Now should see your new counter under the header.
 ## Multiple integration managers (`feature_many_integration_managers`)
 
 Exposes a way to access all the integration managers known to Riot. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
+
+## Verifications in DMs (`feature_dm_verification`)
+
+An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
