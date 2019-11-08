@@ -18,7 +18,8 @@
         "feature_custom_tags": "labs",
         "feature_state_counters": "labs",
         "feature_many_integration_managers": "labs",
-        "feature_user_info_panel": "labs"
+        "feature_user_info_panel": "labs",
+        "feature_dm_verification": "labs"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
