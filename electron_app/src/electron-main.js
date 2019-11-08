@@ -155,7 +155,7 @@ autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName, releaseDate,
 ipcMain.on('ipcCall', async function(ev, payload) {
     if (!mainWindow) return;
 
-    const send_error = (id, e) => {
+    const sendError = (id, e) => {
         const error = {
             message: e.message
         }
@@ -226,7 +226,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                     eventIndex = new seshat(p);
                     console.log("Initialized event store");
                 } catch (e) {
-                    send_error(payload.id, e);
+                    sendError(payload.id, e);
                     return;
                 }
             }
@@ -245,7 +245,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             try {
                 eventIndex.addEvent(args[0], args[1]);
             } catch (e) {
-                send_error(payload.id, e);
+                sendError(payload.id, e);
                 return;
             }
             break;
@@ -254,7 +254,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             try {
                 ret = await eventIndex.commit();
             } catch (e) {
-                send_error(payload.id, e);
+                sendError(payload.id, e);
                 return;
             }
             break;
@@ -263,7 +263,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             try {
                 ret = await eventIndex.search(args[0]);
             } catch (e) {
-                send_error(payload.id, e);
+                sendError(payload.id, e);
                 return;
             }
             break;
@@ -275,7 +275,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                     ret = await eventIndex.addHistoricEvents(
                         args[0], args[1], args[2]);
                 } catch (e) {
-                    send_error(payload.id, e);
+                    sendError(payload.id, e);
                     return;
                 }
             }
@@ -287,7 +287,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 try {
                     ret = await eventIndex.removeCrawlerCheckpoint(args[0]);
                 } catch (e) {
-                    send_error(payload.id, e);
+                    sendError(payload.id, e);
                     return;
                 }
             }
@@ -299,7 +299,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 try {
                     ret = await eventIndex.addCrawlerCheckpoint(args[0]);
                 } catch (e) {
-                    send_error(payload.id, e);
+                    sendError(payload.id, e);
                     return;
                 }
             }
