@@ -49,13 +49,13 @@ When starting work on a feature, we should create a matching feature flag:
 ```js
     SettingsStore.isFeatureEnabled("feature_cats")
 ```
-3. Add the feature to the [set of labs on develop](../riot.im/develop/config.json):
+3. Add the feature to the [set of labs on develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json):
 ```json
     "features": {
         "feature_cats": "labs"
     },
 ```
-4. Document the feature in the [labs documentation](labs.md)
+4. Document the feature in the [labs documentation](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md)
 
 With these steps completed, the feature is disabled by default, but can be
 enabled on develop by interested users for testing.
@@ -65,7 +65,7 @@ following lists a few common options.
 
 ## Enabling by default on develop
 
-Set the feature to `enable` in the [develop config](../riot.im/develop/config.json):
+Set the feature to `enable` in the [develop config](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json):
 
 ```json
     "features": {
@@ -75,7 +75,7 @@ Set the feature to `enable` in the [develop config](../riot.im/develop/config.js
 
 ## Enabling by default on staging and app
 
-Set the feature to `enable` in the [app config](../riot.im/app/config.json).
+Set the feature to `enable` in the [app config](https://github.com/vector-im/riot-web/blob/develop/riot.im/app/config.json).
 
 ## Feature deployed successfully
 
@@ -83,7 +83,9 @@ Once we're confident that a feature is working well, we should remove the flag:
 
 1. Remove the [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.js)
 2. Remove all `isFeatureEnabled` lines that test for the feature's setting
-3. Remove the feature from the [labs documentation](labs.md)
-4. Remove feature state from [develop](../riot.im/develop/config.json) and
-  [app](../riot.im/app/config.json) configs
+3. Remove the feature from the [labs documentation](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md)
+4. Remove feature state from
+   [develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json)
+   and [app](https://github.com/vector-im/riot-web/blob/develop/riot.im/app/config.json)
+   configs
 5. Celebrate! 🥳
