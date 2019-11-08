@@ -2280,5 +2280,16 @@
     "Show tray icon and minimize window to it on close": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Cette action nécessite l’accès au serveur d’identité par défaut <server /> afin de valider une adresse e-mail ou un numéro de téléphone, mais le serveur n’a aucune condition de service.",
     "Trust": "Confiance",
-    "Message Actions": "Actions de message"
+    "Message Actions": "Actions de message",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Send verification requests in direct message": "Envoyer les demandes de vérification en message direct",
+    "You verified %(name)s": "Vous avez vérifié %(name)s",
+    "You cancelled verifying %(name)s": "Vous avez annulé la vérification de %(name)s",
+    "%(name)s cancelled verifying": "%(name)s a annulé la vérification",
+    "You accepted": "Vous avez accepté",
+    "%(name)s accepted": "%(name)s a accepté",
+    "You cancelled": "Vous avez annulé",
+    "%(name)s cancelled": "%(name)s a annulé",
+    "%(name)s wants to verify": "%(name)s veut vérifier",
+    "You sent a verification request": "Vous avez envoyé une demande de vérification"
 }
