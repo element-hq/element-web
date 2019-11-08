@@ -37,7 +37,7 @@
     "Dev chat for the Dendrite dev team": "Dendrite開発者チームのための開発者チャット",
     "Co-ordination for Riot translators": "Riot 翻訳者による共同作業",
     "Unexpected error preparing the app. See console for details.": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
-    "Your Riot is misconfigured": "あなたの Riot は間違って設定されています。",
+    "Your Riot is misconfigured": "あなたのRiotは設定が間違っています",
     "Invalid configuration: no default server specified.": "不正な設定です：デフォルトのサーバーが設定されていません。",
     "Sign In": "サインイン",
     "Create Account": "アカウントを作成する",
