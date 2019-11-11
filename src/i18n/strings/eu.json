@@ -2222,5 +2222,19 @@
     "Jump to first unread room.": "Jauzi irakurri gabeko lehen gelara.",
     "Jump to first invite.": "Jauzi lehen gonbidapenera.",
     "Command Autocomplete": "Aginduak auto-osatzea",
-    "DuckDuckGo Results": "DuckDuckGo emaitzak"
+    "DuckDuckGo Results": "DuckDuckGo emaitzak",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ekintza honek lehenetsitako <server /> identitate-zerbitzaria atzitzea eskatzen du, e-mail helbidea edo telefono zenbakia balioztatzeko, baina zerbitzariak ez du erabilera baldintzarik.",
+    "Trust": "Jo fidagarritzat",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Send verification requests in direct message": "Bidali egiaztaketa eskariak mezu zuzen bidez",
+    "Message Actions": "Mezu-ekintzak",
+    "You verified %(name)s": "%(name)s egiaztatu duzu",
+    "You cancelled verifying %(name)s": "%(name)s egiaztatzeari utzi diozu",
+    "%(name)s cancelled verifying": "%(name)s(e)k egiaztaketa utzi du",
+    "You accepted": "Onartu duzu",
+    "%(name)s accepted": "%(name)s onartuta",
+    "You cancelled": "Utzi duzu",
+    "%(name)s cancelled": "%(name)s utzita",
+    "%(name)s wants to verify": "%(name)s(e)k egiaztatu nahi du",
+    "You sent a verification request": "Egiaztaketa eskari bat bidali duzu"
 }
