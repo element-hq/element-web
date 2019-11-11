@@ -22,6 +22,7 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import {Group} from 'matrix-js-sdk';
 import GroupStore from "../../../stores/GroupStore";
+import {MenuItem} from "../../structures/ContextualMenu";
 
 export default class GroupInviteTileContextMenu extends React.Component {
     static propTypes = {
@@ -36,7 +37,7 @@ export default class GroupInviteTileContextMenu extends React.Component {
         this._onClickReject = this._onClickReject.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
     }
 
@@ -78,12 +79,11 @@ export default class GroupInviteTileContextMenu extends React.Component {
     }
 
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div>
-            <AccessibleButton className="mx_RoomTileContextMenu_leave" onClick={this._onClickReject} >
-                <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
+            <MenuItem className="mx_RoomTileContextMenu_leave" onClick={this._onClickReject}>
+                <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" alt="" />
                 { _t('Reject') }
-            </AccessibleButton>
+            </MenuItem>
         </div>;
     }
 }

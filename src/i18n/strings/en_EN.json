@@ -1494,6 +1494,7 @@
     "Report Content": "Report Content",
     "Failed to set Direct Message status of room": "Failed to set Direct Message status of room",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
+    "Notification settings": "Notification settings",
     "All messages (noisy)": "All messages (noisy)",
     "All messages": "All messages",
     "Mentions only": "Mentions only",

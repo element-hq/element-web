@@ -17,8 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -26,10 +25,9 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import sdk from '../../../index';
-import {createMenu} from '../../structures/ContextualMenu';
+import {ContextMenu} from '../../structures/ContextualMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
-import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -147,6 +145,8 @@ module.exports = createReactClass({
     },
 
     componentDidMount: function() {
+        this._contextMenuButton = createRef();
+
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
         cli.on("Room.name", this.onRoomName);
@@ -229,32 +229,6 @@ module.exports = createReactClass({
         this.badgeOnMouseLeave();
     },
 
-    _showContextMenu: function(x, y, chevronOffset) {
-        const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
-
-        createMenu(RoomTileContextMenu, {
-            chevronOffset,
-            left: x,
-            top: y,
-            room: this.props.room,
-            onFinished: () => {
-                this.setState({ menuDisplayed: false });
-                this.props.refreshSubList();
-            },
-        });
-        this.setState({ menuDisplayed: true });
-    },
-
-    onContextMenu: function(e) {
-        // Prevent the RoomTile onClick event firing as well
-        e.preventDefault();
-        // Only allow non-guests to access the context menu
-        if (MatrixClientPeg.get().isGuest()) return;
-
-        const chevronOffset = 12;
-        this._showContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
-    },
-
     badgeOnMouseEnter: function() {
         // Only allow non-guests to access the context menu
         // and only change it if it needs to change
@@ -267,26 +241,31 @@ module.exports = createReactClass({
         this.setState( { badgeHover: false } );
     },
 
-    onOpenMenu: function(e) {
-        // Prevent the RoomTile onClick event firing as well
-        e.stopPropagation();
+    openMenu: function(e) {
         // Only allow non-guests to access the context menu
         if (MatrixClientPeg.get().isGuest()) return;
 
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
+        e.preventDefault();
+
+        const state = {
+            menuDisplayed: true,
+        };
+
         // If the badge is clicked, then no longer show tooltip
         if (this.props.collapsed) {
-            this.setState({ hover: false });
+            state.hover = false;
         }
 
-        const elementRect = e.target.getBoundingClientRect();
+        this.setState(state);
+    },
 
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = elementRect.right + window.pageXOffset + 3;
-        const chevronOffset = 12;
-        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
-
-        this._showContextMenu(x, y, chevronOffset);
+    closeMenu: function() {
+        this.setState({
+            menuDisplayed: false,
+        });
+        this.props.refreshSubList();
     },
 
     render: function() {
@@ -360,9 +339,13 @@ module.exports = createReactClass({
         //    incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
         //}
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         let contextMenuButton;
         if (!MatrixClientPeg.get().isGuest()) {
-            contextMenuButton = <AccessibleButton className="mx_RoomTile_menuButton" onClick={this.onOpenMenu} />;
+            contextMenuButton = (
+                <AccessibleButton className="mx_RoomTile_menuButton" inputRef={this._contextMenuButton} onClick={this.openMenu} />
+            );
         }
 
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
@@ -393,32 +376,54 @@ module.exports = createReactClass({
             ariaLabel += " " + _t("Unread messages.");
         }
 
-        return <AccessibleButton tabIndex="0"
-                                 className={classes}
-                                 onClick={this.onClick}
-                                 onMouseEnter={this.onMouseEnter}
-                                 onMouseLeave={this.onMouseLeave}
-                                 onContextMenu={this.onContextMenu}
-                                 aria-label={ariaLabel}
-                                 aria-selected={this.state.selected}
-                                 role="treeitem"
-        >
-            <div className={avatarClasses}>
-                <div className="mx_RoomTile_avatar_container">
-                    <RoomAvatar room={this.props.room} width={24} height={24} />
-                    { dmIndicator }
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+            // The window X and Y offsets are to adjust position when zoomed in to page
+            const left = elementRect.right + window.pageXOffset + 3;
+            const chevronOffset = 12;
+            let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+            top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
+
+            const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
+            contextMenu = (
+                <ContextMenu props={{ left, top, chevronOffset }} onFinished={this.closeMenu}>
+                    <RoomTileContextMenu room={this.props.room} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
+        }
+
+        return <React.Fragment>
+            <AccessibleButton
+                tabIndex="0"
+                className={classes}
+                onClick={this.onClick}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
+                onContextMenu={this.openMenu}
+                aria-label={ariaLabel}
+                aria-selected={this.state.selected}
+                role="treeitem"
+            >
+                <div className={avatarClasses}>
+                    <div className="mx_RoomTile_avatar_container">
+                        <RoomAvatar room={this.props.room} width={24} height={24} />
+                        { dmIndicator }
+                    </div>
                 </div>
-            </div>
-            <div className="mx_RoomTile_nameContainer">
-                <div className="mx_RoomTile_labelContainer">
-                    { label }
-                    { subtextLabel }
+                <div className="mx_RoomTile_nameContainer">
+                    <div className="mx_RoomTile_labelContainer">
+                        { label }
+                        { subtextLabel }
+                    </div>
+                    { contextMenuButton }
+                    { badge }
                 </div>
-                { contextMenuButton }
-                { badge }
-            </div>
-            { /* { incomingCallBox } */ }
-            { tooltip }
-        </AccessibleButton>;
+                { /* { incomingCallBox } */ }
+                { tooltip }
+            </AccessibleButton>
+
+            { contextMenu }
+        </React.Fragment>;
     },
 });
