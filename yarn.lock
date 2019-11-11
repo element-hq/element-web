@@ -3134,13 +3134,13 @@ electron-devtools-installer@^2.2.4:
     rimraf "^2.5.2"
     semver "^5.3.0"
 
-electron-notarize@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/electron-notarize/-/electron-notarize-0.1.1.tgz#c3563d70c5e7b3315f44e8495b30050a8c408b91"
-  integrity sha512-TpKfJcz4LXl5jiGvZTs5fbEx+wUFXV5u8voeG5WCHWfY/cdgdD8lDZIZRqLVOtR3VO+drgJ9aiSHIO9TYn/fKg==
+electron-notarize@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/electron-notarize/-/electron-notarize-0.2.0.tgz#676c71688ee84149bab27b22426d0a9452e7e262"
+  integrity sha512-u3KdEMOEcGMF9yCML8ej4ZF+O29VmGYIjrs/DoOi23neTWOMiIc5YCeFs4vxq3JG496omcw7Y5pimPm0sH9A7g==
   dependencies:
     debug "^4.1.1"
-    fs-extra "^8.0.1"
+    fs-extra "^8.1.0"
 
 electron-publish@21.2.0:
   version "21.2.0"
@@ -3363,6 +3363,11 @@ eslint-plugin-flowtype@^2.50.3:
   integrity sha512-X+AoKVOr7Re0ko/yEXyM5SSZ0tazc6ffdIOocp2fFUlWoDt7DV0Bz99mngOkAFLOAWjqRA5jPwqUCbrx13XoxQ==
   dependencies:
     lodash "^4.17.10"
+
+eslint-plugin-react-hooks@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-2.2.0.tgz#078264e9e388da6929ace09d6abe92c85963aff4"
+  integrity sha512-jSlnBjV2cmyIeL555H/FbvuSbQ1AtpHjLMHuPrQnt1eVA6lX8yufdygh7AArI2m8ct7ChHGx2uOaCuxq2MUn6g==
 
 eslint-plugin-react@^7.11.1:
   version "7.14.3"
@@ -4091,7 +4096,7 @@ fs-extra@^0.30.0:
     path-is-absolute "^1.0.0"
     rimraf "^2.2.8"
 
-fs-extra@^8.0.1, fs-extra@^8.1.0:
+fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
   integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
@@ -5950,9 +5955,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "2.4.2"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/46d7e4c7075386f1330d6a49941e9979fc26be0a"
+matrix-js-sdk@2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.3.tgz#23b78cc707a02eb0ce7eecb3aa50129e46dd5b6e"
+  integrity sha512-8qTqILd/NmTWF24tpaxmDIzkTk/bZhPD5N8h69PlvJ5Y6kMFctpRj+Tud5zZjl5/yhO07+g+JCyDzg+AagiM/A==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5973,9 +5979,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "1.7.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/53332018234fc9067c6200babb794ab3538a0791"
+matrix-react-sdk@1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.7.2.tgz#4c16fa6c2d188311ecb5163773dfdf7ca92b7ecc"
+  integrity sha512-CWCr41sRBeUChlvec6eJxmY02g+Re6PN3lt9tR7TkqGKyUu++Y72WPfirM+0t11QVtVyZ5Wo1WIzpropLBFyYw==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -6006,7 +6013,7 @@ matrix-mock-request@^1.2.3:
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
     lolex "4.2"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "2.4.3"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
