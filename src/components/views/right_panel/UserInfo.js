@@ -40,6 +40,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import {ContentRepo} from 'matrix-js-sdk';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -917,6 +918,12 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     }, [user.roomId, user.userId, room && room.currentState, cli]); // eslint-disable-line
 
+    const onMemberAvatarKey = e => {
+        if (e.key === "Enter") {
+            onMemberAvatarClick();
+        }
+    };
+
     const onMemberAvatarClick = useCallback(() => {
         const member = user;
         const avatarUrl = member.getMxcAvatarUrl();
@@ -1045,8 +1052,15 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     let avatarElement;
     if (avatarUrl) {
         const httpUrl = cli.mxcUrlToHttp(avatarUrl, 800, 800);
-        avatarElement = <div className="mx_UserInfo_avatar" onClick={onMemberAvatarClick}>
-            <img src={httpUrl} alt={_t("Profile picture")} />
+        avatarElement = <div
+            className="mx_UserInfo_avatar"
+            onClick={onMemberAvatarClick}
+            onKeyDown={onMemberAvatarKey}
+            tabIndex="0"
+            role="img"
+            aria-label={_t("Profile picture")}
+        >
+            <div><div style={{backgroundImage: `url(${httpUrl})`}} /></div>
         </div>;
     }
 
