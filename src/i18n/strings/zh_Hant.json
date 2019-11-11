@@ -2273,5 +2273,16 @@
     "Show tray icon and minimize window to it on close": "顯示系統匣圖示並在關閉視窗時將其最小化至其中",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "此動作需要存取預設的身份識別伺服器 <server /> 以驗證電子郵件或電話號碼，但伺服器沒有任何服務條款。",
     "Trust": "信任",
-    "Message Actions": "訊息動作"
+    "Message Actions": "訊息動作",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Send verification requests in direct message": "在直接訊息中傳送驗證請求",
+    "You verified %(name)s": "您驗證了 %(name)s",
+    "You cancelled verifying %(name)s": "您已取消驗證 %(name)s",
+    "%(name)s cancelled verifying": "%(name)s 已取消驗證",
+    "You accepted": "您已接受",
+    "%(name)s accepted": "%(name)s 已接受",
+    "You cancelled": "您已取消",
+    "%(name)s cancelled": "%(name)s 已取消",
+    "%(name)s wants to verify": "%(name)s 想要驗證",
+    "You sent a verification request": "您已傳送了驗證請求"
 }
