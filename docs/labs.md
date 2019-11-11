@@ -53,3 +53,7 @@ Exposes a way to access all the integration managers known to Riot. This is an i
 ## Verifications in DMs (`feature_dm_verification`)
 
 An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
+
+## New user info panel (`feature_user_info_panel`)
+
+A new implementation of the user & member info panel, designed to share more code between showing community members & room members.
