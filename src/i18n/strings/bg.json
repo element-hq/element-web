@@ -2249,5 +2249,16 @@
     "Emoji Autocomplete": "Подсказка за емоджита",
     "Notification Autocomplete": "Подсказка за уведомления",
     "Room Autocomplete": "Подсказка за стаи",
-    "User Autocomplete": "Подсказка за потребители"
+    "User Autocomplete": "Подсказка за потребители",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Send verification requests in direct message": "Изпращай заявки за потвърждение чрез директни съобщения",
+    "You verified %(name)s": "Потвърдихте %(name)s",
+    "You cancelled verifying %(name)s": "Отказахте потвърждаването за %(name)s",
+    "%(name)s cancelled verifying": "%(name)s отказа потвърждаването",
+    "You accepted": "Приехте",
+    "%(name)s accepted": "%(name)s прие",
+    "You cancelled": "Отказахте потвърждаването",
+    "%(name)s cancelled": "%(name)s отказа",
+    "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
+    "You sent a verification request": "Изпратихте заявка за потвърждение"
 }
