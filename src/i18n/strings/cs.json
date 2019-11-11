@@ -41,6 +41,13 @@
     "Sign In": "Přihlásit se",
     "Create Account": "Vytvořit účet",
     "Need help?": "Chcete pomoct?",
-    "Explore rooms": "Objevit místnosti",
-    "Room Directory": "Adresář místností"
+    "Explore rooms": "Prohlížet místnosti",
+    "Room Directory": "Adresář místností",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfigurace Riotu obsahuje neplatný JSON. Opravte prosím tento problém a obnovte stránku.",
+    "The message from the parser is: %(message)s": "Zpráva z parseru je: %(message)s",
+    "Invalid JSON": "Neplatný JSON",
+    "Your Riot is misconfigured": "Riot je špatně nakonfigurován",
+    "Unexpected error preparing the app. See console for details.": "Neočekávaná chyba při přípravě aplikace. V konzoli je více informací.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neplatná konfigurace: je možné specifikovat pouze jednu volbu z default_server_config, default_server_name, nebo default_hs_url.",
+    "Invalid configuration: no default server specified.": "Neplatná konfigurace: není zadán výchozí server."
 }
