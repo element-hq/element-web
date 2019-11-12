@@ -22,7 +22,6 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
-import Promise from "bluebird";
 import Modal from "../../../../../Modal";
 import sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";

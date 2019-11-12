@@ -25,7 +25,6 @@ import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
-import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
