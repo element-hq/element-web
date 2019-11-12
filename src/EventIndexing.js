@@ -401,4 +401,9 @@ export default class EventIndexer {
         this._crawlerRef.cancel();
         this._crawlerRef = null;
     }
+
+    async search(searchArgs) {
+        const platform = PlatformPeg.get();
+        return platform.searchEventIndex(searchArgs)
+    }
 }

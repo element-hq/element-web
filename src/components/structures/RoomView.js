@@ -34,7 +34,6 @@ import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
-import PlatformPeg from "../../PlatformPeg";
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import sdk from '../../index';
@@ -44,6 +43,7 @@ import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
 import ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
+import eventSearch from '../../Searching';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
@@ -1130,127 +1130,12 @@ module.exports = createReactClass({
         // todo: should cancel any previous search requests.
         this.searchId = new Date().getTime();
 
-        let filter;
-        if (scope === "Room") {
-            filter = {
-                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
-                rooms: [
-                    this.state.room.roomId,
-                ],
-            };
-        }
+        let roomId;
+        if (scope === "Room") roomId = this.state.room.roomId,
 
         debuglog("sending search request");
-        const platform = PlatformPeg.get();
-
-        if (platform.supportsEventIndexing()) {
-            const combinedSearchFunc = async (searchTerm) => {
-                // Create two promises, one for the local search, one for the
-                // server-side search.
-                const client = MatrixClientPeg.get();
-                const serverSidePromise = client.searchRoomEvents({
-                    term: searchTerm,
-                });
-                const localPromise = localSearchFunc(searchTerm);
-
-                // Wait for both promises to resolve.
-                await Promise.all([serverSidePromise, localPromise]);
-
-                // Get both search results.
-                const localResult = await localPromise;
-                const serverSideResult = await serverSidePromise;
-
-                // Combine the search results into one result.
-                const result = {};
-
-                // Our localResult and serverSideResult are both ordered by
-                // recency separetly, when we combine them the order might not
-                // be the right one so we need to sort them.
-                const compare = (a, b) => {
-                    const aEvent = a.context.getEvent().event;
-                    const bEvent = b.context.getEvent().event;
-
-                    if (aEvent.origin_server_ts >
-                        bEvent.origin_server_ts) return -1;
-                    if (aEvent.origin_server_ts <
-                        bEvent.origin_server_ts) return 1;
-                    return 0;
-                };
-
-                result.count = localResult.count + serverSideResult.count;
-                result.results = localResult.results.concat(
-                    serverSideResult.results).sort(compare);
-                result.highlights = localResult.highlights.concat(
-                    serverSideResult.highlights);
-
-                return result;
-            };
-
-            const localSearchFunc = async (searchTerm, roomId = undefined) => {
-                const searchArgs = {
-                    search_term: searchTerm,
-                    before_limit: 1,
-                    after_limit: 1,
-                    order_by_recency: true,
-                };
-
-                if (roomId !== undefined) {
-                    searchArgs.room_id = roomId;
-                }
-
-                const localResult = await platform.searchEventIndex(
-                    searchArgs);
-
-                const response = {
-                    search_categories: {
-                        room_events: localResult,
-                    },
-                };
-
-                const emptyResult = {
-                    results: [],
-                    highlights: [],
-                };
-
-                // TODO is there a better way to convert our result into what
-                // is expected by the handler method.
-                const result = MatrixClientPeg.get()._processRoomEventsSearch(
-                    emptyResult, response);
-
-                return result;
-            };
-
-            let searchPromise;
-
-            if (scope === "Room") {
-                const roomId = this.state.room.roomId;
-
-                if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
-                    // The search is for a single encrypted room, use our local
-                    // search method.
-                    searchPromise = localSearchFunc(term, roomId);
-                } else {
-                    // The search is for a single non-encrypted room, use the
-                    // server-side search.
-                    searchPromise = MatrixClientPeg.get().searchRoomEvents({
-                        filter: filter,
-                        term: term,
-                    });
-                }
-            } else {
-                // Search across all rooms, combine a server side search and a
-                // local search.
-                searchPromise = combinedSearchFunc(term);
-            }
-
-            this._handleSearchResult(searchPromise).done();
-        } else {
-            const searchPromise = MatrixClientPeg.get().searchRoomEvents({
-                filter: filter,
-                term: term,
-            });
-            this._handleSearchResult(searchPromise).done();
-        }
+        const searchPromise = eventSearch(term, roomId);
+        this._handleSearchResult(searchPromise).done();
     },
 
     _handleSearchResult: function(searchPromise) {
