@@ -389,8 +389,8 @@
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s は %(targetName)s を追放しました。",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s は %(targetName)s の招待を撤回しました。",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s はトピックを \"%(topic)s\" に変更しました。",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s はルーム名を削除しました。",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s はルーム名を %(roomName)s に変更しました。",
+    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s は部屋名を削除しました。",
+    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s は部屋名を %(roomName)s に変更しました。",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s はイメージを送信しました。",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s はこの部屋のアドレスとして %(addedAddresses)s を追加しました。",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s はこの部屋のアドレスとして %(addedAddresses)s を追加しました。",
@@ -1421,5 +1421,6 @@
     "Explore": "探索",
     "Filter": "フィルター",
     "Find a room… (e.g. %(exampleRoom)s)": "部屋を探す… (例: %(exampleRoom)s)",
-    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "もしお探しの部屋が見つからない場合、招待してもらうか<a>部屋を作成</a>しましょう。"
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "もしお探しの部屋が見つからない場合、招待してもらうか<a>部屋を作成</a>しましょう。",
+    "Enable room encryption": "部屋の暗号化を有効にする"
 }
