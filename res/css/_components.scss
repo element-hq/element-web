@@ -124,6 +124,7 @@
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
+@import "./views/messages/_MjolnirBody.scss";
 @import "./views/messages/_ReactionsRow.scss";
 @import "./views/messages/_ReactionsRowButton.scss";
 @import "./views/messages/_ReactionsRowButtonTooltip.scss";
@@ -183,6 +184,7 @@
 @import "./views/settings/tabs/room/_SecurityRoomSettingsTab.scss";
 @import "./views/settings/tabs/user/_GeneralUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_HelpUserSettingsTab.scss";
+@import "./views/settings/tabs/user/_MjolnirUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_NotificationUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_PreferencesUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_SecurityUserSettingsTab.scss";
