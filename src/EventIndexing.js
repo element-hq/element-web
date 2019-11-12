@@ -385,6 +385,7 @@ export default class EventIndexer {
     }
 
     async deleteEventIndex() {
+        const platform = PlatformPeg.get();
         if (platform.supportsEventIndexing()) {
             console.log("Seshat: Deleting event index.");
             this.crawlerRef.cancel();
