@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import sdk from '../../../index';
-import {ContextMenu} from '../../structures/ContextualMenu';
+import {ContextMenu, toRightOf} from '../../structures/ContextualMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
@@ -379,15 +379,9 @@ module.exports = createReactClass({
         let contextMenu;
         if (this.state.menuDisplayed) {
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
-            // The window X and Y offsets are to adjust position when zoomed in to page
-            const left = elementRect.right + window.pageXOffset + 3;
-            const chevronOffset = 12;
-            let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-            top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
-
             const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
             contextMenu = (
-                <ContextMenu props={{ left, top, chevronOffset }} onFinished={this.closeMenu}>
+                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <RoomTileContextMenu room={this.props.room} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

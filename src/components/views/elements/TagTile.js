@@ -29,7 +29,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu} from "../../structures/ContextualMenu";
+import {ContextMenu, toRightOf} from "../../structures/ContextualMenu";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -176,16 +176,9 @@ export default createReactClass({
         let contextMenu;
         if (this.state.menuDisplayed) {
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
-
-            // The window X and Y offsets are to adjust position when zoomed in to page
-            const left = elementRect.right + window.pageXOffset + 3;
-            const chevronOffset = 12;
-            let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-            top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
-
             const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
             contextMenu = (
-                <ContextMenu props={{ left, top, chevronOffset }} onFinished={this.closeMenu}>
+                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

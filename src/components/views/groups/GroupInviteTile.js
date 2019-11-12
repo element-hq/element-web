@@ -24,7 +24,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import {ContextMenu} from "../../structures/ContextualMenu";
+import {ContextMenu, toRightOf} from "../../structures/ContextualMenu";
 
 export default createReactClass({
     displayName: 'GroupInviteTile',
@@ -144,15 +144,9 @@ export default createReactClass({
         let contextMenu;
         if (this.state.menuDisplayed) {
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
-            // The window X and Y offsets are to adjust position when zoomed in to page
-            const left = elementRect.right + window.pageXOffset + 3;
-            const chevronOffset = 12;
-            let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-            top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
-
             const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
             contextMenu = (
-                <ContextMenu props={{ left, top, chevronOffset }} onFinished={this.closeMenu}>
+                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <GroupInviteTileContextMenu group={this.props.group} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

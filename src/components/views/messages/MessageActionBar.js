@@ -27,6 +27,26 @@ import {ContextMenu} from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
 
+const contextMenuProps = (elementRect) => {
+    const menuOptions = {
+        chevronFace: "none",
+    };
+
+    const buttonRight = elementRect.right + window.pageXOffset;
+    const buttonBottom = elementRect.bottom + window.pageYOffset;
+    const buttonTop = elementRect.top + window.pageYOffset;
+    // Align the right edge of the menu to the right edge of the button
+    menuOptions.right = window.innerWidth - buttonRight;
+    // Align the menu vertically on whichever side of the button has more space available.
+    if (buttonBottom < window.innerHeight / 2) {
+        menuOptions.top = buttonBottom;
+    } else {
+        menuOptions.bottom = window.innerHeight - buttonTop;
+    }
+
+    return menuOptions;
+};
+
 const useContextMenu = () => {
     const _button = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -65,26 +85,8 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
             e2eInfoCallback = onCryptoClick;
         }
 
-        const menuOptions = {
-            chevronFace: "none",
-        };
-
         const buttonRect = _button.current.getBoundingClientRect();
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const buttonRight = buttonRect.right + window.pageXOffset;
-        const buttonBottom = buttonRect.bottom + window.pageYOffset;
-        const buttonTop = buttonRect.top + window.pageYOffset;
-        // Align the right edge of the menu to the right edge of the button
-        menuOptions.right = window.innerWidth - buttonRight;
-        // Align the menu vertically on whichever side of the button has more
-        // space available.
-        if (buttonBottom < window.innerHeight / 2) {
-            menuOptions.top = buttonBottom;
-        } else {
-            menuOptions.bottom = window.innerHeight - buttonTop;
-        }
-
-        contextMenu = <ContextMenu props={menuOptions} onFinished={closeMenu}>
+        contextMenu = <ContextMenu props={contextMenuProps(buttonRect)} onFinished={closeMenu}>
             <MessageContextMenu
                 mxEvent={mxEvent}
                 permalinkCreator={permalinkCreator}
@@ -116,27 +118,9 @@ const ReactButton = ({mxEvent, reactions}) => {
 
     let contextMenu;
     if (menuDisplayed) {
-        const menuOptions = {
-            chevronFace: "none",
-        };
-
         const buttonRect = _button.current.getBoundingClientRect();
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const buttonRight = buttonRect.right + window.pageXOffset;
-        const buttonBottom = buttonRect.bottom + window.pageYOffset;
-        const buttonTop = buttonRect.top + window.pageYOffset;
-        // Align the right edge of the menu to the right edge of the button
-        menuOptions.right = window.innerWidth - buttonRight;
-        // Align the menu vertically on whichever side of the button has more
-        // space available.
-        if (buttonBottom < window.innerHeight / 2) {
-            menuOptions.top = buttonBottom;
-        } else {
-            menuOptions.bottom = window.innerHeight - buttonTop;
-        }
-
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu props={menuOptions} onFinished={closeMenu}>
+        contextMenu = <ContextMenu props={contextMenuProps(buttonRect)} onFinished={closeMenu}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }

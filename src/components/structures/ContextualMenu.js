@@ -559,6 +559,14 @@ MenuItemRadio.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
+// Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
+export const toRightOf = (elementRect, chevronOffset=12) => {
+    const left = elementRect.right + window.pageXOffset + 3;
+    let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+    top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
+    return {left, top};
+};
+
 export function createMenu(ElementClass, props, hasBackground=true) {
     const closeMenu = function(...args) {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
