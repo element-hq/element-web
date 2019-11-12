@@ -179,50 +179,43 @@ class RoomViewStore extends Store {
         } else if (payload.room_alias) {
             // Try the room alias to room ID navigation cache first to avoid
             // blocking room navigation on the homeserver.
-            const roomId = getCachedRoomIDForAlias(payload.room_alias);
-            if (roomId) {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: roomId,
-                    event_id: payload.event_id,
-                    highlighted: payload.highlighted,
-                    room_alias: payload.room_alias,
-                    auto_join: payload.auto_join,
-                    oob_data: payload.oob_data,
+            let roomId = getCachedRoomIDForAlias(payload.room_alias);
+            if (!roomId) {
+                // Room alias cache miss, so let's ask the homeserver. Resolve the alias
+                // and then do a second dispatch with the room ID acquired.
+                this._setState({
+                    roomId: null,
+                    initialEventId: null,
+                    initialEventPixelOffset: null,
+                    isInitialEventHighlighted: null,
+                    roomAlias: payload.room_alias,
+                    roomLoading: true,
+                    roomLoadError: null,
                 });
-                return;
+                try {
+                    const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
+                    storeRoomAliasInCache(payload.room_alias, result.room_id);
+                    roomId = result.room_id;
+                } catch (err) {
+                    dis.dispatch({
+                        action: 'view_room_error',
+                        room_id: null,
+                        room_alias: payload.room_alias,
+                        err,
+                    });
+                    return;
+                }
             }
-            // Room alias cache miss, so let's ask the homeserver.
-            // Resolve the alias and then do a second dispatch with the room ID acquired
-            this._setState({
-                roomId: null,
-                initialEventId: null,
-                initialEventPixelOffset: null,
-                isInitialEventHighlighted: null,
-                roomAlias: payload.room_alias,
-                roomLoading: true,
-                roomLoadError: null,
+
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId,
+                event_id: payload.event_id,
+                highlighted: payload.highlighted,
+                room_alias: payload.room_alias,
+                auto_join: payload.auto_join,
+                oob_data: payload.oob_data,
             });
-            try {
-                const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
-                storeRoomAliasInCache(payload.room_alias, result.room_id);
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: result.room_id,
-                    event_id: payload.event_id,
-                    highlighted: payload.highlighted,
-                    room_alias: payload.room_alias,
-                    auto_join: payload.auto_join,
-                    oob_data: payload.oob_data,
-                });
-            } catch (err) {
-                dis.dispatch({
-                    action: 'view_room_error',
-                    room_id: null,
-                    room_alias: payload.room_alias,
-                    err,
-                });
-            }
         }
     }
 
