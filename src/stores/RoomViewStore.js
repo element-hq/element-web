@@ -20,6 +20,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
+import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -137,7 +138,7 @@ class RoomViewStore extends Store {
         }
     }
 
-    _viewRoom(payload) {
+    async _viewRoom(payload) {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
@@ -176,6 +177,22 @@ class RoomViewStore extends Store {
                 this._joinRoom(payload);
             }
         } else if (payload.room_alias) {
+            // Try the room alias to room ID navigation cache first to avoid
+            // blocking room navigation on the homeserver.
+            const roomId = getCachedRoomIDForAlias(payload.room_alias);
+            if (roomId) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: roomId,
+                    event_id: payload.event_id,
+                    highlighted: payload.highlighted,
+                    room_alias: payload.room_alias,
+                    auto_join: payload.auto_join,
+                    oob_data: payload.oob_data,
+                });
+                return;
+            }
+            // Room alias cache miss, so let's ask the homeserver.
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
                 roomId: null,
@@ -186,8 +203,9 @@ class RoomViewStore extends Store {
                 roomLoading: true,
                 roomLoadError: null,
             });
-            MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-            (result) => {
+            try {
+                const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
+                storeRoomAliasInCache(payload.room_alias, result.room_id);
                 dis.dispatch({
                     action: 'view_room',
                     room_id: result.room_id,
@@ -197,14 +215,14 @@ class RoomViewStore extends Store {
                     auto_join: payload.auto_join,
                     oob_data: payload.oob_data,
                 });
-            }, (err) => {
+            } catch (err) {
                 dis.dispatch({
                     action: 'view_room_error',
                     room_id: null,
                     room_alias: payload.room_alias,
-                    err: err,
+                    err,
                 });
-            });
+            }
         }
     }
 
