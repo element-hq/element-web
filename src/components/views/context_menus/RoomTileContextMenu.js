@@ -318,8 +318,6 @@ module.exports = createReactClass({
             return null;
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let leaveClickHandler = null;
         let leaveText = null;
 

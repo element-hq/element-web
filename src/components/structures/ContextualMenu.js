@@ -22,7 +22,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {focusCapturedRef} from "../../utils/Accessibility";
 import {Key, KeyCode} from "../../Keyboard";
-import {_t} from "../../languageHandler";
 import sdk from "../../index";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
