@@ -115,7 +115,7 @@ module.exports = createReactClass({
                 this.setState({
                     error: err,
                 });
-            }).then();
+            }).done();
         }
     },
 

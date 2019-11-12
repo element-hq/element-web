@@ -52,7 +52,7 @@ export default class DevicesPanel extends React.Component {
     }
 
     _loadDevices() {
-        MatrixClientPeg.get().getDevices().then(
+        MatrixClientPeg.get().getDevices().done(
             (resp) => {
                 if (this._unmounted) { return; }
                 this.setState({devices: resp.devices || []});

@@ -279,7 +279,7 @@ function inviteUser(event, roomId, userId) {
         }
     }
 
-    client.invite(roomId, userId).then(function() {
+    client.invite(roomId, userId).done(function() {
         sendResponse(event, {
             success: true,
         });
@@ -398,7 +398,7 @@ function setPlumbingState(event, roomId, status) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).then(() => {
+    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).done(() => {
         sendResponse(event, {
             success: true,
         });
@@ -414,7 +414,7 @@ function setBotOptions(event, roomId, userId) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).then(() => {
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
         sendResponse(event, {
             success: true,
         });
@@ -444,7 +444,7 @@ function setBotPower(event, roomId, userId, level) {
             },
         );
 
-        client.setPowerLevel(roomId, userId, level, powerEvent).then(() => {
+        client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
             sendResponse(event, {
                 success: true,
             });

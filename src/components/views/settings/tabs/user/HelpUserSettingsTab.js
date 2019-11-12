@@ -75,7 +75,7 @@ export default class HelpUserSettingsTab extends React.Component {
         // stopping in the middle of the logs.
         console.log("Clear cache & reload clicked");
         MatrixClientPeg.get().stopClient();
-        MatrixClientPeg.get().store.deleteAllData().then(() => {
+        MatrixClientPeg.get().store.deleteAllData().done(() => {
             PlatformPeg.get().reload();
         });
     };

@@ -1101,7 +1101,7 @@ module.exports = createReactClass({
         }
 
         ContentMessages.sharedInstance().sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
-            .then(undefined, (error) => {
+            .done(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
                     // Let the staus bar handle this
                     return;
@@ -1145,7 +1145,7 @@ module.exports = createReactClass({
             filter: filter,
             term: term,
         });
-        this._handleSearchResult(searchPromise).then();
+        this._handleSearchResult(searchPromise).done();
     },
 
     _handleSearchResult: function(searchPromise) {
@@ -1316,7 +1316,7 @@ module.exports = createReactClass({
     },
 
     onForgetClick: function() {
-        MatrixClientPeg.get().forget(this.state.room.roomId).then(function() {
+        MatrixClientPeg.get().forget(this.state.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
             const errCode = err.errcode || _t("unknown error code");
@@ -1333,7 +1333,7 @@ module.exports = createReactClass({
         this.setState({
             rejecting: true,
         });
-        MatrixClientPeg.get().leave(this.state.roomId).then(function() {
+        MatrixClientPeg.get().leave(this.state.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false,

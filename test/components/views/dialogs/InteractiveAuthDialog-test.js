@@ -26,7 +26,6 @@ import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
-import {sleep} from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
     'views.dialogs.InteractiveAuthDialog',
@@ -108,7 +107,7 @@ describe('InteractiveAuthDialog', function() {
                 },
             })).toBe(true);
             // let the request complete
-            return sleep(1);
+            return Promise.delay(1);
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);

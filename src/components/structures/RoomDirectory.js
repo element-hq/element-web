@@ -89,7 +89,7 @@ module.exports = createReactClass({
             this.setState({protocolsLoading: false});
             return;
         }
-        MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
+        MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
@@ -135,7 +135,7 @@ module.exports = createReactClass({
             publicRooms: [],
             loading: true,
         });
-        this.getMoreRooms().then();
+        this.getMoreRooms().done();
     },
 
     getMoreRooms: function() {
@@ -246,7 +246,7 @@ module.exports = createReactClass({
                     if (!alias) return;
                     step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
-                }).then(() => {
+                }).done(() => {
                     modal.close();
                     this.refreshRoomList();
                 }, (err) => {
@@ -348,7 +348,7 @@ module.exports = createReactClass({
                 });
                 return;
             }
-            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).then((resp) => {
+            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).done((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
                     this.showRoomAlias(resp[0].alias, true);
                 } else {

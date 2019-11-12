@@ -49,7 +49,7 @@ export default class LanguageDropdown extends React.Component {
             this.setState({langs});
         }).catch(() => {
             this.setState({langs: ['en']});
-        }).then();
+        }).done();
 
         if (!this.props.value) {
             // If no value is given, we start with the first

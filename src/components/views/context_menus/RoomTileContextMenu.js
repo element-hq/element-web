@@ -161,7 +161,7 @@ module.exports = createReactClass({
 
     _onClickForget: function() {
         // FIXME: duplicated with RoomSettings (and dead code in RoomView)
-        MatrixClientPeg.get().forget(this.props.room.roomId).then(() => {
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(() => {
             // Switch to another room view if we're currently viewing the
             // historical room
             if (RoomViewStore.getRoomId() === this.props.room.roomId) {
@@ -191,7 +191,7 @@ module.exports = createReactClass({
         this.setState({
             roomNotifState: newState,
         });
-        RoomNotifs.setRoomNotifsState(roomId, newState).then(() => {
+        RoomNotifs.setRoomNotifsState(roomId, newState).done(() => {
             // delay slightly so that the user can see their state change
             // before closing the menu
             return sleep(500).then(() => {

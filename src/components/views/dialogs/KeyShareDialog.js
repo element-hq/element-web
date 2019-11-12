@@ -78,7 +78,7 @@ export default createReactClass({
                     true,
                 );
             }
-        }).then();
+        }).done();
     },
 
     componentWillUnmount: function() {

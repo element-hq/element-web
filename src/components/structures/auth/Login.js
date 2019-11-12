@@ -253,7 +253,7 @@ module.exports = createReactClass({
             this.setState({
                 busy: false,
             });
-        }).then();
+        }).done();
     },
 
     onUsernameChanged: function(username) {
@@ -424,7 +424,7 @@ module.exports = createReactClass({
             this.setState({
                 busy: false,
             });
-        }).then();
+        }).done();
     },
 
     _isSupportedFlow: function(flow) {

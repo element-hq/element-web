@@ -62,7 +62,7 @@ export default createReactClass({
             return;
         }
         this._addThreepid = new AddThreepid();
-        this._addThreepid.addEmailAddress(emailAddress).then(() => {
+        this._addThreepid.addEmailAddress(emailAddress).done(() => {
             Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                 title: _t("Verification Pending"),
                 description: _t(
@@ -96,7 +96,7 @@ export default createReactClass({
     },
 
     verifyEmailAddress: function() {
-        this._addThreepid.checkEmailLinkClicked().then(() => {
+        this._addThreepid.checkEmailLinkClicked().done(() => {
             this.props.onFinished(true);
         }, (err) => {
             this.setState({emailBusy: false});

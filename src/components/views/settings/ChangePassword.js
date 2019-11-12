@@ -174,7 +174,7 @@ module.exports = createReactClass({
                 newPassword: "",
                 newPasswordConfirm: "",
             });
-        }).then();
+        }).done();
     },
 
     _optionallySetEmail: function() {

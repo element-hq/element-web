@@ -267,7 +267,7 @@ module.exports = createReactClass({
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });
-        }).then(() => {
+        }).done(() => {
             this.setState({
                 busy: false,
             });
@@ -380,7 +380,7 @@ module.exports = createReactClass({
                 // Do a local search immediately
                 this._doLocalSearch(query);
             }
-        }).then(() => {
+        }).done(() => {
             this.setState({
                 busy: false,
             });

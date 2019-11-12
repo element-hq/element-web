@@ -51,7 +51,7 @@ export default class EditableTextContainer extends React.Component {
 
         this.setState({busy: true});
 
-        this.props.getInitialValue().then(
+        this.props.getInitialValue().done(
             (result) => {
                 if (this._unmounted) { return; }
                 this.setState({
@@ -83,7 +83,7 @@ export default class EditableTextContainer extends React.Component {
             errorString: null,
         });
 
-        this.props.onSubmit(value).then(
+        this.props.onSubmit(value).done(
             () => {
                 if (this._unmounted) { return; }
                 this.setState({

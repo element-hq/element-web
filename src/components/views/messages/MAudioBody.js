@@ -55,7 +55,7 @@ export default class MAudioBody extends React.Component {
             decryptFile(content.file).then(function(blob) {
                 decryptedBlob = blob;
                 return URL.createObjectURL(decryptedBlob);
-            }).then((url) => {
+            }).done((url) => {
                 this.setState({
                     decryptedUrl: url,
                     decryptedBlob: decryptedBlob,
