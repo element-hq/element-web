@@ -190,7 +190,10 @@ function openDMForUser(cli, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
         const room = cli.getRoom(roomId);
-        if (!lastActiveRoom || (room && lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp())) {
+        if (!room || room.getMyMembership() === "leave") {
+            return lastActiveRoom;
+        }
+        if (!lastActiveRoom || lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp()) {
             return room;
         }
         return lastActiveRoom;
@@ -317,7 +320,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
 
     return (
         <div className="mx_UserInfo_container">
-            <h3>{ _t("User Options") }</h3>
+            <h3>{ _t("Options") }</h3>
             <div className="mx_UserInfo_buttons">
                 { directMessageButton }
                 { readReceiptButton }
