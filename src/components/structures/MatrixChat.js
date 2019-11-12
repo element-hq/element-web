@@ -1276,11 +1276,6 @@ export default createReactClass({
         // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
         cli.setCanResetTimelineCallback(async function(roomId) {
             console.log("Request to reset timeline in room ", roomId, " viewing:", self.state.currentRoomId);
-            // TODO is there a better place to plug this in
-            const eventIndex = EventIndexPeg.get();
-            if (eventIndex !== null) {
-                await eventIndex.addCheckpointForLimitedRoom(roomId);
-            }
 
             if (roomId !== self.state.currentRoomId) {
                 // It is safe to remove events from rooms we are not viewing.
@@ -1312,6 +1307,13 @@ export default createReactClass({
             const eventIndex = EventIndexPeg.get();
             if (eventIndex === null) return;
             await eventIndex.onEventDecrypted(ev, err);
+        });
+
+        cli.on("Room.timelineReset", async (room, timelineSet, resetAllTimelines) => {
+            const eventIndex = EventIndexPeg.get();
+            if (eventIndex === null) return;
+            if (resetAllTimelines === true) return;
+            await eventIndex.addCheckpointForLimitedRoom(roomId);
         });
 
         cli.on('sync', function(state, prevState, data) {
