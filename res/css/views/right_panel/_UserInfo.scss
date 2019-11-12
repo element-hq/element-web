@@ -22,13 +22,6 @@ limitations under the License.
     overflow-y: auto;
 }
 
-.mx_UserInfo_profile .mx_E2EIcon {
-    display: inline;
-    margin: auto;
-    padding-right: 25px;
-    mask-size: contain;
-}
-
 .mx_UserInfo_cancel {
     height: 16px;
     width: 16px;
@@ -41,16 +34,10 @@ limitations under the License.
     position: absolute;
 }
 
-.mx_UserInfo_profile h2 {
-    flex: 1;
-    overflow-x: auto;
-    max-height: 50px;
-}
-
 .mx_UserInfo h2 {
     font-size: 18px;
     font-weight: 600;
-    margin: 16px 0 8px 0;
+    margin: 0;
 }
 
 .mx_UserInfo_container {
@@ -76,6 +63,7 @@ limitations under the License.
 
 .mx_UserInfo_avatar {
     margin: 24px 32px 0 32px;
+    cursor: pointer;
 }
 
 .mx_UserInfo_avatar > div {
@@ -110,11 +98,29 @@ limitations under the License.
     margin: 4px 0;
 }
 
-.mx_UserInfo_profileField {
-    font-size: 15px;
-    position: relative;
+.mx_UserInfo_profile {
+    font-size: 12px;
     text-align: center;
+
+    h2 {
+        flex: 1;
+        overflow-x: auto;
+        max-height: 50px;
+        display: flex;
+        justify-self: ;
+        justify-content: center;
+        align-items: center;
+
+        .mx_E2EIcon {
+            margin: 5px;
+        }
+    }
+
+    .mx_UserInfo_profileStatus {
+        margin-top: 12px;
+    }
 }
+
 
 .mx_UserInfo_memberDetails {
     text-align: center;

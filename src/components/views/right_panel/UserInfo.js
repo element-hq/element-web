@@ -1157,7 +1157,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
     let e2eIcon;
     if (isRoomEncrypted && devices) {
-        e2eIcon = <E2EIcon status={_getE2EStatus(devices)} isUser={true} />;
+        e2eIcon = <E2EIcon size={18} status={_getE2EStatus(devices)} isUser={true} />;
     }
 
     return (
@@ -1167,16 +1167,14 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
             <div className="mx_UserInfo_container">
                 <div className="mx_UserInfo_profile">
-                    <div className="mx_UserInfo_profileField">
-                        <h2>
+                    <div >
+                        <h2 aria-label={displayName}>
                             { e2eIcon }
                             { displayName }
                         </h2>
                     </div>
-                    <div className="mx_UserInfo_profileField">
-                        { user.userId }
-                    </div>
-                    <div className="mx_UserInfo_profileField">
+                    <div>{ user.userId }</div>
+                    <div className="mx_UserInfo_profileStatus">
                         {presenceLabel}
                         {statusLabel}
                     </div>
