@@ -17,17 +17,56 @@ limitations under the License.
 .mx_E2EIcon {
     width: 25px;
     height: 25px;
-    mask-repeat: no-repeat;
-    mask-position: center 0;
     margin: 0 9px;
+    position: relative;
+    display: block;
 }
 
-.mx_E2EIcon_verified {
-    mask-image: url('$(res)/img/e2e/lock-verified.svg');
-    background-color: $accent-color;
+.mx_E2EIcon_verified::before, .mx_E2EIcon_warning::before {
+    content: "";
+    display: block;
+    /* the symbols in the shield icons are cut out the make the themeable with css masking.
+    if they appear on a different background than white, the symbol wouldn't be white though, so we
+    add a rectangle here below the masked element to shine through the symbol cutout.
+    hardcoding white and not using a theme variable as this would probably be white for any theme. */
+    background-color: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
-.mx_E2EIcon_warning {
-    mask-image: url('$(res)/img/e2e/lock-warning.svg');
+.mx_E2EIcon_verified::after, .mx_E2EIcon_warning::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.mx_E2EIcon_verified::before {
+    /* white rectangle below checkmark of shield */
+    margin: 25% 28% 38% 25%;
+}
+
+
+.mx_E2EIcon_verified::after {
+    mask-image: url('$(res)/img/e2e/verified.svg');
+    background-color: $warning-color;
+}
+
+
+.mx_E2EIcon_warning::before {
+    /* white rectangle below "!" of shield */
+    margin: 18% 40% 25% 40%;
+}
+
+.mx_E2EIcon_warning::after {
+    mask-image: url('$(res)/img/e2e/warning.svg');
     background-color: $warning-color;
 }
