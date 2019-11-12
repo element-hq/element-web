@@ -215,6 +215,10 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
     let inviteUserButton = null;
     let readReceiptButton = null;
 
+    const isMe = member.userId === cli.getUserId();
+
+
+
     const onShareUserClick = () => {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room member dialog', '', ShareDialog, {
@@ -224,7 +228,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
 
     // Only allow the user to ignore the user if its not ourselves
     // same goes for jumping to read receipt
-    if (member.userId !== cli.getUserId()) {
+    if (!isMe) {
         const onIgnoreToggle = () => {
             const ignoredUsers = cli.getIgnoredUsers();
             if (isIgnored) {
