@@ -50,6 +50,16 @@ That's it. Now should see your new counter under the header.
 
 Exposes a way to access all the integration managers known to Riot. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
+## New ways to ignore people (`feature_mjolnir`)
+
+When enabled, a new settings tab appears for users to be able to manage their ban lists. 
+This is a different kind of ignoring where the ignored user's messages still get rendered, 
+but are hidden by default.
+
+Ban lists are rooms within Matrix, proposed as [MSC2313](https://github.com/matrix-org/matrix-doc/pull/2313).
+[Mjolnir](https://github.com/matrix-org/mjolnir) is a set of moderation tools which support
+ban lists.
+
 ## Verifications in DMs (`feature_dm_verification`)
 
 An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
