@@ -32,6 +32,7 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import {sleep} from "../../../utils/promise";
 
 module.exports = createReactClass({
     displayName: 'RoomTileContextMenu',
@@ -62,7 +63,7 @@ module.exports = createReactClass({
 
     _toggleTag: function(tagNameOn, tagNameOff) {
         if (!MatrixClientPeg.get().isGuest()) {
-            Promise.delay(500).then(() => {
+            sleep(500).then(() => {
                 dis.dispatch(RoomListActions.tagRoom(
                     MatrixClientPeg.get(),
                     this.props.room,
@@ -119,7 +120,7 @@ module.exports = createReactClass({
 
         Rooms.guessAndSetDMRoom(
             this.props.room, newIsDirectMessage,
-        ).delay(500).finally(() => {
+        ).then(sleep(500)).finally(() => {
             // Close the context menu
             if (this.props.onFinished) {
                 this.props.onFinished();
@@ -193,7 +194,7 @@ module.exports = createReactClass({
         RoomNotifs.setRoomNotifsState(roomId, newState).done(() => {
             // delay slightly so that the user can see their state change
             // before closing the menu
-            return Promise.delay(500).then(() => {
+            return sleep(500).then(() => {
                 if (this._unmounted) return;
                 // Close the context menu
                 if (this.props.onFinished) {

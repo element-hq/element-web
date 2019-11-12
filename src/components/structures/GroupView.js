@@ -38,6 +38,7 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk";
+import {sleep} from "../../utils/promise";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -692,7 +693,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.acceptGroupInvite(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -711,7 +712,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -735,7 +736,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.joinGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -787,7 +788,7 @@ export default createReactClass({
 
                 // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
                 // spinner disappearing after we have fetched new group data.
-                await Promise.delay(500);
+                await sleep(500);
 
                 GroupStore.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
