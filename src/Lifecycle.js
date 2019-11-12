@@ -613,6 +613,7 @@ export function onLoggedOut() {
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'});
+    EventIndexPeg.deleteEventIndex().done();
     stopMatrixClient();
     _clearStorage().done();
 }
@@ -648,6 +649,7 @@ export function stopMatrixClient(unsetClient=true) {
     ActiveWidgetStore.stop();
     IntegrationManagers.sharedInstance().stopWatching();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
+    EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
