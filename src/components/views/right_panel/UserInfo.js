@@ -89,103 +89,6 @@ const DevicesSection = ({devices, userId, loading}) => {
     );
 };
 
-const onRoomTileClick = (roomId) => {
-    dis.dispatch({
-        action: 'view_room',
-        room_id: roomId,
-    });
-};
-
-const DirectChatsSection = withLegacyMatrixClient(({matrixClient: cli, userId, startUpdating, stopUpdating}) => {
-    const onNewDMClick = async () => {
-        startUpdating();
-        await createRoom({dmUserId: userId});
-        stopUpdating();
-    };
-
-    // TODO: Immutable DMs replaces a lot of this
-    // dmRooms will not include dmRooms that we have been invited into but did not join.
-    // Because DMRoomMap runs off account_data[m.direct] which is only set on join of dm room.
-    // XXX: we potentially want DMs we have been invited to, to also show up here :L
-    // especially as logic below concerns specially if we haven't joined but have been invited
-    const [dmRooms, setDmRooms] = useState(new DMRoomMap(cli).getDMRoomsForUserId(userId));
-
-    // TODO bind the below
-    // cli.on("Room", this.onRoom);
-    // cli.on("Room.name", this.onRoomName);
-    // cli.on("deleteRoom", this.onDeleteRoom);
-
-    const accountDataHandler = useCallback((ev) => {
-        if (ev.getType() === "m.direct") {
-            const dmRoomMap = new DMRoomMap(cli);
-            setDmRooms(dmRoomMap.getDMRoomsForUserId(userId));
-        }
-    }, [cli, userId]);
-    useEventEmitter(cli, "accountData", accountDataHandler);
-
-    const RoomTile = sdk.getComponent("rooms.RoomTile");
-
-    const tiles = [];
-    for (const roomId of dmRooms) {
-        const room = cli.getRoom(roomId);
-        if (room) {
-            const myMembership = room.getMyMembership();
-            // not a DM room if we have are not joined
-            if (myMembership !== 'join') continue;
-
-            const them = room.getMember(userId);
-            // not a DM room if they are not joined
-            if (!them || !them.membership || them.membership !== 'join') continue;
-
-            const highlight = room.getUnreadNotificationCount('highlight') > 0;
-
-            tiles.push(
-                <RoomTile key={room.roomId}
-                          room={room}
-                          transparent={true}
-                          collapsed={false}
-                          selected={false}
-                          unread={Unread.doesRoomHaveUnreadMessages(room)}
-                          highlight={highlight}
-                          isInvite={false}
-                          onClick={onRoomTileClick}
-                />,
-            );
-        }
-    }
-
-    const labelClasses = classNames({
-        mx_UserInfo_createRoom_label: true,
-        mx_RoomTile_name: true,
-    });
-
-    let body = tiles;
-    if (!body) {
-        body = (
-            <AccessibleButton className="mx_UserInfo_createRoom" onClick={onNewDMClick}>
-                <div className="mx_RoomTile_avatar">
-                    <img src={require("../../../../res/img/create-big.svg")} width="26" height="26" alt={_t("Start a chat")} />
-                </div>
-                <div className={labelClasses}><i>{ _t("Start a chat") }</i></div>
-            </AccessibleButton>
-        );
-    }
-
-    return (
-        <div className="mx_UserInfo_container">
-            <div className="mx_UserInfo_container_header">
-                <h3>{ _t("Direct messages") }</h3>
-                <AccessibleButton
-                    className="mx_UserInfo_container_header_right mx_UserInfo_newDmButton"
-                    onClick={onNewDMClick}
-                    title={_t("Start a chat")}
-                />
-            </div>
-            { body }
-        </div>
-    );
-});
-
 function openDMForUser(cli, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
@@ -216,8 +119,6 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
     let readReceiptButton = null;
 
     const isMe = member.userId === cli.getUserId();
-
-
 
     const onShareUserClick = () => {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
@@ -979,11 +880,6 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     let synapseDeactivateButton;
     let spinner;
 
-    let directChatsSection;
-    if (user.userId !== cli.getUserId()) {
-        directChatsSection = <DirectChatsSection userId={user.userId} />;
-    }
-
     // We don't need a perfect check here, just something to pass as "probably not our homeserver". If
     // someone does figure out how to bypass this check the worst that happens is an error.
     // FIXME this should be using cli instead of MatrixClientPeg.matrixClient
@@ -1226,9 +1122,6 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
             <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
                 { devicesSection }
-
-                { directChatsSection }
-
                 <UserOptionsSection
                     canInvite={roomPermissions.canInvite}
                     isIgnored={isIgnored}
