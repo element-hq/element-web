@@ -108,8 +108,7 @@ export default class VectorBasePlatform extends BasePlatform {
             if (window.chrome) {
                 doUpdate();
             }
-        }
-         catch (e) {
+        } catch (e) {
             console.warn(`Failed to set badge count: ${e.message}`);
         }
     }
