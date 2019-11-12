@@ -312,14 +312,18 @@ async function _restoreFromLocalStorage(opts) {
 function _handleLoadSessionFailure(e) {
     console.error("Unable to load session", e);
 
+    const def = Promise.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
-    const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
+    Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
+        onFinished: (success) => {
+            def.resolve(success);
+        },
     });
 
-    return modal.finished.then(([success]) => {
+    return def.promise.then((success) => {
         if (success) {
             // user clicked continue.
             _clearStorage();

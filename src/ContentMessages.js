@@ -59,38 +59,40 @@ export class UploadCanceledError extends Error {}
  *  and a thumbnail key.
  */
 function createThumbnail(element, inputWidth, inputHeight, mimeType) {
-    return new Promise((resolve) => {
-        let targetWidth = inputWidth;
-        let targetHeight = inputHeight;
-        if (targetHeight > MAX_HEIGHT) {
-            targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
-            targetHeight = MAX_HEIGHT;
-        }
-        if (targetWidth > MAX_WIDTH) {
-            targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
-            targetWidth = MAX_WIDTH;
-        }
+    const deferred = Promise.defer();
 
-        const canvas = document.createElement("canvas");
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        canvas.getContext("2d").drawImage(element, 0, 0, targetWidth, targetHeight);
-        canvas.toBlob(function(thumbnail) {
-            resolve({
-                info: {
-                    thumbnail_info: {
-                        w: targetWidth,
-                        h: targetHeight,
-                        mimetype: thumbnail.type,
-                        size: thumbnail.size,
-                    },
-                    w: inputWidth,
-                    h: inputHeight,
+    let targetWidth = inputWidth;
+    let targetHeight = inputHeight;
+    if (targetHeight > MAX_HEIGHT) {
+        targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
+        targetHeight = MAX_HEIGHT;
+    }
+    if (targetWidth > MAX_WIDTH) {
+        targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
+        targetWidth = MAX_WIDTH;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    canvas.getContext("2d").drawImage(element, 0, 0, targetWidth, targetHeight);
+    canvas.toBlob(function(thumbnail) {
+        deferred.resolve({
+            info: {
+                thumbnail_info: {
+                    w: targetWidth,
+                    h: targetHeight,
+                    mimetype: thumbnail.type,
+                    size: thumbnail.size,
                 },
-                thumbnail: thumbnail,
-            });
-        }, mimeType);
-    });
+                w: inputWidth,
+                h: inputHeight,
+            },
+            thumbnail: thumbnail,
+        });
+    }, mimeType);
+
+    return deferred.promise;
 }
 
 /**
@@ -177,29 +179,30 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
  * @return {Promise} A promise that resolves with the video image element.
  */
 function loadVideoElement(videoFile) {
-    return new Promise((resolve, reject) => {
-        // Load the file into an html element
-        const video = document.createElement("video");
+    const deferred = Promise.defer();
 
-        const reader = new FileReader();
+    // Load the file into an html element
+    const video = document.createElement("video");
 
-        reader.onload = function(e) {
-            video.src = e.target.result;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        video.src = e.target.result;
 
-            // Once ready, returns its size
-            // Wait until we have enough data to thumbnail the first frame.
-            video.onloadeddata = function() {
-                resolve(video);
-            };
-            video.onerror = function(e) {
-                reject(e);
-            };
+        // Once ready, returns its size
+        // Wait until we have enough data to thumbnail the first frame.
+        video.onloadeddata = function() {
+            deferred.resolve(video);
         };
-        reader.onerror = function(e) {
-            reject(e);
+        video.onerror = function(e) {
+            deferred.reject(e);
         };
-        reader.readAsDataURL(videoFile);
-    });
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsDataURL(videoFile);
+
+    return deferred.promise;
 }
 
 /**
@@ -233,16 +236,16 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
  *   is read.
  */
 function readFileAsArrayBuffer(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            resolve(e.target.result);
-        };
-        reader.onerror = function(e) {
-            reject(e);
-        };
-        reader.readAsArrayBuffer(file);
-    });
+    const deferred = Promise.defer();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        deferred.resolve(e.target.result);
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsArrayBuffer(file);
+    return deferred.promise;
 }
 
 /**
@@ -458,34 +461,33 @@ export default class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const prom = new Promise((resolve) => {
-            if (file.type.indexOf('image/') == 0) {
-                content.msgtype = 'm.image';
-                infoForImageFile(matrixClient, roomId, file).then((imageInfo)=>{
-                    extend(content.info, imageInfo);
-                    resolve();
-                }, (error)=>{
-                    console.error(error);
-                    content.msgtype = 'm.file';
-                    resolve();
-                });
-            } else if (file.type.indexOf('audio/') == 0) {
-                content.msgtype = 'm.audio';
-                resolve();
-            } else if (file.type.indexOf('video/') == 0) {
-                content.msgtype = 'm.video';
-                infoForVideoFile(matrixClient, roomId, file).then((videoInfo)=>{
-                    extend(content.info, videoInfo);
-                    resolve();
-                }, (error)=>{
-                    content.msgtype = 'm.file';
-                    resolve();
-                });
-            } else {
+        const def = Promise.defer();
+        if (file.type.indexOf('image/') == 0) {
+            content.msgtype = 'm.image';
+            infoForImageFile(matrixClient, roomId, file).then((imageInfo)=>{
+                extend(content.info, imageInfo);
+                def.resolve();
+            }, (error)=>{
+                console.error(error);
                 content.msgtype = 'm.file';
-                resolve();
-            }
-        });
+                def.resolve();
+            });
+        } else if (file.type.indexOf('audio/') == 0) {
+            content.msgtype = 'm.audio';
+            def.resolve();
+        } else if (file.type.indexOf('video/') == 0) {
+            content.msgtype = 'm.video';
+            infoForVideoFile(matrixClient, roomId, file).then((videoInfo)=>{
+                extend(content.info, videoInfo);
+                def.resolve();
+            }, (error)=>{
+                content.msgtype = 'm.file';
+                def.resolve();
+            });
+        } else {
+            content.msgtype = 'm.file';
+            def.resolve();
+        }
 
         const upload = {
             fileName: file.name || 'Attachment',
@@ -507,7 +509,7 @@ export default class ContentMessages {
             dis.dispatch({action: 'upload_progress', upload: upload});
         }
 
-        return prom.then(function() {
+        return def.promise.then(function() {
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.

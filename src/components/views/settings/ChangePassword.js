@@ -178,12 +178,17 @@ module.exports = createReactClass({
     },
 
     _optionallySetEmail: function() {
+        const deferred = Promise.defer();
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
-        const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
+        Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
+            onFinished: (confirmed) => {
+                // ignore confirmed, setting an email is optional
+                deferred.resolve(confirmed);
+            },
         });
-        return modal.finished.then(([confirmed]) => confirmed);
+        return deferred.promise;
     },
 
     _onExportE2eKeysClicked: function() {
