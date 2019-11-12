@@ -36,6 +36,7 @@ import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import {Mjolnir} from "./mjolnir/Mjolnir";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -581,6 +582,11 @@ async function startMatrixClient(startSyncing=true) {
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
 
+    // Start Mjolnir even though we haven't checked the feature flag yet. Starting
+    // the thing just wastes CPU cycles, but should result in no actual functionality
+    // being exposed to the user.
+    Mjolnir.sharedInstance().start();
+
     if (startSyncing) {
         await MatrixClientPeg.start();
     } else {
@@ -641,6 +647,7 @@ export function stopMatrixClient(unsetClient=true) {
     Presence.stop();
     ActiveWidgetStore.stop();
     IntegrationManagers.sharedInstance().stopWatching();
+    Mjolnir.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     const cli = MatrixClientPeg.get();
     if (cli) {
