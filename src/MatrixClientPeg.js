@@ -31,6 +31,7 @@ import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientB
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import PlatformPeg from "./PlatformPeg";
+import EventIndexPeg from "./EventIndexPeg";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -222,9 +223,6 @@ class MatrixClientPeg {
         };
 
         this.matrixClient = createMatrixClient(opts);
-
-        const platform = PlatformPeg.get();
-        if (platform.supportsEventIndexing()) platform.initEventIndex(creds.userId);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

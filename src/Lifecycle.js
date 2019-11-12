@@ -20,6 +20,7 @@ import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
+import EventIndexPeg from './EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';
@@ -587,6 +588,7 @@ async function startMatrixClient(startSyncing=true) {
 
     if (startSyncing) {
         await MatrixClientPeg.start();
+        await EventIndexPeg.init();
     } else {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
