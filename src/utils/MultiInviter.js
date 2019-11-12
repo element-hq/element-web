@@ -24,6 +24,7 @@ import {_t} from "../languageHandler";
 import sdk from "../index";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
+import {defer} from "./promise";
 
 /**
  * Invites multiple addresses to a room or group, handling rate limiting from the server
@@ -71,7 +72,7 @@ export default class MultiInviter {
                 };
             }
         }
-        this.deferred = Promise.defer();
+        this.deferred = defer();
         this._inviteMore(0);
 
         return this.deferred.promise;
