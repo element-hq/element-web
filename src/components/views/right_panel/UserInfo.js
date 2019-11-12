@@ -186,6 +186,26 @@ const DirectChatsSection = withLegacyMatrixClient(({matrixClient: cli, userId, s
     );
 });
 
+function openDMForUser(cli, userId) {
+    const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
+    const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
+        const room = cli.getRoom(roomId);
+        if (!lastActiveRoom || (room && lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp())) {
+            return room;
+        }
+        return lastActiveRoom;
+    }, null);
+
+    if (lastActiveRoom) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: lastActiveRoom.roomId,
+        });
+    } else {
+        createRoom({dmUserId: userId});
+    }
+}
+
 const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite}) => {
     let ignoreButton = null;
     let insertPillButton = null;
@@ -286,10 +306,20 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
         </AccessibleButton>
     );
 
+    let directMessageButton;
+    if (!isMe) {
+        directMessageButton = (
+            <AccessibleButton onClick={() => openDMForUser(cli, member.userId)} className="mx_UserInfo_field">
+                { _t('Direct message') }
+            </AccessibleButton>
+        );
+    }
+
     return (
         <div className="mx_UserInfo_container">
             <h3>{ _t("User Options") }</h3>
             <div className="mx_UserInfo_buttons">
+                { directMessageButton }
                 { readReceiptButton }
                 { shareUserButton }
                 { insertPillButton }
