@@ -462,7 +462,7 @@ const TimelinePanel = createReactClass({
         // timeline window.
         //
         // see https://github.com/vector-im/vector-web/issues/1035
-        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).done(() => {
+        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).then(() => {
             if (this.unmounted) { return; }
 
             const { events, liveEvents } = this._getEvents();
@@ -1088,7 +1088,7 @@ const TimelinePanel = createReactClass({
             prom = prom.then(onLoaded, onError);
         }
 
-        prom.done();
+        prom.then();
     },
 
     // handle the completion of a timeline load or localEchoUpdate, by

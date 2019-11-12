@@ -639,7 +639,7 @@ export default createReactClass({
                 title: _t('Error'),
                 description: _t('Failed to upload image'),
             });
-        }).done();
+        }).then();
     },
 
     _onJoinableChange: function(ev) {
@@ -678,7 +678,7 @@ export default createReactClass({
             this.setState({
                 avatarChanged: false,
             });
-        }).done();
+        }).then();
     },
 
     _saveGroup: async function() {

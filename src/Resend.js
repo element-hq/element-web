@@ -35,7 +35,7 @@ module.exports = {
     },
     resend: function(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        MatrixClientPeg.get().resendEvent(event, room).done(function(res) {
+        MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event,

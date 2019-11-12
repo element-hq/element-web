@@ -289,7 +289,7 @@ export default class MImageBody extends React.Component {
                 this.setState({
                     error: err,
                 });
-            }).done();
+            }).then();
         }
 
         // Remember that the user wanted to show this particular image

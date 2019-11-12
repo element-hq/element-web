@@ -205,7 +205,7 @@ export default class AppTile extends React.Component {
         if (!this._scalarClient) {
             this._scalarClient = defaultManager.getScalarClient();
         }
-        this._scalarClient.getScalarToken().done((token) => {
+        this._scalarClient.getScalarToken().then((token) => {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this._addWurlParams(this.props.url));

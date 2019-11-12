@@ -97,7 +97,7 @@ module.exports = createReactClass({
             phase: this.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).done(function() {
+        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).then(function() {
            self._refreshFromServer();
         });
     },
@@ -170,7 +170,7 @@ module.exports = createReactClass({
             emailPusher.kind = null;
             emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
         }
-        emailPusherPromise.done(() => {
+        emailPusherPromise.then(() => {
             this._refreshFromServer();
         }, (error) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -274,7 +274,7 @@ module.exports = createReactClass({
                 }
             }
 
-            Promise.all(deferreds).done(function() {
+            Promise.all(deferreds).then(function() {
                 self._refreshFromServer();
             }, function(error) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -343,7 +343,7 @@ module.exports = createReactClass({
             }
         }
 
-        Promise.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).then(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -398,7 +398,7 @@ module.exports = createReactClass({
         };
 
         // Then, add the new ones
-        Promise.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).then(function(resps) {
             const deferreds = [];
 
             let pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -434,7 +434,7 @@ module.exports = createReactClass({
                 }
             }
 
-            Promise.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).then(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -650,7 +650,7 @@ module.exports = createReactClass({
                 externalContentRules: self.state.externalContentRules,
                 externalPushRules: self.state.externalPushRules,
             });
-        }).done();
+        }).then();
 
         MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
     },
