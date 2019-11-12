@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// This is only here to allow access to methods like done for the time being
+import Promise from "bluebird";
+
 // @flow
 
 // Returns a promise which resolves with a given value after the given number of ms
