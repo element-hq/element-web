@@ -34,6 +34,7 @@ export default class EventIndexer {
         const platform = PlatformPeg.get();
         if (!platform.supportsEventIndexing()) return false;
         platform.initEventIndex(userId);
+        return true;
     }
 
     async onSync(state, prevState, data) {
@@ -397,7 +398,7 @@ export default class EventIndexer {
         this.crawlerRef = crawlerHandle;
     }
 
-    stopCrawler() {
+    stop() {
         this._crawlerRef.cancel();
         this._crawlerRef = null;
     }

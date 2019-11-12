@@ -57,13 +57,14 @@ class EventIndexPeg {
         return true
     }
 
-    async stop() {
-        if (this.index == null) return;
-        index.stopCrawler();
+    stop() {
+        if (this.index === null) return;
+        index.stop();
+        this.index = null;
     }
 
     async deleteEventIndex() {
-        if (this.index == null) return;
+        if (this.index === null) return;
         index.deleteEventIndex();
     }
 }
