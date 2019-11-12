@@ -515,7 +515,21 @@ class RoomListStore extends Store {
             }
 
             if (count !== 1) {
-                console.warn(`!! Room ${room.roomId} inserted ${count} times`);
+                console.warn(`!! Room ${room.roomId} inserted ${count} times to ${targetTag}`);
+            }
+
+            // This is a workaround for https://github.com/vector-im/riot-web/issues/11303
+            // The logging is to try and identify what happened exactly.
+            if (count === 0) {
+                // Something went very badly wrong - try to recover the room.
+                // We don't bother checking how the target list is ordered - we're expecting
+                // to just insert it.
+                console.warn(`!! Recovering ${room.roomId} for tag ${targetTag} at position 0`);
+                if (!listsClone[targetTag]) {
+                    console.warn(`!! List for tag ${targetTag} does not exist - creating`);
+                    listsClone[targetTag] = [];
+                }
+                listsClone[targetTag].splice(0, 0, {room, category});
             }
         }
 
