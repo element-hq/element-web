@@ -946,7 +946,7 @@
     "Verified key": "Verifierad nyckel",
     "Unrecognised command:": "Oigenkänt kommando:",
     "Unbans user with given id": "Avbannar användare med givet id",
-    "Verifies a user, device, and pubkey tuple": "Verifierar en användare, enhet och nycklar",
+    "Verifies a user, device, and pubkey tuple": "Verifierar en användare, enhet och offentlig nyckel-tupel",
     "VoIP conference started.": "VoIP-konferens startad.",
     "VoIP conference finished.": "VoIP-konferens avslutad.",
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s gjorde framtida rumshistorik synligt för okänd (%(visibility)s).",
@@ -1812,5 +1812,10 @@
     "Connect this device to Key Backup": "Anslut den här enheten till nyckelsäkerhetskopiering",
     "Backing up %(sessionsRemaining)s keys...": "Säkerhetskopierar %(sessionsRemaining)s nycklar...",
     "All keys backed up": "Alla nycklar säkerhetskopierade",
-    "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.": "Säkerhetskopian har en signatur från <verify>okänd</verify> enhet med ID %(deviceId)s."
+    "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.": "Säkerhetskopian har en signatur från <verify>okänd</verify> enhet med ID %(deviceId)s.",
+    "Add Email Address": "Lägg till e-postadress",
+    "Add Phone Number": "Lägg till telefonnummer",
+    "Identity server has no terms of service": "Identitetsserver har inga användarvillkor",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Den här åtgärden kräver åtkomst till standardidentitetsservern <server /> för att validera en e-postadress eller telefonnummer, men servern har inga användarvillkor.",
+    "Trust": "Förtroende"
 }

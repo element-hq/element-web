@@ -48,7 +48,14 @@ const DATA_BY_CATEGORY = {
 };
 const DATA_BY_EMOJI = {};
 
+const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
 EMOJIBASE.forEach(emoji => {
+    if (emoji.unicode.includes(VARIATION_SELECTOR)) {
+        // Clone data into variation-less version
+        emoji = Object.assign({}, emoji, {
+            unicode: emoji.unicode.replace(VARIATION_SELECTOR, ""),
+        });
+    }
     DATA_BY_EMOJI[emoji.unicode] = emoji;
     const categoryId = EMOJIBASE_CATEGORY_IDS[emoji.group];
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
@@ -82,7 +89,10 @@ class EmojiPicker extends React.Component {
             viewportHeight: 280,
         };
 
-        this.recentlyUsed = recent.get().map(unicode => DATA_BY_EMOJI[unicode]);
+        // Convert recent emoji characters to emoji data, removing unknowns.
+        this.recentlyUsed = recent.get()
+            .map(unicode => DATA_BY_EMOJI[unicode])
+            .filter(data => !!data);
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,

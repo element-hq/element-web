@@ -1,6 +1,7 @@
 /*
 Copyright 2017 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
+import escapeHtml from "escape-html";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -101,6 +103,15 @@ export default class ReplyThread extends React.Component {
             if (html) html = this.stripHTMLReply(html);
         }
 
+        if (!body) body = ""; // Always ensure we have a body, for reasons.
+
+        // Escape the body to use as HTML below.
+        // We also run a nl2br over the result to fix the fallback representation. We do this
+        // after converting the text to safe HTML to avoid user-provided BR's from being converted.
+        if (!html) html = escapeHtml(body).replace(/\n/g, '<br/>');
+
+        // dev note: do not rely on `body` being safe for HTML usage below.
+
         const evLink = permalinkCreator.forEvent(ev.getId());
         const userLink = makeUserPermalink(ev.getSender());
         const mxid = ev.getSender();
@@ -110,7 +121,7 @@ export default class ReplyThread extends React.Component {
             case 'm.text':
             case 'm.notice': {
                 html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>${html || body}</blockquote></mx-reply>`;
+                    + `<br>${html}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `<${mxid}> ${lines[0]}`;
@@ -140,7 +151,7 @@ export default class ReplyThread extends React.Component {
                 break;
             case 'm.emote': {
                 html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> * `
-                    + `<a href="${userLink}">${mxid}</a><br>${html || body}</blockquote></mx-reply>`;
+                    + `<a href="${userLink}">${mxid}</a><br>${html}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `* <${mxid}> ${lines[0]}`;

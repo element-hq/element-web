@@ -116,7 +116,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             nodes.push((
                 <EditHistoryMessage
                     key={e.getId()}
-                    previousEdit={!isBaseEvent && allEvents[i + 1]}
+                    previousEdit={!isBaseEvent ? allEvents[i + 1] : null}
                     isBaseEvent={isBaseEvent}
                     mxEvent={e}
                     isTwelveHour={this.state.isTwelveHour}

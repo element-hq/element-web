@@ -2263,5 +2263,20 @@
     "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Azonosítási szerver nincs beállítva, így nem tudsz hozzáadni e-mail címet amivel vissza lehetne állítani a jelszót a későbbiekben.",
     "%(count)s unread messages including mentions.|one": "1 olvasatlan megemlítés.",
     "%(count)s unread messages.|one": "1 olvasatlan üzenet.",
-    "Unread messages.": "Olvasatlan üzenetek."
+    "Unread messages.": "Olvasatlan üzenetek.",
+    "Show tray icon and minimize window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ez a művelet az e-mail cím vagy telefonszám ellenőrzése miatt hozzáférést igényel az alapértelmezett azonosítási szerverhez (<server />), de a szervernek nincsen semmilyen felhasználási feltétele.",
+    "Trust": "Megbízom benne",
+    "Message Actions": "Üzenet Műveletek",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Send verification requests in direct message": "Ellenőrzés kérés küldése közvetlen üzenetben",
+    "You verified %(name)s": "Ellenőrizted: %(name)s",
+    "You cancelled verifying %(name)s": "Az ellenőrzést megszakítottad ehhez: %(name)s",
+    "%(name)s cancelled verifying": "%(name)s megszakította az ellenőrzést",
+    "You accepted": "Elfogadtad",
+    "%(name)s accepted": "%(name)s elfogadta",
+    "You cancelled": "Megszakítottad",
+    "%(name)s cancelled": "%(name)s megszakította",
+    "%(name)s wants to verify": "%(name)s ellenőrizni szeretné",
+    "You sent a verification request": "Ellenőrzési kérést küldtél"
 }

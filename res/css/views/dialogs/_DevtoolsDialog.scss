@@ -135,9 +135,6 @@ limitations under the License.
     }
 }
 
-/* Ordering this block by specificity would require breaking it up into several
-   chunks, which seems like it would be more confusing to read. */
-/* stylelint-disable no-descending-specificity */
 .mx_DevTools_tgl-flip {
     + .mx_DevTools_tgl-btn {
         padding: 2px;
@@ -192,4 +189,3 @@ limitations under the License.
         }
     }
 }
-/* stylelint-enable no-descending-specificity */

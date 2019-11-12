@@ -51,7 +51,7 @@ limitations under the License.
     height: 36px;
 }
 
-.mx_RoomSubList_labelContainer:focus-within {
+.mx_RoomSubList_labelContainer.focus-visible:focus-within {
     background-color: $roomtile-focused-bg-color;
 }
 
@@ -151,6 +151,7 @@ limitations under the License.
     .mx_RoomSubList_labelContainer {
         margin-right: 8px;
         margin-left: 2px;
+        padding: 0;
     }
 
     .mx_RoomSubList_addRoom {

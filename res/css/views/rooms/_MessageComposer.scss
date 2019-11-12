@@ -180,34 +180,42 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
+    position: relative;
     margin-right: 12px;
     cursor: pointer;
-    padding-top: 4px;
     height: 20px;
     width: 20px;
-    background-color: $composer-button-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
+
+    &::before {
+        content: '';
+        position: absolute;
+
+        height: 20px;
+        width: 20px;
+        background-color: $composer-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
 }
 
-.mx_MessageComposer_upload {
+.mx_MessageComposer_upload::before {
     mask-image: url('$(res)/img/feather-customised/paperclip.svg');
 }
 
-.mx_MessageComposer_hangup {
+.mx_MessageComposer_hangup::before {
     mask-image: url('$(res)/img/hangup.svg');
 }
 
-.mx_MessageComposer_voicecall {
+.mx_MessageComposer_voicecall::before {
     mask-image: url('$(res)/img/feather-customised/phone.svg');
 }
 
-.mx_MessageComposer_videocall {
+.mx_MessageComposer_videocall::before {
     mask-image: url('$(res)/img/feather-customised/video.svg');
 }
 
-.mx_MessageComposer_stickers {
+.mx_MessageComposer_stickers::before {
     mask-image: url('$(res)/img/feather-customised/face.svg');
 }
 

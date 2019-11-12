@@ -140,6 +140,12 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
+    "feature_dm_verification": {
+        isFeature: true,
+        displayName: _td("Send verification requests in direct message"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -292,6 +298,14 @@ export const SETTINGS = {
     "breadcrumb_rooms": {
         supportedLevels: ['account'],
         default: [],
+    },
+    "integrationProvisioning": {
+        supportedLevels: ['account'],
+        default: true,
+    },
+    "allowedWidgets": {
+        supportedLevels: ['room-account'],
+        default: {}, // none allowed
     },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
