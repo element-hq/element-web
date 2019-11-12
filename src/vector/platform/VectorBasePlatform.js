@@ -105,7 +105,7 @@ export default class VectorBasePlatform extends BasePlatform {
             // Note that trying to reproduce the problem in isolation doesn't seem to work:
             // see https://gist.github.com/turt2live/5ab87919918adbfd7cfb8f1ad10f2409 for
             // an example (you'll need your own web server to host that).
-            if (!!window.chrome) {
+            if (window.chrome) {
                 doUpdate();
             }
         }
