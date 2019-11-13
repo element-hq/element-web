@@ -1310,8 +1310,8 @@ export default createReactClass({
         cli.on("Room.timelineReset", async (room, timelineSet, resetAllTimelines) => {
             const eventIndex = EventIndexPeg.get();
             if (eventIndex === null) return;
-            if (resetAllTimelines === true) return;
-            await eventIndex.addCheckpointForLimitedRoom(room);
+            if (room === null) return;
+            await eventIndex.onLimitedTimeline(room);
         });
 
         cli.on('sync', function(state, prevState, data) {

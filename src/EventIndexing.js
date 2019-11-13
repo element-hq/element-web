@@ -347,7 +347,7 @@ export default class EventIndexer {
         console.log("Seshat: Stopping crawler function");
     }
 
-    async addCheckpointForLimitedRoom(room) {
+    async onLimitedTimeline(room) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (indexManager === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
@@ -362,21 +362,12 @@ export default class EventIndexer {
             direction: "b",
         };
 
-        const forwardsCheckpoint = {
-            roomId: room.roomId,
-            token: token,
-            fullCrawl: false,
-            direction: "f",
-        };
-
         console.log("Seshat: Added checkpoint because of a limited timeline",
-            backwardsCheckpoint, forwardsCheckpoint);
+            backwardsCheckpoint);
 
         await indexManager.addCrawlerCheckpoint(backwardsCheckpoint);
-        await indexManager.addCrawlerCheckpoint(forwardsCheckpoint);
 
         this.crawlerChekpoints.push(backwardsCheckpoint);
-        this.crawlerChekpoints.push(forwardsCheckpoint);
     }
 
     async deleteEventIndex() {
