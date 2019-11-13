@@ -40,7 +40,6 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {ContentRepo} from 'matrix-js-sdk';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -315,13 +314,13 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
     return (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Options") }</h3>
-            <div className="mx_UserInfo_buttons">
+            <div>
                 { directMessageButton }
                 { readReceiptButton }
                 { shareUserButton }
                 { insertPillButton }
-                { ignoreButton }
                 { inviteUserButton }
+                { ignoreButton }
                 { unverifyButton }
             </div>
         </div>
