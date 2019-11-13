@@ -262,6 +262,7 @@ ipcMain.on('seshat', async function(ev, payload) {
         case 'deleteEventIndex':
             await eventIndex.delete();
             eventIndex = null;
+            break;
 
         case 'isEventIndexEmpty':
             if (eventIndex === null) ret = true;
