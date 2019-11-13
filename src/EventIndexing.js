@@ -25,7 +25,7 @@ export default class EventIndexer {
         this.crawlerCheckpoints = [];
         // The time that the crawler will wait between /rooms/{room_id}/messages
         // requests
-        this._crawler_timeout = 3000;
+        this._crawlerTimeout = 3000;
         this._crawlerRef = null;
         this.liveEventsForIndex = new Set();
     }
