@@ -346,7 +346,7 @@ const useRoomPowerLevels = (room) => {
         };
     }, [room]);
 
-    useEventEmitter(room, "RoomState.events", update);
+    useEventEmitter(room.currentState, "RoomState.events", update);
     useEffect(() => {
         update();
         return () => {
