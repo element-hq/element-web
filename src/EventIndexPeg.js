@@ -32,7 +32,9 @@ class EventIndexPeg {
     }
 
     /**
-     * Returns the current Event index object for the application. Can be null
+     * Get the current event index.
+     *
+     * @Returns The EventIndex object for the application. Can be null
      * if the platform doesn't support event indexing.
      */
     get() {
@@ -47,25 +49,25 @@ class EventIndexPeg {
         const platform = PlatformPeg.get();
         if (!platform.supportsEventIndexing()) return false;
 
-        let index = new EventIndex();
+        const index = new EventIndex();
 
         const userId = MatrixClientPeg.get().getUserId();
         // TODO log errors here and return false if it errors out.
         await index.init(userId);
         this.index = index;
 
-        return true
+        return true;
     }
 
     stop() {
         if (this.index === null) return;
-        index.stop();
+        this.index.stop();
         this.index = null;
     }
 
     async deleteEventIndex() {
         if (this.index === null) return;
-        index.deleteEventIndex();
+        this.index.deleteEventIndex();
     }
 }
 

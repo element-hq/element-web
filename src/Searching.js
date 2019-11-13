@@ -26,7 +26,7 @@ function serverSideSearch(term, roomId = undefined) {
         };
     }
 
-    let searchPromise = MatrixClientPeg.get().searchRoomEvents({
+    const searchPromise = MatrixClientPeg.get().searchRoomEvents({
         filter: filter,
         term: term,
     });
@@ -37,7 +37,6 @@ function serverSideSearch(term, roomId = undefined) {
 async function combinedSearchFunc(searchTerm) {
     // Create two promises, one for the local search, one for the
     // server-side search.
-    const client = MatrixClientPeg.get();
     const serverSidePromise = serverSideSearch(searchTerm);
     const localPromise = localSearchFunc(searchTerm);
 
@@ -126,7 +125,7 @@ function eventIndexSearch(term, roomId = undefined) {
         searchPromise = combinedSearchFunc(term);
     }
 
-    return searchPromise
+    return searchPromise;
 }
 
 export default function eventSearch(term, roomId = undefined) {

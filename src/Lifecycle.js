@@ -633,10 +633,10 @@ function _clearStorage() {
         baseUrl: "",
     });
 
-    const clear = async() => {
+    const clear = async () => {
         await EventIndexPeg.deleteEventIndex();
         await cli.clearStores();
-    }
+    };
 
     return clear();
 }

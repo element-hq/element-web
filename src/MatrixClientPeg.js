@@ -30,8 +30,6 @@ import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import PlatformPeg from "./PlatformPeg";
-import EventIndexPeg from "./EventIndexPeg";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
