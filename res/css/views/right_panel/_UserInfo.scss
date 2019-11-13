@@ -136,6 +136,9 @@ limitations under the License.
         line-height: 16px;
         margin: 8px 0;
 
+        &.mx_UserInfo_destructive {
+            color: $warning-color;
+        }
     }
 
     .mx_UserInfo_statusMessage {

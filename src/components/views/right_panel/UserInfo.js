@@ -224,7 +224,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
         };
 
         ignoreButton = (
-            <AccessibleButton onClick={onIgnoreToggle} className="mx_UserInfo_field">
+            <AccessibleButton onClick={onIgnoreToggle} className={classNames("mx_UserInfo_field", {mx_UserInfo_destructive: !isIgnored})}>
                 { isIgnored ? _t("Unignore") : _t("Ignore") }
             </AccessibleButton>
         );
@@ -306,7 +306,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
     let unverifyButton;
     if (devices && devices.some(device => device.isVerified())) {
         unverifyButton = (
-            <AccessibleButton onClick={() => unverifyUser(cli, member.userId)} className="mx_UserInfo_field">
+            <AccessibleButton onClick={() => unverifyUser(cli, member.userId)} className="mx_UserInfo_field mx_UserInfo_destructive">
                 { _t('Unverify user') }
             </AccessibleButton>
         );
@@ -428,7 +428,7 @@ const RoomKickButton = withLegacyMatrixClient(({matrixClient: cli, member, start
     };
 
     const kickLabel = member.membership === "invite" ? _t("Disinvite") : _t("Kick");
-    return <AccessibleButton className="mx_UserInfo_field" onClick={onKick}>
+    return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onKick}>
         { kickLabel }
     </AccessibleButton>;
 });
@@ -501,7 +501,7 @@ const RedactMessagesButton = withLegacyMatrixClient(({matrixClient: cli, member}
         }
     };
 
-    return <AccessibleButton className="mx_UserInfo_field" onClick={onRedactAllMessages}>
+    return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onRedactAllMessages}>
         { _t("Remove recent messages") }
     </AccessibleButton>;
 });
@@ -553,7 +553,11 @@ const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, star
         label = _t("Unban");
     }
 
-    return <AccessibleButton className="mx_UserInfo_field" onClick={onBanOrUnban}>
+    const classes = classNames("mx_UserInfo_field", {
+        mx_UserInfo_destructive: member.membership !== 'ban',
+    });
+
+    return <AccessibleButton className={classes} onClick={onBanOrUnban}>
         { label }
     </AccessibleButton>;
 });
@@ -610,8 +614,12 @@ const MuteToggleButton = withLegacyMatrixClient(
             }
         };
 
+        const classes = classNames("mx_UserInfo_field", {
+            mx_UserInfo_destructive: !isMuted,
+        });
+
         const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
-        return <AccessibleButton className="mx_UserInfo_field" onClick={onMuteToggle}>
+        return <AccessibleButton className={classes} onClick={onMuteToggle}>
             { muteLabel }
         </AccessibleButton>;
     },
@@ -734,7 +742,7 @@ const GroupAdminToolsSection = withLegacyMatrixClient(
             };
 
             const kickButton = (
-                <AccessibleButton className="mx_UserInfo_field" onClick={_onKick}>
+                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={_onKick}>
                     { isInvited ? _t('Disinvite') : _t('Remove from community') }
                 </AccessibleButton>
             );
@@ -975,7 +983,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     // FIXME this should be using cli instead of MatrixClientPeg.matrixClient
     if (isSynapseAdmin && user.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
         synapseDeactivateButton = (
-            <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field">
+            <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field mx_UserInfo_destructive">
                 {_t("Deactivate user")}
             </AccessibleButton>
         );
