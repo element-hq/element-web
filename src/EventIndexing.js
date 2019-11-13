@@ -26,6 +26,9 @@ export default class EventIndexer {
         // The time that the crawler will wait between /rooms/{room_id}/messages
         // requests
         this._crawlerTimeout = 3000;
+        // The maximum number of events our crawler should fetch in a single
+        // crawl.
+        this._eventsPerCrawl = 100;
         this._crawlerRef = null;
         this.liveEventsForIndex = new Set();
     }
@@ -218,7 +221,7 @@ export default class EventIndexer {
 
             try {
                 res = await client._createMessagesRequest(
-                    checkpoint.roomId, checkpoint.token, 100,
+                    checkpoint.roomId, checkpoint.token, this._eventsPerCrawl,
                     checkpoint.direction);
             } catch (e) {
                 console.log("EventIndex: Error crawling events:", e);
