@@ -44,7 +44,7 @@ export default class EventIndexer {
         if (prevState === null && state === "PREPARED") {
             // Load our stored checkpoints, if any.
             this.crawlerChekpoints = await indexManager.loadCheckpoints();
-            console.log("Seshat: Loaded checkpoints",
+            console.log("EventIndex: Loaded checkpoints",
                         this.crawlerChekpoints);
             return;
         }
@@ -62,7 +62,7 @@ export default class EventIndexer {
                 // rooms can use the search provided by the Homeserver.
                 const encryptedRooms = rooms.filter(isRoomEncrypted);
 
-                console.log("Seshat: Adding initial crawler checkpoints");
+                console.log("EventIndex: Adding initial crawler checkpoints");
 
                 // Gather the prev_batch tokens and create checkpoints for
                 // our message crawler.
@@ -70,7 +70,7 @@ export default class EventIndexer {
                     const timeline = room.getLiveTimeline();
                     const token = timeline.getPaginationToken("b");
 
-                    console.log("Seshat: Got token for indexer",
+                    console.log("EventIndex: Got token for indexer",
                                 room.roomId, token);
 
                     const backCheckpoint = {
@@ -106,7 +106,7 @@ export default class EventIndexer {
         if (prevState === "SYNCING" && state === "SYNCING") {
             // A sync was done, presumably we queued up some live events,
             // commit them now.
-            console.log("Seshat: Committing events");
+            console.log("EventIndex: Committing events");
             await indexManager.commitLiveEvents();
             return;
         }
@@ -177,7 +177,7 @@ export default class EventIndexer {
 
         let cancelled = false;
 
-        console.log("Seshat: Started crawler function");
+        console.log("EventIndex: Started crawler function");
 
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -192,10 +192,10 @@ export default class EventIndexer {
             // here.
             await sleep(this._crawler_timeout);
 
-            console.log("Seshat: Running the crawler loop.");
+            console.log("EventIndex: Running the crawler loop.");
 
             if (cancelled) {
-                console.log("Seshat: Cancelling the crawler.");
+                console.log("EventIndex: Cancelling the crawler.");
                 break;
             }
 
@@ -207,7 +207,7 @@ export default class EventIndexer {
                 continue;
             }
 
-            console.log("Seshat: crawling using checkpoint", checkpoint);
+            console.log("EventIndex: crawling using checkpoint", checkpoint);
 
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our Homeserver too much.
@@ -221,13 +221,13 @@ export default class EventIndexer {
                     checkpoint.roomId, checkpoint.token, 100,
                     checkpoint.direction);
             } catch (e) {
-                console.log("Seshat: Error crawling events:", e);
+                console.log("EventIndex: Error crawling events:", e);
                 this.crawlerChekpoints.push(checkpoint);
                 continue;
             }
 
             if (res.chunk.length === 0) {
-                console.log("Seshat: Done with the checkpoint", checkpoint);
+                console.log("EventIndex: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
                 await indexManager.removeCrawlerCheckpoint(checkpoint);
@@ -289,7 +289,7 @@ export default class EventIndexer {
             // stage?
             const filteredEvents = matrixEvents.filter(isValidEvent);
 
-            // Let us convert the events back into a format that Seshat can
+            // Let us convert the events back into a format that EventIndex can
             // consume.
             const events = filteredEvents.map((ev) => {
                 const jsonEvent = ev.toJSON();
@@ -317,7 +317,7 @@ export default class EventIndexer {
             };
 
             console.log(
-                "Seshat: Crawled room",
+                "EventIndex: Crawled room",
                 client.getRoom(checkpoint.roomId).name,
                 "and fetched", events.length, "events.",
             );
@@ -330,21 +330,21 @@ export default class EventIndexer {
                 // Let us delete the checkpoint in that case, otherwise push
                 // the new checkpoint to be used by the crawler.
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
-                    console.log("Seshat: Checkpoint had already all events",
+                    console.log("EventIndex: Checkpoint had already all events",
                                 "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     this.crawlerChekpoints.push(newCheckpoint);
                 }
             } catch (e) {
-                console.log("Seshat: Error durring a crawl", e);
+                console.log("EventIndex: Error durring a crawl", e);
                 // An error occured, put the checkpoint back so we
                 // can retry.
                 this.crawlerChekpoints.push(checkpoint);
             }
         }
 
-        console.log("Seshat: Stopping crawler function");
+        console.log("EventIndex: Stopping crawler function");
     }
 
     async onLimitedTimeline(room) {
@@ -362,7 +362,7 @@ export default class EventIndexer {
             direction: "b",
         };
 
-        console.log("Seshat: Added checkpoint because of a limited timeline",
+        console.log("EventIndex: Added checkpoint because of a limited timeline",
             backwardsCheckpoint);
 
         await indexManager.addCrawlerCheckpoint(backwardsCheckpoint);
@@ -373,7 +373,7 @@ export default class EventIndexer {
     async deleteEventIndex() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (indexManager !== null) {
-            console.log("Seshat: Deleting event index.");
+            console.log("EventIndex: Deleting event index.");
             this.crawlerRef.cancel();
             await indexManager.deleteEventIndex();
         }
