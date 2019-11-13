@@ -61,6 +61,22 @@ function getCustomTheme(themeName) {
 }
 
 /**
+ * Gets the underlying theme name for the given theme. This is usually the theme or
+ * CSS resource that the theme relies upon to load.
+ * @param {string} theme The theme name to get the base of.
+ * @returns {string} The base theme (typically "light" or "dark").
+ */
+export function getBaseTheme(theme) {
+    if (!theme) return "light";
+    if (theme.startsWith("custom-")) {
+        const customTheme = getCustomTheme(theme.substr(7));
+        return customTheme.is_dark ? "dark-custom" : "light-custom";
+    }
+
+    return theme; // it's probably a base theme
+}
+
+/**
  * Called whenever someone changes the theme
  *
  * @param {string} theme new theme
