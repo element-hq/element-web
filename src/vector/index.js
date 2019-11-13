@@ -56,8 +56,8 @@ import WebPlatform from './platform/WebPlatform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
-import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
+import {getBaseTheme, setTheme} from "matrix-react-sdk/lib/theme";
 
 import Olm from 'olm';
 
@@ -255,15 +255,18 @@ async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
+    // we do this by checking to see if the theme's "base" has loaded first so we can
+    // safely rely on the assets.
     let a;
     const theme = SettingsStore.getValue("theme");
+    const baseTheme = getBaseTheme(theme);
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         if (!href) continue;
         // shouldn't we be using the 'title' tag rather than the href?
         const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
         if (match) {
-            if (match[1] === theme) {
+            if (match[1] === baseTheme) {
                 // remove the disabled flag off the stylesheet
 
                 // Firefox requires setting the attribute to false, so do
@@ -274,21 +277,21 @@ async function loadApp() {
                 // in case the Tinter.tint() in MatrixChat fires before the
                 // CSS has actually loaded (which in practice happens)...
 
-                // This if fixes Tinter.setTheme to not fire on Firefox
+                // This if fixes setTheme to not fire on Firefox
                 // in case it is the first time loading Riot.
                 // `InstallTrigger` is a Object which only exists on Firefox
                 // (it is used for their Plugins) and can be used as a
                 // feature check.
                 // Firefox loads css always before js. This is why we dont use
-                // onload or it's EventListener as thoose will never trigger.
+                // onload or it's EventListener as those will never trigger.
                 if (typeof InstallTrigger !== 'undefined') {
-                    Tinter.setTheme(theme);
+                    setTheme(theme);
                 } else {
                     // FIXME: we should probably block loading the app or even
                     // showing a spinner until the theme is loaded, to avoid
                     // flashes of unstyled content.
                     a.onload = () => {
-                        Tinter.setTheme(theme);
+                        setTheme(theme);
                     };
                 }
             } else {
