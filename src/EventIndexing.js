@@ -193,7 +193,7 @@ export default class EventIndexer {
             // This is a low priority task and we don't want to spam our
             // Homeserver with /messages requests so we set a hefty timeout
             // here.
-            await sleep(this._crawler_timeout);
+            await sleep(this._crawlerTimeout);
 
             console.log("EventIndex: Running the crawler loop.");
 
