@@ -22,7 +22,7 @@ import MatrixClientPeg from "./MatrixClientPeg";
  */
 export default class EventIndexer {
     constructor() {
-        this.crawlerChekpoints = [];
+        this.crawlerCheckpoints = [];
         // The time that the crawler will wait between /rooms/{room_id}/messages
         // requests
         this._crawler_timeout = 3000;
@@ -43,9 +43,9 @@ export default class EventIndexer {
 
         if (prevState === null && state === "PREPARED") {
             // Load our stored checkpoints, if any.
-            this.crawlerChekpoints = await indexManager.loadCheckpoints();
+            this.crawlerCheckpoints = await indexManager.loadCheckpoints();
             console.log("EventIndex: Loaded checkpoints",
-                        this.crawlerChekpoints);
+                        this.crawlerCheckpoints);
             return;
         }
 
@@ -87,8 +87,8 @@ export default class EventIndexer {
 
                     await indexManager.addCrawlerCheckpoint(backCheckpoint);
                     await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                    this.crawlerChekpoints.push(backCheckpoint);
-                    this.crawlerChekpoints.push(forwardCheckpoint);
+                    this.crawlerCheckpoints.push(backCheckpoint);
+                    this.crawlerCheckpoints.push(forwardCheckpoint);
                 }));
             };
 
@@ -199,7 +199,7 @@ export default class EventIndexer {
                 break;
             }
 
-            const checkpoint = this.crawlerChekpoints.shift();
+            const checkpoint = this.crawlerCheckpoints.shift();
 
             /// There is no checkpoint available currently, one may appear if
             // a sync with limited room timelines happens, so go back to sleep.
@@ -222,7 +222,7 @@ export default class EventIndexer {
                     checkpoint.direction);
             } catch (e) {
                 console.log("EventIndex: Error crawling events:", e);
-                this.crawlerChekpoints.push(checkpoint);
+                this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
 
@@ -334,13 +334,13 @@ export default class EventIndexer {
                                 "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
-                    this.crawlerChekpoints.push(newCheckpoint);
+                    this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
                 console.log("EventIndex: Error durring a crawl", e);
                 // An error occured, put the checkpoint back so we
                 // can retry.
-                this.crawlerChekpoints.push(checkpoint);
+                this.crawlerCheckpoints.push(checkpoint);
             }
         }
 
@@ -367,7 +367,7 @@ export default class EventIndexer {
 
         await indexManager.addCrawlerCheckpoint(backwardsCheckpoint);
 
-        this.crawlerChekpoints.push(backwardsCheckpoint);
+        this.crawlerCheckpoints.push(backwardsCheckpoint);
     }
 
     async deleteEventIndex() {
