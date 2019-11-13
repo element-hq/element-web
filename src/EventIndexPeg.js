@@ -47,15 +47,25 @@ class EventIndexPeg {
      */
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        console.log("Initializing event index, got {}", indexManager);
         if (indexManager === null) return false;
 
-        console.log("Seshat: Creatingnew EventIndex object", indexManager);
-        const index = new EventIndex();
+        if (await indexManager.supportsEventIndexing() !== true) {
+            console.log("EventIndex: Platform doesn't support event indexing,",
+                        "not initializing.");
+            return false;
+        }
 
+        const index = new EventIndex();
         const userId = MatrixClientPeg.get().getUserId();
-        // TODO log errors here and return false if it errors out.
-        await index.init(userId);
+
+        try {
+            await index.init(userId);
+        } catch (e) {
+            console.log("EventIndex: Error initializing the event index", e);
+        }
+
+        console.log("EventIndex: Successfully initialized the event index");
+
         this.index = index;
 
         return true;
