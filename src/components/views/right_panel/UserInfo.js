@@ -110,8 +110,42 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
-const DevicesSection = ({devices, userId, loading}) => {
-    const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
+function verifyDevice(userId, device) {
+    const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
+    Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
+        userId: userId,
+        device: device,
+    });
+}
+
+function DeviceItem({userId, device}) {
+    const classes = classNames("mx_UserInfo_device", {
+        mx_UserInfo_device_verified: device.isVerified(),
+        mx_UserInfo_device_unverified: !device.isVerified(),
+    });
+    const iconClasses = classNames("mx_E2EIcon", {
+        mx_E2EIcon_verified: device.isVerified(),
+        mx_E2EIcon_warning: !device.isVerified(),
+    });
+
+    const onDeviceClick = () => {
+        if (!device.isVerified()) {
+            verifyDevice(userId, device);
+        }
+    };
+
+    const deviceName = device.ambiguous ?
+            (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
+            device.getDisplayName();
+    const trustedLabel = device.isVerified() ? _t("Trusted") : _t("Not trusted");
+    return (<AccessibleButton className={classes} onClick={onDeviceClick}>
+        <div className={iconClasses} />
+        <div className="mx_UserInfo_device_name">{deviceName}</div>
+        <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+    </AccessibleButton>);
+}
+
+function DevicesSection({devices, userId, loading}) {
     const Spinner = sdk.getComponent("elements.Spinner");
 
     const [isExpanded, setExpanded] = useState(false);
@@ -130,23 +164,24 @@ const DevicesSection = ({devices, userId, loading}) => {
     let expandButton;
     if (verifiedDevices.length) {
         if (isExpanded) {
-            expandButton = (<AccessibleButton onClick={() => setExpanded(false)}>
-                {_t("Hide verified Sign-In's")}
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(false)}>
+                <div>{_t("Hide verified Sign-In's")}</div>
             </AccessibleButton>);
         } else {
-            expandButton = (<AccessibleButton onClick={() => setExpanded(true)}>
-                {_t("%(count)s verified Sign-In's", {count: verifiedDevices.length})}
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(true)}>
+                <div className="mx_E2EIcon mx_E2EIcon_verified" />
+                <div>{_t("%(count)s verified Sign-In's", {count: verifiedDevices.length})}</div>
             </AccessibleButton>);
         }
     }
 
     let deviceList = unverifiedDevices.map((device, i) => {
-        return (<MemberDeviceInfo key={i} userId={userId} device={device} />);
+        return (<DeviceItem key={i} userId={userId} device={device} />);
     });
     if (isExpanded) {
         const keyStart = unverifiedDevices.length;
         deviceList = deviceList.concat(verifiedDevices.map((device, i) => {
-            return (<MemberDeviceInfo key={i + keyStart} userId={userId} device={device} />);
+            return (<DeviceItem key={i + keyStart} userId={userId} device={device} />);
         }));
     }
 
@@ -156,7 +191,7 @@ const DevicesSection = ({devices, userId, loading}) => {
             <div>{expandButton}</div>
         </div>
     );
-};
+}
 
 const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite, devices}) => {
     let ignoreButton = null;
