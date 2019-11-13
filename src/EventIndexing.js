@@ -347,15 +347,10 @@ export default class EventIndexer {
         console.log("Seshat: Stopping crawler function");
     }
 
-    async addCheckpointForLimitedRoom(roomId) {
+    async addCheckpointForLimitedRoom(room) {
         const platform = PlatformPeg.get();
         if (!platform.supportsEventIndexing()) return;
-        if (!MatrixClientPeg.get().isRoomEncrypted(roomId)) return;
-
-        const client = MatrixClientPeg.get();
-        const room = client.getRoom(roomId);
-
-        if (room === null) return;
+        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
         const timeline = room.getLiveTimeline();
         const token = timeline.getPaginationToken("b");

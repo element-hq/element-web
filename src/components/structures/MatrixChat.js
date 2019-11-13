@@ -1223,8 +1223,6 @@ export default createReactClass({
      * Called when the session is logged out
      */
     _onLoggedOut: async function() {
-        const platform = PlatformPeg.get();
-
         this.notifyNewScreen('login');
         this.setStateForNewView({
             view: VIEWS.LOGIN,
@@ -1313,7 +1311,7 @@ export default createReactClass({
             const eventIndex = EventIndexPeg.get();
             if (eventIndex === null) return;
             if (resetAllTimelines === true) return;
-            await eventIndex.addCheckpointForLimitedRoom(roomId);
+            await eventIndex.addCheckpointForLimitedRoom(room);
         });
 
         cli.on('sync', function(state, prevState, data) {
