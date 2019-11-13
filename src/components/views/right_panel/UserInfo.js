@@ -64,6 +64,17 @@ const _getE2EStatus = (devices) => {
     return hasUnverifiedDevice ? "warning" : "verified";
 };
 
+async function unverifyUser(matrixClient, userId) {
+    const devices = await matrixClient.getStoredDevicesForUser(userId);
+    for (const device of devices) {
+        if (device.isVerified()) {
+            matrixClient.setDeviceVerified(
+                userId, device.deviceId, false,
+            );
+        }
+    }
+}
+
 function useIsEncrypted(cli, room) {
     const [isEncrypted, setIsEncrypted] = useState(cli.isRoomEncrypted(room.roomId));
 
@@ -124,7 +135,7 @@ function openDMForUser(cli, userId) {
     }
 }
 
-const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite}) => {
+const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite, devices}) => {
     let ignoreButton = null;
     let insertPillButton = null;
     let inviteUserButton = null;
@@ -234,6 +245,14 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
             </AccessibleButton>
         );
     }
+    let unverifyButton;
+    if (devices && devices.some(device => device.isVerified())) {
+        unverifyButton = (
+            <AccessibleButton onClick={() => unverifyUser(cli, member.userId)} className="mx_UserInfo_field">
+                { _t('Unverify user') }
+            </AccessibleButton>
+        );
+    }
 
     return (
         <div className="mx_UserInfo_container">
@@ -245,6 +264,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
                 { insertPillButton }
                 { ignoreButton }
                 { inviteUserButton }
+                { unverifyButton }
             </div>
         </div>
     );
@@ -1140,6 +1160,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
                 { devicesSection }
                 <UserOptionsSection
+                    devices={devices}
                     canInvite={roomPermissions.canInvite}
                     isIgnored={isIgnored}
                     member={user} />
