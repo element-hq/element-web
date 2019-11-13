@@ -34,80 +34,80 @@ function serverSideSearch(term, roomId = undefined) {
     return searchPromise;
 }
 
+async function combinedSearchFunc(searchTerm) {
+    // Create two promises, one for the local search, one for the
+    // server-side search.
+    const client = MatrixClientPeg.get();
+    const serverSidePromise = serverSideSearch(searchTerm);
+    const localPromise = localSearchFunc(searchTerm);
+
+    // Wait for both promises to resolve.
+    await Promise.all([serverSidePromise, localPromise]);
+
+    // Get both search results.
+    const localResult = await localPromise;
+    const serverSideResult = await serverSidePromise;
+
+    // Combine the search results into one result.
+    const result = {};
+
+    // Our localResult and serverSideResult are both ordered by
+    // recency separetly, when we combine them the order might not
+    // be the right one so we need to sort them.
+    const compare = (a, b) => {
+        const aEvent = a.context.getEvent().event;
+        const bEvent = b.context.getEvent().event;
+
+        if (aEvent.origin_server_ts >
+            bEvent.origin_server_ts) return -1;
+        if (aEvent.origin_server_ts <
+            bEvent.origin_server_ts) return 1;
+        return 0;
+    };
+
+    result.count = localResult.count + serverSideResult.count;
+    result.results = localResult.results.concat(
+        serverSideResult.results).sort(compare);
+    result.highlights = localResult.highlights.concat(
+        serverSideResult.highlights);
+
+    return result;
+}
+
+async function localSearchFunc(searchTerm, roomId = undefined) {
+    const searchArgs = {
+        search_term: searchTerm,
+        before_limit: 1,
+        after_limit: 1,
+        order_by_recency: true,
+    };
+
+    if (roomId !== undefined) {
+        searchArgs.room_id = roomId;
+    }
+
+    const eventIndex = EventIndexPeg.get();
+
+    const localResult = await eventIndex.search(searchArgs);
+
+    const response = {
+        search_categories: {
+            room_events: localResult,
+        },
+    };
+
+    const emptyResult = {
+        results: [],
+        highlights: [],
+    };
+
+    const result = MatrixClientPeg.get()._processRoomEventsSearch(
+        emptyResult, response);
+
+    return result;
+}
+
 function eventIndexSearch(term, roomId = undefined) {
-    const combinedSearchFunc = async (searchTerm) => {
-        // Create two promises, one for the local search, one for the
-        // server-side search.
-        const client = MatrixClientPeg.get();
-        const serverSidePromise = serverSideSearch(searchTerm);
-        const localPromise = localSearchFunc(searchTerm);
-
-        // Wait for both promises to resolve.
-        await Promise.all([serverSidePromise, localPromise]);
-
-        // Get both search results.
-        const localResult = await localPromise;
-        const serverSideResult = await serverSidePromise;
-
-        // Combine the search results into one result.
-        const result = {};
-
-        // Our localResult and serverSideResult are both ordered by
-        // recency separetly, when we combine them the order might not
-        // be the right one so we need to sort them.
-        const compare = (a, b) => {
-            const aEvent = a.context.getEvent().event;
-            const bEvent = b.context.getEvent().event;
-
-            if (aEvent.origin_server_ts >
-                bEvent.origin_server_ts) return -1;
-            if (aEvent.origin_server_ts <
-                bEvent.origin_server_ts) return 1;
-            return 0;
-        };
-
-        result.count = localResult.count + serverSideResult.count;
-        result.results = localResult.results.concat(
-            serverSideResult.results).sort(compare);
-        result.highlights = localResult.highlights.concat(
-            serverSideResult.highlights);
-
-        return result;
-    };
-
-    const localSearchFunc = async (searchTerm, roomId = undefined) => {
-        const searchArgs = {
-            search_term: searchTerm,
-            before_limit: 1,
-            after_limit: 1,
-            order_by_recency: true,
-        };
-
-        if (roomId !== undefined) {
-            searchArgs.room_id = roomId;
-        }
-
-        const eventIndex = EventIndexPeg.get();
-
-        const localResult = await eventIndex.search(searchArgs);
-
-        const response = {
-            search_categories: {
-                room_events: localResult,
-            },
-        };
-
-        const emptyResult = {
-            results: [],
-            highlights: [],
-        };
-
-        const result = MatrixClientPeg.get()._processRoomEventsSearch(
-            emptyResult, response);
-
-        return result;
-    };
-
     let searchPromise;
 
     if (roomId !== undefined) {
