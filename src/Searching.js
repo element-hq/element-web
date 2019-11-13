@@ -79,6 +79,7 @@ async function localSearchFunc(searchTerm, roomId = undefined) {
         before_limit: 1,
         after_limit: 1,
         order_by_recency: true,
+        room_id: undefined,
     };
 
     if (roomId !== undefined) {
