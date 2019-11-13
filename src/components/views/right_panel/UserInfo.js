@@ -75,6 +75,29 @@ async function unverifyUser(matrixClient, userId) {
     }
 }
 
+function openDMForUser(matrixClient, userId) {
+    const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
+    const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
+        const room = matrixClient.getRoom(roomId);
+        if (!room || room.getMyMembership() === "leave") {
+            return lastActiveRoom;
+        }
+        if (!lastActiveRoom || lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp()) {
+            return room;
+        }
+        return lastActiveRoom;
+    }, null);
+
+    if (lastActiveRoom) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: lastActiveRoom.roomId,
+        });
+    } else {
+        createRoom({dmUserId: userId});
+    }
+}
+
 function useIsEncrypted(cli, room) {
     const [isEncrypted, setIsEncrypted] = useState(cli.isRoomEncrypted(room.roomId));
 
@@ -111,29 +134,6 @@ const DevicesSection = ({devices, userId, loading}) => {
         </div>
     );
 };
-
-function openDMForUser(cli, userId) {
-    const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
-        const room = cli.getRoom(roomId);
-        if (!room || room.getMyMembership() === "leave") {
-            return lastActiveRoom;
-        }
-        if (!lastActiveRoom || lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp()) {
-            return room;
-        }
-        return lastActiveRoom;
-    }, null);
-
-    if (lastActiveRoom) {
-        dis.dispatch({
-            action: 'view_room',
-            room_id: lastActiveRoom.roomId,
-        });
-    } else {
-        createRoom({dmUserId: userId});
-    }
-}
 
 const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite, devices}) => {
     let ignoreButton = null;
