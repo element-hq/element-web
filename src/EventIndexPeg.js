@@ -34,16 +34,16 @@ class EventIndexPeg {
     /**
      * Get the current event index.
      *
-     * @Returns The EventIndex object for the application. Can be null
-     * if the platform doesn't support event indexing.
+     * @return {EventIndex} The current event index.
      */
     get() {
         return this.index;
     }
 
     /** Create a new EventIndex and initialize it if the platform supports it.
-     * Returns true if an EventIndex was successfully initialized, false
-     * otherwise.
+     *
+     * @return {Promise<bool>} A promise that will resolve to true if an
+     * EventIndex was successfully initialized, false otherwise.
      */
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -71,15 +71,27 @@ class EventIndexPeg {
         return true;
     }
 
+    /**
+     * Stop our event indexer.
+     */
     stop() {
         if (this.index === null) return;
         this.index.stop();
         this.index = null;
     }
 
+    /**
+     * Delete our event indexer.
+     *
+     * After a call to this the init() method will need to be called again.
+     *
+     * @return {Promise} A promise that will resolve once the event index is
+     * deleted.
+     */
     async deleteEventIndex() {
         if (this.index === null) return;
         this.index.deleteEventIndex();
+        this.index = null;
     }
 }
 

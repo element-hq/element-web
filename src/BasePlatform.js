@@ -153,6 +153,12 @@ export default class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    /**
+     * Get our platform specific EventIndexManager.
+     *
+     * @return {BaseEventIndexManager} The EventIndex manager for our platform,
+     * can be null if the platform doesn't support event indexing.
+     */
     getEventIndexingManager(): BaseEventIndexManager | null {
         return null;
     }

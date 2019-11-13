@@ -1131,7 +1131,7 @@ module.exports = createReactClass({
         this.searchId = new Date().getTime();
 
         let roomId;
-        if (scope === "Room") roomId = this.state.room.roomId,
+        if (scope === "Room") roomId = this.state.room.roomId;
 
         debuglog("sending search request");
         const searchPromise = eventSearch(term, roomId);

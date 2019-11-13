@@ -168,7 +168,7 @@ export default class BaseEventIndexManager {
     async addHistoricEvents(
         events: [HistoricEvent],
         checkpoint: CrawlerCheckpoint | null = null,
-        oldCheckpoint: CrawlerCheckpoint | null  = null,
+        oldCheckpoint: CrawlerCheckpoint | null = null,
     ): Promise<bool> {
         throw new Error("Unimplemented");
     }
