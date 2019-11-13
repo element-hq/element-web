@@ -20,6 +20,7 @@ limitations under the License.
 */
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
+import BaseEventIndexManager from 'matrix-react-sdk/lib/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
@@ -66,12 +67,100 @@ function getUpdateCheckStatus(status) {
     }
 }
 
+class SeshatIndexerManager extends BaseEventIndexManager {
+    constructor() {
+        super();
+
+        this._pendingIpcCalls = {};
+        this._nextIpcCallId = 0;
+        ipcRenderer.on('seshatReply', this._onIpcReply.bind(this));
+    }
+
+    async _ipcCall(name: string, ...args: []): Promise<{}> {
+        // TODO this should be moved into the preload.js file.
+        const ipcCallId = ++this._nextIpcCallId;
+        return new Promise((resolve, reject) => {
+            this._pendingIpcCalls[ipcCallId] = {resolve, reject};
+            window.ipcRenderer.send('seshat', {id: ipcCallId, name, args});
+        });
+    }
+
+    _onIpcReply(ev: {}, payload: {}) {
+        if (payload.id === undefined) {
+            console.warn("Ignoring IPC reply with no ID");
+            return;
+        }
+
+        if (this._pendingIpcCalls[payload.id] === undefined) {
+            console.warn("Unknown IPC payload ID: " + payload.id);
+            return;
+        }
+
+        const callbacks = this._pendingIpcCalls[payload.id];
+        delete this._pendingIpcCalls[payload.id];
+        if (payload.error) {
+            callbacks.reject(payload.error);
+        } else {
+            callbacks.resolve(payload.reply);
+        }
+    }
+
+    async supportsEventIndexing(): Promise<boolean> {
+        return this._ipcCall('supportsEventIndexing');
+    }
+
+    async initEventIndex(userId: string): Promise<> {
+        return this._ipcCall('initEventIndex', userId);
+    }
+
+    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<> {
+        return this._ipcCall('addEventToIndex', ev, profile);
+    }
+
+    async isEventIndexEmpty(): Promise<boolean> {
+        return this._ipcCall('isEventIndexEmpty');
+    }
+
+    async commitLiveEvents(): Promise<> {
+        return this._ipcCall('commitLiveEvents');
+    }
+
+    async searchEventIndex(searchConfig: SearchConfig): Promise<SearchResult> {
+        return this._ipcCall('searchEventIndex', searchConfig);
+    }
+
+    async addHistoricEvents(
+        events: [HistoricEvent],
+        checkpoint: CrawlerCheckpoint | null = null,
+        oldCheckpoint: CrawlerCheckpoint | null = null,
+    ): Promise<> {
+        return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
+    }
+
+    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+        return this._ipcCall('addCrawlerCheckpoint', checkpoint);
+    }
+
+    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+        return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
+    }
+
+    async loadCheckpoints(): Promise<[CrawlerCheckpoint]> {
+        return this._ipcCall('loadCheckpoints');
+    }
+
+    async deleteEventIndex(): Promise<> {
+        return this._ipcCall('deleteEventIndex');
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
 
         this._pendingIpcCalls = {};
         this._nextIpcCallId = 0;
+        this.eventIndexManager = new SeshatIndexerManager();
 
         dis.register(_onAction);
         /*
@@ -294,47 +383,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async initEventIndex(userId: string): void {
-        return this._ipcCall('initEventIndex', userId);
-    }
-
-    supportsEventIndexing(): boolean {
-        return true;
-    }
-
-    async addEventToIndex(ev: {}, profile: {}): void {
-        return this._ipcCall('addEventToIndex', ev, profile);
-    }
-
-    async isEventIndexEmpty(): Promise<boolean> {
-        return this._ipcCall('isEventIndexEmpty');
-    }
-
-    async commitLiveEvents(): Promise<{}> {
-        return this._ipcCall('commitLiveEvents');
-    }
-
-    async searchEventIndex(term: string): Promise<{}> {
-        return this._ipcCall('searchEventIndex', term);
-    }
-
-    async addHistoricEvents(events: string, checkpoint: {} = null, oldCheckpoint: {} = null): Promise<{}> {
-        return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
-    }
-
-    async addCrawlerCheckpoint(checkpoint: {}): Promise<{}> {
-        return this._ipcCall('addCrawlerCheckpoint', checkpoint);
-    }
-
-    async removeCrawlerCheckpoint(checkpoint: {}): Promise<{}> {
-        return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
-    }
-
-    async loadCheckpoints(checkpoint: {}): Promise<[{}]> {
-        return this._ipcCall('loadCheckpoints');
-    }
-
-    async deleteEventIndex(): Promise<> {
-        return this._ipcCall('deleteEventIndex');
+    getEventIndexingManager(): BaseEventIndexManager | null {
+        return this.eventIndexManager;
     }
 }

@@ -155,17 +155,6 @@ autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName, releaseDate,
 ipcMain.on('ipcCall', async function(ev, payload) {
     if (!mainWindow) return;
 
-    const sendError = (id, e) => {
-        const error = {
-            message: e.message
-        }
-
-        mainWindow.webContents.send('ipcReply', {
-            id:id,
-            error: error
-        });
-    }
-
     const args = payload.args || [];
     let ret;
 
@@ -218,12 +207,50 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             ret = vectorConfig;
             break;
 
+        default:
+            mainWindow.webContents.send('ipcReply', {
+                id: payload.id,
+                error: "Unknown IPC Call: " + payload.name,
+            });
+            return;
+    }
+
+    mainWindow.webContents.send('ipcReply', {
+        id: payload.id,
+        reply: ret,
+    });
+});
+
+ipcMain.on('seshat', async function(ev, payload) {
+    if (!mainWindow) return;
+
+    const sendError = (id, e) => {
+        const error = {
+            message: e.message
+        }
+
+        mainWindow.webContents.send('seshatReply', {
+            id:id,
+            error: error
+        });
+    }
+
+    const args = payload.args || [];
+    let ret;
+
+    switch (payload.name) {
+        case 'supportsEventIndexing':
+            if (Seshat === null) ret = false;
+            else ret = true;
+            break;
+
         case 'initEventIndex':
             if (args[0] && eventIndex === null) {
                 let p = path.normalize(path.join(eventStorePath, args[0]));
                 try {
                     await makeDir(p);
                     eventIndex = new Seshat(p);
+                    // eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
                     console.log("Initialized event store");
                 } catch (e) {
                     sendError(payload.id, e);
@@ -317,14 +344,14 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             break;
 
         default:
-            mainWindow.webContents.send('ipcReply', {
+            mainWindow.webContents.send('seshatReply', {
                 id: payload.id,
                 error: "Unknown IPC Call: " + payload.name,
             });
             return;
     }
 
-    mainWindow.webContents.send('ipcReply', {
+    mainWindow.webContents.send('seshatReply', {
         id: payload.id,
         reply: ret,
     });
