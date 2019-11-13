@@ -613,7 +613,6 @@ export function onLoggedOut() {
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'});
-    EventIndexPeg.deleteEventIndex().done();
     stopMatrixClient();
     _clearStorage().done();
 }
@@ -633,7 +632,13 @@ function _clearStorage() {
         // we'll never make any requests, so can pass a bogus HS URL
         baseUrl: "",
     });
-    return cli.clearStores();
+
+    const clear = async() => {
+        await EventIndexPeg.deleteEventIndex();
+        await cli.clearStores();
+    }
+
+    return clear();
 }
 
 /**
