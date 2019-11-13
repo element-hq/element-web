@@ -39,8 +39,15 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
-const Seshat = require('seshat-node');
-const makeDir = require('make-dir');
+
+let Seshat = null;
+let makeDir = null;
+
+try {
+    Seshat = require('seshat-node');
+    makeDir = require('make-dir');
+} catch (e) {
+}
 
 if (argv["help"]) {
     console.log("Options:");
