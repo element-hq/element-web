@@ -64,6 +64,18 @@ const _getE2EStatus = (devices) => {
     return hasUnverifiedDevice ? "warning" : "verified";
 };
 
+function useIsEncrypted(cli, room) {
+    const [isEncrypted, setIsEncrypted] = useState(cli.isRoomEncrypted(room.roomId));
+
+    const update = useCallback((event) => {
+        if (event.getType() === "m.room.encryption") {
+            setIsEncrypted(cli.isRoomEncrypted(room.roomId));
+        }
+    }, [cli, room]);
+    useEventEmitter(room.currentState, "RoomState.events", update);
+    return isEncrypted;
+}
+
 const DevicesSection = ({devices, userId, loading}) => {
     const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
     const Spinner = sdk.getComponent("elements.Spinner");
@@ -1005,6 +1017,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             title={_t('Close')} />;
     }
 
+    const isRoomEncrypted = useIsEncrypted(cli, room);
     // undefined means yet to be loaded, null means failed to load, otherwise list of devices
     const [devices, setDevices] = useState(undefined);
     // Download device lists
@@ -1029,14 +1042,15 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
                 setDevices(null);
             }
         }
-
-        _downloadDeviceList();
+        if (isRoomEncrypted) {
+            _downloadDeviceList();
+        }
 
         // Handle being unmounted
         return () => {
             cancelled = true;
         };
-    }, [cli, user.userId]);
+    }, [cli, user.userId, isRoomEncrypted]);
 
     // Listen to changes
     useEffect(() => {
@@ -1053,16 +1067,19 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             }
         };
 
-        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
+        if (isRoomEncrypted) {
+            cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
+        }
         // Handle being unmounted
         return () => {
             cancel = true;
-            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
+            if (isRoomEncrypted) {
+                cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
+            }
         };
-    }, [cli, user.userId]);
+    }, [cli, user.userId, isRoomEncrypted]);
 
     let devicesSection;
-    const isRoomEncrypted = _enableDevices && room && cli.isRoomEncrypted(room.roomId);
     if (isRoomEncrypted) {
         devicesSection = <DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />;
     } else {
