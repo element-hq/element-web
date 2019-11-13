@@ -114,6 +114,8 @@ const DevicesSection = ({devices, userId, loading}) => {
     const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
     const Spinner = sdk.getComponent("elements.Spinner");
 
+    const [isExpanded, setExpanded] = useState(false);
+
     if (loading) {
         // still loading
         return <Spinner />;
@@ -121,16 +123,37 @@ const DevicesSection = ({devices, userId, loading}) => {
     if (devices === null) {
         return _t("Unable to load device list");
     }
-    if (devices.length === 0) {
-        return _t("No devices with registered encryption keys");
+
+    const unverifiedDevices = devices.filter(d => !d.isVerified());
+    const verifiedDevices = devices.filter(d => d.isVerified());
+
+    let expandButton;
+    if (verifiedDevices.length) {
+        if (isExpanded) {
+            expandButton = (<AccessibleButton onClick={() => setExpanded(false)}>
+                {_t("Hide verified Sign-In's")}
+            </AccessibleButton>);
+        } else {
+            expandButton = (<AccessibleButton onClick={() => setExpanded(true)}>
+                {_t("%(count)s verified Sign-In's", {count: verifiedDevices.length})}
+            </AccessibleButton>);
+        }
+    }
+
+    let deviceList = unverifiedDevices.map((device, i) => {
+        return (<MemberDeviceInfo key={i} userId={userId} device={device} />);
+    });
+    if (isExpanded) {
+        const keyStart = unverifiedDevices.length;
+        deviceList = deviceList.concat(verifiedDevices.map((device, i) => {
+            return (<MemberDeviceInfo key={i + keyStart} userId={userId} device={device} />);
+        }));
     }
 
     return (
-        <div className="mx_UserInfo_container">
-            <h3>{ _t("Trust & Devices") }</h3>
-            <div className="mx_UserInfo_devices">
-                { devices.map((device, i) => <MemberDeviceInfo key={i} userId={userId} device={device} />) }
-            </div>
+        <div className="mx_UserInfo_devices">
+            <div>{deviceList}</div>
+            <div>{expandButton}</div>
         </div>
     );
 };
@@ -1099,12 +1122,8 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         };
     }, [cli, user.userId, isRoomEncrypted]);
 
-    let devicesSection;
-    if (isRoomEncrypted) {
-        devicesSection = <DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />;
-    } else {
-        let text;
-
+    let text;
+    if (!isRoomEncrypted) {
         if (!_enableDevices) {
             text = _t("This client does not support end-to-end encryption.");
         } else if (room) {
@@ -1112,18 +1131,17 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         } else {
             // TODO what to render for GroupMember
         }
-
-        if (text) {
-            devicesSection = (
-                <div className="mx_UserInfo_container">
-                    <h3>{ _t("Trust & Devices") }</h3>
-                    <div className="mx_UserInfo_devices">
-                        { text }
-                    </div>
-                </div>
-            );
-        }
+    } else {
+        text = _t("Messages in this room are end-to-end encrypted.");
     }
+
+    const devicesSection = (
+        <div className="mx_UserInfo_container">
+            <h3>{ _t("Security") }</h3>
+            <p>{ text }</p>
+            <DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />
+        </div>
+    );
 
     let e2eIcon;
     if (isRoomEncrypted && devices) {
