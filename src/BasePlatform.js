@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import dis from './dispatcher';
+import BaseEventIndexManager from './BaseEventIndexManager';
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -152,43 +153,7 @@ export default class BasePlatform {
         throw new Error("Unimplemented");
     }
 
-    supportsEventIndexing(): boolean {
-        return false;
-    }
-
-    async initEventIndex(userId: string): boolean {
-        throw new Error("Unimplemented");
-    }
-
-    async addEventToIndex(ev: {}, profile: {}): void {
-        throw new Error("Unimplemented");
-    }
-
-    indexIsEmpty(): Promise<boolean> {
-        throw new Error("Unimplemented");
-    }
-
-    async commitLiveEvents(): void {
-        throw new Error("Unimplemented");
-    }
-
-    async searchEventIndex(term: string): Promise<{}> {
-        throw new Error("Unimplemented");
-    }
-
-    async addHistoricEvents(events: [], checkpoint: {} = null, oldCheckpoint: {} = null): Promise<bool> {
-        throw new Error("Unimplemented");
-    }
-
-    async addCrawlerCheckpoint(checkpoint: {}): Promise<> {
-        throw new Error("Unimplemented");
-    }
-
-    async removeCrawlerCheckpoint(checkpoint: {}): Promise<> {
-        throw new Error("Unimplemented");
-    }
-
-    async deleteEventIndex(): Promise<> {
-        throw new Error("Unimplemented");
+    getEventIndexingManager(): BaseEventIndexManager | null {
+        return null;
     }
 }

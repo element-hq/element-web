@@ -46,9 +46,11 @@ class EventIndexPeg {
      * otherwise.
      */
     async init() {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return false;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        console.log("Initializing event index, got {}", indexManager);
+        if (indexManager === null) return false;
 
+        console.log("Seshat: Creatingnew EventIndex object", indexManager);
         const index = new EventIndex();
 
         const userId = MatrixClientPeg.get().getUserId();

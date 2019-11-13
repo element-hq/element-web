@@ -31,19 +31,19 @@ export default class EventIndexer {
     }
 
     async init(userId) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return false;
-        platform.initEventIndex(userId);
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return false;
+        indexManager.initEventIndex(userId);
         return true;
     }
 
     async onSync(state, prevState, data) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return;
 
         if (prevState === null && state === "PREPARED") {
             // Load our stored checkpoints, if any.
-            this.crawlerChekpoints = await platform.loadCheckpoints();
+            this.crawlerChekpoints = await indexManager.loadCheckpoints();
             console.log("Seshat: Loaded checkpoints",
                         this.crawlerChekpoints);
             return;
@@ -85,8 +85,8 @@ export default class EventIndexer {
                         direction: "f",
                     };
 
-                    await platform.addCrawlerCheckpoint(backCheckpoint);
-                    await platform.addCrawlerCheckpoint(forwardCheckpoint);
+                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
                     this.crawlerChekpoints.push(backCheckpoint);
                     this.crawlerChekpoints.push(forwardCheckpoint);
                 }));
@@ -95,7 +95,7 @@ export default class EventIndexer {
             // If our indexer is empty we're most likely running Riot the
             // first time with indexing support or running it with an
             // initial sync. Add checkpoints to crawl our encrypted rooms.
-            const eventIndexWasEmpty = await platform.isEventIndexEmpty();
+            const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();
             if (eventIndexWasEmpty) await addInitialCheckpoints();
 
             // Start our crawler.
@@ -107,14 +107,14 @@ export default class EventIndexer {
             // A sync was done, presumably we queued up some live events,
             // commit them now.
             console.log("Seshat: Committing events");
-            await platform.commitLiveEvents();
+            await indexManager.commitLiveEvents();
             return;
         }
     }
 
     async onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return;
 
         // We only index encrypted rooms locally.
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
@@ -139,8 +139,8 @@ export default class EventIndexer {
     }
 
     async onEventDecrypted(ev, err) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return;
 
         const eventId = ev.getId();
 
@@ -151,8 +151,8 @@ export default class EventIndexer {
     }
 
     async addLiveEventToIndex(ev) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return;
 
         if (["m.room.message", "m.room.name", "m.room.topic"]
             .indexOf(ev.getType()) == -1) {
@@ -165,7 +165,7 @@ export default class EventIndexer {
             avatar_url: ev.sender.getMxcAvatarUrl(),
         };
 
-        platform.addEventToIndex(e, profile);
+        indexManager.addEventToIndex(e, profile);
     }
 
     async crawlerFunc(handle) {
@@ -180,7 +180,7 @@ export default class EventIndexer {
         console.log("Seshat: Started crawler function");
 
         const client = MatrixClientPeg.get();
-        const platform = PlatformPeg.get();
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         handle.cancel = () => {
             cancelled = true;
@@ -223,14 +223,14 @@ export default class EventIndexer {
             } catch (e) {
                 console.log("Seshat: Error crawling events:", e);
                 this.crawlerChekpoints.push(checkpoint);
-                continue
+                continue;
             }
 
             if (res.chunk.length === 0) {
                 console.log("Seshat: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
-                await platform.removeCrawlerCheckpoint(checkpoint);
+                await indexManager.removeCrawlerCheckpoint(checkpoint);
                 continue;
             }
 
@@ -323,7 +323,7 @@ export default class EventIndexer {
             );
 
             try {
-                const eventsAlreadyAdded = await platform.addHistoricEvents(
+                const eventsAlreadyAdded = await indexManager.addHistoricEvents(
                     events, newCheckpoint, checkpoint);
                 // If all events were already indexed we assume that we catched
                 // up with our index and don't need to crawl the room further.
@@ -332,7 +332,7 @@ export default class EventIndexer {
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
                     console.log("Seshat: Checkpoint had already all events",
                                 "added, stopping the crawl", checkpoint);
-                    await platform.removeCrawlerCheckpoint(newCheckpoint);
+                    await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     this.crawlerChekpoints.push(newCheckpoint);
                 }
@@ -348,8 +348,8 @@ export default class EventIndexer {
     }
 
     async addCheckpointForLimitedRoom(room) {
-        const platform = PlatformPeg.get();
-        if (!platform.supportsEventIndexing()) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
         const timeline = room.getLiveTimeline();
@@ -372,19 +372,19 @@ export default class EventIndexer {
         console.log("Seshat: Added checkpoint because of a limited timeline",
             backwardsCheckpoint, forwardsCheckpoint);
 
-        await platform.addCrawlerCheckpoint(backwardsCheckpoint);
-        await platform.addCrawlerCheckpoint(forwardsCheckpoint);
+        await indexManager.addCrawlerCheckpoint(backwardsCheckpoint);
+        await indexManager.addCrawlerCheckpoint(forwardsCheckpoint);
 
         this.crawlerChekpoints.push(backwardsCheckpoint);
         this.crawlerChekpoints.push(forwardsCheckpoint);
     }
 
     async deleteEventIndex() {
-        const platform = PlatformPeg.get();
-        if (platform.supportsEventIndexing()) {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        if (indexManager !== null) {
             console.log("Seshat: Deleting event index.");
             this.crawlerRef.cancel();
-            await platform.deleteEventIndex();
+            await indexManager.deleteEventIndex();
         }
     }
 
@@ -400,7 +400,7 @@ export default class EventIndexer {
     }
 
     async search(searchArgs) {
-        const platform = PlatformPeg.get();
-        return platform.searchEventIndex(searchArgs)
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        return indexManager.searchEventIndex(searchArgs);
     }
 }
