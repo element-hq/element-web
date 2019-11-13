@@ -76,6 +76,19 @@ export interface HistoricEvent {
  */
 export default class BaseEventIndexManager {
     /**
+     * Does our EventIndexManager support event indexing.
+     *
+     * If an EventIndexManager imlpementor has runtime dependencies that
+     * optionally enable event indexing they may override this method to perform
+     * the necessary runtime checks here.
+     *
+     * @return {Promise} A promise that will resolve to true if event indexing
+     * is supported, false otherwise.
+     */
+    async supportsEventIndexing(): Promise<boolean> {
+        return true;
+    }
+    /**
      * Initialize the event index for the given user.
      *
      * @param {string} userId The unique identifier of the logged in user that
