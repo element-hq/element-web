@@ -26,6 +26,7 @@ import { Room } from 'matrix-js-sdk';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
+import {sleep} from "../../../utils/promise";
 
 const COMPOSER_SELECTED = 0;
 
@@ -105,13 +106,11 @@ export default class Autocomplete extends React.Component {
             autocompleteDelay = 0;
         }
 
-        const deferred = Promise.defer();
-        this.debounceCompletionsRequest = setTimeout(() => {
-            this.processQuery(query, selection).then(() => {
-                deferred.resolve();
-            });
-        }, autocompleteDelay);
-        return deferred.promise;
+        return new Promise((resolve) => {
+            this.debounceCompletionsRequest = setTimeout(() => {
+                resolve(this.processQuery(query, selection));
+            }, autocompleteDelay);
+        });
     }
 
     processQuery(query, selection) {
@@ -197,16 +196,16 @@ export default class Autocomplete extends React.Component {
     }
 
     forceComplete() {
-        const done = Promise.defer();
-        this.setState({
-            forceComplete: true,
-            hide: false,
-        }, () => {
-            this.complete(this.props.query, this.props.selection).then(() => {
-                done.resolve(this.countCompletions());
+        return new Promise((resolve) => {
+            this.setState({
+                forceComplete: true,
+                hide: false,
+            }, () => {
+                this.complete(this.props.query, this.props.selection).then(() => {
+                    resolve(this.countCompletions());
+                });
             });
         });
-        return done.promise;
     }
 
     onCompletionClicked(selectionOffset: number): boolean {

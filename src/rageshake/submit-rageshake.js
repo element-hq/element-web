@@ -105,26 +105,22 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
 }
 
 function _submitReport(endpoint, body, progressCallback) {
-    const deferred = Promise.defer();
-
-    const req = new XMLHttpRequest();
-    req.open("POST", endpoint);
-    req.timeout = 5 * 60 * 1000;
-    req.onreadystatechange = function() {
-        if (req.readyState === XMLHttpRequest.LOADING) {
-            progressCallback(_t("Waiting for response from server"));
-        } else if (req.readyState === XMLHttpRequest.DONE) {
-            on_done();
-        }
-    };
-    req.send(body);
-    return deferred.promise;
-
-    function on_done() {
-        if (req.status < 200 || req.status >= 400) {
-            deferred.reject(new Error(`HTTP ${req.status}`));
-            return;
-        }
-        deferred.resolve();
-    }
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open("POST", endpoint);
+        req.timeout = 5 * 60 * 1000;
+        req.onreadystatechange = function() {
+            if (req.readyState === XMLHttpRequest.LOADING) {
+                progressCallback(_t("Waiting for response from server"));
+            } else if (req.readyState === XMLHttpRequest.DONE) {
+                // on done
+                if (req.status < 200 || req.status >= 400) {
+                    reject(new Error(`HTTP ${req.status}`));
+                    return;
+                }
+                resolve();
+            }
+        };
+        req.send(body);
+    });
 }
