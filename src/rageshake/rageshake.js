@@ -136,6 +136,8 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
+
+        // these promises are cleared as soon as fulfilled
         this.flushPromise = null;
         // set if flush() is called whilst one is ongoing
         this.flushAgainPromise = null;
@@ -208,15 +210,15 @@ class IndexedDBLogStore {
      */
     flush() {
         // check if a flush() operation is ongoing
-        if (this.flushPromise && this.flushPromise.isPending()) {
-            if (this.flushAgainPromise && this.flushAgainPromise.isPending()) {
-                // this is the 3rd+ time we've called flush() : return the same
-                // promise.
+        if (this.flushPromise) {
+            if (this.flushAgainPromise) {
+                // this is the 3rd+ time we've called flush() : return the same promise.
                 return this.flushAgainPromise;
             }
-            // queue up a flush to occur immediately after the pending one
-            // completes.
+            // queue up a flush to occur immediately after the pending one completes.
             this.flushAgainPromise = this.flushPromise.then(() => {
+                // clear this.flushAgainPromise
+                this.flushAgainPromise = null;
                 return this.flush();
             });
             return this.flushAgainPromise;
@@ -232,12 +234,16 @@ class IndexedDBLogStore {
             }
             const lines = this.logger.flush();
             if (lines.length === 0) {
+                // clear this.flushPromise
+                this.flushPromise = null;
                 resolve();
                 return;
             }
             const txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             const objStore = txn.objectStore("logs");
             txn.oncomplete = (event) => {
+                // clear this.flushPromise
+                this.flushPromise = null;
                 resolve();
             };
             txn.onerror = (event) => {
