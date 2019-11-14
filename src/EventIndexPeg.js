@@ -24,7 +24,6 @@ limitations under the License.
 
 import PlatformPeg from "./PlatformPeg";
 import EventIndex from "./EventIndexing";
-import MatrixClientPeg from "./MatrixClientPeg";
 
 class EventIndexPeg {
     constructor() {
