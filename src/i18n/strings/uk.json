@@ -40,10 +40,14 @@
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви також можете встановити власний сервер ідентифікації, але Ви не зможете запрошувати користувачів (або бути запрошеним самому) за адресою електронної пошти.",
     "Need help?": "Допомогти?",
     "Sign In": "Вхід",
-    "Create Account": "Створити аккаунт",
+    "Create Account": "Створити акаунт",
     "Explore rooms": "Дослідити кімнати",
     "Room Directory": "Каталог кімнат",
     "Unexpected error preparing the app. See console for details.": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невірна конфігурація: можна вказати лише default_server_config, default_server_name або default_hs_url.",
-    "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням."
+    "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Ваша конфігурація Riot містить некоректний JSON. Виправте проблему та оновіть сторінку.",
+    "The message from the parser is: %(message)s": "Повідомлення від парсера: %(message)s",
+    "Invalid JSON": "Хибний JSON",
+    "Your Riot is misconfigured": "Ваш Riot налаштовано неправильно"
 }
