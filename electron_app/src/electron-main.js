@@ -252,8 +252,8 @@ ipcMain.on('seshat', async function(ev, payload) {
             break;
 
         case 'initEventIndex':
-            if (args[0] && eventIndex === null) {
-                let p = path.normalize(path.join(eventStorePath, args[0]));
+            if (eventIndex === null) {
+                let p = path.normalize(eventStorePath);
                 try {
                     await makeDir(p);
                     eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
