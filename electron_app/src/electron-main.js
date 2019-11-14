@@ -256,8 +256,7 @@ ipcMain.on('seshat', async function(ev, payload) {
                 let p = path.normalize(path.join(eventStorePath, args[0]));
                 try {
                     await makeDir(p);
-                    eventIndex = new Seshat(p);
-                    // eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
+                    eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
                     console.log("Initialized event store");
                 } catch (e) {
                     sendError(payload.id, e);
