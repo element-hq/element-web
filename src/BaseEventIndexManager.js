@@ -114,9 +114,6 @@ export default class BaseEventIndexManager {
 
     /**
      * Check if our event index is empty.
-     *
-     * @return {Promise<boolean>} A promise that will resolve to true if the
-     * event index is empty, false otherwise.
      */
     indexIsEmpty(): Promise<boolean> {
         throw new Error("Unimplemented");
