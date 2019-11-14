@@ -22,6 +22,19 @@ import Promise from "bluebird";
 // Returns a promise which resolves with a given value after the given number of ms
 export const sleep = (ms: number, value: any): Promise => new Promise((resolve => { setTimeout(resolve, ms, value); }));
 
+// Returns a promise which resolves when the input promise resolves with its value
+// or when the timeout of ms is reached with the value of given timeoutValue
+export async function timeout(promise: Promise, timeoutValue: any, ms: number): Promise {
+    const timeoutPromise = new Promise((resolve) => {
+        const timeoutId = setTimeout(resolve, ms, timeoutValue);
+        promise.then(() => {
+            clearTimeout(timeoutId);
+        });
+    });
+
+    return Promise.race([promise, timeoutPromise]);
+}
+
 // Returns a Deferred
 export function defer(): {resolve: () => {}, reject: () => {}, promise: Promise} {
     let resolve;
