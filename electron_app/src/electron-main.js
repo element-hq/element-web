@@ -44,7 +44,7 @@ let Seshat = null;
 let makeDir = null;
 
 try {
-    Seshat = require('seshat-node');
+    Seshat = require('matrix-seshat');
     makeDir = require('make-dir');
 } catch (e) {
 }

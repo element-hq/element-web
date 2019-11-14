@@ -16,6 +16,6 @@
     "minimist": "^1.2.0",
     "png-to-ico": "^1.0.2",
     "make-dir": "^3.0.0",
-    "seshat-node": "^0.2.0"
+    "matrix-seshat": "^0.3.0"
   }
 }
