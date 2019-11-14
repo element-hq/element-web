@@ -27,7 +27,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import Unread from '../../../Unread';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -40,6 +39,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import {textualPowerLevel} from '../../../Roles';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -780,43 +780,11 @@ const useIsSynapseAdmin = (cli) => {
     return isAdmin;
 };
 
-// cli is injected by withLegacyMatrixClient
-const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, roomId, onClose}) => {
-    // Load room if we are given a room id and memoize it
-    const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
-
-    // only display the devices list if our client supports E2E
-    const _enableDevices = cli.isCryptoEnabled();
-
-    // Load whether or not we are a Synapse Admin
-    const isSynapseAdmin = useIsSynapseAdmin(cli);
-
-    // Check whether the user is ignored
-    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(user.userId));
-    // Recheck if the user or client changes
-    useEffect(() => {
-        setIsIgnored(cli.isUserIgnored(user.userId));
-    }, [cli, user.userId]);
-    // Recheck also if we receive new accountData m.ignored_user_list
-    const accountDataHandler = useCallback((ev) => {
-        if (ev.getType() === "m.ignored_user_list") {
-            setIsIgnored(cli.isUserIgnored(user.userId));
-        }
-    }, [cli, user.userId]);
-    useEventEmitter(cli, "accountData", accountDataHandler);
-
-    // Count of how many operations are currently in progress, if > 0 then show a Spinner
-    const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
-    const startUpdating = useCallback(() => {
-        setPendingUpdateCount(pendingUpdateCount + 1);
-    }, [pendingUpdateCount]);
-    const stopUpdating = useCallback(() => {
-        setPendingUpdateCount(pendingUpdateCount - 1);
-    }, [pendingUpdateCount]);
-
+function useRoomPermissions(cli, room, user) {
     const [roomPermissions, setRoomPermissions] = useState({
         // modifyLevelMax is the max PL we can set this user to, typically min(their PL, our PL) && canSetPL
         modifyLevelMax: -1,
+        canAffectUser: false,
         canInvite: false,
     });
     const updateRoomPermissions = useCallback(async () => {
@@ -847,6 +815,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
         setRoomPermissions({
             canInvite: me.powerLevel >= powerLevels.invite,
+            canAffectUser,
             modifyLevelMax,
         });
     }, [cli, user, room]);
@@ -856,38 +825,16 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         return () => {
             setRoomPermissions({
                 maximalPowerLevel: -1,
+                canAffectUser: false,
                 canInvite: false,
             });
         };
     }, [updateRoomPermissions]);
 
-    const onSynapseDeactivate = useCallback(async () => {
-        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
-        const {finished} = Modal.createTrackedDialog('Synapse User Deactivation', '', QuestionDialog, {
-            title: _t("Deactivate user?"),
-            description:
-                <div>{ _t(
-                    "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
-                    "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you " +
-                    "want to deactivate this user?",
-                ) }</div>,
-            button: _t("Deactivate user"),
-            danger: true,
-        });
+    return roomPermissions;
+}
 
-        const [accepted] = await finished;
-        if (!accepted) return;
-        try {
-            cli.deactivateSynapseUser(user.userId);
-        } catch (err) {
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-            Modal.createTrackedDialog('Failed to deactivate user', '', ErrorDialog, {
-                title: _t('Failed to deactivate user'),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
-            });
-        }
-    }, [cli, user.userId]);
-
+const PowerLevelEditor = withLegacyMatrixClient(({matrixClient: cli, user, room, startUpdating, stopUpdating, roomPermissions}) => {
     const onPowerChange = useCallback(async (powerLevel) => {
         const _applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
             startUpdating();
@@ -952,6 +899,104 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         }
         _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     }, [user.roomId, user.userId, room && room.currentState, cli]); // eslint-disable-line
+
+
+    const [isEditingPL, setEditingPL] = useState(false);
+    if (room && user.roomId) { // is in room
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
+        const powerLevel = parseInt(user.powerLevel);
+        const IconButton = sdk.getComponent('elements.IconButton');
+        if (isEditingPL) {
+            const PowerSelector = sdk.getComponent('elements.PowerSelector');
+            return (
+                <div className="mx_UserInfo_profileField">
+                    <PowerSelector
+                        label={null}
+                        value={powerLevel}
+                        maxValue={roomPermissions.modifyLevelMax}
+                        usersDefault={powerLevelUsersDefault}
+                        onChange={onPowerChange}
+                    />
+                    <IconButton icon="check" onClick={() => setEditingPL(false)} />
+                </div>
+            );
+        } else {
+            const modifyButton = roomPermissions.canAffectUser ?
+                (<IconButton icon="edit" onClick={() => setEditingPL(true)} />) : null;
+            const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
+            const label = _t("<strong>%(role)s</strong> in %(roomName)s",
+                {role, roomName: room.name},
+                {strong: label => <strong>{label}</strong>},
+            );
+            return (<div className="mx_UserInfo_profileField"><div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div></div>);
+        }
+    }
+});
+
+// cli is injected by withLegacyMatrixClient
+const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, roomId, onClose}) => {
+    // Load room if we are given a room id and memoize it
+    const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
+
+    // only display the devices list if our client supports E2E
+    const _enableDevices = cli.isCryptoEnabled();
+
+    // Load whether or not we are a Synapse Admin
+    const isSynapseAdmin = useIsSynapseAdmin(cli);
+
+    // Check whether the user is ignored
+    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(user.userId));
+    // Recheck if the user or client changes
+    useEffect(() => {
+        setIsIgnored(cli.isUserIgnored(user.userId));
+    }, [cli, user.userId]);
+    // Recheck also if we receive new accountData m.ignored_user_list
+    const accountDataHandler = useCallback((ev) => {
+        if (ev.getType() === "m.ignored_user_list") {
+            setIsIgnored(cli.isUserIgnored(user.userId));
+        }
+    }, [cli, user.userId]);
+    useEventEmitter(cli, "accountData", accountDataHandler);
+
+    // Count of how many operations are currently in progress, if > 0 then show a Spinner
+    const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
+    const startUpdating = useCallback(() => {
+        setPendingUpdateCount(pendingUpdateCount + 1);
+    }, [pendingUpdateCount]);
+    const stopUpdating = useCallback(() => {
+        setPendingUpdateCount(pendingUpdateCount - 1);
+    }, [pendingUpdateCount]);
+
+    const roomPermissions = useRoomPermissions(cli, room, user);
+
+    const onSynapseDeactivate = useCallback(async () => {
+        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        const {finished} = Modal.createTrackedDialog('Synapse User Deactivation', '', QuestionDialog, {
+            title: _t("Deactivate user?"),
+            description:
+                <div>{ _t(
+                    "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
+                    "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you " +
+                    "want to deactivate this user?",
+                ) }</div>,
+            button: _t("Deactivate user"),
+            danger: true,
+        });
+
+        const [accepted] = await finished;
+        if (!accepted) return;
+        try {
+            cli.deactivateSynapseUser(user.userId);
+        } catch (err) {
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+            Modal.createTrackedDialog('Failed to deactivate user', '', ErrorDialog, {
+                title: _t('Failed to deactivate user'),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        }
+    }, [cli, user.userId]);
+
 
     const onMemberAvatarKey = e => {
         if (e.key === "Enter") {
@@ -1058,26 +1103,6 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
     }
 
-    let memberDetails = null;
-
-    if (room && user.roomId) { // is in room
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
-
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-        memberDetails = <div>
-            <div className="mx_UserInfo_profileField">
-                <PowerSelector
-                    value={parseInt(user.powerLevel)}
-                    maxValue={roomPermissions.modifyLevelMax}
-                    disabled={roomPermissions.modifyLevelMax < 0}
-                    usersDefault={powerLevelUsersDefault}
-                    onChange={onPowerChange} />
-            </div>
-
-        </div>;
-    }
-
     const avatarUrl = user.getMxcAvatarUrl ? user.getMxcAvatarUrl() : user.avatarUrl;
     let avatarElement;
     if (avatarUrl) {
@@ -1101,6 +1126,11 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             onClick={onClose}
             title={_t('Close')} />;
     }
+
+    const memberDetails = <PowerLevelEditor
+        user={user} room={room} roomPermissions={roomPermissions}
+        startUpdating={startUpdating} stopUpdating={stopUpdating}
+    />;
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
     // undefined means yet to be loaded, null means failed to load, otherwise list of devices

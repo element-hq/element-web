@@ -125,8 +125,34 @@ limitations under the License.
         }
     }
 
-    .mx_UserInfo_memberDetails {
-        text-align: center;
+    .mx_UserInfo_memberDetails .mx_UserInfo_profileField {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin: 6px 0;
+
+        .mx_IconButton {
+            margin-left: 6px;
+            width: 16px;
+            height: 16px;
+
+            &::before {
+                mask-size: 80%;
+            }
+        }
+
+        .mx_UserInfo_roleDescription {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // try to make it the same height as the dropdown
+            margin: 11px 0 12px 0;
+        }
+
+        .mx_Field {
+            margin: 0;
+        }
     }
 
     .mx_UserInfo_field {
