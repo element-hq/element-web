@@ -61,6 +61,7 @@ class EventIndexPeg {
             await index.init();
         } catch (e) {
             console.log("EventIndex: Error initializing the event index", e);
+            return false;
         }
 
         console.log("EventIndex: Successfully initialized the event index");
