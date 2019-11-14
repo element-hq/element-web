@@ -35,9 +35,7 @@ export default class EventIndexer {
 
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return false;
-        indexManager.initEventIndex();
-        return true;
+        return indexManager.initEventIndex();
     }
 
     async onSync(state, prevState, data) {
@@ -198,7 +196,6 @@ export default class EventIndexer {
             console.log("EventIndex: Running the crawler loop.");
 
             if (cancelled) {
-                console.log("EventIndex: Cancelling the crawler.");
                 break;
             }
 
@@ -373,24 +370,33 @@ export default class EventIndexer {
         this.crawlerCheckpoints.push(backwardsCheckpoint);
     }
 
+    startCrawler() {
+        if (this._crawlerRef !== null) return;
+
+        const crawlerHandle = {};
+        this.crawlerFunc(crawlerHandle);
+        this._crawlerRef = crawlerHandle;
+    }
+
+    stopCrawler() {
+        if (this._crawlerRef === null) return;
+
+        this._crawlerRef.cancel();
+        this._crawlerRef = null;
+    }
+
+    async close() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        this.stopCrawler();
+        return indexManager.closeEventIndex();
+    }
+
     async deleteEventIndex() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (indexManager !== null) {
-            console.log("EventIndex: Deleting event index.");
-            this.crawlerRef.cancel();
+            this.stopCrawler();
             await indexManager.deleteEventIndex();
         }
-    }
-
-    startCrawler() {
-        const crawlerHandle = {};
-        this.crawlerFunc(crawlerHandle);
-        this.crawlerRef = crawlerHandle;
-    }
-
-    stop() {
-        this._crawlerRef.cancel();
-        this._crawlerRef = null;
     }
 
     async search(searchArgs) {

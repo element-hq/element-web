@@ -31,15 +31,6 @@ class EventIndexPeg {
         this.index = null;
     }
 
-    /**
-     * Get the current event index.
-     *
-     * @return {EventIndex} The current event index.
-     */
-    get() {
-        return this.index;
-    }
-
     /** Create a new EventIndex and initialize it if the platform supports it.
      *
      * @return {Promise<bool>} A promise that will resolve to true if an
@@ -72,11 +63,30 @@ class EventIndexPeg {
     }
 
     /**
-     * Stop our event indexer.
+     * Get the current event index.
+     *
+     * @return {EventIndex} The current event index.
      */
+    get() {
+        return this.index;
+    }
+
     stop() {
         if (this.index === null) return;
-        this.index.stop();
+        this.index.stopCrawler();
+    }
+
+    /**
+     * Unset our event store
+     *
+     * After a call to this the init() method will need to be called again.
+     *
+     * @return {Promise} A promise that will resolve once the event index is
+     * closed.
+     */
+    async unset() {
+        if (this.index === null) return;
+        this.index.close();
         this.index = null;
     }
 
@@ -89,9 +99,14 @@ class EventIndexPeg {
      * deleted.
      */
     async deleteEventIndex() {
-        if (this.index === null) return;
-        this.index.deleteEventIndex();
-        this.index = null;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+
+        if (indexManager !== null) {
+            this.stop();
+            console.log("EventIndex: Deleting event index.");
+            await indexManager.deleteEventIndex();
+            this.index = null;
+        }
     }
 }
 

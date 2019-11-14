@@ -662,6 +662,7 @@ export function stopMatrixClient(unsetClient=true) {
 
         if (unsetClient) {
             MatrixClientPeg.unset();
+            EventIndexPeg.unset().done();
         }
     }
 }

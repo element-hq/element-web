@@ -207,6 +207,16 @@ export default class BaseEventIndexManager {
     }
 
     /**
+     * close our event index.
+     *
+     * @return {Promise} A promise that will resolve once the event index has
+     * been closed.
+     */
+    async closeEventIndex(): Promise<> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
      * Delete our current event index.
      *
      * @return {Promise} A promise that will resolve once the event index has
