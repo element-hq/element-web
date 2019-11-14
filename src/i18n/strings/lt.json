@@ -1117,5 +1117,6 @@
     "Custom user status messages": "Pasirinktinės vartotojo būsenos žinutės",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Grupuoti ir filtruoti kambarius pagal pasirinktines žymas (atnaujinkite, kad pritaikytumėte pakeitimus)",
     "Render simple counters in room header": "Užkrauti paprastus skaitiklius kambario antraštėje",
-    "Multiple integration managers": "Daugialypiai integracijų valdikliai"
+    "Multiple integration managers": "Daugialypiai integracijų valdikliai",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)"
 }

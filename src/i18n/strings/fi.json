@@ -1533,7 +1533,7 @@
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Lisää ”¯\\_(ツ)_/¯” viestin alkuun",
     "User %(userId)s is already in the room": "Käyttäjä %(userId)s on jo huoneessa",
     "The user must be unbanned before they can be invited.": "Käyttäjän porttikielto täytyy poistaa ennen kutsumista.",
-    "<a>Upgrade</a> to your own domain": "<a>Päivitä</a> omaan verkkotunnukseesi",
+    "<a>Upgrade</a> to your own domain": "<a>Päivitä</a> omaan verkkotunnukseen",
     "Accept all %(invitedRooms)s invites": "Hyväksy kaikki %(invitedRooms)s kutsut",
     "Change room avatar": "Vaihda huoneen kuva",
     "Change room name": "Vaihda huoneen nimi",
