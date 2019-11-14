@@ -56,10 +56,9 @@ class EventIndexPeg {
         }
 
         const index = new EventIndex();
-        const userId = MatrixClientPeg.get().getUserId();
 
         try {
-            await index.init(userId);
+            await index.init();
         } catch (e) {
             console.log("EventIndex: Error initializing the event index", e);
         }

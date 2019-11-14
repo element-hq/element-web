@@ -33,10 +33,10 @@ export default class EventIndexer {
         this.liveEventsForIndex = new Set();
     }
 
-    async init(userId) {
+    async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (indexManager === null) return false;
-        indexManager.initEventIndex(userId);
+        indexManager.initEventIndex();
         return true;
     }
 

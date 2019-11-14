@@ -91,13 +91,10 @@ export default class BaseEventIndexManager {
     /**
      * Initialize the event index for the given user.
      *
-     * @param {string} userId The unique identifier of the logged in user that
-     * owns the index.
-     *
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(userId: string): Promise<> {
+    async initEventIndex(): Promise<> {
         throw new Error("Unimplemented");
     }
 
