@@ -40,12 +40,13 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
 
+const fs = require('fs');
+const afs = fs.promises;
+
 let Seshat = null;
-let makeDir = null;
 
 try {
     Seshat = require('matrix-seshat');
-    makeDir = require('make-dir');
 } catch (e) {
 }
 
@@ -255,9 +256,8 @@ ipcMain.on('seshat', async function(ev, payload) {
             if (eventIndex === null) {
                 let p = path.normalize(eventStorePath);
                 try {
-                    await makeDir(p);
+                    await afs.mkdir(p, {recursive: true});
                     eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
-                    console.log("Initialized event store");
                 } catch (e) {
                     sendError(payload.id, e);
                     return;
@@ -265,9 +265,23 @@ ipcMain.on('seshat', async function(ev, payload) {
             }
             break;
 
-        case 'deleteEventIndex':
-            await eventIndex.delete();
+        case 'closeEventIndex':
             eventIndex = null;
+            break;
+
+        case 'deleteEventIndex':
+            const deleteFolderRecursive = async(p) =>  {
+                for (let entry of await afs.readdir(p)) {
+                    const curPath = path.join(p, entry);
+                    await afs.unlink(curPath);
+                }
+            }
+
+            try {
+                await deleteFolderRecursive(path.normalize(eventStorePath));
+            } catch (e) {
+            }
+
             break;
 
         case 'isEventIndexEmpty':

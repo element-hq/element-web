@@ -149,6 +149,10 @@ class SeshatIndexerManager extends BaseEventIndexManager {
         return this._ipcCall('loadCheckpoints');
     }
 
+    async closeEventIndex(): Promise<> {
+        return this._ipcCall('closeEventIndex');
+    }
+
     async deleteEventIndex(): Promise<> {
         return this._ipcCall('deleteEventIndex');
     }
