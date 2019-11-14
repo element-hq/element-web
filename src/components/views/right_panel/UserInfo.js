@@ -842,10 +842,13 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         const [accepted] = await finished;
         if (!accepted) return;
         try {
-            cli.deactivateSynapseUser(user.userId);
+            await cli.deactivateSynapseUser(user.userId);
         } catch (err) {
+            console.error("Failed to deactivate user");
+            console.error(err);
+
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-            Modal.createTrackedDialog('Failed to deactivate user', '', ErrorDialog, {
+            Modal.createTrackedDialog('Failed to deactivate Synapse user', '', ErrorDialog, {
                 title: _t('Failed to deactivate user'),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
