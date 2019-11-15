@@ -111,7 +111,6 @@ limitations under the License.
             overflow-x: auto;
             max-height: 50px;
             display: flex;
-            justify-self: ;
             justify-content: center;
             align-items: center;
 
@@ -188,7 +187,7 @@ limitations under the License.
         padding-bottom: 0;
         border-bottom: none;
 
-        >:not(h3) {
+        > :not(h3) {
             margin-left: 8px;
         }
     }
@@ -229,5 +228,4 @@ limitations under the License.
             color: $accent-color;
         }
     }
-
 }
