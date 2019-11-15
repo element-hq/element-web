@@ -837,9 +837,46 @@ function useRoomPermissions(cli, room, user) {
 }
 
 const PowerLevelSection = withLegacyMatrixClient(({matrixClient: cli, user, room, roomPermissions, powerLevels}) => {
+    const [isEditing, setEditing] = useState(false);
+    if (room && user.roomId) { // is in room
+        if (isEditing) {
+            return (<PowerLevelEditor
+                user={user} room={room} roomPermissions={roomPermissions}
+                onFinished={() => setEditing(false)} />);
+        } else {
+            const IconButton = sdk.getComponent('elements.IconButton');
+            const powerLevelUsersDefault = powerLevels.users_default || 0;
+            const powerLevel = parseInt(user.powerLevel, 10);
+            const modifyButton = roomPermissions.canEdit ?
+                (<IconButton icon="edit" onClick={() => setEditing(true)} />) : null;
+            const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
+            const label = _t("<strong>%(role)s</strong> in %(roomName)s",
+                {role, roomName: room.name},
+                {strong: label => <strong>{label}</strong>},
+            );
+            return (
+                <div className="mx_UserInfo_profileField">
+                    <div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div>
+                </div>
+            );
+        }
+    } else {
+        return null;
+    }
+});
+
+const PowerLevelEditor = withLegacyMatrixClient(({matrixClient: cli, user, room, roomPermissions, onFinished}) => {
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [selectedPowerLevel, setSelectedPowerLevel] = useState(parseInt(user.powerLevel, 10));
+    const [isDirty, setIsDirty] = useState(false);
+    const onPowerChange = useCallback((powerLevel) => {
+        setIsDirty(true);
+        setSelectedPowerLevel(parseInt(powerLevel, 10));
+    }, [setSelectedPowerLevel, setIsDirty]);
+
+    const changePowerLevel = useCallback(async () => {
         const _applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
-            startUpdating();
-            cli.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
+            return cli.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
@@ -852,87 +889,86 @@ const PowerLevelSection = withLegacyMatrixClient(({matrixClient: cli, user, room
                         description: _t("Failed to change power level"),
                     });
                 },
-            ).finally(() => {
-                stopUpdating();
-            }).done();
+            );
         };
 
-        const roomId = user.roomId;
-        const target = user.userId;
-
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        if (!powerLevelEvent) return;
-
-        if (!powerLevelEvent.getContent().users) {
-            _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-            return;
-        }
-
-        const myUserId = cli.getUserId();
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-        // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
-        if (myUserId === target) {
-            try {
-                if (!(await _warnSelfDemote())) return;
-                _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-            } catch (e) {
-                console.error("Failed to warn about self demotion: ", e);
+        try {
+            if (!isDirty) {
+                return;
             }
-            return;
+
+            setIsUpdating(true);
+
+            const powerLevel = selectedPowerLevel;
+
+            const roomId = user.roomId;
+            const target = user.userId;
+
+            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+            if (!powerLevelEvent) return;
+
+            if (!powerLevelEvent.getContent().users) {
+                _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                return;
+            }
+
+            const myUserId = cli.getUserId();
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
+            if (myUserId === target) {
+                try {
+                    if (!(await _warnSelfDemote())) return;
+                } catch (e) {
+                    console.error("Failed to warn about self demotion: ", e);
+                }
+                await _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                return;
+            }
+
+            const myPower = powerLevelEvent.getContent().users[myUserId];
+            if (parseInt(myPower) === parseInt(powerLevel)) {
+                const {finished} = Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
+                    title: _t("Warning!"),
+                    description:
+                        <div>
+                            { _t("You will not be able to undo this change as you are promoting the user " +
+                                "to have the same power level as yourself.") }<br />
+                            { _t("Are you sure?") }
+                        </div>,
+                    button: _t("Continue"),
+                });
+
+                const [confirmed] = await finished;
+                if (confirmed) return;
+            }
+            await _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+        } finally {
+            onFinished();
         }
+    }, [user.roomId, user.userId, cli, selectedPowerLevel, isDirty, setIsUpdating, onFinished, room]);
 
-        const myPower = powerLevelEvent.getContent().users[myUserId];
-        if (parseInt(myPower) === parseInt(powerLevel)) {
-            const {finished} = Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
-                title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("You will not be able to undo this change as you are promoting the user " +
-                            "to have the same power level as yourself.") }<br />
-                        { _t("Are you sure?") }
-                    </div>,
-                button: _t("Continue"),
-            });
+    const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+    const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
+    const IconButton = sdk.getComponent('elements.IconButton');
+    const Spinner = sdk.getComponent("elements.Spinner");
+    const buttonOrSpinner = isUpdating ? <Spinner w={16} h={16} /> :
+        <IconButton icon="check" onClick={changePowerLevel} />;
 
-            const [confirmed] = await finished;
-            if (confirmed) return;
-        }
-        _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-    }, [user.roomId, user.userId, room && room.currentState, cli]); // eslint-disable-line
-
-
-    const [isEditingPL, setEditingPL] = useState(false);
-    if (room && user.roomId) { // is in room
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
-        const powerLevel = parseInt(user.powerLevel);
-        const IconButton = sdk.getComponent('elements.IconButton');
-        if (isEditingPL) {
-            const PowerSelector = sdk.getComponent('elements.PowerSelector');
-            return (
-                <div className="mx_UserInfo_profileField">
-                    <PowerSelector
-                        label={null}
-                        value={powerLevel}
-                        maxValue={roomPermissions.modifyLevelMax}
-                        usersDefault={powerLevelUsersDefault}
-                        onChange={onPowerChange}
-                    />
-                    <IconButton icon="check" onClick={() => setEditingPL(false)} />
-                </div>
-            );
-        } else {
-            const modifyButton = roomPermissions.canAffectUser ?
-                (<IconButton icon="edit" onClick={() => setEditingPL(true)} />) : null;
-            const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
-            const label = _t("<strong>%(role)s</strong> in %(roomName)s",
-                {role, roomName: room.name},
-                {strong: label => <strong>{label}</strong>},
-            );
-            return (<div className="mx_UserInfo_profileField"><div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div></div>);
-        }
-    }
+    const PowerSelector = sdk.getComponent('elements.PowerSelector');
+    return (
+        <div className="mx_UserInfo_profileField">
+            <PowerSelector
+                label={null}
+                value={selectedPowerLevel}
+                maxValue={roomPermissions.modifyLevelMax}
+                usersDefault={powerLevelUsersDefault}
+                onChange={onPowerChange}
+                disabled={isUpdating}
+            />
+            {buttonOrSpinner}
+        </div>
+    );
 });
 
 // cli is injected by withLegacyMatrixClient

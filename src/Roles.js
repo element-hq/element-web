@@ -30,6 +30,6 @@ export function textualPowerLevel(level, usersDefault) {
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level];
     } else {
-        return _t("Custom %(level)s", {level});
+        return _t("Custom (%(level)s)", {level});
     }
 }
