@@ -2325,5 +2325,17 @@
     "If this isn't what you want, please use a different tool to ignore users.": "Si ce n’est pas ce que vous voulez, utilisez un autre outil pour ignorer les utilisateurs.",
     "Room ID or alias of ban list": "Identifiant ou alias du salon de la liste de bannissement",
     "Subscribe": "S’inscrire",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Vous avez ignoré cet utilisateur, donc ses messages sont cachés. <a>Les montrer quand même.</a>"
+    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Vous avez ignoré cet utilisateur, donc ses messages sont cachés. <a>Les montrer quand même.</a>",
+    "Custom (%(level)s)": "Personnalisé (%(level)s)",
+    "Trusted": "Fiable",
+    "Not trusted": "Non vérifié",
+    "Hide verified Sign-In's": "Masquer les connexions vérifiées",
+    "%(count)s verified Sign-In's|other": "%(count)s connexions vérifiées",
+    "%(count)s verified Sign-In's|one": "1 connexion vérifiée",
+    "Direct message": "Message direct",
+    "Unverify user": "Ne plus marquer l’utilisateur comme vérifié",
+    "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> dans %(roomName)s",
+    "Messages in this room are end-to-end encrypted.": "Les messages dans ce salon sont chiffrés de bout en bout.",
+    "Security": "Sécurité",
+    "Verify": "Vérifier"
 }
