@@ -789,8 +789,10 @@ function useRoomPermissions(cli, room, user) {
         canEdit: false,
         canInvite: false,
     });
-    const updateRoomPermissions = useCallback(async () => {
-        if (!room) return;
+    const updateRoomPermissions = useCallback(() => {
+        if (!room) {
+            return;
+        }
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
