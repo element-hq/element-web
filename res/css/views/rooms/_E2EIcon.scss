@@ -25,9 +25,9 @@ limitations under the License.
 .mx_E2EIcon_verified::before, .mx_E2EIcon_warning::before {
     content: "";
     display: block;
-    /* the symbols in the shield icons are cut out the make the themeable with css masking.
+    /* the symbols in the shield icons are cut out to make it themeable with css masking.
     if they appear on a different background than white, the symbol wouldn't be white though, so we
-    add a rectangle here below the masked element to shine through the symbol cutout.
+    add a rectangle here below the masked element to shine through the symbol cut-out.
     hardcoding white and not using a theme variable as this would probably be white for any theme. */
     background-color: white;
     position: absolute;
