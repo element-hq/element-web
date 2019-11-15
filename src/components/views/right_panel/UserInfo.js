@@ -1115,7 +1115,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     let presenceCurrentlyActive;
     let statusMessage;
 
-    if (user instanceof RoomMember) {
+    if (user instanceof RoomMember && user.user) {
         presenceState = user.user.presence;
         presenceLastActiveAgo = user.user.lastActiveAgo;
         presenceCurrentlyActive = user.user.currentlyActive;
