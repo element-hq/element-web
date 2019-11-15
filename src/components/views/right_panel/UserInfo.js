@@ -628,13 +628,12 @@ const MuteToggleButton = withLegacyMatrixClient(
 );
 
 const RoomAdminToolsContainer = withLegacyMatrixClient(
-    ({matrixClient: cli, room, children, member, startUpdating, stopUpdating}) => {
+    ({matrixClient: cli, room, children, member, startUpdating, stopUpdating, powerLevels}) => {
         let kickButton;
         let banButton;
         let muteButton;
         let redactButton;
 
-        const powerLevels = useRoomPowerLevels(room);
         const editPowerLevel = (
             (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
             powerLevels.state_default
@@ -837,8 +836,7 @@ function useRoomPermissions(cli, room, user) {
     return roomPermissions;
 }
 
-const PowerLevelEditor = withLegacyMatrixClient(({matrixClient: cli, user, room, startUpdating, stopUpdating, roomPermissions}) => {
-    const onPowerChange = useCallback(async (powerLevel) => {
+const PowerLevelSection = withLegacyMatrixClient(({matrixClient: cli, user, room, roomPermissions, powerLevels}) => {
         const _applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
             startUpdating();
             cli.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
@@ -945,6 +943,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     // only display the devices list if our client supports E2E
     const _enableDevices = cli.isCryptoEnabled();
 
+    const powerLevels = useRoomPowerLevels(cli, room);
     // Load whether or not we are a Synapse Admin
     const isSynapseAdmin = useIsSynapseAdmin(cli);
 
@@ -1040,6 +1039,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     if (room && user.roomId) {
         adminToolsContainer = (
             <RoomAdminToolsContainer
+                powerLevels={powerLevels}
                 member={user}
                 room={room}
                 startUpdating={startUpdating}
@@ -1130,9 +1130,9 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             title={_t('Close')} />;
     }
 
-    const memberDetails = <PowerLevelEditor
+    const memberDetails = <PowerLevelSection
+        powerLevels={powerLevels}
         user={user} room={room} roomPermissions={roomPermissions}
-        startUpdating={startUpdating} stopUpdating={stopUpdating}
     />;
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
