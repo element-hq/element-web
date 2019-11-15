@@ -146,6 +146,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_cross_signing": {
+        isFeature: true,
+        displayName: _td("Enable cross-signing to verify per-user instead of per-device"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

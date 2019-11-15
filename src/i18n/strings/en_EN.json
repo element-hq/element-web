@@ -342,6 +342,7 @@
     "Use the new, consistent UserInfo panel for Room Members and Group Members": "Use the new, consistent UserInfo panel for Room Members and Group Members",
     "Try out new ways to ignore people (experimental)": "Try out new ways to ignore people (experimental)",
     "Send verification requests in direct message": "Send verification requests in direct message",
+    "Enable cross-signing to verify per-user instead of per-device": "Enable cross-signing to verify per-user instead of per-device",
     "Use the new, faster, composer for writing messages": "Use the new, faster, composer for writing messages",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
