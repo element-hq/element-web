@@ -1254,6 +1254,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
+            <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyDevice(user.userId, null)}>{_t("Verify")}</AccessibleButton>
             { devicesSection }
         </div>
     );

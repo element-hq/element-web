@@ -228,4 +228,14 @@ limitations under the License.
             color: $accent-color;
         }
     }
+
+    .mx_UserInfo_verify {
+        display: block;
+        background-color: $accent-color;
+        color: $accent-fg-color;
+        border-radius: 4px;
+        padding: 7px 1.5em;
+        text-align: center;
+        margin: 16px 0;
+    }
 }
