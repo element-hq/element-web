@@ -1248,11 +1248,13 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
-    const devicesSection = (
+    const devicesSection = isRoomEncrypted ?
+        (<DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />) : null;
+    const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
-            <DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />
+            { devicesSection }
         </div>
     );
 
@@ -1289,7 +1291,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             </div> }
 
             <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
-                { devicesSection }
+                { securitySection }
                 <UserOptionsSection
                     devices={devices}
                     canInvite={roomPermissions.canInvite}
