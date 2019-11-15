@@ -786,7 +786,7 @@ function useRoomPermissions(cli, room, user) {
     const [roomPermissions, setRoomPermissions] = useState({
         // modifyLevelMax is the max PL we can set this user to, typically min(their PL, our PL) && canSetPL
         modifyLevelMax: -1,
-        canAffectUser: false,
+        canEdit: false,
         canInvite: false,
     });
     const updateRoomPermissions = useCallback(async () => {
@@ -817,7 +817,7 @@ function useRoomPermissions(cli, room, user) {
 
         setRoomPermissions({
             canInvite: me.powerLevel >= powerLevels.invite,
-            canAffectUser,
+            canEdit: modifyLevelMax >= 0,
             modifyLevelMax,
         });
     }, [cli, user, room]);
@@ -827,7 +827,7 @@ function useRoomPermissions(cli, room, user) {
         return () => {
             setRoomPermissions({
                 maximalPowerLevel: -1,
-                canAffectUser: false,
+                canEdit: false,
                 canInvite: false,
             });
         };
