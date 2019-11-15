@@ -365,10 +365,13 @@ const _isMuted = (member, powerLevelContent) => {
     return member.powerLevel < levelToSend;
 };
 
-const useRoomPowerLevels = (room) => {
+const useRoomPowerLevels = (cli, room) => {
     const [powerLevels, setPowerLevels] = useState({});
 
     const update = useCallback(() => {
+        if (!room) {
+            return;
+        }
         const event = room.currentState.getStateEvents("m.room.power_levels", "");
         if (event) {
             setPowerLevels(event.getContent());
@@ -380,7 +383,7 @@ const useRoomPowerLevels = (room) => {
         };
     }, [room]);
 
-    useEventEmitter(room.currentState, "RoomState.events", update);
+    useEventEmitter(cli, "RoomState.members", update);
     useEffect(() => {
         update();
         return () => {
@@ -819,7 +822,7 @@ function useRoomPermissions(cli, room, user) {
             modifyLevelMax,
         });
     }, [cli, user, room]);
-    useEventEmitter(cli, "RoomState.events", updateRoomPermissions);
+    useEventEmitter(cli, "RoomState.members", updateRoomPermissions);
     useEffect(() => {
         updateRoomPermissions();
         return () => {
