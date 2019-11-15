@@ -1082,7 +1082,6 @@
     "Failed to withdraw invitation": "Failed to withdraw invitation",
     "Failed to remove user from community": "Failed to remove user from community",
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> in %(roomName)s",
-    "Failed to deactivate user": "Failed to deactivate user",
     "This client does not support end-to-end encryption.": "This client does not support end-to-end encryption.",
     "Messages in this room are not end-to-end encrypted.": "Messages in this room are not end-to-end encrypted.",
     "Messages in this room are end-to-end encrypted.": "Messages in this room are end-to-end encrypted.",
