@@ -2318,5 +2318,17 @@
     "If this isn't what you want, please use a different tool to ignore users.": "如果這不是您想要的，請使用不同的工具來忽略使用者。",
     "Room ID or alias of ban list": "聊天室 ID 或封鎖清單的別名",
     "Subscribe": "訂閱",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "您已經忽略了這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>"
+    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "您已經忽略了這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
+    "Custom (%(level)s)": "自訂 (%(level)s)",
+    "Trusted": "已信任",
+    "Not trusted": "不信任",
+    "Hide verified Sign-In's": "隱藏已驗證的登入",
+    "%(count)s verified Sign-In's|other": "%(count)s 個已驗證的登入",
+    "%(count)s verified Sign-In's|one": "1 個已驗證的登入",
+    "Direct message": "直接訊息",
+    "Unverify user": "未驗證的使用者",
+    "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> 在 %(roomName)s",
+    "Messages in this room are end-to-end encrypted.": "在此聊天室中的訊息為端到端加密。",
+    "Security": "安全",
+    "Verify": "驗證"
 }
