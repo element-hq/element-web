@@ -2280,5 +2280,17 @@
     "If this isn't what you want, please use a different tool to ignore users.": "Nëse kjo s’është ajo çka doni, ju lutemi, përdorni një tjetër mjet për të shpërfillur përdorues.",
     "Room ID or alias of ban list": "ID dhome ose alias e listës së dëbimeve",
     "Subscribe": "Pajtohuni",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "E keni shpërfillur këtë përdorues, ndaj mesazhi i tij është fshehur. <a>Shfaqe, sido qoftë.</a>"
+    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "E keni shpërfillur këtë përdorues, ndaj mesazhi i tij është fshehur. <a>Shfaqe, sido qoftë.</a>",
+    "Custom (%(level)s)": "Vetjak (%(level)s)",
+    "Trusted": "E besuar",
+    "Not trusted": "Jo e besuar",
+    "Hide verified Sign-In's": "Fshihi Hyrjet e verifikuara",
+    "%(count)s verified Sign-In's|other": "%(count)s Hyrje të verifikuara",
+    "%(count)s verified Sign-In's|one": "1 Hyrje e verifikuar",
+    "Direct message": "Mesazh i Drejtpërdrejtë",
+    "Unverify user": "Hiqi verifikimin përdoruesit",
+    "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> në %(roomName)s",
+    "Messages in this room are end-to-end encrypted.": "Mesazhet në këtë dhomë janë të fshehtëzuara skaj-më-skaj.",
+    "Security": "Siguri",
+    "Verify": "Verifikoje"
 }
