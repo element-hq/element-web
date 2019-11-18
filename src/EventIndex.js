@@ -29,7 +29,7 @@ export default class EventIndex {
         // The maximum number of events our crawler should fetch in a single
         // crawl.
         this._eventsPerCrawl = 100;
-        this._crawlerRef = null;
+        this._crawler = null;
         this.liveEventsForIndex = new Set();
     }
 
@@ -165,7 +165,7 @@ export default class EventIndex {
         indexManager.addEventToIndex(e, profile);
     }
 
-    async crawlerFunc(handle) {
+    async crawlerFunc() {
         // TODO either put this in a better place or find a library provided
         // method that does this.
         const sleep = async (ms) => {
@@ -179,7 +179,9 @@ export default class EventIndex {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        handle.cancel = () => {
+        this._crawler = {};
+
+        this._crawler.cancel = () => {
             cancelled = true;
         };
 
@@ -340,6 +342,8 @@ export default class EventIndex {
             }
         }
 
+        this._crawler = null;
+
         console.log("EventIndex: Stopping crawler function");
     }
 
@@ -366,18 +370,13 @@ export default class EventIndex {
     }
 
     startCrawler() {
-        if (this._crawlerRef !== null) return;
-
-        const crawlerHandle = {};
-        this.crawlerFunc(crawlerHandle);
-        this._crawlerRef = crawlerHandle;
+        if (this._crawler !== null) return;
+        this.crawlerFunc();
     }
 
     stopCrawler() {
-        if (this._crawlerRef === null) return;
-
-        this._crawlerRef.cancel();
-        this._crawlerRef = null;
+        if (this._crawler === null) return;
+        this._crawler.cancel();
     }
 
     async close() {
