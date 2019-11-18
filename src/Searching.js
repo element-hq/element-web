@@ -35,11 +35,11 @@ function serverSideSearch(term, roomId = undefined) {
     return searchPromise;
 }
 
-async function combinedSearchFunc(searchTerm) {
+async function combinedSearch(searchTerm) {
     // Create two promises, one for the local search, one for the
     // server-side search.
     const serverSidePromise = serverSideSearch(searchTerm);
-    const localPromise = localSearchFunc(searchTerm);
+    const localPromise = localSearch(searchTerm);
 
     // Wait for both promises to resolve.
     await Promise.all([serverSidePromise, localPromise]);
@@ -74,7 +74,7 @@ async function combinedSearchFunc(searchTerm) {
     return result;
 }
 
-async function localSearchFunc(searchTerm, roomId = undefined) {
+async function localSearch(searchTerm, roomId = undefined) {
     const searchArgs = {
         search_term: searchTerm,
         before_limit: 1,
@@ -115,7 +115,7 @@ function eventIndexSearch(term, roomId = undefined) {
         if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
             // The search is for a single encrypted room, use our local
             // search method.
-            searchPromise = localSearchFunc(term, roomId);
+            searchPromise = localSearch(term, roomId);
         } else {
             // The search is for a single non-encrypted room, use the
             // server-side search.
@@ -124,7 +124,7 @@ function eventIndexSearch(term, roomId = undefined) {
     } else {
         // Search across all rooms, combine a server side search and a
         // local search.
-        searchPromise = combinedSearchFunc(term);
+        searchPromise = combinedSearch(term);
     }
 
     return searchPromise;
