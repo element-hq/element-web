@@ -20,7 +20,7 @@ limitations under the License.
  */
 
 import PlatformPeg from "./PlatformPeg";
-import EventIndex from "./EventIndexing";
+import EventIndex from "./EventIndex";
 
 class EventIndexPeg {
     constructor() {
