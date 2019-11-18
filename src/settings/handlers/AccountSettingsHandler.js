@@ -126,6 +126,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             if (!content || !content['recent_rooms']) {
                 content = this._getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
             }
+            if (!content) content = {}; // If we still don't have content, make some
 
             content['recent_rooms'] = newValue;
             return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
