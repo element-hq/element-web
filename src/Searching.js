@@ -20,8 +20,9 @@ import MatrixClientPeg from "./MatrixClientPeg";
 function serverSideSearch(term, roomId = undefined) {
     let filter;
     if (roomId !== undefined) {
+        // XXX: it's unintuitive that the filter for searching doesn't have
+        // the same shape as the v2 filter API :(
         filter = {
-        // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
             rooms: [roomId],
         };
     }
