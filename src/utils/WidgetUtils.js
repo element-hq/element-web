@@ -400,7 +400,7 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId, app, sender, roomId) {
+    static makeAppConfig(appId, app, senderUserId, roomId) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const user = MatrixClientPeg.get().getUser(myUserId);
         const params = {
@@ -412,6 +412,11 @@ export default class WidgetUtils {
             // TODO: Namespace themes through some standard
             '$theme': SettingsStore.getValue("theme"),
         };
+
+        if (!senderUserId) {
+            throw new Error("Widgets must be created by someone - provide a senderUserId");
+        }
+        app.creatorUserId = senderUserId;
 
         app.id = appId;
         app.name = app.name || app.type;
@@ -425,7 +430,6 @@ export default class WidgetUtils {
         }
 
         app.url = encodeUri(app.url, params);
-        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
 
         return app;
     }
