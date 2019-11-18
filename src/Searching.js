@@ -28,8 +28,8 @@ function serverSideSearch(term, roomId = undefined) {
     }
 
     const searchPromise = MatrixClientPeg.get().searchRoomEvents({
-        filter: filter,
-        term: term,
+        filter,
+        term,
     });
 
     return searchPromise;
