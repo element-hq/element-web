@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 12 12">
-    <defs>
-        <path id="a" d="M5 10A5 5 0 1 0 5 0a5 5 0 0 0 0 10zM5 .5A1.5 1.5 0 0 1 6.5 2v3a1.5 1.5 0 0 1-3 0V2A1.5 1.5 0 0 1 5 .5zm0 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-    </defs>
-    <use fill="#F56679" fill-rule="evenodd" stroke="#F56679" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" transform="translate(1 1)" xlink:href="#a"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="24"
+   height="24"
+   fill="none"
+   viewBox="0 0 24 24">
+  <path
+     style="fill-opacity:1;fill:#ff4b55;stroke:none"
+     d="M 12 2 L 3 4.8496094 L 3 11.5 C 3 17.2 12 21 12 21 C 12 21 21 17.2 21 11.5 L 21 4.8496094 L 12 2 z M 12.050781 5.5 C 12.743281 5.5 13.300781 6.0575 13.300781 6.75 L 13.300781 12.25 C 13.300781 12.9425 12.743281 13.5 12.050781 13.5 C 11.358281 13.5 10.800781 12.9425 10.800781 12.25 L 10.800781 6.75 C 10.800781 6.0575 11.358281 5.5 12.050781 5.5 z M 12.050781 15 C 12.743281 15 13.300781 15.5575 13.300781 16.25 C 13.300781 16.9425 12.743281 17.5 12.050781 17.5 C 11.358281 17.5 10.800781 16.9425 10.800781 16.25 C 10.800781 15.5575 11.358281 15 12.050781 15 z "
+     id="path2" />
 </svg>

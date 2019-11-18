@@ -386,7 +386,11 @@ module.exports = createReactClass({
                 ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
             if (this.state.serverErrorIsFatal) {
-                return; // Server is dead - do not continue.
+                // Server is dead: show server details prompt instead
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
+                return;
             }
         }
 

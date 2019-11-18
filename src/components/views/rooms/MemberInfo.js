@@ -550,7 +550,16 @@ module.exports = createReactClass({
             danger: true,
             onFinished: (accepted) => {
                 if (!accepted) return;
-                this.context.matrixClient.deactivateSynapseUser(this.props.member.userId);
+                this.context.matrixClient.deactivateSynapseUser(this.props.member.userId).catch(e => {
+                    console.error("Failed to deactivate user");
+                    console.error(e);
+
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Failed to deactivate Synapse user', '', ErrorDialog, {
+                        title: _t('Failed to deactivate user'),
+                        description: ((e && e.message) ? e.message : _t("Operation failed")),
+                    });
+                });
             },
         });
     },
