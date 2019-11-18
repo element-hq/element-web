@@ -25,13 +25,6 @@ export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this._startNewBackup = this._startNewBackup.bind(this);
-        this._deleteBackup = this._deleteBackup.bind(this);
-        this._onKeyBackupSessionsRemaining =
-            this._onKeyBackupSessionsRemaining.bind(this);
-        this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
-        this._restoreBackup = this._restoreBackup.bind(this);
-
         this._unmounted = false;
         this.state = {
             loading: true,
@@ -63,13 +56,13 @@ export default class KeyBackupPanel extends React.PureComponent {
         }
     }
 
-    _onKeyBackupSessionsRemaining(sessionsRemaining) {
+    _onKeyBackupSessionsRemaining = (sessionsRemaining) => {
         this.setState({
             sessionsRemaining,
         });
     }
 
-    _onKeyBackupStatus() {
+    _onKeyBackupStatus = () => {
         // This just loads the current backup status rather than forcing
         // a re-check otherwise we risk causing infinite loops
         this._loadBackupStatus();
@@ -120,7 +113,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         }
     }
 
-    _startNewBackup() {
+    _startNewBackup = () => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
@@ -131,7 +124,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         );
     }
 
-    _deleteBackup() {
+    _deleteBackup = () => {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
@@ -151,7 +144,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         });
     }
 
-    _restoreBackup() {
+    _restoreBackup = () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         });
