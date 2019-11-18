@@ -606,8 +606,8 @@ module.exports = createReactClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: this.state.verified === true,
-            mx_EventTile_unverified: this.state.verified === false,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === true,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === false,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
@@ -800,7 +800,7 @@ module.exports = createReactClass({
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { timestamp }
                             </a>
-                            { this._renderE2EPadlock() }
+                            { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
@@ -826,7 +826,7 @@ module.exports = createReactClass({
                             { readAvatars }
                         </div>
                         { sender }
-                        <div className={classNames("mx_EventTile_line", {mx_EventTile_bubbleLine: isBubbleMessage})}>
+                        <div className="mx_EventTile_line">
                             <a
                                 href={permalink}
                                 onClick={this.onPermalinkClicked}
@@ -834,7 +834,7 @@ module.exports = createReactClass({
                             >
                                 { timestamp }
                             </a>
-                            { this._renderE2EPadlock() }
+                            { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}

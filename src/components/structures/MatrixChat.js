@@ -1766,10 +1766,12 @@ export default createReactClass({
             const client = MatrixClientPeg.get();
             const room = client && client.getRoom(this.state.currentRoomId);
             if (room) {
-                subtitle = `| ${ room.name } ${subtitle}`;
+                subtitle = `${this.subTitleStatus} | ${ room.name } ${subtitle}`;
             }
+        } else {
+            subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
-        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle} ${this.subTitleStatus}`;
+        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
     },
 
     updateStatusIndicator: function(state, prevState) {

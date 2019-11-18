@@ -49,6 +49,7 @@ limitations under the License.
     color: $primary-fg-color;
     background-color: $primary-bg-color;
     flex: 1;
+    min-width: 0;
 }
 
 .mx_Field select {
