@@ -2018,7 +2018,7 @@
     "Create a private room": "Создать приватную комнату",
     "Topic (optional)": "Тема (опционально)",
     "Make this room public": "Сделать комнату публичной",
-    "Use the new, faster, composer for writing messages": "Используйте новый, более быстрый, редактор для написания сообщений.",
+    "Use the new, faster, composer for writing messages": "Используйте новый, более быстрый, редактор для написания сообщений",
     "Send read receipts for messages (requires compatible homeserver to disable)": "Отправлять подтверждения о прочтении сообщений (требуется отключение совместимого домашнего сервера)",
     "Show previews/thumbnails for images": "Показать превью / миниатюры для изображений",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Отключиться от сервера идентификации <current /> и вместо этого подключиться к <new />?",
@@ -2050,7 +2050,7 @@
     "contact the administrators of identity server <idserver />": "связаться с администраторами сервера идентификации <idserver />",
     "wait and try again later": "Подождите и повторите попытку позже",
     "Error changing power level requirement": "Ошибка изменения требования к уровню прав",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Произошла ошибка при изменении требований к уровню прав комнаты. Убедитесь, что у вас достаточно прав и попробуйте снова.",
+    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Произошла ошибка при изменении требований к уровню доступа комнаты. Убедитесь, что у вас достаточно прав и попробуйте снова.",
     "Error changing power level": "Ошибка изменения уровня прав",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Произошла ошибка при изменении уровня прав пользователя. Убедитесь, что у вас достаточно прав и попробуйте снова.",
     "Unable to revoke sharing for email address": "Не удается отменить общий доступ к адресу электронной почты",
@@ -2165,5 +2165,14 @@
     "%(count)s unread messages including mentions.|one": "1 непрочитанное упоминание.",
     "%(count)s unread messages.|one": "1 непрочитанное сообщение.",
     "Unread messages.": "Непрочитанные сообщения.",
-    "Message Actions": "Сообщение действий"
+    "Message Actions": "Сообщение действий",
+    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Это действие требует по умолчанию доступа к серверу идентификации <server/> для подтверждения адреса электронной почты или номера телефона, но у сервера нет никакого пользовательского соглашения.",
+    "Custom (%(level)s)": "Пользовательский (%(level)s)",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Try out new ways to ignore people (experimental)": "Попробуйте новые способы игнорировать людей (экспериментальные)",
+    "Send verification requests in direct message": "Отправить запросы на подтверждение в прямом сообщении",
+    "My Ban List": "Мой список запрещенных",
+    "Ignored/Blocked": "Игнорируемые/Заблокированные",
+    "Error adding ignored user/server": "Ошибка добавления игнорируемого пользователя/сервера",
+    "Error subscribing to list": "Ошибка при подписке на список"
 }

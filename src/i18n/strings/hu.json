@@ -2324,5 +2324,18 @@
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> a szobában: %(roomName)s",
     "Messages in this room are end-to-end encrypted.": "Az üzenetek a szobában végponttól végpontig titkosítottak.",
     "Security": "Biztonság",
-    "Verify": "Ellenőriz"
+    "Verify": "Ellenőriz",
+    "Enable cross-signing to verify per-user instead of per-device": "Kereszt-aláírás engedélyezése eszköz alapú ellenőrzés helyett felhasználó alapú ellenőrzéshez",
+    "Any of the following data may be shared:": "Az alábbi adatok közül bármelyik megosztásra kerülhet:",
+    "Your display name": "Megjelenítési neved",
+    "Your avatar URL": "Profilképed URL-je",
+    "Your user ID": "Felhasználói azonosítód",
+    "Your theme": "Témád",
+    "Riot URL": "Riot URL",
+    "Room ID": "Szoba azonosító",
+    "Widget ID": "Kisalkalmazás azon.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Ennek a kisalkalmazásnak a használata adatot oszthat meg <helpIcon /> %(widgetDomain)s domain-nel és az Integrációs Menedzserrel.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Ennek a kisalkalmazásnak a használata adatot oszthat meg <helpIcon /> %(widgetDomain)s domain-nel.",
+    "Widget added by": "A kisalkalmazást hozzáadta",
+    "This widget may use cookies.": "Ez a kisalkalmazás sütiket használhat."
 }
