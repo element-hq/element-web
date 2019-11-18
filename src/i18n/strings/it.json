@@ -2270,5 +2270,17 @@
     "You cancelled": "Hai annullato",
     "%(name)s cancelled": "%(name)s ha annullato",
     "%(name)s wants to verify": "%(name)s vuole verificare",
-    "You sent a verification request": "Hai inviato una richiesta di verifica"
+    "You sent a verification request": "Hai inviato una richiesta di verifica",
+    "Custom (%(level)s)": "Personalizzato (%(level)s)",
+    "Trusted": "Fidato",
+    "Not trusted": "Non fidato",
+    "Hide verified Sign-In's": "Nascondi accessi verificati",
+    "%(count)s verified Sign-In's|other": "%(count)s accessi verificati",
+    "%(count)s verified Sign-In's|one": "1 accesso verificato",
+    "Direct message": "Messaggio diretto",
+    "Unverify user": "Revoca verifica utente",
+    "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> in %(roomName)s",
+    "Messages in this room are end-to-end encrypted.": "I messaggi in questa stanza sono cifrati end-to-end.",
+    "Security": "Sicurezza",
+    "Verify": "Verifica"
 }
