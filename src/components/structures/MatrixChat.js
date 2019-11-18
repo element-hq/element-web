@@ -61,10 +61,6 @@ import { setTheme } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 
-// Disable warnings for now: we use deprecated bluebird functions
-// and need to migrate, but they spam the console with warnings.
-Promise.config({warnings: false});
-
 /** constants for MatrixChat.state.view */
 const VIEWS = {
     // a special initial state which is only used at startup, while we are
