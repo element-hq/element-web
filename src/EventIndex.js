@@ -282,8 +282,8 @@ export default class EventIndex {
                 // attributes?
             };
 
-            // TODO if there ar no events at this point we're missing a lot
-            // decryption keys, do we wan't to retry this checkpoint at a later
+            // TODO if there are no events at this point we're missing a lot
+            // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(isValidEvent);
 
@@ -336,7 +336,7 @@ export default class EventIndex {
                 }
             } catch (e) {
                 console.log("EventIndex: Error durring a crawl", e);
-                // An error occured, put the checkpoint back so we
+                // An error occurred, put the checkpoint back so we
                 // can retry.
                 this.crawlerCheckpoints.push(checkpoint);
             }
