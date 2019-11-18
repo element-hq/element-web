@@ -40,7 +40,6 @@ export default class EventIndex {
 
     async onSync(state, prevState, data) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return;
 
         if (prevState === null && state === "PREPARED") {
             // Load our stored checkpoints, if any.
@@ -115,7 +114,6 @@ export default class EventIndex {
 
     async onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return;
 
         // We only index encrypted rooms locally.
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
@@ -141,7 +139,6 @@ export default class EventIndex {
 
     async onEventDecrypted(ev, err) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return;
 
         const eventId = ev.getId();
 
@@ -153,7 +150,6 @@ export default class EventIndex {
 
     async addLiveEventToIndex(ev) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return;
 
         if (["m.room.message", "m.room.name", "m.room.topic"]
             .indexOf(ev.getType()) == -1) {
@@ -349,7 +345,6 @@ export default class EventIndex {
 
     async onLimitedTimeline(room) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
         const timeline = room.getLiveTimeline();
