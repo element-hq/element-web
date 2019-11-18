@@ -38,7 +38,7 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk";
-import {sleep} from "../../utils/promise";
+import {allSettled, sleep} from "../../utils/promise";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -99,11 +99,10 @@ const CategoryRoomList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addRoomToGroupSummary(this.props.groupId, addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;
@@ -276,11 +275,10 @@ const RoleUserList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addUserToGroupSummary(addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;

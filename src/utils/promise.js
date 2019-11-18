@@ -47,3 +47,20 @@ export function defer(): {resolve: () => {}, reject: () => {}, promise: Promise}
 
     return {resolve, reject, promise};
 }
+
+// Promise.allSettled polyfill until browser support is stable in Firefox
+export function allSettled(promises: Promise[]): {status: string, value?: any, reason?: any}[] {
+    if (Promise.allSettled) {
+        return Promise.allSettled(promises);
+    }
+
+    return Promise.all(promises.map((promise) => {
+        return promise.then(value => ({
+            status: "fulfilled",
+            value,
+        })).catch(reason => ({
+            status: "rejected",
+            reason,
+        }));
+    }));
+}
