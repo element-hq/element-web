@@ -59,8 +59,8 @@ export default class EventIndexer {
                     return client.isRoomEncrypted(room.roomId);
                 };
 
-                // We only care to crawl the encrypted rooms, non-encrytped
-                // rooms can use the search provided by the Homeserver.
+                // We only care to crawl the encrypted rooms, non-encrypted.
+                // rooms can use the search provided by the homeserver.
                 const encryptedRooms = rooms.filter(isRoomEncrypted);
 
                 console.log("EventIndex: Adding initial crawler checkpoints");
@@ -189,7 +189,7 @@ export default class EventIndexer {
 
         while (!cancelled) {
             // This is a low priority task and we don't want to spam our
-            // Homeserver with /messages requests so we set a hefty timeout
+            // homeserver with /messages requests so we set a hefty timeout
             // here.
             await sleep(this._crawlerTimeout);
 
@@ -210,7 +210,7 @@ export default class EventIndexer {
             console.log("EventIndex: crawling using checkpoint", checkpoint);
 
             // We have a checkpoint, let us fetch some messages, again, very
-            // conservatively to not bother our Homeserver too much.
+            // conservatively to not bother our homeserver too much.
             const eventMapper = client.getEventMapper();
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
