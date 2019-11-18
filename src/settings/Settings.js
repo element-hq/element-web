@@ -23,7 +23,7 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
-import LowBandwidthController from "./controllers/LowBandwidthController";
+import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -145,6 +145,13 @@ export const SETTINGS = {
         displayName: _td("Send verification requests in direct message"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+    },
+    "feature_cross_signing": {
+        isFeature: true,
+        displayName: _td("Enable cross-signing to verify per-user instead of per-device"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
@@ -427,7 +434,7 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Low bandwidth mode'),
         default: false,
-        controller: new LowBandwidthController(),
+        controller: new ReloadOnChangeController(),
     },
     "fallbackICEServerAllowed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
