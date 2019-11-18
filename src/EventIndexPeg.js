@@ -15,11 +15,8 @@ limitations under the License.
 */
 
 /*
- * Holds the current Platform object used by the code to do anything
- * specific to the platform we're running on (eg. web, electron)
- * Platforms are provided by the app layer.
- * This allows the app layer to set a Platform without necessarily
- * having to have a MatrixChat object
+ * Object holding the global EventIndex object. Can only be initialized if the 
+ * platform supports event indexing.
  */
 
 import PlatformPeg from "./PlatformPeg";
