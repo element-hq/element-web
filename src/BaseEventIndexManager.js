@@ -76,7 +76,7 @@ export default class BaseEventIndexManager {
     /**
      * Does our EventIndexManager support event indexing.
      *
-     * If an EventIndexManager imlpementor has runtime dependencies that
+     * If an EventIndexManager implementor has runtime dependencies that
      * optionally enable event indexing they may override this method to perform
      * the necessary runtime checks here.
      *
