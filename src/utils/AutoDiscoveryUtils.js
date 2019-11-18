@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +34,8 @@ export class ValidatedServerConfig {
     isUrl: string;
 
     isDefault: boolean;
+
+    warning: string;
 }
 
 export default class AutoDiscoveryUtils {
@@ -56,7 +59,14 @@ export default class AutoDiscoveryUtils {
      * implementation for known values.
      * @returns {*} The state for the component, given the error.
      */
-    static authComponentStateForError(err: Error, pageName="login"): Object {
+    static authComponentStateForError(err: string | Error | null, pageName = "login"): Object {
+        if (!err) {
+            return {
+                serverIsAlive: true,
+                serverErrorIsFatal: false,
+                serverDeadError: null,
+            };
+        }
         let title = _t("Cannot reach homeserver");
         let body = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
@@ -153,11 +163,9 @@ export default class AutoDiscoveryUtils {
     /**
      * Validates a server configuration, using a homeserver domain name as input.
      * @param {string} serverName The homeserver domain name (eg: "matrix.org") to validate.
-     * @param {boolean} syntaxOnly If true, errors relating to liveliness of the servers will
-     * not be raised.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerName(serverName: string, syntaxOnly=false): ValidatedServerConfig {
+    static async validateServerName(serverName: string): ValidatedServerConfig {
         const result = await AutoDiscovery.findClientConfig(serverName);
         return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
     }
@@ -186,7 +194,7 @@ export default class AutoDiscoveryUtils {
         const defaultConfig = SdkConfig.get()["validated_server_config"];
 
         // Validate the identity server first because an invalid identity server causes
-        // and invalid homeserver, which may not be picked up correctly.
+        // an invalid homeserver, which may not be picked up correctly.
 
         // Note: In the cases where we rely on the default IS from the config (namely
         // lack of identity server provided by the discovery method), we intentionally do not
@@ -197,20 +205,18 @@ export default class AutoDiscoveryUtils {
             preferredIdentityUrl = isResult["base_url"];
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             console.error("Error determining preferred identity server URL:", isResult);
-            if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(isResult.error)) {
+            if (isResult.state === AutoDiscovery.FAIL_ERROR) {
                 if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error) !== -1) {
                     throw newTranslatableError(isResult.error);
                 }
                 throw newTranslatableError(_td("Unexpected error resolving identity server configuration"));
             } // else the error is not related to syntax - continue anyways.
 
-            // rewrite homeserver error if we don't care about problems
-            if (syntaxOnly) {
-                hsResult.error = AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER;
+            // rewrite homeserver error since we don't care about problems
+            hsResult.error = AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER;
 
-                // Also use the user's supplied identity server if provided
-                if (isResult["base_url"]) preferredIdentityUrl = isResult["base_url"];
-            }
+            // Also use the user's supplied identity server if provided
+            if (isResult["base_url"]) preferredIdentityUrl = isResult["base_url"];
         }
 
         if (hsResult.state !== AutoDiscovery.SUCCESS) {
@@ -241,6 +247,7 @@ export default class AutoDiscoveryUtils {
             hsNameIsDifferent: url.hostname !== preferredHomeserverName,
             isUrl: preferredIdentityUrl,
             isDefault: false,
+            warning: hsResult.error,
         });
     }
 }
