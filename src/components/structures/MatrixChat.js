@@ -1222,7 +1222,7 @@ export default createReactClass({
     /**
      * Called when the session is logged out
      */
-    _onLoggedOut: async function() {
+    _onLoggedOut: function() {
         this.notifyNewScreen('login');
         this.setStateForNewView({
             view: VIEWS.LOGIN,
@@ -1272,9 +1272,8 @@ export default createReactClass({
         // particularly noticeable when there are lots of 'limited' /sync responses
         // such as when laptops unsleep.
         // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
-        cli.setCanResetTimelineCallback(async function(roomId) {
+        cli.setCanResetTimelineCallback(function(roomId) {
             console.log("Request to reset timeline in room ", roomId, " viewing:", self.state.currentRoomId);
-
             if (roomId !== self.state.currentRoomId) {
                 // It is safe to remove events from rooms we are not viewing.
                 return true;
