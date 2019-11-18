@@ -168,7 +168,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             // This seems fishy - try and get the event for the new rooms
             const newType = this._getSettings(BREADCRUMBS_EVENT_TYPE);
             if (newType) val = newType['recent_rooms'];
-            else val = event.getContent()['rooms'] || [];
+            else val = event.getContent()['rooms'];
         } else if (event.getType() === BREADCRUMBS_EVENT_TYPE) {
             val = event.getContent()['recent_rooms'];
         } else {
