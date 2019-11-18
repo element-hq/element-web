@@ -38,9 +38,7 @@ class EventIndexPeg {
      */
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager === null) return false;
-
-        if (await indexManager.supportsEventIndexing() !== true) {
+        if (!indexManager || await indexManager.supportsEventIndexing() !== true) {
             console.log("EventIndex: Platform doesn't support event indexing,",
                         "not initializing.");
             return false;
