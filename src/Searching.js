@@ -52,7 +52,7 @@ async function combinedSearch(searchTerm) {
     const result = {};
 
     // Our localResult and serverSideResult are both ordered by
-    // recency separetly, when we combine them the order might not
+    // recency separately, when we combine them the order might not
     // be the right one so we need to sort them.
     const compare = (a, b) => {
         const aEvent = a.context.getEvent().event;
