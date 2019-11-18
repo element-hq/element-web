@@ -386,14 +386,6 @@ export default class EventIndex {
         return indexManager.closeEventIndex();
     }
 
-    async deleteEventIndex() {
-        const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (indexManager !== null) {
-            this.stopCrawler();
-            await indexManager.deleteEventIndex();
-        }
-    }
-
     async search(searchArgs) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
