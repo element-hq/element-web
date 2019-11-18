@@ -1076,6 +1076,7 @@ const TimelinePanel = createReactClass({
         if (timeline) {
             // This is a hot-path optimization by skipping a promise tick
             // by repeating a no-op sync branch in TimelineSet.getTimelineForEvent & MatrixClient.getEventTimeline
+            this._timelineWindow.load(eventId, INITIAL_SIZE); // in this branch this method will happen in sync time
             onLoaded();
         } else {
             const prom = this._timelineWindow.load(eventId, INITIAL_SIZE);
