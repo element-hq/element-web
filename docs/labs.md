@@ -67,3 +67,9 @@ An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/224
 ## New user info panel (`feature_user_info_panel`)
 
 A new implementation of the user & member info panel, designed to share more code between showing community members & room members.
+
+## Cross-signing (`feature_cross_signing`)
+
+Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
+improves the device verification experience by allowing you to verify a user
+instead of verifying each of their devices.
