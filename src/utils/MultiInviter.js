@@ -15,11 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
 import MatrixClientPeg from '../MatrixClientPeg';
 import {getAddressType} from '../UserAddress';
 import GroupStore from '../stores/GroupStore';
-import Promise from 'bluebird';
 import {_t} from "../languageHandler";
 import sdk from "../index";
 import Modal from "../Modal";

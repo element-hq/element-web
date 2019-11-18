@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
@@ -525,7 +524,7 @@ export function logout() {
             console.log("Failed to call logout API: token will not be invalidated");
             onLoggedOut();
         },
-    ).done();
+    );
 }
 
 export function softLogout() {
@@ -614,7 +613,7 @@ export function onLoggedOut() {
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    _clearStorage().done();
+    _clearStorage();
 }
 
 /**

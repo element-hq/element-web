@@ -26,7 +26,6 @@ import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
-import Promise from 'bluebird';
 import {timeout} from "../utils/promise";
 
 export type SelectionRange = {

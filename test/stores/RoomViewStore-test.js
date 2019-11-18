@@ -1,13 +1,11 @@
 import expect from 'expect';
 
-import dis from '../../src/dispatcher';
 import RoomViewStore from '../../src/stores/RoomViewStore';
 
 
 import peg from '../../src/MatrixClientPeg';
 
 import * as testUtils from '../test-utils';
-import Promise from 'bluebird';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);
 

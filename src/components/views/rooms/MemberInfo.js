@@ -248,7 +248,7 @@ module.exports = createReactClass({
             return client.getStoredDevicesForUser(member.userId);
         }).finally(function() {
             self._cancelDeviceList = null;
-        }).done(function(devices) {
+        }).then(function(devices) {
             if (cancelled) {
                 // we got cancelled - presumably a different user now
                 return;
@@ -572,7 +572,7 @@ module.exports = createReactClass({
             },
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
-        }).done();
+        });
     },
 
     onPowerChange: async function(powerLevel) {
@@ -629,7 +629,7 @@ module.exports = createReactClass({
         this.setState({ updating: this.state.updating + 1 });
         createRoom({dmUserId: this.props.member.userId}).finally(() => {
             this.setState({ updating: this.state.updating - 1 });
-        }).done();
+        });
     },
 
     onLeaveClick: function() {

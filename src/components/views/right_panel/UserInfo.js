@@ -870,7 +870,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
                 },
             ).finally(() => {
                 stopUpdating();
-            }).done();
+            });
         };
 
         const roomId = user.roomId;

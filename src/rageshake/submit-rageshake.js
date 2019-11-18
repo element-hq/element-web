@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import pako from 'pako';
-import Promise from 'bluebird';
 
 import MatrixClientPeg from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';

@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -637,7 +636,7 @@ export default createReactClass({
                 title: _t('Error'),
                 description: _t('Failed to upload image'),
             });
-        }).done();
+        });
     },
 
     _onJoinableChange: function(ev) {
@@ -676,7 +675,7 @@ export default createReactClass({
             this.setState({
                 avatarChanged: false,
             });
-        }).done();
+        });
     },
 
     _saveGroup: async function() {

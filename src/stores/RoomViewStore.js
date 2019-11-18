@@ -234,7 +234,7 @@ class RoomViewStore extends Store {
         });
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
-        ).done(() => {
+        ).then(() => {
             // We don't actually need to do anything here: we do *not*
             // clear the 'joining' flag because the Room object and/or
             // our 'joined' member event may not have come down the sync

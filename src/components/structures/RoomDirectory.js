@@ -27,7 +27,6 @@ const dis = require('../../dispatcher');
 
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
@@ -89,7 +88,7 @@ module.exports = createReactClass({
             this.setState({protocolsLoading: false});
             return;
         }
-        MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
+        MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
@@ -135,7 +134,7 @@ module.exports = createReactClass({
             publicRooms: [],
             loading: true,
         });
-        this.getMoreRooms().done();
+        this.getMoreRooms();
     },
 
     getMoreRooms: function() {
@@ -246,7 +245,7 @@ module.exports = createReactClass({
                     if (!alias) return;
                     step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
-                }).done(() => {
+                }).then(() => {
                     modal.close();
                     this.refreshRoomList();
                 }, (err) => {
@@ -348,7 +347,7 @@ module.exports = createReactClass({
                 });
                 return;
             }
-            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).done((resp) => {
+            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).then((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
                     this.showRoomAlias(resp[0].alias, true);
                 } else {
