@@ -30,7 +30,8 @@ class EventIndexPeg {
         this.index = null;
     }
 
-    /** Create a new EventIndex and initialize it if the platform supports it.
+    /**
+     * Create a new EventIndex and initialize it if the platform supports it.
      *
      * @return {Promise<bool>} A promise that will resolve to true if an
      * EventIndex was successfully initialized, false otherwise.
