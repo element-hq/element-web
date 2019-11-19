@@ -334,6 +334,7 @@
     "Group & filter rooms by custom tags (refresh to apply changes)": "Group & filter rooms by custom tags (refresh to apply changes)",
     "Render simple counters in room header": "Render simple counters in room header",
     "Multiple integration managers": "Multiple integration managers",
+    "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
     "Use the new, faster, composer for writing messages": "Use the new, faster, composer for writing messages",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
@@ -1829,6 +1830,5 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
-    "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }
