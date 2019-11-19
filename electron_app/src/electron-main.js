@@ -92,7 +92,6 @@ try {
     // Could not load local config, this is expected in most cases.
 }
 
-
 const eventStorePath = path.join(app.getPath('userData'), 'EventStore');
 const store = new Store({ name: "electron-config" });
 
