@@ -195,6 +195,8 @@ limitations under the License.
     .mx_UserInfo_devices {
         .mx_UserInfo_device {
             display: flex;
+            margin: 8px 0;
+
 
             &.mx_UserInfo_device_verified {
                 .mx_UserInfo_device_trusted {
@@ -210,6 +212,7 @@ limitations under the License.
             .mx_UserInfo_device_name {
                 flex: 1;
                 margin-right: 5px;
+                word-break: break-word;
             }
         }
 
