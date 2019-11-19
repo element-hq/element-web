@@ -20,7 +20,7 @@ limitations under the License.
 */
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
-import BaseEventIndexManager from 'matrix-react-sdk/lib/BaseEventIndexManager';
+import BaseEventIndexManager from 'matrix-react-sdk/lib/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
