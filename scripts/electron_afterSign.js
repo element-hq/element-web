@@ -13,7 +13,7 @@ exports.default = async function(context) {
         // from the keychain, so we need to get it from the environment.
         const userId = process.env.NOTARIZE_APPLE_ID;
         if (userId === undefined) {
-            throw new Exception("User ID not found. Set NOTARIZE_APPLE_ID.");
+            throw new Error("User ID not found. Set NOTARIZE_APPLE_ID.");
         }
 
         console.log("Notarising macOS app. This may be some time.");
