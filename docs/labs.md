@@ -52,8 +52,8 @@ Exposes a way to access all the integration managers known to Riot. This is an i
 
 ## New ways to ignore people (`feature_mjolnir`)
 
-When enabled, a new settings tab appears for users to be able to manage their ban lists. 
-This is a different kind of ignoring where the ignored user's messages still get rendered, 
+When enabled, a new settings tab appears for users to be able to manage their ban lists.
+This is a different kind of ignoring where the ignored user's messages still get rendered,
 but are hidden by default.
 
 Ban lists are rooms within Matrix, proposed as [MSC2313](https://github.com/matrix-org/matrix-doc/pull/2313).
@@ -64,9 +64,7 @@ ban lists.
 
 An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
 
-## New user info panel (`feature_user_info_panel`)
-
-A new implementation of the user & member info panel, designed to share more code between showing community members & room members.
+This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
 
 ## Cross-signing (`feature_cross_signing`)
 
