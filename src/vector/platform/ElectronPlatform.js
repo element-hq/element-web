@@ -131,8 +131,8 @@ class SeshatIndexManager extends BaseEventIndexManager {
 
     async addHistoricEvents(
         events: [HistoricEvent],
-        checkpoint: CrawlerCheckpoint | null = null,
-        oldCheckpoint: CrawlerCheckpoint | null = null,
+        checkpoint: CrawlerCheckpoint | null,
+        oldCheckpoint: CrawlerCheckpoint | null,
     ): Promise<> {
         return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
     }
