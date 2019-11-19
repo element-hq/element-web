@@ -2337,5 +2337,18 @@
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> dans %(roomName)s",
     "Messages in this room are end-to-end encrypted.": "Les messages dans ce salon sont chiffrés de bout en bout.",
     "Security": "Sécurité",
-    "Verify": "Vérifier"
+    "Verify": "Vérifier",
+    "Enable cross-signing to verify per-user instead of per-device": "Activer la signature croisée pour vérifier par utilisateur et non par appareil",
+    "Any of the following data may be shared:": "Les données suivants peuvent être partagées :",
+    "Your display name": "Votre nom d’affichage",
+    "Your avatar URL": "L’URL de votre avatar",
+    "Your user ID": "Votre identifiant utilisateur",
+    "Your theme": "Votre thème",
+    "Riot URL": "URL de Riot",
+    "Room ID": "Identifiant du salon",
+    "Widget ID": "Identifiant du widget",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s et votre gestionnaire d’intégrations.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s.",
+    "Widget added by": "Widget ajouté par",
+    "This widget may use cookies.": "Ce widget pourrait utiliser des cookies."
 }
