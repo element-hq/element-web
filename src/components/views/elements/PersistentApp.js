@@ -67,7 +67,8 @@ module.exports = createReactClass({
                     return ev.getStateKey() === ActiveWidgetStore.getPersistentWidgetId();
                 });
                 const app = WidgetUtils.makeAppConfig(
-                    appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(), persistentWidgetInRoomId, appEvent.getId(),
+                    appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(),
+                    persistentWidgetInRoomId, appEvent.getId(),
                 );
                 const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, persistentWidgetInRoomId);
                 const AppTile = sdk.getComponent('elements.AppTile');

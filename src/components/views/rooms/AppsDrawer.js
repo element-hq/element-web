@@ -107,7 +107,9 @@ module.exports = createReactClass({
             this.props.room.roomId, WidgetUtils.getRoomWidgets(this.props.room),
         );
         return widgets.map((ev) => {
-            return WidgetUtils.makeAppConfig(ev.getStateKey(), ev.getContent(), ev.getSender(), ev.getRoomId(), ev.getId());
+            return WidgetUtils.makeAppConfig(
+                ev.getStateKey(), ev.getContent(), ev.getSender(), ev.getRoomId(), ev.getId(),
+            );
         });
     },
 
