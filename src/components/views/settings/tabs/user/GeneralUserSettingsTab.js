@@ -175,6 +175,9 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
         this.setState({theme: newTheme});
+        // The settings watcher doesn't fire until the echo comes back from the
+        // server, so to make the theme change immediately we need to manually
+        // do the dispatch now
         dis.dispatch({action: 'set_theme', value: newTheme});
     };
 

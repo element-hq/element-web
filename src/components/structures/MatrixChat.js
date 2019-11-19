@@ -274,6 +274,7 @@ export default createReactClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onThemeChanged);
 
         this.focusComposer = false;
 
@@ -360,6 +361,7 @@ export default createReactClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this._themeWatchRef);
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
@@ -380,6 +382,13 @@ export default createReactClass({
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
+    },
+
+    _onThemeChanged: function(settingName, roomId, atLevel, newValue) {
+        dis.dispatch({
+            action: 'set_theme',
+            value: newValue,
+        });
     },
 
     startPageChangeTimer() {
@@ -1374,17 +1383,6 @@ export default createReactClass({
                     }
                 },
             }, null, true);
-        });
-
-        cli.on("accountData", function(ev) {
-            if (ev.getType() === 'im.vector.web.settings') {
-                if (ev.getContent() && ev.getContent().theme) {
-                    dis.dispatch({
-                        action: 'set_theme',
-                        value: ev.getContent().theme,
-                    });
-                }
-            }
         });
 
         const dft = new DecryptionFailureTracker((total, errorCode) => {
