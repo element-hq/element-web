@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 /*
- * Object holding the global EventIndex object. Can only be initialized if the 
+ * Object holding the global EventIndex object. Can only be initialized if the
  * platform supports event indexing.
  */
 

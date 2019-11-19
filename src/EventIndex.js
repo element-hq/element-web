@@ -113,8 +113,6 @@ export default class EventIndex {
     }
 
     async onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
-        const indexManager = PlatformPeg.get().getEventIndexingManager();
-
         // We only index encrypted rooms locally.
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
@@ -138,8 +136,6 @@ export default class EventIndex {
     }
 
     async onEventDecrypted(ev, err) {
-        const indexManager = PlatformPeg.get().getEventIndexingManager();
-
         const eventId = ev.getId();
 
         // If the event isn't in our live event set, ignore it.
