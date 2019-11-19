@@ -67,7 +67,7 @@ function getUpdateCheckStatus(status) {
     }
 }
 
-class SeshatIndexerManager extends BaseEventIndexManager {
+class SeshatIndexManager extends BaseEventIndexManager {
     constructor() {
         super();
 
@@ -164,7 +164,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this._pendingIpcCalls = {};
         this._nextIpcCallId = 0;
-        this.eventIndexManager = new SeshatIndexerManager();
+        this.eventIndexManager = new SeshatIndexManager();
 
         dis.register(_onAction);
         /*
