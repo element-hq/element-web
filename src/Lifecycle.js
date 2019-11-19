@@ -20,7 +20,7 @@ import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
-import EventIndexPeg from './EventIndexPeg';
+import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';

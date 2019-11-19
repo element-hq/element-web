@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import dis from './dispatcher';
-import BaseEventIndexManager from './BaseEventIndexManager';
+import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 
 /**
  * Base class for classes that provide platform-specific functionality

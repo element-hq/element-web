@@ -19,9 +19,9 @@ limitations under the License.
  * platform supports event indexing.
  */
 
-import PlatformPeg from "./PlatformPeg";
-import EventIndex from "./EventIndex";
-import SettingsStore from './settings/SettingsStore';
+import PlatformPeg from "../PlatformPeg";
+import EventIndex from "../indexing/EventIndex";
+import SettingsStore from '../settings/SettingsStore';
 
 class EventIndexPeg {
     constructor() {
