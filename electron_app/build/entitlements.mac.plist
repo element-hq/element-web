@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Entitlements from electron-builder's defaults
+         (https://github.com/electron-userland/electron-builder/blob/master/packages/app-builder-lib/templates/entitlements.mac.plist)
+         nb. This does *not* include the app sandbox: at the time of adding this file,
+         we were using electron-builder 21.2.0 which does not have the sandbox entitlement.
+         Latest electron-builder does, but it appears to be causing issues:
+         (https://github.com/electron-userland/electron-builder/issues/4390)
+    -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <!-- https://github.com/electron-userland/electron-builder/issues/3940 -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+
+    <!-- Our own additional entitlements (we need to access the camera and
+        mic for VoIP calls -->
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+</dict>
+</plist>
