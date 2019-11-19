@@ -842,5 +842,11 @@
     "Collapse panel": "Colapsar o painel",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Com o seu navegador atual, a aparência e sensação de uso da aplicação podem estar completamente incorretas, e algumas das funcionalidades poderão não funcionar. Se quiser tentar de qualquer maneira pode continuar, mas  está por sua conta com algum problema que possa encontrar!",
     "Checking for an update...": "A procurar uma atualização...",
-    "There are advanced notifications which are not shown here": "Existem notificações avançadas que não são exibidas aqui"
+    "There are advanced notifications which are not shown here": "Existem notificações avançadas que não são exibidas aqui",
+    "Add Email Address": "Adicione adresso de e-mail",
+    "Add Phone Number": "Adicione número de telefone",
+    "The platform you're on": "A plataforma em que se encontra",
+    "The version of Riot.im": "A versão do RIOT.im",
+    "Whether or not you're logged in (we don't record your username)": "Tenha ou não, iniciado sessão (não iremos guardar o seu username)",
+    "Your language of choice": "O seu idioma de escolha"
 }
