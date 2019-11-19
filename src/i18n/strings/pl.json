@@ -1731,5 +1731,6 @@
     "Join": "Dołącz",
     "%(creator)s created and configured the room.": "%(creator)s stworzył(a) i skonfigurował(a) pokój.",
     "Preview": "Przejrzyj",
-    "View": "Wyświetl"
+    "View": "Wyświetl",
+    "Missing media permissions, click the button below to request.": "Brakuje uprawnień do mediów, kliknij przycisk poniżej, aby o nie zapytać."
 }
