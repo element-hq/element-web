@@ -31,11 +31,45 @@ export default class EventIndex {
         this._eventsPerCrawl = 100;
         this._crawler = null;
         this.liveEventsForIndex = new Set();
+
+        this.boundOnSync = async (state, prevState, data) => {
+            await this.onSync(state, prevState, data);
+        };
+        this.boundOnRoomTimeline = async ( ev, room, toStartOfTimeline, removed,
+            data) => {
+            await this.onRoomTimeline(ev, room, toStartOfTimeline, removed, data);
+        };
+        this.boundOnEventDecrypted = async (ev, err) => {
+            await this.onEventDecrypted(ev, err);
+        };
+        this.boundOnTimelineReset = async (room, timelineSet,
+            resetAllTimelines) => await this.onTimelineReset(room);
     }
 
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        return indexManager.initEventIndex();
+        await indexManager.initEventIndex();
+
+        this.registerListeners();
+    }
+
+    registerListeners() {
+        const client = MatrixClientPeg.get();
+
+        client.on('sync', this.boundOnSync);
+        client.on('Room.timeline', this.boundOnRoomTimeline);
+        client.on('Event.decrypted', this.boundOnEventDecrypted);
+        client.on('Room.timelineReset', this.boundOnTimelineReset);
+    }
+
+    removeListeners() {
+        const client = MatrixClientPeg.get();
+        if (client === null) return;
+
+        client.removeListener('sync', this.boundOnSync);
+        client.removeListener('Room.timeline', this.boundOnRoomTimeline);
+        client.removeListener('Event.decrypted', this.boundOnEventDecrypted);
+        client.removeListener('Room.timelineReset', this.boundOnTimelineReset);
     }
 
     async onSync(state, prevState, data) {
@@ -343,7 +377,9 @@ export default class EventIndex {
         console.log("EventIndex: Stopping crawler function");
     }
 
-    async onLimitedTimeline(room) {
+    async onTimelineReset(room) {
+        if (room === null) return;
+
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
@@ -377,6 +413,7 @@ export default class EventIndex {
 
     async close() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
+        this.removeListeners();
         this.stopCrawler();
         return indexManager.closeEventIndex();
     }

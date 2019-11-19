@@ -97,10 +97,9 @@ class EventIndexPeg {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {
-            this.stop();
+            this.unset();
             console.log("EventIndex: Deleting event index.");
             await indexManager.deleteEventIndex();
-            this.index = null;
         }
     }
 }

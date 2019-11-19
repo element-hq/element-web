@@ -31,7 +31,6 @@ import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import MatrixClientPeg from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
-import EventIndexPeg from "../../EventIndexPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
 import dis from "../../dispatcher";
@@ -1286,31 +1285,6 @@ export default createReactClass({
                 return true;
             }
             return self._loggedInView.child.canResetTimelineInRoom(roomId);
-        });
-
-        cli.on('sync', async (state, prevState, data) => {
-            const eventIndex = EventIndexPeg.get();
-            if (eventIndex === null) return;
-            await eventIndex.onSync(state, prevState, data);
-        });
-
-        cli.on("Room.timeline", async (ev, room, toStartOfTimeline, removed, data) => {
-            const eventIndex = EventIndexPeg.get();
-            if (eventIndex === null) return;
-            await eventIndex.onRoomTimeline(ev, room, toStartOfTimeline, removed, data);
-        });
-
-        cli.on("Event.decrypted", async (ev, err) => {
-            const eventIndex = EventIndexPeg.get();
-            if (eventIndex === null) return;
-            await eventIndex.onEventDecrypted(ev, err);
-        });
-
-        cli.on("Room.timelineReset", async (room, timelineSet, resetAllTimelines) => {
-            const eventIndex = EventIndexPeg.get();
-            if (eventIndex === null) return;
-            if (room === null) return;
-            await eventIndex.onLimitedTimeline(room);
         });
 
         cli.on('sync', function(state, prevState, data) {
