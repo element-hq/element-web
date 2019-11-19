@@ -288,14 +288,14 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
                 </details>
-                <p>
+                <div className="mx_KeyBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         {restoreButtonCaption}
                     </AccessibleButton>&nbsp;&nbsp;&nbsp;
                     <AccessibleButton kind="danger" onClick={this._deleteBackup}>
                         { _t("Delete Backup") }
                     </AccessibleButton>
-                </p>
+                </div>
             </div>;
         } else {
             return <div>
