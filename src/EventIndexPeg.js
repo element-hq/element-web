@@ -21,6 +21,7 @@ limitations under the License.
 
 import PlatformPeg from "./PlatformPeg";
 import EventIndex from "./EventIndex";
+import SettingsStore from './settings/SettingsStore';
 
 class EventIndexPeg {
     constructor() {
@@ -34,6 +35,10 @@ class EventIndexPeg {
      * EventIndex was successfully initialized, false otherwise.
      */
     async init() {
+        if (!SettingsStore.isFeatureEnabled("feature_event_indexing")) {
+            return false;
+        }
+
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!indexManager || await indexManager.supportsEventIndexing() !== true) {
             console.log("EventIndex: Platform doesn't support event indexing,",
