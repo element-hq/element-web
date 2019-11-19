@@ -607,20 +607,20 @@ async function startMatrixClient(startSyncing=true) {
  * Stops a running client and all related services, and clears persistent
  * storage. Used after a session has been logged out.
  */
-export function onLoggedOut() {
+export async function onLoggedOut() {
     _isLoggingOut = false;
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'});
     stopMatrixClient();
-    _clearStorage().done();
+    await _clearStorage();
 }
 
 /**
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-function _clearStorage() {
+async function _clearStorage() {
     Analytics.logout();
 
     if (window.localStorage) {
@@ -633,12 +633,8 @@ function _clearStorage() {
         baseUrl: "",
     });
 
-    const clear = async () => {
-        await EventIndexPeg.deleteEventIndex();
-        await cli.clearStores();
-    };
-
-    return clear();
+    await EventIndexPeg.deleteEventIndex();
+    await cli.clearStores();
 }
 
 /**
@@ -662,7 +658,7 @@ export function stopMatrixClient(unsetClient=true) {
 
         if (unsetClient) {
             MatrixClientPeg.unset();
-            EventIndexPeg.unset().done();
+            EventIndexPeg.unset();
         }
     }
 }
