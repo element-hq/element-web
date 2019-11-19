@@ -253,10 +253,9 @@ ipcMain.on('seshat', async function(ev, payload) {
 
         case 'initEventIndex':
             if (eventIndex === null) {
-                let p = path.normalize(eventStorePath);
                 try {
-                    await afs.mkdir(p, {recursive: true});
-                    eventIndex = new Seshat(p, {passphrase: "DEFAULT_PASSPHRASE"});
+                    await afs.mkdir(eventStorePath, {recursive: true});
+                    eventIndex = new Seshat(eventStorePath, {passphrase: "DEFAULT_PASSPHRASE"});
                 } catch (e) {
                     sendError(payload.id, e);
                     return;
@@ -277,7 +276,7 @@ ipcMain.on('seshat', async function(ev, payload) {
             }
 
             try {
-                await deleteFolderRecursive(path.normalize(eventStorePath));
+                await deleteFolderRecursive(eventStorePath);
             } catch (e) {
             }
 
