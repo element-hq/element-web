@@ -120,12 +120,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_user_info_panel": {
-        isFeature: true,
-        displayName: _td("Use the new, consistent UserInfo panel for Room Members and Group Members"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_mjolnir": {
         isFeature: true,
         displayName: _td("Try out new ways to ignore people (experimental)"),
@@ -142,7 +136,8 @@ export const SETTINGS = {
     },
     "feature_dm_verification": {
         isFeature: true,
-        displayName: _td("Send verification requests in direct message"),
+        displayName: _td("Send verification requests in direct message," +
+            " including a new verification UX in the member panel."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
