@@ -60,13 +60,15 @@ export class ThemeWatcher {
 
     _onAction = (payload) => {
         if (payload.action === 'recheck_theme') {
-            this.recheck();
+            // XXX forceTheme
+            this.recheck(payload.forceTheme);
         }
     }
 
-    recheck() {
+    // XXX: forceTheme param aded here as local echo appears to be unreliable
+    recheck(forceTheme) {
         const oldTheme = this._currentTheme;
-        this._currentTheme = this.getEffectiveTheme();
+        this._currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
         if (oldTheme !== this._currentTheme) {
             setTheme(this._currentTheme);
         }
