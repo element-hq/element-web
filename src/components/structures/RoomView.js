@@ -43,6 +43,7 @@ import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
 import ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
+import eventSearch from '../../Searching';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
@@ -1129,22 +1130,11 @@ module.exports = createReactClass({
         // todo: should cancel any previous search requests.
         this.searchId = new Date().getTime();
 
-        let filter;
-        if (scope === "Room") {
-            filter = {
-                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
-                rooms: [
-                    this.state.room.roomId,
-                ],
-            };
-        }
+        let roomId;
+        if (scope === "Room") roomId = this.state.room.roomId;
 
         debuglog("sending search request");
-
-        const searchPromise = MatrixClientPeg.get().searchRoomEvents({
-            filter: filter,
-            term: term,
-        });
+        const searchPromise = eventSearch(term, roomId);
         this._handleSearchResult(searchPromise).done();
     },
 

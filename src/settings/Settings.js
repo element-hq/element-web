@@ -148,6 +148,12 @@ export const SETTINGS = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_event_indexing": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
+        default: false,
+    },
     "useCiderComposer": {
         displayName: _td("Use the new, faster, composer for writing messages"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
