@@ -26,7 +26,10 @@ single directory tree.
 
 Custom Themes
 =============
-Themes derived from the built in themes may also be defined in settings,
+
+Themes derived from the built in themes may also be defined in settings.
+
+To avoid name collisions, the internal name of a theme is `custom-${theme.name}`. So if you want to set the custom theme below as the default theme, you would use `default_theme: "custom-Electric Blue"`.
 
 eg. in config.json:
 
