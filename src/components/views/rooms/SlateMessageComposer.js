@@ -460,13 +460,9 @@ export default class SlateMessageComposer extends React.Component {
 
         const showFormatBar = this.state.showFormatting && this.state.inputState.isRichTextEnabled;
 
-        const wrapperClasses = classNames({
-            mx_MessageComposer_wrapper: true,
-            mx_MessageComposer_hasE2EIcon: !!this.props.e2eStatus,
-        });
         return (
             <div className="mx_MessageComposer">
-                <div className={wrapperClasses}>
+                <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>
