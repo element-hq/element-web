@@ -19,6 +19,7 @@ limitations under the License.
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
+import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';
@@ -588,6 +589,7 @@ async function startMatrixClient(startSyncing=true) {
 
     if (startSyncing) {
         await MatrixClientPeg.start();
+        await EventIndexPeg.init();
     } else {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
@@ -606,20 +608,20 @@ async function startMatrixClient(startSyncing=true) {
  * Stops a running client and all related services, and clears persistent
  * storage. Used after a session has been logged out.
  */
-export function onLoggedOut() {
+export async function onLoggedOut() {
     _isLoggingOut = false;
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    _clearStorage();
+    await _clearStorage();
 }
 
 /**
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-function _clearStorage() {
+async function _clearStorage() {
     Analytics.logout();
 
     if (window.localStorage) {
@@ -631,7 +633,9 @@ function _clearStorage() {
         // we'll never make any requests, so can pass a bogus HS URL
         baseUrl: "",
     });
-    return cli.clearStores();
+
+    await EventIndexPeg.deleteEventIndex();
+    await cli.clearStores();
 }
 
 /**
@@ -648,6 +652,7 @@ export function stopMatrixClient(unsetClient=true) {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
+    EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
@@ -655,6 +660,7 @@ export function stopMatrixClient(unsetClient=true) {
 
         if (unsetClient) {
             MatrixClientPeg.unset();
+            EventIndexPeg.unset();
         }
     }
 }

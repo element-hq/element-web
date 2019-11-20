@@ -17,7 +17,7 @@ limitations under the License.
 import SettingController from "./SettingController";
 import PlatformPeg from "../../PlatformPeg";
 
-export default class LowBandwidthController extends SettingController {
+export default class ReloadOnChangeController extends SettingController {
     onChange(level, roomId, newValue) {
         PlatformPeg.get().reload();
     }

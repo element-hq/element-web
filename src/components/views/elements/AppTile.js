@@ -569,11 +569,11 @@ export default class AppTile extends React.Component {
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {
-                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className={appTileBodyClass}>
                         <AppPermission
-                            isRoomEncrypted={isRoomEncrypted}
+                            roomId={this.props.room.roomId}
+                            creatorUserId={this.props.creatorUserId}
                             url={this.state.widgetUrl}
                             onPermissionGranted={this._grantWidgetPermission}
                         />

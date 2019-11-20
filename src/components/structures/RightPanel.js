@@ -185,7 +185,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_user_info_panel")) {
+            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",
@@ -204,7 +204,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
         } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_user_info_panel")) {
+            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",

@@ -378,8 +378,19 @@ module.exports = createReactClass({
 
         // Do a quick liveliness check on the URLs
         try {
-            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
-            this.setState({serverIsAlive: true, errorText: ""});
+            const { warning } =
+                await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            if (warning) {
+                this.setState({
+                    ...AutoDiscoveryUtils.authComponentStateForError(warning),
+                    errorText: "",
+                });
+            } else {
+                this.setState({
+                    serverIsAlive: true,
+                    errorText: "",
+                });
+            }
         } catch (e) {
             this.setState({
                 busy: false,

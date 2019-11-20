@@ -173,8 +173,17 @@ export default class GeneralUserSettingsTab extends React.Component {
         const newTheme = e.target.value;
         if (this.state.theme === newTheme) return;
 
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        // doing getValue in the .catch will still return the value we failed to set,
+        // so remember what the value was before we tried to set it so we can revert
+        const oldTheme = SettingsStore.getValue('theme');
+        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme).catch(() => {
+            dis.dispatch({action: 'set_theme', value: oldTheme});
+            this.setState({theme: oldTheme});
+        });
         this.setState({theme: newTheme});
+        // The settings watcher doesn't fire until the echo comes back from the
+        // server, so to make the theme change immediately we need to manually
+        // do the dispatch now
         dis.dispatch({action: 'set_theme', value: newTheme});
     };
 
