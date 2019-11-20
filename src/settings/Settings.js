@@ -122,7 +122,7 @@ export const SETTINGS = {
     },
     "feature_event_indexing": {
         isFeature: true,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        supportedLevels: LEVELS_FEATURE,
         displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
         default: false,
     },
