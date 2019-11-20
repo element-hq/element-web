@@ -57,7 +57,7 @@ import WebPlatform from './platform/WebPlatform';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
-import {getBaseTheme, setTheme} from "matrix-react-sdk/lib/theme";
+import {getBaseTheme, setTheme, ThemeWatcher} from "matrix-react-sdk/lib/theme";
 
 import Olm from 'olm';
 
@@ -258,7 +258,8 @@ async function loadApp() {
     // we do this by checking to see if the theme's "base" has loaded first so we can
     // safely rely on the assets.
     let a;
-    const theme = SettingsStore.getValue("theme");
+    const themeWatcher = new ThemeWatcher();
+    const theme = themeWatcher.getEffectiveTheme();
     const baseTheme = getBaseTheme(theme);
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
