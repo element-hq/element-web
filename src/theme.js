@@ -84,7 +84,7 @@ export class ThemeWatcher {
     }
 
     isSystemThemeSupported() {
-        return this._preferDark || this._preferLight;
+        return this._preferDark.matches || this._preferLight.matches;
     }
 }
 
