@@ -3337,7 +3337,7 @@ es6-promisify@^5.0.0:
   dependencies:
     es6-promise "^4.0.3"
 
-escape-html@~1.0.3:
+escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
@@ -4258,6 +4258,11 @@ glob-to-regexp@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz#8c5a1494d2066c570cc3bfe4496175acc4d502ab"
   integrity sha1-jFoUlNIGbFcMw7/kSWF1rMTVAqs=
+
+glob-to-regexp@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.4.1.tgz#c75297087c851b9a578bd217dd59a92f59fe546e"
+  integrity sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==
 
 glob2base@^0.0.12:
   version "0.0.12"
@@ -5955,10 +5960,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
-matrix-js-sdk@2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.3.tgz#23b78cc707a02eb0ce7eecb3aa50129e46dd5b6e"
-  integrity sha512-8qTqILd/NmTWF24tpaxmDIzkTk/bZhPD5N8h69PlvJ5Y6kMFctpRj+Tud5zZjl5/yhO07+g+JCyDzg+AagiM/A==
+matrix-js-sdk@2.4.4-rc.1:
+  version "2.4.4-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-2.4.4-rc.1.tgz#5fd33fd11be9eea23cd0d0b8eb79da7a4b6253bf"
+  integrity sha512-Kn94zZMXh2EmihYL3lWNp2lpT7RtqcaUxjkP7H9Mr113swSOXtKr8RWMrvopAIguC1pcLzL+lCk+N8rrML2A4Q==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5979,10 +5984,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.7.2.tgz#4c16fa6c2d188311ecb5163773dfdf7ca92b7ecc"
-  integrity sha512-CWCr41sRBeUChlvec6eJxmY02g+Re6PN3lt9tR7TkqGKyUu++Y72WPfirM+0t11QVtVyZ5Wo1WIzpropLBFyYw==
+matrix-react-sdk@1.7.3-rc.1:
+  version "1.7.3-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.7.3-rc.1.tgz#ef109b2e843c803bad0aff459004125b00c752ec"
+  integrity sha512-fLoeoi5jv8aDUpZvWLI6wQdmYdex027/J84lMX8+VoaCzUl4d3dTKaA1dEoIsVVKnfsvPDarnMZgBSr2Aje48g==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5998,6 +6003,7 @@ matrix-react-sdk@1.7.2:
     diff-match-patch "^1.0.4"
     emojibase-data "^4.0.2"
     emojibase-regex "^3.0.0"
+    escape-html "^1.0.3"
     file-saver "^1.3.3"
     filesize "3.5.6"
     flux "2.1.1"
@@ -6007,13 +6013,14 @@ matrix-react-sdk@1.7.2:
     gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
     glob "^5.0.14"
+    glob-to-regexp "^0.4.1"
     highlight.js "^9.15.8"
     is-ip "^2.0.0"
     isomorphic-fetch "^2.2.1"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
     lolex "4.2"
-    matrix-js-sdk "2.4.3"
+    matrix-js-sdk "2.4.4-rc.1"
     optimist "^0.6.1"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
