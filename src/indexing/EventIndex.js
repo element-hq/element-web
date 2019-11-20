@@ -17,7 +17,7 @@ limitations under the License.
 import PlatformPeg from "../PlatformPeg";
 import MatrixClientPeg from "../MatrixClientPeg";
 
-/**
+/*
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex {
