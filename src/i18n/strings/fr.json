@@ -2350,5 +2350,6 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s et votre gestionnaire d’intégrations.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s.",
     "Widget added by": "Widget ajouté par",
-    "This widget may use cookies.": "Ce widget pourrait utiliser des cookies."
+    "This widget may use cookies.": "Ce widget pourrait utiliser des cookies.",
+    "Send verification requests in direct message, including a new verification UX in the member panel.": "Envoyer les demandes de vérification en message direct, en incluant une nouvelle expérience de vérification dans le tableau des membres."
 }
