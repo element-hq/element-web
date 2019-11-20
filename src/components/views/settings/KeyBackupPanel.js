@@ -20,6 +20,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import SettingsStore from '../../../../lib/settings/SettingsStore';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -122,6 +123,27 @@ export default class KeyBackupPanel extends React.PureComponent {
                 },
             },
         );
+    }
+
+    _bootstrapSecureSecretStorage = async () => {
+        try {
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+            await MatrixClientPeg.get().bootstrapSecretStorage({
+                doInteractiveAuthFlow: async (makeRequest) => {
+                    const { finished } = Modal.createTrackedDialog(
+                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                        {
+                            title: _t("Send cross-signing keys to homeserver"),
+                            matrixClient: MatrixClientPeg.get(),
+                            makeRequest,
+                        },
+                    );
+                    await finished;
+                },
+            });
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     _deleteBackup = () => {
@@ -298,6 +320,21 @@ export default class KeyBackupPanel extends React.PureComponent {
                 </div>
             </div>;
         } else {
+            // This is a temporary button for testing SSSS. Initialising SSSS
+            // depends on cross-signing and is part of the same project, so we
+            // only show this mode when the cross-signing feature is enabled.
+            // TODO: Clean this up when removing the feature flag.
+            let bootstrapSecureSecretStorage;
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                bootstrapSecureSecretStorage = (
+                    <div className="mx_KeyBackupPanel_buttonRow">
+                        <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                            {_t("Bootstrap Secure Secret Storage (MSC1946)")}
+                        </AccessibleButton>
+                    </div>
+                );
+            }
+
             return <div>
                 <div>
                     <p>{_t(
@@ -307,9 +344,12 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
                 </div>
-                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
-                    { _t("Start using Key Backup") }
-                </AccessibleButton>
+                <div className="mx_KeyBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                        {_t("Start using Key Backup")}
+                    </AccessibleButton>
+                </div>
+                {bootstrapSecureSecretStorage}
             </div>;
         }
     }
