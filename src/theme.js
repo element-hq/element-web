@@ -19,7 +19,71 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
+import dis from "./dispatcher";
 import SettingsStore from "./settings/SettingsStore";
+
+export class ThemeWatcher {
+    static _instance = null;
+
+    constructor() {
+        this._themeWatchRef = null;
+        this._systemThemeWatchRef = null;
+        this._dispatcherRef = null;
+
+        // we have both here as each may either match or not match, so by having both
+        // we can get the tristate of dark/light/unsupported
+        this._preferDark = global.matchMedia("(prefers-color-scheme: dark)");
+        this._preferLight = global.matchMedia("(prefers-color-scheme: light)");
+
+        this._currentTheme = this.getEffectiveTheme();
+    }
+
+    start() {
+        this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onChange);
+        this._systemThemeWatchRef = SettingsStore.watchSetting("use_system_theme", null, this._onChange);
+        this._preferDark.addEventListener('change', this._onChange);
+        this._preferLight.addEventListener('change', this._onChange);
+        this._dispatcherRef = dis.register(this._onAction);
+    }
+
+    stop() {
+        this._preferDark.removeEventListener('change', this._onChange);
+        this._preferLight.removeEventListener('change', this._onChange);
+        SettingsStore.unwatchSetting(this._systemThemeWatchRef);
+        SettingsStore.unwatchSetting(this._themeWatchRef);
+        dis.unregister(this._dispatcherRef);
+    }
+
+    _onChange = () => {
+        this.recheck();
+    }
+
+    _onAction = (payload) => {
+        if (payload.action === 'recheck_theme') {
+            this.recheck();
+        }
+    }
+
+    recheck() {
+        const oldTheme = this._currentTheme;
+        this._currentTheme = this.getEffectiveTheme();
+        if (oldTheme !== this._currentTheme) {
+            setTheme(this._currentTheme);
+        }
+    }
+
+    getEffectiveTheme() {
+        if (SettingsStore.getValue('use_system_theme')) {
+            if (this._preferDark.matches) return 'dark';
+            if (this._preferLight.matches) return 'light';
+        }
+        return SettingsStore.getValue('theme');
+    }
+
+    isSystemThemeSupported() {
+        return this._preferDark || this._preferLight;
+    }
+}
 
 export function enumerateThemes() {
     const BUILTIN_THEMES = {
@@ -83,7 +147,8 @@ export function getBaseTheme(theme) {
  */
 export function setTheme(theme) {
     if (!theme) {
-        theme = SettingsStore.getValue("theme");
+        const themeWatcher = new ThemeWatcher();
+        theme = themeWatcher.getEffectiveTheme();
     }
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
