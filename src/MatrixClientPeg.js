@@ -223,7 +223,7 @@ class MatrixClientPeg {
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             // TODO: Cross-signing keys are temporarily in memory only. A
             // separate task in the cross-signing project will build from here.
-            const keys = [];
+            const keys = {};
             opts.cryptoCallbacks = {
                 getCrossSigningKey: k => keys[k],
                 saveCrossSigningKeys: newKeys => Object.assign(keys, newKeys),
