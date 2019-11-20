@@ -188,7 +188,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         dis.dispatch({action: 'recheck_theme'});
     };
 
-    _onUseSystemThemeChanged  = (checked) => {
+    _onUseSystemThemeChanged = (checked) => {
         this.setState({useSystemTheme: checked});
         dis.dispatch({action: 'recheck_theme'});
     }
