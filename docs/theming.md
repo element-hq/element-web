@@ -23,3 +23,53 @@ To define a theme for Riot:
 
 In future, the assets for a theme will probably be gathered together into a
 single directory tree.
+
+Custom Themes
+=============
+Themes derived from the built in themes may also be defined in settings,
+
+eg. in config.json:
+
+```
+"settingDefaults": {
+        "custom_themes": [
+            {
+                "name": "Electric Blue",
+                "is_dark": false,
+                "colors": {
+                    "accent-color": "#3596fc",
+                    "primary-color": "#368bd6",
+                    "warning-color": "#ff4b55",
+                    "sidebar-color": "#27303a",
+                    "roomlist-background-color": "#f3f8fd",
+                    "roomlist-text-color": "#2e2f32",
+                    "roomlist-text-secondary-color": "#61708b",
+                    "roomlist-highlights-color": "#ffffff",
+                    "roomlist-separator-color": "#e3e8f0",
+                    "timeline-background-color": "#ffffff",
+                    "timeline-text-color": "#2e2f32",
+                    "timeline-text-secondary-color": "#61708b",
+                    "timeline-highlights-color": "#f3f8fd"
+                }
+            }, {
+                "name": "Deep Purple",
+                "is_dark": true,
+                "colors": {
+                    "accent-color": "#6503b3",
+                    "primary-color": "#368bd6",
+                    "warning-color": "#b30356",
+                    "sidebar-color": "#15171B",
+                    "roomlist-background-color": "#22262E",
+                    "roomlist-text-color": "#A1B2D1",
+                    "roomlist-text-secondary-color": "#EDF3FF",
+                    "roomlist-highlights-color": "#343A46",
+                    "roomlist-separator-color": "#a1b2d1",
+                    "timeline-background-color": "#181b21",
+                    "timeline-text-color": "#EDF3FF",
+                    "timeline-text-secondary-color": "#A1B2D1",
+                    "timeline-highlights-color": "#22262E"
+                }
+            }
+        ]
+    }
+```
