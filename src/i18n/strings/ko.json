@@ -2181,5 +2181,19 @@
     "Messages in this room are end-to-end encrypted.": "이 방의 메시지는 종단간 암호화되었습니다.",
     "Security": "보안",
     "Verify": "확인",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>"
+    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>",
+    "Send verification requests in direct message, including a new verification UX in the member panel.": "다이렉트 메시지에서 구성원 패널에 새 확인 UX가 적용된 확인 요청을 보냅니다.",
+    "Enable cross-signing to verify per-user instead of per-device": "기기 당 확인이 아닌 사람 당 확인을 위한 교차 서명 켜기",
+    "Any of the following data may be shared:": "다음 데이터가 공유됩니다:",
+    "Your display name": "당신의 표시 이름",
+    "Your avatar URL": "당신의 아바타 URL",
+    "Your user ID": "당신의 사용자 ID",
+    "Your theme": "당신의 테마",
+    "Riot URL": "Riot URL",
+    "Room ID": "방 ID",
+    "Widget ID": "위젯 ID",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "이 위젯을 사용하면 <helpcon /> %(widgetDomain)s & 통합 관리자와 데이터를 공유합니다.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "이 위젯을 사용하면 <helpIcon /> %(widgetDomain)s와(과) 데이터를 공유합니다.",
+    "Widget added by": "위젯을 추가했습니다",
+    "This widget may use cookies.": "이 위젯은 쿠키를 사용합니다."
 }
