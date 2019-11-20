@@ -78,10 +78,6 @@ limitations under the License.
     height: 16px;
     margin-right: 0; // Counteract the E2EIcon class
     margin-left: 3px; // Counteract the E2EIcon class
-
-    &::after {
-        background-color: $composer-e2e-icon-color;
-    }
 }
 
 .mx_MessageComposer_noperm_error {
