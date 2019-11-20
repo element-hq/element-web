@@ -1,3 +1,46 @@
+Changes in [1.5.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.4-rc.1) (2019-11-20)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.3...v1.5.4-rc.1)
+
+ * Add doc for custom themes
+   [\#11444](https://github.com/vector-im/riot-web/pull/11444)
+ * Use new theme API in react-sdk
+   [\#11442](https://github.com/vector-im/riot-web/pull/11442)
+ * preload warning triangle
+   [\#11441](https://github.com/vector-im/riot-web/pull/11441)
+ * Update from Weblate
+   [\#11440](https://github.com/vector-im/riot-web/pull/11440)
+ * Add entitlements file for mic & camera permissions on macOS
+   [\#11435](https://github.com/vector-im/riot-web/pull/11435)
+ * Fix error/exception in electron signing script
+   [\#11429](https://github.com/vector-im/riot-web/pull/11429)
+ * Merge the `feature_user_info_panel` flag into `feature_dm_verification`
+   [\#11426](https://github.com/vector-im/riot-web/pull/11426)
+ * Let the user's homeserver config override the build config
+   [\#11409](https://github.com/vector-im/riot-web/pull/11409)
+ * Add cross-signing labs flag to develop and document
+   [\#11408](https://github.com/vector-im/riot-web/pull/11408)
+ * Update from Weblate
+   [\#11405](https://github.com/vector-im/riot-web/pull/11405)
+ * Trigger a theme change on startup, not just a tint change
+   [\#11381](https://github.com/vector-im/riot-web/pull/11381)
+ * Perform favicon updates twice in Chrome
+   [\#11375](https://github.com/vector-im/riot-web/pull/11375)
+ * Add labs documentation for Mjolnir
+   [\#11275](https://github.com/vector-im/riot-web/pull/11275)
+ * Add description of user info feature in labs doc
+   [\#11360](https://github.com/vector-im/riot-web/pull/11360)
+ * Update from Weblate
+   [\#11359](https://github.com/vector-im/riot-web/pull/11359)
+ * Add DM verification feature to labs.md
+   [\#11356](https://github.com/vector-im/riot-web/pull/11356)
+ * Add feature_dm_verification to labs
+   [\#11355](https://github.com/vector-im/riot-web/pull/11355)
+ * Document feature flag process
+   [\#11341](https://github.com/vector-im/riot-web/pull/11341)
+ * Remove unused feature flags
+   [\#11343](https://github.com/vector-im/riot-web/pull/11343)
+
 Changes in [1.5.3](https://github.com/vector-im/riot-web/releases/tag/v1.5.3) (2019-11-06)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.2...v1.5.3)
