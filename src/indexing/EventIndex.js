@@ -31,19 +31,6 @@ export default class EventIndex {
         this._eventsPerCrawl = 100;
         this._crawler = null;
         this.liveEventsForIndex = new Set();
-
-        this.boundOnSync = async (state, prevState, data) => {
-            await this.onSync(state, prevState, data);
-        };
-        this.boundOnRoomTimeline = async ( ev, room, toStartOfTimeline, removed,
-            data) => {
-            await this.onRoomTimeline(ev, room, toStartOfTimeline, removed, data);
-        };
-        this.boundOnEventDecrypted = async (ev, err) => {
-            await this.onEventDecrypted(ev, err);
-        };
-        this.boundOnTimelineReset = async (room, timelineSet,
-            resetAllTimelines) => await this.onTimelineReset(room);
     }
 
     async init() {
@@ -56,23 +43,23 @@ export default class EventIndex {
     registerListeners() {
         const client = MatrixClientPeg.get();
 
-        client.on('sync', this.boundOnSync);
-        client.on('Room.timeline', this.boundOnRoomTimeline);
-        client.on('Event.decrypted', this.boundOnEventDecrypted);
-        client.on('Room.timelineReset', this.boundOnTimelineReset);
+        client.on('sync', this.onSync);
+        client.on('Room.timeline', this.onRoomTimeline);
+        client.on('Event.decrypted', this.onEventDecrypted);
+        client.on('Room.timelineReset', this.onTimelineReset);
     }
 
     removeListeners() {
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
-        client.removeListener('sync', this.boundOnSync);
-        client.removeListener('Room.timeline', this.boundOnRoomTimeline);
-        client.removeListener('Event.decrypted', this.boundOnEventDecrypted);
-        client.removeListener('Room.timelineReset', this.boundOnTimelineReset);
+        client.removeListener('sync', this.onSync);
+        client.removeListener('Room.timeline', this.onRoomTimeline);
+        client.removeListener('Event.decrypted', this.onEventDecrypted);
+        client.removeListener('Room.timelineReset', this.onTimelineReset);
     }
 
-    async onSync(state, prevState, data) {
+    onSync = async (state, prevState, data) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === null && state === "PREPARED") {
@@ -146,7 +133,7 @@ export default class EventIndex {
         }
     }
 
-    async onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+    onRoomTimeline = async (ev, room, toStartOfTimeline, removed, data) => {
         // We only index encrypted rooms locally.
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
@@ -169,7 +156,7 @@ export default class EventIndex {
         }
     }
 
-    async onEventDecrypted(ev, err) {
+    onEventDecrypted = async (ev, err) => {
         const eventId = ev.getId();
 
         // If the event isn't in our live event set, ignore it.
@@ -377,7 +364,7 @@ export default class EventIndex {
         console.log("EventIndex: Stopping crawler function");
     }
 
-    async onTimelineReset(room) {
+    onTimelineReset = async (room, timelineSet, resetAllTimelines) => {
         if (room === null) return;
 
         const indexManager = PlatformPeg.get().getEventIndexingManager();
