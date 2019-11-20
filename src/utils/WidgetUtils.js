@@ -400,7 +400,7 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId, app, senderUserId, roomId) {
+    static makeAppConfig(appId, app, senderUserId, roomId, eventId) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const user = MatrixClientPeg.get().getUser(myUserId);
         const params = {
@@ -419,6 +419,7 @@ export default class WidgetUtils {
         app.creatorUserId = senderUserId;
 
         app.id = appId;
+        app.eventId = eventId;
         app.name = app.name || app.type;
 
         if (app.data) {
