@@ -34,7 +34,7 @@ import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -69,8 +69,11 @@ export default class AppTile extends React.Component {
      * @return {Object} Updated component state to be set with setState
      */
     _getNewState(newProps) {
-        const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
-        const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
+        // This is a function to make the impact of calling SettingsStore slightly less
+        const hasPermissionToLoad = () => {
+            const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", newProps.room.roomId);
+            return !!currentlyAllowedWidgets[newProps.eventId];
+        };
 
         const PersistedElement = sdk.getComponent("elements.PersistedElement");
         return {
@@ -78,10 +81,9 @@ export default class AppTile extends React.Component {
             // True while the iframe content is loading
             loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
             widgetUrl: this._addWurlParams(newProps.url),
-            widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
+            hasPermissionToLoad: newProps.userId === newProps.creatorUserId || hasPermissionToLoad(),
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
@@ -446,24 +448,38 @@ export default class AppTile extends React.Component {
         });
     }
 
-    /* TODO -- Store permission in account data so that it is persisted across multiple devices */
     _grantWidgetPermission() {
-        console.warn('Granting permission to load widget - ', this.state.widgetUrl);
-        localStorage.setItem(this.state.widgetPermissionId, true);
-        this.setState({hasPermissionToLoad: true});
-        // Now that we have permission, fetch the IM token
-        this.setScalarToken();
+        const roomId = this.props.room.roomId;
+        console.info("Granting permission for widget to load: " + this.props.eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        current[this.props.eventId] = true;
+        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+            this.setState({hasPermissionToLoad: true});
+
+            // Fetch a token for the integration manager, now that we're allowed to
+            this.setScalarToken();
+        }).catch(err => {
+            console.error(err);
+            // We don't really need to do anything about this - the user will just hit the button again.
+        });
     }
 
     _revokeWidgetPermission() {
-        console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
-        localStorage.removeItem(this.state.widgetPermissionId);
-        this.setState({hasPermissionToLoad: false});
+        const roomId = this.props.room.roomId;
+        console.info("Revoking permission for widget to load: " + this.props.eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        current[this.props.eventId] = false;
+        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+            this.setState({hasPermissionToLoad: false});
 
-        // Force the widget to be non-persistent
-        ActiveWidgetStore.destroyPersistentWidget(this.props.id);
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
-        PersistedElement.destroyElement(this._persistKey);
+            // Force the widget to be non-persistent (able to be deleted/forgotten)
+            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
+            const PersistedElement = sdk.getComponent("elements.PersistedElement");
+            PersistedElement.destroyElement(this._persistKey);
+        }).catch(err => {
+            console.error(err);
+            // We don't really need to do anything about this - the user will just hit the button again.
+        });
     }
 
     formatAppTileName() {
@@ -720,6 +736,7 @@ AppTile.displayName ='AppTile';
 
 AppTile.propTypes = {
     id: PropTypes.string.isRequired,
+    eventId: PropTypes.string, // required for room widgets
     url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     room: PropTypes.object.isRequired,

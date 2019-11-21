@@ -57,7 +57,7 @@ import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
-import { setTheme } from "../../theme";
+import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 
@@ -268,7 +268,8 @@ export default createReactClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onThemeChanged);
+        this._themeWatcher = new ThemeWatcher();
+        this._themeWatcher.start();
 
         this.focusComposer = false;
 
@@ -355,7 +356,7 @@ export default createReactClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
-        SettingsStore.unwatchSetting(this._themeWatchRef);
+        this._themeWatcher.stop();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
@@ -376,13 +377,6 @@ export default createReactClass({
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
-    },
-
-    _onThemeChanged: function(settingName, roomId, atLevel, newValue) {
-        dis.dispatch({
-            action: 'set_theme',
-            value: newValue,
-        });
     },
 
     startPageChangeTimer() {
@@ -666,9 +660,6 @@ export default createReactClass({
                 });
                 break;
             }
-            case 'set_theme':
-                setTheme(payload.value);
-                break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
