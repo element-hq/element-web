@@ -3,7 +3,6 @@ import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
 import sinon from 'sinon';
-import Promise from 'bluebird';
 import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');

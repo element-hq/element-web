@@ -53,7 +53,7 @@ module.exports = createReactClass({
             );
         }, (error)=>{
             console.error("Failed to get URL preview: " + error);
-        }).done();
+        });
     },
 
     componentDidMount: function() {

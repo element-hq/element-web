@@ -21,7 +21,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import type {Completion} from '../../../autocomplete/Autocompleter';
-import Promise from 'bluebird';
 import { Room } from 'matrix-js-sdk';
 
 import SettingsStore from "../../../settings/SettingsStore";

@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-import Promise from 'bluebird';
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
@@ -371,7 +370,7 @@ module.exports = createReactClass({
                 if (pushers[i].kind === 'email') {
                     const emailPusher = pushers[i];
                     emailPusher.data = { brand: this.props.brand };
-                    matrixClient.setPusher(emailPusher).done(() => {
+                    matrixClient.setPusher(emailPusher).then(() => {
                         console.log("Set email branding to " + this.props.brand);
                     }, (error) => {
                         console.error("Couldn't set email branding: " + error);

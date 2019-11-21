@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import Promise from 'bluebird';
 
 /**
  * Given a room object, return the alias we should use for it,

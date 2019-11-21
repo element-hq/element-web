@@ -20,7 +20,6 @@ import createReactClass from 'create-react-class';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -115,7 +114,7 @@ module.exports = createReactClass({
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
     },
 

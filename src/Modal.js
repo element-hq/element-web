@@ -23,7 +23,6 @@ import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
 import { _t } from './languageHandler';
-import Promise from "bluebird";
 import {defer} from "./utils/promise";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";

@@ -93,7 +93,7 @@ export default createReactClass({
             this.setState({createError: e});
         }).finally(() => {
             this.setState({creating: false});
-        }).done();
+        });
     },
 
     _onCancel: function() {

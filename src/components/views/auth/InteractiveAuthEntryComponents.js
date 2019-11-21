@@ -441,7 +441,7 @@ export const MsisdnAuthEntry = createReactClass({
             this.props.fail(e);
         }).finally(() => {
             this.setState({requestingToken: false});
-        }).done();
+        });
     },
 
     /*
