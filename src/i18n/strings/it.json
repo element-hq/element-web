@@ -2295,5 +2295,8 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Usando questo widget i dati possono essere condivisi <helpIcon /> con %(widgetDomain)s e il tuo Gestore di Integrazione.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Usando questo widget i dati possono essere condivisi <helpIcon /> con %(widgetDomain)s.",
     "Widget added by": "Widget aggiunto da",
-    "This widget may use cookies.": "Questo widget può usare cookie."
+    "This widget may use cookies.": "Questo widget può usare cookie.",
+    "Send verification requests in direct message, including a new verification UX in the member panel.": "Invia le richieste di verifica via messaggio diretto, inclusa una nuova esperienza utente per la verifica nel pannello membri.",
+    "Enable local event indexing and E2EE search (requires restart)": "Attiva l'indicizzazione di eventi locali e la ricerca E2EE (richiede riavvio)",
+    "Match system dark mode setting": "Combacia la modalità scura di sistema"
 }
