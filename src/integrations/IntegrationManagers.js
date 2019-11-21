@@ -22,9 +22,6 @@ import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
 import {AutoDiscovery} from "matrix-js-sdk";
-import {_t} from "../languageHandler";
-import dis from "../dispatcher";
-import React from 'react';
 import SettingsStore from "../settings/SettingsStore";
 
 const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
