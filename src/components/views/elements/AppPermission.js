@@ -115,7 +115,7 @@ export default class AppPermission extends React.Component {
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
                 {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
 
-        const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets are not encrypted.") : null;
+        const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
 
         return (
             <div className='mx_AppPermissionWarning'>
