@@ -84,7 +84,7 @@ export default class ImageView extends React.Component {
                         title: _t('Error'),
                         description: _t('You cannot delete this image. (%(code)s)', {code: code}),
                     });
-                }).done();
+                });
             },
         });
     };

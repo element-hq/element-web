@@ -19,7 +19,6 @@ limitations under the License.
 
 import request from 'browser-request';
 import counterpart from 'counterpart';
-import Promise from 'bluebird';
 import React from 'react';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 

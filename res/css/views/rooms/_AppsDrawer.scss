@@ -153,40 +153,12 @@ $AppsDrawerBodyHeight: 273px;
     background-color: $accent-color;
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_reload {
-    mask-image: url('$(res)/img/feather-customised/widget/refresh.svg');
-    mask-size: 100%;
-}
-
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
     mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_snapshot {
-    mask-image: url('$(res)/img/feather-customised/widget/camera.svg');
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_edit {
-    mask-image: url('$(res)/img/feather-customised/widget/edit.svg');
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_delete {
-    mask-image: url('$(res)/img/feather-customised/widget/bin.svg');
-    background-color: $warning-color;
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_cancel {
-    mask-image: url('$(res)/img/feather-customised/widget/x-circle.svg');
-}
-
-/* delete ? */
-.mx_AppTileMenuBarWidget {
-    cursor: pointer;
-    width: 10px;
-    height: 10px;
-    padding: 1px;
-    transition-duration: 500ms;
-    border: 1px solid transparent;
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_menu {
+    mask-image: url('$(res)/img/icon_context.svg');
 }
 
 .mx_AppTileMenuBarWidgetDelete {
@@ -294,49 +266,61 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppPermissionWarning {
     text-align: center;
-    background-color: $primary-bg-color;
+    background-color: $widget-menu-bar-bg-color;
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 16px;
 }
 
-.mx_AppPermissionWarningImage {
-    margin: 10px 0;
+.mx_AppPermissionWarning_row {
+    margin-bottom: 12px;
 }
 
-.mx_AppPermissionWarningImage img {
-    width: 100px;
+.mx_AppPermissionWarning_smallText {
+    font-size: 12px;
 }
 
-.mx_AppPermissionWarningText {
-    max-width: 90%;
-    margin: 10px auto 10px auto;
-    color: $primary-fg-color;
+.mx_AppPermissionWarning_bolder {
+    font-weight: 600;
 }
 
-.mx_AppPermissionWarningTextLabel {
-    font-weight: bold;
-    display: block;
+.mx_AppPermissionWarning h4 {
+    margin: 0;
+    padding: 0;
 }
 
-.mx_AppPermissionWarningTextURL {
+.mx_AppPermissionWarning_helpIcon {
+    margin-top: 1px;
+    margin-right: 2px;
+    width: 10px;
+    height: 10px;
     display: inline-block;
-    max-width: 100%;
-    color: $accent-color;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
-.mx_AppPermissionButton {
-    border: none;
-    padding: 5px 20px;
-    border-radius: 5px;
-    background-color: $button-bg-color;
-    color: $button-fg-color;
-    cursor: pointer;
+.mx_AppPermissionWarning_helpIcon::before {
+    display: inline-block;
+    background-color: $accent-color;
+    mask-repeat: no-repeat;
+    mask-size: 12px;
+    width: 12px;
+    height: 12px;
+    mask-position: center;
+    content: '';
+    vertical-align: middle;
+    mask-image: url('$(res)/img/feather-customised/help-circle.svg');
+}
+
+.mx_AppPermissionWarning_tooltip {
+    @mixin mx_Tooltip_dark;
+
+    ul {
+        list-style-position: inside;
+        padding-left: 2px;
+        margin-left: 0;
+    }
 }
 
 .mx_AppLoading {

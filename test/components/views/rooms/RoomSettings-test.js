@@ -3,7 +3,6 @@
 // import ReactDOM from 'react-dom';
 // import expect from 'expect';
 // import jest from 'jest-mock';
-// import Promise from 'bluebird';
 // import * as testUtils from '../../../test-utils';
 // import sdk from 'matrix-react-sdk';
 // const WrappedRoomSettings = testUtils.wrapInMatrixClientContext(sdk.getComponent('views.rooms.RoomSettings'));

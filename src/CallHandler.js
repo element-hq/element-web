@@ -382,7 +382,7 @@ function _onAction(payload) {
 }
 
 async function _startCallApp(roomId, type) {
-    // check for a working integrations manager. Technically we could put
+    // check for a working integration manager. Technically we could put
     // the state event in anyway, but the resulting widget would then not
     // work for us. Better that the user knows before everyone else in the
     // room sees it.
@@ -495,6 +495,17 @@ async function _startCallApp(roomId, type) {
 // with the dispatcher once
 if (!global.mxCallHandler) {
     dis.register(_onAction);
+    // add empty handlers for media actions, otherwise the media keys
+    // end up causing the audio elements with our ring/ringback etc
+    // audio clips in to play.
+    if (navigator.mediaSession) {
+        navigator.mediaSession.setActionHandler('play', function() {});
+        navigator.mediaSession.setActionHandler('pause', function() {});
+        navigator.mediaSession.setActionHandler('seekbackward', function() {});
+        navigator.mediaSession.setActionHandler('seekforward', function() {});
+        navigator.mediaSession.setActionHandler('previoustrack', function() {});
+        navigator.mediaSession.setActionHandler('nexttrack', function() {});
+    }
 }
 
 const callHandler = {

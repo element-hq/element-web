@@ -48,6 +48,7 @@
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
 @import "./views/context_menus/_TopLeftMenu.scss";
+@import "./views/context_menus/_WidgetContextMenu.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
@@ -172,7 +173,7 @@
 @import "./views/rooms/_WhoIsTypingTile.scss";
 @import "./views/settings/_DevicesPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
-@import "./views/settings/_IntegrationsManager.scss";
+@import "./views/settings/_IntegrationManager.scss";
 @import "./views/settings/_KeyBackupPanel.scss";
 @import "./views/settings/_Notifications.scss";
 @import "./views/settings/_PhoneNumbers.scss";

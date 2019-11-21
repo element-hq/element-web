@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import url from 'url';
-import Promise from 'bluebird';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 const request = require('browser-request');

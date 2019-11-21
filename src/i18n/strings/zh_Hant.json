@@ -2330,5 +2330,19 @@
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> 在 %(roomName)s",
     "Messages in this room are end-to-end encrypted.": "在此聊天室中的訊息為端到端加密。",
     "Security": "安全",
-    "Verify": "驗證"
+    "Verify": "驗證",
+    "Send verification requests in direct message, including a new verification UX in the member panel.": "在直接訊息中傳送驗證請求，包含成員面板中新的驗證使用者體驗。",
+    "Enable cross-signing to verify per-user instead of per-device": "啟用交叉簽章以驗證每個使用者而非每個裝置",
+    "Any of the following data may be shared:": "可能會分享以下資料：",
+    "Your display name": "您的顯示名稱",
+    "Your avatar URL": "您的大頭貼 URL",
+    "Your user ID": "您的使用 ID",
+    "Your theme": "您的佈景主題",
+    "Riot URL": "Riot URL",
+    "Room ID": "聊天室 ID",
+    "Widget ID": "小工具 ID",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "使用這個小工具可能會與 %(widgetDomain)s 以及您的整合管理員分享資料 <helpIcon />。",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "使用這個小工具可能會與 %(widgetDomain)s 分享資料 <helpIcon /> 。",
+    "Widget added by": "小工具新增由",
+    "This widget may use cookies.": "這個小工具可能會使用 cookies。"
 }

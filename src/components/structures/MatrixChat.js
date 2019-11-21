@@ -17,8 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
@@ -59,13 +57,9 @@ import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
-import { setTheme } from "../../theme";
+import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
-
-// Disable warnings for now: we use deprecated bluebird functions
-// and need to migrate, but they spam the console with warnings.
-Promise.config({warnings: false});
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -274,6 +268,8 @@ export default createReactClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        this._themeWatcher = new ThemeWatcher();
+        this._themeWatcher.start();
 
         this.focusComposer = false;
 
@@ -360,6 +356,7 @@ export default createReactClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
+        this._themeWatcher.stop();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
@@ -542,7 +539,7 @@ export default createReactClass({
                             const Loader = sdk.getComponent("elements.Spinner");
                             const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                            MatrixClientPeg.get().leave(payload.room_id).done(() => {
+                            MatrixClientPeg.get().leave(payload.room_id).then(() => {
                                 modal.close();
                                 if (this.state.currentRoomId === payload.room_id) {
                                     dis.dispatch({action: 'view_next_room'});
@@ -663,9 +660,6 @@ export default createReactClass({
                 });
                 break;
             }
-            case 'set_theme':
-                setTheme(payload.value);
-                break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -863,7 +857,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.done(() => {
+        waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -980,7 +974,7 @@ export default createReactClass({
 
         const [shouldCreate, createOpts] = await modal.finished;
         if (shouldCreate) {
-            createRoom({createOpts}).done();
+            createRoom({createOpts});
         }
     },
 
@@ -1376,17 +1370,6 @@ export default createReactClass({
             }, null, true);
         });
 
-        cli.on("accountData", function(ev) {
-            if (ev.getType() === 'im.vector.web.settings') {
-                if (ev.getContent() && ev.getContent().theme) {
-                    dis.dispatch({
-                        action: 'set_theme',
-                        value: ev.getContent().theme,
-                    });
-                }
-            }
-        });
-
         const dft = new DecryptionFailureTracker((total, errorCode) => {
             Analytics.trackEvent('E2E', 'Decryption failure', errorCode, total);
         }, (errorCode) => {
@@ -1756,7 +1739,7 @@ export default createReactClass({
             return;
         }
 
-        cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
+        cli.sendEvent(roomId, event.getType(), event.getContent()).then(() => {
             dis.dispatch({action: 'message_sent'});
         }, (err) => {
             dis.dispatch({action: 'message_send_failed'});

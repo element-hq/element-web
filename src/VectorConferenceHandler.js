@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import {createNewMatrixCall, Room} from "matrix-js-sdk";
 import CallHandler from './CallHandler';
 import MatrixClientPeg from "./MatrixClientPeg";
