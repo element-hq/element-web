@@ -2351,5 +2351,7 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s.",
     "Widget added by": "Widget ajouté par",
     "This widget may use cookies.": "Ce widget pourrait utiliser des cookies.",
-    "Send verification requests in direct message, including a new verification UX in the member panel.": "Envoyer les demandes de vérification en message direct, en incluant une nouvelle expérience de vérification dans le tableau des membres."
+    "Send verification requests in direct message, including a new verification UX in the member panel.": "Envoyer les demandes de vérification en message direct, en incluant une nouvelle expérience de vérification dans le tableau des membres.",
+    "Enable local event indexing and E2EE search (requires restart)": "Activer l’indexation des événements locaux et la recherche des données chiffrées de bout en bout (nécessite un redémarrage)",
+    "Match system dark mode setting": "S’adapter aux paramètres de mode sombre du système"
 }
