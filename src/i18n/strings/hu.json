@@ -2340,5 +2340,11 @@
     "This widget may use cookies.": "Ez a kisalkalmazás sütiket használhat.",
     "Send verification requests in direct message, including a new verification UX in the member panel.": "Ellenőrzés küldése közvetlen üzenetben, beleértve az új ellenőrzési felhasználói élményt a résztvevői panelen.",
     "Enable local event indexing and E2EE search (requires restart)": "Helyi esemény indexálás és végponttól végpontig titkosított események keresésének engedélyezése (újraindítás szükséges)",
-    "Match system dark mode setting": "Rendszer sötét témájához alkalmazkodás"
+    "Match system dark mode setting": "Rendszer sötét témájához alkalmazkodás",
+    "Widgets are not encrypted.": "A kisalkalmazások nem titkosítottak.",
+    "More options": "További beállítások",
+    "Reload": "Újratölt",
+    "Take picture": "Fénykép készítés",
+    "Remove for everyone": "Visszavonás mindenkitől",
+    "Remove for me": "Visszavonás magamtól"
 }
