@@ -2346,5 +2346,17 @@
     "Reload": "Újratölt",
     "Take picture": "Fénykép készítés",
     "Remove for everyone": "Visszavonás mindenkitől",
-    "Remove for me": "Visszavonás magamtól"
+    "Remove for me": "Visszavonás magamtól",
+    "Connecting to integration manager...": "Kapcsolódás az integrációs menedzserhez...",
+    "Cannot connect to integration manager": "A kapcsolódás az integrációs menedzserhez sikertelen",
+    "The integration manager is offline or it cannot reach your homeserver.": "Az integrációs menedzser nem működik vagy nem éri el a matrix szerveredet.",
+    "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Használj Integrációs Menedzsert <b>(%(serverName)s)</b> a botok, kisalkalmazások és matrica csomagok kezeléséhez.",
+    "Use an Integration Manager to manage bots, widgets, and sticker packs.": "Használj Integrációs Menedzsert a botok, kisalkalmazások és matrica csomagok kezeléséhez.",
+    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrációs Menedzser megkapja a konfigurációt, módosíthat kisalkalmazásokat, szobához meghívót küldhet és a hozzáférési szintet beállíthatja helyetted.",
+    "Failed to connect to integration manager": "Az integrációs menedzserhez nem sikerült csatlakozni",
+    "Widgets do not use message encryption.": "A kisalkalmazások nem használnak üzenet titkosítást.",
+    "Integrations are disabled": "Az integrációk le vannak tiltva",
+    "Enable 'Manage Integrations' in Settings to do this.": "Ehhez engedélyezd az „Integrációk Kezelésé”-t a Beállításokban.",
+    "Integrations not allowed": "Az integrációk nem engedélyezettek",
+    "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "A Riotod nem használhat ehhez Integrációs Menedzsert. Kérlek vedd fel a kapcsolatot az adminisztrátorral."
 }
