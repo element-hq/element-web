@@ -55,8 +55,6 @@ class EventIndexPeg {
             return false;
         }
 
-        console.log("EventIndex: Successfully initialized the event index");
-
         this.index = index;
 
         return true;
