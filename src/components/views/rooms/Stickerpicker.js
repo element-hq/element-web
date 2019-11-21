@@ -287,11 +287,10 @@ export default class Stickerpicker extends React.Component {
         return stickersContent;
     }
 
-    /**
+    // Dev note: this isn't jsdoc because it's angry.
+    /*
      * Show the sticker picker overlay
      * If no stickerpacks have been added, show a link to the integration manager add sticker packs page.
-     * @param  {Event} e Event that triggered the function
-     * @return Nothing of use when the thing happens.
      */
     _onShowStickersClick(e) {
         if (!SettingsStore.getValue("integrationProvisioning")) {
