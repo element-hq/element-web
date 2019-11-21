@@ -36,26 +36,29 @@ export default class SetIntegrationManager extends React.Component {
         if (currentManager) {
             managerName = `(${currentManager.name})`;
             bodyText = _t(
-                "You are currently using <b>%(serverName)s</b> to manage your bots, widgets, " +
+                "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, " +
                 "and sticker packs.",
                 {serverName: currentManager.name},
                 { b: sub => <b>{sub}</b> },
             );
         } else {
-            bodyText = _t(
-                "Add which integration manager you want to manage your bots, widgets, " +
-                "and sticker packs.",
-            );
+            bodyText = _t("Use an Integration Manager to manage bots, widgets, and sticker packs.");
         }
 
         return (
             <div className='mx_SetIntegrationManager'>
                 <div className="mx_SettingsTab_heading">
-                    <span>{_t("Integration Manager")}</span>
+                    <span>{_t("Integrations")}</span>
                     <span className="mx_SettingsTab_subheading">{managerName}</span>
                 </div>
                 <span className="mx_SettingsTab_subsectionText">
                     {bodyText}
+                    <br />
+                    <br />
+                    {_t(
+                        "Integration Managers receive configuration data, and can modify widgets, " +
+                        "send room invites, and set power levels on your behalf.",
+                    )}
                 </span>
             </div>
         );
