@@ -2344,5 +2344,7 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "使用這個小工具可能會與 %(widgetDomain)s 以及您的整合管理員分享資料 <helpIcon />。",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "使用這個小工具可能會與 %(widgetDomain)s 分享資料 <helpIcon /> 。",
     "Widget added by": "小工具新增由",
-    "This widget may use cookies.": "這個小工具可能會使用 cookies。"
+    "This widget may use cookies.": "這個小工具可能會使用 cookies。",
+    "Enable local event indexing and E2EE search (requires restart)": "啟用本機事件索引與端到端加密搜尋（需要重新啟動）",
+    "Match system dark mode setting": "與系統深色模式設定相符"
 }
