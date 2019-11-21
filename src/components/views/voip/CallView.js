@@ -90,6 +90,13 @@ module.exports = createReactClass({
             }
         } else {
             call = CallHandler.getAnyActiveCall();
+            // Ignore calls if we can't get the room associated with them.
+            // I think the underlying problem is that the js-sdk sends events
+            // for calls before it has made the rooms available in the store,
+            // although this isn't confirmed.
+            if (MatrixClientPeg.get().getRoom(call.roomId) === null) {
+                call = null;
+            }
             this.setState({ call: call });
         }
 
