@@ -80,13 +80,26 @@ function play(audioId) {
     // which listens?
     const audio = document.getElementById(audioId);
     if (audio) {
+        const playAudio = async () => {
+            try {
+                // This still causes the chrome debugger to break on promise rejection if
+                // the promise is rejected, even though we're catching the exception.
+                await audio.play();
+            } catch (e) {
+                // This is usually because the user hasn't interacted with the document,
+                // or chrome doesn't think so and is denying the request. Not sure what
+                // we can really do here...
+                // https://github.com/vector-im/riot-web/issues/7657
+                console.log("Unable to play audio clip", e);
+            }
+        };
         if (audioPromises[audioId]) {
             audioPromises[audioId] = audioPromises[audioId].then(()=>{
                 audio.load();
-                return audio.play();
+                return playAudio();
             });
         } else {
-            audioPromises[audioId] = audio.play();
+            audioPromises[audioId] = playAudio();
         }
     }
 }
