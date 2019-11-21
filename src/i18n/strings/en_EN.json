@@ -598,7 +598,7 @@
     "Change": "Change",
     "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.",
     "Use an Integration Manager to manage bots, widgets, and sticker packs.": "Use an Integration Manager to manage bots, widgets, and sticker packs.",
-    "Integrations": "Integrations",
+    "Manage integrations": "Manage integrations",
     "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.",
     "Flair": "Flair",
     "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
