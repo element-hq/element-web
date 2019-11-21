@@ -498,12 +498,14 @@ if (!global.mxCallHandler) {
     // add empty handlers for media actions, otherwise the media keys
     // end up causing the audio elements with our ring/ringback etc
     // audio clips in to play.
-    navigator.mediaSession.setActionHandler('play', function() {});
-    navigator.mediaSession.setActionHandler('pause', function() {});
-    navigator.mediaSession.setActionHandler('seekbackward', function() {});
-    navigator.mediaSession.setActionHandler('seekforward', function() {});
-    navigator.mediaSession.setActionHandler('previoustrack', function() {});
-    navigator.mediaSession.setActionHandler('nexttrack', function() {});
+    if (navigator.mediaSession) {
+        navigator.mediaSession.setActionHandler('play', function() {});
+        navigator.mediaSession.setActionHandler('pause', function() {});
+        navigator.mediaSession.setActionHandler('seekbackward', function() {});
+        navigator.mediaSession.setActionHandler('seekforward', function() {});
+        navigator.mediaSession.setActionHandler('previoustrack', function() {});
+        navigator.mediaSession.setActionHandler('nexttrack', function() {});
+    }
 }
 
 const callHandler = {
