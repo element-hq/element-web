@@ -17,6 +17,8 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../languageHandler";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import sdk from '../../../index';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 export default class SetIntegrationManager extends React.Component {
     constructor() {
@@ -26,10 +28,24 @@ export default class SetIntegrationManager extends React.Component {
 
         this.state = {
             currentManager,
+            provisioningEnabled: SettingsStore.getValue("integrationProvisioning"),
         };
     }
 
+    onProvisioningToggled = () => {
+        const current = this.state.provisioningEnabled;
+        SettingsStore.setValue("integrationProvisioning", null, SettingLevel.ACCOUNT, !current).catch(err => {
+            console.error("Error changing integration manager provisioning");
+            console.error(err);
+
+            this.setState({provisioningEnabled: current});
+        });
+        this.setState({provisioningEnabled: !current});
+    };
+
     render() {
+        const ToggleSwitch = sdk.getComponent("views.elements.ToggleSwitch");
+
         const currentManager = this.state.currentManager;
         let managerName;
         let bodyText;
@@ -50,6 +66,7 @@ export default class SetIntegrationManager extends React.Component {
                 <div className="mx_SettingsTab_heading">
                     <span>{_t("Integrations")}</span>
                     <span className="mx_SettingsTab_subheading">{managerName}</span>
+                    <ToggleSwitch checked={this.state.provisioningEnabled} onChange={this.onProvisioningToggled} />
                 </div>
                 <span className="mx_SettingsTab_subsectionText">
                     {bodyText}
