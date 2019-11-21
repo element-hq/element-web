@@ -17,20 +17,20 @@ limitations under the License.
 .mx_WidgetContextMenu {
     padding: 6px;
 
-  .mx_WidgetContextMenu_option {
-      padding: 3px 6px 3px 6px;
-      cursor: pointer;
-      white-space: nowrap;
-  }
+    .mx_WidgetContextMenu_option {
+        padding: 3px 6px 3px 6px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
 
-  .mx_WidgetContextMenu_separator {
-      margin-top: 0;
-      margin-bottom: 0;
-      border-bottom-style: none;
-      border-left-style: none;
-      border-right-style: none;
-      border-top-style: solid;
-      border-top-width: 1px;
-      border-color: $menu-border-color;
-  }
+    .mx_WidgetContextMenu_separator {
+        margin-top: 0;
+        margin-bottom: 0;
+        border-bottom-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: solid;
+        border-top-width: 1px;
+        border-color: $menu-border-color;
+    }
 }
