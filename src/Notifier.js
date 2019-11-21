@@ -146,7 +146,7 @@ const Notifier = {
                 }
                 document.body.appendChild(audioElement);
             }
-            audioElement.play();
+            await audioElement.play();
         } catch (ex) {
             console.warn("Caught error when trying to fetch room notification sound:", ex);
         }
