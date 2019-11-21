@@ -172,11 +172,10 @@ export class IntegrationManagers {
     }
 
     openNoManagerDialog(): void {
-        // TODO: Is it Integrations (plural) or Integration (singular). Singular is easier spoken.
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
         Modal.createTrackedDialog(
-            "Integration Manager", "None", IntegrationsManager,
-            {configured: false}, 'mx_IntegrationsManager',
+            "Integration Manager", "None", IntegrationManager,
+            {configured: false}, 'mx_IntegrationManager',
         );
     }
 

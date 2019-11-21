@@ -74,10 +74,10 @@ export default class Stickerpicker extends React.Component {
                 this.forceUpdate();
                 return this.scalarClient;
             }).catch((e) => {
-                this._imError(_td("Failed to connect to integrations server"), e);
+                this._imError(_td("Failed to connect to integration manager"), e);
             });
         } else {
-            this._imError(_td("No integrations server is configured to manage stickers with"));
+            this._imError(_td("No integration manager is configured to manage stickers with"));
         }
     }
 
@@ -346,7 +346,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     /**
-     * Launch the integrations manager on the stickers integration page
+     * Launch the integration manager on the stickers integration page
      */
     _launchManageIntegrations() {
         // TODO: Open the right integration manager for the widget
