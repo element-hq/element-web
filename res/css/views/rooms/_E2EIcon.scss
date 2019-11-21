@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_E2EIcon {
-    width: 25px;
-    height: 25px;
+    width: 16px;
+    height: 16px;
     margin: 0 9px;
     position: relative;
     display: block;
@@ -30,16 +30,14 @@ limitations under the License.
     bottom: 0;
     left: 0;
     right: 0;
-    mask-repeat: no-repeat;
-    mask-size: contain;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .mx_E2EIcon_verified::after {
-    mask-image: url('$(res)/img/e2e/verified.svg');
-    background-color: $accent-color;
+    background-image: url('$(res)/img/e2e/verified.svg');
 }
 
 .mx_E2EIcon_warning::after {
-    mask-image: url('$(res)/img/e2e/warning.svg');
-    background-color: $warning-color;
+    background-image: url('$(res)/img/e2e/warning.svg');
 }
