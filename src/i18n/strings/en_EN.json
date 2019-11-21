@@ -1187,7 +1187,7 @@
     "Widget ID": "Widget ID",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
-    "Widgets are not encrypted.": "Widgets are not encrypted.",
+    "Widgets do not use message encryption.": "Widgets do not use message encryption.",
     "Widget added by": "Widget added by",
     "This widget may use cookies.": "This widget may use cookies.",
     "Delete Widget": "Delete Widget",
