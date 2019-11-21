@@ -20,6 +20,8 @@ import {dialogTermsInteractionCallback, TermsNotSignedError} from "../Terms";
 import type {Room} from "matrix-js-sdk";
 import Modal from '../Modal';
 import url from 'url';
+import SettingsStore from "../settings/SettingsStore";
+import {IntegrationManagers} from "./IntegrationManagers";
 
 export const KIND_ACCOUNT = "account";
 export const KIND_CONFIG = "config";
@@ -57,6 +59,10 @@ export class IntegrationManagerInstance {
     }
 
     async open(room: Room = null, screen: string = null, integrationId: string = null): void {
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            return IntegrationManagers.sharedInstance().showDisabledDialog();
+        }
+
         const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
         const dialog = Modal.createTrackedDialog(
             'Integration Manager', '', IntegrationManager,

@@ -22,6 +22,10 @@ import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import MatrixClientPeg from "../MatrixClientPeg";
 import {AutoDiscovery} from "matrix-js-sdk";
+import {_t} from "../languageHandler";
+import dis from "../dispatcher";
+import React from 'react';
+import SettingsStore from "../settings/SettingsStore";
 
 const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
 const KIND_PREFERENCE = [
@@ -172,19 +176,29 @@ export class IntegrationManagers {
     }
 
     openNoManagerDialog(): void {
-        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
-        Modal.createTrackedDialog(
-            "Integration Manager", "None", IntegrationManager,
-            {configured: false}, 'mx_IntegrationManager',
-        );
+        const IntegrationsImpossibleDialog = sdk.getComponent("dialogs.IntegrationsImpossibleDialog");
+        Modal.createTrackedDialog('Integrations impossible', '', IntegrationsImpossibleDialog);
     }
 
     openAll(room: Room = null, screen: string = null, integrationId: string = null): void {
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            return this.showDisabledDialog();
+        }
+
+        if (this._managers.length === 0) {
+            return this.openNoManagerDialog();
+        }
+
         const TabbedIntegrationManagerDialog = sdk.getComponent("views.dialogs.TabbedIntegrationManagerDialog");
         Modal.createTrackedDialog(
             'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
             {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
         );
+    }
+
+    showDisabledDialog(): void {
+        const IntegrationsDisabledDialog = sdk.getComponent("dialogs.IntegrationsDisabledDialog");
+        Modal.createTrackedDialog('Integrations disabled', '', IntegrationsDisabledDialog);
     }
 
     async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {

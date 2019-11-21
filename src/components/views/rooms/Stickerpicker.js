@@ -77,7 +77,7 @@ export default class Stickerpicker extends React.Component {
                 this._imError(_td("Failed to connect to integration manager"), e);
             });
         } else {
-            this._imError(_td("No integration manager is configured to manage stickers with"));
+            IntegrationManagers.sharedInstance().openNoManagerDialog();
         }
     }
 
@@ -293,6 +293,11 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            // Intercept this case and spawn a warning.
+            return IntegrationManagers.sharedInstance().showDisabledDialog();
+        }
+
         // XXX: Simplify by using a context menu that is positioned relative to the sticker picker button
 
         const buttonRect = e.target.getBoundingClientRect();

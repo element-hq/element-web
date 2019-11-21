@@ -23,9 +23,6 @@ import dis from '../../../dispatcher';
 
 export default class IntegrationManager extends React.Component {
     static propTypes = {
-        // false to display an error saying that there is no integration manager configured
-        configured: PropTypes.bool.isRequired,
-
         // false to display an error saying that we couldn't connect to the integration manager
         connected: PropTypes.bool.isRequired,
 
@@ -40,7 +37,6 @@ export default class IntegrationManager extends React.Component {
     };
 
     static defaultProps = {
-        configured: true,
         connected: true,
         loading: false,
     };
@@ -70,15 +66,6 @@ export default class IntegrationManager extends React.Component {
     };
 
     render() {
-        if (!this.props.configured) {
-            return (
-                <div className='mx_IntegrationManager_error'>
-                    <h3>{_t("No integration manager configured")}</h3>
-                    <p>{_t("This Riot instance does not have an integration manager configured.")}</p>
-                </div>
-            );
-        }
-
         if (this.props.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (
