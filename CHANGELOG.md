@@ -1,3 +1,16 @@
+Changes in [1.7.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.3-rc.2) (2019-11-22)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.3-rc.1...v1.7.3-rc.2)
+
+ * Fix double date separator for room upgrade tiles
+   [\#3663](https://github.com/matrix-org/matrix-react-sdk/pull/3663)
+ * Show m.room.create event before the ELS on room upgrade
+   [\#3660](https://github.com/matrix-org/matrix-react-sdk/pull/3660)
+ * Make addEventListener conditional
+   [\#3659](https://github.com/matrix-org/matrix-react-sdk/pull/3659)
+ * Fix e2e icons
+   [\#3658](https://github.com/matrix-org/matrix-react-sdk/pull/3658)
+
 Changes in [1.7.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.3-rc.1) (2019-11-20)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.2...v1.7.3-rc.1)
