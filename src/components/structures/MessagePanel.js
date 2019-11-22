@@ -109,7 +109,8 @@ export default class MessagePanel extends React.Component {
         showReactions: PropTypes.bool,
     };
 
-    componentDidMount() {
+    constructor() {
+        super();
         // the event after which we put a visible unread marker on the last
         // render cycle; null if readMarkerVisible was false or the RM was
         // suppressed (eg because it was at the end of the timeline)
@@ -165,6 +166,10 @@ export default class MessagePanel extends React.Component {
         this._showHiddenEventsInTimeline =
             SettingsStore.getValue("showHiddenEventsInTimeline");
 
+        this._isMounted = false;
+    }
+
+    componentDidMount() {
         this._isMounted = true;
     }
 
