@@ -2353,5 +2353,22 @@
     "This widget may use cookies.": "Ce widget pourrait utiliser des cookies.",
     "Send verification requests in direct message, including a new verification UX in the member panel.": "Envoyer les demandes de vérification en message direct, en incluant une nouvelle expérience de vérification dans le tableau des membres.",
     "Enable local event indexing and E2EE search (requires restart)": "Activer l’indexation des événements locaux et la recherche des données chiffrées de bout en bout (nécessite un redémarrage)",
-    "Match system dark mode setting": "S’adapter aux paramètres de mode sombre du système"
+    "Match system dark mode setting": "S’adapter aux paramètres de mode sombre du système",
+    "Connecting to integration manager...": "Connexion au gestionnaire d’intégrations…",
+    "Cannot connect to integration manager": "Impossible de se connecter au gestionnaire d’intégrations",
+    "The integration manager is offline or it cannot reach your homeserver.": "Le gestionnaire d’intégrations est hors ligne ou il ne peut pas joindre votre serveur d’accueil.",
+    "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Utilisez un gestionnaire d’intégrations <b>(%(serverName)s)</b> pour gérer les bots, les widgets et les packs de stickers.",
+    "Use an Integration Manager to manage bots, widgets, and sticker packs.": "Utilisez un gestionnaire d’intégrations pour gérer les bots, les widgets et les packs de stickers.",
+    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Les gestionnaires d’intégrations reçoivent les données de configuration et peuvent modifier les widgets, envoyer des invitations aux salons et définir les rangs à votre place.",
+    "Failed to connect to integration manager": "Échec de la connexion au gestionnaire d’intégrations",
+    "Widgets do not use message encryption.": "Les widgets n’utilisent pas le chiffrement des messages.",
+    "More options": "Plus d’options",
+    "Integrations are disabled": "Les intégrations sont désactivées",
+    "Enable 'Manage Integrations' in Settings to do this.": "Activez « Gérer les intégrations » dans les paramètres pour faire ça.",
+    "Integrations not allowed": "Les intégrations ne sont pas autorisées",
+    "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "Votre Riot ne vous autorise pas à utiliser un gestionnaire d’intégrations pour faire ça. Contactez un administrateur.",
+    "Reload": "Recharger",
+    "Take picture": "Prendre une photo",
+    "Remove for everyone": "Supprimer pour tout le monde",
+    "Remove for me": "Supprimer pour moi"
 }
