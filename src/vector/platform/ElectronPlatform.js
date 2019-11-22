@@ -155,6 +155,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
     async deleteEventIndex(): Promise<> {
         return this._ipcCall('deleteEventIndex');
     }
+
+    async indexSize(): Promise<> {
+        return this._ipcCall('indexSize');
+    }
 }
 
 export default class ElectronPlatform extends VectorBasePlatform {
