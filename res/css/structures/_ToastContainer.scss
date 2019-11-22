@@ -41,9 +41,6 @@ limitations under the License.
         box-shadow: 0px 4px 12px $menu-box-shadow-color;
         border-radius: 8px;
         overflow: hidden;
-    }
-
-    .mx_Toast_toast {
         display: grid;
         grid-template-columns: 20px 1fr;
         column-gap: 10px;
