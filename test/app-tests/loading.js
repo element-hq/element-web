@@ -213,10 +213,10 @@ describe('loading:', function() {
     }
 
     describe("Clean load with no stored credentials:", function() {
-        it('gives a welcome page by default', function(done) {
+        it('gives a welcome page by default', function() {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -231,10 +231,10 @@ describe('loading:', function() {
                 return awaitWelcomeComponent(matrixChat);
             }).then(() => {
                 expect(windowLocation.hash).toEqual("#/welcome");
-            }).then(done, done);
+            });
         });
 
-        it('should follow the original link after successful login', function(done) {
+        it('should follow the original link after successful login', function() {
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
@@ -243,7 +243,7 @@ describe('loading:', function() {
             httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
             httpBackend.when("GET", "/api/v1").respond(200, {});
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -272,7 +272,7 @@ describe('loading:', function() {
                 expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual(DEFAULT_HS_URL);
                 expect(localStorage.getItem('mx_is_url')).toEqual(DEFAULT_IS_URL);
-            }).then(done, done);
+            });
         });
 
         it('should not register as a guest when using a #/login link', function() {
@@ -348,7 +348,7 @@ describe('loading:', function() {
             });
         });
 
-        it('shows a home page by default if we have no joined rooms', function(done) {
+        it('shows a home page by default if we have no joined rooms', function() {
             localStorage.removeItem("mx_last_room_id");
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
@@ -356,7 +356,7 @@ describe('loading:', function() {
 
             loadApp();
 
-            awaitLoggedIn(matrixChat).then(() => {
+            return awaitLoggedIn(matrixChat).then(() => {
                 // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
@@ -365,10 +365,10 @@ describe('loading:', function() {
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.EmbeddedPage'));
                 expect(windowLocation.hash).toEqual("#/home");
-            }).then(done, done);
+            });
         });
 
-        it('shows a room view if we followed a room link', function(done) {
+        it('shows a room view if we followed a room link', function() {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
@@ -376,7 +376,7 @@ describe('loading:', function() {
                 uriFragment: "#/room/!room:id",
             });
 
-            awaitLoggedIn(matrixChat).then(() => {
+            return awaitLoggedIn(matrixChat).then(() => {
                 // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
@@ -385,7 +385,7 @@ describe('loading:', function() {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
-            }).then(done, done);
+            });
         });
 
         describe('/#/login link:', function() {
@@ -442,10 +442,10 @@ describe('loading:', function() {
     });
 
     describe('Guest auto-registration:', function() {
-        it('shows a welcome page by default', function(done) {
+        it('shows a welcome page by default', function() {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -469,13 +469,13 @@ describe('loading:', function() {
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('auth.Welcome'));
                 expect(windowLocation.hash).toEqual("#/welcome");
-            }).then(done, done);
+            });
         });
 
-        it('uses the default homeserver to register with', function(done) {
+        it('uses the default homeserver to register with', function() {
             loadApp();
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -503,14 +503,14 @@ describe('loading:', function() {
                 expect(windowLocation.hash).toEqual("#/welcome");
                 expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
                 expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
-            }).then(done, done);
+            });
         });
 
-        it('shows a room view if we followed a room link', function(done) {
+        it('shows a room view if we followed a room link', function() {
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -533,7 +533,7 @@ describe('loading:', function() {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
-            }).then(done, done);
+            });
         });
 
         describe('Login as user', function() {
@@ -611,12 +611,12 @@ describe('loading:', function() {
     });
 
     describe('Token login:', function() {
-        it('logs in successfully', function(done) {
+        it('logs in successfully', function() {
             loadApp({
                 queryString: "?loginToken=secretToken&homeserver=https%3A%2F%2Fhomeserver&identityServer=https%3A%2F%2Fidserver",
             });
 
-            sleep(1).then(() => {
+            return sleep(1).then(() => {
                 // we expect a spinner while we're logging in
                 assertAtLoadingSpinner(matrixChat);
 
@@ -645,7 +645,7 @@ describe('loading:', function() {
                 expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual('https://homeserver');
                 expect(localStorage.getItem('mx_is_url')).toEqual('https://idserver');
-            }).then(done, done);
+            });
         });
     });
 
