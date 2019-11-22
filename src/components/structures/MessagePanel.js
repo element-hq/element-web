@@ -413,7 +413,8 @@ module.exports = createReactClass({
 
                 // If this m.room.create event should be shown (room upgrade) then show it before the summary
                 if (this._shouldShowEvent(mxEv)) {
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, false));
+                    // pass in the mxEv as prevEvent as well so no extra DateSeparator is rendered
+                    ret.push(...this._getTilesForEvent(mxEv, mxEv, false));
                 }
 
                 const summarisedEvents = []; // Don't add m.room.create here as we don't want it inside the summary
