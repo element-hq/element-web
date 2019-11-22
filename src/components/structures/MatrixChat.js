@@ -60,6 +60,7 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
+import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -1264,7 +1265,6 @@ export default createReactClass({
         this.firstSyncComplete = false;
         this.firstSyncPromise = defer();
         const cli = MatrixClientPeg.get();
-        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room
@@ -1463,12 +1463,35 @@ export default createReactClass({
             }
         });
 
-        cli.on("crypto.verification.start", (verifier) => {
-            Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                verifier,
-            });
-        });
+        if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            cli.on("crypto.verification.request", request => {
+                let requestObserver;
+                if (request.event.getRoomId()) {
+                    requestObserver = new KeyVerificationStateObserver(
+                        request.event, MatrixClientPeg.get());
+                }
 
+                if (!requestObserver || requestObserver.pending) {
+                    dis.dispatch({
+                        action: "show_toast",
+                        toast: {
+                            key: request.event.getId(),
+                            title: _t("Verification Request"),
+                            icon: "verification",
+                            props: {request, requestObserver},
+                            component: sdk.getComponent("toasts.VerificationRequestToast"),
+                        },
+                    });
+                }
+            });
+        } else {
+            cli.on("crypto.verification.start", (verifier) => {
+                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                    verifier,
+                });
+            });
+        }
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
         const colorScheme = SettingsStore.getValue("roomColor");
