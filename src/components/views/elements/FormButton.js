@@ -20,7 +20,8 @@ import AccessibleButton from "./AccessibleButton";
 export default function FormButton(props) {
     const {className, label, kind, ...restProps} = props;
     const newClassName = (className || "") + " mx_FormButton";
-    const allProps = Object.assign({}, restProps, {className: newClassName, kind: kind || "primary", children: [label]});
+    const allProps = Object.assign({}, restProps,
+        {className: newClassName, kind: kind || "primary", children: [label]});
     return React.createElement(AccessibleButton, allProps);
 }
 
