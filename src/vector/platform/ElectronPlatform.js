@@ -199,7 +199,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     supportsAutoHideMenuBar(): boolean {
-        return true;
+        // This is irelevant on Mac as Menu bars don't live in the app window
+        return !navigator.platform.toUpperCase().includes('MAC');
     }
 
     async getAutoHideMenuBarEnabled(): boolean {

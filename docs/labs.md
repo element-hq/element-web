@@ -49,3 +49,25 @@ That's it. Now should see your new counter under the header.
 ## Multiple integration managers (`feature_many_integration_managers`)
 
 Exposes a way to access all the integration managers known to Riot. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
+
+## New ways to ignore people (`feature_mjolnir`)
+
+When enabled, a new settings tab appears for users to be able to manage their ban lists.
+This is a different kind of ignoring where the ignored user's messages still get rendered,
+but are hidden by default.
+
+Ban lists are rooms within Matrix, proposed as [MSC2313](https://github.com/matrix-org/matrix-doc/pull/2313).
+[Mjolnir](https://github.com/matrix-org/mjolnir) is a set of moderation tools which support
+ban lists.
+
+## Verifications in DMs (`feature_dm_verification`)
+
+An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
+
+This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
+
+## Cross-signing (`feature_cross_signing`)
+
+Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
+improves the device verification experience by allowing you to verify a user
+instead of verifying each of their devices.

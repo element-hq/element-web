@@ -8,8 +8,8 @@
     "Riot is not supported on mobile web. Install the app?": "Riot nėra palaikoma naršant svetainėje mobiliaisiais įrenginiais. Įdiegti programėlę?",
     "Riot Desktop on %(platformName)s": "Riot Desktop, naudojant %(platformName)s",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s per %(browserName)s, naudojant %(osName)s",
-    "You need to be using HTTPS to place a screen-sharing call.": "Norint skambinti su ekrano bendrinimo funkcija būtina naudoti HTTPS.",
-    "Custom Server Options": "Tinkinto serverio parametrai",
+    "You need to be using HTTPS to place a screen-sharing call.": "Norint skambinti naudojant ekrano vaizdo dalijimosi funkciją, jūs turite naudoti HTTPS.",
+    "Custom Server Options": "Pasirinktiniai Serverio Nustatymai",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Norėdami prisijungti prie kito nei Matrix serverio, galite naudoti tinkinto serverio parametrus ir nurodyti kito serverio URL adresą.<br/>Tai leis jums naudoti Riot su esama Matrix paskyra kituose serveriuose.<br/><br/>Taip pat galite nustatyti tinkintą tapatybės serverį, tačiau tuomet negalėsite pakviesti kitus naudotojus pagal el. paštą, o taip pat ir jie negalės pakviesti jūsų.",
     "Dismiss": "Atmesti",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizuoti, šifruoti pokalbiai ir bendradarbiavimas, veikiantis su [matrix]",
@@ -40,5 +40,13 @@
     "Create Account": "Sukurti paskyrą",
     "Need help?": "Reikia pagalbos?",
     "Explore rooms": "Peržiūrėti kambarius",
-    "Room Directory": "Kambarių katalogas"
+    "Room Directory": "Kambarių katalogas",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsų Riot konfigūracijoje yra klaidingas JSON. Prašome pataisyti problemą ir iš naujo užkrauti puslapį.",
+    "The message from the parser is: %(message)s": "Analizatoriaus žinutė yra: %(message)s",
+    "Invalid JSON": "Klaidingas JSON",
+    "Your Riot is misconfigured": "Jūsų Riot yra neteisingai sukonfigūruotas",
+    "Unexpected error preparing the app. See console for details.": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Klaidinga konfigūracija: galima nurodyti tik vieną iš default_server_config, default_server_name, arba default_hs_url.",
+    "Invalid configuration: no default server specified.": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Jūs galite naudoti pasirinktinius serverio nustatymus, kad prisijungtumėte prie kitų Matrix serverių, nurodydami kito serverio URL. Tai leidžia jums naudotis Riot su esama Matrix paskyra kitame serveryje."
 }

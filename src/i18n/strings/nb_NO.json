@@ -30,5 +30,7 @@
     "Create Account": "Lag konto",
     "Need help?": "Trenger du hjelp?",
     "Room Directory": "Alle rom",
-    "Explore rooms": "Se alle rom"
+    "Explore rooms": "Se alle rom",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-konfigurasjonen din inneholder ugyldig JSON. Vennligst fiks problemet og oppdater siden.",
+    "The message from the parser is: %(message)s": "Meldingen fra parseren er: %(message)s"
 }

@@ -77,6 +77,18 @@ try {
 try {
     // Load local config and use it to override values from the one baked with the build
     const localConfig = require(path.join(app.getPath('userData'), 'config.json'));
+
+    // If the local config has a homeserver defined, don't use the homeserver from the build
+    // config. This is to avoid a problem where Riot thinks there are multiple homeservers
+    // defined, and panics as a result.
+    const homeserverProps = ['default_is_url', 'default_hs_url', 'default_server_name', 'default_server_config'];
+    if (Object.keys(localConfig).find(k => homeserverProps.includes(k))) {
+        // Rip out all the homeserver options from the vector config
+        vectorConfig = Object.keys(vectorConfig)
+            .filter(k => !homeserverProps.includes(k))
+            .reduce((obj, key) => {obj[key] = vectorConfig[key]; return obj;}, {});
+    }
+
     vectorConfig = Object.assign(vectorConfig, localConfig);
 } catch (e) {
     // Could not load local config, this is expected in most cases.
@@ -393,7 +405,7 @@ app.on('ready', () => {
     });
     mainWindow.on('close', (e) => {
         // If we are not quitting and have a tray icon then minimize to tray
-        if (!global.appQuitting && tray.hasTray()) {
+        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
