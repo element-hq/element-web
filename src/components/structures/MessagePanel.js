@@ -414,6 +414,11 @@ export default class MessagePanel extends React.Component {
                     readMarkerInSummary = true;
                 }
 
+                // If this m.room.create event should be shown (room upgrade) then show it before the summary
+                if (this._shouldShowEvent(mxEv)) {
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, false));
+                }
+
                 const summarisedEvents = []; // Don't add m.room.create here as we don't want it inside the summary
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
