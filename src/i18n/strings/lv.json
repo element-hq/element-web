@@ -1144,5 +1144,8 @@
     "You do not have permission to start a conference call in this room": "Šajā istabā nav atļaujas sākt konferences zvanu",
     "Replying With Files": "Atbildot ar failiem",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Šobrīd nav iespējams atbildēt ar failu. Vai vēlaties augšupielādēt šo failu, neatbildot?",
-    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts"
+    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts",
+    "Add Email Address": "Pievienot e-pasta adresi",
+    "Add Phone Number": "Pievienot tālruņa numuru",
+    "Call failed due to misconfigured server": "Zvans neizdevās nekorekti nokonfigurēta servera dēļ"
 }
