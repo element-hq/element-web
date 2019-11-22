@@ -41,14 +41,18 @@ export class ThemeWatcher {
     start() {
         this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onChange);
         this._systemThemeWatchRef = SettingsStore.watchSetting("use_system_theme", null, this._onChange);
-        this._preferDark.addEventListener('change', this._onChange);
-        this._preferLight.addEventListener('change', this._onChange);
+        if (this._preferDark.addEventListener) {
+            this._preferDark.addEventListener('change', this._onChange);
+            this._preferLight.addEventListener('change', this._onChange);
+        }
         this._dispatcherRef = dis.register(this._onAction);
     }
 
     stop() {
-        this._preferDark.removeEventListener('change', this._onChange);
-        this._preferLight.removeEventListener('change', this._onChange);
+        if (this._preferDark.addEventListener) {
+            this._preferDark.removeEventListener('change', this._onChange);
+            this._preferLight.removeEventListener('change', this._onChange);
+        }
         SettingsStore.unwatchSetting(this._systemThemeWatchRef);
         SettingsStore.unwatchSetting(this._themeWatchRef);
         dis.unregister(this._dispatcherRef);
