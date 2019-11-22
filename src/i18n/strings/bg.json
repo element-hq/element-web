@@ -2260,5 +2260,7 @@
     "You cancelled": "Отказахте потвърждаването",
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
-    "You sent a verification request": "Изпратихте заявка за потвърждение"
+    "You sent a verification request": "Изпратихте заявка за потвърждение",
+    "Custom (%(level)s)": "Собствен (%(level)s)",
+    "Try out new ways to ignore people (experimental)": "Опитайте нови начини да игнорирате хора (експериментално)"
 }
