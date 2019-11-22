@@ -38,7 +38,7 @@ const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType()
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 export default class MessagePanel extends React.Component {
-    propTypes = {
+    static propTypes = {
         // true to give the component a 'display: none' style.
         hidden: PropTypes.bool,
 

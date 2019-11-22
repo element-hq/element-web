@@ -221,6 +221,7 @@ hr.mx_RoomView_myReadMarker {
     position: relative;
     top: -1px;
     z-index: 1;
+    transition: width 1s easeInSine;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
