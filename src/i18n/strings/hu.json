@@ -2358,5 +2358,9 @@
     "Integrations are disabled": "Az integrációk le vannak tiltva",
     "Enable 'Manage Integrations' in Settings to do this.": "Ehhez engedélyezd az „Integrációk Kezelésé”-t a Beállításokban.",
     "Integrations not allowed": "Az integrációk nem engedélyezettek",
-    "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "A Riotod nem használhat ehhez Integrációs Menedzsert. Kérlek vedd fel a kapcsolatot az adminisztrátorral."
+    "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "A Riotod nem használhat ehhez Integrációs Menedzsert. Kérlek vedd fel a kapcsolatot az adminisztrátorral.",
+    "Decline (%(counter)s)": "Elutasítás (%(counter)s)",
+    "Manage integrations": "Integrációk kezelése",
+    "Verification Request": "Ellenőrzési kérés",
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
 }
