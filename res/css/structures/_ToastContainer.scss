@@ -87,10 +87,6 @@ limitations under the License.
 
         .mx_Toast_buttons {
             display: flex;
-
-            > :not(:last-child) {
-                margin-right: 8px;
-            }
         }
 
         .mx_Toast_description {

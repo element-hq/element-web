@@ -18,6 +18,11 @@ limitations under the License.
     line-height: 16px;
     padding: 5px 15px;
     font-size: 12px;
+    height: min-content;
+
+    &:not(:last-child) {
+        margin-right: 8px;
+    }
 
     &.mx_AccessibleButton_kind_primary {
         color: $accent-color;
