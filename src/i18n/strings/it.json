@@ -2315,5 +2315,11 @@
     "Reload": "Ricarica",
     "Take picture": "Scatta foto",
     "Remove for everyone": "Rimuovi per tutti",
-    "Remove for me": "Rimuovi per me"
+    "Remove for me": "Rimuovi per me",
+    "Trust": "Fidati",
+    "Decline (%(counter)s)": "Rifiuta (%(counter)s)",
+    "Manage integrations": "Gestisci integrazioni",
+    "Ignored/Blocked": "Ignorati/Bloccati",
+    "Verification Request": "Richiesta verifica",
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
 }
