@@ -38,7 +38,7 @@
     "Co-ordination for Riot translators": "Coordenação para tradutores do Riot",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "A sua configuração do RIOT contém JSON inválido. Por favor corriga o erro e recarregue a página.",
     "The message from the parser is: %(message)s": "A mensagem do analisador é: %(message)s",
-    "Invalid JSON": "JSON inválido.",
+    "Invalid JSON": "JSON inválido",
     "Your Riot is misconfigured": "A sua configuração do RIOT está incorrecta.",
     "Unexpected error preparing the app. See console for details.": "Erro inesperado na preparação da aplicação. Veja a consola para mais detalhes.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuração inválida: só pode especificar uma das default_server_config, default_server_name,\nor default_hs_url.",
