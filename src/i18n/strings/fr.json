@@ -2370,5 +2370,9 @@
     "Reload": "Recharger",
     "Take picture": "Prendre une photo",
     "Remove for everyone": "Supprimer pour tout le monde",
-    "Remove for me": "Supprimer pour moi"
+    "Remove for me": "Supprimer pour moi",
+    "Decline (%(counter)s)": "Refuser (%(counter)s)",
+    "Manage integrations": "Gérer les intégrations",
+    "Verification Request": "Demande de vérification",
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
 }
