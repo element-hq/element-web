@@ -627,6 +627,22 @@ export default createReactClass({
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
                 break;
+            case 'view_last_screen':
+                // This function does what we want, despite the name. The idea is that it shows
+                // the last room we were looking at or some reasonable default/guess. We don't
+                // have to worry about email invites or similar being re-triggered because the
+                // function will have cleared that state and not execute that path.
+                this._showScreenAfterLogin();
+                break;
+            case 'toggle_my_groups':
+                // We just dispatch the page change rather than have to worry about
+                // what the logic is for each of these branches.
+                if (this.state.page_type === PageTypes.MyGroups) {
+                    dis.dispatch({action: 'view_last_screen'});
+                } else {
+                    dis.dispatch({action: 'view_my_groups'});
+                }
+                break;
             case 'notifier_enabled': {
                     this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
                 }
