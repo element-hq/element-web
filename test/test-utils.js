@@ -57,4 +57,6 @@ export function deleteIndexedDB(dbName) {
     });
 }
 
-export const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
+export function sleep(ms) {
+    return new Promise((resolve) => { setTimeout(resolve, ms); });
+}
