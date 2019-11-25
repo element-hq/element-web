@@ -45,7 +45,7 @@ function selectText(target) {
     selection.addRange(range);
 }
 
-/**
+/*
  * Walks the user through the process of creating an e2e key backup
  * on the server.
  */
