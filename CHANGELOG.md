@@ -1,3 +1,116 @@
+Changes in [1.7.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.3) (2019-11-25)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.3-rc.2...v1.7.3)
+
+ * No changes since rc.2
+
+Changes in [1.7.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.3-rc.2) (2019-11-22)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.3-rc.1...v1.7.3-rc.2)
+
+ * Fix double date separator for room upgrade tiles
+   [\#3663](https://github.com/matrix-org/matrix-react-sdk/pull/3663)
+ * Show m.room.create event before the ELS on room upgrade
+   [\#3660](https://github.com/matrix-org/matrix-react-sdk/pull/3660)
+ * Make addEventListener conditional
+   [\#3659](https://github.com/matrix-org/matrix-react-sdk/pull/3659)
+ * Fix e2e icons
+   [\#3658](https://github.com/matrix-org/matrix-react-sdk/pull/3658)
+
+Changes in [1.7.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.3-rc.1) (2019-11-20)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.2...v1.7.3-rc.1)
+
+ * Fix positioning, size, and colour of the composer e2e icon
+   [\#3641](https://github.com/matrix-org/matrix-react-sdk/pull/3641)
+ * upgrade nunito from 3.500 to 3.504
+   [\#3639](https://github.com/matrix-org/matrix-react-sdk/pull/3639)
+ * Wire up the widget permission prompt to the cross-platform setting
+   [\#3630](https://github.com/matrix-org/matrix-react-sdk/pull/3630)
+ * Get theme automatically from system setting
+   [\#3637](https://github.com/matrix-org/matrix-react-sdk/pull/3637)
+ * Update code style for our 90 char life
+   [\#3636](https://github.com/matrix-org/matrix-react-sdk/pull/3636)
+ * use general warning icon instead of e2e one for room status
+   [\#3633](https://github.com/matrix-org/matrix-react-sdk/pull/3633)
+ * Add support for platform specific event indexing and search
+   [\#3550](https://github.com/matrix-org/matrix-react-sdk/pull/3550)
+ * Update from Weblate
+   [\#3635](https://github.com/matrix-org/matrix-react-sdk/pull/3635)
+ * Use a settings watcher to set the theme
+   [\#3634](https://github.com/matrix-org/matrix-react-sdk/pull/3634)
+ * Merge the `feature_user_info_panel` flag into `feature_dm_verification`
+   [\#3632](https://github.com/matrix-org/matrix-react-sdk/pull/3632)
+ * Fix some styling regressions in member panel
+   [\#3631](https://github.com/matrix-org/matrix-react-sdk/pull/3631)
+ * Add a bit more safety around breadcrumbs
+   [\#3629](https://github.com/matrix-org/matrix-react-sdk/pull/3629)
+ * Ensure widgets always have a sender associated with them
+   [\#3628](https://github.com/matrix-org/matrix-react-sdk/pull/3628)
+ * re-add missing case of codepath
+   [\#3627](https://github.com/matrix-org/matrix-react-sdk/pull/3627)
+ * Implement the bulk of the new widget permission prompt design
+   [\#3622](https://github.com/matrix-org/matrix-react-sdk/pull/3622)
+ * Relax identity server discovery error handling
+   [\#3588](https://github.com/matrix-org/matrix-react-sdk/pull/3588)
+ * Add cross-signing feature flag
+   [\#3626](https://github.com/matrix-org/matrix-react-sdk/pull/3626)
+ * Attempt number two at ripping out Bluebird from rageshake.js
+   [\#3624](https://github.com/matrix-org/matrix-react-sdk/pull/3624)
+ * Update from Weblate
+   [\#3625](https://github.com/matrix-org/matrix-react-sdk/pull/3625)
+ * Remove Bluebird: phase 2.1
+   [\#3618](https://github.com/matrix-org/matrix-react-sdk/pull/3618)
+ * Add better error handling to Synapse user deactivation
+   [\#3619](https://github.com/matrix-org/matrix-react-sdk/pull/3619)
+ * New design for member panel
+   [\#3620](https://github.com/matrix-org/matrix-react-sdk/pull/3620)
+ * Show server details on login for unreachable homeserver
+   [\#3617](https://github.com/matrix-org/matrix-react-sdk/pull/3617)
+ * Add a function to get the "base" theme for a theme
+   [\#3615](https://github.com/matrix-org/matrix-react-sdk/pull/3615)
+ * Remove Bluebird: phase 2
+   [\#3616](https://github.com/matrix-org/matrix-react-sdk/pull/3616)
+ * Remove Bluebird: phase 1
+   [\#3612](https://github.com/matrix-org/matrix-react-sdk/pull/3612)
+ * Move notification count to in front of the room name in the page title
+   [\#3613](https://github.com/matrix-org/matrix-react-sdk/pull/3613)
+ * Add some logging/recovery for lost rooms
+   [\#3614](https://github.com/matrix-org/matrix-react-sdk/pull/3614)
+ * Add Mjolnir ban list support
+   [\#3585](https://github.com/matrix-org/matrix-react-sdk/pull/3585)
+ * Improve room switching performance with alias cache
+   [\#3610](https://github.com/matrix-org/matrix-react-sdk/pull/3610)
+ * Fix draw order when hovering composer format buttons
+   [\#3609](https://github.com/matrix-org/matrix-react-sdk/pull/3609)
+ * Use a ternary operator instead of relying on AND semantics in
+   EditHistoryDialog
+   [\#3606](https://github.com/matrix-org/matrix-react-sdk/pull/3606)
+ * Update from Weblate
+   [\#3608](https://github.com/matrix-org/matrix-react-sdk/pull/3608)
+ * Fix HTML fallback in replies
+   [\#3607](https://github.com/matrix-org/matrix-react-sdk/pull/3607)
+ * Fix rounded corners for the formatting toolbar
+   [\#3605](https://github.com/matrix-org/matrix-react-sdk/pull/3605)
+ * Check for a message type before assuming it is a room message
+   [\#3604](https://github.com/matrix-org/matrix-react-sdk/pull/3604)
+ * Remove lint comments about no-descending-specificity
+   [\#3603](https://github.com/matrix-org/matrix-react-sdk/pull/3603)
+ * Show verification requests in the timeline
+   [\#3601](https://github.com/matrix-org/matrix-react-sdk/pull/3601)
+ * Match identity server registration to the IS r0.3.0 spec
+   [\#3602](https://github.com/matrix-org/matrix-react-sdk/pull/3602)
+ * Restore thumbs after variation selector removal
+   [\#3600](https://github.com/matrix-org/matrix-react-sdk/pull/3600)
+ * Fix breadcrumbs so the bar is a toolbar and the buttons are buttons.
+   [\#3599](https://github.com/matrix-org/matrix-react-sdk/pull/3599)
+ * Now that part of spacing is padding, make it smaller when collapsed
+   [\#3597](https://github.com/matrix-org/matrix-react-sdk/pull/3597)
+ * Remove variation selectors from quick reactions
+   [\#3598](https://github.com/matrix-org/matrix-react-sdk/pull/3598)
+ * Fix linkify imports
+   [\#3595](https://github.com/matrix-org/matrix-react-sdk/pull/3595)
+
 Changes in [1.7.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.2) (2019-11-06)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.1...v1.7.2)
