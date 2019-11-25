@@ -20,6 +20,7 @@ released version of Riot:
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
+1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Riot!
@@ -191,6 +192,18 @@ Labs Features
 
 Some features of Riot may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
+
+Caching requirements
+====================
+
+Riot requires the following URLs not to be cached, when/if you are serving Riot from your own webserver:
+```
+/config.*.json
+/i18n
+/home
+/sites
+/index.html
+```
 
 Development
 ===========
