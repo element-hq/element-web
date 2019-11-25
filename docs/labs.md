@@ -72,5 +72,4 @@ Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
 improves the device verification experience by allowing you to verify a user
 instead of verifying each of their devices.
 
-This feature is still in development and will be landing in several chunks in
-the coming weeks.
+This feature is still in development and will be landing in several chunks.
