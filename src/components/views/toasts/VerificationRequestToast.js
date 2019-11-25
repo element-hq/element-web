@@ -108,7 +108,7 @@ export default class VerificationRequestToast extends React.PureComponent {
         }
         return (<div>
             <div className="mx_Toast_description">{nameLabel}</div>
-            <div className="mx_Toast_buttons">
+            <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Decline (%(counter)s)", {counter: this.state.counter})} kind="danger" onClick={this.cancel} />
                 <FormButton label={_t("Accept")} onClick={this.accept} />
             </div>

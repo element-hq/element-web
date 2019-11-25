@@ -74,7 +74,7 @@ export default class ToastContainer extends React.Component {
         });
 
         return (
-            <div className={containerClasses}>
+            <div className={containerClasses} role="alert" aria-live="polite">
                 <div className={toastClasses}>
                     <h2>{title}{countIndicator}</h2>
                     <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
