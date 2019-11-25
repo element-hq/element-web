@@ -21,7 +21,6 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import Promise from 'bluebird';
 
 import url from 'url';
 import UAParser from 'ua-parser-js';

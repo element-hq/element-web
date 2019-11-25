@@ -1,7 +1,5 @@
 "use strict";
 
-import Promise from 'bluebird';
-
 /**
  * Perform common actions before each test case, e.g. printing the test case
  * name to stdout.
@@ -57,4 +55,8 @@ export function deleteIndexedDB(dbName) {
         console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
         throw e;
     });
+}
+
+export function sleep(ms) {
+    return new Promise((resolve) => { setTimeout(resolve, ms); });
 }

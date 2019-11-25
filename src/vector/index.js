@@ -40,7 +40,6 @@ import sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
 import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
-import Promise from 'bluebird';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
@@ -64,10 +63,6 @@ import Olm from 'olm';
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
 let lastLocationHashSet = null;
-
-// Disable warnings for now: we use deprecated bluebird functions
-// and need to migrate, but they spam the console with warnings.
-Promise.config({warnings: false});
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
