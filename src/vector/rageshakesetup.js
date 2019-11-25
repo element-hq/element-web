@@ -50,6 +50,10 @@ initRageshake();
 
 global.mxSendRageshake = function(text, withLogs) {
     if (withLogs === undefined) withLogs = true;
+    if (!text || !text.trim()) {
+        console.error("Cannot send a rageshake without a message - please tell us what went wrong");
+        return;
+    }
     require(['matrix-react-sdk/lib/rageshake/submit-rageshake'], (s) => {
         s(SdkConfig.get().bug_report_endpoint_url, {
             userText: text,

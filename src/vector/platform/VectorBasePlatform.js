@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ limitations under the License.
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
 
@@ -39,20 +41,35 @@ export default class VectorBasePlatform extends BasePlatform {
     constructor() {
         super();
 
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animation every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this.favicon = new Favico({animation: 'none'});
         this.showUpdateCheck = false;
-        this._updateFavicon();
-
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
+    async getConfig(): Promise<{}> {
+        return getVectorConfig();
+    }
+
     getHumanReadableName(): string {
         return 'Vector Base Platform'; // no translation required: only used for analytics
+    }
+
+    /**
+     * Delay creating the `Favico` instance until first use (on the first notification) as
+     * it uses canvas, which can trigger a permission prompt in Firefox's resist
+     * fingerprinting mode.
+     * See https://github.com/vector-im/riot-web/issues/9605.
+     */
+    get favicon() {
+        if (this._favicon) {
+            return this._favicon;
+        }
+        // The 'animations' are really low framerate and look terrible.
+        // Also it re-starts the animation every time you set the badge,
+        // and we set the state each time, even if the value hasn't changed,
+        // so we'd need to fix that if enabling the animation.
+        this._favicon = new Favico({ animation: 'none' });
+        return this._favicon;
     }
 
     _updateFavicon() {
@@ -68,9 +85,29 @@ export default class VectorBasePlatform extends BasePlatform {
                 bgColor = "#f00";
             }
 
-            this.favicon.badge(notif, {
-                bgColor: bgColor,
-            });
+            const doUpdate = () => {
+                this.favicon.badge(notif, {
+                    bgColor: bgColor,
+                });
+            };
+
+            doUpdate();
+
+            // HACK: Workaround for Chrome 78+ and dependency incompatibility.
+            // The library we use doesn't appear to work in Chrome 78, likely due to their
+            // changes surrounding tab behaviour. Tabs went through a bit of a redesign and
+            // restructuring in Chrome 78, so it's not terribly surprising that the library
+            // doesn't work correctly. The library we use hasn't been updated in years and
+            // does not look easy to fix/fork ourselves - we might as well write our own that
+            // doesn't include animation/webcam/etc support. However, that's a bit difficult
+            // so for now we'll just trigger the update twice.
+            //
+            // Note that trying to reproduce the problem in isolation doesn't seem to work:
+            // see https://gist.github.com/turt2live/5ab87919918adbfd7cfb8f1ad10f2409 for
+            // an example (you'll need your own web server to host that).
+            if (window.chrome) {
+                doUpdate();
+            }
         } catch (e) {
             console.warn(`Failed to set badge count: ${e.message}`);
         }
@@ -86,19 +123,6 @@ export default class VectorBasePlatform extends BasePlatform {
         if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
-    }
-
-    supportsAutoLaunch() {
-        return false;
-    }
-
-    // XXX: Surely this should be a setting like any other?
-    async getAutoLaunchEnabled() {
-        return false;
-    }
-
-    async setAutoLaunchEnabled(enabled) {
-        throw new Error("Unimplemented");
     }
 
     /**

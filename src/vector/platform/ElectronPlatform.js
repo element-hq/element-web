@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -99,6 +100,20 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+
+        this._tryPersistStorage();
+    }
+
+    async _tryPersistStorage() {
+        if (navigator.storage && navigator.storage.persist) {
+            const granted = await navigator.storage.persist();
+            const persisted = await navigator.storage.persisted();
+            console.log("Storage persist request granted: " + granted + " persisted: " + persisted);
+        }
+    }
+
+    async getConfig(): Promise<{}> {
+        return this._ipcCall('getConfig');
     }
 
     async onUpdateDownloaded(ev, updateInfo) {
@@ -141,14 +156,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
 
         // Notifications in Electron use the HTML5 notification API
-        const notification = new global.Notification(
-            title,
-            {
-                body: msg,
-                icon: avatarUrl,
-                silent: true, // we play our own sounds
-            },
-        );
+        const notifBody = {
+            body: msg,
+            silent: true, // we play our own sounds
+        };
+        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        const notification = new global.Notification(title, notifBody);
 
         notification.onclick = () => {
             dis.dispatch({
@@ -171,19 +184,45 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAppVersion(): Promise<string> {
-        return await this._ipcCall('getAppVersion');
+        return this._ipcCall('getAppVersion');
     }
 
-    supportsAutoLaunch() {
+    supportsAutoLaunch(): boolean {
         return true;
     }
 
-    async getAutoLaunchEnabled() {
-        return await this._ipcCall('getAutoLaunchEnabled');
+    async getAutoLaunchEnabled(): boolean {
+        return this._ipcCall('getAutoLaunchEnabled');
     }
 
-    async setAutoLaunchEnabled(enabled) {
-        return await this._ipcCall('setAutoLaunchEnabled', enabled);
+    async setAutoLaunchEnabled(enabled: boolean): void {
+        return this._ipcCall('setAutoLaunchEnabled', enabled);
+    }
+
+    supportsAutoHideMenuBar(): boolean {
+        // This is irelevant on Mac as Menu bars don't live in the app window
+        return !navigator.platform.toUpperCase().includes('MAC');
+    }
+
+    async getAutoHideMenuBarEnabled(): boolean {
+        return this._ipcCall('getAutoHideMenuBarEnabled');
+    }
+
+    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+        return this._ipcCall('setAutoHideMenuBarEnabled', enabled);
+    }
+
+    supportsMinimizeToTray(): boolean {
+        // Things other than Mac support tray icons
+        return !navigator.platform.toUpperCase().includes('MAC');
+    }
+
+    async getMinimizeToTrayEnabled(): boolean {
+        return this._ipcCall('getMinimizeToTrayEnabled');
+    }
+
+    async setMinimizeToTrayEnabled(enabled: boolean): void {
+        return this._ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
     async canSelfUpdate(): boolean {

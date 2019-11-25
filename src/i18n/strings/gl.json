@@ -35,5 +35,12 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Xa existen multitude de salas en Matrix ben ligadas a redes existentes (Slack, IRC, Gitter etc) ou ben independentes. Busque no directorio!",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; sala de conversas matrix-android-sdk",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Pode utilizar as opcións persoais de servidor para conectarse a outros servidores Matrix indicando o enderezo URL dese servidor.</br>Isto permítelle utilizar Riot cunha conta Matrix existente en outro servidor.<br/><br/>Tamén pode empregar un servidor personalizado de identidade mais nese caso nin se poderán convidar a outros usuarios empregando os correo electrónicos nin tampouco eles o poderán convidar a vostede por correo.",
-    "Co-ordination for Riot translators": "Coordinación para tradutora/es de Riot"
+    "Co-ordination for Riot translators": "Coordinación para tradutora/es de Riot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Podes usar as opcións de servidor personalizado para iniciar sesión en outros servidores Matrix  especificando unha dirección diferente de servidor doméstico. Con esto podes usar Riot cunha conta Matrix existente noutro servidor doméstico.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Tamén podes fixar un servidor de identidade, pero non poderás invitar a usuarios polo enderezo de correo, e tampouco que te inviten.",
+    "Sign In": "Entrar",
+    "Create Account": "Crear conta",
+    "Need help?": "¿Precisas axuda?",
+    "Explore rooms": "Explorar salas",
+    "Room Directory": "Directorio de salas"
 }

@@ -5,7 +5,7 @@
     "Riot Desktop on %(platformName)s": "الواجهة المكتبية لرايوت على %(platformName)s",
     "Unknown device": "جهاز مجهول",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s عبر %(browserName)s على %(osName)s",
-    "You need to be using HTTPS to place a screen-sharing call.": "تحتاج الى استخدام الاتصال الآمن ( HTTPS) للسماح بمشاركة الشاشة",
+    "You need to be using HTTPS to place a screen-sharing call.": "تحتاج الى استخدام الاتصال الآمن (HTTPS) للسماح بمشاركة الشاشة.",
     "Co-ordination for Riot translators": "التنسيق لمترجمين Riot",
     "powered by Matrix": "مشغل بواسطة Matrix",
     "Welcome to Riot.im": "مرحبا بك في Riot.im",
@@ -28,5 +28,10 @@
     "Running Matrix services": "تشغيل خدمات Matrix",
     "Community-run support for Synapse": "الدعم المجتمعي لـ Synapse",
     "Admin support for Dendrite": "الدعم الاداري لـDendrite",
-    "Announcements about Synapse releases": "إعلانات حول إصدارات Synaps"
+    "Announcements about Synapse releases": "إعلانات حول إصدارات Synaps",
+    "Create Account": "انشاء حساب",
+    "Need help?": "بحاجة إلى مساعدة؟",
+    "Explore rooms": "استكشف غرف المحادثات",
+    "Room Directory": "دليل غرف المحادثات",
+    "Sign In": "التسجيل"
 }

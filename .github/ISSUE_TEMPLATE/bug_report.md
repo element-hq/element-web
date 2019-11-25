@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
@@ -31,9 +31,10 @@ Describe here the problem that you are experiencing, or the feature you are requ
 
 Describe how what happens differs from what you expected.
 
-Log: sent/not sent?    <!-- You can send us the app's logs via the 'Report bug'
-link on the 'Settings' page. Very important for hard-to-reproduce bugs. Please
-file a bug here too! -->
+<!-- Please send us logs for your bug report. They're very important for bugs
+which are hard to reproduce. To do this, create this issue then go to your
+account settings and click 'Submit Debug Logs' from the Help & About tab -->
+Logs being sent: yes/no
 
 <!-- Include screenshots if possible: you can drag and drop images below. -->
 
@@ -52,4 +53,4 @@ For the web app:
 For the desktop app:
 
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **Version**: 0.x.y <!-- check the user settings panel if unsure -->
+- **Version**: 1.x.y <!-- check the user settings panel if unsure -->

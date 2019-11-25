@@ -9,7 +9,7 @@
     "Dismiss": "Mos e merr parasysh",
     "powered by Matrix": "bazuar në Matrix",
     "Welcome to Riot.im": "Mirë se vini te Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Fjalosje &amp; bashkëpunim të decentralizuar, të fshehtëzuar, bazuar në [matrix]",
     "Search the room directory": "Kërkoni te drejtoria e dhomave",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Ka tashmë plot dhoma në Matrix, të lidhura me rrjete ekzistues (Slack, IRC, Gitter, etj) ose të pavarur. Hidhini një sy listës!",
     "Chat with Riot Bot": "Fjalosuni me Robotin Riot",
@@ -42,5 +42,13 @@
     "Create Account": "Krijoni Llogari",
     "Need help?": "Ju duhet ndihmë?",
     "Explore rooms": "Eksploroni dhoma",
-    "Room Directory": "Listë Dhomash"
+    "Room Directory": "Listë Dhomash",
+    "Unexpected error preparing the app. See console for details.": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Formësim i pavlefshëm: mund të caktohet vetëm një prej default_server_config, default_server_name, ose default_hs_url.",
+    "Invalid configuration: no default server specified.": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
+    "This installation of Riot seems to have an invalid server configuration. If you are the administrator, please correct the error below": "Ky instalim i Riot-it duket se ka një formësim të pavlefshëm për shërbyesin. Nëse jeni një përgjegjës, ju lutemi, ndreqni gabimin më poshtë",
+    "Your Riot is misconfigured": "Riot-i juaj është i keqformësuar",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Formësimi juaj i Riot-it përmban JSON. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
+    "The message from the parser is: %(message)s": "Mesazhi prej procesit është: %(message)s",
+    "Invalid JSON": "JSON i pavlefshëm"
 }

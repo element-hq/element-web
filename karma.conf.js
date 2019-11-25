@@ -9,7 +9,7 @@ var webpack_config = require('./webpack.config');
  * to build everything; however it's the easiest way to load our dependencies
  * from node_modules.
  *
- * If you run karma in multi-run mode (with `npm run test-multi`), it will watch
+ * If you run karma in multi-run mode (with `yarn test-multi`), it will watch
  * the tests for changes, and webpack will rebuild using a cache. This is much quicker
  * than a clean rebuild.
  */
@@ -100,7 +100,7 @@ module.exports = function (config) {
 
         // test results reporter to use
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['logcapture', 'spec', 'junit', 'summary'],
+        reporters: ['logcapture', 'spec', 'summary'],
 
         specReporter: {
             suppressErrorSummary: false, // do print error summary
@@ -138,10 +138,10 @@ module.exports = function (config) {
         ],
 
         customLaunchers: {
-            'ChromeHeadless': {
+            'VectorChromeHeadless': {
                 base: 'Chrome',
                 flags: [
-                    // '--no-sandbox',
+                    '--no-sandbox',
                     // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
                     '--headless',
                     '--disable-gpu',
@@ -158,10 +158,6 @@ module.exports = function (config) {
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity,
-
-        junitReporter: {
-            outputDir: 'karma-reports',
-        },
 
         webpack: webpack_config,
 

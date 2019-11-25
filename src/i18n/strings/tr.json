@@ -2,7 +2,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s işletim sisteminde %(browserName)s ile %(appName)s",
     "Custom Server Options": "Özelleştirilebilir Sunucu Seçenekleri",
     "Dismiss": "Kapat",
-    "powered by Matrix": "Matrix tarafından desteklenmektedir",
+    "powered by Matrix": "Matrix'den besleniyor",
     "Riot Desktop on %(platformName)s": "%(platformName)s platformunda Riot Masaüstü",
     "Riot is not supported on mobile web. Install the app?": "Riot mobil web'de desteklenmiyor . Uygulamayı yükle ?",
     "Unknown device": "Bilinmeyen aygıt",
@@ -35,5 +35,12 @@
     "Dev chat for the Dendrite dev team": "Dendrite geliştirici takımı için geliştirici sohbeti",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix'te var olan ağalara bağlı (Slack , IRC , Gitter vb.) birçok oda var. Dizini kontrol edin!",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Farklı bir ev sunucusu URL'sini belirterek diğer Matrix sunucularına oturum açmak için özel sunucu seçeneklerini kullanabilirsiniz.<br />Bu, Riot'u başka bir ev sunucusu üzerinde var olan Matrix hesabını kullanmanıza olanak sağlar. <br/><br/> Ayrıca özelleştirilebilir bir kimlik de ayarlayabilirsiniz, ama kullanıcılırı ve kendinizi e-posta adreslerinden davet edemeyeceksiniz.",
-    "Co-ordination for Riot translators": "Riot çeviricileri için iş güdüm (koordinasyon)"
+    "Co-ordination for Riot translators": "Riot çeviricileri için iş güdüm (koordinasyon)",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Özel sunucu seçenekleri kullanıp farklı bir anamakine URL'si belirleyerek diğer Matrix sunucularına giriş yapabilirsin. Bu Riot'u varolan bir Matrix hesabı ile farklı anamakine de kullanmanı sağlar.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ayrıca özel kimlik sunucusu da belirleyebilirsin, ancak kullanıcıları epostaları ile davet edemezsin ya da epostan ile davet edilemezsin.",
+    "Sign In": "Giriş yap",
+    "Create Account": "Kayıt Ol",
+    "Need help?": "Yardıma mı ihtiyacın var?",
+    "Explore rooms": "Odaları keşfet",
+    "Room Directory": "Oda Dizini"
 }

@@ -9,13 +9,13 @@ if (!moduleName) {
 
 const argString = process.argv.length > 3 ? process.argv.slice(3).join(" ") : "";
 if (!argString) {
-    console.error("Expected an npm argument string to use");
+    console.error("Expected an yarn argument string to use");
     process.exit(1);
 }
 
 const modulePath = path.dirname(require.resolve(`${moduleName}/package.json`));
 
-child_process.execSync("npm " + argString, {
+child_process.execSync("yarn " + argString, {
     env: process.env,
     cwd: modulePath,
     stdio: ['inherit', 'inherit', 'inherit'],

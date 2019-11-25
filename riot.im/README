@@ -1,0 +1,11 @@
+This directory contains the config files and deployment scripts for the official
+riot.im distribution of Riot Web at https://riot.im.
+
+You probably do not want to build with this config unless you're building the
+official riot.im distribution, but these files may be useful if you want to
+inspect the configuration used there.
+
+Riot Desktop uses a separate config (see electron_app/riot.im/config.json).
+
+Deployment scripts (such as app/deploy.py) are meant to be run on the web server
+hosting the Riot installation.
