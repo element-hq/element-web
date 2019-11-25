@@ -50,35 +50,34 @@ export default class ToastContainer extends React.Component {
 
     render() {
         const totalCount = this.state.toasts.length;
-        if (totalCount === 0) {
-            return null;
-        }
         const isStacked = totalCount > 1;
-        const topToast = this.state.toasts[0];
-        const {title, icon, key, component, props} = topToast;
+        let toast;
+        if (totalCount !== 0) {
+            const topToast = this.state.toasts[0];
+            const {title, icon, key, component, props} = topToast;
+            const toastClasses = classNames("mx_Toast_toast", {
+                "mx_Toast_hasIcon": icon,
+                [`mx_Toast_icon_${icon}`]: icon,
+            });
+            const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
+
+            const toastProps = Object.assign({}, props, {
+                dismiss: this.dismissTopToast,
+                key,
+            });
+            toast = (<div className={toastClasses}>
+                <h2>{title}{countIndicator}</h2>
+                <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
+            </div>);
+        }
 
         const containerClasses = classNames("mx_ToastContainer", {
             "mx_ToastContainer_stacked": isStacked,
         });
 
-        const toastClasses = classNames("mx_Toast_toast", {
-            "mx_Toast_hasIcon": icon,
-            [`mx_Toast_icon_${icon}`]: icon,
-        });
-
-        const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
-
-        const toastProps = Object.assign({}, props, {
-            dismiss: this.dismissTopToast,
-            key,
-        });
-
         return (
-            <div className={containerClasses} role="alert" aria-live="polite">
-                <div className={toastClasses}>
-                    <h2>{title}{countIndicator}</h2>
-                    <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
-                </div>
+            <div className={containerClasses} role="alert">
+                {toast}
             </div>
         );
     }
