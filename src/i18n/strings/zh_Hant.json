@@ -2363,5 +2363,9 @@
     "Reload": "重新載入",
     "Take picture": "拍照",
     "Remove for everyone": "對所有人移除",
-    "Remove for me": "對我移除"
+    "Remove for me": "對我移除",
+    "Decline (%(counter)s)": "拒絕 (%(counter)s)",
+    "Manage integrations": "管理整合",
+    "Verification Request": "驗證請求",
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
 }
