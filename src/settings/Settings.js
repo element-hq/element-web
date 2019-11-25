@@ -143,7 +143,7 @@ export const SETTINGS = {
     },
     "feature_cross_signing": {
         isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-device"),
+        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
