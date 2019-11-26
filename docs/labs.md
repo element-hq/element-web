@@ -50,7 +50,7 @@ That's it. Now should see your new counter under the header.
 
 Exposes a way to access all the integration managers known to Riot. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
-## Event indexing or E2EE search support using Seshat (`feature_event_indexing`)
+## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
 
 Adds support for search in E2E encrypted rooms. This enables an event indexer
 that downloads, stores, and indexes room messages for E2E encrypted rooms.
