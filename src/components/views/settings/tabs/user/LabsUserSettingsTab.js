@@ -53,8 +53,10 @@ export default class LabsUserSettingsTab extends React.Component {
                     {
                         _t('These are experimental features. For more information on what ' +
                             'these options do see <a>the documentation</a>.', {}, {
-                            'a': (sub) => <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
-                                             rel='noopener' target='_blank'>{sub}</a>,
+                            'a': (sub) => {
+                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                    rel='noopener' target='_blank'>{sub}</a>;
+                            },
                         })
                     }
                 </div>
