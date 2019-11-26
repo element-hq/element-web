@@ -69,6 +69,11 @@ class EventIndexPeg {
         return this.index;
     }
 
+    start() {
+        if (this.index === null) return;
+        this.index.startCrawler();
+    }
+
     stop() {
         if (this.index === null) return;
         this.index.stopCrawler();
