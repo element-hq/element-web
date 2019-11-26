@@ -40,6 +40,16 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
 
+const fs = require('fs');
+const afs = fs.promises;
+
+let Seshat = null;
+
+try {
+    Seshat = require('matrix-seshat');
+} catch (e) {
+}
+
 if (argv["help"]) {
     console.log("Options:");
     console.log("  --profile-dir {path}: Path to where to store the profile.");
@@ -94,7 +104,10 @@ try {
     // Could not load local config, this is expected in most cases.
 }
 
+const eventStorePath = path.join(app.getPath('userData'), 'EventStore');
 const store = new Store({ name: "electron-config" });
+
+let eventIndex = null;
 
 let mainWindow = null;
 global.appQuitting = false;
@@ -225,6 +238,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'getConfig':
             ret = vectorConfig;
             break;
+
         default:
             mainWindow.webContents.send('ipcReply', {
                 id: payload.id,
@@ -234,6 +248,154 @@ ipcMain.on('ipcCall', async function(ev, payload) {
     }
 
     mainWindow.webContents.send('ipcReply', {
+        id: payload.id,
+        reply: ret,
+    });
+});
+
+ipcMain.on('seshat', async function(ev, payload) {
+    if (!mainWindow) return;
+
+    const sendError = (id, e) => {
+        const error = {
+            message: e.message
+        }
+
+        mainWindow.webContents.send('seshatReply', {
+            id:id,
+            error: error
+        });
+    }
+
+    const args = payload.args || [];
+    let ret;
+
+    switch (payload.name) {
+        case 'supportsEventIndexing':
+            if (Seshat === null) ret = false;
+            else ret = true;
+            break;
+
+        case 'initEventIndex':
+            if (eventIndex === null) {
+                try {
+                    await afs.mkdir(eventStorePath, {recursive: true});
+                    eventIndex = new Seshat(eventStorePath, {passphrase: "DEFAULT_PASSPHRASE"});
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'closeEventIndex':
+            eventIndex = null;
+            break;
+
+        case 'deleteEventIndex':
+            const deleteFolderRecursive = async(p) =>  {
+                for (let entry of await afs.readdir(p)) {
+                    const curPath = path.join(p, entry);
+                    await afs.unlink(curPath);
+                }
+            }
+
+            try {
+                await deleteFolderRecursive(eventStorePath);
+            } catch (e) {
+            }
+
+            break;
+
+        case 'isEventIndexEmpty':
+            if (eventIndex === null) ret = true;
+            else ret = await eventIndex.isEmpty();
+            break;
+
+        case 'addEventToIndex':
+            try {
+                eventIndex.addEvent(args[0], args[1]);
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'commitLiveEvents':
+            try {
+                ret = await eventIndex.commit();
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'searchEventIndex':
+            try {
+                ret = await eventIndex.search(args[0]);
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'addHistoricEvents':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addHistoricEvents(
+                        args[0], args[1], args[2]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'removeCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.removeCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'addCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'loadCheckpoints':
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadCheckpoints();
+                } catch (e) {
+                    ret = [];
+                }
+            }
+            break;
+
+        default:
+            mainWindow.webContents.send('seshatReply', {
+                id: payload.id,
+                error: "Unknown IPC Call: " + payload.name,
+            });
+            return;
+    }
+
+    mainWindow.webContents.send('seshatReply', {
         id: payload.id,
         reply: ret,
     });
