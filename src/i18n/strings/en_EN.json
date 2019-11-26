@@ -641,6 +641,7 @@
     "Access Token:": "Access Token:",
     "click to reveal": "click to reveal",
     "Labs": "Labs",
+    "These are experimental features. For more information on what these options do see <a>the documentation</a>.": "These are experimental features. For more information on what these options do see <a>the documentation</a>.",
     "Ignored/Blocked": "Ignored/Blocked",
     "Error adding ignored user/server": "Error adding ignored user/server",
     "Something went wrong. Please try again or view your console for hints.": "Something went wrong. Please try again or view your console for hints.",
