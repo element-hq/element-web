@@ -83,7 +83,8 @@ export class ThemeWatcher {
         // If the user has specifically enabled the system matching option (excluding default),
         // then use that over anything else. We pick the lowest possible level for the setting
         // to ensure the ordering otherwise works.
-        const systemThemeExplicit = SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme", null, false, true);
+        const systemThemeExplicit = SettingsStore.getValueAt(
+            SettingLevel.DEVICE, "use_system_theme", null, false, true);
         if (systemThemeExplicit) {
             if (this._preferDark.matches) return 'dark';
             if (this._preferLight.matches) return 'light';
@@ -92,7 +93,8 @@ export class ThemeWatcher {
         // If the user has specifically enabled the theme (without the system matching option being
         // enabled specifically and excluding the default), use that theme. We pick the lowest possible
         // level for the setting to ensure the ordering otherwise works.
-        const themeExplicit = SettingsStore.getValueAt(SettingLevel.DEVICE, "theme", null, false, true);
+        const themeExplicit = SettingsStore.getValueAt(
+            SettingLevel.DEVICE, "theme", null, false, true);
         if (themeExplicit) return themeExplicit;
 
         // If the user hasn't really made a preference in either direction, assume the defaults of the
