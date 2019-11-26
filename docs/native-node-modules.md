@@ -1,7 +1,8 @@
 # Native Node Modules
 
-Since v???, the electron version of Riot can make use of native node modules.
-These allow Riot to integrate with the desktop in ways that a browser cannot.
+For some features, the desktop version of Riot can make use of native Node
+modules. These allow Riot to integrate with the desktop in ways that a browser
+cannot.
 
 While handy, these modules must be compiled and are thus downloaded
 pre-compiled during build so that a single OS can compile Riot for all
