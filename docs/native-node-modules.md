@@ -26,9 +26,12 @@ these features if you'd like to try them out.
 Seshat is a native Node module that adds support for local event indexing and
 full text search in E2E encrypted rooms.
 
-Since Seshat is written in rust the rust compiler and cargo tool-chain need to be
-installed before installing Seshat itself. After installing the compiler Seshat
-support can be added using yarn inside the `electron_app/` directory:
+Since Seshat is written in Rust, the Rust compiler and related tools need to be
+installed before installing Seshat itself. To install Rust please consult the
+official Rust [documentation](https://www.rust-lang.org/tools/install).
+
+After installing the compiler, Seshat support can be added using yarn inside
+the `electron_app/` directory:
 
     yarn add matrix-seshat
 
