@@ -118,6 +118,13 @@ export default class BaseEventIndexManager {
     }
 
     /**
+     * Get the disk usage of the index
+     */
+    async indexSize(): Promise<number> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
      * Commit the previously queued up events to the index.
      *
      * @return {Promise} A promise that will resolve once the queued up events

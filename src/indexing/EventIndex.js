@@ -406,4 +406,9 @@ export default class EventIndex {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
     }
+
+    async indexSize() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        return indexManager.indexSize();
+    }
 }
