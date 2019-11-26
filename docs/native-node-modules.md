@@ -11,7 +11,9 @@ as is done for Riot releases, instead of trusting binaries hosted on npm,
 then please read on.
 
 Do note that compiling a module for a particular operating system
-(Linux/Mac/Windows) and will need to be done on that operating system.
+(Linux/macOS/Windows) and will need to be done on that operating system.
+Cross-compiling from a host OS for a different target OS may be possible, but
+we don't support this flow with Riot dependencies at this time.
 
 ## Adding Seshat support
 
