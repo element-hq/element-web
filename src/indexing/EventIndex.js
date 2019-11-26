@@ -16,6 +16,7 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
+import {sleep} from "../utils/promise";
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
@@ -180,12 +181,6 @@ export default class EventIndex {
     }
 
     async crawlerFunc() {
-        // TODO either put this in a better place or find a library provided
-        // method that does this.
-        const sleep = async (ms) => {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        };
-
         let cancelled = false;
 
         console.log("EventIndex: Started crawler function");
