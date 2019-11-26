@@ -74,10 +74,10 @@ export default class Stickerpicker extends React.Component {
                 this.forceUpdate();
                 return this.scalarClient;
             }).catch((e) => {
-                this._imError(_td("Failed to connect to integrations server"), e);
+                this._imError(_td("Failed to connect to integration manager"), e);
             });
         } else {
-            this._imError(_td("No integrations server is configured to manage stickers with"));
+            IntegrationManagers.sharedInstance().openNoManagerDialog();
         }
     }
 
@@ -287,12 +287,17 @@ export default class Stickerpicker extends React.Component {
         return stickersContent;
     }
 
-    /**
+    // Dev note: this isn't jsdoc because it's angry.
+    /*
      * Show the sticker picker overlay
      * If no stickerpacks have been added, show a link to the integration manager add sticker packs page.
-     * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            // Intercept this case and spawn a warning.
+            return IntegrationManagers.sharedInstance().showDisabledDialog();
+        }
+
         // XXX: Simplify by using a context menu that is positioned relative to the sticker picker button
 
         const buttonRect = e.target.getBoundingClientRect();
@@ -346,7 +351,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     /**
-     * Launch the integrations manager on the stickers integration page
+     * Launch the integration manager on the stickers integration page
      */
     _launchManageIntegrations() {
         // TODO: Open the right integration manager for the widget

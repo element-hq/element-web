@@ -112,7 +112,7 @@ module.exports = createReactClass({
             }
         });
 
-        httpPromise.done(function() {
+        httpPromise.then(function() {
             self.setState({
                 phase: self.Phases.Display,
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl),

@@ -25,7 +25,6 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
-import classNames from 'classnames';
 import E2EIcon from './E2EIcon';
 
 function ComposerAvatar(props) {
@@ -353,13 +352,9 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const wrapperClasses = classNames({
-            mx_MessageComposer_wrapper: true,
-            mx_MessageComposer_hasE2EIcon: !!this.props.e2eStatus,
-        });
         return (
             <div className="mx_MessageComposer">
-                <div className={wrapperClasses}>
+                <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>

@@ -20,7 +20,6 @@ import createReactClass from 'create-react-class';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -89,7 +88,7 @@ module.exports = createReactClass({
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
-            if (content.info.thumbnail_file) {
+            if (content.info && content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file,
                 ).then(function(blob) {
@@ -115,7 +114,7 @@ module.exports = createReactClass({
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
     },
 

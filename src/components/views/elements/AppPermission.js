@@ -30,6 +30,7 @@ export default class AppPermission extends React.Component {
         creatorUserId: PropTypes.string.isRequired,
         roomId: PropTypes.string.isRequired,
         onPermissionGranted: PropTypes.func.isRequired,
+        isRoomEncrypted: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -114,6 +115,8 @@ export default class AppPermission extends React.Component {
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
                 {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
 
+        const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
+
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_bolder mx_AppPermissionWarning_smallText'>
@@ -128,7 +131,7 @@ export default class AppPermission extends React.Component {
                     {warning}
                 </div>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
-                    {_t("This widget may use cookies.")}
+                    {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
                 </div>
                 <div className='mx_AppPermissionWarning_row'>
                     <AccessibleButton kind='primary_sm' onClick={this.props.onPermissionGranted}>

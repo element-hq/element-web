@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-
 // This module contains all the code needed to log the console, persist it to
 // disk and submit bug reports. Rationale is as follows:
 //  - Monkey-patching the console is preferable to having a log library because

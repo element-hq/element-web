@@ -1269,7 +1269,7 @@
     "Security & Privacy": "Bezpečnost & Soukromí",
     "Encryption": "Šifrování",
     "Once enabled, encryption cannot be disabled.": "Když se šifrování zapne, už nepůjde vypnout.",
-    "Encrypted": "Šifrování je zapnuté",
+    "Encrypted": "Šifrování",
     "General": "Obecné",
     "General failure": "Nějaká chyba",
     "This homeserver does not support login using email address.": "Tento homeserver neumožňuje přihlášní pomocí emailu.",

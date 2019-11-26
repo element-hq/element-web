@@ -17,7 +17,6 @@ limitations under the License.
 
 'use strict';
 
-import Promise from 'bluebird';
 import extend from './extend';
 import dis from './dispatcher';
 import MatrixClientPeg from './MatrixClientPeg';

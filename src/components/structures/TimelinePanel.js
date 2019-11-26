@@ -23,7 +23,6 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 
 const Matrix = require("matrix-js-sdk");
 const EventTimeline = Matrix.EventTimeline;
@@ -462,7 +461,7 @@ const TimelinePanel = createReactClass({
         // timeline window.
         //
         // see https://github.com/vector-im/vector-web/issues/1035
-        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).done(() => {
+        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).then(() => {
             if (this.unmounted) { return; }
 
             const { events, liveEvents } = this._getEvents();

@@ -43,7 +43,7 @@ module.exports = createReactClass({
         const cli = MatrixClientPeg.get();
         this.setState({busy: true});
         const self = this;
-        cli.getProfileInfo(cli.credentials.userId).done(function(result) {
+        cli.getProfileInfo(cli.credentials.userId).then(function(result) {
             self.setState({
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(result.avatar_url),
                 busy: false,

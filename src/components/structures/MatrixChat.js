@@ -17,8 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
@@ -62,10 +60,7 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
-
-// Disable warnings for now: we use deprecated bluebird functions
-// and need to migrate, but they spam the console with warnings.
-Promise.config({warnings: false});
+import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -545,7 +540,7 @@ export default createReactClass({
                             const Loader = sdk.getComponent("elements.Spinner");
                             const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                            MatrixClientPeg.get().leave(payload.room_id).done(() => {
+                            MatrixClientPeg.get().leave(payload.room_id).then(() => {
                                 modal.close();
                                 if (this.state.currentRoomId === payload.room_id) {
                                     dis.dispatch({action: 'view_next_room'});
@@ -863,7 +858,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.done(() => {
+        waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -980,7 +975,7 @@ export default createReactClass({
 
         const [shouldCreate, createOpts] = await modal.finished;
         if (shouldCreate) {
-            createRoom({createOpts}).done();
+            createRoom({createOpts});
         }
     },
 
@@ -1270,7 +1265,6 @@ export default createReactClass({
         this.firstSyncComplete = false;
         this.firstSyncPromise = defer();
         const cli = MatrixClientPeg.get();
-        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room
@@ -1469,12 +1463,35 @@ export default createReactClass({
             }
         });
 
-        cli.on("crypto.verification.start", (verifier) => {
-            Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                verifier,
-            });
-        });
+        if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            cli.on("crypto.verification.request", request => {
+                let requestObserver;
+                if (request.event.getRoomId()) {
+                    requestObserver = new KeyVerificationStateObserver(
+                        request.event, MatrixClientPeg.get());
+                }
 
+                if (!requestObserver || requestObserver.pending) {
+                    dis.dispatch({
+                        action: "show_toast",
+                        toast: {
+                            key: request.event.getId(),
+                            title: _t("Verification Request"),
+                            icon: "verification",
+                            props: {request, requestObserver},
+                            component: sdk.getComponent("toasts.VerificationRequestToast"),
+                        },
+                    });
+                }
+            });
+        } else {
+            cli.on("crypto.verification.start", (verifier) => {
+                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                    verifier,
+                });
+            });
+        }
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
         const colorScheme = SettingsStore.getValue("roomColor");
@@ -1745,7 +1762,7 @@ export default createReactClass({
             return;
         }
 
-        cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
+        cli.sendEvent(roomId, event.getType(), event.getContent()).then(() => {
             dis.dispatch({action: 'message_sent'});
         }, (err) => {
             dis.dispatch({action: 'message_send_failed'});

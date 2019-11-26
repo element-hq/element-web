@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";

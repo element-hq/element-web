@@ -21,12 +21,9 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
 
-export default class IntegrationsManager extends React.Component {
+export default class IntegrationManager extends React.Component {
     static propTypes = {
-        // false to display an error saying that there is no integrations manager configured
-        configured: PropTypes.bool.isRequired,
-
-        // false to display an error saying that we couldn't connect to the integrations manager
+        // false to display an error saying that we couldn't connect to the integration manager
         connected: PropTypes.bool.isRequired,
 
         // true to display a loading spinner
@@ -40,7 +37,6 @@ export default class IntegrationsManager extends React.Component {
     };
 
     static defaultProps = {
-        configured: true,
         connected: true,
         loading: false,
     };
@@ -70,20 +66,11 @@ export default class IntegrationsManager extends React.Component {
     };
 
     render() {
-        if (!this.props.configured) {
-            return (
-                <div className='mx_IntegrationsManager_error'>
-                    <h3>{_t("No integrations server configured")}</h3>
-                    <p>{_t("This Riot instance does not have an integrations server configured.")}</p>
-                </div>
-            );
-        }
-
         if (this.props.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (
-                <div className='mx_IntegrationsManager_loading'>
-                    <h3>{_t("Connecting to integrations server...")}</h3>
+                <div className='mx_IntegrationManager_loading'>
+                    <h3>{_t("Connecting to integration manager...")}</h3>
                     <Spinner />
                 </div>
             );
@@ -91,9 +78,9 @@ export default class IntegrationsManager extends React.Component {
 
         if (!this.props.connected) {
             return (
-                <div className='mx_IntegrationsManager_error'>
-                    <h3>{_t("Cannot connect to integrations server")}</h3>
-                    <p>{_t("The integrations server is offline or it cannot reach your homeserver.")}</p>
+                <div className='mx_IntegrationManager_error'>
+                    <h3>{_t("Cannot connect to integration manager")}</h3>
+                    <p>{_t("The integration manager is offline or it cannot reach your homeserver.")}</p>
                 </div>
             );
         }

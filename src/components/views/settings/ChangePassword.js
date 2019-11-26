@@ -25,7 +25,6 @@ const Modal = require("../../../Modal");
 const sdk = require("../../../index");
 
 import dis from "../../../dispatcher";
-import Promise from 'bluebird';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
@@ -174,7 +173,7 @@ module.exports = createReactClass({
                 newPassword: "",
                 newPasswordConfirm: "",
             });
-        }).done();
+        });
     },
 
     _optionallySetEmail: function() {

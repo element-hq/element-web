@@ -91,7 +91,7 @@ describe('MemberEventListSummary', function() {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
 
-        languageHandler.setLanguage('en').done(done);
+        languageHandler.setLanguage('en').then(done);
         languageHandler.setMissingEntryGenerator(function(key) {
             return key.split('|', 2)[1];
         });

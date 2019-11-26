@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
@@ -526,7 +525,7 @@ export function logout() {
             console.log("Failed to call logout API: token will not be invalidated");
             onLoggedOut();
         },
-    ).done();
+    );
 }
 
 export function softLogout() {

@@ -30,6 +30,18 @@ export default class KeyVerificationStateObserver {
         this._updateVerificationState();
     }
 
+    get concluded() {
+        return this.accepted || this.done || this.cancelled;
+    }
+
+    get pending() {
+        return !this.concluded;
+    }
+
+    setCallback(callback) {
+        this._updateCallback = callback;
+    }
+
     attach() {
         this._requestEvent.on("Event.relationsCreated", this._onRelationsCreated);
         for (const phaseName of SUB_EVENT_TYPES_OF_INTEREST) {
@@ -83,7 +95,7 @@ export default class KeyVerificationStateObserver {
 
     _onRelationsUpdated = (event) => {
         this._updateVerificationState();
-        this._updateCallback();
+        this._updateCallback && this._updateCallback();
     };
 
     _updateVerificationState() {

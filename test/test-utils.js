@@ -1,7 +1,6 @@
 "use strict";
 
 import sinon from 'sinon';
-import Promise from 'bluebird';
 import React from 'react';
 import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';

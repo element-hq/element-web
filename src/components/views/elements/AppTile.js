@@ -35,6 +35,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import {createMenu} from "../../structures/ContextualMenu";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -52,7 +53,7 @@ export default class AppTile extends React.Component {
         this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
         this._onDeleteClick = this._onDeleteClick.bind(this);
-        this._onCancelClick = this._onCancelClick.bind(this);
+        this._onRevokeClicked = this._onRevokeClicked.bind(this);
         this._onSnapshotClick = this._onSnapshotClick.bind(this);
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
         this._onMinimiseClick = this._onMinimiseClick.bind(this);
@@ -207,7 +208,7 @@ export default class AppTile extends React.Component {
         if (!this._scalarClient) {
             this._scalarClient = defaultManager.getScalarClient();
         }
-        this._scalarClient.getScalarToken().done((token) => {
+        this._scalarClient.getScalarToken().then((token) => {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this._addWurlParams(this.props.url));
@@ -271,7 +272,7 @@ export default class AppTile extends React.Component {
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     }
 
-    _onEditClick(e) {
+    _onEditClick() {
         console.log("Edit widget ID ", this.props.id);
         if (this.props.onEditClick) {
             this.props.onEditClick();
@@ -293,7 +294,7 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _onSnapshotClick(e) {
+    _onSnapshotClick() {
         console.warn("Requesting widget snapshot");
         ActiveWidgetStore.getWidgetMessaging(this.props.id).getScreenshot()
             .catch((err) => {
@@ -360,13 +361,9 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _onCancelClick() {
-        if (this.props.onDeleteClick) {
-            this.props.onDeleteClick();
-        } else {
-            console.info("Revoke widget permissions - %s", this.props.id);
-            this._revokeWidgetPermission();
-        }
+    _onRevokeClicked() {
+        console.info("Revoke widget permissions - %s", this.props.id);
+        this._revokeWidgetPermission();
     }
 
     /**
@@ -544,17 +541,58 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _onPopoutWidgetClick(e) {
+    _onPopoutWidgetClick() {
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getSafeUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
             { target: '_blank', href: this._getSafeUrl(), rel: 'noopener'}).click();
     }
 
-    _onReloadWidgetClick(e) {
+    _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
         this.refs.appFrame.src = this.refs.appFrame.src;
     }
+
+    _getMenuOptions(ev) {
+        // TODO: This block of code gets copy/pasted a lot. We should make that happen less.
+        const menuOptions = {};
+        const buttonRect = ev.target.getBoundingClientRect();
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const buttonLeft = buttonRect.left + window.pageXOffset;
+        const buttonTop = buttonRect.top + window.pageYOffset;
+        // Align the right edge of the menu to the left edge of the button
+        menuOptions.right = window.innerWidth - buttonLeft;
+        // Align the menu vertically on whichever side of the button has more
+        // space available.
+        if (buttonTop < window.innerHeight / 2) {
+            menuOptions.top = buttonTop;
+        } else {
+            menuOptions.bottom = window.innerHeight - buttonTop;
+        }
+        return menuOptions;
+    }
+
+    _onContextMenuClick = (ev) => {
+        const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
+        const menuOptions = {
+            ...this._getMenuOptions(ev),
+
+            // A revoke handler is always required
+            onRevokeClicked: this._onRevokeClicked,
+        };
+
+        const canUserModify = this._canUserModify();
+        const showEditButton = Boolean(this._scalarClient && canUserModify);
+        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
+        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
+
+        if (showEditButton) menuOptions.onEditClicked = this._onEditClick;
+        if (showDeleteButton) menuOptions.onDeleteClicked = this._onDeleteClick;
+        if (showPictureSnapshotButton) menuOptions.onSnapshotClicked = this._onSnapshotClick;
+        if (this.props.showReload) menuOptions.onReloadClicked = this._onReloadWidgetClick;
+
+        createMenu(WidgetContextMenu, menuOptions);
+    };
 
     render() {
         let appTileBody;
@@ -565,7 +603,7 @@ export default class AppTile extends React.Component {
         }
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
-        // because that would allow the iframe to prgramatically remove the sandbox attribute, but
+        // because that would allow the iframe to programmatically remove the sandbox attribute, but
         // this would only be for content hosted on the same origin as the riot client: anything
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
@@ -585,12 +623,14 @@ export default class AppTile extends React.Component {
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {
+                const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className={appTileBodyClass}>
                         <AppPermission
                             roomId={this.props.room.roomId}
                             creatorUserId={this.props.creatorUserId}
                             url={this.state.widgetUrl}
+                            isRoomEncrypted={isEncrypted}
                             onPermissionGranted={this._grantWidgetPermission}
                         />
                     </div>
@@ -643,13 +683,6 @@ export default class AppTile extends React.Component {
             }
         }
 
-        // editing is done in scalar
-        const canUserModify = this._canUserModify();
-        const showEditButton = Boolean(this._scalarClient && canUserModify);
-        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
-        const showCancelButton = (this.props.showCancel === undefined || this.props.showCancel) && !showDeleteButton;
-        // Picture snapshot - only show button when apps are maximised.
-        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
         const showMinimiseButton = this.props.showMinimise && this.props.show;
         const showMaximiseButton = this.props.showMinimise && !this.props.show;
 
@@ -688,41 +721,17 @@ export default class AppTile extends React.Component {
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
-                        { /* Reload widget */ }
-                        { this.props.showReload && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_reload"
-                            title={_t('Reload widget')}
-                            onClick={this._onReloadWidgetClick}
-                        /> }
                         { /* Popout widget */ }
                         { this.props.showPopout && <AccessibleButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
                             title={_t('Popout widget')}
                             onClick={this._onPopoutWidgetClick}
                         /> }
-                        { /* Snapshot widget */ }
-                        { showPictureSnapshotButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_snapshot"
-                            title={_t('Picture')}
-                            onClick={this._onSnapshotClick}
-                        /> }
-                        { /* Edit widget */ }
-                        { showEditButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_edit"
-                            title={_t('Edit')}
-                            onClick={this._onEditClick}
-                        /> }
-                        { /* Delete widget */ }
-                        { showDeleteButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_delete"
-                            title={_t('Delete widget')}
-                            onClick={this._onDeleteClick}
-                        /> }
-                        { /* Cancel widget */ }
-                        { showCancelButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_cancel"
-                            title={_t('Revoke widget access')}
-                            onClick={this._onCancelClick}
+                        { /* Context menu */ }
+                        { <AccessibleButton
+                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
+                            title={_t('More options')}
+                            onClick={this._onContextMenuClick}
                         /> }
                     </span>
                 </div> }

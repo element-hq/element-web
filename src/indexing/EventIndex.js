@@ -35,7 +35,12 @@ export default class EventIndex {
 
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
+
         await indexManager.initEventIndex();
+        console.log("EventIndex: Successfully initialized the event index");
+
+        this.crawlerCheckpoints = await indexManager.loadCheckpoints();
+        console.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
 
         this.registerListeners();
     }
@@ -61,14 +66,6 @@ export default class EventIndex {
 
     onSync = async (state, prevState, data) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-
-        if (prevState === null && state === "PREPARED") {
-            // Load our stored checkpoints, if any.
-            this.crawlerCheckpoints = await indexManager.loadCheckpoints();
-            console.log("EventIndex: Loaded checkpoints",
-                        this.crawlerCheckpoints);
-            return;
-        }
 
         if (prevState === "PREPARED" && state === "SYNCING") {
             const addInitialCheckpoints = async () => {
