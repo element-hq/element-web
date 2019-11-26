@@ -6,6 +6,7 @@ module.exports = {
         require("postcss-extend")(),
         require("postcss-nested")(),
         require("postcss-mixins")(),
+        require("postcss-easings")(),
         require("postcss-strip-inline-comments")(),
     ],
     "parser": "postcss-scss",
