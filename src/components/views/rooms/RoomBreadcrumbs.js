@@ -31,6 +31,9 @@ import {_t} from "../../../languageHandler";
 const MAX_ROOMS = 20;
 const MIN_ROOMS_BEFORE_ENABLED = 10;
 
+// The threshold time in milliseconds to wait for an autojoined room to show up.
+const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90 seconds
+
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
         super(props);
@@ -38,6 +41,10 @@ export default class RoomBreadcrumbs extends React.Component {
 
         this.onAction = this.onAction.bind(this);
         this._dispatcherRef = null;
+
+        // The room IDs we're waiting to come down the Room handler and when we
+        // started waiting for them. Used to track a room over an upgrade/autojoin.
+        this._waitingRoomQueue = [/* { roomId, addedTs } */];
     }
 
     componentWillMount() {
@@ -54,7 +61,7 @@ export default class RoomBreadcrumbs extends React.Component {
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
-        MatrixClientPeg.get().on("Room", this.onRoomMembershipChanged);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     componentWillUnmount() {
@@ -68,7 +75,7 @@ export default class RoomBreadcrumbs extends React.Component {
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
-            client.removeListener("Room", this.onRoomMembershipChanged);
+            client.removeListener("Room", this.onRoom);
         }
     }
 
@@ -87,6 +94,12 @@ export default class RoomBreadcrumbs extends React.Component {
     onAction(payload) {
         switch (payload.action) {
             case 'view_room':
+                if (payload.auto_join && !MatrixClientPeg.get().getRoom(payload.room_id)) {
+                    // Queue the room instead of pushing it immediately - we're probably just waiting
+                    // for a join to complete (ie: joining the upgraded room).
+                    this._waitingRoomQueue.push({roomId: payload.room_id, addedTs: (new Date).getTime()});
+                    break;
+                }
                 this._appendRoomId(payload.room_id);
                 break;
 
@@ -153,7 +166,20 @@ export default class RoomBreadcrumbs extends React.Component {
         if (!this.state.enabled && this._shouldEnable()) {
             this.setState({enabled: true});
         }
-    }
+    };
+
+    onRoom = (room) => {
+        // Always check for membership changes when we see new rooms
+        this.onRoomMembershipChanged();
+
+        const waitingRoom = this._waitingRoomQueue.find(r => r.roomId === room.roomId);
+        if (!waitingRoom) return;
+        this._waitingRoomQueue.splice(this._waitingRoomQueue.indexOf(waitingRoom), 1);
+
+        const now = (new Date()).getTime();
+        if ((now - waitingRoom.addedTs) > AUTOJOIN_WAIT_THRESHOLD_MS) return; // Too long ago.
+        this._appendRoomId(room.roomId); // add the room we've been waiting for
+    };
 
     _shouldEnable() {
         const client = MatrixClientPeg.get();
