@@ -185,7 +185,8 @@
     "win": {
       "target": {
         "target": "squirrel"
-      }
+      },
+      "sign": "scripts/electron_winSign"
     },
     "directories": {
       "buildResources": "electron_app/build",
