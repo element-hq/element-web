@@ -431,8 +431,8 @@ export default class EventIndex {
     }
 
     currentlyCrawledRooms() {
-        let crawlingRooms = new Set();
-        let totalRooms = new Set();
+        const crawlingRooms = new Set();
+        const totalRooms = new Set();
 
         this.crawlerCheckpoints.forEach((checkpoint, index) => {
             crawlingRooms.add(checkpoint.roomId);
@@ -454,6 +454,6 @@ export default class EventIndex {
             totalRooms.add(room.roomId);
         });
 
-        return {crawlingRooms, totalRooms}
+        return {crawlingRooms, totalRooms};
     }
 }

@@ -113,11 +113,11 @@ export default class PreferencesUserSettingsTab extends React.Component {
         let crawlingRooms = 0;
         let totalCrawlingRooms = 0;
 
-        let eventIndex = EventIndexPeg.get();
+        const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
             eventIndexSize = await eventIndex.indexSize();
-            let crawledRooms = eventIndex.currentlyCrawledRooms();
+            const crawledRooms = eventIndex.currentlyCrawledRooms();
             crawlingRooms = crawledRooms.crawlingRooms.size;
             totalCrawlingRooms = crawledRooms.totalRooms.size;
         }
@@ -211,8 +211,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
         if (!this.state.eventIndexingEnabled) {
             crawlerState = <div>{_t("Message downloader is stopped.")}</div>;
-        }
-        else if (this.state.crawlingRooms === 0) {
+        } else if (this.state.crawlingRooms === 0) {
             crawlerState = <div>{_t("Message downloader is currently idle.")}</div>;
         } else {
             crawlerState = (
@@ -231,8 +230,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     <span className="mx_SettingsTab_subheading">{_t("Encrypted search")}</span>
                     {
                         _t( "To enable search in encrypted rooms, Riot needs to run " +
-                            "a background process to download historical messages "   +
-                            "from those rooms to your computer."
+                            "a background process to download historical messages " +
+                            "from those rooms to your computer.",
                         )
                     }
                     <div className='mx_SettingsTab_subsectionText'>
