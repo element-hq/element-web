@@ -335,7 +335,7 @@ function _onAction(payload) {
                     });
                     return;
                 } else if (members.length === 2) {
-                    console.log("Place %s call in %s", payload.type, payload.room_id);
+                    console.info("Place %s call in %s", payload.type, payload.room_id);
                     const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
                     placeCall(call);
                 } else { // > 2
@@ -350,7 +350,7 @@ function _onAction(payload) {
             }
             break;
         case 'place_conference_call':
-            console.log("Place conference call in %s", payload.room_id);
+            console.info("Place conference call in %s", payload.room_id);
             _startCallApp(payload.room_id, payload.type);
             break;
         case 'incoming_call':

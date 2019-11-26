@@ -362,7 +362,7 @@ export default class AppTile extends React.Component {
     }
 
     _onRevokeClicked() {
-        console.log("Revoke widget permissions - %s", this.props.id);
+        console.info("Revoke widget permissions - %s", this.props.id);
         this._revokeWidgetPermission();
     }
 
