@@ -23,6 +23,8 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
+import EventIndexPeg from "../../../../../indexing/EventIndexPeg";
+import {formatBytes} from "../../../../../utils/FormattingUtils";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
@@ -70,6 +72,13 @@ export default class PreferencesUserSettingsTab extends React.Component {
             alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
+            eventIndexSize: 0,
+            crawlingRooms: 0,
+            totalCrawlingRooms: 0,
+            eventIndexingEnabled:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling'),
+            crawlerSleepTime:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
             autocompleteDelay:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
             readMarkerInViewThresholdMs:
@@ -100,6 +109,19 @@ export default class PreferencesUserSettingsTab extends React.Component {
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
 
+        let eventIndexSize = 0;
+        let crawlingRooms = 0;
+        let totalCrawlingRooms = 0;
+
+        let eventIndex = EventIndexPeg.get();
+
+        if (eventIndex !== null) {
+            eventIndexSize = await eventIndex.indexSize();
+            let crawledRooms = eventIndex.currentlyCrawledRooms();
+            crawlingRooms = crawledRooms.crawlingRooms.size;
+            totalCrawlingRooms = crawledRooms.totalRooms.size;
+        }
+
         this.setState({
             autoLaunch,
             autoLaunchSupported,
@@ -107,6 +129,9 @@ export default class PreferencesUserSettingsTab extends React.Component {
             alwaysShowMenuBar,
             minimizeToTraySupported,
             minimizeToTray,
+            eventIndexSize,
+            crawlingRooms,
+            totalCrawlingRooms,
         });
     }
 
@@ -136,6 +161,20 @@ export default class PreferencesUserSettingsTab extends React.Component {
         this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
+
+    _onEventIndexingEnabledChange = (checked) => {
+        SettingsStore.setValue("enableCrawling", null, SettingLevel.DEVICE, checked);
+
+        if (checked) EventIndexPeg.start();
+        else EventIndexPeg.stop();
+
+        this.setState({eventIndexingEnabled: checked});
+    }
+
+    _onCrawlerSleepTimeChange = (e) => {
+        this.setState({crawlerSleepTime: e.target.value});
+        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
+    }
 
     _renderGroup(settingIds) {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
@@ -167,9 +206,61 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 label={_t('Show tray icon and minimize window to it on close')} />;
         }
 
+        let eventIndexingSettings = null;
+        let crawlerState;
+
+        if (!this.state.eventIndexingEnabled) {
+            crawlerState = <div>{_t("Message downloader is stopped.")}</div>;
+        }
+        else if (this.state.crawlingRooms === 0) {
+            crawlerState = <div>{_t("Message downloader is currently idle.")}</div>;
+        } else {
+            crawlerState = (
+                <div>{_t(
+                    "Currently downloading mesages in %(crawlingRooms)s of %(totalRooms)s rooms.",
+                    { crawlingRooms: this.state.crawlingRooms,
+                      totalRooms: this.state.totalCrawlingRooms,
+                    })}
+                </div>
+            );
+        }
+
+        if (EventIndexPeg.get() !== null) {
+            eventIndexingSettings = (
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Encrypted search")}</span>
+                    {
+                        _t( "To enable search in encrypted rooms, Riot needs to run " +
+                            "a background process to download historical messages "   +
+                            "from those rooms to your computer."
+                        )
+                    }
+                    <div className='mx_SettingsTab_subsectionText'>
+                        {_t("Message disk usage:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
+                        {crawlerState}<br />
+                    </div>
+
+                    <LabelledToggleSwitch
+                        value={this.state.eventIndexingEnabled}
+                        onChange={this._onEventIndexingEnabledChange}
+                        label={_t('Enable message downloading')} />
+
+                    <Field
+                        id={"crawlerSleepTimeMs"}
+                        label={_t('Message downloading sleep time(ms)')}
+                        type='number'
+                        value={this.state.crawlerSleepTime}
+                        onChange={this._onCrawlerSleepTimeChange} />
+                </div>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
+
+                {eventIndexingSettings}
+
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
