@@ -21,7 +21,7 @@ currently disabled by default until that is resolved. The following sections
 explain the manual steps you can use with a custom build of Riot to enable
 these features if you'd like to try them out.
 
-## Adding Seshat support
+## Adding Seshat for search in E2E encrypted rooms
 
 Seshat is a native node library that adds support for local event indexing and
 full text search in E2E encrypted rooms.
