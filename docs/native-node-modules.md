@@ -11,7 +11,7 @@ we may offer a pre-compiled path for those who want to use these features in a
 custom build of Riot without installing the various build tools required.
 
 Do note that compiling a module for a particular operating system
-(Linux/macOS/Windows) and will need to be done on that operating system.
+(Linux/macOS/Windows) will need to be done on that operating system.
 Cross-compiling from a host OS for a different target OS may be possible, but
 we don't support this flow with Riot dependencies at this time.
 
