@@ -30,8 +30,11 @@ Since Seshat is written in Rust, the Rust compiler and related tools need to be
 installed before installing Seshat itself. To install Rust please consult the
 official Rust [documentation](https://www.rust-lang.org/tools/install).
 
-After installing the compiler, Seshat support can be added using yarn inside
-the `electron_app/` directory:
+Seshat also depends on the SQLCipher library to store its data in encrypted form
+on disk. You'll need to install it via your OS package manager.
+
+After installing the Rust compiler and SQLCipher, Seshat support can be added
+using yarn inside the `electron_app/` directory:
 
     yarn add matrix-seshat
 
