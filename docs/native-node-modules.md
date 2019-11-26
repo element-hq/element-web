@@ -23,7 +23,7 @@ these features if you'd like to try them out.
 
 ## Adding Seshat for search in E2E encrypted rooms
 
-Seshat is a native node library that adds support for local event indexing and
+Seshat is a native Node module that adds support for local event indexing and
 full text search in E2E encrypted rooms.
 
 Since Seshat is written in rust the rust compiler and cargo tool-chain need to be
@@ -32,7 +32,7 @@ support can be added using yarn inside the `electron_app/` directory:
 
     yarn add matrix-seshat
 
-After this is done the electron version of riot can be run from the main folder
+After this is done the Electron version of Riot can be run from the main folder
 as usual using:
 
     yarn electron
