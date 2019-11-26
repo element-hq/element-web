@@ -120,7 +120,9 @@ export default class EventIndex {
             if (eventIndexWasEmpty) await addInitialCheckpoints();
 
             // Start our crawler.
-            this.startCrawler();
+            if (SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling')) {
+                this.startCrawler();
+            }
             return;
         }
 
