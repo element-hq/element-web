@@ -144,7 +144,7 @@ module.exports = createReactClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        //console.log("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
@@ -159,7 +159,7 @@ module.exports = createReactClass({
     },
 
     calculateUrlPreview: function() {
-        //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
             let links = this.findLinks(this.refs.content.children);

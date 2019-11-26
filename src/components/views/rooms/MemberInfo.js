@@ -698,7 +698,7 @@ module.exports = createReactClass({
 
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
-            //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
+            //console.info("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
             return can;
         }
         const editPowerLevel = (

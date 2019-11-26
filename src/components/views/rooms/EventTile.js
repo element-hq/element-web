@@ -548,7 +548,7 @@ module.exports = createReactClass({
         const SenderProfile = sdk.getComponent('messages.SenderProfile');
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
-        //console.log("EventTile showUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        //console.info("EventTile showUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         const content = this.props.mxEvent.getContent();
         const msgtype = content.msgtype;
