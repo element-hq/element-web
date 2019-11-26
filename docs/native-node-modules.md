@@ -4,11 +4,11 @@ For some features, the desktop version of Riot can make use of native Node
 modules. These allow Riot to integrate with the desktop in ways that a browser
 cannot.
 
-While handy, these modules must be compiled and are thus downloaded
-pre-compiled during build so that a single OS can compile Riot for all
-platforms. If you would like to compile the native node modules from source,
-as is done for Riot releases, instead of trusting binaries hosted on npm,
-then please read on.
+While native modules enable powerful new features, they must be complied for
+each operating system. For official Riot releases, we will always build these
+modules from source to ensure we can trust the compiled output. In the future,
+we may offer a pre-compiled path for those who want to use these features in a
+custom build of Riot without installing the various build tools required.
 
 Do note that compiling a module for a particular operating system
 (Linux/macOS/Windows) and will need to be done on that operating system.
