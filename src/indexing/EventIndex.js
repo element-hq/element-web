@@ -33,6 +33,7 @@ export default class EventIndex {
         // crawl.
         this._eventsPerCrawl = 100;
         this._crawler = null;
+        this._currentCheckpoint = null;
         this.liveEventsForIndex = new Set();
     }
 
@@ -213,6 +214,8 @@ export default class EventIndex {
                 sleepTime = this._crawlerIdleTime;
             }
 
+            this._currentCheckpoint = null;
+
             await sleep(sleepTime);
 
             console.log("EventIndex: Running the crawler loop.");
@@ -229,6 +232,8 @@ export default class EventIndex {
                 idle = true;
                 continue;
             }
+
+            this._currentCheckpoint = checkpoint;
 
             idle = false;
 
@@ -423,5 +428,32 @@ export default class EventIndex {
     async indexSize() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.indexSize();
+    }
+
+    currentlyCrawledRooms() {
+        let crawlingRooms = new Set();
+        let totalRooms = new Set();
+
+        this.crawlerCheckpoints.forEach((checkpoint, index) => {
+            crawlingRooms.add(checkpoint.roomId);
+        });
+
+        if (this._currentCheckpoint !== null) {
+            crawlingRooms.add(this._currentCheckpoint.roomId);
+        }
+
+        const client = MatrixClientPeg.get();
+        const rooms = client.getRooms();
+
+        const isRoomEncrypted = (room) => {
+            return client.isRoomEncrypted(room.roomId);
+        };
+
+        const encryptedRooms = rooms.filter(isRoomEncrypted);
+        encryptedRooms.forEach((room, index) => {
+            totalRooms.add(room.roomId);
+        });
+
+        return {crawlingRooms, totalRooms}
     }
 }
