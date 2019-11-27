@@ -2367,5 +2367,7 @@
     "Decline (%(counter)s)": "拒絕 (%(counter)s)",
     "Manage integrations": "管理整合",
     "Verification Request": "驗證請求",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "啟用交叉簽章以驗證每個使者而非每個裝置（開發中）",
+    "Match system theme": "符合系統佈景主題"
 }
