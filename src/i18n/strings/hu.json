@@ -2362,5 +2362,6 @@
     "Decline (%(counter)s)": "Elutasítás (%(counter)s)",
     "Manage integrations": "Integrációk kezelése",
     "Verification Request": "Ellenőrzési kérés",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Kereszt-aláírás engedélyezése a felhasználó alapú azonosításhoz az eszköz alapú helyett (fejlesztés alatt)"
 }
