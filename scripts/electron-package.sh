@@ -131,6 +131,7 @@ pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
 rm -r "$projdir/electron_app/dist" || true
+mkdir -p "$projdir/electron_app/dist"
 
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
