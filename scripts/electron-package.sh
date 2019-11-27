@@ -131,19 +131,18 @@ pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
 rm -r "$projdir/electron_app/dist" || true
-mkdir -p "$projdir/electron_app/dist/unsigned/"
+mkdir -p "$projdir/electron_app/dist"
 
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
 mkdir -p "$pubdir/install/macos"
 cp $distdir/*.dmg "$pubdir/install/macos/"
 
-# Windows installers need signing, this comes later
 mkdir -p "$pubdir/install/win32/ia32/"
-mkdir -p "$projdir/electron_app/dist/unsigned/ia32/"
+cp $distdir/squirrel-windows-ia32/*.exe "$pubdir/install/win32/ia32/"
 
 mkdir -p "$pubdir/install/win32/x64/"
-mkdir -p "$projdir/electron_app/dist/unsigned/x64/"
+cp $distdir/squirrel-windows/*.exe "$pubdir/install/win32/x64/"
 
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
@@ -164,20 +163,6 @@ cp $distdir/squirrel-windows/RELEASES "$pubdir/update/win32/x64/"
 # windows, but 32 bit linux is unsupported as of electron 4 and no
 # longer appears to work).
 cp $distdir/*_amd64.deb "$projdir/electron_app/dist/"
-
-# Now we sign the windows installer executables (as opposed to the main binary which
-# is signed in the electron afteSign hook)
-echo "Signing Windows installers..."
-
-exe32=( "$distdir"/squirrel-windows-ia32/*.exe )
-basename32=`basename "$exe32"`
-osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$exe32" -out "$projdir/electron_app/pub/install/win32/ia32/$basename32"
-
-exe64=( "$distdir"/squirrel-windows/*.exe )
-basename64=`basename "$exe64"`
-osslsigncode sign $OSSLSIGNCODE_SIGNARGS -pass "$token_password" -in "$exe64" -out "$projdir/electron_app/pub/install/win32/x64/$basename64"
-
-echo "Installers signed"
 
 rm -rf "$builddir"
 

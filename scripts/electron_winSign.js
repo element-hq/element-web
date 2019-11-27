@@ -36,7 +36,7 @@ exports.default = async function(options) {
             'tmp_' + Math.random().toString(36).substring(2, 15) + '.exe',
         );
         const args = [
-            '-hash', options.hash,
+            '-h', options.hash,
             '-pass', tokenPassphrase,
             '-in', inPath,
             '-out', tmpFile,
@@ -44,11 +44,14 @@ exports.default = async function(options) {
         if (options.isNest) args.push('-nest');
         cmdLine += shellescape(args);
 
+        let signStdout;
         const signproc = exec(cmdLine, {}, (error, stdout) => {
-            console.log(stdout);
+            signStdout = stdout;
         });
         signproc.on('exit', (code) => {
             if (code !== 0) {
+                console.log("Running", cmdLine);
+                console.log(signStdout);
                 console.error("osslsigncode failed with code " + code);
                 reject("osslsigncode failed with code " + code);
                 return;
