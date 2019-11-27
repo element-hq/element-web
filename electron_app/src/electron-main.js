@@ -48,6 +48,7 @@ let Seshat = null;
 try {
     Seshat = require('matrix-seshat');
 } catch (e) {
+    console.warn("seshat unavailable", e);
 }
 
 if (argv["help"]) {
