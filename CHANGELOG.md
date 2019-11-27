@@ -1,3 +1,12 @@
+Changes in [1.5.5](https://github.com/vector-im/riot-web/releases/tag/v1.5.5) (2019-11-27)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.4...v1.5.5)
+
+* Upgrade to JS SDK 2.5.4 to relax identity server discovery and E2EE debugging
+* Upgrade to React SDK 1.7.4 to fix override behaviour of themes
+* Clarify that cross-signing is in development
+* Sign all of the Windows executable files
+
 Changes in [1.5.4](https://github.com/vector-im/riot-web/releases/tag/v1.5.4) (2019-11-25)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.4-rc.2...v1.5.4)
