@@ -38,15 +38,10 @@ using yarn inside the `electron_app/` directory:
 
     yarn add matrix-seshat
 
-After this is done the Electron version of Riot can be run from the main folder
-as usual using:
-
-    yarn electron
-
-If for some reason recompilation of Seshat is needed, e.g. when using a
-development version of Seshat using `yarn link`, or if the initial compilation was
-done for the wrong electron version, Seshat can be recompiled with the
-`electron-build-env` tool. Again from the `electron_app/` directory:
+You will have to rebuild the native libraries against electron's version of
+of node rather than your system node, using the `electron-build-env` tool.
+This is also needed to when pulling in changes to Seshat using `yarn link`.
+Again from the `electron_app/` directory:
 
     yarn add electron-build-env
 
@@ -57,3 +52,10 @@ Recompiling Seshat itself can be done like so:
 Please make sure to include all the `--` as well as the `--release` command line
 switch at the end. Modify your electron version accordingly depending on the
 version that is installed on your system.
+
+After this is done the Electron version of Riot can be run from the main folder
+as usual using:
+
+    yarn build
+    yarn electron
+
