@@ -44,12 +44,14 @@ exports.default = async function(options) {
         if (options.isNest) args.push('-nest');
         cmdLine += shellescape(args);
 
-        console.log("Running", cmdLine);
+        let signStdout;
         const signproc = exec(cmdLine, {}, (error, stdout) => {
-            console.log(stdout);
+            signStdout = stdout;
         });
         signproc.on('exit', (code) => {
             if (code !== 0) {
+                console.log("Running", cmdLine);
+                console.log(signStdout);
                 console.error("osslsigncode failed with code " + code);
                 reject("osslsigncode failed with code " + code);
                 return;
