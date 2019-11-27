@@ -2375,5 +2375,6 @@
     "Manage integrations": "Gérer les intégrations",
     "Verification Request": "Demande de vérification",
     " (1/%(totalCount)s)": " (1/%(totalCount)s)",
-    "Enable cross-signing to verify per-user instead of per-device (in development)": "Activer la signature croisée pour vérifier par utilisateur plutôt que par appareil (en développement)"
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Activer la signature croisée pour vérifier par utilisateur plutôt que par appareil (en développement)",
+    "Match system theme": "S’adapter au thème du système"
 }
