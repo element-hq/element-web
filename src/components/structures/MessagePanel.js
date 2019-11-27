@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* global Velocity */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -111,14 +109,12 @@ export default class MessagePanel extends React.Component {
 
     constructor() {
         super();
-        // the event after which we put a visible unread marker on the last
-        // render cycle; null if readMarkerVisible was false or the RM was
-        // suppressed (eg because it was at the end of the timeline)
-        this.currentReadMarkerEventId = null;
 
-        // the event after which we are showing a disappearing read marker
-        // animation
-        this.currentGhostEventId = null;
+        this.state = {
+            // previous positions the read marker has been in, so we can
+            // display 'ghost' read markers that are animating away
+            ghostReadMarkers: [],
+        };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
         // to manage its animations
@@ -157,10 +153,6 @@ export default class MessagePanel extends React.Component {
         // displayed event in the current render cycle.
         this._readReceiptsByUserId = {};
 
-        // Remember the read marker ghost node so we can do the cleanup that
-        // Velocity requires
-        this._readMarkerGhostNode = null;
-
         // Cache hidden events setting on mount since Settings is expensive to
         // query, and we check this in a hot code path.
         this._showHiddenEventsInTimeline =
@@ -175,6 +167,16 @@ export default class MessagePanel extends React.Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.readMarkerVisible && this.props.readMarkerEventId !== prevProps.readMarkerEventId) {
+            const ghostReadMarkers = this.state.ghostReadMarkers;
+            ghostReadMarkers.push(prevProps.readMarkerEventId);
+            this.setState({
+                ghostReadMarkers,
+            });
+        }
     }
 
     /* get the DOM node representing the given event */
@@ -325,6 +327,78 @@ export default class MessagePanel extends React.Component {
         return !shouldHideEvent(mxEv);
     }
 
+    _readMarkerForEvent(eventId, isLastEvent) {
+        const visible = !isLastEvent && this.props.readMarkerVisible;
+
+        if (this.props.readMarkerEventId === eventId) {
+            let hr;
+            // if the read marker comes at the end of the timeline (except
+            // for local echoes, which are excluded from RMs, because they
+            // don't have useful event ids), we don't want to show it, but
+            // we still want to create the <li/> for it so that the
+            // algorithms which depend on its position on the screen aren't
+            // confused.
+            if (visible) {
+                hr = <hr className="mx_RoomView_myReadMarker"
+                    style={{opacity: 1, width: '99%'}}
+                />;
+            }
+
+            return (
+                <li key={"readMarker_"+eventId} ref="readMarkerNode"
+                      className="mx_RoomView_myReadMarker_container">
+                    { hr }
+                </li>
+            );
+        } else if (this.state.ghostReadMarkers.includes(eventId)) {
+            // We render 'ghost' read markers in the DOM while they
+            // transition away. This allows the actual read marker
+            // to be in the right place straight away without having
+            // to wait for the transition to finish.
+            // There are probably much simpler ways to do this transition,
+            // possibly using react-transition-group which handles keeping
+            // elements in the DOM whilst they transition out, although our
+            // case is a little more complex because only some of the items
+            // transition (ie. the read markers do but the event tiles do not)
+            // and TransitionGroup requires that all its children are Transitions.
+            const hr = <hr className="mx_RoomView_myReadMarker"
+                ref={this._collectGhostReadMarker}
+                onTransitionEnd={this._onGhostTransitionEnd}
+                data-eventid={eventId}
+            />;
+
+            // give it a key which depends on the event id. That will ensure that
+            // we get a new DOM node (restarting the animation) when the ghost
+            // moves to a different event.
+            return (
+                <li key={"_readuptoghost_"+eventId}
+                      className="mx_RoomView_myReadMarker_container">
+                    { hr }
+                </li>
+            );
+        }
+
+        return null;
+    }
+
+    _collectGhostReadMarker = (node) => {
+        if (node) {
+            // now the element has appeared, change the style which will trigger the CSS transition
+            requestAnimationFrame(() => {
+                node.style.width = '10%';
+                node.style.opacity = '0';
+            });
+        }
+    };
+
+    _onGhostTransitionEnd = (ev) => {
+        // we can now clean up the ghost element
+        const finishedEventId = ev.target.dataset.eventid;
+        this.setState({
+            ghostReadMarkers: this.state.ghostReadMarkers.filter(eid => eid !== finishedEventId),
+        });
+    };
+
     _getEventTiles() {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
@@ -332,7 +406,6 @@ export default class MessagePanel extends React.Component {
 
         this.eventNodes = {};
 
-        let visible = false;
         let i;
 
         // first figure out which is the last event in the list which we're
@@ -367,16 +440,6 @@ export default class MessagePanel extends React.Component {
 
         let prevEvent = null; // the last event we showed
 
-        // assume there is no read marker until proven otherwise
-        let readMarkerVisible = false;
-
-        // if the readmarker has moved, cancel any active ghost.
-        if (this.currentReadMarkerEventId && this.props.readMarkerEventId &&
-                this.props.readMarkerVisible &&
-                this.currentReadMarkerEventId !== this.props.readMarkerEventId) {
-            this.currentGhostEventId = null;
-        }
-
         this._readReceiptsByEvent = {};
         if (this.props.showReadReceipts) {
             this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
@@ -401,7 +464,7 @@ export default class MessagePanel extends React.Component {
                return false;
             };
             if (mxEv.getType() === "m.room.create") {
-                let readMarkerInSummary = false;
+                let summaryReadMarker = null;
                 const ts1 = mxEv.getTs();
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
@@ -410,9 +473,7 @@ export default class MessagePanel extends React.Component {
                 }
 
                 // If RM event is the first in the summary, append the RM after the summary
-                if (mxEv.getId() === this.props.readMarkerEventId) {
-                    readMarkerInSummary = true;
-                }
+                summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(mxEv.getId());
 
                 // If this m.room.create event should be shown (room upgrade) then show it before the summary
                 if (this._shouldShowEvent(mxEv)) {
@@ -427,9 +488,7 @@ export default class MessagePanel extends React.Component {
                     // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
                         // If this hidden event is the RM and in or at end of a summary put RM after the summary.
-                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                            readMarkerInSummary = true;
-                        }
+                        summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
                         continue;
                     }
 
@@ -438,9 +497,7 @@ export default class MessagePanel extends React.Component {
                     }
 
                     // If RM event is in the summary, mark it as such and the RM will be appended after the summary.
-                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                        readMarkerInSummary = true;
-                    }
+                    summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
 
                     summarisedEvents.push(collapsedMxEv);
                 }
@@ -468,8 +525,8 @@ export default class MessagePanel extends React.Component {
                     { eventTiles }
                 </EventListSummary>);
 
-                if (readMarkerInSummary) {
-                    ret.push(this._getReadMarkerTile(visible));
+                if (summaryReadMarker) {
+                    ret.push(summaryReadMarker);
                 }
 
                 prevEvent = mxEv;
@@ -480,7 +537,7 @@ export default class MessagePanel extends React.Component {
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
-                let readMarkerInMels = false;
+                let summaryReadMarker = null;
                 const ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -498,9 +555,7 @@ export default class MessagePanel extends React.Component {
                 }
 
                 // If RM event is the first in the MELS, append the RM after MELS
-                if (mxEv.getId() === this.props.readMarkerEventId) {
-                    readMarkerInMels = true;
-                }
+                summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(mxEv.getId());
 
                 const summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
@@ -509,9 +564,7 @@ export default class MessagePanel extends React.Component {
                     // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
                         // If this hidden event is the RM and in or at end of a MELS put RM after MELS.
-                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                            readMarkerInMels = true;
-                        }
+                        summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
                         continue;
                     }
 
@@ -521,9 +574,7 @@ export default class MessagePanel extends React.Component {
                     }
 
                     // If RM event is in MELS mark it as such and the RM will be appended after MELS.
-                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                        readMarkerInMels = true;
-                    }
+                    summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
 
                     summarisedEvents.push(collapsedMxEv);
                 }
@@ -554,8 +605,8 @@ export default class MessagePanel extends React.Component {
                         { eventTiles }
                 </MemberEventListSummary>);
 
-                if (readMarkerInMels) {
-                    ret.push(this._getReadMarkerTile(visible));
+                if (summaryReadMarker) {
+                    ret.push(summaryReadMarker);
                 }
 
                 prevEvent = mxEv;
@@ -570,40 +621,10 @@ export default class MessagePanel extends React.Component {
                 prevEvent = mxEv;
             }
 
-            let isVisibleReadMarker = false;
-
-            if (eventId === this.props.readMarkerEventId) {
-                visible = this.props.readMarkerVisible;
-
-                // if the read marker comes at the end of the timeline (except
-                // for local echoes, which are excluded from RMs, because they
-                // don't have useful event ids), we don't want to show it, but
-                // we still want to create the <li/> for it so that the
-                // algorithms which depend on its position on the screen aren't
-                // confused.
-                if (i >= lastShownNonLocalEchoIndex) {
-                    visible = false;
-                }
-                ret.push(this._getReadMarkerTile(visible));
-                readMarkerVisible = visible;
-                isVisibleReadMarker = visible;
-            }
-
-            // XXX: there should be no need for a ghost tile - we should just use a
-            // a dispatch (user_activity_end) to start the RM animation.
-            if (eventId === this.currentGhostEventId) {
-                // if we're showing an animation, continue to show it.
-                ret.push(this._getReadMarkerGhostTile());
-            } else if (!isVisibleReadMarker &&
-                       eventId === this.currentReadMarkerEventId) {
-                // there is currently a read-up-to marker at this point, but no
-                // more. Show an animation of it disappearing.
-                ret.push(this._getReadMarkerGhostTile());
-                this.currentGhostEventId = eventId;
-            }
+            const readMarker = this._readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
+            if (readMarker) ret.push(readMarker);
         }
 
-        this.currentReadMarkerEventId = readMarkerVisible ? this.props.readMarkerEventId : null;
         return ret;
     }
 
@@ -795,53 +816,6 @@ export default class MessagePanel extends React.Component {
         }
 
         return receiptsByEvent;
-    }
-
-    _getReadMarkerTile(visible) {
-        let hr;
-        if (visible) {
-            hr = <hr className="mx_RoomView_myReadMarker"
-                    style={{opacity: 1, width: '99%'}}
-                />;
-        }
-
-        return (
-            <li key="_readupto" ref="readMarkerNode"
-                  className="mx_RoomView_myReadMarker_container">
-                { hr }
-            </li>
-        );
-    }
-
-    _startAnimation = (ghostNode) => {
-        if (this._readMarkerGhostNode) {
-            Velocity.Utilities.removeData(this._readMarkerGhostNode);
-        }
-        this._readMarkerGhostNode = ghostNode;
-
-        if (ghostNode) {
-            // eslint-disable-next-line new-cap
-            Velocity(ghostNode, {opacity: '0', width: '10%'},
-                     {duration: 400, easing: 'easeInSine',
-                      delay: 1000});
-        }
-    };
-
-    _getReadMarkerGhostTile() {
-        const hr = <hr className="mx_RoomView_myReadMarker"
-                  style={{opacity: 1, width: '99%'}}
-                  ref={this._startAnimation}
-            />;
-
-        // give it a key which depends on the event id. That will ensure that
-        // we get a new DOM node (restarting the animation) when the ghost
-        // moves to a different event.
-        return (
-            <li key={"_readuptoghost_"+this.currentGhostEventId}
-                  className="mx_RoomView_myReadMarker_container">
-                { hr }
-            </li>
-        );
     }
 
     _collectEventNode = (eventId, node) => {
