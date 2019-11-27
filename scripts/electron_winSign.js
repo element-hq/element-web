@@ -36,7 +36,7 @@ exports.default = async function(options) {
             'tmp_' + Math.random().toString(36).substring(2, 15) + '.exe',
         );
         const args = [
-            '-hash', options.hash,
+            '-h', options.hash,
             '-pass', tokenPassphrase,
             '-in', inPath,
             '-out', tmpFile,
@@ -44,6 +44,7 @@ exports.default = async function(options) {
         if (options.isNest) args.push('-nest');
         cmdLine += shellescape(args);
 
+        console.log("Running", cmdLine);
         const signproc = exec(cmdLine, {}, (error, stdout) => {
             console.log(stdout);
         });
