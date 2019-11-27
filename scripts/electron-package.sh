@@ -131,19 +131,17 @@ pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
 rm -r "$projdir/electron_app/dist" || true
-mkdir -p "$projdir/electron_app/dist/unsigned/"
 
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
 mkdir -p "$pubdir/install/macos"
 cp $distdir/*.dmg "$pubdir/install/macos/"
 
-# Windows installers need signing, this comes later
 mkdir -p "$pubdir/install/win32/ia32/"
-mkdir -p "$projdir/electron_app/dist/unsigned/ia32/"
+cp $distdir/squirrel-windows-ia32/*.exe "$pubdir/install/win32/ia32/"
 
 mkdir -p "$pubdir/install/win32/x64/"
-mkdir -p "$projdir/electron_app/dist/unsigned/x64/"
+cp $distdir/squirrel-windows/*.exe "$pubdir/install/win32/x64/"
 
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
