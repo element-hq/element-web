@@ -2246,5 +2246,10 @@
     " (1/%(totalCount)s)": " (1/%(totalCount)s)",
     "Failed to get autodiscovery configuration from server": "Automaattisen etsinnän asetusten hakeminen palvelimelta epäonnistui",
     "Invalid base_url for m.homeserver": "Epäkelpo base_url palvelimelle m.homeserver",
-    "Invalid base_url for m.identity_server": "Epäkelpo base_url palvelimelle m.identity_server"
+    "Invalid base_url for m.identity_server": "Epäkelpo base_url palvelimelle m.identity_server",
+    "%(senderName)s placed a voice call.": "%(senderName)s soitti äänipuhelun.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s soitti äänipuhelun. (selaimesi ei tue äänipuheluita)",
+    "%(senderName)s placed a video call.": "%(senderName)s soitti videopuhelun.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s soitti videopuhelun (selaimesi ei tue videopuheluita)",
+    "Clear notifications": "Tyhjennä ilmoitukset"
 }
