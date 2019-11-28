@@ -14,11 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingController from "./SettingController";
-import PlatformPeg from "../../PlatformPeg";
-
-export default class LowBandwidthController extends SettingController {
-    onChange(level, roomId, newValue) {
-        PlatformPeg.get().reload();
-    }
+.mx_MjolnirBody {
+    opacity: 0.4;
 }

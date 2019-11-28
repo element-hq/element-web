@@ -525,6 +525,7 @@ const LoggedInView = createReactClass({
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
+        const ToastContainer = sdk.getComponent('structures.ToastContainer');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const CookieBar = sdk.getComponent('globals.CookieBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -628,6 +629,7 @@ const LoggedInView = createReactClass({
         return (
             <div onPaste={this._onPaste} onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
+                <ToastContainer />
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel

@@ -25,7 +25,6 @@ const Modal = require("../../../Modal");
 const sdk = require("../../../index");
 
 import dis from "../../../dispatcher";
-import Promise from 'bluebird';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
@@ -174,21 +173,16 @@ module.exports = createReactClass({
                 newPassword: "",
                 newPasswordConfirm: "",
             });
-        }).done();
+        });
     },
 
     _optionallySetEmail: function() {
-        const deferred = Promise.defer();
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
-        Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
+        const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
-            onFinished: (confirmed) => {
-                // ignore confirmed, setting an email is optional
-                deferred.resolve(confirmed);
-            },
         });
-        return deferred.promise;
+        return modal.finished.then(([confirmed]) => confirmed);
     },
 
     _onExportE2eKeysClicked: function() {

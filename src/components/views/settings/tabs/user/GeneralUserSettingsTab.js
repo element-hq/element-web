@@ -27,7 +27,7 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
-import {enumerateThemes} from "../../../../../theme";
+import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import PlatformPeg from "../../../../../PlatformPeg";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
@@ -50,6 +50,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -173,10 +174,28 @@ export default class GeneralUserSettingsTab extends React.Component {
         const newTheme = e.target.value;
         if (this.state.theme === newTheme) return;
 
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        // doing getValue in the .catch will still return the value we failed to set,
+        // so remember what the value was before we tried to set it so we can revert
+        const oldTheme = SettingsStore.getValue('theme');
+        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme).catch(() => {
+            dis.dispatch({action: 'recheck_theme'});
+            this.setState({theme: oldTheme});
+        });
         this.setState({theme: newTheme});
-        dis.dispatch({action: 'set_theme', value: newTheme});
+        // The settings watcher doesn't fire until the echo comes back from the
+        // server, so to make the theme change immediately we need to manually
+        // do the dispatch now
+        // XXX: The local echoed value appears to be unreliable, in particular
+        // when settings custom themes(!) so adding forceTheme to override
+        // the value from settings.
+        dis.dispatch({action: 'recheck_theme', forceTheme: newTheme});
     };
+
+    _onUseSystemThemeChanged = (checked) => {
+        this.setState({useSystemTheme: checked});
+        dis.dispatch({action: 'recheck_theme'});
+    }
+
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
@@ -288,11 +307,24 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderThemeSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+
+        const themeWatcher = new ThemeWatcher();
+        let systemThemeSection;
+        if (themeWatcher.isSystemThemeSupported()) {
+            systemThemeSection = <div>
+                <SettingsFlag name="use_system_theme" level={SettingLevel.DEVICE}
+                    onChange={this._onUseSystemThemeChanged}
+                />
+            </div>;
+        }
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
+                {systemThemeSection}
                 <Field id="theme" label={_t("Theme")} element="select"
-                       value={this.state.theme} onChange={this._onThemeChange}>
+                       value={this.state.theme} onChange={this._onThemeChange}
+                       disabled={this.state.useSystemTheme}
+                >
                     {Object.entries(enumerateThemes()).map(([theme, text]) => {
                         return <option key={theme} value={theme}>{text}</option>;
                     })}

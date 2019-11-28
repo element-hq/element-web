@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -26,6 +25,7 @@ import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
+import {sleep} from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
     'views.dialogs.InteractiveAuthDialog',
@@ -107,7 +107,7 @@ describe('InteractiveAuthDialog', function() {
                 },
             })).toBe(true);
             // let the request complete
-            return Promise.delay(1);
+            return sleep(1);
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);

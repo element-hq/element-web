@@ -253,7 +253,7 @@ module.exports = createReactClass({
             this.setState({
                 busy: false,
             });
-        }).done();
+        });
     },
 
     onUsernameChanged: function(username) {
@@ -378,15 +378,30 @@ module.exports = createReactClass({
 
         // Do a quick liveliness check on the URLs
         try {
-            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
-            this.setState({serverIsAlive: true, errorText: ""});
+            const { warning } =
+                await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            if (warning) {
+                this.setState({
+                    ...AutoDiscoveryUtils.authComponentStateForError(warning),
+                    errorText: "",
+                });
+            } else {
+                this.setState({
+                    serverIsAlive: true,
+                    errorText: "",
+                });
+            }
         } catch (e) {
             this.setState({
                 busy: false,
                 ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
             if (this.state.serverErrorIsFatal) {
-                return; // Server is dead - do not continue.
+                // Server is dead: show server details prompt instead
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
+                return;
             }
         }
 
@@ -424,7 +439,7 @@ module.exports = createReactClass({
             this.setState({
                 busy: false,
             });
-        }).done();
+        });
     },
 
     _isSupportedFlow: function(flow) {

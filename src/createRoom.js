@@ -21,7 +21,6 @@ import { _t } from './languageHandler';
 import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
 
-import Promise from 'bluebird';
 import {getAddressType} from "./UserAddress";
 
 /**

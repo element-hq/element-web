@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-
 // This module contains all the code needed to log the console, persist it to
 // disk and submit bug reports. Rationale is as follows:
 //  - Monkey-patching the console is preferable to having a log library because
@@ -136,6 +134,8 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
+
+        // these promises are cleared as soon as fulfilled
         this.flushPromise = null;
         // set if flush() is called whilst one is ongoing
         this.flushAgainPromise = null;
@@ -208,16 +208,16 @@ class IndexedDBLogStore {
      */
     flush() {
         // check if a flush() operation is ongoing
-        if (this.flushPromise && this.flushPromise.isPending()) {
-            if (this.flushAgainPromise && this.flushAgainPromise.isPending()) {
-                // this is the 3rd+ time we've called flush() : return the same
-                // promise.
+        if (this.flushPromise) {
+            if (this.flushAgainPromise) {
+                // this is the 3rd+ time we've called flush() : return the same promise.
                 return this.flushAgainPromise;
             }
-            // queue up a flush to occur immediately after the pending one
-            // completes.
+            // queue up a flush to occur immediately after the pending one completes.
             this.flushAgainPromise = this.flushPromise.then(() => {
                 return this.flush();
+            }).then(() => {
+                this.flushAgainPromise = null;
             });
             return this.flushAgainPromise;
         }
@@ -225,8 +225,7 @@ class IndexedDBLogStore {
         // a brand new one, destroying the chain which may have been built up.
         this.flushPromise = new Promise((resolve, reject) => {
             if (!this.db) {
-                // not connected yet or user rejected access for us to r/w to
-                // the db.
+                // not connected yet or user rejected access for us to r/w to the db.
                 reject(new Error("No connected database"));
                 return;
             }
@@ -251,6 +250,8 @@ class IndexedDBLogStore {
             objStore.add(this._generateLogEntry(lines));
             const lastModStore = txn.objectStore("logslastmod");
             lastModStore.put(this._generateLastModifiedTime());
+        }).then(() => {
+            this.flushPromise = null;
         });
         return this.flushPromise;
     }

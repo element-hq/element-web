@@ -43,7 +43,8 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
         if (room) {
             const senders = [];
             for (const reactionEvent of reactionEvents) {
-                const { name } = room.getMember(reactionEvent.getSender());
+                const member = room.getMember(reactionEvent.getSender());
+                const name = member ? member.name : reactionEvent.getSender();
                 senders.push(name);
             }
             const shortName = unicodeToShortcode(content);

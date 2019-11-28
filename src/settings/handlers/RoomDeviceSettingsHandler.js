@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import {SettingLevel} from "../SettingsStore";
 

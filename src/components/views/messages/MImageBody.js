@@ -24,7 +24,6 @@ import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -289,7 +288,7 @@ export default class MImageBody extends React.Component {
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
 
         // Remember that the user wanted to show this particular image

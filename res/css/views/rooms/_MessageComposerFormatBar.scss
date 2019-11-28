@@ -40,6 +40,7 @@ limitations under the License.
 
         &:hover {
             border-color: $message-action-bar-hover-border-color;
+            z-index: 1;
         }
 
         &:first-child {

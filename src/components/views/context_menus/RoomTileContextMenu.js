@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
@@ -32,6 +31,7 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import {sleep} from "../../../utils/promise";
 import {MenuItem, MenuItemCheckbox, MenuItemRadio} from "../../structures/ContextualMenu";
 
 const RoomTagOption = ({active, onClick, src, srcSet, label}) => {
@@ -92,7 +92,7 @@ module.exports = createReactClass({
 
     _toggleTag: function(tagNameOn, tagNameOff) {
         if (!MatrixClientPeg.get().isGuest()) {
-            Promise.delay(500).then(() => {
+            sleep(500).then(() => {
                 dis.dispatch(RoomListActions.tagRoom(
                     MatrixClientPeg.get(),
                     this.props.room,
@@ -149,7 +149,7 @@ module.exports = createReactClass({
 
         Rooms.guessAndSetDMRoom(
             this.props.room, newIsDirectMessage,
-        ).delay(500).finally(() => {
+        ).then(sleep(500)).finally(() => {
             // Close the context menu
             if (this.props.onFinished) {
                 this.props.onFinished();
@@ -190,7 +190,7 @@ module.exports = createReactClass({
 
     _onClickForget: function() {
         // FIXME: duplicated with RoomSettings (and dead code in RoomView)
-        MatrixClientPeg.get().forget(this.props.room.roomId).done(() => {
+        MatrixClientPeg.get().forget(this.props.room.roomId).then(() => {
             // Switch to another room view if we're currently viewing the
             // historical room
             if (RoomViewStore.getRoomId() === this.props.room.roomId) {
@@ -220,10 +220,10 @@ module.exports = createReactClass({
         this.setState({
             roomNotifState: newState,
         });
-        RoomNotifs.setRoomNotifsState(roomId, newState).done(() => {
+        RoomNotifs.setRoomNotifsState(roomId, newState).then(() => {
             // delay slightly so that the user can see their state change
             // before closing the menu
-            return Promise.delay(500).then(() => {
+            return sleep(500).then(() => {
                 if (this._unmounted) return;
                 // Close the context menu
                 if (this.props.onFinished) {

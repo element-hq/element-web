@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,10 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* global Velocity */
-
 import React from 'react';
-import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -37,10 +35,8 @@ const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType()
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
-module.exports = createReactClass({
-    displayName: 'MessagePanel',
-
-    propTypes: {
+export default class MessagePanel extends React.Component {
+    static propTypes = {
         // true to give the component a 'display: none' style.
         hidden: PropTypes.bool,
 
@@ -109,17 +105,16 @@ module.exports = createReactClass({
 
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
-    },
+    };
 
-    componentWillMount: function() {
-        // the event after which we put a visible unread marker on the last
-        // render cycle; null if readMarkerVisible was false or the RM was
-        // suppressed (eg because it was at the end of the timeline)
-        this.currentReadMarkerEventId = null;
+    constructor() {
+        super();
 
-        // the event after which we are showing a disappearing read marker
-        // animation
-        this.currentGhostEventId = null;
+        this.state = {
+            // previous positions the read marker has been in, so we can
+            // display 'ghost' read markers that are animating away
+            ghostReadMarkers: [],
+        };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
         // to manage its animations
@@ -158,47 +153,57 @@ module.exports = createReactClass({
         // displayed event in the current render cycle.
         this._readReceiptsByUserId = {};
 
-        // Remember the read marker ghost node so we can do the cleanup that
-        // Velocity requires
-        this._readMarkerGhostNode = null;
-
         // Cache hidden events setting on mount since Settings is expensive to
         // query, and we check this in a hot code path.
         this._showHiddenEventsInTimeline =
             SettingsStore.getValue("showHiddenEventsInTimeline");
 
-        this._isMounted = true;
-    },
-
-    componentWillUnmount: function() {
         this._isMounted = false;
-    },
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.readMarkerVisible && this.props.readMarkerEventId !== prevProps.readMarkerEventId) {
+            const ghostReadMarkers = this.state.ghostReadMarkers;
+            ghostReadMarkers.push(prevProps.readMarkerEventId);
+            this.setState({
+                ghostReadMarkers,
+            });
+        }
+    }
 
     /* get the DOM node representing the given event */
-    getNodeForEventId: function(eventId) {
+    getNodeForEventId(eventId) {
         if (!this.eventNodes) {
             return undefined;
         }
 
         return this.eventNodes[eventId];
-    },
+    }
 
     /* return true if the content is fully scrolled down right now; else false.
      */
-    isAtBottom: function() {
+    isAtBottom() {
         return this.refs.scrollPanel
             && this.refs.scrollPanel.isAtBottom();
-    },
+    }
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
      * details.
      *
      * returns null if we are not mounted.
      */
-    getScrollState: function() {
+    getScrollState() {
         if (!this.refs.scrollPanel) { return null; }
         return this.refs.scrollPanel.getScrollState();
-    },
+    }
 
     // returns one of:
     //
@@ -206,7 +211,7 @@ module.exports = createReactClass({
     //  -1: read marker is above the window
     //   0: read marker is within the window
     //  +1: read marker is below the window
-    getReadMarkerPosition: function() {
+    getReadMarkerPosition() {
         const readMarker = this.refs.readMarkerNode;
         const messageWrapper = this.refs.scrollPanel;
 
@@ -226,45 +231,45 @@ module.exports = createReactClass({
         } else {
             return 1;
         }
-    },
+    }
 
     /* jump to the top of the content.
      */
-    scrollToTop: function() {
+    scrollToTop() {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.scrollToTop();
         }
-    },
+    }
 
     /* jump to the bottom of the content.
      */
-    scrollToBottom: function() {
+    scrollToBottom() {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.scrollToBottom();
         }
-    },
+    }
 
     /**
      * Page up/down.
      *
      * @param {number} mult: -1 to page up, +1 to page down
      */
-    scrollRelative: function(mult) {
+    scrollRelative(mult) {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.scrollRelative(mult);
         }
-    },
+    }
 
     /**
      * Scroll up/down in response to a scroll key
      *
      * @param {KeyboardEvent} ev: the keyboard event to handle
      */
-    handleScrollKey: function(ev) {
+    handleScrollKey(ev) {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.handleScrollKey(ev);
         }
-    },
+    }
 
     /* jump to the given event id.
      *
@@ -276,33 +281,33 @@ module.exports = createReactClass({
      * node (specifically, the bottom of it) will be positioned. If omitted, it
      * defaults to 0.
      */
-    scrollToEvent: function(eventId, pixelOffset, offsetBase) {
+    scrollToEvent(eventId, pixelOffset, offsetBase) {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.scrollToToken(eventId, pixelOffset, offsetBase);
         }
-    },
+    }
 
-    scrollToEventIfNeeded: function(eventId) {
+    scrollToEventIfNeeded(eventId) {
         const node = this.eventNodes[eventId];
         if (node) {
             node.scrollIntoView({block: "nearest", behavior: "instant"});
         }
-    },
+    }
 
     /* check the scroll state and send out pagination requests if necessary.
      */
-    checkFillState: function() {
+    checkFillState() {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.checkFillState();
         }
-    },
+    }
 
-    _isUnmounting: function() {
+    _isUnmounting() {
         return !this._isMounted;
-    },
+    }
 
     // TODO: Implement granular (per-room) hide options
-    _shouldShowEvent: function(mxEv) {
+    _shouldShowEvent(mxEv) {
         if (mxEv.sender && MatrixClientPeg.get().isUserIgnored(mxEv.sender.userId)) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
@@ -320,16 +325,87 @@ module.exports = createReactClass({
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
         return !shouldHideEvent(mxEv);
-    },
+    }
 
-    _getEventTiles: function() {
+    _readMarkerForEvent(eventId, isLastEvent) {
+        const visible = !isLastEvent && this.props.readMarkerVisible;
+
+        if (this.props.readMarkerEventId === eventId) {
+            let hr;
+            // if the read marker comes at the end of the timeline (except
+            // for local echoes, which are excluded from RMs, because they
+            // don't have useful event ids), we don't want to show it, but
+            // we still want to create the <li/> for it so that the
+            // algorithms which depend on its position on the screen aren't
+            // confused.
+            if (visible) {
+                hr = <hr className="mx_RoomView_myReadMarker"
+                    style={{opacity: 1, width: '99%'}}
+                />;
+            }
+
+            return (
+                <li key={"readMarker_"+eventId} ref="readMarkerNode"
+                      className="mx_RoomView_myReadMarker_container">
+                    { hr }
+                </li>
+            );
+        } else if (this.state.ghostReadMarkers.includes(eventId)) {
+            // We render 'ghost' read markers in the DOM while they
+            // transition away. This allows the actual read marker
+            // to be in the right place straight away without having
+            // to wait for the transition to finish.
+            // There are probably much simpler ways to do this transition,
+            // possibly using react-transition-group which handles keeping
+            // elements in the DOM whilst they transition out, although our
+            // case is a little more complex because only some of the items
+            // transition (ie. the read markers do but the event tiles do not)
+            // and TransitionGroup requires that all its children are Transitions.
+            const hr = <hr className="mx_RoomView_myReadMarker"
+                ref={this._collectGhostReadMarker}
+                onTransitionEnd={this._onGhostTransitionEnd}
+                data-eventid={eventId}
+            />;
+
+            // give it a key which depends on the event id. That will ensure that
+            // we get a new DOM node (restarting the animation) when the ghost
+            // moves to a different event.
+            return (
+                <li key={"_readuptoghost_"+eventId}
+                      className="mx_RoomView_myReadMarker_container">
+                    { hr }
+                </li>
+            );
+        }
+
+        return null;
+    }
+
+    _collectGhostReadMarker = (node) => {
+        if (node) {
+            // now the element has appeared, change the style which will trigger the CSS transition
+            requestAnimationFrame(() => {
+                node.style.width = '10%';
+                node.style.opacity = '0';
+            });
+        }
+    };
+
+    _onGhostTransitionEnd = (ev) => {
+        // we can now clean up the ghost element
+        const finishedEventId = ev.target.dataset.eventid;
+        this.setState({
+            ghostReadMarkers: this.state.ghostReadMarkers.filter(eid => eid !== finishedEventId),
+        });
+    };
+
+    _getEventTiles() {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
 
-        let visible = false;
         let i;
 
         // first figure out which is the last event in the list which we're
@@ -364,16 +440,6 @@ module.exports = createReactClass({
 
         let prevEvent = null; // the last event we showed
 
-        // assume there is no read marker until proven otherwise
-        let readMarkerVisible = false;
-
-        // if the readmarker has moved, cancel any active ghost.
-        if (this.currentReadMarkerEventId && this.props.readMarkerEventId &&
-                this.props.readMarkerVisible &&
-                this.currentReadMarkerEventId !== this.props.readMarkerEventId) {
-            this.currentGhostEventId = null;
-        }
-
         this._readReceiptsByEvent = {};
         if (this.props.showReadReceipts) {
             this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
@@ -398,7 +464,7 @@ module.exports = createReactClass({
                return false;
             };
             if (mxEv.getType() === "m.room.create") {
-                let readMarkerInSummary = false;
+                let summaryReadMarker = null;
                 const ts1 = mxEv.getTs();
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
@@ -407,8 +473,12 @@ module.exports = createReactClass({
                 }
 
                 // If RM event is the first in the summary, append the RM after the summary
-                if (mxEv.getId() === this.props.readMarkerEventId) {
-                    readMarkerInSummary = true;
+                summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(mxEv.getId());
+
+                // If this m.room.create event should be shown (room upgrade) then show it before the summary
+                if (this._shouldShowEvent(mxEv)) {
+                    // pass in the mxEv as prevEvent as well so no extra DateSeparator is rendered
+                    ret.push(...this._getTilesForEvent(mxEv, mxEv, false));
                 }
 
                 const summarisedEvents = []; // Don't add m.room.create here as we don't want it inside the summary
@@ -418,9 +488,7 @@ module.exports = createReactClass({
                     // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
                         // If this hidden event is the RM and in or at end of a summary put RM after the summary.
-                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                            readMarkerInSummary = true;
-                        }
+                        summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
                         continue;
                     }
 
@@ -429,9 +497,7 @@ module.exports = createReactClass({
                     }
 
                     // If RM event is in the summary, mark it as such and the RM will be appended after the summary.
-                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                        readMarkerInSummary = true;
-                    }
+                    summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
 
                     summarisedEvents.push(collapsedMxEv);
                 }
@@ -459,8 +525,8 @@ module.exports = createReactClass({
                     { eventTiles }
                 </EventListSummary>);
 
-                if (readMarkerInSummary) {
-                    ret.push(this._getReadMarkerTile(visible));
+                if (summaryReadMarker) {
+                    ret.push(summaryReadMarker);
                 }
 
                 prevEvent = mxEv;
@@ -471,7 +537,7 @@ module.exports = createReactClass({
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
-                let readMarkerInMels = false;
+                let summaryReadMarker = null;
                 const ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -489,9 +555,7 @@ module.exports = createReactClass({
                 }
 
                 // If RM event is the first in the MELS, append the RM after MELS
-                if (mxEv.getId() === this.props.readMarkerEventId) {
-                    readMarkerInMels = true;
-                }
+                summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(mxEv.getId());
 
                 const summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
@@ -500,9 +564,7 @@ module.exports = createReactClass({
                     // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
                         // If this hidden event is the RM and in or at end of a MELS put RM after MELS.
-                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                            readMarkerInMels = true;
-                        }
+                        summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
                         continue;
                     }
 
@@ -512,9 +574,7 @@ module.exports = createReactClass({
                     }
 
                     // If RM event is in MELS mark it as such and the RM will be appended after MELS.
-                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
-                        readMarkerInMels = true;
-                    }
+                    summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
 
                     summarisedEvents.push(collapsedMxEv);
                 }
@@ -545,8 +605,8 @@ module.exports = createReactClass({
                         { eventTiles }
                 </MemberEventListSummary>);
 
-                if (readMarkerInMels) {
-                    ret.push(this._getReadMarkerTile(visible));
+                if (summaryReadMarker) {
+                    ret.push(summaryReadMarker);
                 }
 
                 prevEvent = mxEv;
@@ -561,44 +621,14 @@ module.exports = createReactClass({
                 prevEvent = mxEv;
             }
 
-            let isVisibleReadMarker = false;
-
-            if (eventId === this.props.readMarkerEventId) {
-                visible = this.props.readMarkerVisible;
-
-                // if the read marker comes at the end of the timeline (except
-                // for local echoes, which are excluded from RMs, because they
-                // don't have useful event ids), we don't want to show it, but
-                // we still want to create the <li/> for it so that the
-                // algorithms which depend on its position on the screen aren't
-                // confused.
-                if (i >= lastShownNonLocalEchoIndex) {
-                    visible = false;
-                }
-                ret.push(this._getReadMarkerTile(visible));
-                readMarkerVisible = visible;
-                isVisibleReadMarker = visible;
-            }
-
-            // XXX: there should be no need for a ghost tile - we should just use a
-            // a dispatch (user_activity_end) to start the RM animation.
-            if (eventId === this.currentGhostEventId) {
-                // if we're showing an animation, continue to show it.
-                ret.push(this._getReadMarkerGhostTile());
-            } else if (!isVisibleReadMarker &&
-                       eventId === this.currentReadMarkerEventId) {
-                // there is currently a read-up-to marker at this point, but no
-                // more. Show an animation of it disappearing.
-                ret.push(this._getReadMarkerGhostTile());
-                this.currentGhostEventId = eventId;
-            }
+            const readMarker = this._readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
+            if (readMarker) ret.push(readMarker);
         }
 
-        this.currentReadMarkerEventId = readMarkerVisible ? this.props.readMarkerEventId : null;
         return ret;
-    },
+    }
 
-    _getTilesForEvent: function(prevEvent, mxEv, last) {
+    _getTilesForEvent(prevEvent, mxEv, last) {
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
@@ -691,20 +721,20 @@ module.exports = createReactClass({
         );
 
         return ret;
-    },
+    }
 
-    _wantsDateSeparator: function(prevEvent, nextEventDate) {
+    _wantsDateSeparator(prevEvent, nextEventDate) {
         if (prevEvent == null) {
             // first event in the panel: depends if we could back-paginate from
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
         return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
-    },
+    }
 
     // Get a list of read receipts that should be shown next to this event
     // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
-    _getReadReceiptsForEvent: function(event) {
+    _getReadReceiptsForEvent(event) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get list of read receipts, sorted most recent first
@@ -728,12 +758,12 @@ module.exports = createReactClass({
             });
         });
         return receipts;
-    },
+    }
 
     // Get an object that maps from event ID to a list of read receipts that
     // should be shown next to that event. If a hidden event has read receipts,
     // they are folded into the receipts of the last shown event.
-    _getReadReceiptsByShownEvent: function() {
+    _getReadReceiptsByShownEvent() {
         const receiptsByEvent = {};
         const receiptsByUserId = {};
 
@@ -786,78 +816,31 @@ module.exports = createReactClass({
         }
 
         return receiptsByEvent;
-    },
+    }
 
-    _getReadMarkerTile: function(visible) {
-        let hr;
-        if (visible) {
-            hr = <hr className="mx_RoomView_myReadMarker"
-                    style={{opacity: 1, width: '99%'}}
-                />;
-        }
-
-        return (
-            <li key="_readupto" ref="readMarkerNode"
-                  className="mx_RoomView_myReadMarker_container">
-                { hr }
-            </li>
-        );
-    },
-
-    _startAnimation: function(ghostNode) {
-        if (this._readMarkerGhostNode) {
-            Velocity.Utilities.removeData(this._readMarkerGhostNode);
-        }
-        this._readMarkerGhostNode = ghostNode;
-
-        if (ghostNode) {
-            // eslint-disable-next-line new-cap
-            Velocity(ghostNode, {opacity: '0', width: '10%'},
-                     {duration: 400, easing: 'easeInSine',
-                      delay: 1000});
-        }
-    },
-
-    _getReadMarkerGhostTile: function() {
-        const hr = <hr className="mx_RoomView_myReadMarker"
-                  style={{opacity: 1, width: '99%'}}
-                  ref={this._startAnimation}
-            />;
-
-        // give it a key which depends on the event id. That will ensure that
-        // we get a new DOM node (restarting the animation) when the ghost
-        // moves to a different event.
-        return (
-            <li key={"_readuptoghost_"+this.currentGhostEventId}
-                  className="mx_RoomView_myReadMarker_container">
-                { hr }
-            </li>
-        );
-    },
-
-    _collectEventNode: function(eventId, node) {
+    _collectEventNode = (eventId, node) => {
         this.eventNodes[eventId] = node;
-    },
+    }
 
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
-    _onHeightChanged: function() {
+    _onHeightChanged = () => {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.checkScroll();
         }
-    },
+    };
 
-    _onTypingShown: function() {
+    _onTypingShown = () => {
         const scrollPanel = this.refs.scrollPanel;
         // this will make the timeline grow, so checkScroll
         scrollPanel.checkScroll();
         if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
             scrollPanel.preventShrinking();
         }
-    },
+    };
 
-    _onTypingHidden: function() {
+    _onTypingHidden = () => {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             // as hiding the typing notifications doesn't
@@ -868,9 +851,9 @@ module.exports = createReactClass({
             // reveal added padding to balance the notifs disappearing.
             scrollPanel.checkScroll();
         }
-    },
+    };
 
-    updateTimelineMinHeight: function() {
+    updateTimelineMinHeight() {
         const scrollPanel = this.refs.scrollPanel;
 
         if (scrollPanel) {
@@ -885,16 +868,16 @@ module.exports = createReactClass({
                 scrollPanel.preventShrinking();
             }
         }
-    },
+    }
 
-    onTimelineReset: function() {
+    onTimelineReset() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.clearPreventShrinking();
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
@@ -941,5 +924,5 @@ module.exports = createReactClass({
                 { bottomSpinner }
             </ScrollPanel>
         );
-    },
-});
+    }
+}

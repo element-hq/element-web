@@ -25,7 +25,7 @@ limitations under the License.
         width: 12px;
         height: 16px;
         content: "";
-        mask: url("$(res)/img/e2e/verified.svg");
+        mask-image: url("$(res)/img/e2e/normal.svg");
         mask-repeat: no-repeat;
         mask-size: 100%;
         margin-top: 4px;
@@ -33,6 +33,7 @@ limitations under the License.
     }
 
     &.mx_KeyVerification_icon_verified::after {
+        mask-image: url("$(res)/img/e2e/verified.svg");
         background-color: $accent-color;
     }
 
@@ -64,23 +65,6 @@ limitations under the License.
     .mx_KeyVerification_buttons {
         align-items: center;
         display: flex;
-
-        .mx_AccessibleButton_kind_decline {
-            color: $notice-primary-color;
-            background-color: $notice-primary-bg-color;
-        }
-
-        .mx_AccessibleButton_kind_accept {
-            color: $accent-color;
-            background-color: $accent-bg-color;
-        }
-
-        [role=button] {
-            margin: 10px;
-            padding: 7px 15px;
-            border-radius: 5px;
-            height: min-content;
-        }
     }
 
     .mx_KeyVerification_state {

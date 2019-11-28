@@ -26,6 +26,7 @@ import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
+import {timeout} from "../../../utils/promise";
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -245,14 +246,11 @@ export default class SetIdServer extends React.Component {
         let threepids = [];
         let currentServerReachable = true;
         try {
-            threepids = await Promise.race([
+            threepids = await timeout(
                 getThreepidsWithBindStatus(MatrixClientPeg.get()),
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        reject(new Error("Timeout attempting to reach identity server"));
-                    }, REACHABILITY_TIMEOUT);
-                }),
-            ]);
+                Promise.reject(new Error("Timeout attempting to reach identity server")),
+                REACHABILITY_TIMEOUT,
+            );
         } catch (e) {
             currentServerReachable = false;
             console.warn(

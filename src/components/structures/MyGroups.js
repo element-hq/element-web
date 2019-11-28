@@ -47,7 +47,7 @@ export default createReactClass({
     },
 
     _fetch: function() {
-        this.context.matrixClient.getJoinedGroups().done((result) => {
+        this.context.matrixClient.getJoinedGroups().then((result) => {
             this.setState({groups: result.groups, error: null});
         }, (err) => {
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {

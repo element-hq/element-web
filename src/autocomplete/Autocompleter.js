@@ -26,7 +26,7 @@ import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
-import Promise from 'bluebird';
+import {timeout} from "../utils/promise";
 
 export type SelectionRange = {
     beginning: boolean, // whether the selection is in the first block of the editor or not
@@ -77,23 +77,16 @@ export default class Autocompleter {
          while the user is interacting with the list, which makes it difficult
          to predict whether an action will actually do what is intended
         */
-        const completionsList = await Promise.all(
-            // Array of inspections of promises that might timeout. Instead of allowing a
-            // single timeout to reject the Promise.all, reflect each one and once they've all
-            // settled, filter for the fulfilled ones
-            this.providers.map(provider =>
-                provider
-                    .getCompletions(query, selection, force)
-                    .timeout(PROVIDER_COMPLETION_TIMEOUT)
-                    .reflect(),
-            ),
-        );
+        const completionsList = await Promise.all(this.providers.map(provider => {
+            return timeout(provider.getCompletions(query, selection, force), null, PROVIDER_COMPLETION_TIMEOUT);
+        }));
 
-        return completionsList.filter(
-            (inspection) => inspection.isFulfilled(),
-        ).map((completionsState, i) => {
+        // map then filter to maintain the index for the map-operation, for this.providers to line up
+        return completionsList.map((completions, i) => {
+            if (!completions || !completions.length) return;
+
             return {
-                completions: completionsState.value(),
+                completions,
                 provider: this.providers[i],
 
                 /* the currently matched "command" the completer tried to complete
@@ -102,6 +95,6 @@ export default class Autocompleter {
                  */
                 command: this.providers[i].getCurrentCommand(query, selection, force),
             };
-        });
+        }).filter(Boolean);
     }
 }

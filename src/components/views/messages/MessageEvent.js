@@ -18,6 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
+import {Mjolnir} from "../../../mjolnir/Mjolnir";
 
 module.exports = createReactClass({
     displayName: 'MessageEvent',
@@ -47,6 +49,10 @@ module.exports = createReactClass({
 
     getEventTileOps: function() {
         return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
+    },
+
+    onTileUpdate: function() {
+        this.forceUpdate();
     },
 
     render: function() {
@@ -81,6 +87,21 @@ module.exports = createReactClass({
             }
         }
 
+        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+            const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
+            const allowRender = localStorage.getItem(key) === "true";
+
+            if (!allowRender) {
+                const userDomain = this.props.mxEvent.getSender().split(':').slice(1).join(':');
+                const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender());
+                const serverBanned = Mjolnir.sharedInstance().isServerBanned(userDomain);
+
+                if (userBanned || serverBanned) {
+                    BodyType = sdk.getComponent('messages.MjolnirBody');
+                }
+            }
+        }
+
         return <BodyType
             ref="body" mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
@@ -90,6 +111,8 @@ module.exports = createReactClass({
             maxImageHeight={this.props.maxImageHeight}
             replacingEventId={this.props.replacingEventId}
             editState={this.props.editState}
-            onHeightChanged={this.props.onHeightChanged} />;
+            onHeightChanged={this.props.onHeightChanged}
+            onMessageAllowed={this.onTileUpdate}
+        />;
     },
 });

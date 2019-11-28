@@ -121,7 +121,7 @@ export default createReactClass({
             this.setState({
                 errorText: msg,
             });
-        }).done();
+        });
 
         this._intervalId = null;
         if (this.props.poll) {

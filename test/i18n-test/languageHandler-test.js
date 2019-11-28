@@ -11,7 +11,7 @@ describe('languageHandler', function() {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
 
-        languageHandler.setLanguage('en').done(done);
+        languageHandler.setLanguage('en').then(done);
     });
 
     afterEach(function() {

@@ -111,10 +111,10 @@ export default class MKeyVerificationRequest extends React.Component {
                 userLabelForEventRoom(fromUserId, mxEvent)}</div>);
             const isResolved = !(this.state.accepted || this.state.cancelled || this.state.done);
             if (isResolved) {
-                const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+                const FormButton = sdk.getComponent("elements.FormButton");
                 stateNode = (<div className="mx_KeyVerification_buttons">
-                    <AccessibleButton kind="decline" onClick={this._onRejectClicked}>{_t("Decline")}</AccessibleButton>
-                    <AccessibleButton kind="accept" onClick={this._onAcceptClicked}>{_t("Accept")}</AccessibleButton>
+                    <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
+                    <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
         } else if (isOwn) { // request sent by us

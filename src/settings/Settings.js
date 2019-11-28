@@ -23,7 +23,7 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
-import LowBandwidthController from "./controllers/LowBandwidthController";
+import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -120,16 +120,38 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_user_info_panel": {
+    "feature_mjolnir": {
         isFeature: true,
-        displayName: _td("Use the new, consistent UserInfo panel for Room Members and Group Members"),
+        displayName: _td("Try out new ways to ignore people (experimental)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "mjolnirRooms": {
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "mjolnirPersonalRoom": {
+        supportedLevels: ['account'],
+        default: null,
+    },
     "feature_dm_verification": {
         isFeature: true,
-        displayName: _td("Send verification requests in direct message"),
+        displayName: _td("Send verification requests in direct message," +
+            " including a new verification UX in the member panel."),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_cross_signing": {
+        isFeature: true,
+        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_event_indexing": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
         default: false,
     },
     "useCiderComposer": {
@@ -258,6 +280,11 @@ export const SETTINGS = {
     "custom_themes": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: [],
+    },
+    "use_system_theme": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: true,
+        displayName: _td("Match system theme"),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -413,7 +440,7 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Low bandwidth mode'),
         default: false,
-        controller: new LowBandwidthController(),
+        controller: new ReloadOnChangeController(),
     },
     "fallbackICEServerAllowed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

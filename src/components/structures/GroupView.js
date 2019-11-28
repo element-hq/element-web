@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -38,6 +37,7 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk";
+import {allSettled, sleep} from "../../utils/promise";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -98,11 +98,10 @@ const CategoryRoomList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addRoomToGroupSummary(this.props.groupId, addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;
@@ -275,11 +274,10 @@ const RoleUserList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addUserToGroupSummary(addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;
@@ -638,7 +636,7 @@ export default createReactClass({
                 title: _t('Error'),
                 description: _t('Failed to upload image'),
             });
-        }).done();
+        });
     },
 
     _onJoinableChange: function(ev) {
@@ -677,7 +675,7 @@ export default createReactClass({
             this.setState({
                 avatarChanged: false,
             });
-        }).done();
+        });
     },
 
     _saveGroup: async function() {
@@ -692,7 +690,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.acceptGroupInvite(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -711,7 +709,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -735,7 +733,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.joinGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -787,7 +785,7 @@ export default createReactClass({
 
                 // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
                 // spinner disappearing after we have fetched new group data.
-                await Promise.delay(500);
+                await sleep(500);
 
                 GroupStore.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync

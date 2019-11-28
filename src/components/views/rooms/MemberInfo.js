@@ -248,7 +248,7 @@ module.exports = createReactClass({
             return client.getStoredDevicesForUser(member.userId);
         }).finally(function() {
             self._cancelDeviceList = null;
-        }).done(function(devices) {
+        }).then(function(devices) {
             if (cancelled) {
                 // we got cancelled - presumably a different user now
                 return;
@@ -550,7 +550,16 @@ module.exports = createReactClass({
             danger: true,
             onFinished: (accepted) => {
                 if (!accepted) return;
-                this.context.matrixClient.deactivateSynapseUser(this.props.member.userId);
+                this.context.matrixClient.deactivateSynapseUser(this.props.member.userId).catch(e => {
+                    console.error("Failed to deactivate user");
+                    console.error(e);
+
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Failed to deactivate Synapse user', '', ErrorDialog, {
+                        title: _t('Failed to deactivate user'),
+                        description: ((e && e.message) ? e.message : _t("Operation failed")),
+                    });
+                });
             },
         });
     },
@@ -572,7 +581,7 @@ module.exports = createReactClass({
             },
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
-        }).done();
+        });
     },
 
     onPowerChange: async function(powerLevel) {
@@ -629,7 +638,7 @@ module.exports = createReactClass({
         this.setState({ updating: this.state.updating + 1 });
         createRoom({dmUserId: this.props.member.userId}).finally(() => {
             this.setState({ updating: this.state.updating - 1 });
-        }).done();
+        });
     },
 
     onLeaveClick: function() {
@@ -689,7 +698,7 @@ module.exports = createReactClass({
 
         const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
-            //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
+            //console.info("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
             return can;
         }
         const editPowerLevel = (

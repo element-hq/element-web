@@ -146,7 +146,7 @@ const Notifier = {
                 }
                 document.body.appendChild(audioElement);
             }
-            audioElement.play();
+            await audioElement.play();
         } catch (ex) {
             console.warn("Caught error when trying to fetch room notification sound:", ex);
         }
@@ -198,7 +198,7 @@ const Notifier = {
 
         if (enable) {
             // Attempt to get permission from user
-            plaf.requestNotificationPermission().done((result) => {
+            plaf.requestNotificationPermission().then((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
