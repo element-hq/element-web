@@ -1,5 +1,4 @@
 /*
-Copyright 2018 New Vector Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,23 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_KeyBackupPanel_sigValid, .mx_KeyBackupPanel_sigInvalid,
-.mx_KeyBackupPanel_deviceVerified, .mx_KeyBackupPanel_deviceNotVerified {
-    font-weight: bold;
+.mx_CrossSigningPanel_statusList {
+    border-spacing: 0;
+
+    td {
+        padding: 0;
+
+        &:first-of-type {
+            padding-inline-end: 1em;
+        }
+    }
 }
 
-.mx_KeyBackupPanel_sigValid, .mx_KeyBackupPanel_deviceVerified {
-    color: $e2e-verified-color;
-}
-
-.mx_KeyBackupPanel_sigInvalid, .mx_KeyBackupPanel_deviceNotVerified {
-    color: $e2e-warning-color;
-}
-
-.mx_KeyBackupPanel_deviceName {
-    font-style: italic;
-}
-
-.mx_KeyBackupPanel_buttonRow {
+.mx_CrossSigningPanel_buttonRow {
     margin: 1em 0;
 }
