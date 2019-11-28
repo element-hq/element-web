@@ -24,7 +24,6 @@ import Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
 import {ContextMenu, ContextMenuButton} from "./ContextualMenu";
-import sdk from "../../index";
 
 const AVATAR_SIZE = 28;
 
