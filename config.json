@@ -14,8 +14,8 @@
     "disable_3pid_login": false,
     "brand": "Riot",
     "branding": {
-        "authHeaderLogoUrl": "https://github.com/SciCatProject/riot-web/raw/develop/ess-branding/esslogo.png",
-        "welcomeBackgroundUrl": "https://github.com/SciCatProject/riot-web/raw/develop/ess-branding/ess-site.png",
+        "authHeaderLogoUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/esslogo.png",
+        "welcomeBackgroundUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/ess-site.png",
         "authFooterLinks": [
             { "text": "SciCat", "url": "https://scitest.esss.lu.se/" }
         ]

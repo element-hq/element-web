@@ -15,8 +15,8 @@
     <link rel="manifest" href="manifest.json">
     <meta name="referrer" content="no-referrer">
     <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
-    <meta name="apple-mobile-web-app-title" content="Riot">
-    <meta name="application-name" content="Riot">
+    <meta name="apple-mobile-web-app-title" content="SciChat">
+    <meta name="application-name" content="SciChat">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-144x144.png') %>">
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
@@ -36,7 +36,7 @@
   </head>
   <body style="height: 100%;">
     <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
-    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <noscript>Sorry, SciChat requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <script>
         window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
     </script>
