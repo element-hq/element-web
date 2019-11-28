@@ -358,13 +358,25 @@ function textForCallHangupEvent(event) {
 function textForCallInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     // FIXME: Find a better way to determine this from the event?
-    let callType = "voice";
+    let isVoice = true;
     if (event.getContent().offer && event.getContent().offer.sdp &&
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        callType = "video";
+        isVoice = false;
     }
-    const supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call.', {senderName, callType}) + ' ' + supported;
+    const isSupported = MatrixClientPeg.get().supportsVoip();
+
+    // This ladder could be reduced down to a couple string variables, however other languages
+    // can have a hard time translating those strings. In an effort to make translations easier
+    // and more accurate, we break out the string-based variables to a couple booleans.
+    if (isVoice && isSupported) {
+        return _t("%(senderName)s placed a voice call.", {senderName});
+    } else if (isVoice && !isSupported) {
+        return _t("%(senderName)s placed a voice call. (not supported by this browser)", {senderName});
+    } else if (!isVoice && isSupported) {
+        return _t("%(senderName)s placed a video call.", {senderName});
+    } else if (!isVoice && !isSupported) {
+        return _t("%(senderName)s placed a video call. (not supported by this browser)", {senderName});
+    }
 }
 
 function textForThreePidInviteEvent(event) {
