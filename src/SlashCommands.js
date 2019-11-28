@@ -176,12 +176,14 @@ export const CommandMap = {
                                 const {replacement_room: newRoomId} = await upgradePromise;
                                 if (newRoom.roomId !== newRoomId) return;
 
-                                const joinedMembers = room.getJoinedMembers()
-                                    .map(m => m.userId).filter(m => m !== cli.getUserId());
+                                const toInvite = [
+                                    ...room.getMembersWithMembership("join"),
+                                    ...room.getMembersWithMembership("invite"),
+                                ].map(m => m.userId).filter(m => m !== cli.getUserId());
 
-                                if (joinedMembers.length > 0) {
+                                if (toInvite.length > 0) {
                                     // Errors are handled internally to this function
-                                    await inviteUsersToRoom(newRoomId, joinedMembers);
+                                    await inviteUsersToRoom(newRoomId, toInvite);
                                 }
 
                                 cli.removeListener('Room', checkForUpgradeFn);
