@@ -681,10 +681,10 @@ export default class AppTile extends React.Component {
                 <ContextMenu {...aboveLeft(elementRect, null)} onFinished={this._closeContextMenu}>
                     <WidgetContextMenu
                         onRevokeClicked={this._onRevokeClicked}
-                        onEditClicked={showEditButton && this._onEditClick}
-                        onDeleteClicked={showDeleteButton && this._onDeleteClick}
-                        onSnapshotClicked={showPictureSnapshotButton && this._onSnapshotClick}
-                        onReloadClicked={this.props.showReload && this._onReloadWidgetClick}
+                        onEditClicked={showEditButton ? this._onEditClick : undefined}
+                        onDeleteClicked={showDeleteButton ? this._onDeleteClick : undefined}
+                        onSnapshotClicked={showPictureSnapshotButton ? this._onSnapshotClick : undefined}
+                        onReloadClicked={this.props.showReload ? this._onReloadWidgetClick : undefined}
                         onFinished={this._closeContextMenu}
                     />
                 </ContextMenu>
