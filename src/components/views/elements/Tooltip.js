@@ -129,6 +129,9 @@ module.exports = createReactClass({
 
     render: function() {
         // Render a placeholder
-        return <div className={this.props.className} />;
+        return (
+            <div className={this.props.className} >
+            </div>
+        );
     },
 });
