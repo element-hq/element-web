@@ -183,6 +183,8 @@ export class ContextMenu extends React.Component {
     };
 
     _onKeyDown = (ev) => {
+        let handled = true;
+
         switch (ev.key) {
             case Key.TAB:
             case Key.ESCAPE:
@@ -200,11 +202,15 @@ export class ContextMenu extends React.Component {
             case Key.END:
                 this._onMoveFocusHomeEnd(this.state.contextMenuElem, false);
                 break;
+            default:
+                handled = false;
         }
 
-        // consume all other keys in context menu
-        ev.stopPropagation();
-        ev.preventDefault();
+        if (handled) {
+            // consume all other keys in context menu
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
     };
 
     renderMenu(hasBackground=this.props.hasBackground) {
