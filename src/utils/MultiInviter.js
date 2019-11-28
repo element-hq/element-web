@@ -154,6 +154,8 @@ export default class MultiInviter {
                     return;
                 }
 
+                console.error(err);
+
                 let errorText;
                 let fatal = false;
                 if (err.errcode === 'M_FORBIDDEN') {

@@ -153,13 +153,8 @@ function _onStartDmFinished(shouldInvite, addrs) {
     }
 }
 
-function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
-    if (!shouldInvite) return;
-
-    const addrTexts = addrs.map((addr) => addr.address);
-
-    // Invite new users to a room
-    inviteMultipleToRoom(roomId, addrTexts).then((result) => {
+export function inviteUsersToRoom(roomId, userIds) {
+    return inviteMultipleToRoom(roomId, userIds).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
         return _showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
@@ -170,6 +165,15 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
             description: ((err && err.message) ? err.message : _t("Operation failed")),
         });
     });
+}
+
+function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
+    if (!shouldInvite) return;
+
+    const addrTexts = addrs.map((addr) => addr.address);
+
+    // Invite new users to a room
+    inviteUsersToRoom(roomId, addrTexts);
 }
 
 // TODO: Immutable DMs replaces this
