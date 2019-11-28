@@ -1,0 +1,11 @@
+version: "3"
+services:
+    riot:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:80"
+        volumes:
+            - "./config.json:/app/config.json"
+

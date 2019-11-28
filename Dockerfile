@@ -9,6 +9,8 @@ ARG REACT_SDK_BRANCH="master"
 ARG JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git"
 ARG JS_SDK_BRANCH="master"
 
+ARG RIOT_OG_IMAGE_URL="https://github.com/SciCatProject/riot-web/raw/develop/ess-branding/esslogo.png"
+
 RUN apk add --no-cache git dos2unix
 
 WORKDIR /src
@@ -28,4 +30,4 @@ FROM nginx:alpine
 COPY --from=builder /src/webapp /app
 
 RUN rm -rf /usr/share/nginx/html \
- && ln -s /app /usr/share/nginx/html
+    && ln -s /app /usr/share/nginx/html

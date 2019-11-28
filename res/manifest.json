@@ -1,8 +1,8 @@
 {
-    "name": "Riot - open team collaboration",
-    "short_name": "Riot",
+    "name": "SciChat",
+    "short_name": "SciChat",
     "display": "standalone",
-    "theme_color": "#76CFA6",
+    "theme_color": "#0094ca",
     "start_url": "index.html",
     "icons": [
         {
