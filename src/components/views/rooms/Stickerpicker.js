@@ -25,6 +25,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import PersistedElement from "../elements/PersistedElement";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
+import {ContextMenu} from "../../structures/ContextualMenu";
 
 const widgetType = 'm.stickerpicker';
 
@@ -371,26 +372,8 @@ export default class Stickerpicker extends React.Component {
     }
 
     render() {
-        const ContextualMenu = sdk.getComponent('structures.ContextualMenu');
-        const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
+        let stickerPicker;
         let stickersButton;
-
-        const stickerPicker = <ContextualMenu
-            elementClass={GenericElementContextMenu}
-            chevronOffset={this.state.stickerPickerChevronOffset}
-            chevronFace={'bottom'}
-            left={this.state.stickerPickerX}
-            top={this.state.stickerPickerY}
-            menuWidth={this.popoverWidth}
-            menuHeight={this.popoverHeight}
-            element={this._getStickerpickerContent()}
-            onFinished={this._onFinished}
-            menuPaddingTop={0}
-            menuPaddingLeft={0}
-            menuPaddingRight={0}
-            zIndex={STICKERPICKER_Z_INDEX}
-        />;
-
         if (this.state.showStickers) {
             // Show hide-stickers button
             stickersButton =
@@ -402,6 +385,23 @@ export default class Stickerpicker extends React.Component {
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;
+
+            const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
+            stickerPicker = <ContextMenu
+                chevronOffset={this.state.stickerPickerChevronOffset}
+                chevronFace="bottom"
+                left={this.state.stickerPickerX}
+                top={this.state.stickerPickerY}
+                menuWidth={this.popoverWidth}
+                menuHeight={this.popoverHeight}
+                onFinished={this._onFinished}
+                menuPaddingTop={0}
+                menuPaddingLeft={0}
+                menuPaddingRight={0}
+                zIndex={STICKERPICKER_Z_INDEX}
+            >
+                <GenericElementContextMenu element={this._getStickerpickerContent()} onResize={this._onFinished} />
+            </ContextMenu>;
         } else {
             // Show show-stickers button
             stickersButton =
@@ -415,8 +415,8 @@ export default class Stickerpicker extends React.Component {
                 </AccessibleButton>;
         }
         return <React.Fragment>
-            {stickersButton}
-            {this.state.showStickers && stickerPicker}
+            { stickersButton }
+            { stickerPicker }
         </React.Fragment>;
     }
 }
