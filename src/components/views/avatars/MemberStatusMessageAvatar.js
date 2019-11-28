@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AccessibleButton from '../elements/AccessibleButton';
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
-import * as ContextualMenu from "../../structures/ContextualMenu";
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
+import {ContextMenu} from "../../structures/ContextualMenu";
 
 export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {
@@ -43,7 +43,10 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
         this.state = {
             hasStatus: this.hasStatus,
+            menuDisplayed: false,
         };
+
+        this._button = createRef();
     }
 
     componentWillMount() {
@@ -86,25 +89,12 @@ export default class MemberStatusMessageAvatar extends React.Component {
         });
     };
 
-    _onClick = (e) => {
-        e.stopPropagation();
+    openMenu = () => {
+        this.setState({ menuDisplayed: true });
+    };
 
-        const elementRect = e.target.getBoundingClientRect();
-
-        const x = (elementRect.left + window.pageXOffset);
-        const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
-        const chevronOffset = (elementRect.width - chevronWidth) / 2;
-        const chevronMargin = 1; // Add some spacing away from target
-        const y = elementRect.top + window.pageYOffset - chevronMargin;
-
-        ContextualMenu.createMenu(StatusMessageContextMenu, {
-            chevronOffset: chevronOffset,
-            chevronFace: 'bottom',
-            left: x,
-            top: y,
-            menuWidth: 226,
-            user: this.props.member.user,
-        });
+    closeMenu = () => {
+        this.setState({ menuDisplayed: false });
     };
 
     render() {
@@ -124,10 +114,35 @@ export default class MemberStatusMessageAvatar extends React.Component {
             "mx_MemberStatusMessageAvatar_hasStatus": this.state.hasStatus,
         });
 
-        return <AccessibleButton className={classes}
-            element="div" onClick={this._onClick}
-        >
-            {avatar}
-        </AccessibleButton>;
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._button.current.getBoundingClientRect();
+
+            const x = (elementRect.left + window.pageXOffset);
+            const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
+            const chevronOffset = (elementRect.width - chevronWidth) / 2;
+            const chevronMargin = 1; // Add some spacing away from target
+            const y = elementRect.top + window.pageYOffset - chevronMargin;
+
+            const props = {
+                chevronOffset: chevronOffset,
+                chevronFace: 'bottom',
+                left: x,
+                top: y,
+                menuWidth: 226,
+            };
+
+            contextMenu = <ContextMenu props={props} onFinished={this.closeMenu}>
+                <StatusMessageContextMenu user={this.props.member.user} onFinished={this.closeMenu} />
+            </ContextMenu>;
+        }
+
+        return <React.Fragment>
+            <AccessibleButton className={classes} inputRef={this._button} onClick={this.openMenu}>
+                {avatar}
+            </AccessibleButton>
+
+            { contextMenu }
+        </React.Fragment>;
     }
 }
