@@ -8,4 +8,5 @@ electron_app/
 karma-reports/
 .idea/
 .tmp/
-config.json*
+config.sample.json
+docker-compose.yaml

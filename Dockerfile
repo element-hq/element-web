@@ -21,7 +21,7 @@ RUN yarn --network-timeout=100000 install
 RUN yarn build
 
 # Copy the config now so that we don't create another layer in the app image
-RUN cp /src/config.sample.json /src/webapp/config.json
+RUN cp /src/config.json /src/webapp/config.json
 
 
 # App
@@ -31,3 +31,4 @@ COPY --from=builder /src/webapp /app
 
 RUN rm -rf /usr/share/nginx/html \
     && ln -s /app /usr/share/nginx/html
+EXPOSE 80
