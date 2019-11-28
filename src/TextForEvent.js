@@ -367,7 +367,7 @@ function textForCallInviteEvent(event) {
 
     // This ladder could be reduced down to a couple string variables, however other languages
     // can have a hard time translating those strings. In an effort to make translations easier
-    // and more accurate, we break out the string-based variables in the a couple booleans.
+    // and more accurate, we break out the string-based variables to a couple booleans.
     if (isVoice && isSupported) {
         return _t("%(senderName)s placed a voice call.", {senderName});
     } else if (isVoice && !isSupported) {
