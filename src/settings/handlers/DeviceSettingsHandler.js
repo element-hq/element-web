@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from "../../MatrixClientPeg";
 import {SettingLevel} from "../SettingsStore";
@@ -122,7 +121,10 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         }
 
         const value = localStorage.getItem("mx_labs_feature_" + featureName);
-        return value === "true";
+        if (value === "true") return true;
+        if (value === "false") return false;
+        // Try to read the next config level for the feature.
+        return null;
     }
 
     _writeFeature(featureName, enabled) {

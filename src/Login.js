@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -87,30 +88,21 @@ export default class Login {
         const isEmail = username.indexOf("@") > 0;
 
         let identifier;
-        let legacyParams; // parameters added to support old HSes
         if (phoneCountry && phoneNumber) {
             identifier = {
                 type: 'm.id.phone',
                 country: phoneCountry,
                 number: phoneNumber,
             };
-            // No legacy support for phone number login
         } else if (isEmail) {
             identifier = {
                 type: 'm.id.thirdparty',
                 medium: 'email',
                 address: username,
             };
-            legacyParams = {
-                medium: 'email',
-                address: username,
-            };
         } else {
             identifier = {
                 type: 'm.id.user',
-                user: username,
-            };
-            legacyParams = {
                 user: username,
             };
         }
@@ -120,7 +112,6 @@ export default class Login {
             identifier: identifier,
             initial_device_display_name: this._defaultDeviceDisplayName,
         };
-        Object.assign(loginParams, legacyParams);
 
         const tryFallbackHs = (originalError) => {
             return sendLoginRequest(

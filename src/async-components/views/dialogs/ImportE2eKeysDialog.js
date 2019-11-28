@@ -16,8 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
-import * as Matrix from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -37,11 +38,11 @@ function readFileAsArrayBuffer(file) {
 const PHASE_EDIT = 1;
 const PHASE_IMPORTING = 2;
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'ImportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         onFinished: PropTypes.func.isRequired,
     },
 

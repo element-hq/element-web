@@ -2,6 +2,7 @@
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +24,10 @@ import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import createRoom from "../../../createRoom";
+import dis from "../../../dispatcher";
+import SettingsStore from '../../../settings/SettingsStore';
 
 const MODE_LEGACY = 'legacy';
 const MODE_SAS = 'sas';
@@ -85,25 +90,37 @@ export default class DeviceVerifyDialog extends React.Component {
         this.props.onFinished(confirm);
     }
 
-    _onSasRequestClick = () => {
+    _onSasRequestClick = async () => {
         this.setState({
             phase: PHASE_WAIT_FOR_PARTNER_TO_ACCEPT,
         });
-        this._verifier = MatrixClientPeg.get().beginKeyVerification(
-            verificationMethods.SAS, this.props.userId, this.props.device.deviceId,
-        );
-        this._verifier.on('show_sas', this._onVerifierShowSas);
-        this._verifier.verify().then(() => {
+        const client = MatrixClientPeg.get();
+        const verifyingOwnDevice = this.props.userId === client.getUserId();
+        try {
+            if (!verifyingOwnDevice && SettingsStore.getValue("feature_dm_verification")) {
+                const roomId = await ensureDMExistsAndOpen(this.props.userId);
+                // throws upon cancellation before having started
+                this._verifier = await client.requestVerificationDM(
+                    this.props.userId, roomId, [verificationMethods.SAS],
+                );
+            } else {
+                this._verifier = client.beginKeyVerification(
+                    verificationMethods.SAS, this.props.userId, this.props.device.deviceId,
+                );
+            }
+            this._verifier.on('show_sas', this._onVerifierShowSas);
+            // throws upon cancellation
+            await this._verifier.verify();
             this.setState({phase: PHASE_VERIFIED});
             this._verifier.removeListener('show_sas', this._onVerifierShowSas);
             this._verifier = null;
-        }).catch((e) => {
+        } catch (e) {
             console.log("Verification failed", e);
             this.setState({
                 phase: PHASE_CANCELLED,
             });
             this._verifier = null;
-        });
+        }
     }
 
     _onSasMatchesClick = () => {
@@ -241,6 +258,16 @@ export default class DeviceVerifyDialog extends React.Component {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
+        let text;
+        if (MatrixClientPeg.get().getUserId() === this.props.userId) {
+            text = _t("To verify that this device can be trusted, please check that the key you see " +
+                "in User Settings on that device matches the key below:");
+        } else {
+            text = _t("To verify that this device can be trusted, please contact its owner using some other " +
+                "means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings " +
+                "for this device matches the key below:");
+        }
+
         const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
         const body = (
             <div>
@@ -250,10 +277,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     {_t("Use two-way text verification")}
                 </AccessibleButton>
                 <p>
-                    { _t("To verify that this device can be trusted, please contact its " +
-                        "owner using some other means (e.g. in person or a phone call) " +
-                        "and ask them whether the key they see in their User Settings " +
-                        "for this device matches the key below:") }
+                    { text }
                 </p>
                 <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
@@ -291,3 +315,30 @@ export default class DeviceVerifyDialog extends React.Component {
     }
 }
 
+async function ensureDMExistsAndOpen(userId) {
+    const client = MatrixClientPeg.get();
+    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
+    const rooms = roomIds.map(id => client.getRoom(id));
+    const suitableDMRooms = rooms.filter(r => {
+        if (r && r.getMyMembership() === "join") {
+            const member = r.getMember(userId);
+            return member && (member.membership === "invite" || member.membership === "join");
+        }
+        return false;
+    });
+    let roomId;
+    if (suitableDMRooms.length) {
+        const room = suitableDMRooms[0];
+        roomId = room.roomId;
+    } else {
+        roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
+    }
+    // don't use andView and spinner in createRoom, together, they cause this dialog to close and reopen,
+    // we causes us to loose the verifier and restart, and we end up having two verification requests
+    dis.dispatch({
+        action: 'view_room',
+        room_id: roomId,
+        should_peek: false,
+    });
+    return roomId;
+}

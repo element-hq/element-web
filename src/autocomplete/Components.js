@@ -34,7 +34,7 @@ export class TextualCompletion extends React.Component {
             ...restProps
         } = this.props;
         return (
-            <div className={classNames('mx_Autocomplete_Completion_block', className)} {...restProps}>
+            <div className={classNames('mx_Autocomplete_Completion_block', className)} role="option" {...restProps}>
                 <span className="mx_Autocomplete_Completion_title">{ title }</span>
                 <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
                 <span className="mx_Autocomplete_Completion_description">{ description }</span>
@@ -60,7 +60,7 @@ export class PillCompletion extends React.Component {
             ...restProps
         } = this.props;
         return (
-            <div className={classNames('mx_Autocomplete_Completion_pill', className)} {...restProps}>
+            <div className={classNames('mx_Autocomplete_Completion_pill', className)} role="option" {...restProps}>
                 { initialComponent }
                 <span className="mx_Autocomplete_Completion_title">{ title }</span>
                 <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>

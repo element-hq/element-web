@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 
-const TagPanelButtons = React.createClass({
+const TagPanelButtons = createReactClass({
     displayName: 'TagPanelButtons',
 
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._dispatcherRef = dis.register(this._onAction);
     },
 

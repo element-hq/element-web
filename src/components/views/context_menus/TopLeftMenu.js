@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,12 +24,17 @@ import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from "../../../index";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {
         displayName: PropTypes.string.isRequired,
         userId: PropTypes.string.isRequired,
         onFinished: PropTypes.func,
+
+        // Optional function to collect a reference to the container
+        // of this component directly.
+        containerRef: PropTypes.func,
     };
 
     constructor() {
@@ -52,6 +58,8 @@ export class TopLeftMenu extends React.Component {
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const isGuest = MatrixClientPeg.get().isGuest();
 
         const hostingSignupLink = getHostingLink('user-context-menu');
@@ -61,44 +69,56 @@ export class TopLeftMenu extends React.Component {
                 {_t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener" tabIndex="0">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noopener" aria-hidden={true}>
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;
         }
 
-        let homePageSection = null;
+        let homePageItem = null;
         if (this.hasHomePage()) {
-            homePageSection = <ul className="mx_TopLeftMenu_section_withIcon">
-                <li className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>{_t("Home")}</li>
-            </ul>;
+            homePageItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>
+                    {_t("Home")}
+                </AccessibleButton>
+            );
         }
 
-        let signInOutSection;
+        let signInOutItem;
         if (isGuest) {
-            signInOutSection = <ul className="mx_TopLeftMenu_section_withIcon">
-                <li className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>{_t("Sign in")}</li>
-            </ul>;
+            signInOutItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>
+                    {_t("Sign in")}
+                </AccessibleButton>
+            );
         } else {
-            signInOutSection = <ul className="mx_TopLeftMenu_section_withIcon">
-                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
-            </ul>;
+            signInOutItem = (
+                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>
+                    {_t("Sign out")}
+                </AccessibleButton>
+            );
         }
 
-        return <div className="mx_TopLeftMenu">
-            <div className="mx_TopLeftMenu_section_noIcon">
+        const settingsItem = (
+            <AccessibleButton element="li" className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>
+                {_t("Settings")}
+            </AccessibleButton>
+        );
+
+        return <div className="mx_TopLeftMenu" ref={this.props.containerRef}>
+            <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true}>
                 <div>{this.props.displayName}</div>
-                <div className="mx_TopLeftMenu_greyedText">{this.props.userId}</div>
+                <div className="mx_TopLeftMenu_greyedText" aria-hidden={true}>{this.props.userId}</div>
                 {hostingSignup}
             </div>
-            {homePageSection}
             <ul className="mx_TopLeftMenu_section_withIcon">
-                <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
+                {homePageItem}
+                {settingsItem}
+                {signInOutItem}
             </ul>
-            {signInOutSection}
         </div>;
     }
 

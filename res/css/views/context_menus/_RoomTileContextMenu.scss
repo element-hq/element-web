@@ -18,6 +18,18 @@ limitations under the License.
     padding: 6px;
 }
 
+.mx_RoomTileContextMenu_tag_icon {
+    padding-right: 8px;
+    padding-left: 4px;
+    display: inline-block;
+}
+
+.mx_RoomTileContextMenu_tag_icon_set {
+    padding-right: 8px;
+    padding-left: 4px;
+    display: none;
+}
+
 .mx_RoomTileContextMenu_tag_field, .mx_RoomTileContextMenu_leave {
     padding-top: 8px;
     padding-right: 20px;
@@ -45,18 +57,6 @@ limitations under the License.
     color: rgba(0, 0, 0, 0.2);
 }
 
-.mx_RoomTileContextMenu_tag_icon {
-    padding-right: 8px;
-    padding-left: 4px;
-    display: inline-block
-}
-
-.mx_RoomTileContextMenu_tag_icon_set {
-    padding-right: 8px;
-    padding-left: 4px;
-    display: none;
-}
-
 .mx_RoomTileContextMenu_separator {
     margin-top: 0;
     margin-bottom: 0;
@@ -70,10 +70,6 @@ limitations under the License.
 
 .mx_RoomTileContextMenu_leave {
     color: $warning-color;
-}
-
-.mx_RoomTileContextMenu_tag_fieldSet .mx_RoomTileContextMenu_tag_icon {
-    /* Something to indicate that the icon is the set tag */
 }
 
 .mx_RoomTileContextMenu_notif_picker {

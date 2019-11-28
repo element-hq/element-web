@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import PropTypes from "prop-types";
-import {RoomPermalinkCreator} from "../../../matrix-to";
+import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -37,18 +37,19 @@ export default class ReplyPreview extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        this.unmounted = false;
 
         this.state = {
-            event: null,
+            event: RoomViewStore.getQuotingEvent(),
         };
 
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
-
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
-        this._onRoomViewStoreUpdate();
     }
 
     componentWillUnmount() {
+        this.unmounted = true;
+
         // Remove RoomStore listener
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
@@ -56,6 +57,8 @@ export default class ReplyPreview extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
+        if (this.unmounted) return;
+
         const event = RoomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });
@@ -66,13 +69,12 @@ export default class ReplyPreview extends React.Component {
         if (!this.state.event) return null;
 
         const EventTile = sdk.getComponent('rooms.EventTile');
-        const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
-                <EmojiText element="div" className="mx_ReplyPreview_header mx_ReplyPreview_title">
+                <div className="mx_ReplyPreview_header mx_ReplyPreview_title">
                     { '💬 ' + _t('Replying') }
-                </EmojiText>
+                </div>
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
                     <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18"
                          onClick={cancelQuoting} />

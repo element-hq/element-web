@@ -36,8 +36,8 @@ limitations under the License.
     border-bottom: 7px solid transparent;
 }
 
-.mx_Tooltip_chevron:after {
-    content:'';
+.mx_Tooltip_chevron::after {
+    content: '';
     width: 0;
     height: 0;
     border-top: 6px solid transparent;
@@ -55,7 +55,7 @@ limitations under the License.
     border-radius: 4px;
     box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     background-color: $menu-bg-color;
-    z-index: 2000;
+    z-index: 4000; // Higher than dialogs so tooltips can be used in dialogs
     padding: 10px;
     pointer-events: none;
     line-height: 14px;
@@ -72,5 +72,21 @@ limitations under the License.
 
     &.mx_Tooltip_invisible {
         animation: mx_fadeout 0.1s forwards;
+    }
+}
+
+.mx_Tooltip_timeline {
+    box-shadow: none;
+    background-color: $tooltip-timeline-bg-color;
+    color: $tooltip-timeline-fg-color;
+    text-align: center;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 6px 8px;
+
+    .mx_Tooltip_chevron::after {
+        border-right-color: $tooltip-timeline-bg-color;
     }
 }

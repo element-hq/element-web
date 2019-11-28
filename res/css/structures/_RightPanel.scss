@@ -50,18 +50,18 @@ limitations under the License.
     height: 20px;
     width: 20px;
     position: relative;
-}
 
-.mx_RightPanel_headerButton::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: $rightpanel-button-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: $rightpanel-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
 }
 
 .mx_RightPanel_membersButton::before {

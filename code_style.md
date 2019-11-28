@@ -22,7 +22,7 @@ number throgh from the original code to the final application.
 General Style
 -------------
 - 4 spaces to indent, for consistency with Matrix Python.
-- 120 columns per line, but try to keep JavaScript code around the 80 column mark.
+- 120 columns per line, but try to keep JavaScript code around the 90 column mark.
   Inline JSX in particular can be nicer with more columns per line.
 - No trailing whitespace at end of lines.
 - Don't indent empty lines.
@@ -34,7 +34,7 @@ General Style
 - UpperCamelCase for class and type names
 - lowerCamelCase for functions and variables.
 - Single line ternary operators are fine.
-- UPPER_CAMEL_CASE for constants
+- UPPER_SNAKE_CASE for constants
 - Single quotes for strings by default, for consistency with most JavaScript styles:
 
   ```javascript

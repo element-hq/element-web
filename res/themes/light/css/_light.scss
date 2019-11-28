@@ -1,15 +1,20 @@
 // XXX: check this?
 /* Nunito lacks combining diacritics, so these will fall through
    to the next font.  Helevetica's diacritics however do not combine
-   nicely with Open Sans (on OSX, at least) and result in a huge
-   horizontal mess.  Arial empirically gets it right, hence prioritising
-   Arial here. */
-$font-family: 'Nunito', Arial, Helvetica, Sans-Serif;
+   nicely (on OSX, at least) and result in a huge horizontal mess.
+   Arial empirically gets it right, hence prioritising Arial here. */
+/* We fall through to Twemoji for emoji rather than falling through
+   to native Emoji fonts (if any) to ensure cross-browser consistency */
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Arial, Helvetica, Sans-Serif;
+
+$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Courier, monospace;
 
 // unified palette
 // try to use these colors when possible
 $accent-color: #03b381;
+$accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
+$notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $notice-secondary-color: #61708b;
 $header-panel-bg-color: #f3f8fd;
 
@@ -25,15 +30,17 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color-50pct: #92caad;
+$accent-color-50pct: rgba(3, 179, 129, 0.5);    //#03b381 in rgb
+$accent-color-darker: #92caad;
 $accent-color-alt: #238CF5;
 
 $selection-fg-color: $primary-bg-color;
 
 $focus-brightness: 105%;
 
-// red warning colour
-$warning-color: $notice-primary-color;
+// warning colours
+$warning-color: $notice-primary-color; // red
+$orange-warning-color: #ff8d13; // used for true warnings
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;
@@ -162,6 +169,7 @@ $header-divider-color: #91A1C0;
 // ********************
 
 $roomtile-name-color: #61708b;
+$roomtile-badge-fg-color: $accent-fg-color;
 $roomtile-selected-color: #212121;
 $roomtile-notified-color: #212121;
 $roomtile-selected-bg-color: #fff;
@@ -191,10 +199,18 @@ $widget-menu-bar-bg-color: $secondary-accent-color;
 
 // ********************
 
+// both $event-highlight-bg-color and $room-warning-bg-color share this value,
+// so to not make their order dependent on who depends on who, have a shared value
+// defined before both
+$yellow-background: #fff8e3;
+
 // event tile lifecycle
 $event-encrypting-color: #abddbc;
 $event-sending-color: #ddd;
 $event-notsent-color: #f44;
+
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: $yellow-background;
 
 // event redaction
 $event-redacted-fg-color: #e2e2e2;
@@ -221,7 +237,7 @@ $tab-label-active-fg-color: #ffffff;
 $tab-label-bg-color: transparent;
 $tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: #454545;
-$tab-label-active-icon-bg-color: #ffffff;
+$tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 
 // Buttons
 $button-primary-fg-color: #ffffff;
@@ -231,6 +247,10 @@ $button-danger-fg-color: #ffffff;
 $button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+$button-link-fg-color: $accent-color;
+$button-link-bg-color: transparent;
+
+$visual-bell-bg-color: #faa;
 
 // Toggle switch
 $togglesw-off-color: #c1c9d6;
@@ -239,7 +259,7 @@ $togglesw-ball-color: #fff;
 
 $progressbar-color: #000;
 
-$room-warning-bg-color: #fff8e3;
+$room-warning-bg-color: $yellow-background;
 
 $memberstatus-placeholder-color: $roomtile-name-color;
 
@@ -257,13 +277,21 @@ $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 $message-action-bar-bg-color: $primary-bg-color;
 $message-action-bar-fg-color: $primary-fg-color;
 $message-action-bar-border-color: #e9edf1;
-$message-action-bar-hover-border-color: #b8c1d2;
+$message-action-bar-hover-border-color: $focus-bg-color;
 
 $reaction-row-button-bg-color: $header-panel-bg-color;
 $reaction-row-button-border-color: #e9edf1;
-$reaction-row-button-hover-border-color: #bebebe;
+$reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 $reaction-row-button-selected-border-color: $accent-color;
+
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
+$interactive-tooltip-bg-color: #27303a;
+$interactive-tooltip-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #e8eef5;
 
 // ***** Mixins! *****
 
@@ -304,4 +332,9 @@ $reaction-row-button-selected-border-color: $accent-color;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
+}
+
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
 }

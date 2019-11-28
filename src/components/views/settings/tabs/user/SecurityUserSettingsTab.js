@@ -22,9 +22,9 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
-import Promise from "bluebird";
 import Modal from "../../../../../Modal";
 import sdk from "../../../../..";
+import {sleep} from "../../../../../utils/promise";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -129,7 +129,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
                     // Add a delay between each invite change in order to avoid rate
                     // limiting by the server.
-                    await Promise.delay(e.retry_after_ms || 2500);
+                    await sleep(e.retry_after_ms || 2500);
 
                     // Redo last action
                     i--;
@@ -258,6 +258,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Devices")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
+                        {_t("A device's public name is visible to people you communicate with")}
                         <DevicesPanel />
                     </div>
                 </div>

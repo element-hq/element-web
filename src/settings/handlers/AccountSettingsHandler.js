@@ -19,7 +19,11 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
 
-const BREADCRUMBS_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
+const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
+const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
+const BREADCRUMBS_EVENT_TYPES = [BREADCRUMBS_LEGACY_EVENT_TYPE, BREADCRUMBS_EVENT_TYPE];
+
+const INTEG_PROVISIONING_EVENT_TYPE = "im.vector.setting.integration_provisioning";
 
 /**
  * Gets and sets settings at the "account" level for the current user.
@@ -57,9 +61,11 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 const val = event.getContent()[settingName];
                 this._watchers.notifyUpdate(settingName, null, SettingLevel.ACCOUNT, val);
             }
-        } else if (event.getType() === BREADCRUMBS_EVENT_TYPE) {
-            const val = event.getContent()['rooms'] || [];
-            this._watchers.notifyUpdate("breadcrumb_rooms", null, SettingLevel.ACCOUNT, val);
+        } else if (BREADCRUMBS_EVENT_TYPES.includes(event.getType())) {
+            this._notifyBreadcrumbsUpdate(event);
+        } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
+            const val = event.getContent()['enabled'];
+            this._watchers.notifyUpdate("integrationProvisioning", null, SettingLevel.ACCOUNT, val);
         }
     }
 
@@ -75,8 +81,21 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         // Special case for breadcrumbs
         if (settingName === "breadcrumb_rooms") {
-            const content = this._getSettings(BREADCRUMBS_EVENT_TYPE) || {};
-            return content['rooms'] || [];
+            let content = this._getSettings(BREADCRUMBS_EVENT_TYPE);
+            if (!content || !content['recent_rooms']) {
+                content = this._getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
+
+                // This is a bit of a hack, but it makes things slightly easier
+                if (content) content['recent_rooms'] = content['rooms'];
+            }
+
+            return content && content['recent_rooms'] ? content['recent_rooms'] : [];
+        }
+
+        // Special case integration manager provisioning
+        if (settingName === "integrationProvisioning") {
+            const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE);
+            return content ? content['enabled'] : null;
         }
 
         const settings = this._getSettings() || {};
@@ -102,9 +121,22 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         // Special case for breadcrumbs
         if (settingName === "breadcrumb_rooms") {
-            const content = this._getSettings(BREADCRUMBS_EVENT_TYPE) || {};
-            content['rooms'] = newValue;
+            // We read the value first just to make sure we preserve whatever random keys might be present.
+            let content = this._getSettings(BREADCRUMBS_EVENT_TYPE);
+            if (!content || !content['recent_rooms']) {
+                content = this._getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
+            }
+            if (!content) content = {}; // If we still don't have content, make some
+
+            content['recent_rooms'] = newValue;
             return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
+        }
+
+        // Special case integration manager provisioning
+        if (settingName === "integrationProvisioning") {
+            const content = this._getSettings(INTEG_PROVISIONING_EVENT_TYPE) || {};
+            content['enabled'] = newValue;
+            return MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);
         }
 
         const content = this._getSettings() || {};
@@ -128,5 +160,20 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         const event = cli.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
         return event.getContent();
+    }
+
+    _notifyBreadcrumbsUpdate(event) {
+        let val = [];
+        if (event.getType() === BREADCRUMBS_LEGACY_EVENT_TYPE) {
+            // This seems fishy - try and get the event for the new rooms
+            const newType = this._getSettings(BREADCRUMBS_EVENT_TYPE);
+            if (newType) val = newType['recent_rooms'];
+            else val = event.getContent()['rooms'];
+        } else if (event.getType() === BREADCRUMBS_EVENT_TYPE) {
+            val = event.getContent()['recent_rooms'];
+        } else {
+            return; // for sanity, not because we expect to be here.
+        }
+        this._watchers.notifyUpdate("breadcrumb_rooms", null, SettingLevel.ACCOUNT, val || []);
     }
 }

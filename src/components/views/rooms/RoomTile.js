@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -31,8 +33,9 @@ import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
+import {_t} from "../../../languageHandler";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomTile',
 
     propTypes: {
@@ -67,14 +70,6 @@ module.exports = React.createClass({
         });
     },
 
-    _shouldShowNotifBadge: function() {
-        return RoomNotifs.BADGE_STATES.includes(this.state.notifState);
-    },
-
-    _shouldShowMentionBadge: function() {
-        return RoomNotifs.MENTION_BADGE_STATES.includes(this.state.notifState);
-    },
-
     _isDirectMessageRoom: function(roomId) {
         const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
         return Boolean(dmRooms);
@@ -91,6 +86,8 @@ module.exports = React.createClass({
     },
 
     _getStatusMessageUser() {
+        if (!MatrixClientPeg.get()) return null; // We've probably been logged out
+
         const selfId = MatrixClientPeg.get().getUserId();
         const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
         if (!otherMember) {
@@ -149,19 +146,17 @@ module.exports = React.createClass({
         });
     },
 
-    componentWillMount: function() {
-        MatrixClientPeg.get().on("accountData", this.onAccountData);
-        MatrixClientPeg.get().on("Room.name", this.onRoomName);
+    componentDidMount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.on("accountData", this.onAccountData);
+        cli.on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
 
         if (this._shouldShowStatusMessage()) {
             const statusUser = this._getStatusMessageUser();
             if (statusUser) {
-                statusUser.on(
-                    "User._unstable_statusMessage",
-                    this._onStatusMessageCommitted,
-                );
+                statusUser.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
             }
         }
     },
@@ -299,8 +294,8 @@ module.exports = React.createClass({
         const notificationCount = this.props.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
-        const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
-        const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
+        const notifBadges = notificationCount > 0 && RoomNotifs.shouldShowNotifBadge(this.state.notifState);
+        const mentionBadges = this.props.highlight && RoomNotifs.shouldShowMentionBadge(this.state.notifState);
         const badges = notifBadges || mentionBadges;
 
         let subtext = null;
@@ -342,7 +337,6 @@ module.exports = React.createClass({
             badge = <div className={badgeClasses}>{ badgeContent }</div>;
         }
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
         let subtextLabel;
         let tooltip;
@@ -354,14 +348,7 @@ module.exports = React.createClass({
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
-
-            if (this.state.selected) {
-                const nameSelected = <EmojiText>{ name }</EmojiText>;
-
-                label = <div title={name} className={nameClasses} dir="auto">{ nameSelected }</div>;
-            } else {
-                label = <EmojiText element="div" title={name} className={nameClasses} dir="auto">{ name }</EmojiText>;
-            }
+            label = <div title={name} className={nameClasses} dir="auto">{ name }</div>;
         } else if (this.state.hover) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
@@ -380,6 +367,8 @@ module.exports = React.createClass({
 
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
+        let ariaLabel = name;
+
         let dmIndicator;
         if (this._isDirectMessageRoom(this.props.room.roomId)) {
             dmIndicator = <img
@@ -391,12 +380,28 @@ module.exports = React.createClass({
             />;
         }
 
+        // The following labels are written in such a fashion to increase screen reader efficiency (speed).
+        if (notifBadges && mentionBadges && !isInvite) {
+            ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
+                count: notificationCount,
+            });
+        } else if (notifBadges) {
+            ariaLabel += " " + _t("%(count)s unread messages.", { count: notificationCount });
+        } else if (mentionBadges && !isInvite) {
+            ariaLabel += " " + _t("Unread mentions.");
+        } else if (this.props.unread) {
+            ariaLabel += " " + _t("Unread messages.");
+        }
+
         return <AccessibleButton tabIndex="0"
                                  className={classes}
                                  onClick={this.onClick}
                                  onMouseEnter={this.onMouseEnter}
                                  onMouseLeave={this.onMouseLeave}
                                  onContextMenu={this.onContextMenu}
+                                 aria-label={ariaLabel}
+                                 aria-selected={this.state.selected}
+                                 role="treeitem"
         >
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">

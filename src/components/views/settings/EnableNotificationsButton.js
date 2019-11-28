@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-const React = require("react");
-const Notifier = require("../../../Notifier");
-const dis = require("../../../dispatcher");
+import React from "react";
+import createReactClass from 'create-react-class';
+import Notifier from "../../../Notifier";
+import dis from "../../../dispatcher";
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'EnableNotificationsButton',
 
     componentDidMount: function() {

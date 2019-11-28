@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 import ToggleSwitch from "./ToggleSwitch";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'SettingsFlag',
     propTypes: {
         name: PropTypes.string.isRequired,
@@ -29,7 +30,6 @@ module.exports = React.createClass({
         label: PropTypes.string, // untranslated
         onChange: PropTypes.func,
         isExplicit: PropTypes.bool,
-        manualSave: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -46,8 +46,8 @@ module.exports = React.createClass({
     onChange: function(checked) {
         if (this.props.group && !checked) return;
 
-        if (!this.props.manualSave) this.save(checked);
-        else this.setState({ value: checked });
+        this.save(checked);
+        this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
     },
 
@@ -61,13 +61,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const value = this.props.manualSave ? this.state.value : SettingsStore.getValueAt(
-            this.props.level,
-            this.props.name,
-            this.props.roomId,
-            this.props.isExplicit,
-        );
-
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         let label = this.props.label;
@@ -77,7 +70,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_SettingsFlag">
                 <span className="mx_SettingsFlag_label">{label}</span>
-                <ToggleSwitch checked={value} onChange={this.onChange} disabled={!canChange} />
+                <ToggleSwitch checked={this.state.value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
             </div>
         );
     },

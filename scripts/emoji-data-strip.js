@@ -1,28 +1,29 @@
 #!/usr/bin/env node
-const EMOJI_DATA = require('emojione/emoji.json');
-const EMOJI_SUPPORTED = Object.keys(require('emojione').emojioneList);
+
+// This generates src/stripped-emoji.json as used by the EmojiProvider autocomplete
+// provider.
+
+const EMOJIBASE = require('emojibase-data/en/compact.json');
+
 const fs = require('fs');
 
-const output = Object.keys(EMOJI_DATA).map(
-    (key) => {
-        const datum = EMOJI_DATA[key];
+const output = EMOJIBASE.map(
+    (datum) => {
         const newDatum = {
-            name: datum.name,
-            shortname: datum.shortname,
-            category: datum.category,
-            emoji_order: datum.emoji_order,
+            name: datum.annotation,
+            shortname: `:${datum.shortcodes[0]}:`,
+            category: datum.group,
+            emoji_order: datum.order,
         };
-        if (datum.aliases.length > 0) {
-            newDatum.aliases = datum.aliases;
+        if (datum.shortcodes.length > 1) {
+            newDatum.aliases = datum.shortcodes.slice(1).map(s => `:${s}:`);
         }
-        if (datum.aliases_ascii.length > 0) {
-            newDatum.aliases_ascii = datum.aliases_ascii;
+        if (datum.emoticon) {
+            newDatum.aliases_ascii = [ datum.emoticon ];
         }
         return newDatum;
     }
-).filter((datum) => {
-    return EMOJI_SUPPORTED.includes(datum.shortname);
-});
+);
 
 // Write to a file in src. Changes should be checked into git. This file is copied by
 // babel using --copy-files

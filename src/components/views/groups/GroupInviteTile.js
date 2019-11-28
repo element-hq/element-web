@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
@@ -25,7 +26,7 @@ import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {createMenu} from "../../structures/ContextualMenu";
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'GroupInviteTile',
 
     propTypes: {
@@ -117,7 +118,6 @@ export default React.createClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         const groupName = this.props.group.name || this.props.group.groupId;
         const httpAvatarUrl = this.props.group.avatarUrl ?
@@ -129,9 +129,9 @@ export default React.createClass({
             'mx_RoomTile_badgeShown': this.state.badgeHover || this.state.menuDisplayed,
         });
 
-        const label = <EmojiText element="div" title={this.props.group.groupId} className={nameClasses} dir="auto">
+        const label = <div title={this.props.group.groupId} className={nameClasses} dir="auto">
             { groupName }
-        </EmojiText>;
+        </div>;
 
         const badgeEllipsis = this.state.badgeHover || this.state.menuDisplayed;
         const badgeClasses = classNames('mx_RoomTile_badge mx_RoomTile_highlight', {

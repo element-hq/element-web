@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +17,15 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-
 import PasswordReset from "../../../PasswordReset";
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from 'classnames';
 
 // Phases
 // Show controls to configure server details
@@ -36,46 +39,73 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
-        // The default server name to use when the user hasn't specified
-        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
-        // via `.well-known` discovery. The server name is used instead of the
-        // HS URL when talking about "your account".
-        defaultServerName: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
-
-        defaultHsUrl: PropTypes.string,
-        defaultIsUrl: PropTypes.string,
-        customHsUrl: PropTypes.string,
-        customIsUrl: PropTypes.string,
-
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        onServerConfigChange: PropTypes.func.isRequired,
         onLoginClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
-            enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
-            enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
             phase: PHASE_FORGOT,
             email: "",
             password: "",
             password2: "",
             errorText: null,
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverErrorIsFatal: false,
+            serverDeadError: "",
+            serverRequiresIdServer: null,
         };
     },
 
-    submitPasswordReset: function(hsUrl, identityUrl, email, password) {
+    componentWillMount: function() {
+        this.reset = null;
+        this._checkServerLiveliness(this.props.serverConfig);
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
+            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+
+        // Do a liveliness check on the new URLs
+        this._checkServerLiveliness(newProps.serverConfig);
+    },
+
+    _checkServerLiveliness: async function(serverConfig) {
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                serverConfig.hsUrl,
+                serverConfig.isUrl,
+            );
+
+            const pwReset = new PasswordReset(serverConfig.hsUrl, serverConfig.isUrl);
+            const serverRequiresIdServer = await pwReset.doesServerRequireIdServerParam();
+
+            this.setState({
+                serverIsAlive: true,
+                serverRequiresIdServer,
+            });
+        } catch (e) {
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
+        }
+    },
+
+    submitPasswordReset: function(email, password) {
         this.setState({
             phase: PHASE_SENDING_EMAIL,
         });
-        this.reset = new PasswordReset(hsUrl, identityUrl);
-        this.reset.resetPassword(email, password).done(() => {
+        this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
+        this.reset.resetPassword(email, password).then(() => {
             this.setState({
                 phase: PHASE_EMAIL_SENT,
             });
@@ -87,28 +117,25 @@ module.exports = React.createClass({
         });
     },
 
-    onVerify: function(ev) {
+    onVerify: async function(ev) {
         ev.preventDefault();
         if (!this.reset) {
             console.error("onVerify called before submitPasswordReset!");
             return;
         }
-        this.reset.checkEmailLinkClicked().done((res) => {
+        try {
+            await this.reset.checkEmailLinkClicked();
             this.setState({ phase: PHASE_DONE });
-        }, (err) => {
+        } catch (err) {
             this.showErrorDialog(err.message);
-        });
+        }
     },
 
-    onSubmitForm: function(ev) {
+    onSubmitForm: async function(ev) {
         ev.preventDefault();
 
-        // Don't allow the user to register if there's a discovery error
-        // Without this, the user could end up registering on the wrong homeserver.
-        if (this.props.defaultServerDiscoveryError) {
-            this.setState({errorText: this.props.defaultServerDiscoveryError});
-            return;
-        }
+        // refresh the server errors, just in case the server came back online
+        await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -132,10 +159,7 @@ module.exports = React.createClass({
                 button: _t('Continue'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        this.submitPasswordReset(
-                            this.state.enteredHsUrl, this.state.enteredIsUrl,
-                            this.state.email, this.state.password,
-                        );
+                        this.submitPasswordReset(this.state.email, this.state.password);
                     }
                 },
             });
@@ -148,19 +172,7 @@ module.exports = React.createClass({
         });
     },
 
-    onServerConfigChange: function(config) {
-        const newState = {};
-        if (config.hsUrl !== undefined) {
-            newState.enteredHsUrl = config.hsUrl;
-        }
-        if (config.isUrl !== undefined) {
-            newState.enteredIsUrl = config.isUrl;
-        }
-        this.setState(newState);
-    },
-
-    onServerDetailsNextPhaseClick(ev) {
-        ev.stopPropagation();
+    async onServerDetailsNextPhaseClick() {
         this.setState({
             phase: PHASE_FORGOT,
         });
@@ -190,56 +202,61 @@ module.exports = React.createClass({
 
     renderServerDetails() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        return <div>
-            <ServerConfig
-                defaultHsUrl={this.props.defaultHsUrl}
-                defaultIsUrl={this.props.defaultIsUrl}
-                customHsUrl={this.state.enteredHsUrl}
-                customIsUrl={this.state.enteredIsUrl}
-                onServerConfigChange={this.onServerConfigChange}
-                delayTimeMs={0} />
-            <AccessibleButton className="mx_Login_submit"
-                onClick={this.onServerDetailsNextPhaseClick}
-            >
-                {_t("Next")}
-            </AccessibleButton>
-        </div>;
+        return <ServerConfig
+            serverConfig={this.props.serverConfig}
+            onServerConfigChange={this.props.onServerConfigChange}
+            delayTimeMs={0}
+            showIdentityServerIfRequiredByHomeserver={true}
+            onAfterSubmit={this.onServerDetailsNextPhaseClick}
+            submitText={_t("Next")}
+            submitClass="mx_Login_submit"
+        />;
     },
 
     renderForgot() {
         const Field = sdk.getComponent('elements.Field');
 
         let errorText = null;
-        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        const err = this.state.errorText;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let yourMatrixAccountText = _t('Your Matrix account');
-        if (this.state.enteredHsUrl === this.props.defaultHsUrl && this.props.defaultServerName) {
-            yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
-                serverName: this.props.defaultServerName,
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.state.enteredHsUrl);
-                yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                errorText = <div className="mx_Login_error">{_t(
-                    "The homeserver URL %(hsUrl)s doesn't seem to be valid URL. Please " +
-                    "enter a valid URL including the protocol prefix.",
-                {
-                    hsUrl: this.state.enteredHsUrl,
-                })}</div>;
-            }
+            serverDeadSection = (
+                <div className={classes}>
+                    {this.state.serverDeadError}
+                </div>
+            );
+        }
+
+        let yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            yourMatrixAccountText = _t('Your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
+            });
         }
 
         // If custom URLs are allowed, wire up the server details edit link.
@@ -252,12 +269,29 @@ module.exports = React.createClass({
             </a>;
         }
 
+        if (!this.props.serverConfig.isUrl && this.state.serverRequiresIdServer) {
+            return <div>
+                <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3>
+                {_t(
+                    "No identity server is configured: " +
+                    "add one in server settings to reset your password.",
+                )}
+                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+                    {_t('Sign in instead')}
+                </a>
+            </div>;
+        }
+
         return <div>
+            {errorText}
+            {serverDeadSection}
             <h3>
                 {yourMatrixAccountText}
                 {editLink}
             </h3>
-            {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
@@ -292,7 +326,11 @@ module.exports = React.createClass({
                     'A verification email will be sent to your inbox to confirm ' +
                     'setting your new password.',
                 )}</span>
-                <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
+                <input
+                    className="mx_Login_submit"
+                    type="submit"
+                    value={_t('Send Reset Email')}
+                />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                 {_t('Sign in instead')}

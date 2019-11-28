@@ -15,13 +15,14 @@ limitations under the License.
 */
 import React from "react";
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import {ContentRepo} from "matrix-js-sdk";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import sdk from "../../../index";
-import DMRoomMap from '../../../utils/DMRoomMap';
+import Avatar from '../../../Avatar';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomAvatar',
 
     // Room may be left unset here, but if it is,
@@ -51,7 +52,7 @@ module.exports = React.createClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     },
 
@@ -89,7 +90,6 @@ module.exports = React.createClass({
                 props.resizeMethod,
             ), // highest priority
             this.getRoomAvatarUrl(props),
-            this.getOneToOneAvatar(props), // lowest priority
         ].filter(function(url) {
             return (url != null && url != "");
         });
@@ -98,39 +98,12 @@ module.exports = React.createClass({
     getRoomAvatarUrl: function(props) {
         if (!props.room) return null;
 
-        return props.room.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
+        return Avatar.avatarUrlForRoom(
+            props.room,
             Math.floor(props.width * window.devicePixelRatio),
             Math.floor(props.height * window.devicePixelRatio),
             props.resizeMethod,
-            false,
         );
-    },
-
-    getOneToOneAvatar: function(props) {
-        const room = props.room;
-        if (!room) {
-            return null;
-        }
-        let otherMember = null;
-        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-        if (otherUserId) {
-            otherMember = room.getMember(otherUserId);
-        } else {
-            // if the room is not marked as a 1:1, but only has max 2 members
-            // then still try to show any avatar (pref. other member)
-            otherMember = room.getAvatarFallbackMember();
-        }
-        if (otherMember) {
-            return otherMember.getAvatarUrl(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                Math.floor(props.width * window.devicePixelRatio),
-                Math.floor(props.height * window.devicePixelRatio),
-                props.resizeMethod,
-                false,
-            );
-        }
-        return null;
     },
 
     onRoomAvatarClick: function() {

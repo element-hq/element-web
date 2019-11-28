@@ -21,6 +21,7 @@ import { linkifyElement } from '../../../HtmlUtils';
 import { ContentRepo } from 'matrix-js-sdk';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -39,7 +40,7 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         room: roomShape,
         // passes ev, room as args

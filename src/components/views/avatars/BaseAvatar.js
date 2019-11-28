@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,12 +18,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
-import sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'BaseAvatar',
 
     propTypes: {
@@ -55,7 +57,7 @@ module.exports = React.createClass({
         return this._getState(this.props);
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this.context.matrixClient.on('sync', this.onClientSync);
     },
@@ -104,9 +106,13 @@ module.exports = React.createClass({
         // work out the full set of urls to try to load. This is formed like so:
         // imageUrls: [ props.url, props.urls, default image ]
 
-        const urls = props.urls || [];
-        if (props.url) {
-            urls.unshift(props.url); // put in urls[0]
+        let urls = [];
+        if (!SettingsStore.getValue("lowBandwidth")) {
+            urls = props.urls || [];
+
+            if (props.url) {
+                urls.unshift(props.url); // put in urls[0]
+            }
         }
 
         let defaultImageUrl = null;
@@ -116,6 +122,10 @@ module.exports = React.createClass({
             );
             urls.push(defaultImageUrl); // lowest priority
         }
+
+        // deduplicate URLs
+        urls = Array.from(new Set(urls));
+
         return {
             imageUrls: urls,
             defaultImageUrl: defaultImageUrl,
@@ -133,40 +143,7 @@ module.exports = React.createClass({
         }
     },
 
-    /**
-     * returns the first (non-sigil) character of 'name',
-     * converted to uppercase
-     */
-    _getInitialLetter: function(name) {
-        if (name.length < 1) {
-            return undefined;
-        }
-
-        let idx = 0;
-        const initial = name[0];
-        if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
-            idx++;
-        }
-
-        // string.codePointAt(0) would do this, but that isn't supported by
-        // some browsers (notably PhantomJS).
-        let chars = 1;
-        const first = name.charCodeAt(idx);
-
-        // check if it’s the start of a surrogate pair
-        if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
-            const second = name.charCodeAt(idx+1);
-            if (second >= 0xDC00 && second <= 0xDFFF) {
-                chars++;
-            }
-        }
-
-        const firstChar = name.substring(idx, idx+chars);
-        return firstChar.toUpperCase();
-    },
-
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
         const {
@@ -176,20 +153,20 @@ module.exports = React.createClass({
         } = this.props;
 
         if (imageUrl === this.state.defaultImageUrl) {
-            const initialLetter = this._getInitialLetter(name);
+            const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
-                <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
+                <span className="mx_BaseAvatar_initial" aria-hidden="true"
                     style={{ fontSize: (width * 0.65) + "px",
                     width: width + "px",
                     lineHeight: height + "px" }}
                 >
                     { initialLetter }
-                </EmojiText>
+                </span>
             );
             const imgNode = (
                 <img className="mx_BaseAvatar_image" src={imageUrl}
                     alt="" title={title} onError={this.onError}
-                    width={width} height={height} />
+                    width={width} height={height} aria-hidden="true" />
             );
             if (onClick != null) {
                 return (

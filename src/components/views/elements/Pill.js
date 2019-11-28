@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,29 +16,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import { MATRIXTO_URL_PATTERN } from '../../../linkify-matrix';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
-
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_MATRIXTO = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
+const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
 
-const Pill = React.createClass({
+const Pill = createReactClass({
     statics: {
         isPillUrl: (url) => {
-            return !!REGEX_MATRIXTO.exec(url);
+            return !!getPrimaryPermalinkEntity(url);
         },
         isMessagePillUrl: (url) => {
-            return !!REGEX_LOCAL_MATRIXTO.exec(url);
+            return !!REGEX_LOCAL_PERMALINK.exec(url);
         },
         roomNotifPos: (text) => {
             return text.indexOf("@room");
@@ -94,22 +94,21 @@ const Pill = React.createClass({
     },
 
     async componentWillReceiveProps(nextProps) {
-        let regex = REGEX_MATRIXTO;
-        if (nextProps.inMessage) {
-            regex = REGEX_LOCAL_MATRIXTO;
-        }
-
-        let matrixToMatch;
         let resourceId;
         let prefix;
 
         if (nextProps.url) {
-            // Default to the empty array if no match for simplicity
-            // resource and prefix will be undefined instead of throwing
-            matrixToMatch = regex.exec(nextProps.url) || [];
+            if (nextProps.inMessage) {
+                // Default to the empty array if no match for simplicity
+                // resource and prefix will be undefined instead of throwing
+                const matrixToMatch = REGEX_LOCAL_PERMALINK.exec(nextProps.url) || [];
 
-            resourceId = matrixToMatch[1]; // The room/user ID
-            prefix = matrixToMatch[2]; // The first character of prefix
+                resourceId = matrixToMatch[1]; // The room/user ID
+                prefix = matrixToMatch[2]; // The first character of prefix
+            } else {
+                resourceId = getPrimaryPermalinkEntity(nextProps.url);
+                prefix = resourceId ? resourceId[0] : undefined;
+            }
         }
 
         const pillType = this.props.type || {

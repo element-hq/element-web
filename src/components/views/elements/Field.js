@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -41,11 +41,23 @@ export default class Field extends React.PureComponent {
         value: PropTypes.string.isRequired,
         // Optional component to include inside the field before the input.
         prefix: PropTypes.node,
+        // Optional component to include inside the field after the input.
+        postfix: PropTypes.node,
         // The callback called whenever the contents of the field
         // changes.  Returns an object with `valid` boolean field
         // and a `feedback` react component field to provide feedback
         // to the user.
         onValidate: PropTypes.func,
+        // If specified, overrides the value returned by onValidate.
+        flagInvalid: PropTypes.bool,
+        // If specified, contents will appear as a tooltip on the element and
+        // validation feedback tooltips will be suppressed.
+        tooltipContent: PropTypes.node,
+        // If specified alongside tooltipContent, the class name to apply to the
+        // tooltip itself.
+        tooltipClassName: PropTypes.string,
+        // If specified, an additional class name to apply to the field container
+        className: PropTypes.string,
         // All other props pass through to the <input>.
     };
 
@@ -118,14 +130,25 @@ export default class Field extends React.PureComponent {
         }
     }
 
-    validateOnChange = throttle(() => {
+    /*
+     * This was changed from throttle to debounce: this is more traditional for
+     * form validation since it means that the validation doesn't happen at all
+     * until the user stops typing for a bit (debounce defaults to not running on
+     * the leading edge). If we're doing an HTTP hit on each validation, we have more
+     * incentive to prevent validating input that's very unlikely to be valid.
+     * We may find that we actually want different behaviour for registration
+     * fields, in which case we can add some options to control it.
+     */
+    validateOnChange = debounce(() => {
         this.validate({
             focused: true,
         });
     }, VALIDATION_THROTTLE_MS);
 
     render() {
-        const { element, prefix, onValidate, children, ...inputProps } = this.props;
+        const {
+            element, prefix, postfix, className, onValidate, children,
+            tooltipContent, flagInvalid, tooltipClassName, ...inputProps} = this.props;
 
         const inputElement = element || "input";
 
@@ -144,24 +167,32 @@ export default class Field extends React.PureComponent {
         if (prefix) {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
+        let postfixContainer = null;
+        if (postfix) {
+            postfixContainer = <span className="mx_Field_postfix">{postfix}</span>;
+        }
 
-        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
+        const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
+        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, className, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
             mx_Field_labelAlwaysTopLeft: prefix,
             mx_Field_valid: onValidate && this.state.valid === true,
-            mx_Field_invalid: onValidate && this.state.valid === false,
+            mx_Field_invalid: hasValidationFlag
+                ? flagInvalid
+                : onValidate && this.state.valid === false,
         });
 
         // Handle displaying feedback on validity
         const Tooltip = sdk.getComponent("elements.Tooltip");
-        let tooltip;
-        if (this.state.feedback) {
-            tooltip = <Tooltip
-                tooltipClassName="mx_Field_tooltip"
+        let fieldTooltip;
+        if (tooltipContent || this.state.feedback) {
+            const addlClassName = tooltipClassName ? tooltipClassName : '';
+            fieldTooltip = <Tooltip
+                tooltipClassName={`mx_Field_tooltip ${addlClassName}`}
                 visible={this.state.feedbackVisible}
-                label={this.state.feedback}
+                label={tooltipContent || this.state.feedback}
             />;
         }
 
@@ -169,7 +200,8 @@ export default class Field extends React.PureComponent {
             {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
-            {tooltip}
+            {postfixContainer}
+            {fieldTooltip}
         </div>;
     }
 }

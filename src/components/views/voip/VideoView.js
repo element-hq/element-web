@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 
 import sdk from '../../../index';
@@ -35,7 +34,7 @@ function getFullScreenElement() {
     );
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'VideoView',
 
     propTypes: {

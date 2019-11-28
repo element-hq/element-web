@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 const Avatar = require('../../../Avatar');
 const sdk = require("../../../index");
 const dispatcher = require("../../../dispatcher");
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MemberAvatar',
 
     propTypes: {

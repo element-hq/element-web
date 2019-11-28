@@ -50,11 +50,15 @@ export async function checkConsistency() {
 
     let dataInLocalStorage = false;
     let dataInCryptoStore = false;
+    let cryptoInited = false;
     let healthy = true;
 
     if (localStorage) {
         dataInLocalStorage = localStorage.length > 0;
         log(`Local storage contains data? ${dataInLocalStorage}`);
+
+        cryptoInited = localStorage.getItem("mx_crypto_initialised");
+        log(`Crypto initialised? ${cryptoInited}`);
     } else {
         healthy = false;
         error("Local storage cannot be used on this browser");
@@ -84,10 +88,11 @@ export async function checkConsistency() {
         track("Crypto store disabled");
     }
 
-    if (dataInLocalStorage && !dataInCryptoStore) {
+    if (dataInLocalStorage && cryptoInited && !dataInCryptoStore) {
         healthy = false;
         error(
-            "Data exists in local storage but not in crypto store. " +
+            "Data exists in local storage and crypto is marked as initialised " +
+            " but no data found in crypto store. " +
             "IndexedDB storage has likely been evicted by the browser!",
         );
         track("Crypto store evicted");
@@ -104,6 +109,7 @@ export async function checkConsistency() {
     return {
         dataInLocalStorage,
         dataInCryptoStore,
+        cryptoInited,
         healthy,
     };
 }
@@ -154,4 +160,18 @@ export function trackStores(client) {
             track("Sync store using IndexedDB degraded to memory");
         });
     }
+}
+
+/**
+ * Sets whether crypto has ever been successfully
+ * initialised on this client.
+ * StorageManager uses this to determine whether indexeddb
+ * has been wiped by the browser: this flag is saved to localStorage
+ * and if it is true and not crypto data is found, an error is
+ * presented to the user.
+ *
+ * @param {bool} cryptoInited True if crypto has been set up
+ */
+export function setCryptoInitialised(cryptoInited) {
+    localStorage.setItem("mx_crypto_initialised", cryptoInited);
 }

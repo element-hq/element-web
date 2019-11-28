@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 
 import { COUNTRIES } from '../../../phonenumber';
+import SdkConfig from "../../../SdkConfig";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
@@ -45,17 +46,25 @@ export default class CountryDropdown extends React.Component {
         this._onOptionChange = this._onOptionChange.bind(this);
         this._getShortOption = this._getShortOption.bind(this);
 
+        let defaultCountry = COUNTRIES[0];
+        const defaultCountryCode = SdkConfig.get()["defaultCountryCode"];
+        if (defaultCountryCode) {
+            const country = COUNTRIES.find(c => c.iso2 === defaultCountryCode.toUpperCase());
+            if (country) defaultCountry = country;
+        }
+
         this.state = {
             searchQuery: '',
+            defaultCountry,
         };
     }
 
     componentWillMount() {
         if (!this.props.value) {
-            // If no value is given, we start with the first
+            // If no value is given, we start with the default
             // country selected, but our parent component
             // doesn't know this, therefore we do this.
-            this.props.onOptionChange(COUNTRIES[0]);
+            this.props.onOptionChange(this.state.defaultCountry);
         }
     }
 
@@ -119,7 +128,7 @@ export default class CountryDropdown extends React.Component {
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propgating
-        const value = this.props.value || COUNTRIES[0].iso2;
+        const value = this.props.value || this.state.defaultCountry.iso2;
 
         return <Dropdown className={this.props.className + " mx_CountryDropdown"}
             onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}

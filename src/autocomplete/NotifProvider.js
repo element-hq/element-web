@@ -42,6 +42,7 @@ export default class NotifProvider extends AutocompleteProvider {
             return [{
                 completion: '@room',
                 completionId: '@room',
+                type: "at-room",
                 suffix: ' ',
                 component: (
                     <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={this.room} />} title="@room" description={_t("Notify the whole room")} />
@@ -57,8 +58,14 @@ export default class NotifProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            { completions }
-        </div>;
+        return (
+            <div
+                className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
+                role="listbox"
+                aria-label={_t("Notification Autocomplete")}
+            >
+                { completions }
+            </div>
+        );
     }
 }

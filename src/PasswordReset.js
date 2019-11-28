@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,7 +37,11 @@ class PasswordReset {
             idBaseUrl: identityUrl,
         });
         this.clientSecret = this.client.generateClientSecret();
-        this.identityServerDomain = identityUrl.split("://")[1];
+        this.identityServerDomain = identityUrl ? identityUrl.split("://")[1] : null;
+    }
+
+    doesServerRequireIdServerParam() {
+        return this.client.doesServerRequireIdServerParam();
     }
 
     /**
@@ -68,15 +73,21 @@ class PasswordReset {
      * with a "message" property which contains a human-readable message detailing why
      * the reset failed, e.g. "There is no mapped matrix user ID for the given email address".
      */
-    checkEmailLinkClicked() {
-        return this.client.setPassword({
-            type: "m.login.email.identity",
-            threepid_creds: {
-                sid: this.sessionId,
-                client_secret: this.clientSecret,
-                id_server: this.identityServerDomain,
-            },
-        }, this.password).catch(function(err) {
+    async checkEmailLinkClicked() {
+        const creds = {
+            sid: this.sessionId,
+            client_secret: this.clientSecret,
+        };
+        if (await this.doesServerRequireIdServerParam()) {
+            creds.id_server = this.identityServerDomain;
+        }
+
+        try {
+            await this.client.setPassword({
+                type: "m.login.email.identity",
+                threepid_creds: creds,
+            }, this.password);
+        } catch (err) {
             if (err.httpStatus === 401) {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             } else if (err.httpStatus === 404) {
@@ -86,7 +97,7 @@ class PasswordReset {
                 err.message += ` (Status ${err.httpStatus})`;
             }
             throw err;
-        });
+        }
     }
 }
 

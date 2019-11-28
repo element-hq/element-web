@@ -81,7 +81,7 @@ export default class DevicesPanelEntry extends React.Component {
                     { lastSeen }
                 </div>
                 <div className="mx_DevicesPanel_deviceButtons">
-                    <input type="checkbox" onClick={this.onDeviceToggled} checked={this.props.selected} />
+                    <input type="checkbox" onChange={this.onDeviceToggled} checked={this.props.selected} />
                 </div>
             </div>
         );

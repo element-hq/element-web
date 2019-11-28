@@ -16,18 +16,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { KeyCode } from '../../Keyboard';
 import dis from '../../dispatcher';
 import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
+import classNames from 'classnames';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'SearchBox',
 
     propTypes: {
         onSearch: PropTypes.func,
         onCleared: PropTypes.func,
+        onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
 
@@ -46,6 +49,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             searchTerm: "",
+            blurred: true,
         };
     },
 
@@ -90,10 +94,22 @@ module.exports = React.createClass({
                 this._clearSearch("keyboard");
                 break;
         }
+        if (this.props.onKeyDown) this.props.onKeyDown(ev);
     },
 
     _onFocus: function(ev) {
+        this.setState({blurred: false});
         ev.target.select();
+        if (this.props.onFocus) {
+            this.props.onFocus(ev);
+        }
+    },
+
+    _onBlur: function(ev) {
+        this.setState({blurred: true});
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
+        }
     },
 
     _clearSearch: function(source) {
@@ -112,15 +128,21 @@ module.exports = React.createClass({
         if (this.props.collapsed) {
             return null;
         }
-        const clearButton = this.state.searchTerm.length > 0 ?
+        const clearButton = (!this.state.blurred || this.state.searchTerm) ?
             (<AccessibleButton key="button"
                     className="mx_SearchBox_closeButton"
                     onClick={ () => {this._clearSearch("button"); } }>
             </AccessibleButton>) : undefined;
 
+        // show a shorter placeholder when blurred, if requested
+        // this is used for the room filter field that has
+        // the explore button next to it when blurred
+        const placeholder = this.state.blurred ?
+            (this.props.blurredPlaceholder || this.props.placeholder) :
+            this.props.placeholder;
         const className = this.props.className || "";
         return (
-            <div className="mx_SearchBox mx_textinput">
+            <div className={classNames("mx_SearchBox", "mx_textinput", {"mx_SearchBox_blurred": this.state.blurred})}>
                 <input
                     key="searchfield"
                     type="text"
@@ -130,7 +152,8 @@ module.exports = React.createClass({
                     onFocus={ this._onFocus }
                     onChange={ this.onChange }
                     onKeyDown={ this._onKeyDown }
-                    placeholder={ this.props.placeholder }
+                    onBlur={this._onBlur}
+                    placeholder={ placeholder }
                 />
                 { clearButton }
             </div>

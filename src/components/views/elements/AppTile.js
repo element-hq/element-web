@@ -1,6 +1,7 @@
-/**
+/*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import url from 'url';
 import qs from 'querystring';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import AccessibleButton from './AccessibleButton';
 import Modal from '../../../Modal';
@@ -35,6 +33,9 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import {createMenu} from "../../structures/ContextualMenu";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -52,7 +53,7 @@ export default class AppTile extends React.Component {
         this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
         this._onDeleteClick = this._onDeleteClick.bind(this);
-        this._onCancelClick = this._onCancelClick.bind(this);
+        this._onRevokeClicked = this._onRevokeClicked.bind(this);
         this._onSnapshotClick = this._onSnapshotClick.bind(this);
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
         this._onMinimiseClick = this._onMinimiseClick.bind(this);
@@ -69,8 +70,11 @@ export default class AppTile extends React.Component {
      * @return {Object} Updated component state to be set with setState
      */
     _getNewState(newProps) {
-        const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
-        const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
+        // This is a function to make the impact of calling SettingsStore slightly less
+        const hasPermissionToLoad = () => {
+            const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", newProps.room.roomId);
+            return !!currentlyAllowedWidgets[newProps.eventId];
+        };
 
         const PersistedElement = sdk.getComponent("elements.PersistedElement");
         return {
@@ -78,10 +82,9 @@ export default class AppTile extends React.Component {
             // True while the iframe content is loading
             loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
             widgetUrl: this._addWurlParams(newProps.url),
-            widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
+            hasPermissionToLoad: newProps.userId === newProps.creatorUserId || hasPermissionToLoad(),
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
@@ -139,7 +142,10 @@ export default class AppTile extends React.Component {
     }
 
     componentWillMount() {
-        this.setScalarToken();
+        // Only fetch IM token on mount if we're showing and have permission to load
+        if (this.props.show && this.state.hasPermissionToLoad) {
+            this.setScalarToken();
+        }
     }
 
     componentDidMount() {
@@ -153,7 +159,7 @@ export default class AppTile extends React.Component {
 
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
-            ActiveWidgetStore.destroyPersistentWidget();
+            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }
@@ -164,8 +170,6 @@ export default class AppTile extends React.Component {
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
-        this.setState({initialising: true});
-
         if (!WidgetUtils.isScalarUrl(this.props.url)) {
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
@@ -176,18 +180,42 @@ export default class AppTile extends React.Component {
             return;
         }
 
+        const managers = IntegrationManagers.sharedInstance();
+        if (!managers.hasManager()) {
+            console.warn("No integration manager - not setting scalar token", url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
+            return;
+        }
+
+        // TODO: Pick the right manager for the widget
+
+        const defaultManager = managers.getPrimaryManager();
+        if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
+            console.warn('Non-scalar manager, not setting scalar token!', url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
+            return;
+        }
+
         // Fetch the token before loading the iframe as we need it to mangle the URL
         if (!this._scalarClient) {
-            this._scalarClient = new ScalarAuthClient();
+            this._scalarClient = defaultManager.getScalarClient();
         }
-        this._scalarClient.getScalarToken().done((token) => {
+        this._scalarClient.getScalarToken().then((token) => {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this._addWurlParams(this.props.url));
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
-                // u.search must be set to undefined, so that u.format() uses query paramerters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
+                // u.search must be set to undefined, so that u.format() uses query parameters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
                 u.search = undefined;
                 u.query = params;
             }
@@ -214,11 +242,20 @@ export default class AppTile extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
             this._getNewState(nextProps);
-            this.setScalarToken();
-        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
-            this.setState({
-                loading: true,
-            });
+            // Fetch IM token for new URL if we're showing and have permission to load
+            if (this.props.show && this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
+        } else if (nextProps.show && !this.props.show) {
+            if (this.props.waitForIframeLoad) {
+                this.setState({
+                    loading: true,
+                });
+            }
+            // Fetch IM token now that we're showing if we already have permission to load
+            if (this.state.hasPermissionToLoad) {
+                this.setScalarToken();
+            }
         } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
@@ -235,28 +272,29 @@ export default class AppTile extends React.Component {
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     }
 
-    _onEditClick(e) {
+    _onEditClick() {
         console.log("Edit widget ID ", this.props.id);
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            this._scalarClient.connect().done(() => {
-                const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room, 'type_' + this.props.type, this.props.id);
-                Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                    src: src,
-                }, "mx_IntegrationsManager");
-            }, (err) => {
-                this.setState({
-                    error: err.message,
-                });
-                console.error('Error ensuring a valid scalar_token exists', err);
-            });
+            // TODO: Open the right manager for the widget
+            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+                IntegrationManagers.sharedInstance().openAll(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            } else {
+                IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                    this.props.room,
+                    'type_' + this.props.type,
+                    this.props.id,
+                );
+            }
         }
     }
 
-    _onSnapshotClick(e) {
+    _onSnapshotClick() {
         console.warn("Requesting widget snapshot");
         ActiveWidgetStore.getWidgetMessaging(this.props.id).getScreenshot()
             .catch((err) => {
@@ -323,13 +361,9 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _onCancelClick() {
-        if (this.props.onDeleteClick) {
-            this.props.onDeleteClick();
-        } else {
-            console.log("Revoke widget permissions - %s", this.props.id);
-            this._revokeWidgetPermission();
-        }
+    _onRevokeClicked() {
+        console.info("Revoke widget permissions - %s", this.props.id);
+        this._revokeWidgetPermission();
     }
 
     /**
@@ -411,22 +445,38 @@ export default class AppTile extends React.Component {
         });
     }
 
-    /* TODO -- Store permission in account data so that it is persisted across multiple devices */
     _grantWidgetPermission() {
-        console.warn('Granting permission to load widget - ', this.state.widgetUrl);
-        localStorage.setItem(this.state.widgetPermissionId, true);
-        this.setState({hasPermissionToLoad: true});
+        const roomId = this.props.room.roomId;
+        console.info("Granting permission for widget to load: " + this.props.eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        current[this.props.eventId] = true;
+        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+            this.setState({hasPermissionToLoad: true});
+
+            // Fetch a token for the integration manager, now that we're allowed to
+            this.setScalarToken();
+        }).catch(err => {
+            console.error(err);
+            // We don't really need to do anything about this - the user will just hit the button again.
+        });
     }
 
     _revokeWidgetPermission() {
-        console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
-        localStorage.removeItem(this.state.widgetPermissionId);
-        this.setState({hasPermissionToLoad: false});
+        const roomId = this.props.room.roomId;
+        console.info("Revoking permission for widget to load: " + this.props.eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        current[this.props.eventId] = false;
+        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+            this.setState({hasPermissionToLoad: false});
 
-        // Force the widget to be non-persistent
-        ActiveWidgetStore.destroyPersistentWidget();
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
-        PersistedElement.destroyElement(this._persistKey);
+            // Force the widget to be non-persistent (able to be deleted/forgotten)
+            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
+            const PersistedElement = sdk.getComponent("elements.PersistedElement");
+            PersistedElement.destroyElement(this._persistKey);
+        }).catch(err => {
+            console.error(err);
+            // We don't really need to do anything about this - the user will just hit the button again.
+        });
     }
 
     formatAppTileName() {
@@ -491,17 +541,58 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _onPopoutWidgetClick(e) {
+    _onPopoutWidgetClick() {
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getSafeUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
             { target: '_blank', href: this._getSafeUrl(), rel: 'noopener'}).click();
     }
 
-    _onReloadWidgetClick(e) {
+    _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
         this.refs.appFrame.src = this.refs.appFrame.src;
     }
+
+    _getMenuOptions(ev) {
+        // TODO: This block of code gets copy/pasted a lot. We should make that happen less.
+        const menuOptions = {};
+        const buttonRect = ev.target.getBoundingClientRect();
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const buttonLeft = buttonRect.left + window.pageXOffset;
+        const buttonTop = buttonRect.top + window.pageYOffset;
+        // Align the right edge of the menu to the left edge of the button
+        menuOptions.right = window.innerWidth - buttonLeft;
+        // Align the menu vertically on whichever side of the button has more
+        // space available.
+        if (buttonTop < window.innerHeight / 2) {
+            menuOptions.top = buttonTop;
+        } else {
+            menuOptions.bottom = window.innerHeight - buttonTop;
+        }
+        return menuOptions;
+    }
+
+    _onContextMenuClick = (ev) => {
+        const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
+        const menuOptions = {
+            ...this._getMenuOptions(ev),
+
+            // A revoke handler is always required
+            onRevokeClicked: this._onRevokeClicked,
+        };
+
+        const canUserModify = this._canUserModify();
+        const showEditButton = Boolean(this._scalarClient && canUserModify);
+        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
+        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
+
+        if (showEditButton) menuOptions.onEditClicked = this._onEditClick;
+        if (showDeleteButton) menuOptions.onDeleteClicked = this._onDeleteClick;
+        if (showPictureSnapshotButton) menuOptions.onSnapshotClicked = this._onSnapshotClick;
+        if (this.props.showReload) menuOptions.onReloadClicked = this._onReloadWidgetClick;
+
+        createMenu(WidgetContextMenu, menuOptions);
+    };
 
     render() {
         let appTileBody;
@@ -512,7 +603,7 @@ export default class AppTile extends React.Component {
         }
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
-        // because that would allow the iframe to prgramatically remove the sandbox attribute, but
+        // because that would allow the iframe to programmatically remove the sandbox attribute, but
         // this would only be for content hosted on the same origin as the riot client: anything
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
@@ -531,13 +622,26 @@ export default class AppTile extends React.Component {
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
-            if (this.state.initialising) {
+            if (!this.state.hasPermissionToLoad) {
+                const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+                appTileBody = (
+                    <div className={appTileBodyClass}>
+                        <AppPermission
+                            roomId={this.props.room.roomId}
+                            creatorUserId={this.props.creatorUserId}
+                            url={this.state.widgetUrl}
+                            isRoomEncrypted={isEncrypted}
+                            onPermissionGranted={this._grantWidgetPermission}
+                        />
+                    </div>
+                );
+            } else if (this.state.initialising) {
                 appTileBody = (
                     <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                         { loadingElement }
                     </div>
                 );
-            } else if (this.state.hasPermissionToLoad == true) {
+            } else {
                 if (this.isMixedContent()) {
                     appTileBody = (
                         <div className={appTileBodyClass}>
@@ -557,13 +661,12 @@ export default class AppTile extends React.Component {
                                 allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}
-                                allowFullScreen="true"
+                                allowFullScreen={true}
                                 sandbox={sandboxFlags}
-                                onLoad={this._onLoaded}
-                            ></iframe>
+                                onLoad={this._onLoaded} />
                         </div>
                     );
-                    // if the widget would be allowed to remian on screen, we must put it in
+                    // if the widget would be allowed to remain on screen, we must put it in
                     // a PersistedElement from the get-go, otherwise the iframe will be
                     // re-mounted later when we do.
                     if (this.props.whitelistCapabilities.includes('m.always_on_screen')) {
@@ -577,27 +680,9 @@ export default class AppTile extends React.Component {
                         </div>;
                     }
                 }
-            } else {
-                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-                appTileBody = (
-                    <div className={appTileBodyClass}>
-                        <AppPermission
-                            isRoomEncrypted={isRoomEncrypted}
-                            url={this.state.widgetUrl}
-                            onPermissionGranted={this._grantWidgetPermission}
-                        />
-                    </div>
-                );
             }
         }
 
-        // editing is done in scalar
-        const canUserModify = this._canUserModify();
-        const showEditButton = Boolean(this._scalarClient && canUserModify);
-        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
-        const showCancelButton = (this.props.showCancel === undefined || this.props.showCancel) && !showDeleteButton;
-        // Picture snapshot - only show button when apps are maximised.
-        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
         const showMinimiseButton = this.props.showMinimise && this.props.show;
         const showMaximiseButton = this.props.showMinimise && !this.props.show;
 
@@ -636,41 +721,17 @@ export default class AppTile extends React.Component {
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
-                        { /* Reload widget */ }
-                        { this.props.showReload && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_reload"
-                            title={_t('Reload widget')}
-                            onClick={this._onReloadWidgetClick}
-                        /> }
                         { /* Popout widget */ }
                         { this.props.showPopout && <AccessibleButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
                             title={_t('Popout widget')}
                             onClick={this._onPopoutWidgetClick}
                         /> }
-                        { /* Snapshot widget */ }
-                        { showPictureSnapshotButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_snapshot"
-                            title={_t('Picture')}
-                            onClick={this._onSnapshotClick}
-                        /> }
-                        { /* Edit widget */ }
-                        { showEditButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_edit"
-                            title={_t('Edit')}
-                            onClick={this._onEditClick}
-                        /> }
-                        { /* Delete widget */ }
-                        { showDeleteButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_delete"
-                            title={_t('Delete widget')}
-                            onClick={this._onDeleteClick}
-                        /> }
-                        { /* Cancel widget */ }
-                        { showCancelButton && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_cancel"
-                            title={_t('Revoke widget access')}
-                            onClick={this._onCancelClick}
+                        { /* Context menu */ }
+                        { <AccessibleButton
+                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
+                            title={_t('More options')}
+                            onClick={this._onContextMenuClick}
                         /> }
                     </span>
                 </div> }
@@ -684,6 +745,7 @@ AppTile.displayName ='AppTile';
 
 AppTile.propTypes = {
     id: PropTypes.string.isRequired,
+    eventId: PropTypes.string, // required for room widgets
     url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     room: PropTypes.object.isRequired,

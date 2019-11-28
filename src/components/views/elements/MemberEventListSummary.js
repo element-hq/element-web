@@ -1,5 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,18 +15,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-const MemberAvatar = require('../avatars/MemberAvatar.js');
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
+import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
+import sdk from "../../../index";
+import {MatrixEvent} from "matrix-js-sdk";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MemberEventListSummary',
 
     propTypes: {
         // An array of member events to summarise
-        events: PropTypes.array.isRequired,
+        events: PropTypes.arrayOf(PropTypes.instanceOf(MatrixEvent)).isRequired,
         // An array of EventTiles to render when expanded
         children: PropTypes.array.isRequired,
         // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
@@ -39,12 +44,6 @@ module.exports = React.createClass({
         startExpanded: PropTypes.bool,
     },
 
-    getInitialState: function() {
-        return {
-            expanded: Boolean(this.props.startExpanded),
-        };
-    },
-
     getDefaultProps: function() {
         return {
             summaryLength: 1,
@@ -53,37 +52,27 @@ module.exports = React.createClass({
         };
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps) {
         // Update if
         //  - The number of summarised events has changed
-        //  - or if the summary is currently expanded
         //  - or if the summary is about to toggle to become collapsed
         //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
         return (
             nextProps.events.length !== this.props.events.length ||
-            this.state.expanded || nextState.expanded ||
             nextProps.events.length < this.props.threshold
         );
     },
 
-    _toggleSummary: function() {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-        this.props.onToggle();
-    },
-
     /**
-     * Render the JSX for users aggregated by their transition sequences (`eventAggregates`) where
+     * Generate the text for users aggregated by their transition sequences (`eventAggregates`) where
      * the sequences are ordered by `orderedTransitionSequences`.
      * @param {object[]} eventAggregates a map of transition sequence to array of user display names
      * or user IDs.
      * @param {string[]} orderedTransitionSequences an array which is some ordering of
      * `Object.keys(eventAggregates)`.
-     * @returns {ReactElement} a single <span> containing the textual summary of the aggregated
-     * events that occurred.
+     * @returns {string} the textual summary of the aggregated events that occurred.
      */
-    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
+    _generateSummary: function(eventAggregates, orderedTransitionSequences) {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this._renderNameList(userNames);
@@ -105,7 +94,7 @@ module.exports = React.createClass({
                 );
             });
 
-            const desc = this._renderCommaSeparatedList(descs);
+            const desc = formatCommaSeparatedList(descs);
 
             return _t('%(nameList)s %(transitionList)s', { nameList: nameList, transitionList: desc });
         });
@@ -114,15 +103,7 @@ module.exports = React.createClass({
             return null;
         }
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
-
-        return (
-            <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                <EmojiText>
-                    { summaries.join(", ") }
-                </EmojiText>
-            </span>
-        );
+        return summaries.join(", ");
     },
 
     /**
@@ -132,7 +113,7 @@ module.exports = React.createClass({
      * included before "and [n] others".
      */
     _renderNameList: function(users) {
-        return this._renderCommaSeparatedList(users, this.props.summaryLength);
+        return formatCommaSeparatedList(users, this.props.summaryLength);
     },
 
     /**
@@ -208,7 +189,7 @@ module.exports = React.createClass({
      * For a certain transition, t, describe what happened to the users that
      * underwent the transition.
      * @param {string} t the transition type.
-     * @param {integer} userCount number of usernames
+     * @param {number} userCount number of usernames
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
@@ -278,51 +259,14 @@ module.exports = React.createClass({
                     ? _t("%(severalUsers)schanged their avatar %(count)s times", { severalUsers: "", count: repeats })
                     : _t("%(oneUser)schanged their avatar %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "no_change":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)smade no changes %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)smade no changes %(count)s times", { oneUser: "", count: repeats });
+                break;
         }
 
         return res;
-    },
-
-    /**
-     * Constructs a written English string representing `items`, with an optional limit on
-     * the number of items included in the result. If specified and if the length of
-     *`items` is greater than the limit, the string "and n others" will be appended onto
-     * the result.
-     * If `items` is empty, returns the empty string. If there is only one item, return
-     * it.
-     * @param {string[]} items the items to construct a string from.
-     * @param {number?} itemLimit the number by which to limit the list.
-     * @returns {string} a string constructed by joining `items` with a comma between each
-     * item, but with the last item appended as " and [lastItem]".
-     */
-    _renderCommaSeparatedList(items, itemLimit) {
-        const remaining = itemLimit === undefined ? 0 : Math.max(
-            items.length - itemLimit, 0,
-        );
-        if (items.length === 0) {
-            return "";
-        } else if (items.length === 1) {
-            return items[0];
-        } else if (remaining > 0) {
-            items = items.slice(0, itemLimit);
-            return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } );
-        } else {
-            const lastItem = items.pop();
-            return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
-        }
-    },
-
-    _renderAvatars: function(roomMembers) {
-        const avatars = roomMembers.slice(0, this.props.avatarsMaxLength).map((m) => {
-            return (
-                <MemberAvatar key={m.userId} member={m} width={14} height={14} />
-            );
-        });
-        return (
-            <span className="mx_MemberEventListSummary_avatars" onClick={this._toggleSummary}>
-                { avatars }
-            </span>
-        );
     },
 
     _getTransitionSequence: function(events) {
@@ -338,6 +282,11 @@ module.exports = React.createClass({
      * if a transition is not recognised.
      */
     _getTransition: function(e) {
+        if (e.mxEvent.getType() === 'm.room.third_party_invite') {
+            // Handle 3pid invites the same as invites so they get bundled together
+            return 'invited';
+        }
+
         switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
@@ -351,7 +300,7 @@ module.exports = React.createClass({
                         return 'changed_avatar';
                     }
                     // console.log("MELS ignoring duplicate membership join event");
-                    return null;
+                    return 'no_change';
                 } else {
                     return 'joined';
                 }
@@ -365,8 +314,8 @@ module.exports = React.createClass({
                 switch (e.mxEvent.getPrevContent().membership) {
                     case 'invite': return 'invite_withdrawal';
                     case 'ban': return 'unbanned';
-                    case 'join': return 'kicked';
-                    default: return 'left';
+                    // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                    default: return 'kicked';
                 }
             default: return null;
         }
@@ -415,22 +364,6 @@ module.exports = React.createClass({
 
     render: function() {
         const eventsToRender = this.props.events;
-        const eventIds = eventsToRender.map((e) => e.getId()).join(',');
-        const fewEvents = eventsToRender.length < this.props.threshold;
-        const expanded = this.state.expanded || fewEvents;
-
-        let expandedEvents = null;
-        if (expanded) {
-            expandedEvents = this.props.children;
-        }
-
-        if (fewEvents) {
-            return (
-                <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                    { expandedEvents }
-                </div>
-            );
-        }
 
         // Map user IDs to an array of objects:
         const userEvents = {
@@ -452,9 +385,17 @@ module.exports = React.createClass({
                 userEvents[userId] = [];
                 if (e.target) avatarMembers.push(e.target);
             }
+
+            let displayName = userId;
+            if (e.getType() === 'm.room.third_party_invite') {
+                displayName = e.getContent().display_name;
+            } else if (e.target) {
+                displayName = e.target.name;
+            }
+
             userEvents[userId].push({
                 mxEvent: e,
-                displayName: (e.target ? e.target.name : null) || userId,
+                displayName,
                 index: index,
             });
         });
@@ -466,30 +407,14 @@ module.exports = React.createClass({
             (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2],
         );
 
-        let summaryContainer = null;
-        if (!expanded) {
-            summaryContainer = (
-                <div className="mx_EventTile_line">
-                    <div className="mx_EventTile_info">
-                        { this._renderAvatars(avatarMembers) }
-                        { this._renderSummary(aggregate.names, orderedTransitionSequences) }
-                    </div>
-                </div>
-            );
-        }
-        const toggleButton = (
-            <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                { expanded ? _t('collapse') : _t('expand') }
-            </div>
-        );
-
-        return (
-            <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                { toggleButton }
-                { summaryContainer }
-                { expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null }
-                { expandedEvents }
-            </div>
-        );
+        const EventListSummary = sdk.getComponent("views.elements.EventListSummary");
+        return <EventListSummary
+            events={this.props.events}
+            threshold={this.props.threshold}
+            onToggle={this.props.onToggle}
+            startExpanded={this.props.startExpanded}
+            children={this.props.children}
+            summaryMembers={avatarMembers}
+            summaryText={this._generateSummary(aggregate.names, orderedTransitionSequences)} />;
     },
 });

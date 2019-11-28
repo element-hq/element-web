@@ -12,6 +12,7 @@ module.exports = {
     extends: [matrixJsSdkPath + "/.eslintrc.js"],
     plugins: [
       "react",
+      "react-hooks",
       "flowtype",
       "babel"
     ],
@@ -104,6 +105,9 @@ module.exports = {
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",
+
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
     },
     settings: {
         flowtype: {

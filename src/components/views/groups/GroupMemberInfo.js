@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -26,7 +27,7 @@ import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'GroupMemberInfo',
 
     contextTypes: {
@@ -180,16 +181,15 @@ module.exports = React.createClass({
             this.props.groupMember.displayname || this.props.groupMember.userId
         );
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
-            <div className="mx_MemberInfo">
+            <div className="mx_MemberInfo" role="tabpanel">
                 <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     { avatarElement }
-                    <EmojiText element="h2">{ groupMemberName }</EmojiText>
+                    <h2>{ groupMemberName }</h2>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">

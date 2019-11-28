@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,11 +21,12 @@ import {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-const sdk = require("../../../../..");
-const PlatformPeg = require("../../../../../PlatformPeg");
+import sdk from "../../../../..";
+import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
+        'useCiderComposer',
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
@@ -42,10 +44,12 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showJoinLeaves',
         'showAvatarChanges',
         'showDisplaynameChanges',
+        'showImages',
     ];
 
     static ROOM_LIST_SETTINGS = [
         'RoomList.orderByImportance',
+        'breadcrumbs',
     ];
 
     static ADVANCED_SETTINGS = [
@@ -63,8 +67,16 @@ export default class PreferencesUserSettingsTab extends React.Component {
         this.state = {
             autoLaunch: false,
             autoLaunchSupported: false,
+            alwaysShowMenuBar: true,
+            alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
+            autocompleteDelay:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
+            readMarkerInViewThresholdMs:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'readMarkerInViewThresholdMs').toString(10),
+            readMarkerOutOfViewThresholdMs:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'readMarkerOutOfViewThresholdMs').toString(10),
         };
     }
 
@@ -73,23 +85,38 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
         let autoLaunch = false;
-
         if (autoLaunchSupported) {
             autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
+        const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
+        let alwaysShowMenuBar = true;
+        if (alwaysShowMenuBarSupported) {
+            alwaysShowMenuBar = !await platform.getAutoHideMenuBarEnabled();
+        }
+
         const minimizeToTraySupported = await platform.supportsMinimizeToTray();
         let minimizeToTray = true;
-
         if (minimizeToTraySupported) {
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
 
-        this.setState({autoLaunch, autoLaunchSupported, minimizeToTraySupported, minimizeToTray});
+        this.setState({
+            autoLaunch,
+            autoLaunchSupported,
+            alwaysShowMenuBarSupported,
+            alwaysShowMenuBar,
+            minimizeToTraySupported,
+            minimizeToTray,
+        });
     }
 
     _onAutoLaunchChange = (checked) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
+    };
+
+    _onAlwaysShowMenuBarChange = (checked) => {
+        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
     };
 
     _onMinimizeToTrayChange = (checked) => {
@@ -97,7 +124,18 @@ export default class PreferencesUserSettingsTab extends React.Component {
     };
 
     _onAutocompleteDelayChange = (e) => {
+        this.setState({autocompleteDelay: e.target.value});
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
+    };
+
+    _onReadMarkerInViewThresholdMs = (e) => {
+        this.setState({readMarkerInViewThresholdMs: e.target.value});
+        SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
+    };
+
+    _onReadMarkerOutOfViewThresholdMs = (e) => {
+        this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
+        SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
     _renderGroup(settingIds) {
@@ -108,16 +146,26 @@ export default class PreferencesUserSettingsTab extends React.Component {
     render() {
         let autoLaunchOption = null;
         if (this.state.autoLaunchSupported) {
-            autoLaunchOption = <LabelledToggleSwitch value={this.state.autoLaunch}
-                                                     onChange={this._onAutoLaunchChange}
-                                                     label={_t('Start automatically after system login')} />;
+            autoLaunchOption = <LabelledToggleSwitch
+                value={this.state.autoLaunch}
+                onChange={this._onAutoLaunchChange}
+                label={_t('Start automatically after system login')} />;
+        }
+
+        let autoHideMenuOption = null;
+        if (this.state.alwaysShowMenuBarSupported) {
+            autoHideMenuOption = <LabelledToggleSwitch
+                value={this.state.alwaysShowMenuBar}
+                onChange={this._onAlwaysShowMenuBarChange}
+                label={_t('Always show the window menu bar')} />;
         }
 
         let minimizeToTrayOption = null;
         if (this.state.minimizeToTraySupported) {
-            minimizeToTrayOption = <LabelledToggleSwitch value={this.state.minimizeToTray}
-                                                         onChange={this._onMinimizeToTrayChange}
-                                                         label={_t('Close button should minimize window to tray')} />;
+            minimizeToTrayOption = <LabelledToggleSwitch
+                value={this.state.minimizeToTray}
+                onChange={this._onMinimizeToTrayChange}
+                label={_t('Show tray icon and minimize window to it on close')} />;
         }
 
         return (
@@ -136,10 +184,26 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
                     {minimizeToTrayOption}
+                    {autoHideMenuOption}
                     {autoLaunchOption}
-                    <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
-                           value={SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay')}
-                           onChange={this._onAutocompleteDelayChange} />
+                    <Field
+                        id={"autocompleteDelay"}
+                        label={_t('Autocomplete delay (ms)')}
+                        type='number'
+                        value={this.state.autocompleteDelay}
+                        onChange={this._onAutocompleteDelayChange} />
+                    <Field
+                        id={"readMarkerInViewThresholdMs"}
+                        label={_t('Read Marker lifetime (ms)')}
+                        type='number'
+                        value={this.state.readMarkerInViewThresholdMs}
+                        onChange={this._onReadMarkerInViewThresholdMs} />
+                    <Field
+                        id={"readMarkerOutOfViewThresholdMs"}
+                        label={_t('Read Marker off-screen lifetime (ms)')}
+                        type='number'
+                        value={this.state.readMarkerOutOfViewThresholdMs}
+                        onChange={this._onReadMarkerOutOfViewThresholdMs} />
                 </div>
             </div>
         );

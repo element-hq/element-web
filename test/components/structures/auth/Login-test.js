@@ -22,6 +22,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import sdk from 'matrix-react-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import * as TestUtils from '../../../test-utils';
+import {mkServerConfig} from "../../../test-utils";
 
 const Login = sdk.getComponent(
     'structures.auth.Login',
@@ -44,8 +45,7 @@ describe('Login', function() {
 
     function render() {
         return ReactDOM.render(<Login
-            defaultHsUrl="https://matrix.org"
-            defaultIsUrl="https://vector.im"
+            serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
             onLoggedIn={() => {}}
             onRegisterClick={() => {}}
             onServerConfigChange={() => {}}
@@ -54,6 +54,11 @@ describe('Login', function() {
 
     it('should show form with change server link', function() {
         const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            currentFlow: "m.login.password",
+        });
 
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,
@@ -74,6 +79,11 @@ describe('Login', function() {
         });
 
         const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            currentFlow: "m.login.password",
+        });
 
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,

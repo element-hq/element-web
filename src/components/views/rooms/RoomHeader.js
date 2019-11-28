@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -33,7 +32,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomHeader',
 
     propTypes: {
@@ -147,7 +146,6 @@ module.exports = React.createClass({
 
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
-        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         let searchStatus = null;
         let cancelButton = null;
@@ -191,10 +189,10 @@ module.exports = React.createClass({
             roomName = this.props.room.name;
         }
 
-        const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
+        const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
         const name =
             <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                <EmojiText dir="auto" element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
+                <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>
                 { searchStatus }
             </div>;
 

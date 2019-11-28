@@ -63,10 +63,11 @@ export default function AccessibleButton(props) {
         };
     }
 
-    restProps.tabIndex = restProps.tabIndex || "0";
-    restProps.role = "button";
-    restProps.className = (restProps.className ? restProps.className + " " : "") +
-                          "mx_AccessibleButton";
+    // Pass through the ref - used for keyboard shortcut access to some buttons
+    restProps.ref = restProps.inputRef;
+    delete restProps.inputRef;
+
+    restProps.className = (restProps.className ? restProps.className + " " : "") + "mx_AccessibleButton";
 
     if (kind) {
         // We apply a hasKind class to maintain backwards compatibility with
@@ -76,6 +77,7 @@ export default function AccessibleButton(props) {
 
     if (disabled) {
         restProps.className += " mx_AccessibleButton_disabled";
+        restProps["aria-disabled"] = true;
     }
 
     return React.createElement(element, restProps, children);
@@ -89,18 +91,30 @@ export default function AccessibleButton(props) {
  */
 AccessibleButton.propTypes = {
     children: PropTypes.node,
+    inputRef: PropTypes.oneOfType([
+        // Either a function
+        PropTypes.func,
+        // Or the instance of a DOM native element
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    ]),
     element: PropTypes.string,
     onClick: PropTypes.func.isRequired,
 
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
     kind: PropTypes.string,
+    // The ARIA role
+    role: PropTypes.string,
+    // The tabIndex
+    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     disabled: PropTypes.bool,
 };
 
 AccessibleButton.defaultProps = {
     element: 'div',
+    role: 'button',
+    tabIndex: "0",
 };
 
 AccessibleButton.displayName = "AccessibleButton";

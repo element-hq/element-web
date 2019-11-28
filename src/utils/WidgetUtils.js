@@ -27,6 +27,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -99,10 +100,14 @@ export default class WidgetUtils {
         }
 
         const testUrl = url.parse(testUrlString);
-
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
+            const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
+            if (defaultManager) {
+                scalarUrls = [defaultManager.apiUrl];
+            } else {
+                scalarUrls = [];
+            }
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
@@ -228,7 +233,9 @@ export default class WidgetUtils {
         };
 
         const client = MatrixClientPeg.get();
-        const userWidgets = WidgetUtils.getUserWidgets();
+        // Get the current widgets and clone them before we modify them, otherwise
+        // we'll modify the content of the old event.
+        const userWidgets = JSON.parse(JSON.stringify(WidgetUtils.getUserWidgets()));
 
         // Delete existing widget with ID
         try {
@@ -339,6 +346,41 @@ export default class WidgetUtils {
     }
 
     /**
+     * Get all integration manager widgets for this user.
+     * @returns {Object[]} An array of integration manager user widgets.
+     */
+    static getIntegrationManagerWidgets() {
+        const widgets = WidgetUtils.getUserWidgetsArray();
+        return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
+    }
+
+    static removeIntegrationManagerWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
+        Object.entries(userWidgets).forEach(([key, widget]) => {
+            if (widget.content && widget.content.type === "m.integration_manager") {
+                delete userWidgets[key];
+            }
+        });
+        return client.setAccountData('m.widgets', userWidgets);
+    }
+
+    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
+        return WidgetUtils.setUserWidget(
+            "integration_manager_" + (new Date().getTime()),
+            "m.integration_manager",
+            uiUrl,
+            "Integration Manager: " + name,
+            {"api_url": apiUrl},
+        );
+    }
+
+    /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
@@ -347,7 +389,9 @@ export default class WidgetUtils {
         if (!client) {
             throw new Error('User not logged in');
         }
-        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        const widgets = client.getAccountData('m.widgets');
+        if (!widgets) return;
+        const userWidgets = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === 'm.stickerpicker') {
                 delete userWidgets[key];
@@ -356,7 +400,7 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId, app, sender, roomId) {
+    static makeAppConfig(appId, app, senderUserId, roomId, eventId) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const user = MatrixClientPeg.get().getUser(myUserId);
         const params = {
@@ -369,7 +413,13 @@ export default class WidgetUtils {
             '$theme': SettingsStore.getValue("theme"),
         };
 
+        if (!senderUserId) {
+            throw new Error("Widgets must be created by someone - provide a senderUserId");
+        }
+        app.creatorUserId = senderUserId;
+
         app.id = appId;
+        app.eventId = eventId;
         app.name = app.name || app.type;
 
         if (app.data) {
@@ -381,7 +431,6 @@ export default class WidgetUtils {
         }
 
         app.url = encodeUri(app.url, params);
-        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
 
         return app;
     }

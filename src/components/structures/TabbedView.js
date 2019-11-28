@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ limitations under the License.
 import * as React from "react";
 import {_t} from '../../languageHandler';
 import PropTypes from "prop-types";
+import sdk from "../../index";
 
 /**
  * Represents a tab for the TabbedView.
@@ -70,6 +72,8 @@ export class TabbedView extends React.Component {
     }
 
     _renderTabLabel(tab) {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         let classes = "mx_TabbedView_tabLabel ";
 
         const idx = this.props.tabs.indexOf(tab);
@@ -82,14 +86,14 @@ export class TabbedView extends React.Component {
 
         const onClickHandler = () => this._setActiveTab(tab);
 
+        const label = _t(tab.label);
         return (
-            <span className={classes} key={"tab_label_" + tab.label}
-                  onClick={onClickHandler}>
+            <AccessibleButton className={classes} key={"tab_label_" + tab.label} onClick={onClickHandler}>
                 {tabIcon}
                 <span className="mx_TabbedView_tabLabel_text">
-                    {_t(tab.label)}
+                    { label }
                 </span>
-            </span>
+            </AccessibleButton>
         );
     }
 

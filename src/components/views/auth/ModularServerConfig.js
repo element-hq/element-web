@@ -15,11 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import SdkConfig from "../../../SdkConfig";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
+import * as ServerType from '../../views/auth/ServerTypeSelector';
+import ServerConfig from "./ServerConfig";
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+
+// TODO: TravisR - Can this extend ServerConfig for most things?
 
 /*
  * Configure the Modular server name.
@@ -27,79 +33,64 @@ const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_
  * This is a variant of ServerConfig with only the HS field and different body
  * text that is specific to the Modular case.
  */
-export default class ModularServerConfig extends React.PureComponent {
-    static propTypes = {
-        onServerConfigChange: PropTypes.func,
+export default class ModularServerConfig extends ServerConfig {
+    static propTypes = ServerConfig.propTypes;
 
-        // default URLs are defined in config.json (or the hardcoded defaults)
-        // they are used if the user has not overridden them with a custom URL.
-        // In other words, if the custom URL is blank, the default is used.
-        defaultHsUrl: PropTypes.string, // e.g. https://matrix.org
-
-        // This component always uses the default IS URL and doesn't allow it
-        // to be changed.  We still receive it as a prop here to simplify
-        // consumers by still passing the IS URL via onServerConfigChange.
-        defaultIsUrl: PropTypes.string, // e.g. https://vector.im
-
-        // custom URLs are explicitly provided by the user and override the
-        // default URLs.  The user enters them via the component's input fields,
-        // which is reflected on these properties whenever on..UrlChanged fires.
-        // They are persisted in localStorage by MatrixClientPeg, and so can
-        // override the default URLs when the component initially loads.
-        customHsUrl: PropTypes.string,
-
-        delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-    }
-
-    static defaultProps = {
-        onServerConfigChange: function() {},
-        customHsUrl: "",
-        delayTimeMs: 0,
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            hsUrl: props.customHsUrl,
-        };
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (newProps.customHsUrl === this.state.hsUrl) return;
+    async validateAndApplyServer(hsUrl, isUrl) {
+        // Always try and use the defaults first
+        const defaultConfig: ValidatedServerConfig = SdkConfig.get()["validated_server_config"];
+        if (defaultConfig.hsUrl === hsUrl && defaultConfig.isUrl === isUrl) {
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(defaultConfig);
+            return defaultConfig;
+        }
 
         this.setState({
-            hsUrl: newProps.customHsUrl,
+            hsUrl,
+            isUrl,
+            busy: true,
+            errorText: "",
         });
-        this.props.onServerConfigChange({
-            hsUrl: newProps.customHsUrl,
-            isUrl: this.props.defaultIsUrl,
-        });
-    }
 
-    onHomeserverBlur = (ev) => {
-        this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            this.props.onServerConfigChange({
-                hsUrl: this.state.hsUrl,
-                isUrl: this.props.defaultIsUrl,
+        try {
+            const result = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            this.setState({busy: false, errorText: ""});
+            this.props.onServerConfigChange(result);
+            return result;
+        } catch (e) {
+            console.error(e);
+            let message = _t("Unable to validate homeserver/identity server");
+            if (e.translatedMessage) {
+                message = e.translatedMessage;
+            }
+            this.setState({
+                busy: false,
+                errorText: message,
             });
-        });
-    }
 
-    onHomeserverChange = (ev) => {
-        const hsUrl = ev.target.value;
-        this.setState({ hsUrl });
-    }
-
-    _waitThenInvoke(existingTimeoutId, fn) {
-        if (existingTimeoutId) {
-            clearTimeout(existingTimeoutId);
+            return null;
         }
-        return setTimeout(fn.bind(this), this.props.delayTimeMs);
+    }
+
+    async validateServer() {
+        // TODO: Do we want to support .well-known lookups here?
+        // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
+        // find their homeserver without demanding they use "https://matrix.org"
+        return this.validateAndApplyServer(this.state.hsUrl, ServerType.TYPES.PREMIUM.identityServerUrl);
     }
 
     render() {
         const Field = sdk.getComponent('elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        const submitButton = this.props.submitText
+            ? <AccessibleButton
+                element="button"
+                type="submit"
+                className={this.props.submitClass}
+                onClick={this.onSubmit}
+                disabled={this.state.busy}>{this.props.submitText}</AccessibleButton>
+            : null;
 
         return (
             <div className="mx_ServerConfig">
@@ -113,15 +104,18 @@ export default class ModularServerConfig extends React.PureComponent {
                         </a>,
                     },
                 )}
-                <div className="mx_ServerConfig_fields">
-                    <Field id="mx_ServerConfig_hsUrl"
-                        label={_t("Server Name")}
-                        placeholder={this.props.defaultHsUrl}
-                        value={this.state.hsUrl}
-                        onBlur={this.onHomeserverBlur}
-                        onChange={this.onHomeserverChange}
-                    />
-                </div>
+                <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
+                    <div className="mx_ServerConfig_fields">
+                        <Field id="mx_ServerConfig_hsUrl"
+                            label={_t("Server Name")}
+                            placeholder={this.props.serverConfig.hsUrl}
+                            value={this.state.hsUrl}
+                            onBlur={this.onHomeserverBlur}
+                            onChange={this.onHomeserverChange}
+                        />
+                    </div>
+                    {submitButton}
+                </form>
             </div>
         );
     }

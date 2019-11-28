@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {baseUrl} from "./matrix-to";
+import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens
@@ -44,7 +46,7 @@ function matrixLinkify(linkify) {
     const S_ROOMALIAS_COLON = new linkify.parser.State();
     const S_ROOMALIAS_COLON_NUM = new linkify.parser.State(ROOMALIAS);
 
-    const roomname_tokens = [
+    const roomnameTokens = [
         TT.DOT,
         TT.PLUS,
         TT.NUM,
@@ -58,8 +60,8 @@ function matrixLinkify(linkify) {
         TT.LOCALHOST,
     ];
 
-    S_HASH.on(roomname_tokens, S_HASH_NAME);
-    S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
+    S_HASH.on(roomnameTokens, S_HASH_NAME);
+    S_HASH_NAME.on(roomnameTokens, S_HASH_NAME);
     S_HASH_NAME.on(TT.DOMAIN, S_HASH_NAME);
 
     S_HASH_NAME.on(TT.COLON, S_HASH_NAME_COLON);
@@ -92,7 +94,7 @@ function matrixLinkify(linkify) {
     const S_USERID_COLON = new linkify.parser.State();
     const S_USERID_COLON_NUM = new linkify.parser.State(USERID);
 
-    const username_tokens = [
+    const usernameTokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -100,12 +102,12 @@ function matrixLinkify(linkify) {
         TT.DOMAIN,
         TT.TLD,
 
-        // as in roomname_tokens
+        // as in roomnameTokens
         TT.LOCALHOST,
     ];
 
-    S_AT.on(username_tokens, S_AT_NAME);
-    S_AT_NAME.on(username_tokens, S_AT_NAME);
+    S_AT.on(usernameTokens, S_AT_NAME);
+    S_AT_NAME.on(usernameTokens, S_AT_NAME);
     S_AT_NAME.on(TT.DOMAIN, S_AT_NAME);
 
     S_AT_NAME.on(TT.COLON, S_AT_NAME_COLON);
@@ -138,7 +140,7 @@ function matrixLinkify(linkify) {
     const S_GROUPID_COLON = new linkify.parser.State();
     const S_GROUPID_COLON_NUM = new linkify.parser.State(GROUPID);
 
-    const groupid_tokens = [
+    const groupIdTokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -146,12 +148,12 @@ function matrixLinkify(linkify) {
         TT.DOMAIN,
         TT.TLD,
 
-        // as in roomname_tokens
+        // as in roomnameTokens
         TT.LOCALHOST,
     ];
 
-    S_PLUS.on(groupid_tokens, S_PLUS_NAME);
-    S_PLUS_NAME.on(groupid_tokens, S_PLUS_NAME);
+    S_PLUS.on(groupIdTokens, S_PLUS_NAME);
+    S_PLUS_NAME.on(groupIdTokens, S_PLUS_NAME);
     S_PLUS_NAME.on(TT.DOMAIN, S_PLUS_NAME);
 
     S_PLUS_NAME.on(TT.COLON, S_PLUS_NAME_COLON);
@@ -179,22 +181,15 @@ const escapeRegExp = function(string) {
 
 // Recognise URLs from both our local vector and official vector as vector.
 // anyone else really should be using matrix.to.
-matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
+matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?://)?(?:"
     + escapeRegExp(window.location.host + window.location.pathname) + "|"
     + "(?:www\\.)?(?:riot|vector)\\.im/(?:app|beta|staging|develop)/"
     + ")(#.*)";
 
-matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/(([#@!+]).*)";
+matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?://)?(?:www\\.)?matrix\\.to/#/(([#@!+]).*)";
 matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
-    '\\[([^\\]]*)\\]\\((?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
+    '\\[([^\\]]*)\\]\\((?:https?://)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
-
-const matrixToEntityMap = {
-    '@': '#/user/',
-    '#': '#/room/',
-    '!': '#/room/',
-    '+': '#/group/',
-};
 
 matrixLinkify.options = {
     events: function(href, type) {
@@ -225,20 +220,8 @@ matrixLinkify.options = {
             case 'roomalias':
             case 'userid':
             case 'groupid':
-                return matrixLinkify.MATRIXTO_BASE_URL + '/#/' + href;
             default: {
-                // FIXME: horrible duplication with HtmlUtils' transform tags
-                let m = href.match(matrixLinkify.VECTOR_URL_PATTERN);
-                if (m) {
-                    return m[1];
-                }
-                m = href.match(matrixLinkify.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    const entity = m[1];
-                    if (matrixToEntityMap[entity[0]]) return matrixToEntityMap[entity[0]] + entity;
-                }
-
-                return href;
+                return tryTransformPermalinkToLocalHref(href);
             }
         }
     },
@@ -249,8 +232,8 @@ matrixLinkify.options = {
 
     target: function(href, type) {
         if (type === 'url') {
-            if (href.match(matrixLinkify.VECTOR_URL_PATTERN) ||
-                href.match(matrixLinkify.MATRIXTO_URL_PATTERN)) {
+            const transformed = tryTransformPermalinkToLocalHref(href);
+            if (transformed !== href || href.match(matrixLinkify.VECTOR_URL_PATTERN)) {
                 return null;
             } else {
                 return '_blank';
@@ -260,4 +243,4 @@ matrixLinkify.options = {
     },
 };
 
-module.exports = matrixLinkify;
+export default matrixLinkify;

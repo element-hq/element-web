@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Email from '../../../email';
@@ -29,7 +30,7 @@ import Modal from '../../../Modal';
  *
  * On success, `onFinished(true)` is called.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'SetEmailDialog',
     propTypes: {
         onFinished: PropTypes.func.isRequired,
@@ -61,9 +62,7 @@ export default React.createClass({
             return;
         }
         this._addThreepid = new AddThreepid();
-        // we always bind emails when registering, so let's do the
-        // same here.
-        this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
+        this._addThreepid.addEmailAddress(emailAddress).then(() => {
             Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                 title: _t("Verification Pending"),
                 description: _t(
@@ -97,7 +96,7 @@ export default React.createClass({
     },
 
     verifyEmailAddress: function() {
-        this._addThreepid.checkEmailLinkClicked().done(() => {
+        this._addThreepid.checkEmailLinkClicked().then(() => {
             this.props.onFinished(true);
         }, (err) => {
             this.setState({emailBusy: false});

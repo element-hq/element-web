@@ -14,15 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 const TextForEvent = require('../../../TextForEvent');
-import sdk from '../../../index';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'TextualEvent',
 
     propTypes: {
@@ -31,11 +29,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length === 0) return null;
         return (
-            <EmojiText element="div" className="mx_TextualEvent">{ text }</EmojiText>
+            <div className="mx_TextualEvent">{ text }</div>
         );
     },
 });

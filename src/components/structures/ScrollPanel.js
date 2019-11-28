@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require("react");
+import React from "react";
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -84,7 +84,7 @@ if (DEBUG_SCROLL) {
  * offset as normal.
  */
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'ScrollPanel',
 
     propTypes: {
@@ -214,6 +214,9 @@ module.exports = React.createClass({
     // after an update to the contents of the panel, check that the scroll is
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
+        if (this.unmounted) {
+            return;
+        }
         this._restoreSavedScrollState();
         this.checkFillState();
     },
@@ -673,6 +676,11 @@ module.exports = React.createClass({
             debuglog("updateHeight getting straight to business, no scrolling going on.");
         }
 
+        // We might have unmounted since the timer finished, so abort if so.
+        if (this.unmounted) {
+            return;
+        }
+
         const sn = this._getScrollNode();
         const itemlist = this.refs.itemlist;
         const contentHeight = this._getMessagesHeight();
@@ -750,8 +758,10 @@ module.exports = React.createClass({
     _getMessagesHeight() {
         const itemlist = this.refs.itemlist;
         const lastNode = itemlist.lastElementChild;
+        const lastNodeBottom = lastNode ? lastNode.offsetTop + lastNode.clientHeight : 0;
+        const firstNodeTop = itemlist.firstElementChild ? itemlist.firstElementChild.offsetTop : 0;
         // 18 is itemlist padding
-        return (lastNode.offsetTop + lastNode.clientHeight) - itemlist.firstElementChild.offsetTop + (18 * 2);
+        return lastNodeBottom - firstNodeTop + (18 * 2);
     },
 
     _topFromBottom(node) {

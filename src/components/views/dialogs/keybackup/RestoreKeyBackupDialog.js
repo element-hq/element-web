@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
@@ -22,6 +23,7 @@ import Modal from '../../../../Modal';
 import { MatrixClient } from 'matrix-js-sdk';
 
 import { _t } from '../../../../languageHandler';
+import {Key} from "../../../../Keyboard";
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
@@ -29,7 +31,7 @@ const RESTORE_TYPE_RECOVERYKEY = 1;
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
-export default React.createClass({
+export default createReactClass({
     getInitialState: function() {
         return {
             backupInfo: null,
@@ -135,13 +137,13 @@ export default React.createClass({
     },
 
     _onPassPhraseKeyPress: function(e) {
-        if (e.key === "Enter") {
+        if (e.key === Key.ENTER) {
             this._onPassPhraseNext();
         }
     },
 
     _onRecoveryKeyKeyPress: function(e) {
-        if (e.key === "Enter" && this.state.recoveryKeyValid) {
+        if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
             this._onRecoveryKeyNext();
         }
     },

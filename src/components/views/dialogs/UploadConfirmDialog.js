@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import filesize from "filesize";
 
 export default class UploadConfirmDialog extends React.Component {
     static propTypes = {
@@ -49,6 +51,10 @@ export default class UploadConfirmDialog extends React.Component {
         this.props.onFinished(true);
     }
 
+    _onUploadAllClick = () => {
+        this.props.onFinished(true, true);
+    }
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -71,7 +77,7 @@ export default class UploadConfirmDialog extends React.Component {
             preview = <div className="mx_UploadConfirmDialog_previewOuter">
                 <div className="mx_UploadConfirmDialog_previewInner">
                     <div><img className="mx_UploadConfirmDialog_imagePreview" src={this._objectUrl} /></div>
-                    <div>{this.props.file.name}</div>
+                    <div>{this.props.file.name} ({filesize(this.props.file.size)})</div>
                 </div>
             </div>;
         } else {
@@ -80,9 +86,16 @@ export default class UploadConfirmDialog extends React.Component {
                     <img className="mx_UploadConfirmDialog_fileIcon"
                         src={require("../../../../res/img/files.png")}
                     />
-                    {this.props.file.name}
+                    {this.props.file.name} ({filesize(this.props.file.size)})
                 </div>
             </div>;
+        }
+
+        let uploadAllButton;
+        if (this.props.currentIndex + 1 < this.props.totalFiles) {
+            uploadAllButton = <button onClick={this._onUploadAllClick}>
+                {_t("Upload all")}
+            </button>;
         }
 
         return (
@@ -100,7 +113,9 @@ export default class UploadConfirmDialog extends React.Component {
                     hasCancel={false}
                     onPrimaryButtonClick={this._onUploadClick}
                     focus={true}
-                />
+                >
+                    {uploadAllButton}
+                </DialogButtons>
             </BaseDialog>
         );
     }

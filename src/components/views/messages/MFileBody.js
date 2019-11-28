@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -145,6 +144,7 @@ function remoteRender(event) {
     a.target = data.target;
     a.download = data.download;
     a.style = data.style;
+    a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
     a.href = window.URL.createObjectURL(data.blob);
     a.appendChild(img);
     a.appendChild(document.createTextNode(data.textContent));
@@ -194,7 +194,7 @@ function computedStyle(element) {
     return cssText;
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MFileBody',
 
     getInitialState: function() {

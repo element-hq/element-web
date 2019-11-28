@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'CreateGroupDialog',
     propTypes: {
         onFinished: PropTypes.func.isRequired,
@@ -92,7 +93,7 @@ export default React.createClass({
             this.setState({createError: e});
         }).finally(() => {
             this.setState({creating: false});
-        }).done();
+        });
     },
 
     _onCancel: function() {

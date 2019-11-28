@@ -17,7 +17,6 @@ limitations under the License.
 .mx_RoomDirectory_dialogWrapper > .mx_Dialog {
     max-width: 960px;
     height: 100%;
-    padding: 20px;
 }
 
 .mx_RoomDirectory_dialog {
@@ -33,24 +32,6 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex: 1;
-}
-
-.mx_RoomDirectory .gm-scroll-view {
-    // little hack because gemini doesn't seem to detect
-    // the scrollbar width well in this instance
-    // when using css scrollbars
-    scrollbar-width: thin;
-}
-
-.mx_RoomDirectory_createRoom {
-    background-color: $button-bg-color;
-    border-radius: 4px;
-    padding: 8px;
-    color: $button-fg-color;
-    font-weight: 600;
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 .mx_RoomDirectory_list {
@@ -91,14 +72,42 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_roomAvatar {
-    width: 24px;
-    padding-left: 12px;
-    padding-right: 24px;
+    width: 32px;
+    padding-right: 14px;
     vertical-align: top;
 }
 
 .mx_RoomDirectory_roomDescription {
     padding-bottom: 16px;
+}
+
+.mx_RoomDirectory_roomMemberCount {
+    color: $light-fg-color;
+    width: 60px;
+    padding: 0 10px;
+    text-align: center;
+
+    &::before {
+        background-color: $light-fg-color;
+        display: inline-block;
+        vertical-align: text-top;
+        margin-right: 2px;
+        content: "";
+        mask: url('$(res)/img/feather-customised/user.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        // scale it down and make the size slightly bigger (16 instead of 14px)
+        // to avoid rendering artifacts
+        mask-size: 80%;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.mx_RoomDirectory_join, .mx_RoomDirectory_preview {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .mx_RoomDirectory_name {
@@ -110,22 +119,9 @@ limitations under the License.
     display: inline-block;
 }
 
-.mx_RoomDirectory_perm {
-    display: inline;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-right: 5px;
-    height: 15px;
-    border-radius: 11px;
-    background-color: $plinth-bg-color;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 11px;
-    color: $accent-color;
-}
-
 .mx_RoomDirectory_topic {
     cursor: initial;
+    color: $light-fg-color;
 }
 
 .mx_RoomDirectory_alias {
@@ -133,13 +129,20 @@ limitations under the License.
     color: $settings-grey-fg-color;
 }
 
-.mx_RoomDirectory_roomMemberCount {
-    text-align: right;
-    width: 100px;
-    padding-right: 10px;
-}
-
 .mx_RoomDirectory_table tr {
     padding-bottom: 10px;
     cursor: pointer;
+}
+
+.mx_RoomDirectory .mx_RoomView_MessageList {
+    padding: 0;
+}
+
+.mx_RoomDirectory p {
+    font-size: 14px;
+    margin-top: 0;
+
+    .mx_AccessibleButton {
+        padding: 0;
+    }
 }

@@ -15,11 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
+import createReactClass from 'create-react-class';
+import sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
@@ -52,7 +51,7 @@ function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     }
 }
 
-const EntityTile = React.createClass({
+const EntityTile = createReactClass({
     displayName: 'EntityTile',
 
     propTypes: {
@@ -111,7 +110,6 @@ const EntityTile = React.createClass({
         let nameEl;
         const {name} = this.props;
 
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         if (!this.props.suppressOnHover) {
             const activeAgo = this.props.presenceLastActiveAgo ?
                 (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;
@@ -128,24 +126,24 @@ const EntityTile = React.createClass({
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <EmojiText element="div" className="mx_EntityTile_name" dir="auto">
+                    <div className="mx_EntityTile_name" dir="auto">
                         { name }
-                    </EmojiText>
+                    </div>
                     {presenceLabel}
                 </div>
             );
         } else if (this.props.subtextLabel) {
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <EmojiText element="div" className="mx_EntityTile_name" dir="auto">
+                    <div className="mx_EntityTile_name" dir="auto">
                         {name}
-                    </EmojiText>
+                    </div>
                     <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>
                 </div>
             );
         } else {
             nameEl = (
-                <EmojiText element="div" className="mx_EntityTile_name" dir="auto">{ name }</EmojiText>
+                <div className="mx_EntityTile_name" dir="auto">{ name }</div>
             );
         }
 

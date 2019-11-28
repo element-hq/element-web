@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Email from '../../../email';
@@ -26,6 +28,7 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
+import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -38,7 +41,7 @@ const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from of
 /**
  * A pure UI component which displays a registration form.
  */
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RegistrationForm',
 
     propTypes: {
@@ -51,16 +54,15 @@ module.exports = React.createClass({
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
-        // This is optional and only set if we used a server name to determine
-        // the HS URL via `.well-known` discovery. The server name is used
-        // instead of the HS URL when talking about "your account".
-        hsName: PropTypes.string,
-        hsUrl: PropTypes.string,
+        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        canSubmit: PropTypes.bool,
+        serverRequiresIdServer: PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             onValidationChange: console.error,
+            canSubmit: true,
         };
     },
 
@@ -70,17 +72,20 @@ module.exports = React.createClass({
             fieldValid: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
-            username: "",
-            email: "",
-            phoneNumber: "",
-            password: "",
+            username: this.props.defaultUsername || "",
+            email: this.props.defaultEmail || "",
+            phoneNumber: this.props.defaultPhoneNumber || "",
+            password: this.props.defaultPassword || "",
             passwordConfirm: "",
             passwordComplexity: null,
+            passwordSafe: false,
         };
     },
 
     onSubmit: async function(ev) {
         ev.preventDefault();
+
+        if (!this.props.canSubmit) return;
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
@@ -88,15 +93,26 @@ module.exports = React.createClass({
         }
 
         const self = this;
-        if (this.state.email == '') {
+        if (this.state.email === '') {
+            const haveIs = Boolean(this.props.serverConfig.isUrl);
+
+            let desc;
+            if (this.props.serverRequiresIdServer && !haveIs) {
+                desc = _t(
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
+                );
+            } else {
+                desc = _t(
+                    "If you don't specify an email address, you won't be able to reset your password. " +
+                    "Are you sure?",
+                );
+            }
+
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                 title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("If you don't specify an email address, you won't be able to reset your password. " +
-                            "Are you sure?") }
-                    </div>,
+                description: desc,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (confirmed) {
@@ -150,7 +166,11 @@ module.exports = React.createClass({
             if (!field) {
                 continue;
             }
-            field.validate({ allowEmpty: false });
+            // We must wait for these validations to finish before queueing
+            // up the setState below so our setState goes in the queue after
+            // all the setStates from these validate calls (that's how we
+            // know they've finished).
+            await field.validate({ allowEmpty: false });
         }
 
         // Validation and state updates are async, so we need to wait for them to complete
@@ -270,12 +290,23 @@ module.exports = React.createClass({
                     }
                     const { scorePassword } = await import('../../../utils/PasswordScorer');
                     const complexity = scorePassword(value);
+                    const safe = complexity.score >= PASSWORD_MIN_SCORE;
+                    const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
                     this.setState({
                         passwordComplexity: complexity,
+                        passwordSafe: safe,
                     });
-                    return complexity.score >= PASSWORD_MIN_SCORE;
+                    return allowUnsafe || safe;
                 },
-                valid: () => _t("Nice, strong password!"),
+                valid: function() {
+                    // Unsafe passwords that are valid are only possible through a
+                    // configuration flag. We'll print some helper text to signal
+                    // to the user that their password is allowed, but unsafe.
+                    if (!this.state.passwordSafe) {
+                        return _t("Password is allowed, but unsafe");
+                    }
+                    return _t("Nice, strong password!");
+                },
                 invalid: function() {
                     const complexity = this.state.passwordComplexity;
                     if (!complexity) {
@@ -367,7 +398,7 @@ module.exports = React.createClass({
     },
 
     validateUsernameRules: withValidation({
-        description: () => _t("Use letters, numbers, dashes and underscores only"),
+        description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
         rules: [
             {
                 key: "required",
@@ -406,8 +437,32 @@ module.exports = React.createClass({
         });
     },
 
+    _showEmail() {
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.email.identity')
+        ) {
+            return false;
+        }
+        return true;
+    },
+
+    _showPhoneNumber() {
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        if (
+            !threePidLogin ||
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.msisdn')
+        ) {
+            return false;
+        }
+        return true;
+    },
+
     renderEmail() {
-        if (!this._authStepIsUsed('m.login.email.identity')) {
+        if (!this._showEmail()) {
             return null;
         }
         const Field = sdk.getComponent('elements.Field');
@@ -419,7 +474,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_EMAIL] = field}
             type="text"
             label={emailPlaceholder}
-            defaultValue={this.props.defaultEmail}
             value={this.state.email}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
@@ -433,7 +487,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PASSWORD] = field}
             type="password"
             label={_t("Password")}
-            defaultValue={this.props.defaultPassword}
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
@@ -447,7 +500,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
             label={_t("Confirm")}
-            defaultValue={this.props.defaultPassword}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
@@ -455,8 +507,7 @@ module.exports = React.createClass({
     },
 
     renderPhoneNumber() {
-        const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        if (!threePidLogin || !this._authStepIsUsed('m.login.msisdn')) {
+        if (!this._showPhoneNumber()) {
             return null;
         }
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -475,7 +526,6 @@ module.exports = React.createClass({
             ref={field => this[FIELD_PHONE_NUMBER] = field}
             type="text"
             label={phoneLabel}
-            defaultValue={this.props.defaultPhoneNumber}
             value={this.state.phoneNumber}
             prefix={phoneCountry}
             onChange={this.onPhoneNumberChange}
@@ -491,7 +541,6 @@ module.exports = React.createClass({
             type="text"
             autoFocus={true}
             label={_t("Username")}
-            defaultValue={this.props.defaultUsername}
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
@@ -499,20 +548,22 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let yourMatrixAccountText = _t('Create your Matrix account');
-        if (this.props.hsName) {
-            yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-                serverName: this.props.hsName,
+        let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+            serverName: this.props.serverConfig.hsName,
+        });
+        if (this.props.serverConfig.hsNameIsDifferent) {
+            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+            yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
+                'underlinedServerName': () => {
+                    return <TextWithTooltip
+                        class="mx_Login_underlinedServerName"
+                        tooltip={this.props.serverConfig.hsUrl}
+                    >
+                        {this.props.serverConfig.hsName}
+                    </TextWithTooltip>;
+                },
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                // ignore
-            }
         }
 
         let editLink = null;
@@ -525,8 +576,37 @@ module.exports = React.createClass({
         }
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
+
+        let emailHelperText = null;
+        if (this._showEmail()) {
+            if (this._showPhoneNumber()) {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email or phone to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            } else {
+                emailHelperText = <div>
+                    {_t(
+                        "Set an email for account recovery. " +
+                        "Use email to optionally be discoverable by existing contacts.",
+                    )}
+                </div>;
+            }
+        }
+        const haveIs = Boolean(this.props.serverConfig.isUrl);
+        let noIsText = null;
+        if (this.props.serverRequiresIdServer && !haveIs) {
+            noIsText = <div>
+                {_t(
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
+                )}
+            </div>;
+        }
 
         return (
             <div>
@@ -546,8 +626,8 @@ module.exports = React.createClass({
                         {this.renderEmail()}
                         {this.renderPhoneNumber()}
                     </div>
-                    {_t("Use an email address to recover your account.") + " "}
-                    {_t("Other users can invite you to rooms using your contact details.")}
+                    { emailHelperText }
+                    { noIsText }
                     { registerButton }
                 </form>
             </div>

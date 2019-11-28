@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* This file has CSS for both native and non-native scrollbars in an
- * order that's fairly logic to read but violates stylelints descending
- * specificity rule, so turn it off for this file. It also duplicates
- * a selector to separate the hiding/showing from the sizing.
+/* This file has CSS for both native and non-native scrollbars in an order
+ * that's fairly logical to read but duplicates a selector to separate the
+ * hiding/showing from the sizing.
  */
-/* stylelint-disable no-descending-specificity, no-duplicate-selectors */
+/* stylelint-disable no-duplicate-selectors */
 
 /*
 1. for browsers that support native overlay auto-hiding scrollbars

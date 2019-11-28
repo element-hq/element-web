@@ -8,16 +8,11 @@
     border-bottom: none;
     border-radius: 4px 4px 0 0;
     max-height: 50vh;
-    overflow: auto
+    overflow: auto;
 }
 
 .mx_Autocomplete_ProviderSection {
     border-bottom: 1px solid $primary-hairline-color;
-}
-
-.mx_Autocomplete_Completion_container_pill {
-    margin: 12px;
-    display: flex;
 }
 
 /* a "block" completion takes up a whole line */
@@ -32,7 +27,7 @@
 }
 
 .mx_Autocomplete_Completion_block * {
-     margin: 0 3px;
+    margin: 0 3px;
 }
 
 .mx_Autocomplete_Completion_pill {
@@ -50,23 +45,32 @@
     margin: 0 3px;
 }
 
+/* styling for common completion elements */
+.mx_Autocomplete_Completion_subtitle {
+    font-style: italic;
+    flex: 1;
+}
+
+.mx_Autocomplete_Completion_description {
+    color: gray;
+}
+
+.mx_Autocomplete_Completion_container_pill {
+    margin: 12px;
+    display: flex;
+    flex-flow: wrap;
+}
+
 .mx_Autocomplete_Completion_container_truncate {
     .mx_Autocomplete_Completion_title,
     .mx_Autocomplete_Completion_subtitle,
     .mx_Autocomplete_Completion_description {
-        /* Ellipsis for long names/subtitles/descriptions*/
+        /* Ellipsis for long names/subtitles/descriptions */
         max-width: 150px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-}
-
-/* container for pill-style completions */
-.mx_Autocomplete_Completion_container_pill {
-    margin: 12px;
-    display: flex;
-    flex-flow: wrap;
 }
 
 .mx_Autocomplete_Completion.selected,
@@ -81,14 +85,3 @@
     font-weight: 400;
     opacity: 0.4;
 }
-
-/* styling for common completion elements */
-.mx_Autocomplete_Completion_subtitle {
-    font-style: italic;
-    flex: 1;
-}
-
-.mx_Autocomplete_Completion_description {
-    color: gray;
-}
-

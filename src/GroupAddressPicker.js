@@ -21,6 +21,7 @@ import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 import MatrixClientPeg from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
+import {allSettled} from "./utils/promise";
 
 export function showGroupInviteDialog(groupId) {
     return new Promise((resolve, reject) => {
@@ -38,7 +39,7 @@ export function showGroupInviteDialog(groupId) {
         Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
             title: _t("Invite new community members"),
             description: description,
-            placeholder: _t("Name or matrix ID"),
+            placeholder: _t("Name or Matrix ID"),
             button: _t("Invite to Community"),
             validAddressTypes: ['mx-user-id'],
             onFinished: (success, addrs) => {
@@ -46,7 +47,7 @@ export function showGroupInviteDialog(groupId) {
 
                 _onGroupInviteFinished(groupId, addrs).then(resolve, reject);
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     });
 }
 
@@ -61,7 +62,7 @@ export function showGroupAddRoomDialog(groupId) {
         </div>;
 
         const checkboxContainer = <label className="mx_GroupAddressPicker_checkboxContainer">
-            <input type="checkbox" onClick={onCheckboxClicked} />
+            <input type="checkbox" onChange={onCheckboxClicked} />
             <div>
                 { _t("Show these rooms to non-members on the community page and room list?") }
             </div>
@@ -81,7 +82,7 @@ export function showGroupAddRoomDialog(groupId) {
 
                 _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly).then(resolve, reject);
             },
-        });
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
     });
 }
 
@@ -118,7 +119,7 @@ function _onGroupInviteFinished(groupId, addrs) {
 function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
     const matrixClient = MatrixClientPeg.get();
     const errorList = [];
-    return Promise.all(addrs.map((addr) => {
+    return allSettled(addrs.map((addr) => {
         return GroupStore
             .addRoomToGroup(groupId, addr.address, addRoomsPublicly)
             .catch(() => { errorList.push(addr.address); })
@@ -138,7 +139,7 @@ function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
                     groups.push(groupId);
                     return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.related_groups', {groups}, '');
                 }
-            }).reflect();
+            });
     })).then(() => {
         if (errorList.length === 0) {
             return;

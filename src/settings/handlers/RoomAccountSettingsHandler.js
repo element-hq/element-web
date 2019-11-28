@@ -19,6 +19,8 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
 
+const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
+
 /**
  * Gets and sets settings at the "room-account" level for the current user.
  */
@@ -58,6 +60,8 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
                 const val = event.getContent()[settingName];
                 this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_ACCOUNT, val);
             }
+        } else if (event.getType() === ALLOWED_WIDGETS_EVENT_TYPE) {
+            this._watchers.notifyUpdate("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     }
 
@@ -79,6 +83,11 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             return this._getSettings(roomId, "org.matrix.room.color_scheme");
         }
 
+        // Special case allowed widgets
+        if (settingName === "allowedWidgets") {
+            return this._getSettings(roomId, ALLOWED_WIDGETS_EVENT_TYPE);
+        }
+
         const settings = this._getSettings(roomId) || {};
         return settings[settingName];
     }
@@ -95,6 +104,11 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         if (settingName === "roomColor") {
             // The new value should match our requirements, we just need to store it in the right place.
             return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
+        }
+
+        // Special case allowed widgets
+        if (settingName === "allowedWidgets") {
+            return MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
         }
 
         const content = this._getSettings(roomId) || {};

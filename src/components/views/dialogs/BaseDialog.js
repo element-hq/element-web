@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import FocusTrap from 'focus-trap-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -25,6 +26,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
 
 /**
  * Basic container for modal dialogs.
@@ -32,7 +34,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * Includes a div for the title, and a keypress handler which cancels the
  * dialog on escape.
  */
-export default React.createClass({
+export default createReactClass({
     displayName: 'BaseDialog',
 
     propTypes: {
@@ -113,8 +115,9 @@ export default React.createClass({
     render: function() {
         let cancelButton;
         if (this.props.hasCancel) {
-            cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
-            </AccessibleButton>;
+            cancelButton = (
+                <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton" aria-label={_t("Close dialog")} />
+            );
         }
 
         return (

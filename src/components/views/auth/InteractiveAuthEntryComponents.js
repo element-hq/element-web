@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import url from 'url';
 import classnames from 'classnames';
@@ -57,13 +59,12 @@ import SettingsStore from "../../../settings/SettingsStore";
  *                         session to be failed and the process to go back to the start.
  * setEmailSid:            m.login.email.identity only: a function to be called with the
  *                         email sid after a token is requested.
- * makeRegistrationUrl     A function that makes a registration URL
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
  */
 
-export const PasswordAuthEntry = React.createClass({
+export const PasswordAuthEntry = createReactClass({
     displayName: 'PasswordAuthEntry',
 
     statics: {
@@ -81,14 +82,8 @@ export const PasswordAuthEntry = React.createClass({
 
     getInitialState: function() {
         return {
-            passwordValid: false,
+            password: "",
         };
-    },
-
-    focus: function() {
-        if (this.refs.passwordField) {
-            this.refs.passwordField.focus();
-        }
     },
 
     _onSubmit: function(e) {
@@ -97,24 +92,28 @@ export const PasswordAuthEntry = React.createClass({
 
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
+            // TODO: Remove `user` once servers support proper UIA
+            // See https://github.com/vector-im/riot-web/issues/10312
             user: this.props.matrixClient.credentials.userId,
-            password: this.refs.passwordField.value,
+            identifier: {
+                type: "m.id.user",
+                user: this.props.matrixClient.credentials.userId,
+            },
+            password: this.state.password,
         });
     },
 
     _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
         this.setState({
-            passwordValid: Boolean(this.refs.passwordField.value),
+            password: ev.target.value,
         });
     },
 
     render: function() {
-        let passwordBoxClass = null;
-
-        if (this.props.errorText) {
-            passwordBoxClass = 'error';
-        }
+        const passwordBoxClass = classnames({
+            "error": this.props.errorText,
+        });
 
         let submitButtonOrSpinner;
         if (this.props.busy) {
@@ -124,7 +123,8 @@ export const PasswordAuthEntry = React.createClass({
             submitButtonOrSpinner = (
                 <input type="submit"
                     className="mx_Dialog_primary"
-                    disabled={!this.state.passwordValid}
+                    disabled={!this.state.password}
+                    value={_t("Continue")}
                 />
             );
         }
@@ -138,17 +138,21 @@ export const PasswordAuthEntry = React.createClass({
             );
         }
 
+        const Field = sdk.getComponent('elements.Field');
+
         return (
             <div>
                 <p>{ _t("To continue, please enter your password.") }</p>
-                <form onSubmit={this._onSubmit}>
-                    <label htmlFor="passwordField">{ _t("Password:") }</label>
-                    <input
-                        name="passwordField"
-                        ref="passwordField"
+                <form onSubmit={this._onSubmit} className="mx_InteractiveAuthEntryComponents_passwordSection">
+                    <Field
+                        id="mx_InteractiveAuthEntryComponents_password"
                         className={passwordBoxClass}
-                        onChange={this._onPasswordFieldChange}
                         type="password"
+                        name="passwordField"
+                        label={_t('Password')}
+                        autoFocus={true}
+                        value={this.state.password}
+                        onChange={this._onPasswordFieldChange}
                     />
                     <div className="mx_button_row">
                         { submitButtonOrSpinner }
@@ -160,7 +164,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 });
 
-export const RecaptchaAuthEntry = React.createClass({
+export const RecaptchaAuthEntry = createReactClass({
     displayName: 'RecaptchaAuthEntry',
 
     statics: {
@@ -187,14 +191,24 @@ export const RecaptchaAuthEntry = React.createClass({
             return <Loader />;
         }
 
+        let errorText = this.props.errorText;
+
         const CaptchaForm = sdk.getComponent("views.auth.CaptchaForm");
-        const sitePublicKey = this.props.stageParams.public_key;
+        let sitePublicKey;
+        if (!this.props.stageParams || !this.props.stageParams.public_key) {
+            errorText = _t(
+                "Missing captcha public key in homeserver configuration. Please report " +
+                "this to your homeserver administrator.",
+            );
+        } else {
+            sitePublicKey = this.props.stageParams.public_key;
+        }
 
         let errorSection;
-        if (this.props.errorText) {
+        if (errorText) {
             errorSection = (
                 <div className="error" role="alert">
-                    { this.props.errorText }
+                    { errorText }
                 </div>
             );
         }
@@ -210,7 +224,7 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 });
 
-export const TermsAuthEntry = React.createClass({
+export const TermsAuthEntry = createReactClass({
     displayName: 'TermsAuthEntry',
 
     statics: {
@@ -316,7 +330,7 @@ export const TermsAuthEntry = React.createClass({
 
             checkboxes.push(
                 <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
-                    <input type="checkbox" onClick={() => this._togglePolicy(policy.id)} checked={checked} />
+                    <input type="checkbox" onChange={() => this._togglePolicy(policy.id)} checked={checked} />
                     <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
                 </label>,
             );
@@ -349,7 +363,7 @@ export const TermsAuthEntry = React.createClass({
     },
 });
 
-export const EmailIdentityAuthEntry = React.createClass({
+export const EmailIdentityAuthEntry = createReactClass({
     displayName: 'EmailIdentityAuthEntry',
 
     statics: {
@@ -365,45 +379,12 @@ export const EmailIdentityAuthEntry = React.createClass({
         stageState: PropTypes.object.isRequired,
         fail: PropTypes.func.isRequired,
         setEmailSid: PropTypes.func.isRequired,
-        makeRegistrationUrl: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             requestingToken: false,
         };
-    },
-
-    componentWillMount: function() {
-        if (this.props.stageState.emailSid === null) {
-            this.setState({requestingToken: true});
-            this._requestEmailToken().catch((e) => {
-                this.props.fail(e);
-            }).finally(() => {
-                this.setState({requestingToken: false});
-            }).done();
-        }
-    },
-
-    /*
-     * Requests a verification token by email.
-     */
-    _requestEmailToken: function() {
-        const nextLink = this.props.makeRegistrationUrl({
-            client_secret: this.props.clientSecret,
-            hs_url: this.props.matrixClient.getHomeserverUrl(),
-            is_url: this.props.matrixClient.getIdentityServerUrl(),
-            session_id: this.props.authSessionId,
-        });
-
-        return this.props.matrixClient.requestRegisterEmailToken(
-            this.props.inputs.emailAddress,
-            this.props.clientSecret,
-            1, // TODO: Multiple send attempts?
-            nextLink,
-        ).then((result) => {
-            this.props.setEmailSid(result.sid);
-        });
     },
 
     render: function() {
@@ -424,7 +405,7 @@ export const EmailIdentityAuthEntry = React.createClass({
     },
 });
 
-export const MsisdnAuthEntry = React.createClass({
+export const MsisdnAuthEntry = createReactClass({
     displayName: 'MsisdnAuthEntry',
 
     statics: {
@@ -450,6 +431,7 @@ export const MsisdnAuthEntry = React.createClass({
     },
 
     componentWillMount: function() {
+        this._submitUrl = null;
         this._sid = null;
         this._msisdn = null;
         this._tokenBox = null;
@@ -459,7 +441,7 @@ export const MsisdnAuthEntry = React.createClass({
             this.props.fail(e);
         }).finally(() => {
             this.setState({requestingToken: false});
-        }).done();
+        });
     },
 
     /*
@@ -472,6 +454,7 @@ export const MsisdnAuthEntry = React.createClass({
             this.props.clientSecret,
             1, // TODO: Multiple send attempts?
         ).then((result) => {
+            this._submitUrl = result.submit_url;
             this._sid = result.sid;
             this._msisdn = result.msisdn;
         });
@@ -483,38 +466,56 @@ export const MsisdnAuthEntry = React.createClass({
         });
     },
 
-    _onFormSubmit: function(e) {
+    _onFormSubmit: async function(e) {
         e.preventDefault();
         if (this.state.token == '') return;
 
-            this.setState({
-                errorText: null,
-            });
+        this.setState({
+            errorText: null,
+        });
 
-        this.props.matrixClient.submitMsisdnToken(
-            this._sid, this.props.clientSecret, this.state.token,
-        ).then((result) => {
-            if (result.success) {
-                const idServerParsedUrl = url.parse(
-                    this.props.matrixClient.getIdentityServerUrl(),
+        try {
+            const requiresIdServerParam =
+                await this.props.matrixClient.doesServerRequireIdServerParam();
+            let result;
+            if (this._submitUrl) {
+                result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
+                    this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
                 );
+            } else if (requiresIdServerParam) {
+                result = await this.props.matrixClient.submitMsisdnToken(
+                    this._sid, this.props.clientSecret, this.state.token,
+                );
+            } else {
+                throw new Error("The registration with MSISDN flow is misconfigured");
+            }
+            if (result.success) {
+                const creds = {
+                    sid: this._sid,
+                    client_secret: this.props.clientSecret,
+                };
+                if (requiresIdServerParam) {
+                    const idServerParsedUrl = url.parse(
+                        this.props.matrixClient.getIdentityServerUrl(),
+                    );
+                    creds.id_server = idServerParsedUrl.host;
+                }
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
-                    threepid_creds: {
-                        sid: this._sid,
-                        client_secret: this.props.clientSecret,
-                        id_server: idServerParsedUrl.host,
-                    },
+                    // TODO: Remove `threepid_creds` once servers support proper UIA
+                    // See https://github.com/vector-im/riot-web/issues/10312
+                    threepid_creds: creds,
+                    threepidCreds: creds,
                 });
             } else {
                 this.setState({
                     errorText: _t("Token incorrect"),
                 });
             }
-        }).catch((e) => {
+        } catch (e) {
             this.props.fail(e);
             console.log("Failed to submit msisdn token");
-        }).done();
+        }
     },
 
     render: function() {
@@ -564,7 +565,7 @@ export const MsisdnAuthEntry = React.createClass({
     },
 });
 
-export const FallbackAuthEntry = React.createClass({
+export const FallbackAuthEntry = createReactClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {

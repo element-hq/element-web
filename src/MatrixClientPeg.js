@@ -16,9 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-import Matrix from 'matrix-js-sdk';
+import {MatrixClient, MemoryStore} from 'matrix-js-sdk';
 
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
@@ -27,11 +25,11 @@ import sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
-import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
+import IdentityAuthClient from './IdentityAuthClient';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -51,6 +49,7 @@ interface MatrixClientCreds {
 class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
+        this._justRegisteredUserId = null;
 
         // These are the default options used when when the
         // client is started in 'start'. These can be altered
@@ -86,6 +85,31 @@ class MatrixClientPeg {
     }
 
     /**
+     * If we've registered a user ID we set this to the ID of the
+     * user we've just registered. If they then go & log in, we
+     * can send them to the welcome user (obviously this doesn't
+     * guarentee they'll get a chat with the welcome user).
+     *
+     * @param {string} uid The user ID of the user we've just registered
+     */
+    setJustRegisteredUserId(uid) {
+        this._justRegisteredUserId = uid;
+    }
+
+    /**
+     * Returns true if the current user has just been registered by this
+     * client as determined by setJustRegisteredUserId()
+     *
+     * @returns {bool} True if user has just been registered
+     */
+    currentUserIsJustRegistered() {
+        return (
+            this.matrixClient &&
+            this.matrixClient.credentials.userId === this._justRegisteredUserId
+        );
+    }
+
+    /*
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      */
@@ -94,7 +118,7 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    async start() {
+    async assign() {
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
@@ -104,8 +128,8 @@ class MatrixClientPeg {
             } catch (err) {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
-                    this.matrixClient.store = new Matrix.MemoryStore({
-                      localStorage: global.localStorage,
+                    this.matrixClient.store = new MemoryStore({
+                        localStorage: global.localStorage,
                     });
                 } else {
                     console.error('Failed to start memory store!', err);
@@ -119,8 +143,9 @@ class MatrixClientPeg {
         // try to initialise e2e on the new client
         try {
             // check that we have a version of the js-sdk which includes initCrypto
-            if (this.matrixClient.initCrypto) {
+            if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
+                StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
@@ -145,6 +170,12 @@ class MatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
 
+        return opts;
+    }
+
+    async start() {
+        const opts = await this.assign();
+
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);
         console.log(`MatrixClientPeg: MatrixClient started`);
@@ -161,12 +192,12 @@ class MatrixClientPeg {
         };
     }
 
-    /**
+    /*
      * Return the server name of the user's homeserver
      * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
      */
-    getHomeServerName() {
+    getHomeserverName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
@@ -183,8 +214,21 @@ class MatrixClientPeg {
             deviceId: creds.deviceId,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
-            verificationMethods: [verificationMethods.SAS]
+            fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
+            verificationMethods: [verificationMethods.SAS],
+            unstableClientRelationAggregation: true,
+            identityServer: new IdentityAuthClient(),
         };
+
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            // TODO: Cross-signing keys are temporarily in memory only. A
+            // separate task in the cross-signing project will build from here.
+            const keys = [];
+            opts.cryptoCallbacks = {
+                getCrossSigningKey: k => keys[k],
+                saveCrossSigningKeys: newKeys => Object.assign(keys, newKeys),
+            };
+        }
 
         this.matrixClient = createMatrixClient(opts);
 

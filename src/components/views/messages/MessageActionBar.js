@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,16 +23,36 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import { createMenu } from '../../structures/ContextualMenu';
-import SettingsStore from '../../../settings/SettingsStore';
-import { isContentActionable } from '../../../utils/EventUtils';
+import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
+import {RoomContext} from "../../structures/RoomView";
 
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
+        // The Relations model from the JS SDK for reactions to `mxEvent`
+        reactions: PropTypes.object,
         permalinkCreator: PropTypes.object,
         getTile: PropTypes.func,
         getReplyThread: PropTypes.func,
         onFocusChange: PropTypes.func,
+    };
+
+    static contextTypes = {
+        room: RoomContext,
+    };
+
+    componentDidMount() {
+        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+    }
+
+    componentWillUnmount() {
+        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+    }
+
+    onDecrypted = () => {
+        // When an event decrypts, it is likely to change the set of available
+        // actions, so we force an update to check again.
+        this.forceUpdate();
     };
 
     onFocusChange = (focused) => {
@@ -39,30 +60,67 @@ export default class MessageActionBar extends React.PureComponent {
             return;
         }
         this.props.onFocusChange(focused);
-    }
+    };
 
-    onCryptoClicked = () => {
+    onCryptoClick = () => {
         const event = this.props.mxEvent;
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
             import('../../../async-components/views/dialogs/EncryptedEventDialog'),
             {event},
         );
-    }
+    };
 
     onReplyClick = (ev) => {
         dis.dispatch({
             action: 'reply_to_event',
             event: this.props.mxEvent,
         });
-    }
+    };
+
+    onEditClick = (ev) => {
+        dis.dispatch({
+            action: 'edit_event',
+            event: this.props.mxEvent,
+        });
+    };
+
+    getMenuOptions = (ev) => {
+        const menuOptions = {};
+        const buttonRect = ev.target.getBoundingClientRect();
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const buttonRight = buttonRect.right + window.pageXOffset;
+        const buttonBottom = buttonRect.bottom + window.pageYOffset;
+        const buttonTop = buttonRect.top + window.pageYOffset;
+        // Align the right edge of the menu to the right edge of the button
+        menuOptions.right = window.innerWidth - buttonRight;
+        // Align the menu vertically on whichever side of the button has more
+        // space available.
+        if (buttonBottom < window.innerHeight / 2) {
+            menuOptions.top = buttonBottom;
+        } else {
+            menuOptions.bottom = window.innerHeight - buttonTop;
+        }
+        return menuOptions;
+    };
+
+    onReactClick = (ev) => {
+        const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
+
+        const menuOptions = {
+            ...this.getMenuOptions(ev),
+            mxEvent: this.props.mxEvent,
+            reactions: this.props.reactions,
+            chevronFace: "none",
+            onFinished: () => this.onFocusChange(false),
+        };
+
+        createMenu(ReactionPicker, menuOptions);
+
+        this.onFocusChange(true);
+    };
 
     onOptionsClick = (ev) => {
         const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-        const buttonRect = ev.target.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset;
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
         const { getTile, getReplyThread } = this.props;
         const tile = getTile && getTile();
@@ -70,14 +128,13 @@ export default class MessageActionBar extends React.PureComponent {
 
         let e2eInfoCallback = null;
         if (this.props.mxEvent.isEncrypted()) {
-            e2eInfoCallback = () => this.onCryptoClicked();
+            e2eInfoCallback = () => this.onCryptoClick();
         }
 
-        createMenu(MessageContextMenu, {
-            chevronOffset: 10,
+        const menuOptions = {
+            ...this.getMenuOptions(ev),
             mxEvent: this.props.mxEvent,
-            left: x,
-            top: y,
+            chevronFace: "none",
             permalinkCreator: this.props.permalinkCreator,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
@@ -85,80 +142,54 @@ export default class MessageActionBar extends React.PureComponent {
             onFinished: () => {
                 this.onFocusChange(false);
             },
-        });
+        };
+
+        createMenu(MessageContextMenu, menuOptions);
 
         this.onFocusChange(true);
-    }
-
-    isReactionsEnabled() {
-        return SettingsStore.isFeatureEnabled("feature_reactions");
-    }
-
-    renderAgreeDimension() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "agree",
-                content: "👍",
-            },
-            {
-                key: "disagree",
-                content: "👎",
-            },
-        ];
-        return <ReactionDimension
-            title={_t("Agree or Disagree")}
-            options={options}
-        />;
-    }
-
-    renderLikeDimension() {
-        if (!this.isReactionsEnabled()) {
-            return null;
-        }
-
-        const ReactionDimension = sdk.getComponent('messages.ReactionDimension');
-        const options = [
-            {
-                key: "like",
-                content: "🙂",
-            },
-            {
-                key: "dislike",
-                content: "😔",
-            },
-        ];
-        return <ReactionDimension
-            title={_t("Like or Dislike")}
-            options={options}
-        />;
-    }
+    };
 
     render() {
-        let agreeDimensionReactionButtons;
-        let likeDimensionReactionButtons;
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        let reactButton;
         let replyButton;
+        let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            agreeDimensionReactionButtons = this.renderAgreeDimension();
-            likeDimensionReactionButtons = this.renderLikeDimension();
-            replyButton = <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
-                title={_t("Reply")}
-                onClick={this.onReplyClick}
+            if (this.context.room.canReact) {
+                reactButton = <AccessibleButton
+                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
+                    title={_t("React")}
+                    onClick={this.onReactClick}
+                />;
+            }
+            if (this.context.room.canReply) {
+                replyButton = <AccessibleButton
+                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                    title={_t("Reply")}
+                    onClick={this.onReplyClick}
+                />;
+            }
+        }
+        if (canEditContent(this.props.mxEvent)) {
+            editButton = <AccessibleButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
+                title={_t("Edit")}
+                onClick={this.onEditClick}
             />;
         }
 
-        return <div className="mx_MessageActionBar">
-            {agreeDimensionReactionButtons}
-            {likeDimensionReactionButtons}
+        // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
+        return <div className="mx_MessageActionBar" role="toolbar" aria-label={_t("Message Actions")} aria-live="off">
+            {reactButton}
             {replyButton}
-            <span className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+            {editButton}
+            <AccessibleButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
                 title={_t("Options")}
                 onClick={this.onOptionsClick}
+                aria-haspopup={true}
             />
         </div>;
     }

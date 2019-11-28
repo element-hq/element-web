@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import Matrix from 'matrix-js-sdk';
@@ -25,7 +26,7 @@ import { _t } from '../../languageHandler';
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
-const FilePanel = React.createClass({
+const FilePanel = createReactClass({
     displayName: 'FilePanel',
 
     propTypes: {
@@ -38,21 +39,8 @@ const FilePanel = React.createClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.updateTimelineSet(this.props.roomId);
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        if (nextProps.roomId !== this.props.roomId) {
-            // otherwise we race between re-rendering the TimelinePanel and setting the new timelineSet.
-            //
-            // FIXME: this race only happens because of the promise returned by getOrCreateFilter().
-            // We should only need to create the containsUrl filter once per login session, so in practice
-            // it shouldn't be being done here at all.  Then we could just update the timelineSet directly
-            // without resetting it first, and speed up room-change.
-            this.setState({ timelineSet: null });
-            this.updateTimelineSet(nextProps.roomId);
-        }
     },
 
     updateTimelineSet: function(roomId) {
@@ -116,20 +104,21 @@ const FilePanel = React.createClass({
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <TimelinePanel key={"filepanel_" + this.props.roomId}
-                    className="mx_FilePanel"
-                    manageReadReceipts={false}
-                    manageReadMarkers={false}
-                    timelineSet={this.state.timelineSet}
-                    showUrlPreview = {false}
-                    tileShape="file_grid"
-                    resizeNotifier={this.props.resizeNotifier}
-                    empty={_t('There are no visible files in this room')}
-                />
+                <div className="mx_FilePanel" role="tabpanel">
+                    <TimelinePanel key={"filepanel_" + this.props.roomId}
+                        manageReadReceipts={false}
+                        manageReadMarkers={false}
+                        timelineSet={this.state.timelineSet}
+                        showUrlPreview = {false}
+                        tileShape="file_grid"
+                        resizeNotifier={this.props.resizeNotifier}
+                        empty={_t('There are no visible files in this room')}
+                    />
+                </div>
             );
         } else {
             return (
-                <div className="mx_FilePanel">
+                <div className="mx_FilePanel" role="tabpanel">
                     <Loader />
                 </div>
             );

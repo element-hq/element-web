@@ -1,0 +1,76 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BasicMessageComposer {
+    position: relative;
+
+    .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+        content: var(--placeholder);
+        opacity: 0.333;
+        width: 0;
+        height: 0;
+        overflow: visible;
+        display: inline-block;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    @keyframes visualbell {
+        from { background-color: $visual-bell-bg-color; }
+        to { background-color: $primary-bg-color; }
+    }
+
+    &.mx_BasicMessageComposer_input_error {
+        animation: 0.2s visualbell;
+    }
+
+    .mx_BasicMessageComposer_input {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+        overflow-x: hidden;
+
+        span.mx_UserPill, span.mx_RoomPill {
+            padding-left: 21px;
+            position: relative;
+
+            // avatar psuedo element
+            &::before {
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                content: var(--avatar-letter);
+                width: 16px;
+                height: 16px;
+                background: var(--avatar-background), $avatar-bg-color;
+                color: $avatar-initial-color;
+                background-repeat: no-repeat;
+                background-size: 16px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: normal;
+                line-height: 16px;
+                font-size: 10.4px;
+            }
+        }
+    }
+
+    .mx_BasicMessageComposer_AutoCompleteWrapper {
+        position: relative;
+        height: 0;
+    }
+}

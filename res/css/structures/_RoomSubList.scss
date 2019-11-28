@@ -20,7 +20,7 @@ limitations under the License.
    so they ideally wouldn't affect each other.
    lowest category: .mx_RoomSubList
         flex-shrink: 10000000
-        distribute size of items within the same categery by their size
+        distribute size of items within the same category by their size
    middle category: .mx_RoomSubList.resized-sized
         flex-shrink: 1000
         applied when using the resizer, will have a max-height set to it,
@@ -46,8 +46,13 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     flex: 0 0 auto;
-    margin: 0 16px;
+    margin: 0 8px;
+    padding: 0 8px;
     height: 36px;
+}
+
+.mx_RoomSubList_labelContainer.focus-visible:focus-within {
+    background-color: $roomtile-focused-bg-color;
 }
 
 .mx_RoomSubList_label {
@@ -67,13 +72,13 @@ limitations under the License.
     margin-left: 8px;
 }
 
-.mx_RoomSubList_badge {
+.mx_RoomSubList_badge > div {
     flex: 0 0 auto;
     border-radius: 8px;
-    color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
     padding: 0 5px;
+    color: $roomtile-badge-fg-color;
     background-color: $roomtile-name-color;
     cursor: pointer;
 }
@@ -103,7 +108,8 @@ limitations under the License.
     }
 }
 
-.mx_RoomSubList_badgeHighlight {
+.mx_RoomSubList_badgeHighlight > div {
+    color: $accent-fg-color;
     background-color: $warning-color;
 }
 
@@ -143,8 +149,9 @@ limitations under the License.
     }
 
     .mx_RoomSubList_labelContainer {
-        margin-right: 14px;
+        margin-right: 8px;
         margin-left: 2px;
+        padding: 0;
     }
 
     .mx_RoomSubList_addRoom {

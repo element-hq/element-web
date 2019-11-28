@@ -16,16 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require("../../../index");
+import createReactClass from 'create-react-class';
+import sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'UrlPreviewSettings',
 
     propTypes: {

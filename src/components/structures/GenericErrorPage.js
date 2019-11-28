@@ -16,22 +16,18 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../languageHandler";
 
 export default class GenericErrorPage extends React.PureComponent {
     static propTypes = {
-        message: PropTypes.string.isRequired,
+        title: PropTypes.object.isRequired, // jsx for title
+        message: PropTypes.object.isRequired, // jsx to display
     };
 
     render() {
         return <div className='mx_GenericErrorPage'>
             <div className='mx_GenericErrorPage_box'>
-                <h1>{_t("Error loading Riot")}</h1>
+                <h1>{this.props.title}</h1>
                 <p>{this.props.message}</p>
-                <p>{_t(
-                    "If this is unexpected, please contact your system administrator " +
-                    "or technical support representative.",
-                )}</p>
             </div>
         </div>;
     }

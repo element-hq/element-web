@@ -16,13 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
 import sdk from '../../index';
-import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
-import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher';
@@ -39,7 +38,7 @@ function getUnsentMessages(room) {
     });
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomStatusBar',
 
     propTypes: {
@@ -290,7 +289,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -304,12 +303,10 @@ module.exports = React.createClass({
 
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
-
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }

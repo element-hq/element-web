@@ -74,13 +74,13 @@ export default class Flair extends React.Component {
         };
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
-    }
-
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
         this._generateAvatars(this.props.groups);
+    }
+
+    componentWillUnmount() {
+        this._unmounted = true;
     }
 
     componentWillReceiveProps(newProps) {
@@ -134,9 +134,6 @@ Flair.propTypes = {
     groups: PropTypes.arrayOf(PropTypes.string),
 };
 
-// TODO: We've decided that all components should follow this pattern, which means removing withMatrixClient and using
-// this.context.matrixClient everywhere instead of this.props.matrixClient.
-// See https://github.com/vector-im/riot-web/issues/4951.
 Flair.contextTypes = {
     matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };

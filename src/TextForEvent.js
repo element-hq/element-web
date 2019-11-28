@@ -18,6 +18,7 @@ import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
+import SettingsStore from "./settings/SettingsStore";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -74,9 +75,11 @@ function textForMemberEvent(ev) {
                     return _t('%(senderName)s changed their profile picture.', {senderName});
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return _t('%(senderName)s set a profile picture.', {senderName});
+                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+                    // This is a null rejoin, it will only be visible if the Labs option is enabled
+                    return _t("%(senderName)s made no change.", {senderName});
                 } else {
-                    // suppress null rejoins
-                    return '';
+                    return "";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
@@ -97,15 +100,14 @@ function textForMemberEvent(ev) {
                 }
             } else if (prevContent.membership === "ban") {
                 return _t('%(senderName)s unbanned %(targetName)s.', {senderName, targetName});
-            } else if (prevContent.membership === "join") {
-                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             } else if (prevContent.membership === "invite") {
                 return _t('%(senderName)s withdrew %(targetName)s\'s invitation.', {
                     senderName,
                     targetName,
                 }) + ' ' + reason;
             } else {
-                return _t('%(targetName)s left the room.', {targetName});
+                // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             }
     }
 }
@@ -414,7 +416,8 @@ function textForEncryptionEvent(event) {
 // Currently will only display a change if a user's power level is changed
 function textForPowerEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    if (!event.getPrevContent() || !event.getPrevContent().users) {
+    if (!event.getPrevContent() || !event.getPrevContent().users ||
+        !event.getContent() || !event.getContent().users) {
         return '';
     }
     const userDefault = event.getContent().users_default || 0;

@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
+import createReactClass from 'create-react-class';
+import sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
+import {Mjolnir} from "../../../mjolnir/Mjolnir";
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'MessageEvent',
 
     propTypes: {
@@ -48,6 +49,10 @@ module.exports = React.createClass({
 
     getEventTileOps: function() {
         return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
+    },
+
+    onTileUpdate: function() {
+        this.forceUpdate();
     },
 
     render: function() {
@@ -82,6 +87,21 @@ module.exports = React.createClass({
             }
         }
 
+        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+            const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
+            const allowRender = localStorage.getItem(key) === "true";
+
+            if (!allowRender) {
+                const userDomain = this.props.mxEvent.getSender().split(':').slice(1).join(':');
+                const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender());
+                const serverBanned = Mjolnir.sharedInstance().isServerBanned(userDomain);
+
+                if (userBanned || serverBanned) {
+                    BodyType = sdk.getComponent('messages.MjolnirBody');
+                }
+            }
+        }
+
         return <BodyType
             ref="body" mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
@@ -89,6 +109,10 @@ module.exports = React.createClass({
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
             maxImageHeight={this.props.maxImageHeight}
-            onHeightChanged={this.props.onHeightChanged} />;
+            replacingEventId={this.props.replacingEventId}
+            editState={this.props.editState}
+            onHeightChanged={this.props.onHeightChanged}
+            onMessageAllowed={this.onTileUpdate}
+        />;
     },
 });

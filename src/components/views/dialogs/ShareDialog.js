@@ -20,7 +20,7 @@ import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
-import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../matrix-to";
+import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import * as ContextualMenu from "../../structures/ContextualMenu";
 
 const socials = [
@@ -114,7 +114,8 @@ export default class ShareDialog extends React.Component {
             top: y,
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         }, false);
-        e.target.onmouseleave = close;
+        // Drop a reference to this close handler for componentWillUnmount
+        this.closeCopiedTooltip = e.target.onmouseleave = close;
     }
 
     onLinkSpecificEventCheckboxClick() {
@@ -129,6 +130,12 @@ export default class ShareDialog extends React.Component {
             permalinkCreator.load();
             this.setState({permalinkCreator});
         }
+    }
+
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape or clicking X really quickly
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
     render() {
@@ -146,7 +153,7 @@ export default class ShareDialog extends React.Component {
                     <input type="checkbox"
                            id="mx_ShareDialog_checkbox"
                            checked={this.state.linkSpecificEvent}
-                           onClick={this.onLinkSpecificEventCheckboxClick} />
+                           onChange={this.onLinkSpecificEventCheckboxClick} />
                     <label htmlFor="mx_ShareDialog_checkbox">
                         { _t('Link to most recent message') }
                     </label>

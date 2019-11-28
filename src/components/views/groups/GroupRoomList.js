@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
@@ -24,7 +25,7 @@ import TintableSvg from '../elements/TintableSvg';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         groupId: PropTypes.string.isRequired,
     },
@@ -152,7 +153,7 @@ export default React.createClass({
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
-            <div className="mx_GroupRoomList">
+            <div className="mx_GroupRoomList" role="tabpanel">
                 { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}

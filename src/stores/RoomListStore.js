@@ -261,6 +261,7 @@ class RoomListStore extends Store {
             //     console.log("!! Optimistic tag failure: ", payload);
             // }
             // break;
+            case 'on_client_not_viable':
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
@@ -326,7 +327,7 @@ class RoomListStore extends Store {
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
-        } else {
+        } else if (myMembership) { // null-guard as null means it was peeked
             tags.push("im.vector.fake.archived");
         }
 
@@ -514,7 +515,21 @@ class RoomListStore extends Store {
             }
 
             if (count !== 1) {
-                console.warn(`!! Room ${room.roomId} inserted ${count} times`);
+                console.warn(`!! Room ${room.roomId} inserted ${count} times to ${targetTag}`);
+            }
+
+            // This is a workaround for https://github.com/vector-im/riot-web/issues/11303
+            // The logging is to try and identify what happened exactly.
+            if (count === 0) {
+                // Something went very badly wrong - try to recover the room.
+                // We don't bother checking how the target list is ordered - we're expecting
+                // to just insert it.
+                console.warn(`!! Recovering ${room.roomId} for tag ${targetTag} at position 0`);
+                if (!listsClone[targetTag]) {
+                    console.warn(`!! List for tag ${targetTag} does not exist - creating`);
+                    listsClone[targetTag] = [];
+                }
+                listsClone[targetTag].splice(0, 0, {room, category});
             }
         }
 

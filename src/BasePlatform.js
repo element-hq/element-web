@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import dis from './dispatcher';
+import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -36,6 +37,7 @@ export default class BasePlatform {
 
     _onAction(payload: Object) {
         switch (payload.action) {
+            case 'on_client_not_viable':
             case 'on_logged_out':
                 this.setNotificationCount(0);
                 break;
@@ -127,6 +129,18 @@ export default class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    supportsAutoHideMenuBar(): boolean {
+        return false;
+    }
+
+    async getAutoHideMenuBarEnabled(): boolean {
+        return false;
+    }
+
+    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+        throw new Error("Unimplemented");
+    }
+
     supportsMinimizeToTray(): boolean {
         return false;
     }
@@ -137,5 +151,15 @@ export default class BasePlatform {
 
     async setMinimizeToTrayEnabled(enabled: boolean): void {
         throw new Error("Unimplemented");
+    }
+
+    /**
+     * Get our platform specific EventIndexManager.
+     *
+     * @return {BaseEventIndexManager} The EventIndex manager for our platform,
+     * can be null if the platform doesn't support event indexing.
+     */
+    getEventIndexingManager(): BaseEventIndexManager | null {
+        return null;
     }
 }

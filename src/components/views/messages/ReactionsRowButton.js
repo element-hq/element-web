@@ -18,48 +18,96 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
+
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
+        // The event we're displaying reactions for
+        mxEvent: PropTypes.object.isRequired,
+        // The reaction content / key / emoji
         content: PropTypes.string.isRequired,
+        // The count of votes for this key
         count: PropTypes.number.isRequired,
+        // A Set of Martix reaction events for this key
+        reactionEvents: PropTypes.object.isRequired,
+        // A possible Matrix event if the current user has voted for this type
+        myReactionEvent: PropTypes.object,
     }
 
     constructor(props) {
         super(props);
 
-        // TODO: This should be derived from actual reactions you may have sent
-        // once we have some API to read them.
         this.state = {
-            selected: false,
+            tooltipVisible: false,
         };
     }
 
     onClick = (ev) => {
-        const state = this.state.selected;
-        this.setState({
-            selected: !state,
-        });
-        // TODO: Send the reaction event
+        const { mxEvent, myReactionEvent, content } = this.props;
+        if (myReactionEvent) {
+            MatrixClientPeg.get().redactEvent(
+                mxEvent.getRoomId(),
+                myReactionEvent.getId(),
+            );
+        } else {
+            MatrixClientPeg.get().sendEvent(mxEvent.getRoomId(), "m.reaction", {
+                "m.relates_to": {
+                    "rel_type": "m.annotation",
+                    "event_id": mxEvent.getId(),
+                    "key": content,
+                },
+            });
+        }
     };
 
+    onMouseOver = () => {
+        this.setState({
+            // To avoid littering the DOM with a tooltip for every reaction,
+            // only render it on first use.
+            tooltipRendered: true,
+            tooltipVisible: true,
+        });
+    }
+
+    onMouseOut = () => {
+        this.setState({
+            tooltipVisible: false,
+        });
+    }
+
     render() {
-        const { content, count } = this.props;
-        const { selected } = this.state;
+        const ReactionsRowButtonTooltip =
+            sdk.getComponent('messages.ReactionsRowButtonTooltip');
+        const { content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({
             mx_ReactionsRowButton: true,
-            mx_ReactionsRowButton_selected: selected,
+            mx_ReactionsRowButton_selected: !!myReactionEvent,
         });
 
-        let adjustedCount = count;
-        if (selected) {
-            adjustedCount++;
+        let tooltip;
+        if (this.state.tooltipRendered) {
+            tooltip = <ReactionsRowButtonTooltip
+                mxEvent={this.props.mxEvent}
+                content={content}
+                reactionEvents={reactionEvents}
+                visible={this.state.tooltipVisible}
+            />;
         }
 
         return <span className={classes}
             onClick={this.onClick}
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
         >
-            {content} {adjustedCount}
+            <span className="mx_ReactionsRowButton_content">
+                {content}
+            </span>
+            <span className="mx_ReactionsRowButton_count">
+                {count}
+            </span>
+            {tooltip}
         </span>;
     }
 }

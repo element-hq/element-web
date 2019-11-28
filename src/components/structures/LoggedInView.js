@@ -16,14 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import { Key, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
+import { fixupColorFonts } from '../../utils/FontManager';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
@@ -41,6 +43,13 @@ import {Resizer, CollapseDistributor} from '../../resizer';
 // NB. this is just for server notices rather than pinned messages in general.
 const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
+function canElementReceiveInput(el) {
+    return el.tagName === "INPUT" ||
+        el.tagName === "TEXTAREA" ||
+        el.tagName === "SELECT" ||
+        !!el.getAttribute("contenteditable");
+}
+
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
  * determined by the page_type property.
@@ -50,11 +59,11 @@ const MAX_PINNED_NOTICES_PER_ROOM = 2;
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-const LoggedInView = React.createClass({
+const LoggedInView = createReactClass({
     displayName: 'LoggedInView',
 
     propTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         page_type: PropTypes.string.isRequired,
         onRoomCreated: PropTypes.func,
 
@@ -70,7 +79,7 @@ const LoggedInView = React.createClass({
     },
 
     childContextTypes: {
-        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient),
+        matrixClient: PropTypes.instanceOf(MatrixClient),
         authCache: PropTypes.object,
     },
 
@@ -105,7 +114,7 @@ const LoggedInView = React.createClass({
 
         CallMediaHandler.loadDevices();
 
-        document.addEventListener('keydown', this._onKeyDown);
+        document.addEventListener('keydown', this._onNativeKeyDown, false);
 
         this._sessionStore = sessionStore;
         this._sessionStoreToken = this._sessionStore.addListener(
@@ -118,6 +127,8 @@ const LoggedInView = React.createClass({
         this._matrixClient.on("accountData", this.onAccountData);
         this._matrixClient.on("sync", this.onSync);
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+
+        fixupColorFonts();
     },
 
     componentDidUpdate(prevProps) {
@@ -133,7 +144,7 @@ const LoggedInView = React.createClass({
     },
 
     componentWillUnmount: function() {
-        document.removeEventListener('keydown', this._onKeyDown);
+        document.removeEventListener('keydown', this._onNativeKeyDown, false);
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
@@ -269,6 +280,58 @@ const LoggedInView = React.createClass({
         });
     },
 
+    _onPaste: function(ev) {
+        let canReceiveInput = false;
+        let element = ev.target;
+        // test for all parents because the target can be a child of a contenteditable element
+        while (!canReceiveInput && element) {
+            canReceiveInput = canElementReceiveInput(element);
+            element = element.parentElement;
+        }
+        if (!canReceiveInput) {
+            // refocusing during a paste event will make the
+            // paste end up in the newly focused element,
+            // so dispatch synchronously before paste happens
+            dis.dispatch({action: 'focus_composer'}, true);
+        }
+    },
+
+    /*
+    SOME HACKERY BELOW:
+    React optimizes event handlers, by always attaching only 1 handler to the document for a given type.
+    It then internally determines the order in which React event handlers should be called,
+    emulating the capture and bubbling phases the DOM also has.
+
+    But, as the native handler for React is always attached on the document,
+    it will always run last for bubbling (first for capturing) handlers,
+    and thus React basically has its own event phases, and will always run
+    after (before for capturing) any native other event handlers (as they tend to be attached last).
+
+    So ideally one wouldn't mix React and native event handlers to have bubbling working as expected,
+    but we do need a native event handler here on the document,
+    to get keydown events when there is no focused element (target=body).
+
+    We also do need bubbling here to give child components a chance to call `stopPropagation()`,
+    for keydown events it can handle itself, and shouldn't be redirected to the composer.
+
+    So we listen with React on this component to get any events on focused elements, and get bubbling working as expected.
+    We also listen with a native listener on the document to get keydown events when no element is focused.
+    Bubbling is irrelevant here as the target is the body element.
+    */
+    _onReactKeyDown: function(ev) {
+        // events caught while bubbling up on the root element
+        // of this component, so something must be focused.
+        this._onKeyDown(ev);
+    },
+
+    _onNativeKeyDown: function(ev) {
+        // only pass this if there is no focused element.
+        // if there is, _onKeyDown will be called by the
+        // react keydown handler that respects the react bubbling order.
+        if (ev.target === document.body) {
+            this._onKeyDown(ev);
+        }
+    },
 
     _onKeyDown: function(ev) {
             /*
@@ -287,37 +350,44 @@ const LoggedInView = React.createClass({
 
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
+        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
+            ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
 
-        switch (ev.keyCode) {
-            case KeyCode.UP:
-            case KeyCode.DOWN:
-                if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
-                    const action = ev.keyCode == KeyCode.UP ?
-                        'view_prev_room' : 'view_next_room';
-                    dis.dispatch({action: action});
-                    handled = true;
-                }
-                break;
-
-            case KeyCode.PAGE_UP:
-            case KeyCode.PAGE_DOWN:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+        switch (ev.key) {
+            case Key.PAGE_UP:
+            case Key.PAGE_DOWN:
+                if (!hasModifier) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
                 break;
 
-            case KeyCode.HOME:
-            case KeyCode.END:
+            case Key.HOME:
+            case Key.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
                 break;
-            case KeyCode.KEY_K:
+            case Key.K:
                 if (ctrlCmdOnly) {
                     dis.dispatch({
                         action: 'focus_room_filter',
+                    });
+                    handled = true;
+                }
+                break;
+            case Key.BACKTICK:
+                if (ev.key !== "`") break;
+
+                // Ideally this would be CTRL+P for "Profile", but that's
+                // taken by the print dialog. CTRL+I for "Information"
+                // was previously chosen but conflicted with italics in
+                // composer, so CTRL+` it is
+
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'toggle_top_left_menu',
                     });
                     handled = true;
                 }
@@ -327,6 +397,24 @@ const LoggedInView = React.createClass({
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
+        } else if (!hasModifier) {
+            const isClickShortcut = ev.target !== document.body &&
+                (ev.key === Key.SPACE || ev.key === Key.ENTER);
+
+            // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
+            // If using Slate, consume the Backspace without first focusing as it causes an implosion
+            if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
+                ev.stopPropagation();
+                return;
+            }
+
+            if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
+                // synchronous dispatch so we focus before key generates input
+                dis.dispatch({action: 'focus_composer'}, true);
+                ev.stopPropagation();
+                // we should *not* preventDefault() here as
+                // that would prevent typing in the now-focussed composer
+            }
         }
     },
 
@@ -437,6 +525,7 @@ const LoggedInView = React.createClass({
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
+        const ToastContainer = sdk.getComponent('structures.ToastContainer');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const CookieBar = sdk.getComponent('globals.CookieBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -538,8 +627,9 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
+            <div onPaste={this._onPaste} onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
+                <ToastContainer />
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel

@@ -36,7 +36,6 @@ export default class VerificationShowSas extends React.Component {
 
     render() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let sasDisplay;
         let sasCaption;
@@ -44,7 +43,7 @@ export default class VerificationShowSas extends React.Component {
             const emojiBlocks = this.props.sas.emoji.map(
                 (emoji, i) => <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
                     <div className="mx_VerificationShowSas_emojiSas_emoji">
-                        <EmojiText addAlt={false}>{emoji[0]}</EmojiText>
+                        { emoji[0] }
                     </div>
                     <div className="mx_VerificationShowSas_emojiSas_label">
                         {_t(capFirst(emoji[1]))}

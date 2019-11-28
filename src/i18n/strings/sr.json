@@ -1210,7 +1210,7 @@
     "deleted": "обрисано",
     "underlined": "подвучено",
     "You have no historical rooms": "Ваша историја соба је празна",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Такође, можете подесити прилагођени сервер идентитета али у том случају нећете моћи да позивате кориснике преко мејла адресе или да сами будете позвани преко мејл адресе.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Такође, можете подесити прилагођени сервер идентитета али у том случају нећете моћи да позивате кориснике преко мејл адресе или да сами будете позвани преко мејл адресе.",
     "Whether or not you're logged in (we don't record your username)": "Да ли сте пријављени (не бележимо ваше корисничко име)",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Датотека „%(fileName)s“ премашује ограничење величине отпремања на овом кућном серверу",
     "Unable to load! Check your network connectivity and try again.": "Нисам могао да учитам! Проверите вашу мрежну везу и пробајте поново.",
@@ -1256,5 +1256,10 @@
     "Username": "Корисничко име",
     "You need to enter a username.": "Морате унети корисничко име.",
     "Not sure of your password? <a>Set a new one</a>": "Не сећате се лозинке? <a>Поставите нову</a>",
-    "Are you sure you want to sign out?": "Да ли сте сигурни да се желите одјавити?"
+    "Are you sure you want to sign out?": "Да ли сте сигурни да се желите одјавити?",
+    "Call failed due to misconfigured server": "Позив није успео због погрешно подешеног сервера",
+    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Замолите администратора вашег сервера (<code>%(homeserverDomain)s</code>) да подеси TURN сервер како би позиви радили поуздано.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Или, можете покушати да користите јавни сервер на  <code>turn.matrix.org</code>, али ово неће бити толико поуздано, и поделиће вашу IP адресу са тим сервером. Ово такође можете мењати у Подешавањима.",
+    "Try using turn.matrix.org": "Покушајте да користите turn.matrix.org",
+    "A conference call could not be started because the integrations server is not available": "Конференцијски позив није могао бити започет јер интеграциони сервер није расположив"
 }

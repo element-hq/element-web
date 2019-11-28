@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 import PlatformPeg from '../../../PlatformPeg';
@@ -31,11 +32,11 @@ function checkVersion(ver) {
     return parts.length == 5 && parts[1] == 'react' && parts[3] == 'js';
 }
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
-        version: React.PropTypes.string.isRequired,
-        newVersion: React.PropTypes.string.isRequired,
-        releaseNotes: React.PropTypes.string,
+        version: PropTypes.string.isRequired,
+        newVersion: PropTypes.string.isRequired,
+        releaseNotes: PropTypes.string,
     },
 
     displayReleaseNotes: function(releaseNotes) {

@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'PostRegistration',
 
     propTypes: {
@@ -44,7 +43,7 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         this.setState({busy: true});
         const self = this;
-        cli.getProfileInfo(cli.credentials.userId).done(function(result) {
+        cli.getProfileInfo(cli.credentials.userId).then(function(result) {
             self.setState({
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(result.avatar_url),
                 busy: false,

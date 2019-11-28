@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -23,7 +24,7 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'GroupRoomInfo',
 
     contextTypes: {
@@ -149,7 +150,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
@@ -181,7 +181,7 @@ module.exports = React.createClass({
                             <input type="radio"
                                 value="public"
                                 checked={this.state.groupRoom.isPublic}
-                                onClick={this._changeGroupRoomPublicity}
+                                onChange={this._changeGroupRoomPublicity}
                             />
                             <div className="mx_MemberInfo_label_text">
                                 { _t('Visible to everyone') }
@@ -193,7 +193,7 @@ module.exports = React.createClass({
                             <input type="radio"
                                 value="private"
                                 checked={!this.state.groupRoom.isPublic}
-                                onClick={this._changeGroupRoomPublicity}
+                                onChange={this._changeGroupRoomPublicity}
                             />
                             <div className="mx_MemberInfo_label_text">
                                 { _t('Only visible to community members') }
@@ -214,18 +214,18 @@ module.exports = React.createClass({
 
         const groupRoomName = this.state.groupRoom.displayname;
         return (
-            <div className="mx_MemberInfo">
+            <div className="mx_MemberInfo" role="tabpanel">
                 <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     { avatarElement }
 
-                    <EmojiText element="h2">{ groupRoomName }</EmojiText>
+                    <h2>{ groupRoomName }</h2>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
-                            { this.state.groupRoom.canonical_alias }
+                            { this.state.groupRoom.canonicalAlias }
                         </div>
                     </div>
 

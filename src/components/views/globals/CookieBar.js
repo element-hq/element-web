@@ -30,7 +30,9 @@ export default class CookieBar extends React.Component {
         super();
     }
 
-    onUsageDataClicked() {
+    onUsageDataClicked(e) {
+        e.stopPropagation();
+        e.preventDefault();
         Analytics.showDetailsModal();
     }
 
@@ -61,7 +63,6 @@ export default class CookieBar extends React.Component {
                         {
                             'UsageDataLink': (sub) => <a
                                 className="mx_MatrixToolbar_link"
-                                href="javascript:;"
                                 onClick={this.onUsageDataClicked}
                             >
                                 { sub }
@@ -83,7 +84,6 @@ export default class CookieBar extends React.Component {
                         {
                             'UsageDataLink': (sub) => <a
                                 className="mx_MatrixToolbar_link"
-                                href="javascript:;"
                                 onClick={this.onUsageDataClicked}
                             >
                                 { sub }

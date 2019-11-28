@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +32,9 @@ export default class Resizer {
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
     constructor(container, distributorCtor, config) {
+        if (!container) {
+            throw new Error("Resizer requires a non-null `container` arg");
+        }
         this.container = container;
         this.distributorCtor = distributorCtor;
         this.config = config;

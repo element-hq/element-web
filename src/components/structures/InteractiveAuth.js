@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,11 +19,14 @@ import Matrix from 'matrix-js-sdk';
 const InteractiveAuth = Matrix.InteractiveAuth;
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
 
-export default React.createClass({
+import sdk from '../../index';
+
+export default createReactClass({
     displayName: 'InteractiveAuth',
 
     propTypes: {
@@ -60,7 +64,7 @@ export default React.createClass({
         inputs: PropTypes.object,
 
         // As js-sdk interactive-auth
-        makeRegistrationUrl: PropTypes.func,
+        requestEmailToken: PropTypes.func,
         sessionId: PropTypes.string,
         clientSecret: PropTypes.string,
         emailSid: PropTypes.string,
@@ -90,12 +94,14 @@ export default React.createClass({
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
             doRequest: this._requestCallback,
+            busyChanged: this._onBusyChanged,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
             matrixClient: this.props.matrixClient,
             sessionId: this.props.sessionId,
             clientSecret: this.props.clientSecret,
             emailSid: this.props.emailSid,
+            requestEmailToken: this._requestEmailToken,
         });
 
         this._authLogic.attemptAuth().then((result) => {
@@ -115,7 +121,7 @@ export default React.createClass({
             this.setState({
                 errorText: msg,
             });
-        }).done();
+        });
 
         this._intervalId = null;
         if (this.props.poll) {
@@ -130,6 +136,19 @@ export default React.createClass({
 
         if (this._intervalId !== null) {
             clearInterval(this._intervalId);
+        }
+    },
+
+    _requestEmailToken: async function(...args) {
+        this.setState({
+            busy: true,
+        });
+        try {
+            return await this.props.requestEmailToken(...args);
+        } finally {
+            this.setState({
+                busy: false,
+            });
         }
     },
 
@@ -150,27 +169,26 @@ export default React.createClass({
         });
     },
 
-    _requestCallback: function(auth, background) {
-        const makeRequestPromise = this.props.makeRequest(auth);
+    _requestCallback: function(auth) {
+        // This wrapper just exists because the js-sdk passes a second
+        // 'busy' param for backwards compat. This throws the tests off
+        // so discard it here.
+        return this.props.makeRequest(auth);
+    },
 
-        // if it's a background request, just do it: we don't want
-        // it to affect the state of our UI.
-        if (background) return makeRequestPromise;
-
-        // otherwise, manage the state of the spinner and error messages
-        this.setState({
-            busy: true,
-            errorText: null,
-            stageErrorText: null,
-        });
-        return makeRequestPromise.finally(() => {
-            if (this._unmounted) {
-                return;
-            }
+    _onBusyChanged: function(busy) {
+        // if we've started doing stuff, reset the error messages
+        if (busy) {
+            this.setState({
+                busy: true,
+                errorText: null,
+                stageErrorText: null,
+            });
+        } else {
             this.setState({
                 busy: false,
             });
-        });
+        }
     },
 
     _setFocus: function() {
@@ -185,7 +203,14 @@ export default React.createClass({
 
     _renderCurrentStage: function() {
         const stage = this.state.authStage;
-        if (!stage) return null;
+        if (!stage) {
+            if (this.state.busy) {
+                const Loader = sdk.getComponent("elements.Spinner");
+                return <Loader />;
+            } else {
+                return null;
+            }
+        }
 
         const StageComponent = getEntryComponentForLoginType(stage);
         return (
@@ -202,7 +227,6 @@ export default React.createClass({
                 stageState={this.state.stageState}
                 fail={this._onAuthStageFailed}
                 setEmailSid={this._setEmailSid}
-                makeRegistrationUrl={this.props.makeRegistrationUrl}
                 showContinue={!this.props.continueIsManaged}
             />
         );

@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
-Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -64,6 +63,7 @@ export default class MImageBody extends React.Component {
             imgLoaded: false,
             loadedImageDimensions: null,
             hover: false,
+            showImage: SettingsStore.getValue("showImages"),
         };
     }
 
@@ -86,9 +86,19 @@ export default class MImageBody extends React.Component {
         }
     }
 
+    showImage() {
+        localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
+        this.setState({showImage: true});
+    }
+
     onClick(ev) {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
+            if (!this.state.showImage) {
+                this.showImage();
+                return;
+            }
+
             const content = this.props.mxEvent.getContent();
             const httpUrl = this._getContentUrl();
             const ImageView = sdk.getComponent("elements.ImageView");
@@ -120,7 +130,7 @@ export default class MImageBody extends React.Component {
     onImageEnter(e) {
         this.setState({ hover: true });
 
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
@@ -130,7 +140,7 @@ export default class MImageBody extends React.Component {
     onImageLeave(e) {
         this.setState({ hover: false });
 
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
@@ -172,8 +182,8 @@ export default class MImageBody extends React.Component {
         // thumbnail resolution will be unnecessarily reduced.
         // custom timeline widths seems preferable.
         const pixelRatio = window.devicePixelRatio;
-        const thumbWidth = 800 * pixelRatio;
-        const thumbHeight = 600 * pixelRatio;
+        const thumbWidth = Math.round(800 * pixelRatio);
+        const thumbHeight = Math.round(600 * pixelRatio);
 
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -197,12 +207,18 @@ export default class MImageBody extends React.Component {
             // synapse only supports 800x600 thumbnails for now though,
             // so we'll need to download the original image for this to work
             // well for now. First, let's try a few cases that let us avoid
-            // downloading the original:
-            if (pixelRatio === 1.0 ||
-                    (!content.info || !content.info.w ||
-                     !content.info.h || !content.info.size)) {
-                // always thumbnail. it may look a bit worse, but it'll save bandwidth.
-                // which is probably desirable on a lo-dpi device anyway.
+            // downloading the original, including:
+            //   - When displaying a GIF, we always want to thumbnail so that we can
+            //     properly respect the user's GIF autoplay setting (which relies on
+            //     thumbnailing to produce the static preview image)
+            //   - On a low DPI device, always thumbnail to save bandwidth
+            //   - If there's no sizing info in the event, default to thumbnail
+            const info = content.info;
+            if (
+                this._isGif() ||
+                pixelRatio === 1.0 ||
+                (!info || !info.w || !info.h || !info.size)
+            ) {
                 return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
             } else {
                 // we should only request thumbnails if the image is bigger than 800x600
@@ -215,10 +231,10 @@ export default class MImageBody extends React.Component {
                 // timeline (e.g. >1MB).
 
                 const isLargerThanThumbnail = (
-                    content.info.w > thumbWidth ||
-                    content.info.h > thumbHeight
+                    info.w > thumbWidth ||
+                    info.h > thumbHeight
                 );
-                const isLargeFileSize = content.info.size > 1*1024*1024;
+                const isLargeFileSize = info.size > 1*1024*1024;
 
                 if (isLargeFileSize && isLargerThanThumbnail) {
                     // image is too large physically and bytewise to clutter our timeline so
@@ -258,6 +274,7 @@ export default class MImageBody extends React.Component {
                     decryptedBlob = blob;
                     return URL.createObjectURL(blob);
                 }).then((contentUrl) => {
+                    if (this.unmounted) return;
                     this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
@@ -265,13 +282,20 @@ export default class MImageBody extends React.Component {
                     });
                 });
             }).catch((err) => {
+                if (this.unmounted) return;
                 console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
+
+        // Remember that the user wanted to show this particular image
+        if (!this.state.showImage && localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true") {
+            this.setState({showImage: true});
+        }
+
         this._afterComponentDidMount();
     }
 
@@ -313,13 +337,19 @@ export default class MImageBody extends React.Component {
             // By doing this, the image "pops" into the timeline, but is still restricted
             // by the same width and height logic below.
             if (!this.state.loadedImageDimensions) {
-                return this.wrapImage(contentUrl,
-                    <img style={{display: 'none'}} src={thumbUrl} ref="image"
-                        alt={content.body}
-                        onError={this.onImageError}
-                        onLoad={this.onImageLoad}
-                    />,
-                );
+                let imageElement;
+                if (!this.state.showImage) {
+                    imageElement = <HiddenImagePlaceholder />;
+                } else {
+                    imageElement = (
+                        <img style={{display: 'none'}} src={thumbUrl} ref="image"
+                             alt={content.body}
+                             onError={this.onImageError}
+                             onLoad={this.onImageLoad}
+                        />
+                    );
+                }
+                return this.wrapImage(contentUrl, imageElement);
             }
             infoWidth = this.state.loadedImageDimensions.naturalWidth;
             infoHeight = this.state.loadedImageDimensions.naturalHeight;
@@ -348,19 +378,26 @@ export default class MImageBody extends React.Component {
             placeholder = this.getPlaceholder();
         }
 
-        const showPlaceholder = Boolean(placeholder);
+        let showPlaceholder = Boolean(placeholder);
 
         if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
-            img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                style={{ maxWidth: maxWidth + "px" }}
-                alt={content.body}
-                onError={this.onImageError}
-                onLoad={this.onImageLoad}
-                onMouseEnter={this.onImageEnter}
-                onMouseLeave={this.onImageLeave} />;
+            img = (
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                     style={{ maxWidth: maxWidth + "px" }}
+                     alt={content.body}
+                     onError={this.onImageError}
+                     onLoad={this.onImageLoad}
+                     onMouseEnter={this.onImageEnter}
+                     onMouseLeave={this.onImageLeave} />
+            );
+        }
+
+        if (!this.state.showImage) {
+            img = <HiddenImagePlaceholder style={{ maxWidth: maxWidth + "px" }} />;
+            showPlaceholder = false; // because we're hiding the image, so don't show the sticker icon.
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
@@ -444,5 +481,24 @@ export default class MImageBody extends React.Component {
             { thumbnail }
             { fileBody }
         </span>;
+    }
+}
+
+export class HiddenImagePlaceholder extends React.PureComponent {
+    static propTypes = {
+        hover: PropTypes.bool,
+    };
+
+    render() {
+        let className = 'mx_HiddenImagePlaceholder';
+        if (this.props.hover) className += ' mx_HiddenImagePlaceholder_hover';
+        return (
+            <div className={className}>
+                <div className='mx_HiddenImagePlaceholder_button'>
+                    <span className='mx_HiddenImagePlaceholder_eye' />
+                    <span>{_t("Show image")}</span>
+                </div>
+            </div>
+        );
     }
 }

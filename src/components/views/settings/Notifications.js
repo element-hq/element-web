@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import Promise from 'bluebird';
+import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -63,7 +63,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'Notifications',
 
     phases: {
@@ -97,7 +97,7 @@ module.exports = React.createClass({
             phase: this.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).done(function() {
+        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).then(function() {
            self._refreshFromServer();
         });
     },
@@ -170,7 +170,7 @@ module.exports = React.createClass({
             emailPusher.kind = null;
             emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
         }
-        emailPusherPromise.done(() => {
+        emailPusherPromise.then(() => {
             this._refreshFromServer();
         }, (error) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -274,7 +274,7 @@ module.exports = React.createClass({
                 }
             }
 
-            Promise.all(deferreds).done(function() {
+            Promise.all(deferreds).then(function() {
                 self._refreshFromServer();
             }, function(error) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -343,7 +343,7 @@ module.exports = React.createClass({
             }
         }
 
-        Promise.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).then(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -398,7 +398,7 @@ module.exports = React.createClass({
         };
 
         // Then, add the new ones
-        Promise.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).then(function(resps) {
             const deferreds = [];
 
             let pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -434,7 +434,7 @@ module.exports = React.createClass({
                 }
             }
 
-            Promise.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).then(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -650,7 +650,7 @@ module.exports = React.createClass({
                 externalContentRules: self.state.externalContentRules,
                 externalPushRules: self.state.externalPushRules,
             });
-        }).done();
+        });
 
         MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
     },

@@ -103,6 +103,7 @@ export default class RelatedGroupSettings extends React.Component {
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return <div>
             <EditableItemList
+                id="relatedGroups"
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
                 newItem={this.state.newGroupId}

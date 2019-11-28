@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 import dis from '../../../dispatcher';
-import { RoomPermalinkCreator } from '../../../matrix-to';
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'RoomCreate',
 
     propTypes: {
@@ -49,7 +50,7 @@ module.exports = React.createClass({
             return <div />; // We should never have been instaniated in this case
         }
         const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
-        const permalinkCreator = new RoomPermalinkCreator(prevRoom);
+        const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         return <div className="mx_CreateEvent">

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {focusCapturedRef} from "../../utils/Accessibility";
+import {KeyCode} from "../../Keyboard";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -48,7 +50,6 @@ export default class ContextualMenu extends React.Component {
         menuWidth: PropTypes.number,
         menuHeight: PropTypes.number,
         chevronOffset: PropTypes.number,
-        menuColour: PropTypes.string,
         chevronFace: PropTypes.string, // top, bottom, left, right or none
         // Function to be called on menu close
         onFinished: PropTypes.func,
@@ -67,7 +68,7 @@ export default class ContextualMenu extends React.Component {
         // on resize callback
         windowResize: PropTypes.func,
         // method to close menu
-        closeMenu: PropTypes.func,
+        closeMenu: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -83,6 +84,9 @@ export default class ContextualMenu extends React.Component {
     collectContextMenuRect(element) {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
+
+        // For screen readers to find the thing
+        focusCapturedRef(element);
 
         this.setState({
             contextMenuRect: element.getBoundingClientRect(),
@@ -110,6 +114,14 @@ export default class ContextualMenu extends React.Component {
             });
         }
     }
+
+    _onKeyDown = (ev) => {
+        if (ev.keyCode === KeyCode.ESCAPE) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.props.closeMenu();
+        }
+    };
 
     render() {
         const position = {};
@@ -157,25 +169,6 @@ export default class ContextualMenu extends React.Component {
             chevronOffset.top = Math.max(props.chevronOffset, props.chevronOffset + target - adjusted);
         }
 
-        // To override the default chevron colour, if it's been set
-        let chevronCSS = "";
-        if (props.menuColour) {
-            chevronCSS = `
-                .mx_ContextualMenu_chevron_left:after {
-                    border-right-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_right:after {
-                    border-left-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_top:after {
-                    border-left-color: ${props.menuColour};
-                }
-                .mx_ContextualMenu_chevron_bottom:after {
-                    border-left-color: ${props.menuColour};
-                }
-            `;
-        }
-
         const chevron = hasChevron ?
             <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} /> :
             undefined;
@@ -183,11 +176,14 @@ export default class ContextualMenu extends React.Component {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            'mx_ContextualMenu_noChevron': chevronFace === 'none',
-            'mx_ContextualMenu_left': chevronFace === 'left',
-            'mx_ContextualMenu_right': chevronFace === 'right',
-            'mx_ContextualMenu_top': chevronFace === 'top',
-            'mx_ContextualMenu_bottom': chevronFace === 'bottom',
+            'mx_ContextualMenu_left': !hasChevron && position.left,
+            'mx_ContextualMenu_right': !hasChevron && position.right,
+            'mx_ContextualMenu_top': !hasChevron && position.top,
+            'mx_ContextualMenu_bottom': !hasChevron && position.bottom,
+            'mx_ContextualMenu_withChevron_left': chevronFace === 'left',
+            'mx_ContextualMenu_withChevron_right': chevronFace === 'right',
+            'mx_ContextualMenu_withChevron_top': chevronFace === 'top',
+            'mx_ContextualMenu_withChevron_bottom': chevronFace === 'bottom',
         });
 
         const menuStyle = {};
@@ -197,10 +193,6 @@ export default class ContextualMenu extends React.Component {
 
         if (props.menuHeight) {
             menuStyle.height = props.menuHeight;
-        }
-
-        if (props.menuColour) {
-            menuStyle["backgroundColor"] = props.menuColour;
         }
 
         if (!isNaN(Number(props.menuPaddingTop))) {
@@ -226,14 +218,13 @@ export default class ContextualMenu extends React.Component {
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
-        return <div className={className} style={{...position, ...wrapperStyle}}>
-            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
+        return <div className={className} style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
+            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} tabIndex={0}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
             { props.hasBackground && <div className="mx_ContextualMenu_background" style={wrapperStyle}
                                           onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
-            <style>{ chevronCSS }</style>
         </div>;
     }
 }

@@ -18,48 +18,140 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
-// TODO: Actually load reactions from the timeline
-// Since we don't yet load reactions, let's inject some dummy data for testing the UI
-// only. The UI assumes these are already sorted into the order we want to present,
-// presumably highest vote first.
-const SAMPLE_REACTIONS = {
-    "👍": 4,
-    "👎": 2,
-    "🙂": 1,
-};
+// The maximum number of reactions to initially show on a message.
+const MAX_ITEMS_WHEN_LIMITED = 8;
 
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for
         mxEvent: PropTypes.object.isRequired,
+        // The Relations model from the JS SDK for reactions to `mxEvent`
+        reactions: PropTypes.object,
+    }
+
+    constructor(props) {
+        super(props);
+
+        if (props.reactions) {
+            props.reactions.on("Relations.add", this.onReactionsChange);
+            props.reactions.on("Relations.remove", this.onReactionsChange);
+            props.reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+
+        this.state = {
+            myReactions: this.getMyReactions(),
+            showAll: false,
+        };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.reactions !== this.props.reactions) {
+            this.props.reactions.on("Relations.add", this.onReactionsChange);
+            this.props.reactions.on("Relations.remove", this.onReactionsChange);
+            this.props.reactions.on("Relations.redaction", this.onReactionsChange);
+            this.onReactionsChange();
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.reactions) {
+            this.props.reactions.removeListener(
+                "Relations.add",
+                this.onReactionsChange,
+            );
+            this.props.reactions.removeListener(
+                "Relations.remove",
+                this.onReactionsChange,
+            );
+            this.props.reactions.removeListener(
+                "Relations.redaction",
+                this.onReactionsChange,
+            );
+        }
+    }
+
+    onReactionsChange = () => {
+        // TODO: Call `onHeightChanged` as needed
+        this.setState({
+            myReactions: this.getMyReactions(),
+        });
+        // Using `forceUpdate` for the moment, since we know the overall set of reactions
+        // has changed (this is triggered by events for that purpose only) and
+        // `PureComponent`s shallow state / props compare would otherwise filter this out.
+        this.forceUpdate();
+    }
+
+    getMyReactions() {
+        const reactions = this.props.reactions;
+        if (!reactions) {
+            return null;
+        }
+        const userId = MatrixClientPeg.get().getUserId();
+        const myReactions = reactions.getAnnotationsBySender()[userId];
+        if (!myReactions) {
+            return null;
+        }
+        return [...myReactions.values()];
+    }
+
+    onShowAllClick = () => {
+        this.setState({
+            showAll: true,
+        });
     }
 
     render() {
-        const { mxEvent } = this.props;
+        const { mxEvent, reactions } = this.props;
+        const { myReactions, showAll } = this.state;
 
-        if (!isContentActionable(mxEvent)) {
-            return null;
-        }
-
-        const content = mxEvent.getContent();
-        // TODO: Remove this once we load real reactions
-        if (!content.body || content.body !== "reactions test") {
+        if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        const items = Object.entries(SAMPLE_REACTIONS).map(([content, count]) => {
+        let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
+            const count = events.size;
+            if (!count) {
+                return null;
+            }
+            const myReactionEvent = myReactions && myReactions.find(mxEvent => {
+                if (mxEvent.isRedacted()) {
+                    return false;
+                }
+                return mxEvent.getRelation().key === content;
+            });
             return <ReactionsRowButton
                 key={content}
                 content={content}
                 count={count}
+                mxEvent={mxEvent}
+                reactionEvents={events}
+                myReactionEvent={myReactionEvent}
             />;
-        });
+        }).filter(item => !!item);
+
+        // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
+        // The "+ 1" ensure that the "show all" reveals something that takes up
+        // more space than the button itself.
+        let showAllButton;
+        if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
+            items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
+            showAllButton = <a
+                className="mx_ReactionsRow_showAll"
+                href="#"
+                onClick={this.onShowAllClick}
+            >
+                {_t("Show all")}
+            </a>;
+        }
 
         return <div className="mx_ReactionsRow">
             {items}
+            {showAllButton}
         </div>;
     }
 }

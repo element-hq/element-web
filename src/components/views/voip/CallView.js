@@ -15,13 +15,14 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import CallHandler from '../../../CallHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+module.exports = createReactClass({
     displayName: 'CallView',
 
     propTypes: {
@@ -89,6 +90,13 @@ module.exports = React.createClass({
             }
         } else {
             call = CallHandler.getAnyActiveCall();
+            // Ignore calls if we can't get the room associated with them.
+            // I think the underlying problem is that the js-sdk sends events
+            // for calls before it has made the rooms available in the store,
+            // although this isn't confirmed.
+            if (MatrixClientPeg.get().getRoom(call.roomId) === null) {
+                call = null;
+            }
             this.setState({ call: call });
         }
 

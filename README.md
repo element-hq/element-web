@@ -168,3 +168,8 @@ Ensure you've followed the above development instructions and then:
 ```bash
 yarn test
 ```
+
+## End-to-End tests
+
+Make sure you've got your Riot development server running (by doing `yarn start` in riot-web), and then in this project, run `yarn run e2etests`.
+See `test/end-to-end-tests/README.md` for more information.
