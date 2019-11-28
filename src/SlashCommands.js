@@ -200,7 +200,8 @@ export const CommandMap = {
                         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                         Modal.createTrackedDialog('Slash Commands', 'room upgrade error', ErrorDialog, {
                             title: _t('Error upgrading room'),
-                            description: _t('Double check that your server supports the room version chosen and try again.'),
+                            description: _t(
+                                'Double check that your server supports the room version chosen and try again.'),
                         });
                     }
                 }));
