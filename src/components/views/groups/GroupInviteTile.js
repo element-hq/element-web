@@ -22,9 +22,10 @@ import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
+import {_t} from '../../../languageHandler';
 import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import {ContextMenu, toRightOf} from "../../structures/ContextualMenu";
+import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextualMenu";
 
 export default createReactClass({
     displayName: 'GroupInviteTile',
@@ -124,9 +125,15 @@ export default createReactClass({
 
         const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
         const badge = (
-            <AccessibleButton className={badgeClasses} inputRef={this._contextMenuButton} onClick={this.openMenu}>
+            <ContextMenuButton
+                className={badgeClasses}
+                inputRef={this._contextMenuButton}
+                onClick={this.openMenu}
+                label={_t("Options")}
+                isExpanded={this.state.menuDisplayed}
+            >
                 { badgeContent }
-            </AccessibleButton>
+            </ContextMenuButton>
         );
 
         let tooltip;
@@ -146,7 +153,7 @@ export default createReactClass({
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
             const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
             contextMenu = (
-                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
+                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <GroupInviteTileContextMenu group={this.props.group} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

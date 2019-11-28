@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import sdk from '../../../index';
-import {ContextMenu, toRightOf} from '../../structures/ContextualMenu';
+import {ContextMenu, ContextMenuButton, toRightOf} from '../../structures/ContextualMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
@@ -344,7 +344,12 @@ module.exports = createReactClass({
         let contextMenuButton;
         if (!MatrixClientPeg.get().isGuest()) {
             contextMenuButton = (
-                <AccessibleButton className="mx_RoomTile_menuButton" inputRef={this._contextMenuButton} onClick={this.openMenu} />
+                <ContextMenuButton
+                    className="mx_RoomTile_menuButton"
+                    inputRef={this._contextMenuButton}
+                    label={_t("Options")}
+                    isExpanded={this.state.menuDisplayed}
+                    onClick={this.openMenu} />
             );
         }
 
@@ -381,7 +386,7 @@ module.exports = createReactClass({
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
             const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
             contextMenu = (
-                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
+                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <RoomTileContextMenu room={this.props.room} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

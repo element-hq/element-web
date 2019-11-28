@@ -16,49 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import {ContextMenu} from '../../structures/ContextualMenu';
+import {aboveLeft, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextualMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
-
-const contextMenuProps = (elementRect) => {
-    const menuOptions = {
-        chevronFace: "none",
-    };
-
-    const buttonRight = elementRect.right + window.pageXOffset;
-    const buttonBottom = elementRect.bottom + window.pageYOffset;
-    const buttonTop = elementRect.top + window.pageYOffset;
-    // Align the right edge of the menu to the right edge of the button
-    menuOptions.right = window.innerWidth - buttonRight;
-    // Align the menu vertically on whichever side of the button has more space available.
-    if (buttonBottom < window.innerHeight / 2) {
-        menuOptions.top = buttonBottom;
-    } else {
-        menuOptions.bottom = window.innerHeight - buttonTop;
-    }
-
-    return menuOptions;
-};
-
-const useContextMenu = () => {
-    const _button = useRef(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const open = () => {
-        setIsOpen(true);
-    };
-    const close = () => {
-        setIsOpen(false);
-    };
-
-    return [isOpen, _button, open, close, setIsOpen];
-};
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, _button, openMenu, closeMenu] = useContextMenu();
@@ -86,7 +53,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         }
 
         const buttonRect = _button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu props={contextMenuProps(buttonRect)} onFinished={closeMenu}>
+        contextMenu = <ContextMenu {...aboveLeft(buttonRect)} onFinished={closeMenu}>
             <MessageContextMenu
                 mxEvent={mxEvent}
                 permalinkCreator={permalinkCreator}
@@ -98,14 +65,12 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         </ContextMenu>;
     }
 
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     return <React.Fragment>
-        <AccessibleButton
+        <ContextMenuButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
-            title={_t("Options")}
+            label={_t("Options")}
             onClick={openMenu}
-            aria-haspopup={true}
-            aria-expanded={menuDisplayed}
+            isExpanded={menuDisplayed}
             inputRef={_button}
         />
 
@@ -120,19 +85,17 @@ const ReactButton = ({mxEvent, reactions}) => {
     if (menuDisplayed) {
         const buttonRect = _button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu props={contextMenuProps(buttonRect)} onFinished={closeMenu}>
+        contextMenu = <ContextMenu {...aboveLeft(buttonRect)} onFinished={closeMenu}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
 
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     return <React.Fragment>
-        <AccessibleButton
+        <ContextMenuButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
-            title={_t("React")}
+            label={_t("React")}
             onClick={openMenu}
-            aria-haspopup={true}
-            aria-expanded={menuDisplayed}
+            isExpanded={menuDisplayed}
             inputRef={_button}
         />
 
@@ -227,7 +190,7 @@ export default class MessageActionBar extends React.PureComponent {
                 getReplyThread={this.props.getReplyThread}
                 getTile={this.props.getTile}
                 permalinkCreator={this.props.permalinkCreator}
-                onFocusChange={this.props.onFocusChange}
+                onFocusChange={this.onFocusChange}
             />
         </div>;
     }

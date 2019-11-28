@@ -23,13 +23,14 @@ import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
+import {_t} from '../../../languageHandler';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu, toRightOf} from "../../structures/ContextualMenu";
+import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextualMenu";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -139,7 +140,6 @@ export default createReactClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const Tooltip = sdk.getComponent('elements.Tooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
@@ -178,14 +178,20 @@ export default createReactClass({
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
             const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
             contextMenu = (
-                <ContextMenu props={toRightOf(elementRect)} onFinished={this.closeMenu}>
+                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
                     <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
                 </ContextMenu>
             );
         }
 
         return <React.Fragment>
-            <AccessibleButton className={className} onClick={this.onClick} onContextMenu={this.openMenu}>
+            <ContextMenuButton
+                className={className}
+                onClick={this.onClick}
+                onContextMenu={this.openMenu}
+                label={_t("Options")}
+                isExpanded={this.state.menuDisplayed}
+            >
                 <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                     <BaseAvatar
                         name={name}
@@ -198,7 +204,7 @@ export default createReactClass({
                     { contextButton }
                     { badgeElement }
                 </div>
-            </AccessibleButton>
+            </ContextMenuButton>
 
             { contextMenu }
         </React.Fragment>;

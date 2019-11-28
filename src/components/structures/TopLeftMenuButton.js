@@ -23,7 +23,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
-import {ContextMenu} from "./ContextualMenu";
+import {ContextMenu, ContextMenuButton} from "./ContextualMenu";
 import sdk from "../../index";
 
 const AVATAR_SIZE = 28;
@@ -119,29 +119,26 @@ export default class TopLeftMenuButton extends React.Component {
         let contextMenu;
         if (this.state.menuDisplayed) {
             const elementRect = this._buttonRef.getBoundingClientRect();
-            const x = elementRect.left;
-            const y = elementRect.top + elementRect.height;
 
-            const props = {
-                chevronFace: "none",
-                left: x,
-                top: y,
-            };
-
-            contextMenu = <ContextMenu props={props} onFinished={this.closeMenu}>
-                <TopLeftMenu displayName={name} userId={cli} onFinished={this.closeMenu} />
-            </ContextMenu>;
+            contextMenu = (
+                <ContextMenu
+                    chevronFace="none"
+                    left={elementRect.left}
+                    top={elementRect.top + elementRect.height}
+                    onFinished={this.closeMenu}
+                >
+                    <TopLeftMenu displayName={name} userId={cli} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <React.Fragment>
-            <AccessibleButton
+            <ContextMenuButton
                 className="mx_TopLeftMenuButton"
                 onClick={this.openMenu}
                 inputRef={(r) => this._buttonRef = r}
-                aria-label={_t("Your profile")}
-                aria-haspopup={true}
-                aria-expanded={this.state.menuDisplayed}
+                label={_t("Your profile")}
+                isExpanded={this.state.menuDisplayed}
             >
                 <BaseAvatar
                     idName={MatrixClientPeg.get().getUserId()}
@@ -153,7 +150,7 @@ export default class TopLeftMenuButton extends React.Component {
                 />
                 { nameElement }
                 { chevronElement }
-            </AccessibleButton>
+            </ContextMenuButton>
 
             { contextMenu }
         </React.Fragment>;

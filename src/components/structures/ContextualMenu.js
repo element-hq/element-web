@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {focusCapturedRef} from "../../utils/Accessibility";
 import {Key, KeyCode} from "../../Keyboard";
 import sdk from "../../index";
+import AccessibleButton from "../views/elements/AccessibleButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -222,7 +223,7 @@ export default class ContextualMenu extends React.Component {
         return <div className={className} style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
             <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} tabIndex={0}>
                 { chevron }
-                <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
+                <ElementClass {...props} onFinished={props.closeMenu} onResize={props.onFinished} />
             </div>
             { props.hasBackground && <div className="mx_ContextualMenu_background" style={wrapperStyle}
                                           onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
@@ -231,8 +232,10 @@ export default class ContextualMenu extends React.Component {
 }
 
 const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
-
-class ContextualMenu2 extends React.Component {
+// Generic ContextMenu Portal wrapper
+// all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
+// this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
+export class ContextMenu extends React.Component {
     propTypes: {
         top: PropTypes.number,
         bottom: PropTypes.number,
@@ -243,7 +246,7 @@ class ContextualMenu2 extends React.Component {
         chevronOffset: PropTypes.number,
         chevronFace: PropTypes.string, // top, bottom, left, right or none
         // Function to be called on menu close
-        onFinished: PropTypes.func,
+        onFinished: PropTypes.func.isRequired,
         menuPaddingTop: PropTypes.number,
         menuPaddingRight: PropTypes.number,
         menuPaddingBottom: PropTypes.number,
@@ -258,10 +261,14 @@ class ContextualMenu2 extends React.Component {
         windowResize: PropTypes.func,
     };
 
+    static defaultProps = {
+        hasBackground: true,
+    };
+
     constructor() {
         super();
         this.state = {
-            contextMenuRect: null,
+            contextMenuElem: null,
         };
 
         // persist what had focus when we got initialized so we can return it after
@@ -277,19 +284,22 @@ class ContextualMenu2 extends React.Component {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
-        const first = element.querySelector('[role^="menuitem"]');
+        let first = element.querySelector('[role^="menuitem"]');
+        if (!first) {
+            first = element.querySelector('[tab-index]');
+        }
         if (first) {
             first.focus();
         }
 
         this.setState({
-            contextMenuRect: element.getBoundingClientRect(),
+            contextMenuElem: element,
         });
     };
 
     onContextMenu = (e) => {
-        if (this.props.closeMenu) {
-            this.props.closeMenu();
+        if (this.props.onFinished) {
+            this.props.onFinished();
 
             e.preventDefault();
             const x = e.clientX;
@@ -347,13 +357,25 @@ class ContextualMenu2 extends React.Component {
         }
     };
 
-    _onKeyDown = (ev) => {
-        let handled = true;
+    _onMoveFocusHomeEnd = (element, up) => {
+        let results = element.querySelectorAll('[role^="menuitem"]');
+        if (!results) {
+            results = element.querySelectorAll('[tab-index]');
+        }
+        if (results && results.length) {
+            if (up) {
+                results[0].focus();
+            } else {
+                results[results.length - 1].focus();
+            }
+        }
+    };
 
+    _onKeyDown = (ev) => {
         switch (ev.key) {
             case Key.TAB:
             case Key.ESCAPE:
-                this.props.closeMenu();
+                this.props.onFinished();
                 break;
             case Key.ARROW_UP:
                 this._onMoveFocus(ev.target, true);
@@ -361,14 +383,17 @@ class ContextualMenu2 extends React.Component {
             case Key.ARROW_DOWN:
                 this._onMoveFocus(ev.target, false);
                 break;
-            default:
-                handled = false;
+            case Key.HOME:
+                this._onMoveFocusHomeEnd(this.state.contextMenuElem, true);
+                break;
+            case Key.END:
+                this._onMoveFocusHomeEnd(this.state.contextMenuElem, false);
+                break;
         }
 
-        if (handled) {
-            ev.stopPropagation();
-            ev.preventDefault();
-        }
+        // consume all other keys in context menu
+        ev.stopPropagation();
+        ev.preventDefault();
     };
 
     render() {
@@ -390,7 +415,7 @@ class ContextualMenu2 extends React.Component {
             chevronFace = 'right';
         }
 
-        const contextMenuRect = this.state.contextMenuRect || null;
+        const contextMenuRect = this.state.contextMenuElem ? this.state.contextMenuElem.getBoundingClientRect() : null;
         const padding = 10;
 
         const chevronOffset = {};
@@ -465,37 +490,36 @@ class ContextualMenu2 extends React.Component {
         let background;
         if (props.hasBackground) {
             background = (
-                <div className="mx_ContextualMenu_background" style={wrapperStyle} onClick={props.closeMenu} onContextMenu={this.onContextMenu} />
+                <div className="mx_ContextualMenu_background" style={wrapperStyle} onClick={props.onFinished} onContextMenu={this.onContextMenu} />
             );
         }
 
-        return (
+        const menu = (
             <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
-                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
+                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role="menu">
                     { chevron }
                     { props.children }
                 </div>
                 { background }
             </div>
         );
+        return ReactDOM.createPortal(menu, getOrCreateContainer());
     }
 }
 
-// Generic ContextMenu Portal wrapper
-// all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
-// this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
-
-export const ContextMenu = ({children, onFinished, props, hasBackground=true}) => {
-    const menu = <ContextualMenu2
-        {...props}
-        hasBackground={hasBackground}
-        closeMenu={onFinished}
-        windowResize={onFinished}
-    >
-        { children }
-    </ContextualMenu2>;
-
-    return ReactDOM.createPortal(menu, getOrCreateContainer());
+// Semantic component for representing the AccessibleButton which launches a <ContextMenu />
+export const ContextMenuButton = ({ label, isExpanded, children, ...props }) => {
+    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    return (
+        <AccessibleButton {...props} title={label} aria-label={label} aria-haspopup={true} aria-expanded={isExpanded}>
+            { children }
+        </AccessibleButton>
+    );
+};
+ContextMenuButton.propTypes = {
+    ...AccessibleButton.propTypes,
+    label: PropTypes.string.isRequired,
+    isExpanded: PropTypes.bool.isRequired, // whether or not the context menu is currently open
 };
 
 // Semantic component for representing a role=menuitem
@@ -508,6 +532,7 @@ export const MenuItem = ({children, label, ...props}) => {
     );
 };
 MenuItem.propTypes = {
+    ...AccessibleButton.propTypes,
     label: PropTypes.string, // optional
     className: PropTypes.string, // optional
     onClick: PropTypes.func.isRequired,
@@ -520,6 +545,7 @@ export const MenuGroup = ({children, label, ...props}) => {
     </div>;
 };
 MenuGroup.propTypes = {
+    ...AccessibleButton.propTypes,
     label: PropTypes.string.isRequired,
     className: PropTypes.string, // optional
 };
@@ -534,6 +560,7 @@ export const MenuItemCheckbox = ({children, label, active=false, disabled=false,
     );
 };
 MenuItemCheckbox.propTypes = {
+    ...AccessibleButton.propTypes,
     label: PropTypes.string, // optional
     active: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
@@ -551,6 +578,7 @@ export const MenuItemRadio = ({children, label, active=false, disabled=false, ..
     );
 };
 MenuItemRadio.propTypes = {
+    ...AccessibleButton.propTypes,
     label: PropTypes.string, // optional
     active: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
@@ -564,6 +592,38 @@ export const toRightOf = (elementRect, chevronOffset=12) => {
     let top = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
     top = top - (chevronOffset + 8); // where 8 is half the height of the chevron
     return {left, top};
+};
+
+// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
+export const aboveLeft = (elementRect, chevronFace="none") => {
+    const menuOptions = { chevronFace };
+
+    const buttonRight = elementRect.right + window.pageXOffset;
+    const buttonBottom = elementRect.bottom + window.pageYOffset;
+    const buttonTop = elementRect.top + window.pageYOffset;
+    // Align the right edge of the menu to the right edge of the button
+    menuOptions.right = window.innerWidth - buttonRight;
+    // Align the menu vertically on whichever side of the button has more space available.
+    if (buttonBottom < window.innerHeight / 2) {
+        menuOptions.top = buttonBottom;
+    } else {
+        menuOptions.bottom = window.innerHeight - buttonTop;
+    }
+
+    return menuOptions;
+};
+
+export const useContextMenu = () => {
+    const _button = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const open = () => {
+        setIsOpen(true);
+    };
+    const close = () => {
+        setIsOpen(false);
+    };
+
+    return [isOpen, _button, open, close, setIsOpen];
 };
 
 export function createMenu(ElementClass, props, hasBackground=true) {
