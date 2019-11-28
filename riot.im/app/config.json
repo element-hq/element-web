@@ -12,19 +12,13 @@
     ],
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "features": {
+    },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
         "policyUrl": "https://matrix.org/docs/guides/riot_im_cookie_policy"
-    },
-    "phasedRollOut": {
-        "feature_lazyloading": {
-            "offset": 1539684000000,
-            "period": 604800000
-        }
-    },
-    "features": {
     },
     "roomDirectory": {
         "servers": [
