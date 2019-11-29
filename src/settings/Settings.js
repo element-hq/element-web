@@ -143,7 +143,7 @@ export const SETTINGS = {
     },
     "feature_cross_signing": {
         isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-device"),
+        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
@@ -284,7 +284,7 @@ export const SETTINGS = {
     "use_system_theme": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
-        displayName: _td("Match system dark mode setting"),
+        displayName: _td("Match system theme"),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

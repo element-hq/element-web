@@ -36,6 +36,7 @@ import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {createMenu} from "../../structures/ContextualMenu";
+import PersistedElement from "./PersistedElement";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -247,7 +248,8 @@ export default class AppTile extends React.Component {
                 this.setScalarToken();
             }
         } else if (nextProps.show && !this.props.show) {
-            if (this.props.waitForIframeLoad) {
+            // We assume that persisted widgets are loaded and don't need a spinner.
+            if (this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey)) {
                 this.setState({
                     loading: true,
                 });
@@ -362,7 +364,7 @@ export default class AppTile extends React.Component {
     }
 
     _onRevokeClicked() {
-        console.log("Revoke widget permissions - %s", this.props.id);
+        console.info("Revoke widget permissions - %s", this.props.id);
         this._revokeWidgetPermission();
     }
 
@@ -652,12 +654,7 @@ export default class AppTile extends React.Component {
                     appTileBody = (
                         <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                             { this.state.loading && loadingElement }
-                            { /*
-                                The "is" attribute in the following iframe tag is needed in order to enable rendering of the
-                                "allow" attribute, which is unknown to react 15.
-                            */ }
                             <iframe
-                                is
                                 allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}

@@ -357,7 +357,7 @@ module.exports = createReactClass({
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
             } else if (!room && shouldPeek) {
-                console.log("Attempting to peek into room %s", roomId);
+                console.info("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
                     isPeeking: true, // this will change to false if peeking fails
@@ -1896,7 +1896,7 @@ module.exports = createReactClass({
             highlightedEventId = this.state.initialEventId;
         }
 
-        // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
+        // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         const messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}

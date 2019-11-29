@@ -89,7 +89,7 @@ module.exports = createReactClass({
                     + "authentication");
         }
 
-        console.log("Rendering to %s", divId);
+        console.info("Rendering to %s", divId);
         this._captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,

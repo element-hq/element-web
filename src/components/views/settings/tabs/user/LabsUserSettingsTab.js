@@ -49,6 +49,17 @@ export default class LabsUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
+                <div className='mx_SettingsTab_subsectionText'>
+                    {
+                        _t('Customise your experience with experimental labs features. ' +
+                            '<a>Learn more</a>.', {}, {
+                            'a': (sub) => {
+                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                    rel='noopener' target='_blank'>{sub}</a>;
+                            },
+                        })
+                    }
+                </div>
                 <div className="mx_SettingsTab_section">
                     {flags}
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />

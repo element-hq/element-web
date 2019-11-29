@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -81,6 +82,7 @@ describe('MessagePanel', function() {
 
         // HACK: We assume all settings want to be disabled
         SettingsStore.getValue = sinon.stub().returns(false);
+        SettingsStore.getValue.withArgs('showDisplaynameChanges').returns(true);
 
         // This option clobbers the duration of all animations to be 1ms
         // which makes unit testing a lot simpler (the animation doesn't
@@ -109,6 +111,44 @@ describe('MessagePanel', function() {
         return events;
     }
 
+
+    // make a collection of events with some member events that should be collapsed
+    // with a MemberEventListSummary
+    function mkMelsEvents() {
+        const events = [];
+        const ts0 = Date.now();
+
+        let i = 0;
+        events.push(test_utils.mkMessage({
+            event: true, room: "!room:id", user: "@user:id",
+            ts: ts0 + ++i*1000,
+        }));
+
+        for (i = 0; i < 10; i++) {
+            events.push(test_utils.mkMembership({
+                event: true, room: "!room:id", user: "@user:id",
+                target: {
+                    userId: "@user:id",
+                    name: "Bob",
+                    getAvatarUrl: () => {
+                        return "avatar.jpeg";
+                    },
+                },
+                ts: ts0 + i*1000,
+                mship: 'join',
+                prevMship: 'join',
+                name: 'A user',
+            }));
+        }
+
+        events.push(test_utils.mkMessage({
+            event: true, room: "!room:id", user: "@user:id",
+            ts: ts0 + ++i*1000,
+        }));
+
+        return events;
+    }
+
     it('should show the events', function() {
         const res = TestUtils.renderIntoDocument(
                 <WrappedMessagePanel className="cls" events={events} />,
@@ -118,6 +158,23 @@ describe('MessagePanel', function() {
         const tiles = TestUtils.scryRenderedComponentsWithType(
             res, sdk.getComponent('rooms.EventTile'));
         expect(tiles.length).toEqual(10);
+    });
+
+    it('should collapse adjacent member events', function() {
+        const res = TestUtils.renderIntoDocument(
+            <WrappedMessagePanel className="cls" events={mkMelsEvents()} />,
+        );
+
+        // just check we have the right number of tiles for now
+        const tiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('rooms.EventTile'),
+        );
+        expect(tiles.length).toEqual(2);
+
+        const summaryTiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('elements.MemberEventListSummary'),
+        );
+        expect(summaryTiles.length).toEqual(1);
     });
 
     it('should show the read-marker in the right place', function() {
@@ -135,6 +192,21 @@ describe('MessagePanel', function() {
         // it should follow the <li> which wraps the event tile for event 4
         const eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
         expect(rm.previousSibling).toEqual(eventContainer);
+    });
+
+    it('should show the read-marker that fall in summarised events after the summary', function() {
+        const melsEvents = mkMelsEvents();
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
+                    readMarkerVisible={true} />,
+        );
+
+        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
+
+        // find the <li> which wraps the read marker
+        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
+
+        expect(rm.previousSibling).toEqual(summary);
     });
 
     it('shows a ghost read-marker when the read-marker moves', function(done) {
@@ -190,51 +262,5 @@ describe('MessagePanel', function() {
                 done();
             }, 100);
         }, 100);
-    });
-
-    it('shows only one ghost when the RM moves twice', function() {
-        const parentDiv = document.createElement('div');
-
-        // first render with the RM in one place
-        let mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
-
-        const tiles = TestUtils.scryRenderedComponentsWithType(
-            mp, sdk.getComponent('rooms.EventTile'));
-        const tileContainers = tiles.map(function(t) {
-            return ReactDOM.findDOMNode(t).parentNode;
-        });
-
-        // now move the RM
-        mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
-
-        // now there should be two RM containers
-        let found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
-        expect(found.length).toEqual(2);
-
-        // the first should be the ghost
-        expect(tileContainers.indexOf(found[0].previousSibling)).toEqual(4);
-
-        // the second should be the real RM
-        expect(tileContainers.indexOf(found[1].previousSibling)).toEqual(6);
-
-        // and move the RM again
-        mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[8].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
-
-        // still two RM containers
-        found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
-        expect(found.length).toEqual(2);
-
-        // they should have moved
-        expect(tileContainers.indexOf(found[0].previousSibling)).toEqual(6);
-        expect(tileContainers.indexOf(found[1].previousSibling)).toEqual(8);
     });
 });

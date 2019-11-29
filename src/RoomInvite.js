@@ -203,10 +203,13 @@ function _showAnyInviteErrors(addrs, room, inviter) {
         }
 
         if (errorList.length > 0) {
+            // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
+            const description = <div>{errorList.map(e => <div key={e}>{e}</div>)}</div>;
+
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
                 title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
-                description: errorList.join(<br />),
+                description,
             });
         }
     }
@@ -225,4 +228,3 @@ function _getDirectMessageRooms(addr) {
     });
     return rooms;
 }
-

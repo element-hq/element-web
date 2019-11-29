@@ -100,7 +100,9 @@ module.exports = createReactClass({
         const parent = ReactDOM.findDOMNode(this).parentNode;
         let style = {};
         style = this._updatePosition(style);
-        style.display = "block";
+        // Hide the entire container when not visible. This prevents flashing of the tooltip
+        // if it is not meant to be visible on first mount.
+        style.display = this.props.visible ? "block" : "none";
 
         const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
             "mx_Tooltip_visible": this.props.visible,

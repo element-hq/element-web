@@ -65,23 +65,6 @@ limitations under the License.
     .mx_KeyVerification_buttons {
         align-items: center;
         display: flex;
-
-        .mx_AccessibleButton_kind_decline {
-            color: $notice-primary-color;
-            background-color: $notice-primary-bg-color;
-        }
-
-        .mx_AccessibleButton_kind_accept {
-            color: $accent-color;
-            background-color: $accent-bg-color;
-        }
-
-        [role=button] {
-            margin: 10px;
-            padding: 7px 15px;
-            border-radius: 5px;
-            height: min-content;
-        }
     }
 
     .mx_KeyVerification_state {

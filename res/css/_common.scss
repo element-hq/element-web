@@ -30,6 +30,11 @@ body {
     color: $primary-fg-color;
     border: 0px;
     margin: 0px;
+
+    // needed to match the designs correctly on macOS
+    // see https://github.com/vector-im/riot-web/issues/11425
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 pre, code {

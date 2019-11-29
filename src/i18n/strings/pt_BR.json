@@ -652,7 +652,7 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Se você está usando o editor de texto visual",
     "Your homeserver's URL": "A URL do seu Servidor de Base (homeserver)",
     "Your identity server's URL": "A URL do seu servidor de identidade",
-    "The information being sent to us to help make Riot.im better includes:": "As informações que estão sendo usadas para ajudar a melhorar o Riot.im incluem:",
+    "The information being sent to us to help make Riot.im better includes:": "As informações que estão sendo enviadas para ajudar a melhorar o Riot.im incluem:",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Quando esta página tem informação de identificação, como uma sala, ID de usuária/o ou de grupo, estes dados são removidos antes de serem enviados ao servidor.",
     "Call Failed": "A chamada falhou",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Há dispositivos desconhecidos nesta sala: se você continuar sem verificá-los, será possível alguém espiar sua chamada.",
