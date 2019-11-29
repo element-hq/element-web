@@ -47,7 +47,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         try {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await MatrixClientPeg.get().bootstrapSecretStorage({
-                doInteractiveAuthFlow: async (makeRequest) => {
+                authUploadDeviceSigningKeys: async (makeRequest) => {
                     const { finished } = Modal.createTrackedDialog(
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
                         {
