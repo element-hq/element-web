@@ -56,7 +56,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                             makeRequest,
                         },
                     );
-                    await finished;
+                    const [confirmed] = await finished;
+                    if (!confirmed) {
+                        throw new Error("Cross-signing key upload auth canceled");
+                    }
                 },
             });
             this.setState(this._getUpdatedStatus());
