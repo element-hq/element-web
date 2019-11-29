@@ -62,10 +62,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                     }
                 },
             });
-            this.setState(this._getUpdatedStatus());
         } catch (e) {
             console.error(e);
         }
+        this.setState(this._getUpdatedStatus());
     }
 
     render() {
