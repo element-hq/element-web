@@ -693,6 +693,10 @@ export default class MessagePanel extends React.Component {
 
         const readReceipts = this._readReceiptsByEvent[eventId];
 
+        // Dev note: `this._isUnmounting.bind(this)` is important - it ensures that
+        // the function is run in the context of this class and not EventTile, therefore
+        // ensuring the right `this._mounted` variable is used by read receipts (which
+        // don't update their position if we, the MessagePanel, is unmounting).
         ret.push(
             <li key={eventId}
                 ref={this._collectEventNode.bind(this, eventId)}
@@ -707,7 +711,7 @@ export default class MessagePanel extends React.Component {
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
                     showUrlPreview={this.props.showUrlPreview}
-                    checkUnmounting={this._isUnmounting}
+                    checkUnmounting={this._isUnmounting.bind(this)}
                     eventSendStatus={mxEv.getAssociatedStatus()}
                     tileShape={this.props.tileShape}
                     isTwelveHour={this.props.isTwelveHour}
