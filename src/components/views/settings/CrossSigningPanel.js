@@ -75,7 +75,7 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         return (
             <div>
-                <table className="mx_CrossSigningPanel_statusList">
+                <table className="mx_CrossSigningPanel_statusList"><tbody>
                     <tr>
                         <td>{_t("Cross-signing public keys:")}</td>
                         <td>{crossSigningPublicKeysOnDevice ? _t("on device") : _t("not found")}</td>
@@ -88,7 +88,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <td>{_t("Secret storage public key:")}</td>
                         <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
                     </tr>
-                </table>
+                </tbody></table>
                 <div className="mx_CrossSigningPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
                         {_t("Bootstrap Secure Secret Storage")}
