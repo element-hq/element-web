@@ -221,8 +221,14 @@ class MatrixClientPeg {
         };
 
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            // TODO: Cross-signing keys are temporarily in memory only. A
-            // separate task in the cross-signing project will build from here.
+            // This stores the cross-signing private keys in memory for the JS SDK. They
+            // are also persisted to Secure Secret Storage in account data by
+            // the JS SDK when created.
+            // XXX: On desktop platforms, we plan to store only the SSSS default
+            // key in a secure enclave, while the cross-signing private keys
+            // will still be retrieved from SSSS, so it's unclear that we
+            // actually need these cross-signing application callbacks for Riot.
+            // Should the JS SDK default to in-memory storage of these itself?
             const keys = {};
             opts.cryptoCallbacks = {
                 getCrossSigningKey: k => keys[k],
