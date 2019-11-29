@@ -176,7 +176,7 @@
     "%(senderName)s answered the call.": "%(senderName)s отговори на повикването.",
     "(no answer)": "(няма отговор)",
     "(unknown failure: %(reason)s)": "(неизвестна грешка: %(reason)s)",
-    "%(senderName)s ended the call.": "%(senderName)s прекрати разговора.",
+    "%(senderName)s ended the call.": "%(senderName)s прекрати обаждането.",
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s започна %(callType)s разговор.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s изпрати покана на %(targetDisplayName)s да се присъедини към стаята.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s направи бъдещата история на стаята видима за всички членове, от момента на поканването им в нея.",
@@ -2262,5 +2262,9 @@
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
     "Custom (%(level)s)": "Собствен (%(level)s)",
-    "Try out new ways to ignore people (experimental)": "Опитайте нови начини да игнорирате хора (експериментално)"
+    "Try out new ways to ignore people (experimental)": "Опитайте нови начини да игнорирате хора (експериментално)",
+    "%(senderName)s placed a voice call.": "%(senderName)s започна гласово обаждане.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s започна гласово обаждане. (не се поддържа от този браузър)",
+    "%(senderName)s placed a video call.": "%(senderName)s започна видео обаждане.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s започна видео обаждане. (не се поддържа от този браузър)"
 }
