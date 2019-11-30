@@ -7,7 +7,7 @@
     "Custom Server Options": "カスタムサーバのオプション",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "他のホームサーバのURLを指定することで、他のMatrixサーバにサインインするためにカスタムサーバのオプションを利用できます。<br/>これにより、他のホームサーバ上で既存のMatrixアカウントを用いてRiotを利用できます。<br/><br/>カスタムアイデンティティサーバを立てることもできますが、メールアドレスでユーザを招待する、または自身が招待されることはできません。",
     "Dismiss": "やめる",
-    "powered by Matrix": "Matrix の支援により活動しています。",
+    "powered by Matrix": "powered by Matrix",
     "Riot Desktop on %(platformName)s": "%(platformName)s向けデスクトップ版Riot",
     "You need to be using HTTPS to place a screen-sharing call.": "画面共有通話を行うにはHTTPS通信を使う必要があります。",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] による、分散型で暗号化された会話とコラボレーション",

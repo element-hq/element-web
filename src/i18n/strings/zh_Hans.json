@@ -42,5 +42,12 @@
     "Need help?": "需要帮助？",
     "Explore rooms": "探索房间",
     "Room Directory": "房间目录",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以在自定义服务器选项中通过指定其他主服务器的 URL 来登录其他 Matrix 服务器。 这允许您在不同的主服务器上通过已有的 Matrix 帐户来使用 Riot 。"
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以在自定义服务器选项中通过指定其他主服务器的 URL 来登录其他 Matrix 服务器。 这允许您在不同的主服务器上通过已有的 Matrix 帐户来使用 Riot 。",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "您的 Riot 设置中有无效的 JSON，请将其修复并重新加载此页。",
+    "The message from the parser is: %(message)s": "语法分析器的信息：%(message)s",
+    "Invalid JSON": "无效的 JSON",
+    "Your Riot is misconfigured": "您的 Riot 配置有错误",
+    "Unexpected error preparing the app. See console for details.": "软件准备时出错，详细信息请查看控制台。",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "无效的配置：只能设置 default_server_config，default_server_name，或 default_hs_url 中的一个。",
+    "Invalid configuration: no default server specified.": "无效的配置：没有设置默认服务器。"
 }
