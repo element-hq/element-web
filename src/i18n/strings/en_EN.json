@@ -725,6 +725,7 @@
     "Room version:": "Room version:",
     "Developer options": "Developer options",
     "Open Devtools": "Open Devtools",
+    "Bridge Info": "Bridge Info",
     "Room Addresses": "Room Addresses",
     "Publish this room to the public in %(domain)s's room directory?": "Publish this room to the public in %(domain)s's room directory?",
     "URL Previews": "URL Previews",
