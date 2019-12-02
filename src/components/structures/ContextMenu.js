@@ -415,7 +415,7 @@ export const toRightOf = (elementRect, chevronOffset=12) => {
 };
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
-export const aboveLeft = (elementRect, chevronFace="none") => {
+export const aboveLeftOf = (elementRect, chevronFace="none") => {
     const menuOptions = { chevronFace };
 
     const buttonRight = elementRect.right + window.pageXOffset;

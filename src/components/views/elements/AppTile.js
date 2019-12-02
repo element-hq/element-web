@@ -35,7 +35,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {aboveLeft, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
+import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
@@ -678,7 +678,7 @@ export default class AppTile extends React.Component {
 
             const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
             contextMenu = (
-                <ContextMenu {...aboveLeft(elementRect, null)} onFinished={this._closeContextMenu}>
+                <ContextMenu {...aboveLeftOf(elementRect, null)} onFinished={this._closeContextMenu}>
                     <WidgetContextMenu
                         onRevokeClicked={this._onRevokeClicked}
                         onEditClicked={showEditButton ? this._onEditClick : undefined}

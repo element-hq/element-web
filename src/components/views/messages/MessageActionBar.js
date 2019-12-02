@@ -23,12 +23,12 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import {aboveLeft, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
+import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
-    const [menuDisplayed, _button, openMenu, closeMenu] = useContextMenu();
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -52,8 +52,8 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
             e2eInfoCallback = onCryptoClick;
         }
 
-        const buttonRect = _button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu {...aboveLeft(buttonRect)} onFinished={closeMenu}>
+        const buttonRect = button.current.getBoundingClientRect();
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <MessageContextMenu
                 mxEvent={mxEvent}
                 permalinkCreator={permalinkCreator}
@@ -71,7 +71,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
             label={_t("Options")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
-            inputRef={_button}
+            inputRef={button}
         />
 
         { contextMenu }
@@ -79,13 +79,13 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
 };
 
 const ReactButton = ({mxEvent, reactions}) => {
-    const [menuDisplayed, _button, openMenu, closeMenu] = useContextMenu();
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
     if (menuDisplayed) {
-        const buttonRect = _button.current.getBoundingClientRect();
+        const buttonRect = button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu {...aboveLeft(buttonRect)} onFinished={closeMenu}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
@@ -96,7 +96,7 @@ const ReactButton = ({mxEvent, reactions}) => {
             label={_t("React")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
-            inputRef={_button}
+            inputRef={button}
         />
 
         { contextMenu }
