@@ -382,7 +382,7 @@ module.exports = createReactClass({
         }
 
         let contextMenu;
-        if (this.state.menuDisplayed) {
+        if (this.state.menuDisplayed && this._contextMenuButton.current) {
             const elementRect = this._contextMenuButton.current.getBoundingClientRect();
             const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
             contextMenu = (
