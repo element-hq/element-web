@@ -30,6 +30,24 @@ export default class CrossSigningPanel extends React.PureComponent {
         };
     }
 
+    componentDidMount() {
+        const cli = MatrixClientPeg.get();
+        cli.on("accountData", this.onAccountData);
+    }
+
+    componentWillUnmount() {
+        const cli = MatrixClientPeg.get();
+        if (!cli) return;
+        cli.removeListener("accountData", this.onAccountData);
+    }
+
+    onAccountData = (event) => {
+        const type = event.getType();
+        if (type.startsWith("m.cross_signing") || type.startsWith("m.secret_storage")) {
+            this.setState(this._getUpdatedStatus());
+        }
+    };
+
     _getUpdatedStatus() {
         // XXX: Add public accessors if we keep this around in production
         const cli = MatrixClientPeg.get();
