@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import {Group} from 'matrix-js-sdk';
 import GroupStore from "../../../stores/GroupStore";
-import {MenuItem} from "../../structures/ContextualMenu";
+import {MenuItem} from "../../structures/ContextMenu";
 
 export default class GroupInviteTileContextMenu extends React.Component {
     static propTypes = {

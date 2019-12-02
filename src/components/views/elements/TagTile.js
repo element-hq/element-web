@@ -30,7 +30,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextualMenu";
+import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:

@@ -23,7 +23,7 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import {aboveLeft, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextualMenu';
+import {aboveLeft, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import {RoomContext} from "../../structures/RoomView";
 

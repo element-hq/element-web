@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
-import {MenuItem} from "../../structures/ContextualMenu";
+import {MenuItem} from "../../structures/ContextMenu";
 
 export default class WidgetContextMenu extends React.Component {
     static propTypes = {

@@ -23,7 +23,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
-import {ContextMenu, ContextMenuButton} from "./ContextualMenu";
+import {ContextMenu, ContextMenuButton} from "./ContextMenu";
 
 const AVATAR_SIZE = 28;
 

@@ -35,7 +35,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {aboveLeft, ContextMenu, ContextMenuButton} from "../../structures/ContextualMenu";
+import {aboveLeft, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];

@@ -21,8 +21,8 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
 import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
-import * as ContextualMenu from "../../structures/ContextualMenu";
-import {toRightOf} from "../../structures/ContextualMenu";
+import * as ContextualMenu from "../../structures/ContextMenu";
+import {toRightOf} from "../../structures/ContextMenu";
 
 const socials = [
     {

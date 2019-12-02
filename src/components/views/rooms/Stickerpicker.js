@@ -25,7 +25,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import PersistedElement from "../elements/PersistedElement";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu} from "../../structures/ContextualMenu";
+import {ContextMenu} from "../../structures/ContextMenu";
 
 const widgetType = 'm.stickerpicker';
 

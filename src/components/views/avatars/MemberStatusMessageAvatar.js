@@ -22,7 +22,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu, ContextMenuButton} from "../../structures/ContextualMenu";
+import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 
 export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {

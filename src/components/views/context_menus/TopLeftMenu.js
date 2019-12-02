@@ -24,7 +24,7 @@ import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import {MenuItem} from "../../structures/ContextualMenu";
+import {MenuItem} from "../../structures/ContextMenu";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {

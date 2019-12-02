@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import sdk from '../../../index';
-import {ContextMenu, ContextMenuButton, toRightOf} from '../../structures/ContextualMenu';
+import {ContextMenu, ContextMenuButton, toRightOf} from '../../structures/ContextMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';

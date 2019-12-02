@@ -31,7 +31,7 @@ import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
-import {MenuItem} from "../../structures/ContextualMenu";
+import {MenuItem} from "../../structures/ContextMenu";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;

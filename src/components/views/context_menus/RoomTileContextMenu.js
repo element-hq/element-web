@@ -32,7 +32,7 @@ import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import {sleep} from "../../../utils/promise";
-import {MenuItem, MenuItemCheckbox, MenuItemRadio} from "../../structures/ContextualMenu";
+import {MenuItem, MenuItemCheckbox, MenuItemRadio} from "../../structures/ContextMenu";
 
 const RoomTagOption = ({active, onClick, src, srcSet, label}) => {
     const classes = classNames('mx_RoomTileContextMenu_tag_field', {

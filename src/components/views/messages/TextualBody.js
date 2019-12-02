@@ -27,13 +27,13 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import * as ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextualMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
-import {toRightOf} from "../../structures/ContextualMenu";
+import {toRightOf} from "../../structures/ContextMenu";
 
 module.exports = createReactClass({
     displayName: 'TextualBody',
