@@ -2367,5 +2367,13 @@
     "Decline (%(counter)s)": "拒絕 (%(counter)s)",
     "Manage integrations": "管理整合",
     "Verification Request": "驗證請求",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "啟用交叉簽章以驗證每個使者而非每個裝置（開發中）",
+    "Match system theme": "符合系統佈景主題",
+    "%(senderName)s placed a voice call.": "%(senderName)s 撥打了語音通話。",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s 撥打了語音通話。（不被此瀏覽器支援）",
+    "%(senderName)s placed a video call.": "%(senderName)s 撥打了視訊通話。",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s 撥打了視訊通話。（不被此瀏覽器支援）",
+    "Clear notifications": "清除通知",
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "使用實驗室功能來自訂您的體驗。<a>了解更多</a>。"
 }
