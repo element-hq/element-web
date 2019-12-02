@@ -12,7 +12,7 @@
     "disable_guests": true,
     "disable_login_language_selector": true,
     "disable_3pid_login": false,
-    "brand": "Riot",
+    "brand": "SciChat",
     "branding": {
         "authHeaderLogoUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/esslogo.png",
         "welcomeBackgroundUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/ess-site.png",
