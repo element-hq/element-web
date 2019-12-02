@@ -78,6 +78,7 @@ export const Key = {
     CONTROL: "Control",
     META: "Meta",
     SHIFT: "Shift",
+    CONTEXT_MENU: "ContextMenu",
 
     LESS_THAN: "<",
     GREATER_THAN: ">",

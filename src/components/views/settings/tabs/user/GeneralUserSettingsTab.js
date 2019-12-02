@@ -49,8 +49,6 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
-            theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
-            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -62,6 +60,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             },
             emails: [],
             msisdns: [],
+            ...this._calculateThemeState(),
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -80,6 +79,39 @@ export default class GeneralUserSettingsTab extends React.Component {
         dis.unregister(this.dispatcherRef);
     }
 
+    _calculateThemeState() {
+        // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
+        // show the right values for things.
+
+        const themeChoice = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
+        const systemThemeExplicit = SettingsStore.getValueAt(
+            SettingLevel.DEVICE, "use_system_theme", null, false, true);
+        const themeExplicit = SettingsStore.getValueAt(
+            SettingLevel.DEVICE, "theme", null, false, true);
+
+        // If the user has enabled system theme matching, use that.
+        if (systemThemeExplicit) {
+            return {
+                theme: themeChoice,
+                useSystemTheme: true,
+            };
+        }
+
+        // If the user has set a theme explicitly, use that (no system theme matching)
+        if (themeExplicit) {
+            return {
+                theme: themeChoice,
+                useSystemTheme: false,
+            };
+        }
+
+        // Otherwise assume the defaults for the settings
+        return {
+            theme: themeChoice,
+            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
+        };
+    }
+
     _onAction = (payload) => {
         if (payload.action === 'id_server_changed') {
             this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
@@ -89,11 +121,11 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onEmailsChange = (emails) => {
         this.setState({ emails });
-    }
+    };
 
     _onMsisdnsChange = (msisdns) => {
         this.setState({ msisdns });
-    }
+    };
 
     async _getThreepidState() {
         const cli = MatrixClientPeg.get();
@@ -193,9 +225,9 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onUseSystemThemeChanged = (checked) => {
         this.setState({useSystemTheme: checked});
+        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
         dis.dispatch({action: 'recheck_theme'});
-    }
-
+    };
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
@@ -307,12 +339,15 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderThemeSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        const LabelledToggleSwitch = sdk.getComponent("views.elements.LabelledToggleSwitch");
 
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection;
         if (themeWatcher.isSystemThemeSupported()) {
             systemThemeSection = <div>
-                <SettingsFlag name="use_system_theme" level={SettingLevel.DEVICE}
+                <LabelledToggleSwitch
+                    value={this.state.useSystemTheme}
+                    label={SettingsStore.getDisplayName("use_system_theme")}
                     onChange={this._onUseSystemThemeChanged}
                 />
             </div>;
