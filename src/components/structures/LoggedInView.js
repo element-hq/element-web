@@ -401,6 +401,11 @@ const LoggedInView = createReactClass({
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === Key.SPACE || ev.key === Key.ENTER);
 
+            // Do not capture the context menu key to improve keyboard accessibility
+            if (ev.key === Key.CONTEXT_MENU) {
+                return;
+            }
+
             // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
             // If using Slate, consume the Backspace without first focusing as it causes an implosion
             if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
