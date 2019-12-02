@@ -24,7 +24,10 @@ import Modal from '../../../Modal';
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = this._getUpdatedStatus();
+        this.state = {
+            error: null,
+            ...this._getUpdatedStatus(),
+        };
     }
 
     _getUpdatedStatus() {
@@ -44,6 +47,7 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     _bootstrapSecureSecretStorage = async () => {
+        this.setState({ error: null });
         try {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await MatrixClientPeg.get().bootstrapSecretStorage({
@@ -63,6 +67,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                 },
             });
         } catch (e) {
+            this.setState({ error: e });
             console.error(e);
         }
         this.setState(this._getUpdatedStatus());
@@ -71,10 +76,16 @@ export default class CrossSigningPanel extends React.PureComponent {
     render() {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         const {
+            error,
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
         } = this.state;
+
+        let errorSection;
+        if (error) {
+            errorSection = <div className="error">{error.toString()}</div>;
+        }
 
         return (
             <div>
@@ -97,6 +108,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                         {_t("Bootstrap Secure Secret Storage")}
                     </AccessibleButton>
                 </div>
+                {errorSection}
             </div>
         );
     }
