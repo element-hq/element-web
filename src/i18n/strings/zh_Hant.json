@@ -2374,5 +2374,6 @@
     "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s 撥打了語音通話。（不被此瀏覽器支援）",
     "%(senderName)s placed a video call.": "%(senderName)s 撥打了視訊通話。",
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s 撥打了視訊通話。（不被此瀏覽器支援）",
-    "Clear notifications": "清除通知"
+    "Clear notifications": "清除通知",
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "使用實驗室功能來自訂您的體驗。<a>了解更多</a>。"
 }
