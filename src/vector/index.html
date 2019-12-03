@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>SciChat</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0094ca">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon.png') %>">
+    <link rel="mask-icon" href="<%= require('../../res/vector-icons/safari-pinned-tab.svg') %>" color="#0094ca">
     <link rel="manifest" href="manifest.json">
     <meta name="referrer" content="no-referrer">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= require('../../res/vector-icons/favicon-32x32.png') %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= require('../../res/vector-icons/favicon-16x16.png') %>">
     <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
     <meta name="apple-mobile-web-app-title" content="SciChat">
     <meta name="application-name" content="SciChat">
     <meta name="msapplication-TileColor" content="#0094ca">
+    <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#0094ca">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
