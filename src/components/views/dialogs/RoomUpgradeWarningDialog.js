@@ -20,6 +20,7 @@ import {_t} from "../../../languageHandler";
 import sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import Modal from "../../../Modal";
 
 export default class RoomUpgradeWarningDialog extends React.Component {
     static propTypes = {
@@ -57,7 +58,8 @@ export default class RoomUpgradeWarningDialog extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
-
+        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
     render() {
