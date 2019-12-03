@@ -25,10 +25,13 @@ const INCLUDE_LANGS = [
     {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'gl', 'label': 'Galego'},
+    {'value': 'hi', 'label': 'हिन्दी'},
     {'value': 'hu', 'label': 'Magyar'},
+    {'value': 'is', 'label': 'Íslensku'},
     {'value': 'it', 'label': 'Italiano'},
     {'value': 'ja', 'label': '日本語'},
     {'value': 'ko', 'label': '한국어'},
+    {'value': 'lt', 'label': 'Lietuvis'},
     {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
     {'value': 'nl', 'label': 'Nederlands'},
@@ -44,6 +47,7 @@ const INCLUDE_LANGS = [
     {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'th', 'label': 'ไทย'},
     {'value': 'tr', 'label': 'Türkçe'},
+    {'value': 'uk', 'label': 'Українська'},
     {'value': 'vls', 'label': 'West-Vlaams'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
