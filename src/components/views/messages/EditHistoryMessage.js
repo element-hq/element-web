@@ -102,9 +102,9 @@ export default class EditHistoryMessage extends React.PureComponent {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         // hide the button when already redacted
         let redactButton;
-        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent) {
+        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
-                <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
+                <AccessibleButton onClick={this._onRedactClick}>
                     {_t("Remove")}
                 </AccessibleButton>
             );
