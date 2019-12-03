@@ -53,6 +53,13 @@ export default class RoomUpgradeWarningDialog extends React.Component {
         this.setState({inviteUsersToNewRoom: newVal});
     };
 
+    _openBugReportDialog = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+
+    };
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -61,60 +68,43 @@ export default class RoomUpgradeWarningDialog extends React.Component {
         if (this.state.isPrivate) {
             inviteToggle = (
                 <LabelledToggleSwitch
-                    value={this.state.inviteUsersToNewRoom} toggleInFront={true}
+                    value={this.state.inviteUsersToNewRoom}
                     onChange={this._onInviteUsersToggle}
-                    label={_t("Invite joined members to the new room automatically")} />
+                    label={_t("Automatically invite users")} />
             );
         }
 
+        const title = this.state.isPrivate ? _t("Upgrade private room") : _t("Upgrade public room");
+
         return (
-            <BaseDialog className='mx_RoomUpgradeWarningDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Room upgrade confirmation")}>
+            <BaseDialog
+                className='mx_RoomUpgradeWarningDialog'
+                hasCancel={true}
+                fixedWidth={false}
+                onFinished={this.props.onFinished}
+                title={title}
+            >
                 <div>
-                    <p>{_t("Upgrading a room can be destructive and isn't always necessary.")}</p>
                     <p>
                         {_t(
-                            "Room upgrades are usually recommended when a room version is considered " +
-                            "<i>unstable</i>. Unstable room versions might have bugs, missing features, or " +
-                            "security vulnerabilities.",
-                            {}, {
-                                "i": (sub) => <i>{sub}</i>,
-                            },
+                            "Upgrading a room is an advanced action and is usually recommended when a room " +
+                            "is unstable due to bugs, missing features or security vulnerabilities.",
                         )}
                     </p>
                     <p>
                         {_t(
-                            "Room upgrades usually only affect <i>server-side</i> processing of the " +
-                            "room. If you're having problems with your Riot client, please file an issue " +
-                            "with <issueLink />.",
+                            "This usually only affects how the room is processed on the server. If you're " +
+                            "having problems with your Riot, please <a>report a bug</a>.",
                             {}, {
-                                "i": (sub) => <i>{sub}</i>,
-                                "issueLink": () => {
-                                    return <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                                              target="_blank" rel="noopener">
-                                        https://github.com/vector-im/riot-web/issues/new/choose
-                                    </a>;
+                                "a": (sub) => {
+                                    return <a href='#' onClick={this._openBugReportDialog}>{sub}</a>;
                                 },
                             },
                         )}
                     </p>
                     <p>
                         {_t(
-                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room " +
-                            "members to the new version of the room.</i> We'll post a link to the new room " +
-                            "in the old version of the room - room members will have to click this link to " +
-                            "join the new room.",
-                            {}, {
-                                "b": (sub) => <b>{sub}</b>,
-                                "i": (sub) => <i>{sub}</i>,
-                            },
-                        )}
-                    </p>
-                    <p>
-                        {_t(
-                            "Please confirm that you'd like to go forward with upgrading this room " +
-                            "from <oldVersion /> to <newVersion />.",
+                            "You'll upgrade this room from <oldVersion /> to <newVersion />.",
                             {},
                             {
                                 oldVersion: () => <code>{this.state.currentVersion}</code>,
@@ -125,7 +115,7 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                     {inviteToggle}
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Continue")}
+                    primaryButton={_t("Upgrade")}
                     onPrimaryButtonClick={this._onContinue}
                     cancelButton={_t("Cancel")}
                     onCancel={this._onCancel}
