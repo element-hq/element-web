@@ -2374,5 +2374,13 @@
     "Decline (%(counter)s)": "Refuser (%(counter)s)",
     "Manage integrations": "Gérer les intégrations",
     "Verification Request": "Demande de vérification",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Activer la signature croisée pour vérifier par utilisateur plutôt que par appareil (en développement)",
+    "Match system theme": "S’adapter au thème du système",
+    "%(senderName)s placed a voice call.": "%(senderName)s a passé un appel vocal.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s a passé un appel vocal. (pas pris en charge par ce navigateur)",
+    "%(senderName)s placed a video call.": "%(senderName)s a passé un appel vidéo.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s a passé un appel vidéo. (pas pris en charge par ce navigateur)",
+    "Clear notifications": "Vider les notifications",
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Personnalisez votre expérience avec des fonctionnalités expérimentales du labo. <a>En savoir plus</a>."
 }

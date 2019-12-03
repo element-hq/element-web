@@ -2321,5 +2321,13 @@
     "Manage integrations": "Gestisci integrazioni",
     "Ignored/Blocked": "Ignorati/Bloccati",
     "Verification Request": "Richiesta verifica",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Attiva la firma incrociata per la verifica per-utente invece che per-dispositivo (in sviluppo)",
+    "Match system theme": "Usa il tema di sistema",
+    "%(senderName)s placed a voice call.": "%(senderName)s ha effettuato una chiamata vocale.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s ha effettuato una chiamata vocale. (non supportata da questo browser)",
+    "%(senderName)s placed a video call.": "%(senderName)s ha effettuato una videochiamata.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s ha effettuato una videochiamata. (non supportata da questo browser)",
+    "Clear notifications": "Cancella le notifiche",
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Personalizza la tua esperienza con funzionalità sperimentali. <a>Maggiori informazioni</a>."
 }
