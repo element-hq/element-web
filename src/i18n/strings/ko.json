@@ -2195,5 +2195,12 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "이 위젯을 사용하면 <helpcon /> %(widgetDomain)s & 통합 관리자와 데이터를 공유합니다.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "이 위젯을 사용하면 <helpIcon /> %(widgetDomain)s와(과) 데이터를 공유합니다.",
     "Widget added by": "위젯을 추가했습니다",
-    "This widget may use cookies.": "이 위젯은 쿠키를 사용합니다."
+    "This widget may use cookies.": "이 위젯은 쿠키를 사용합니다.",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "기기 당 확인이 아닌 사용자 당 확인을 위한 교차 서명 켜기 (개발 중)",
+    "Enable local event indexing and E2EE search (requires restart)": "로컬 이벤트 인덱싱 및 종단간 암호화 켜기 (다시 시작해야 합니다)",
+    "Match system dark mode setting": "시스템의 다크 모드 설정에 맞춤",
+    "Decline (%(counter)s)": "거절 (%(counter)s)",
+    "Connecting to integration manager...": "통합 관리자로 연결 중...",
+    "Cannot connect to integration manager": "통합 관리자에 연결할 수 없음",
+    "The integration manager is offline or it cannot reach your homeserver.": "통합 관리자가 오프라인이거나 당신의 홈서버에서 접근할 수 없습니다."
 }

@@ -2362,5 +2362,13 @@
     "Decline (%(counter)s)": "Elutasítás (%(counter)s)",
     "Manage integrations": "Integrációk kezelése",
     "Verification Request": "Ellenőrzési kérés",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Kereszt-aláírás engedélyezése a felhasználó alapú azonosításhoz az eszköz alapú helyett (fejlesztés alatt)",
+    "%(senderName)s placed a voice call.": "%(senderName)s hanghívást kezdeményezett.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s hanghívást kezdeményezett. (ebben a böngészőben nem támogatott)",
+    "%(senderName)s placed a video call.": "%(senderName)s videóhívást kezdeményezett.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s videóhívást kezdeményezett. (ebben a böngészőben nem támogatott)",
+    "Match system theme": "A rendszer témájához megfelelő",
+    "Clear notifications": "Értesítések törlése",
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Kísérleti labor tulajdonságokkal egyénre szabhatod az élményt. <a>Tudj meg többet</a>."
 }
