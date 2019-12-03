@@ -32,6 +32,7 @@ import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
+import {inviteUsersToRoom} from "./RoomInvite";
 
 const singleMxcUpload = async () => {
     return new Promise((resolve) => {
@@ -154,70 +155,57 @@ export const CommandMap = {
                     return reject(_t("You do not have the required permissions to use this command."));
                 }
 
+                const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
+
                 const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
-                    QuestionDialog, {
-                    title: _t('Room upgrade confirmation'),
-                    description: (
-                        <div>
-                            <p>{_t("Upgrading a room can be destructive and isn't always necessary.")}</p>
-                            <p>
-                                {_t(
-                                    "Room upgrades are usually recommended when a room version is considered " +
-                                    "<i>unstable</i>. Unstable room versions might have bugs, missing features, or " +
-                                    "security vulnerabilities.",
-                                    {}, {
-                                        "i": (sub) => <i>{sub}</i>,
-                                    },
-                                )}
-                            </p>
-                            <p>
-                                {_t(
-                                    "Room upgrades usually only affect <i>server-side</i> processing of the " +
-                                    "room. If you're having problems with your Riot client, please file an issue " +
-                                    "with <issueLink />.",
-                                    {}, {
-                                        "i": (sub) => <i>{sub}</i>,
-                                        "issueLink": () => {
-                                            return <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                                                      target="_blank" rel="noopener">
-                                                https://github.com/vector-im/riot-web/issues/new/choose
-                                            </a>;
-                                        },
-                                    },
-                                )}
-                            </p>
-                            <p>
-                                {_t(
-                                    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room " +
-                                    "members to the new version of the room.</i> We'll post a link to the new room " +
-                                    "in the old version of the room - room members will have to click this link to " +
-                                    "join the new room.",
-                                    {}, {
-                                        "b": (sub) => <b>{sub}</b>,
-                                        "i": (sub) => <i>{sub}</i>,
-                                    },
-                                )}
-                            </p>
-                            <p>
-                                {_t(
-                                    "Please confirm that you'd like to go forward with upgrading this room " +
-                                    "from <oldVersion /> to <newVersion />.",
-                                    {},
-                                    {
-                                        oldVersion: () => <code>{room ? room.getVersion() : "1"}</code>,
-                                        newVersion: () => <code>{args}</code>,
-                                    },
-                                )}
-                            </p>
-                        </div>
-                    ),
-                    button: _t("Upgrade"),
-                });
+                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args});
 
-                return success(finished.then(([confirm]) => {
-                    if (!confirm) return;
+                return success(finished.then(async ([resp]) => {
+                    if (!resp.continue) return;
 
-                    return cli.upgradeRoom(roomId, args);
+                    let checkForUpgradeFn;
+                    try {
+                        const upgradePromise = cli.upgradeRoom(roomId, args);
+
+                        // We have to wait for the js-sdk to give us the room back so
+                        // we can more effectively abuse the MultiInviter behaviour
+                        // which heavily relies on the Room object being available.
+                        if (resp.invite) {
+                            checkForUpgradeFn = async (newRoom) => {
+                                // The upgradePromise should be done by the time we await it here.
+                                const {replacement_room: newRoomId} = await upgradePromise;
+                                if (newRoom.roomId !== newRoomId) return;
+
+                                const toInvite = [
+                                    ...room.getMembersWithMembership("join"),
+                                    ...room.getMembersWithMembership("invite"),
+                                ].map(m => m.userId).filter(m => m !== cli.getUserId());
+
+                                if (toInvite.length > 0) {
+                                    // Errors are handled internally to this function
+                                    await inviteUsersToRoom(newRoomId, toInvite);
+                                }
+
+                                cli.removeListener('Room', checkForUpgradeFn);
+                            };
+                            cli.on('Room', checkForUpgradeFn);
+                        }
+
+                        // We have to await after so that the checkForUpgradesFn has a proper reference
+                        // to the new room's ID.
+                        await upgradePromise;
+                    } catch (e) {
+                        console.error(e);
+
+                        if (checkForUpgradeFn) cli.removeListener('Room', checkForUpgradeFn);
+
+                        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                        Modal.createTrackedDialog('Slash Commands', 'room upgrade error', ErrorDialog, {
+                            title: _t('Error upgrading room'),
+                            description: _t(
+                                'Double check that your server supports the room version chosen and try again.'),
+                        });
+                    }
                 }));
             }
             return reject(this.getUsage());
