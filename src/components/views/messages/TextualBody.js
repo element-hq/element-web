@@ -27,7 +27,7 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import * as ContextualMenu from '../../structures/ContextMenu';
+import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import {pillifyLinks} from '../../../utils/pillify';
@@ -275,7 +275,7 @@ module.exports = createReactClass({
 
                 const buttonRect = e.target.getBoundingClientRect();
                 const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-                const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
+                const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
                     ...toRightOf(buttonRect, 11),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
                 });

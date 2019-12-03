@@ -434,7 +434,7 @@ export const aboveLeftOf = (elementRect, chevronFace="none") => {
 };
 
 export const useContextMenu = () => {
-    const _button = useRef(null);
+    const button = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const open = () => {
         setIsOpen(true);
@@ -443,7 +443,7 @@ export const useContextMenu = () => {
         setIsOpen(false);
     };
 
-    return [isOpen, _button, open, close, setIsOpen];
+    return [isOpen, button, open, close, setIsOpen];
 };
 
 export default class LegacyContextMenu extends ContextMenu {
