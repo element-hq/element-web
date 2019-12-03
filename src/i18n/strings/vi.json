@@ -111,9 +111,7 @@
     "Email, name or Matrix ID": "Email, tên hoặc Matrix ID",
     "Start Chat": "Bắt đầu chat",
     "Invite new room members": "Mời thành viên mới",
-    "Who would you like to add to this room?": "Bạn muốn thêm ai vào phòng chat này?",
     "Send Invites": "Gửi lời mời",
-    "Failed to invite user": "Mời người dùng thất bại",
     "Operation failed": "Tác vụ thất bại",
     "Failed to invite": "Không thể mời",
     "Failed to invite users to the room:": "Mời thành viên vào phòng chat thất bại:",
@@ -142,11 +140,9 @@
     "Room upgrades usually only affect <i>server-side</i> processing of the room. If you're having problems with your Riot client, please file an issue with <issueLink />.": "Nâng cấp phòng thường chỉ ảnh hưởng ở phía <i>máy chủ</i> cần để xử lý phòng. Nếu bạn đang gặp vấn đề với Riot, vui lòng gửi thông báo lỗi tới <issueLink />.",
     "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Cảnh báo</b>: Nâng cấp phòng sẽ <i>không tự động mời thành viên vào phòng mới.</i> Thành viên sẽ phải click vào đường link đến phòng mới để tham gia.",
     "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />.": "Vui lòng xác nhận bạn muốn nâng cấp phòng từ phiên bản cũ <oldVersion /> lên <newVersion />.",
-    "Upgrade": "Nâng cấp",
     "Changes your display nickname": "Đổi tên hiển thị của bạn",
     "Changes your display nickname in the current room only": "Chỉ đổi tên hiển thị của bạn trong phòng này mà thôi",
     "Changes your avatar in this current room only": "Chỉ đổi hình đại diện trong phòng này",
-    "Changes colour scheme of current room": "Đổi tông màu của phòng hiện tại",
     "Gets or sets the room topic": "Lấy hoặc đặt chủ đề phòng",
     "This room has no topic.": "Phòng này chưa có chủ đề.",
     "Sets the room name": "Đặt tên phòng",
@@ -231,7 +227,6 @@
     "(no answer)": "(không trả lời)",
     "(unknown failure: %(reason)s)": "(thất bại: %(reason)s)",
     "%(senderName)s ended the call.": "%(senderName)s đã ngắt cuộc gọi.",
-    "%(senderName)s placed a %(callType)s call.": "%(senderName)s đã khởi tạo cuộc gọi %(callType)s.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s đã thu hồi lời mời %(targetDisplayName)s tham gia phòng.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s đã mời %(targetDisplayName)s tham gia phòng.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s đã đặt lịch sử phòng chat xem được bởi thành viên, tính từ lúc thành viên được mời.",
@@ -342,6 +337,5 @@
     "Enable URL previews by default for participants in this room": "Bật mặc định xem trước nội dung đường link cho mọi người trong phòng",
     "Room Colour": "Màu phòng chat",
     "Enable widget screenshots on supported widgets": "Bật widget chụp màn hình cho các widget có hỗ trợ",
-    "Sign In": "Đăng nhập",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Bạn có thể sử dụng máy chủ định danh riêng, nhưng bạn sẽ không thể mời người dùng bằng email, hoặc được mời bằng email của bạn."
+    "Sign In": "Đăng nhập"
 }
