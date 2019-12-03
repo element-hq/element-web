@@ -73,18 +73,16 @@ export default class SpecPermalinkConstructor extends PermalinkConstructor {
             // Probably a group, no further parsing needed.
             return PermalinkParts.forGroup(entity);
         } else if (entity[0] === '#' || entity[0] === '!') {
-            if (parts.length === 1) {
-                return PermalinkParts.forRoom(entity, []);
+            if (parts.length === 1) { // room without event permalink
+                const [roomId, query=""] = entity.split("?");
+                const via = query.split(/&?via=/g).filter(p => !!p);
+                return PermalinkParts.forRoom(roomId, via);
             }
 
             // rejoin the rest because v3 events can have slashes (annoyingly)
             const eventIdAndQuery = parts.length > 1 ? parts.slice(1).join('/') : "";
-            const secondaryParts = eventIdAndQuery.split("?");
-
-            const eventId = secondaryParts[0];
-            const query = secondaryParts.length > 1 ? secondaryParts[1] : "";
-
-            const via = query.split("via=").filter(p => !!p);
+            const [eventId, query=""] = eventIdAndQuery.split("?");
+            const via = query.split(/&?via=/g).filter(p => !!p);
 
             return PermalinkParts.forEvent(entity, eventId, via);
         } else {
