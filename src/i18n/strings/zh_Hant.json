@@ -1923,5 +1923,9 @@
     "%(senderName)s placed a video call.": "%(senderName)s 撥打了視訊通話。",
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s 撥打了視訊通話。（不被此瀏覽器支援）",
     "Clear notifications": "清除通知",
-    "Customise your experience with experimental labs features. <a>Learn more</a>.": "使用實驗室功能來自訂您的體驗。<a>了解更多</a>。"
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "使用實驗室功能來自訂您的體驗。<a>了解更多</a>。",
+    "Error upgrading room": "升級聊天室時遇到錯誤",
+    "Double check that your server supports the room version chosen and try again.": "仔細檢查您的伺服器是否支援選定的聊天室版本，然後再試一次。",
+    "This message cannot be decrypted": "此訊息無法解密",
+    "Unencrypted": "未加密"
 }

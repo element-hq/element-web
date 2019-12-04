@@ -1926,5 +1926,7 @@
     "Customise your experience with experimental labs features. <a>Learn more</a>.": "Kísérleti labor tulajdonságokkal egyénre szabhatod az élményt. <a>Tudj meg többet</a>.",
     "Error upgrading room": "A szoba verziófrissítésénél hiba történt",
     "Double check that your server supports the room version chosen and try again.": "Ellenőrizd még egyszer, hogy a szervered támogatja-e a szoba verzióját és próbáld újra.",
-    "Invite joined members to the new room automatically": "Tagok meghívása automatikusan az új szobába"
+    "Invite joined members to the new room automatically": "Tagok meghívása automatikusan az új szobába",
+    "This message cannot be decrypted": "Ezt az üzenetet nem lehet visszafejteni",
+    "Unencrypted": "Titkosítatlan"
 }
