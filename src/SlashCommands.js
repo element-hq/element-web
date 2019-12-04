@@ -158,7 +158,8 @@ export const CommandMap = {
                 const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
 
                 const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
-                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args});
+                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args}, /*className=*/null,
+                    /*isPriority=*/false, /*isStatic=*/true);
 
                 return success(finished.then(async ([resp]) => {
                     if (!resp.continue) return;
