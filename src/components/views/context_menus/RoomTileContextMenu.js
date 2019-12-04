@@ -32,6 +32,36 @@ import Modal from '../../../Modal';
 import RoomListActions from '../../../actions/RoomListActions';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import {sleep} from "../../../utils/promise";
+import {MenuItem, MenuItemCheckbox, MenuItemRadio} from "../../structures/ContextMenu";
+
+const RoomTagOption = ({active, onClick, src, srcSet, label}) => {
+    const classes = classNames('mx_RoomTileContextMenu_tag_field', {
+        'mx_RoomTileContextMenu_tag_fieldSet': active,
+        'mx_RoomTileContextMenu_tag_fieldDisabled': false,
+    });
+
+    return (
+        <MenuItemCheckbox className={classes} onClick={onClick} active={active} label={label}>
+            <img className="mx_RoomTileContextMenu_tag_icon" src={src} width="15" height="15" alt="" />
+            <img className="mx_RoomTileContextMenu_tag_icon_set" src={srcSet} width="15" height="15" alt="" />
+            { label }
+        </MenuItemCheckbox>
+    );
+};
+
+const NotifOption = ({active, onClick, src, label}) => {
+    const classes = classNames('mx_RoomTileContextMenu_notif_field', {
+        'mx_RoomTileContextMenu_notif_fieldSet': active,
+    });
+
+    return (
+        <MenuItemRadio className={classes} onClick={onClick} active={active} label={label}>
+            <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" alt="" />
+            <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={src} width="16" height="12" alt="" />
+            { label }
+        </MenuItemRadio>
+    );
+};
 
 module.exports = createReactClass({
     displayName: 'RoomTileContextMenu',
@@ -228,53 +258,36 @@ module.exports = createReactClass({
     },
 
     _renderNotifMenu: function() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-        const alertMeClasses = classNames({
-            'mx_RoomTileContextMenu_notif_field': true,
-            'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES_LOUD,
-        });
-
-        const allNotifsClasses = classNames({
-            'mx_RoomTileContextMenu_notif_field': true,
-            'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES,
-        });
-
-        const mentionsClasses = classNames({
-            'mx_RoomTileContextMenu_notif_field': true,
-            'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.MENTIONS_ONLY,
-        });
-
-        const muteNotifsClasses = classNames({
-            'mx_RoomTileContextMenu_notif_field': true,
-            'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.MUTE,
-        });
-
         return (
-            <div className="mx_RoomTileContextMenu">
-                <div className="mx_RoomTileContextMenu_notif_picker">
-                    <img src={require("../../../../res/img/notif-slider.svg")} width="20" height="107" />
+            <div className="mx_RoomTileContextMenu" role="group" aria-label={_t("Notification settings")}>
+                <div className="mx_RoomTileContextMenu_notif_picker" role="presentation">
+                    <img src={require("../../../../res/img/notif-slider.svg")} width="20" height="107" alt="" />
                 </div>
-                <AccessibleButton className={alertMeClasses} onClick={this._onClickAlertMe}>
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off-copy.svg")} width="16" height="12" />
-                    { _t('All messages (noisy)') }
-                </AccessibleButton>
-                <AccessibleButton className={allNotifsClasses} onClick={this._onClickAllNotifs}>
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off.svg")} width="16" height="12" />
-                    { _t('All messages') }
-                </AccessibleButton>
-                <AccessibleButton className={mentionsClasses} onClick={this._onClickMentions}>
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-mentions.svg")} width="16" height="12" />
-                    { _t('Mentions only') }
-                </AccessibleButton>
-                <AccessibleButton className={muteNotifsClasses} onClick={this._onClickMute}>
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute.svg")} width="16" height="12" />
-                    { _t('Mute') }
-                </AccessibleButton>
+
+                <NotifOption
+                    active={this.state.roomNotifState === RoomNotifs.ALL_MESSAGES_LOUD}
+                    label={_t('All messages (noisy)')}
+                    onClick={this._onClickAlertMe}
+                    src={require("../../../../res/img/icon-context-mute-off-copy.svg")}
+                />
+                <NotifOption
+                    active={this.state.roomNotifState === RoomNotifs.ALL_MESSAGES}
+                    label={_t('All messages')}
+                    onClick={this._onClickAllNotifs}
+                    src={require("../../../../res/img/icon-context-mute-off.svg")}
+                />
+                <NotifOption
+                    active={this.state.roomNotifState === RoomNotifs.MENTIONS_ONLY}
+                    label={_t('Mentions only')}
+                    onClick={this._onClickMentions}
+                    src={require("../../../../res/img/icon-context-mute-mentions.svg")}
+                />
+                <NotifOption
+                    active={this.state.roomNotifState === RoomNotifs.MUTE}
+                    label={_t('Mute')}
+                    onClick={this._onClickMute}
+                    src={require("../../../../res/img/icon-context-mute.svg")}
+                />
             </div>
         );
     },
@@ -290,13 +303,12 @@ module.exports = createReactClass({
     },
 
     _renderSettingsMenu: function() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div>
-                <AccessibleButton className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" />
+                <MenuItem className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings}>
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" alt="" />
                     { _t('Settings') }
-                </AccessibleButton>
+                </MenuItem>
             </div>
         );
     },
@@ -305,8 +317,6 @@ module.exports = createReactClass({
         if (!membership) {
             return null;
         }
-
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let leaveClickHandler = null;
         let leaveText = null;
@@ -329,52 +339,38 @@ module.exports = createReactClass({
 
         return (
             <div>
-                <AccessibleButton className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
+                <MenuItem className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler}>
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" alt="" />
                     { leaveText }
-                </AccessibleButton>
+                </MenuItem>
             </div>
         );
     },
 
     _renderRoomTagMenu: function() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-        const favouriteClasses = classNames({
-            'mx_RoomTileContextMenu_tag_field': true,
-            'mx_RoomTileContextMenu_tag_fieldSet': this.state.isFavourite,
-            'mx_RoomTileContextMenu_tag_fieldDisabled': false,
-        });
-
-        const lowPriorityClasses = classNames({
-            'mx_RoomTileContextMenu_tag_field': true,
-            'mx_RoomTileContextMenu_tag_fieldSet': this.state.isLowPriority,
-            'mx_RoomTileContextMenu_tag_fieldDisabled': false,
-        });
-
-        const dmClasses = classNames({
-            'mx_RoomTileContextMenu_tag_field': true,
-            'mx_RoomTileContextMenu_tag_fieldSet': this.state.isDirectMessage,
-            'mx_RoomTileContextMenu_tag_fieldDisabled': false,
-        });
-
         return (
             <div>
-                <AccessibleButton className={favouriteClasses} onClick={this._onClickFavourite} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_fave.svg")} width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_fave_on.svg")} width="15" height="15" />
-                    { _t('Favourite') }
-                </AccessibleButton>
-                <AccessibleButton className={lowPriorityClasses} onClick={this._onClickLowPriority} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_low.svg")} width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_low_on.svg")} width="15" height="15" />
-                    { _t('Low Priority') }
-                </AccessibleButton>
-                <AccessibleButton className={dmClasses} onClick={this._onClickDM} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_person.svg")} width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_person_on.svg")} width="15" height="15" />
-                    { _t('Direct Chat') }
-                </AccessibleButton>
+                <RoomTagOption
+                    active={this.state.isFavourite}
+                    label={_t('Favourite')}
+                    onClick={this._onClickFavourite}
+                    src={require("../../../../res/img/icon_context_fave.svg")}
+                    srcSet={require("../../../../res/img/icon_context_fave_on.svg")}
+                />
+                <RoomTagOption
+                    active={this.state.isLowPriority}
+                    label={_t('Low Priority')}
+                    onClick={this._onClickLowPriority}
+                    src={require("../../../../res/img/icon_context_low.svg")}
+                    srcSet={require("../../../../res/img/icon_context_low_on.svg")}
+                />
+                <RoomTagOption
+                    active={this.state.isDirectMessage}
+                    label={_t('Direct Chat')}
+                    onClick={this._onClickDM}
+                    src={require("../../../../res/img/icon_context_person.svg")}
+                    srcSet={require("../../../../res/img/icon_context_person_on.svg")}
+                />
             </div>
         );
     },
@@ -386,11 +382,11 @@ module.exports = createReactClass({
             case 'join':
                 return <div>
                     { this._renderNotifMenu() }
-                    <hr className="mx_RoomTileContextMenu_separator" />
+                    <hr className="mx_RoomTileContextMenu_separator" role="separator" />
                     { this._renderLeaveMenu(myMembership) }
-                    <hr className="mx_RoomTileContextMenu_separator" />
+                    <hr className="mx_RoomTileContextMenu_separator" role="separator" />
                     { this._renderRoomTagMenu() }
-                    <hr className="mx_RoomTileContextMenu_separator" />
+                    <hr className="mx_RoomTileContextMenu_separator" role="separator" />
                     { this._renderSettingsMenu() }
                 </div>;
             case 'invite':
@@ -400,7 +396,7 @@ module.exports = createReactClass({
             default:
                 return <div>
                     { this._renderLeaveMenu(myMembership) }
-                    <hr className="mx_RoomTileContextMenu_separator" />
+                    <hr className="mx_RoomTileContextMenu_separator" role="separator" />
                     { this._renderSettingsMenu() }
                 </div>;
         }

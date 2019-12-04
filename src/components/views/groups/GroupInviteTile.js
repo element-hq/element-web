@@ -1,6 +1,7 @@
 /*
 Copyright 2017, 2018 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import AccessibleButton from '../elements/AccessibleButton';
+import {_t} from '../../../languageHandler';
 import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import {createMenu} from "../../structures/ContextualMenu";
+import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 
 export default createReactClass({
     displayName: 'GroupInviteTile',
@@ -44,6 +45,10 @@ export default createReactClass({
             menuDisplayed: false,
             selected: this.props.group.groupId === null, // XXX: this needs linking to LoggedInView/GroupView state
         });
+    },
+
+    componentDidMount: function() {
+        this._contextMenuButton = createRef();
     },
 
     onClick: function(e) {
@@ -69,54 +74,34 @@ export default createReactClass({
         });
     },
 
-    _showContextMenu: function(x, y, chevronOffset) {
-        const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
-
-        createMenu(GroupInviteTileContextMenu, {
-            chevronOffset,
-            left: x,
-            top: y,
-            group: this.props.group,
-            onFinished: () => {
-                this.setState({ menuDisplayed: false });
-            },
-        });
-        this.setState({ menuDisplayed: true });
-    },
-
-    onContextMenu: function(e) {
-        // Prevent the RoomTile onClick event firing as well
-        e.preventDefault();
+    openMenu: function(e) {
         // Only allow non-guests to access the context menu
         if (MatrixClientPeg.get().isGuest()) return;
 
-        const chevronOffset = 12;
-        this._showContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
-    },
-
-    onBadgeClicked: function(e) {
-        // Prevent the RoomTile onClick event firing as well
+        // Prevent the GroupInviteTile onClick event firing as well
         e.stopPropagation();
-        // Only allow non-guests to access the context menu
-        if (MatrixClientPeg.get().isGuest()) return;
+        e.preventDefault();
+
+        const state = {
+            menuDisplayed: true,
+        };
 
         // If the badge is clicked, then no longer show tooltip
         if (this.props.collapsed) {
-            this.setState({ hover: false });
+            state.hover = false;
         }
 
-        const elementRect = e.target.getBoundingClientRect();
+        this.setState(state);
+    },
 
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = elementRect.right + window.pageXOffset + 3;
-        const chevronOffset = 12;
-        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
-
-        this._showContextMenu(x, y, chevronOffset);
+    closeMenu: function() {
+        this.setState({
+            menuDisplayed: false,
+        });
     },
 
     render: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const groupName = this.props.group.name || this.props.group.groupId;
@@ -139,7 +124,17 @@ export default createReactClass({
         });
 
         const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
-        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        const badge = (
+            <ContextMenuButton
+                className={badgeClasses}
+                inputRef={this._contextMenuButton}
+                onClick={this.openMenu}
+                label={_t("Options")}
+                isExpanded={this.state.menuDisplayed}
+            >
+                { badgeContent }
+            </ContextMenuButton>
+        );
 
         let tooltip;
         if (this.props.collapsed && this.state.hover) {
@@ -153,12 +148,24 @@ export default createReactClass({
             'mx_GroupInviteTile': true,
         });
 
-        return (
-            <AccessibleButton className={classes}
-                              onClick={this.onClick}
-                              onMouseEnter={this.onMouseEnter}
-                              onMouseLeave={this.onMouseLeave}
-                              onContextMenu={this.onContextMenu}
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+            const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
+            contextMenu = (
+                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
+                    <GroupInviteTileContextMenu group={this.props.group} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
+        }
+
+        return <React.Fragment>
+            <AccessibleButton
+                className={classes}
+                onClick={this.onClick}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
+                onContextMenu={this.onContextMenu}
             >
                 <div className="mx_RoomTile_avatar">
                     { av }
@@ -169,6 +176,8 @@ export default createReactClass({
                 </div>
                 { tooltip }
             </AccessibleButton>
-        );
+
+            { contextMenu }
+        </React.Fragment>;
     },
 });

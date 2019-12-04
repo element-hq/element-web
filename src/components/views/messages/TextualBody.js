@@ -27,12 +27,13 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import * as ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import {pillifyLinks} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
+import {toRightOf} from "../../structures/ContextMenu";
 
 module.exports = createReactClass({
     displayName: 'TextualBody',
@@ -272,18 +273,12 @@ module.exports = createReactClass({
                 const copyCode = button.parentNode.getElementsByTagName("code")[0];
                 const successful = this.copyToClipboard(copyCode.textContent);
 
-                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const buttonRect = e.target.getBoundingClientRect();
-
-                // The window X and Y offsets are to adjust position when zoomed in to page
-                const x = buttonRect.right + window.pageXOffset;
-                const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-                const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
-                    chevronOffset: 10,
-                    left: x,
-                    top: y,
+                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+                const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+                    ...toRightOf(buttonRect, 11),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
-                }, false);
+                });
                 e.target.onmouseleave = close;
             };
 

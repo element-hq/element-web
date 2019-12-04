@@ -21,7 +21,8 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
 import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
-import * as ContextualMenu from "../../structures/ContextualMenu";
+import * as ContextMenu from "../../structures/ContextMenu";
+import {toRightOf} from "../../structures/ContextMenu";
 
 const socials = [
     {
@@ -102,18 +103,12 @@ export default class ShareDialog extends React.Component {
             console.error('Failed to copy: ', err);
         }
 
-        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset;
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-        const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
-            chevronOffset: 10,
-            left: x,
-            top: y,
+        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+        const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+            ...toRightOf(buttonRect, 11),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
-        }, false);
+        });
         // Drop a reference to this close handler for componentWillUnmount
         this.closeCopiedTooltip = e.target.onmouseleave = close;
     }
