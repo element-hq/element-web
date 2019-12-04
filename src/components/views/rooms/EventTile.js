@@ -494,6 +494,9 @@ module.exports = createReactClass({
             if (ev.status === EventStatus.NOT_SENT) {
                 return;
             }
+            if (ev.isState()) {
+                return; // we expect this to be unencrypted
+            }
             // if the event is not encrypted, but it's an e2e room, show the open padlock
             return <E2ePadlockUnencrypted {...props} />;
         }
@@ -887,7 +890,7 @@ module.exports.haveTileForEvent = function(e) {
 
 function E2ePadlockUndecryptable(props) {
     return (
-        <E2ePadlock title={_t("Undecryptable")} icon="undecryptable" {...props} />
+        <E2ePadlock title={_t("This message cannot be decrypted")} icon="undecryptable" {...props} />
     );
 }
 
@@ -899,19 +902,57 @@ function E2ePadlockUnverified(props) {
 
 function E2ePadlockUnencrypted(props) {
     return (
-        <E2ePadlock title={_t("Unencrypted message")} icon="unencrypted" {...props} />
+        <E2ePadlock title={_t("Unencrypted")} icon="unencrypted" {...props} />
     );
 }
 
-function E2ePadlock(props) {
-    if (SettingsStore.getValue("alwaysShowEncryptionIcons")) {
-        return (<div
-                    className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${props.icon}`}
-                    title={props.title} onClick={props.onClick} />);
-    } else {
-        return (<div
-                    className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_hidden mx_EventTile_e2eIcon_${props.icon}`}
-                    onClick={props.onClick} />);
+class E2ePadlock extends React.Component {
+    static propTypes = {
+        icon: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        onClick: PropTypes.func,
+    };
+
+    constructor() {
+        super();
+
+        this.state = {
+            hover: false,
+        };
+    }
+
+    onClick = (e) => {
+        if (this.props.onClick) this.props.onClick(e);
+    };
+
+    onHoverStart = () => {
+        this.setState({hover: true});
+    };
+
+    onHoverEnd = () => {
+        this.setState({hover: false});
+    };
+
+    render() {
+        let tooltip = null;
+        if (this.state.hover) {
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} dir="auto" />;
+        }
+
+        let classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
+        if (!SettingsStore.getValue("alwaysShowEncryptionIcons")) {
+            classes += ' mx_EventTile_e2eIcon_hidden';
+        }
+
+        return (
+            <div
+                className={classes}
+                onClick={this.onClick}
+                onMouseEnter={this.onHoverStart}
+                onMouseLeave={this.onHoverEnd}
+            >{tooltip}</div>
+        );
     }
 }
 
