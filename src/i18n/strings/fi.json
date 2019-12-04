@@ -1923,5 +1923,8 @@
     "%(senderName)s placed a video call.": "%(senderName)s soitti videopuhelun.",
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s soitti videopuhelun (selaimesi ei tue videopuheluita)",
     "Clear notifications": "Tyhjennä ilmoitukset",
-    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Muokkaa kokemustasi kokeellisilla laboratio-ominaisuuksia. <a>Tutki vaihtoehtoja</a>."
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Muokkaa kokemustasi kokeellisilla laboratio-ominaisuuksia. <a>Tutki vaihtoehtoja</a>.",
+    "Error upgrading room": "Virhe päivitettäessä huonetta",
+    "Double check that your server supports the room version chosen and try again.": "Tarkista, että palvelimesi tukee valittua huoneversiota ja yritä uudelleen.",
+    "Invite joined members to the new room automatically": "Kutsu huoneen jäsenet liittymään uuteen huoneeseen automaattisesti"
 }
