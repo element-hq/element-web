@@ -36,7 +36,7 @@ echo "--- Install synapse & other dependencies"
 ./install.sh
 # install static webserver to server symlinked local copy of riot
 ./riot/install-webserver.sh
-mkdir logs
+mkdir logs || rm -r logs/*
 echo "+++ Running end-to-end tests"
 TESTS_STARTED=1
 ./run.sh --no-sandbox --log-directory logs/
