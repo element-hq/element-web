@@ -20,6 +20,8 @@ import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import Pill from "../../../elements/Pill";
 import {makeUserPermalink} from "../../../../../utils/permalinks/Permalinks";
+import BaseAvatar from "../../../avatars/BaseAvatar";
+import { ContentRepo } from "matrix-js-sdk";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -47,9 +49,10 @@ export default class BridgeSettingsTab extends React.Component {
         if (!content || !content.channel || !content.protocol) {
             return null;
         }
+        const { channel, network } = content;
         const protocolName = content.protocol.displayname || content.protocol.id;
-        const channelName = content.channel.displayname || content.channel.id;
-        const networkName = content.network ? " on " + (content.network.displayname || content.network.id) : "";
+        const channelName = channel.displayname || channel.id;
+        const networkName = network ? network.displayname || network.id : "";
         let status = null;
         if (content.status === "active") {
             status = (<p> Status: <b>Active</b> </p>);
@@ -78,13 +81,41 @@ export default class BridgeSettingsTab extends React.Component {
             /> bot user.</p>
         );
 
+        const channelLink = channel.external_url ? (<a target="_blank" href={channel.external_url}>{channelName}</a>) : channelName;
+        const networkLink = network && network.external_url ? (<a target="_blank" href={network.external_url}>{networkName}</a>)
+                            : networkName;
+
         const chanAndNetworkInfo = (
-            <p> Bridged into {channelName}{networkName}, on {protocolName}</p>
+            <p> Bridged into {channelLink} {networkLink}, on {protocolName}</p>
         );
+
+        let networkIcon = null;
+        if (networkName && network.avatar) {
+            const avatarUrl = ContentRepo.getHttpUriForMxc(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                network.avatar, 32, 32, "crop",
+            );
+            networkIcon = <BaseAvatar width={32} height={32} resizeMethod='crop'
+                            name={ networkName } idName={ networkName }
+                            url={ avatarUrl } />;
+        }
+
+        let channelIcon = null;
+        if (channel.avatar) {
+            const avatarUrl = ContentRepo.getHttpUriForMxc(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                channel.avatar, 32, 32, "crop",
+            );
+            console.log(channel.avatar);
+            channelIcon = <BaseAvatar width={32} height={32} resizeMethod='crop'
+                            name={ networkName } idName={ networkName }
+                            url={ avatarUrl } />;
+        }
 
         return (<li key={event.stateKey}>
             <div>
-                <h3>{channelName}{networkName} ({protocolName})</h3>
+                <h3>{channelIcon} {channelName} {networkName ? ` on ${networkName}` : ""} {networkIcon}</h3>
+                <p> Connected via {protocolName} </p>
                 <details>
                     {status}
                     {creator}
