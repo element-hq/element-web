@@ -2,7 +2,7 @@
   "name": "tchap-web",
   "productName": "Tchap",
   "main": "electron_app/src/electron-main.js",
-  "version": "2.0.0",
+  "version": "2.0.4",
   "description": "A feature-rich client for Matrix.org",
   "author": "Minarm",
   "repository": {
