@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
@@ -31,9 +30,10 @@ const RESTORE_TYPE_RECOVERYKEY = 1;
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
-export default createReactClass({
-    getInitialState: function() {
-        return {
+export default class RestoreKeyBackupDialog extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
             backupInfo: null,
             loading: false,
             loadError: null,
@@ -45,27 +45,27 @@ export default createReactClass({
             passPhrase: '',
             restoreType: null,
         };
-    },
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this._loadBackupStatus();
-    },
+    }
 
-    _onCancel: function() {
+    _onCancel = () => {
         this.props.onFinished(false);
-    },
+    }
 
-    _onDone: function() {
+    _onDone = () => {
         this.props.onFinished(true);
-    },
+    }
 
-    _onUseRecoveryKeyClick: function() {
+    _onUseRecoveryKeyClick = () => {
         this.setState({
             forceRecoveryKey: true,
         });
-    },
+    }
 
-    _onResetRecoveryClick: function() {
+    _onResetRecoveryClick = () => {
         this.props.onFinished(false);
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
@@ -75,16 +75,16 @@ export default createReactClass({
                 },
             },
         );
-    },
+    }
 
-    _onRecoveryKeyChange: function(e) {
+    _onRecoveryKeyChange = (e) => {
         this.setState({
             recoveryKey: e.target.value,
             recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
         });
-    },
+    }
 
-    _onPassPhraseNext: async function() {
+    _onPassPhraseNext = async () => {
         this.setState({
             loading: true,
             restoreError: null,
@@ -105,9 +105,9 @@ export default createReactClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onRecoveryKeyNext: async function() {
+    _onRecoveryKeyNext = async () => {
         this.setState({
             loading: true,
             restoreError: null,
@@ -128,27 +128,27 @@ export default createReactClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onPassPhraseChange: function(e) {
+    _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
         });
-    },
+    }
 
-    _onPassPhraseKeyPress: function(e) {
+    _onPassPhraseKeyPress = (e) => {
         if (e.key === Key.ENTER) {
             this._onPassPhraseNext();
         }
-    },
+    }
 
-    _onRecoveryKeyKeyPress: function(e) {
+    _onRecoveryKeyKeyPress = (e) => {
         if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
             this._onRecoveryKeyNext();
         }
-    },
+    }
 
-    _loadBackupStatus: async function() {
+    async _loadBackupStatus() {
         this.setState({
             loading: true,
             loadError: null,
@@ -167,9 +167,9 @@ export default createReactClass({
                 loading: false,
             });
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -345,5 +345,5 @@ export default createReactClass({
             </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}
