@@ -1,0 +1,22 @@
+
+name: CI
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: trigger Job
+      uses: appleboy/gitlab-ci-action@master
+      with:
+        url: "https://gitlab.esss.lu.se/api/v4/projects/1956/ref/master/trigger/pipeline"
+        token: ${{ secrets.GITLAB_TOKEN }}
+        project_id: 1956
+        ref: "master"
+        host: "https://gitlab.esss.lu.se"
+        debug: true
