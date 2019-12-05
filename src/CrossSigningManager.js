@@ -41,7 +41,7 @@ const secretStorageKeys = {};
 
 // XXX: This flow should maybe be reworked to allow retries in case of typos,
 // etc.
-export const getSecretStorageKey = async keyInfos => {
+export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
