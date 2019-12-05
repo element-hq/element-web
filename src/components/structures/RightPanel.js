@@ -1,9 +1,9 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
+import {RIGHT_PANEL_PHASES} from "../../stores/RightPanelStore";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -44,17 +45,7 @@ export default class RightPanel extends React.Component {
         };
     }
 
-    static Phase = Object.freeze({
-        RoomMemberList: 'RoomMemberList',
-        GroupMemberList: 'GroupMemberList',
-        GroupRoomList: 'GroupRoomList',
-        GroupRoomInfo: 'GroupRoomInfo',
-        FilePanel: 'FilePanel',
-        NotificationPanel: 'NotificationPanel',
-        RoomMemberInfo: 'RoomMemberInfo',
-        Room3pidMemberInfo: 'Room3pidMemberInfo',
-        GroupMemberInfo: 'GroupMemberInfo',
-    });
+    static Phase = RIGHT_PANEL_PHASES;
 
     constructor(props, context) {
         super(props, context);
