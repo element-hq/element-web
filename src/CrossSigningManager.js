@@ -32,6 +32,13 @@ const crossSigningKeys = {};
 export const getCrossSigningKey = k => crossSigningKeys[k];
 export const saveCrossSigningKeys = newKeys => Object.assign(crossSigningKeys, newKeys);
 
+// This stores the secret storage private keys in memory for the JS SDK. This is
+// only meant to act as a cache to avoid prompting the user multiple times
+// during the same session. It is considered unsafe to persist this to normal
+// web storage. For platforms with a secure enclave, we will store this key
+// there.
+const secretStorageKeys = {};
+
 // XXX: This flow should maybe be reworked to allow retries in case of typos,
 // etc.
 export const getSecretStorageKey = async keyInfos => {
@@ -40,6 +47,10 @@ export const getSecretStorageKey = async keyInfos => {
         throw new Error("Multiple storage key requests not implemented");
     }
     const [name, info] = keyInfoEntries[0];
+    // Check the in-memory cache
+    if (secretStorageKeys[name]) {
+        return [name, secretStorageKeys[name]];
+    }
     const AccessSecretStorageDialog =
         sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
@@ -58,5 +69,7 @@ export const getSecretStorageKey = async keyInfos => {
     } else {
         key = decodeRecoveryKey(input);
     }
+    // Save to cache to avoid future prompts in the current session
+    secretStorageKeys[name] = key;
     return [name, key];
 };
