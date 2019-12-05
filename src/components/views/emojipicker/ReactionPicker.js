@@ -23,7 +23,6 @@ class ReactionPicker extends React.Component {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
-        closeMenu: PropTypes.func.isRequired,
         reactions: PropTypes.object,
     };
 
@@ -89,7 +88,6 @@ class ReactionPicker extends React.Component {
 
     onChoose(reaction) {
         this.componentWillUnmount();
-        this.props.closeMenu();
         this.props.onFinished();
         const myReactions = this.getReactions();
         if (myReactions.hasOwnProperty(reaction)) {
