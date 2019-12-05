@@ -30,6 +30,8 @@ import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
+import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
+import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -224,13 +226,41 @@ class MatrixClientPeg {
             // This stores the cross-signing private keys in memory for the JS SDK. They
             // are also persisted to Secure Secret Storage in account data by
             // the JS SDK when created.
-            // XXX: On desktop platforms, we plan to store only the SSSS default
-            // key in a secure enclave, while the cross-signing private keys
-            // will still be retrieved from SSSS, so it's unclear that we
-            // actually need these cross-signing application callbacks for Riot.
-            // Should the JS SDK default to in-memory storage of these itself?
             const keys = {};
             opts.cryptoCallbacks = {
+                // XXX: This flow should maybe be reworked to allow retries in
+                // case of typos, etc.
+                getSecretStorageKey: async keyInfos => {
+                    const keyInfoEntries = Object.entries(keyInfos);
+                    if (keyInfoEntries.length > 1) {
+                        throw new Error("Multiple storage key requests not implemented");
+                    }
+                    const [name, info] = keyInfoEntries[0];
+                    const AccessSecretStorageDialog =
+                        sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
+                    const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
+                        AccessSecretStorageDialog, {
+                            keyInfo: info,
+                        },
+                    );
+                    const [input] = await finished;
+                    if (!input) {
+                        throw new Error("Secret storage access canceled");
+                    }
+                    let key;
+                    const { passphrase } = info;
+                    if (passphrase) {
+                        key = await deriveKey(input, passphrase.salt, passphrase.iterations);
+                    } else {
+                        key = decodeRecoveryKey(input);
+                    }
+                    return [name, key];
+                },
+                // XXX: On desktop platforms, we plan to store only the SSSS default
+                // key in a secure enclave, while the cross-signing private keys
+                // will still be retrieved from SSSS, so it's unclear that we
+                // actually need these cross-signing application callbacks for Riot.
+                // Should the JS SDK default to in-memory storage of these itself?
                 getCrossSigningKey: k => keys[k],
                 saveCrossSigningKeys: newKeys => Object.assign(keys, newKeys),
             };

@@ -24,6 +24,9 @@ import Modal from '../../../Modal';
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
         super(props);
+
+        this._unmounted = false;
+
         this.state = {
             error: null,
             ...this._getUpdatedStatus(),
@@ -36,6 +39,7 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     componentWillUnmount() {
+        this._unmounted = true;
         const cli = MatrixClientPeg.get();
         if (!cli) return;
         cli.removeListener("accountData", this.onAccountData);
@@ -64,30 +68,53 @@ export default class CrossSigningPanel extends React.PureComponent {
         };
     }
 
+    /**
+     * Bootstrapping secret storage may take one of these paths:
+     * 1. Create secret storage from a passphrase and store cross-signing keys
+     *    in secret storage.
+     * 2. Access existing secret storage by requesting passphrase and accessing
+     *    cross-signing keys as needed.
+     * 3. All keys are loaded and there's nothing to do.
+     */
     _bootstrapSecureSecretStorage = async () => {
         this.setState({ error: null });
+        const cli = MatrixClientPeg.get();
         try {
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
-            await MatrixClientPeg.get().bootstrapSecretStorage({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Send cross-signing keys to homeserver"),
-                            matrixClient: MatrixClientPeg.get(),
-                            makeRequest,
-                        },
-                    );
-                    const [confirmed] = await finished;
-                    if (!confirmed) {
-                        throw new Error("Cross-signing key upload auth canceled");
-                    }
-                },
-            });
+            if (!cli.hasSecretStorageKey()) {
+                // This dialog calls bootstrap itself after guiding the user through
+                // passphrase creation.
+                const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
+                    import("../../../async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
+                    null, null, /* priority = */ false, /* static = */ true,
+                );
+                const [confirmed] = await finished;
+                if (!confirmed) {
+                    throw new Error("Secret storage creation canceled");
+                }
+            } else {
+                const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+                await cli.bootstrapSecretStorage({
+                    authUploadDeviceSigningKeys: async (makeRequest) => {
+                        const { finished } = Modal.createTrackedDialog(
+                            'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                            {
+                                title: _t("Send cross-signing keys to homeserver"),
+                                matrixClient: MatrixClientPeg.get(),
+                                makeRequest,
+                            },
+                        );
+                        const [confirmed] = await finished;
+                        if (!confirmed) {
+                            throw new Error("Cross-signing key upload auth canceled");
+                        }
+                    },
+                });
+            }
         } catch (e) {
             this.setState({ error: e });
-            console.error(e);
+            console.error("Error bootstrapping secret storage", e);
         }
+        if (this._unmounted) return;
         this.setState(this._getUpdatedStatus());
     }
 

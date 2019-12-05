@@ -27,7 +27,7 @@ import {Key} from "../../../../Keyboard";
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
 
-/**
+/*
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
 export default class RestoreKeyBackupDialog extends React.PureComponent {
@@ -47,7 +47,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._loadBackupStatus();
     }
 
@@ -296,7 +296,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: you should only set up key backup " +
+                    "<b>Warning</b>: You should only set up key backup " +
                     "from a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
@@ -322,7 +322,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     />
                 </div>
                 {_t(
-                    "If you've forgotten your recovery passphrase you can "+
+                    "If you've forgotten your recovery key you can "+
                     "<button>set up new recovery options</button>"
                 , {}, {
                     button: s => <AccessibleButton className="mx_linkButton"
