@@ -1926,5 +1926,16 @@
     "Customise your experience with experimental labs features. <a>Learn more</a>.": "Kísérleti labor tulajdonságokkal egyénre szabhatod az élményt. <a>Tudj meg többet</a>.",
     "Error upgrading room": "A szoba verziófrissítésénél hiba történt",
     "Double check that your server supports the room version chosen and try again.": "Ellenőrizd még egyszer, hogy a szervered támogatja-e a szoba verzióját és próbáld újra.",
-    "Invite joined members to the new room automatically": "Tagok meghívása automatikusan az új szobába"
+    "Invite joined members to the new room automatically": "Tagok meghívása automatikusan az új szobába",
+    "This message cannot be decrypted": "Ezt az üzenetet nem lehet visszafejteni",
+    "Unencrypted": "Titkosítatlan",
+    "Automatically invite users": "Felhasználók automatikus meghívása",
+    "Upgrade private room": "Privát szoba frissítése",
+    "Upgrade public room": "Nyilvános szoba frissítése",
+    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "A szoba frissítése nem egyszerű művelet, általában a szoba hibás működése, hiányzó funkció vagy biztonsági sérülékenység esetén javasolt.",
+    "This usually only affects how the room is processed on the server. If you're having problems with your Riot, please <a>report a bug</a>.": "Ez általában a szoba szerver oldali kezelésében jelent változást. Ha a Riotban van problémád, kérlek <a>küldj egy hibajelentést</a>.",
+    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "<oldVersion /> verzióról <newVersion /> verzióra frissíted a szobát.",
+    "Upgrade": "Frissítés",
+    "Notification settings": "Értesítések beállítása",
+    "User Status": "Felhasználó állapota"
 }
