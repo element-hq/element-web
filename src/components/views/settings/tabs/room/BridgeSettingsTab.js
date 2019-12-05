@@ -80,10 +80,15 @@ export default class BridgeSettingsTab extends React.Component {
             shouldShowPillAvatar={true}
             /> bot user.</p>
         );
+        let channelLink = channelName;
+        if (channel.external_url) {
+            channelLink = <a target="_blank" href={channel.external_url}>{channelName}</a>;
+        }
 
-        const channelLink = channel.external_url ? (<a target="_blank" href={channel.external_url}>{channelName}</a>) : channelName;
-        const networkLink = network && network.external_url ? (<a target="_blank" href={network.external_url}>{networkName}</a>)
-                            : networkName;
+        let networkLink = networkName;
+        if (network && network.external_url) {
+            networkLink = <a target="_blank" href={network.external_url}>{networkName}</a>;
+        }
 
         const chanAndNetworkInfo = (
             <p> Bridged into {channelLink} {networkLink}, on {protocolName}</p>
