@@ -63,11 +63,14 @@ export const getSecretStorageKey = async ({ keys: keyInfos }) => {
         throw new Error("Secret storage access canceled");
     }
     let key;
-    const { passphrase } = info;
-    if (passphrase) {
-        key = await deriveKey(input, passphrase.salt, passphrase.iterations);
+    if (input.passphrase) {
+        key = await deriveKey(
+            input.passphrase,
+            info.passphrase.salt,
+            info.passphrase.iterations,
+        );
     } else {
-        key = decodeRecoveryKey(input);
+        key = decodeRecoveryKey(input.recoveryKey);
     }
     // Save to cache to avoid future prompts in the current session
     secretStorageKeys[name] = key;

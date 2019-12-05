@@ -65,11 +65,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     }
 
     _onPassPhraseNext = async () => {
-        this.props.onFinished(this.state.passPhrase);
+        this.props.onFinished({ passphrase: this.state.passPhrase });
     }
 
     _onRecoveryKeyNext = async () => {
-        this.props.onFinished(this.state.recoveryKey);
+        this.props.onFinished({ recoveryKey: this.state.recoveryKey });
     }
 
     _onPassPhraseChange = (e) => {
