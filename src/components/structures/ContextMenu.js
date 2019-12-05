@@ -47,7 +47,7 @@ const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemr
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 export class ContextMenu extends React.Component {
-    propTypes: {
+    static propTypes = {
         top: PropTypes.number,
         bottom: PropTypes.number,
         left: PropTypes.number,
