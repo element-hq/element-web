@@ -67,7 +67,7 @@ export default class RightPanel extends React.Component {
         const rps = RightPanelStore.getSharedInstance();
         if (this.props.groupId) {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
-                rps.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.GroupMemberList});
                 return RIGHT_PANEL_PHASES.GroupMemberList;
             }
             return rps.groupPanelPhase;
@@ -75,7 +75,7 @@ export default class RightPanel extends React.Component {
             return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
-                rps.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.RoomMemberList});
                 return RIGHT_PANEL_PHASES.RoomMemberList;
             }
             return rps.roomPanelPhase;
