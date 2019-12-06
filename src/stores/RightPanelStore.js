@@ -28,6 +28,9 @@ const INITIAL_STATE = {
     // The last phase (screen) the right panel was showing
     lastRoomPhase: SettingsStore.getValue("lastRightPanelPhaseForRoom"),
     lastGroupPhase: SettingsStore.getValue("lastRightPanelPhaseForGroup"),
+
+    // Extra information about the last phase
+    lastRoomPhaseParams: {},
 };
 
 const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
@@ -70,6 +73,10 @@ export default class RightPanelStore extends Store {
 
     get visibleGroupPanelPhase(): string {
         return this.isOpenForGroup ? this.groupPanelPhase : null;
+    }
+
+    get roomPanelPhaseParams(): any {
+        return this._state.lastRoomPhaseParams || {};
     }
 
     _setState(newState) {
@@ -142,6 +149,7 @@ export default class RightPanelStore extends Store {
                 this._setState({
                     lastRoomPhase: targetPhase,
                     showRoomPanel: true,
+                    lastRoomPhaseParams: payload.refireParams || {},
                 });
             }
         }

@@ -36,7 +36,7 @@ export default class RightPanel extends React.Component {
         return {
             roomId: PropTypes.string, // if showing panels for a given room, this is set
             groupId: PropTypes.string, // if showing panels for a given group, this is set
-            user: PropTypes.object,
+            user: PropTypes.object, // used if we know the user ahead of opening the panel
         };
     }
 
@@ -51,6 +51,7 @@ export default class RightPanel extends React.Component {
         this.state = {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
+            member: this._getUserForPanel(),
         };
         this.onAction = this.onAction.bind(this);
         this.onRoomStateMember = this.onRoomStateMember.bind(this);
@@ -63,6 +64,14 @@ export default class RightPanel extends React.Component {
         }, 500);
     }
 
+    // Helper function to split out the logic for _getPhaseFromProps() and the constructor
+    // as both are called at the same time in the constructor.
+    _getUserForPanel() {
+        if (this.state && this.state.member) return this.state.member;
+        const lastParams = RightPanelStore.getSharedInstance().roomPanelPhaseParams;
+        return this.props.user || lastParams['member'];
+    }
+
     _getPhaseFromProps() {
         const rps = RightPanelStore.getSharedInstance();
         if (this.props.groupId) {
@@ -71,7 +80,7 @@ export default class RightPanel extends React.Component {
                 return RIGHT_PANEL_PHASES.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (this.props.user) {
+        } else if (this._getUserForPanel()) {
             return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
@@ -87,9 +96,6 @@ export default class RightPanel extends React.Component {
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
-        if (this.props.user) {
-            this.setState({member: this.props.user});
-        }
     }
 
     componentWillUnmount() {
