@@ -42,10 +42,16 @@ export default class HeaderButtons extends React.Component {
 
     componentWillMount() {
         this._storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
+        this._dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
     componentWillUnmount() {
         if (this._storeToken) this._storeToken.remove();
+        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
+    }
+
+    onAction(payload) {
+        // Ignore - intended to be overridden by subclasses
     }
 
     setPhase(phase, extras) {
