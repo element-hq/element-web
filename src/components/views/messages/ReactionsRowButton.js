@@ -129,6 +129,7 @@ export default class ReactionsRowButton extends React.PureComponent {
         return <span className={classes}
             role="button"
             aria-label={label}
+            tabindex="0"
             onClick={this.onClick}
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
