@@ -582,6 +582,10 @@ module.exports = createReactClass({
 
     onAction: function(payload) {
         switch (payload.action) {
+            case 'after_right_panel_phase_change':
+                // We don't keep state on the right panel, so just re-render to update
+                this.forceUpdate();
+                break;
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);

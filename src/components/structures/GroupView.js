@@ -580,6 +580,10 @@ export default createReactClass({
                     profileForm: null,
                 });
                 break;
+            case 'after_right_panel_phase_change':
+                // We don't keep state on the right panel, so just re-render to update
+                this.forceUpdate();
+                break;
             default:
                 break;
         }
