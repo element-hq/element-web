@@ -36,6 +36,8 @@ module.exports = {
             return false;
         } else if (ev.getType() == 'm.room.aliases' || ev.getType() == 'm.room.canonical_alias') {
             return false;
+        } else if (ev.getType() == 'm.room.server_acl') {
+            return false;
         }
         const EventTile = sdk.getComponent('rooms.EventTile');
         return EventTile.haveTileForEvent(ev);
