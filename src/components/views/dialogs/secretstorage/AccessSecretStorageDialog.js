@@ -30,6 +30,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     static propTypes = {
         // { passphrase, pubkey }
         keyInfo: PropTypes.object.isRequired,
+        // Function from one of { passphrase, recoveryKey } -> boolean
+        checkPrivateKey: PropTypes.func.isRequired,
     }
 
     constructor(props) {
@@ -39,6 +41,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             recoveryKeyValid: false,
             forceRecoveryKey: false,
             passPhrase: '',
+            keyMatches: null,
         };
     }
 
@@ -61,25 +64,41 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         this.setState({
             recoveryKey: e.target.value,
             recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
+            keyMatches: null,
         });
     }
 
     _onPassPhraseNext = async () => {
-        this.props.onFinished({ passphrase: this.state.passPhrase });
+        this.setState({ keyMatches: null });
+        const input = { passphrase: this.state.passPhrase };
+        const keyMatches = await this.props.checkPrivateKey(input);
+        if (keyMatches) {
+            this.props.onFinished(input);
+        } else {
+            this.setState({ keyMatches });
+        }
     }
 
     _onRecoveryKeyNext = async () => {
-        this.props.onFinished({ recoveryKey: this.state.recoveryKey });
+        this.setState({ keyMatches: null });
+        const input = { recoveryKey: this.state.recoveryKey };
+        const keyMatches = await this.props.checkPrivateKey(input);
+        if (keyMatches) {
+            this.props.onFinished(input);
+        } else {
+            this.setState({ keyMatches });
+        }
     }
 
     _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
+            keyMatches: null,
         });
     }
 
     _onPassPhraseKeyPress = (e) => {
-        if (e.key === Key.ENTER) {
+        if (e.key === Key.ENTER && this.state.passPhrase.length > 0) {
             this._onPassPhraseNext();
         }
     }
@@ -106,6 +125,19 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Enter secret storage passphrase");
+
+            let keyStatus;
+            if (this.state.keyMatches === false) {
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
+                    {"\uD83D\uDC4E "}{_t(
+                        "Unable to access secret storage. Please verify that you " +
+                        "entered the correct passphrase.",
+                    )}
+                </div>;
+            } else {
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus"></div>;
+            }
+
             content = <div>
                 <p>{_t(
                     "<b>Warning</b>: You should only access secret storage " +
@@ -125,11 +157,13 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         value={this.state.passPhrase}
                         autoFocus={true}
                     />
+                    {keyStatus}
                     <DialogButtons primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
+                        primaryDisabled={this.state.passPhrase.length === 0}
                     />
                 </div>
                 {_t(
@@ -162,6 +196,13 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             } else if (this.state.recoveryKeyValid) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
+                </div>;
+            } else if (this.state.keyMatches === false) {
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
+                    {"\uD83D\uDC4E "}{_t(
+                        "Unable to access secret storage. Please verify that you " +
+                        "entered the correct recovery key.",
+                    )}
                 </div>;
             } else {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">

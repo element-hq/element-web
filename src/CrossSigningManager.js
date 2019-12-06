@@ -16,6 +16,7 @@ limitations under the License.
 
 import Modal from './Modal';
 import sdk from './index';
+import MatrixClientPeg from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
 
@@ -39,40 +40,49 @@ export const saveCrossSigningKeys = newKeys => Object.assign(crossSigningKeys, n
 // there.
 const secretStorageKeys = {};
 
-// XXX: This flow should maybe be reworked to allow retries in case of typos,
-// etc.
 export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
     }
     const [name, info] = keyInfoEntries[0];
+
     // Check the in-memory cache
     if (secretStorageKeys[name]) {
         return [name, secretStorageKeys[name]];
     }
+
+    const inputToKey = async ({ passphrase, recoveryKey }) => {
+        if (passphrase) {
+            return deriveKey(
+                passphrase,
+                info.passphrase.salt,
+                info.passphrase.iterations,
+            );
+        } else {
+            return decodeRecoveryKey(recoveryKey);
+        }
+    };
     const AccessSecretStorageDialog =
         sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
-        AccessSecretStorageDialog, {
-        keyInfo: info,
-    },
+        AccessSecretStorageDialog,
+        {
+            keyInfo: info,
+            checkPrivateKey: async (input) => {
+                const key = await inputToKey(input);
+                return MatrixClientPeg.get().checkSecretStoragePrivateKey(key, info.pubkey);
+            },
+        },
     );
     const [input] = await finished;
     if (!input) {
         throw new Error("Secret storage access canceled");
     }
-    let key;
-    if (input.passphrase) {
-        key = await deriveKey(
-            input.passphrase,
-            info.passphrase.salt,
-            info.passphrase.iterations,
-        );
-    } else {
-        key = decodeRecoveryKey(input.recoveryKey);
-    }
+    const key = await inputToKey(input);
+
     // Save to cache to avoid future prompts in the current session
     secretStorageKeys[name] = key;
+
     return [name, key];
 };
