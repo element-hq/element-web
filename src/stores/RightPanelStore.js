@@ -32,6 +32,16 @@ const INITIAL_STATE = {
 
 const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
 
+// These are the phases that are safe to persist (the ones that don't require additional
+// arguments, basically).
+const PHASES_TO_PERSIST = [
+    RIGHT_PANEL_PHASES.NotificationPanel,
+    RIGHT_PANEL_PHASES.FilePanel,
+    RIGHT_PANEL_PHASES.RoomMemberList,
+    RIGHT_PANEL_PHASES.GroupMemberList,
+    RIGHT_PANEL_PHASES.GroupRoomList,
+];
+
 /**
  * A class for tracking the state of the right panel between layouts and
  * sessions.
@@ -62,12 +72,47 @@ export default class RightPanelStore extends Store {
         return this._state.lastGroupPhase;
     }
 
+    get visibleRoomPanelPhase(): string {
+        return this.isOpenForRoom ? this.roomPanelPhase : null;
+    }
+
+    get visibleGroupPanelPhase(): string {
+        return this.isOpenForGroup ? this.groupPanelPhase : null;
+    }
+
     _setState(newState) {
         this._state = Object.assign(this._state, newState);
-        SettingsStore.setValue("showRightPanelInRoom", null, SettingLevel.DEVICE, this._state.showRoomPanel);
-        SettingsStore.setValue("showRightPanelInGroup", null, SettingLevel.DEVICE, this._state.showGroupPanel);
-        SettingsStore.setValue("lastRightPanelPhaseForRoom", null, SettingLevel.DEVICE, this._state.lastRoomPhase);
-        SettingsStore.setValue("lastRightPanelPhaseForGroup", null, SettingLevel.DEVICE, this._state.lastGroupPhase);
+
+        SettingsStore.setValue(
+            "showRightPanelInRoom",
+            null,
+            SettingLevel.DEVICE,
+            this._state.showRoomPanel,
+        );
+        SettingsStore.setValue(
+            "showRightPanelInGroup",
+            null,
+            SettingLevel.DEVICE,
+            this._state.showGroupPanel,
+        );
+
+        if (PHASES_TO_PERSIST.includes(this._state.lastRoomPhase)) {
+            SettingsStore.setValue(
+                "lastRightPanelPhaseForRoom",
+                null,
+                SettingLevel.DEVICE,
+                this._state.lastRoomPhase,
+            );
+        }
+        if (PHASES_TO_PERSIST.includes(this._state.lastGroupPhase)) {
+            SettingsStore.setValue(
+                "lastRightPanelPhaseForGroup",
+                null,
+                SettingLevel.DEVICE,
+                this._state.lastGroupPhase,
+            );
+        }
+
         this.__emitChange();
     }
 
@@ -101,6 +146,13 @@ export default class RightPanelStore extends Store {
                 });
             }
         }
+
+        // Let things like the member info panel actually open to the right member.
+        dis.dispatch({
+            action: 'after_right_panel_phase_change',
+            phase: targetPhase,
+            ...(payload.refireParams || {}),
+        });
     }
 
     static getSharedInstance(): RightPanelStore {
