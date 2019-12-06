@@ -28,7 +28,7 @@ import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
-import {RIGHT_PANEL_PHASES} from "../../stores/RightPanelStore";
+import {RIGHT_PANEL_PHASES} from "../../stores/RightPanelStorePhases";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {

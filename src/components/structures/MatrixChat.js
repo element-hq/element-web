@@ -175,7 +175,6 @@ export default createReactClass({
             viewUserId: null,
             // this is persisted as mx_lhs_size, loaded in LoggedInView
             collapseLhs: false,
-            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -655,18 +654,6 @@ export default createReactClass({
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
-                });
-                break;
-            case 'hide_right_panel':
-                window.localStorage.setItem("mx_rhs_collapsed", true);
-                this.setState({
-                    collapsedRhs: true,
-                });
-                break;
-            case 'show_right_panel':
-                window.localStorage.setItem("mx_rhs_collapsed", false);
-                this.setState({
-                    collapsedRhs: false,
                 });
                 break;
             case 'panel_disable': {
@@ -1245,7 +1232,6 @@ export default createReactClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapsedRhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';
@@ -1261,7 +1247,6 @@ export default createReactClass({
             view: VIEWS.SOFT_LOGOUT,
             ready: false,
             collapseLhs: false,
-            collapsedRhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';

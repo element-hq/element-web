@@ -25,8 +25,7 @@ import {
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
-import RightPanel from "../components/structures/RightPanel";
-import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStore";
+import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];

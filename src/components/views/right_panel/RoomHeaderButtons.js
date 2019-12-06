@@ -45,8 +45,6 @@ export default class RoomHeaderButtons extends HeaderButtons {
             } else {
                 this.setPhase(RightPanel.Phase.RoomMemberList);
             }
-        } else if (payload.action === "view_room" && !this.props.collapsedRhs) {
-            this.setPhase(RightPanel.Phase.RoomMemberList);
         } else if (payload.action === "view_3pid_invite") {
             if (payload.event) {
                 this.setPhase(RightPanel.Phase.Room3pidMemberInfo, {event: payload.event});

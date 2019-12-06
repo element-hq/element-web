@@ -54,6 +54,7 @@ import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
+import RightPanelStore from "../../stores/RightPanelStore";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -97,9 +98,6 @@ module.exports = createReactClass({
         //  * inviterName (string) The display name of the person who
         //  *                      invited us to the room
         oobData: PropTypes.object,
-
-        // is the RightPanel collapsed?
-        collapsedRhs: PropTypes.bool,
 
         // Servers the RoomView can use to try and assist joins
         viaServers: PropTypes.arrayOf(PropTypes.string),
@@ -1714,7 +1712,7 @@ module.exports = createReactClass({
         let aux = null;
         let previewBar;
         let hideCancel = false;
-        let hideRightPanel = false;
+        let forceHideRightPanel = false;
         if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
@@ -1760,7 +1758,7 @@ module.exports = createReactClass({
                     </div>
                 );
             } else {
-                hideRightPanel = true;
+                forceHideRightPanel = true;
             }
         } else if (hiddenHighlightCount > 0) {
             aux = (
@@ -1947,9 +1945,11 @@ module.exports = createReactClass({
             },
         );
 
-        const rightPanel = !hideRightPanel && this.state.room &&
-            <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
-        const collapsedRhs = hideRightPanel || this.props.collapsedRhs;
+        const showRightPanel = !forceHideRightPanel && this.state.room
+            && RightPanelStore.getSharedInstance().isOpenForRoom;
+        const rightPanel = showRightPanel
+            ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />
+            : null;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
@@ -1957,7 +1957,6 @@ module.exports = createReactClass({
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                         oobData={this.props.oobData}
                         inRoom={myMembership === 'join'}
-                        collapsedRhs={collapsedRhs}
                         onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick}
                         onPinnedClick={this.onPinnedClick}
@@ -1968,7 +1967,6 @@ module.exports = createReactClass({
                     />
                     <MainSplit
                         panel={rightPanel}
-                        collapsedRhs={collapsedRhs}
                         resizeNotifier={this.props.resizeNotifier}
                     >
                         <div className={fadableSectionClasses}>

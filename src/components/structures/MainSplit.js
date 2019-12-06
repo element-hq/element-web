@@ -62,7 +62,7 @@ export default class MainSplit extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.panel && !this.props.collapsedRhs) {
+        if (this.props.panel) {
             this._createResizer();
         }
     }
@@ -79,6 +79,8 @@ export default class MainSplit extends React.Component {
         const wasCollapsed = this.props.collapsedRhs && !prevProps.collapsedRhs;
         const wasPanelSet = this.props.panel && !prevProps.panel;
         const wasPanelCleared = !this.props.panel && prevProps.panel;
+
+        // TODO: TravisR - fix this logic
 
         if (this.resizeContainer && (wasExpanded || wasPanelSet)) {
             // The resizer can only be created when **both** expanded and the panel is

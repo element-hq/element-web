@@ -17,6 +17,7 @@ limitations under the License.
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
+import {RIGHT_PANEL_PHASES} from "./RightPanelStorePhases";
 
 const INITIAL_STATE = {
     // Whether or not to show the right panel at all. We split out rooms and groups
@@ -28,21 +29,6 @@ const INITIAL_STATE = {
     lastRoomPhase: SettingsStore.getValue("lastRightPanelPhaseForRoom"),
     lastGroupPhase: SettingsStore.getValue("lastRightPanelPhaseForGroup"),
 };
-
-export const RIGHT_PANEL_PHASES = Object.freeze({
-    // Room stuff
-    RoomMemberList: 'RoomMemberList',
-    FilePanel: 'FilePanel',
-    NotificationPanel: 'NotificationPanel',
-    RoomMemberInfo: 'RoomMemberInfo',
-    Room3pidMemberInfo: 'Room3pidMemberInfo',
-
-    // Group stuff
-    GroupMemberList: 'GroupMemberList',
-    GroupRoomList: 'GroupRoomList',
-    GroupRoomInfo: 'GroupRoomInfo',
-    GroupMemberInfo: 'GroupMemberInfo',
-});
 
 const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
 
