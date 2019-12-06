@@ -1699,12 +1699,6 @@ export default createReactClass({
         if (this._windowWidth <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
             dis.dispatch({ action: 'show_left_panel' });
         }
-        if (this._windowWidth > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
-            dis.dispatch({ action: 'hide_right_panel' });
-        }
-        if (this._windowWidth <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
-            dis.dispatch({ action: 'show_right_panel' });
-        }
 
         this.state.resizeNotifier.notifyWindowResized();
         this._windowWidth = window.innerWidth;
