@@ -149,7 +149,11 @@ export default class ReactionsRow extends React.PureComponent {
             </a>;
         }
 
-        return <div className="mx_ReactionsRow">
+        return <div
+            className="mx_ReactionsRow"
+            role="toolbar"
+            aria-label={_t("Reactions")}
+        >
             {items}
             {showAllButton}
         </div>;
