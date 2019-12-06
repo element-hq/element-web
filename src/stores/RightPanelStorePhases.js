@@ -29,3 +29,13 @@ export const RIGHT_PANEL_PHASES = Object.freeze({
     GroupRoomInfo: 'GroupRoomInfo',
     GroupMemberInfo: 'GroupMemberInfo',
 });
+
+// These are the phases that are safe to persist (the ones that don't require additional
+// arguments).
+export const RIGHT_PANEL_PHASES_NO_ARGS = [
+    RIGHT_PANEL_PHASES.NotificationPanel,
+    RIGHT_PANEL_PHASES.FilePanel,
+    RIGHT_PANEL_PHASES.RoomMemberList,
+    RIGHT_PANEL_PHASES.GroupMemberList,
+    RIGHT_PANEL_PHASES.GroupRoomList,
+];

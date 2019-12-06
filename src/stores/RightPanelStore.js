@@ -17,7 +17,7 @@ limitations under the License.
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
-import {RIGHT_PANEL_PHASES} from "./RightPanelStorePhases";
+import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
 
 const INITIAL_STATE = {
     // Whether or not to show the right panel at all. We split out rooms and groups
@@ -31,16 +31,6 @@ const INITIAL_STATE = {
 };
 
 const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
-
-// These are the phases that are safe to persist (the ones that don't require additional
-// arguments, basically).
-const PHASES_TO_PERSIST = [
-    RIGHT_PANEL_PHASES.NotificationPanel,
-    RIGHT_PANEL_PHASES.FilePanel,
-    RIGHT_PANEL_PHASES.RoomMemberList,
-    RIGHT_PANEL_PHASES.GroupMemberList,
-    RIGHT_PANEL_PHASES.GroupRoomList,
-];
 
 /**
  * A class for tracking the state of the right panel between layouts and
@@ -96,7 +86,7 @@ export default class RightPanelStore extends Store {
             this._state.showGroupPanel,
         );
 
-        if (PHASES_TO_PERSIST.includes(this._state.lastRoomPhase)) {
+        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this._state.lastRoomPhase)) {
             SettingsStore.setValue(
                 "lastRightPanelPhaseForRoom",
                 null,
@@ -104,7 +94,7 @@ export default class RightPanelStore extends Store {
                 this._state.lastRoomPhase,
             );
         }
-        if (PHASES_TO_PERSIST.includes(this._state.lastGroupPhase)) {
+        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this._state.lastGroupPhase)) {
             SettingsStore.setValue(
                 "lastRightPanelPhaseForGroup",
                 null,

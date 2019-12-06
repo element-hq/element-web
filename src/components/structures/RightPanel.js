@@ -28,7 +28,8 @@ import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
-import {RIGHT_PANEL_PHASES} from "../../stores/RightPanelStorePhases";
+import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
+import RightPanelStore from "../../stores/RightPanelStore";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -63,12 +64,21 @@ export default class RightPanel extends React.Component {
     }
 
     _getPhaseFromProps() {
+        const rps = RightPanelStore.getSharedInstance();
         if (this.props.groupId) {
-            return RIGHT_PANEL_PHASES.GroupMemberList;
+            if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
+                rps.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+                return RIGHT_PANEL_PHASES.GroupMemberList;
+            }
+            return rps.groupPanelPhase;
         } else if (this.props.user) {
             return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
-            return RIGHT_PANEL_PHASES.RoomMemberList;
+            if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
+                rps.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+                return RIGHT_PANEL_PHASES.RoomMemberList;
+            }
+            return rps.roomPanelPhase;
         }
     }
 
