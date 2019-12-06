@@ -21,7 +21,7 @@ import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 
 import { _t } from '../../../../languageHandler';
-import {Key} from "../../../../Keyboard";
+import { Key } from "../../../../Keyboard";
 
 /*
  * Access Secure Secret Storage by requesting the user's passphrase.
