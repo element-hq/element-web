@@ -1937,5 +1937,7 @@
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "<oldVersion /> verzióról <newVersion /> verzióra frissíted a szobát.",
     "Upgrade": "Frissítés",
     "Notification settings": "Értesítések beállítása",
-    "User Status": "Felhasználó állapota"
+    "User Status": "Felhasználó állapota",
+    "Reactions": "Reakciók",
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ezzel reagáltak: %(content)s</reactedWith>"
 }
