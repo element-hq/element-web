@@ -39,6 +39,8 @@ const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("G
 export default class RightPanelStore extends Store {
     static _instance;
 
+    _inhibitUpdates = false;
+
     constructor() {
         super(dis);
 
@@ -107,7 +109,12 @@ export default class RightPanelStore extends Store {
     }
 
     __onDispatch(payload) {
-        if (payload.action !== 'set_right_panel_phase') return;
+        if (payload.action === 'panel_disable') {
+            this._inhibitUpdates = payload.rightDisabled || payload.sideDisabled || false;
+            return;
+        }
+
+        if (payload.action !== 'set_right_panel_phase' || this._inhibitUpdates) return;
 
         const targetPhase = payload.phase;
         if (!RIGHT_PANEL_PHASES[targetPhase]) {

@@ -177,7 +177,7 @@ export default createReactClass({
             collapseLhs: false,
             leftDisabled: false,
             middleDisabled: false,
-            rightDisabled: false,
+            // the right panel's disabled state is tracked in its store.
 
             version: null,
             newVersion: null,
@@ -660,7 +660,7 @@ export default createReactClass({
                 this.setState({
                     leftDisabled: payload.leftDisabled || payload.sideDisabled || false,
                     middleDisabled: payload.middleDisabled || false,
-                    rightDisabled: payload.rightDisabled || payload.sideDisabled || false,
+                    // We don't track the right panel being disabled here - it's tracked in the store.
                 });
                 break;
             }

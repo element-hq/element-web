@@ -108,20 +108,9 @@ module.exports = createReactClass({
                 ),
             });
         });
-
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: true,
-        //     middleDisabled: true,
-        // });
     },
 
     componentWillUnmount: function() {
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: false,
-        //     middleDisabled: false,
-        // });
         if (this.filterTimeout) {
             clearTimeout(this.filterTimeout);
         }
