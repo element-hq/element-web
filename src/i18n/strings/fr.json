@@ -1923,5 +1923,18 @@
     "%(senderName)s placed a video call.": "%(senderName)s a passé un appel vidéo.",
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s a passé un appel vidéo. (pas pris en charge par ce navigateur)",
     "Clear notifications": "Vider les notifications",
-    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Personnalisez votre expérience avec des fonctionnalités expérimentales du labo. <a>En savoir plus</a>."
+    "Customise your experience with experimental labs features. <a>Learn more</a>.": "Personnalisez votre expérience avec des fonctionnalités expérimentales du labo. <a>En savoir plus</a>.",
+    "Error upgrading room": "Erreur lors de la mise à niveau du salon",
+    "Double check that your server supports the room version chosen and try again.": "Vérifiez que votre serveur prend en charge la version de salon choisie et réessayez.",
+    "This message cannot be decrypted": "Ce message ne peut pas être déchiffré",
+    "Unencrypted": "Non chiffré",
+    "Automatically invite users": "Inviter automatiquement les utilisateurs",
+    "Upgrade private room": "Mettre à niveau le salon privé",
+    "Upgrade public room": "Mettre à niveau le salon public",
+    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "La mise à niveau d’un salon est une action avancée et qui est généralement recommandée quand un salon est instable à cause d’anomalies, de fonctionnalités manquantes ou de failles de sécurité.",
+    "This usually only affects how the room is processed on the server. If you're having problems with your Riot, please <a>report a bug</a>.": "Cela n’affecte généralement que la façon dont le salon est traité sur le serveur. Si vous avez des problèmes avec votre Riot, <a>signalez une anomalie</a>.",
+    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Vous allez mettre à niveau ce salon de <oldVersion /> vers <newVersion />.",
+    "Upgrade": "Mettre à niveau",
+    "Notification settings": "Paramètres de notification",
+    "User Status": "Statut de l’utilisateur"
 }
