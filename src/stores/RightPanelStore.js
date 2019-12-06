@@ -123,6 +123,7 @@ export default class RightPanelStore extends Store {
             } else {
                 this._setState({
                     lastGroupPhase: targetPhase,
+                    showGroupPanel: true,
                 });
             }
         } else {
@@ -133,6 +134,7 @@ export default class RightPanelStore extends Store {
             } else {
                 this._setState({
                     lastRoomPhase: targetPhase,
+                    showRoomPanel: true,
                 });
             }
         }
