@@ -52,7 +52,10 @@ export default class GroupHeaderButtons extends HeaderButtons {
         } else if (payload.action === "view_group") {
             this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
         } else if (payload.action === "view_group_room") {
-            this.setPhase(RIGHT_PANEL_PHASES.GroupRoomInfo, {groupRoomId: payload.groupRoomId, groupId: payload.groupId});
+            this.setPhase(
+                RIGHT_PANEL_PHASES.GroupRoomInfo,
+                {groupRoomId: payload.groupRoomId, groupId: payload.groupId},
+            );
         } else if (payload.action === "view_group_room_list") {
             this.setPhase(RIGHT_PANEL_PHASES.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
