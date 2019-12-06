@@ -543,10 +543,6 @@ export default createReactClass({
         });
     },
 
-    _onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
-    },
-
     _onEditClick: function() {
         this.setState({
             editing: true,
