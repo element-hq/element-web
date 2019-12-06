@@ -67,7 +67,6 @@
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "browser-request": "^0.3.3",
-    "draft-js": "^0.11.0-alpha",
     "favico.js": "^0.3.10",
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
