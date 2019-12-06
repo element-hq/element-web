@@ -45,8 +45,6 @@ export default class RightPanel extends React.Component {
         };
     }
 
-    static Phase = RIGHT_PANEL_PHASES;
-
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -66,11 +64,11 @@ export default class RightPanel extends React.Component {
 
     _getPhaseFromProps() {
         if (this.props.groupId) {
-            return RightPanel.Phase.GroupMemberList;
+            return RIGHT_PANEL_PHASES.GroupMemberList;
         } else if (this.props.user) {
-            return RightPanel.Phase.RoomMemberInfo;
+            return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
-            return RightPanel.Phase.RoomMemberList;
+            return RIGHT_PANEL_PHASES.RoomMemberList;
         }
     }
 
@@ -117,7 +115,7 @@ export default class RightPanel extends React.Component {
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             this.setState({
-                phase: RightPanel.Phase.GroupMemberList,
+                phase: RIGHT_PANEL_PHASES.GroupMemberList,
             });
         });
     }
@@ -133,9 +131,9 @@ export default class RightPanel extends React.Component {
             return;
         }
         // redraw the badge on the membership list
-        if (this.state.phase === RightPanel.Phase.RoomMemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
-        } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo && member.roomId === this.props.roomId &&
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
@@ -169,13 +167,13 @@ export default class RightPanel extends React.Component {
 
         let panel = <div />;
 
-        if (this.props.roomId && this.state.phase === RightPanel.Phase.RoomMemberList) {
+        if (this.props.roomId && this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList) {
             panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
-        } else if (this.props.groupId && this.state.phase === RightPanel.Phase.GroupMemberList) {
+        } else if (this.props.groupId && this.state.phase === RIGHT_PANEL_PHASES.GroupMemberList) {
             panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
             if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
@@ -192,9 +190,9 @@ export default class RightPanel extends React.Component {
             } else {
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
             }
-        } else if (this.state.phase === RightPanel.Phase.Room3pidMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
-        } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
             if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
@@ -216,14 +214,14 @@ export default class RightPanel extends React.Component {
                     />
                 );
             }
-        } else if (this.state.phase === RightPanel.Phase.GroupRoomInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomInfo) {
             panel = <GroupRoomInfo
                 groupRoomId={this.state.groupRoomId}
                 groupId={this.props.groupId}
                 key={this.state.groupRoomId} />;
-        } else if (this.state.phase === RightPanel.Phase.NotificationPanel) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.NotificationPanel) {
             panel = <NotificationPanel />;
-        } else if (this.state.phase === RightPanel.Phase.FilePanel) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
         }
 
