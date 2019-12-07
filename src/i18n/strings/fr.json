@@ -1936,5 +1936,7 @@
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Vous allez mettre à niveau ce salon de <oldVersion /> vers <newVersion />.",
     "Upgrade": "Mettre à niveau",
     "Notification settings": "Paramètres de notification",
-    "User Status": "Statut de l’utilisateur"
+    "User Status": "Statut de l’utilisateur",
+    "Reactions": "Réactions",
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ont réagi avec %(content)s</reactedWith>"
 }
