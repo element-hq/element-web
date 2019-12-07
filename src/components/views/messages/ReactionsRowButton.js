@@ -126,10 +126,9 @@ export default class ReactionsRowButton extends React.PureComponent {
             );
         }
 
-        return <span className={classes}
-            role="button"
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return <AccessibleButton className={classes}
             aria-label={label}
-            tabindex="0"
             onClick={this.onClick}
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
@@ -141,6 +140,6 @@ export default class ReactionsRowButton extends React.PureComponent {
                 {count}
             </span>
             {tooltip}
-        </span>;
+        </AccessibleButton>;
     }
 }
