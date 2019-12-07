@@ -980,6 +980,8 @@
     "Use an identity server in Settings to receive invites directly in Riot.": "Use an identity server in Settings to receive invites directly in Riot.",
     "Share this email in Settings to receive invites directly in Riot.": "Share this email in Settings to receive invites directly in Riot.",
     "Do you want to chat with %(user)s?": "Do you want to chat with %(user)s?",
+    "<userName/> wants to chat": "<userName/> wants to chat",
+    "Start chatting": "Start chatting",
     "Do you want to join %(roomName)s?": "Do you want to join %(roomName)s?",
     "<userName/> invited you": "<userName/> invited you",
     "Reject": "Reject",
