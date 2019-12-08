@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -36,12 +35,11 @@ import {_t} from "../../languageHandler";
 // turn this on for drop & drag console debugging galore
 const debug = false;
 
-const RoomSubList = createReactClass({
-    displayName: 'RoomSubList',
+export default class RoomSubList extends React.PureComponent {
+    static displayName = 'RoomSubList';
+    static debug = debug;
 
-    debug: debug,
-
-    propTypes: {
+    static propTypes = {
         list: PropTypes.arrayOf(PropTypes.object).isRequired,
         label: PropTypes.string.isRequired,
         tagName: PropTypes.string,
@@ -59,10 +57,26 @@ const RoomSubList = createReactClass({
         incomingCall: PropTypes.object,
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
         forceExpand: PropTypes.bool,
-    },
+    };
 
-    getInitialState: function() {
+    static defaultProps = {
+        onHeaderClick: function() {
+        }, // NOP
+        extraTiles: [],
+        isInvite: false,
+    };
+
+    static getDerivedStateFromProps(props, state) {
         return {
+            listLength: props.list.length,
+            scrollTop: props.list.length === state.listLength ? state.scrollTop : 0,
+        };
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
             hidden: this.props.startAsHidden || false,
             // some values to get LazyRenderList starting
             scrollerHeight: 800,
@@ -71,53 +85,33 @@ const RoomSubList = createReactClass({
             // we have to store the length of the list here so we can see if it's changed or not...
             listLength: null,
         };
-    },
 
-    getDefaultProps: function() {
-        return {
-            onHeaderClick: function() {
-            }, // NOP
-            extraTiles: [],
-            isInvite: false,
-        };
-    },
-
-    UNSAFE_componentWillMount: function() {
         this._header = createRef();
         this._subList = createRef();
         this._scroller = createRef();
         this._headerButton = createRef();
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-    },
+    }
 
-    statics: {
-        getDerivedStateFromProps: function(props, state) {
-            return {
-                listLength: props.list.length,
-                scrollTop: props.list.length === state.listLength ? state.scrollTop : 0,
-            };
-        },
-    },
-
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    },
+    }
 
     // The header is collapsible if it is hidden or not stuck
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
-    isCollapsibleOnClick: function() {
+    isCollapsibleOnClick() {
         const stuck = this._header.current.dataset.stuck;
         if (!this.props.forceExpand && (this.state.hidden || stuck === undefined || stuck === "none")) {
             return true;
         } else {
             return false;
         }
-    },
+    }
 
-    onAction: function(payload) {
+    onAction = (payload) => {
         // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
         // but this is no longer true, so we must do it here (and can apply the small
         // optimisation of checking that we care about the room being read).
@@ -130,9 +124,9 @@ const RoomSubList = createReactClass({
         ) {
             this.forceUpdate();
         }
-    },
+    };
 
-    onClick: function(ev) {
+    onClick = (ev) => {
         if (this.isCollapsibleOnClick()) {
             // The header isCollapsible, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
@@ -143,9 +137,9 @@ const RoomSubList = createReactClass({
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this._header.current.dataset.originalPosition);
         }
-    },
+    };
 
-    onHeaderKeyDown: function(ev) {
+    onHeaderKeyDown = (ev) => {
         switch (ev.key) {
             case Key.TAB:
                 // Prevent LeftPanel handling Tab if focus is on the sublist header itself
@@ -173,9 +167,9 @@ const RoomSubList = createReactClass({
                 break;
             }
         }
-    },
+    };
 
-    onKeyDown: function(ev) {
+    onKeyDown = (ev) => {
         switch (ev.key) {
             // On ARROW_LEFT go to the sublist header
             case Key.ARROW_LEFT:
@@ -186,24 +180,24 @@ const RoomSubList = createReactClass({
             case Key.ARROW_RIGHT:
                 ev.stopPropagation();
         }
-    },
+    };
 
-    onRoomTileClick(roomId, ev) {
+    onRoomTileClick = (roomId, ev) => {
         dis.dispatch({
             action: 'view_room',
             room_id: roomId,
             clear_search: (ev && (ev.keyCode === KeyCode.ENTER || ev.keyCode === KeyCode.SPACE)),
         });
-    },
+    };
 
-    _updateSubListCount: function() {
+    _updateSubListCount = () => {
         // Force an update by setting the state to the current state
         // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
         // method is honoured
         this.setState(this.state);
-    },
+    };
 
-    makeRoomTile: function(room) {
+    makeRoomTile = (room) => {
         return <RoomTile
             room={room}
             roomSubList={this}
@@ -218,9 +212,9 @@ const RoomSubList = createReactClass({
             incomingCall={null}
             onClick={this.onRoomTileClick}
         />;
-    },
+    };
 
-    _onNotifBadgeClick: function(e) {
+    _onNotifBadgeClick = (e) => {
         // prevent the roomsublist collapsing
         e.preventDefault();
         e.stopPropagation();
@@ -231,9 +225,9 @@ const RoomSubList = createReactClass({
                 room_id: room.roomId,
             });
         }
-    },
+    };
 
-    _onInviteBadgeClick: function(e) {
+    _onInviteBadgeClick = (e) => {
         // prevent the roomsublist collapsing
         e.preventDefault();
         e.stopPropagation();
@@ -253,14 +247,14 @@ const RoomSubList = createReactClass({
                 });
             }
         }
-    },
+    };
 
-    onAddRoom: function(e) {
+    onAddRoom = (e) => {
         e.stopPropagation();
         if (this.props.onAddRoom) this.props.onAddRoom();
-    },
+    };
 
-    _getHeaderJsx: function(isCollapsed) {
+    _getHeaderJsx(isCollapsed) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AccessibleTooltipButton = sdk.getComponent('elements.AccessibleTooltipButton');
         const subListNotifications = !this.props.isInvite ?
@@ -352,36 +346,36 @@ const RoomSubList = createReactClass({
                 { addRoomButton }
             </div>
         );
-    },
+    }
 
-    checkOverflow: function() {
+    checkOverflow = () => {
         if (this._scroller.current) {
             this._scroller.current.checkOverflow();
         }
-    },
+    };
 
-    setHeight: function(height) {
+    setHeight = (height) => {
         if (this._subList.current) {
             this._subList.current.style.height = `${height}px`;
         }
         this._updateLazyRenderHeight(height);
-    },
+    };
 
-    _updateLazyRenderHeight: function(height) {
+    _updateLazyRenderHeight(height) {
         this.setState({scrollerHeight: height});
-    },
+    }
 
-    _onScroll: function() {
+    _onScroll = () => {
         this.setState({scrollTop: this._scroller.current.getScrollTop()});
-    },
+    };
 
     _canUseLazyListRendering() {
         // for now disable lazy rendering as they are already rendered tiles
         // not rooms like props.list we pass to LazyRenderList
         return !this.props.extraTiles || !this.props.extraTiles.length;
-    },
+    }
 
-    render: function() {
+    render() {
         const len = this.props.list.length + this.props.extraTiles.length;
         const isCollapsed = this.state.hidden && !this.props.forceExpand;
 
@@ -434,7 +428,5 @@ const RoomSubList = createReactClass({
                 { content }
             </div>
         );
-    },
-});
-
-module.exports = RoomSubList;
+    }
+}
