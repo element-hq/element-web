@@ -422,7 +422,7 @@ module.exports = createReactClass({
             </MenuItem>
         );
 
-        if (this.props.eventTileOps && this.props.eventTileOps.getInnerText) {
+        if (this.props.eventTileOps) { // this event is rendered using TextuaLBody
             quoteButton = (
                 <MenuItem className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
                     { _t('Quote') }
