@@ -203,6 +203,8 @@ const TimelinePanel = createReactClass({
         this.lastRRSentEventId = undefined;
         this.lastRMSentEventId = undefined;
 
+        this._messagePanel = createRef();
+
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }
@@ -225,8 +227,6 @@ const TimelinePanel = createReactClass({
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
-
-        this._messagePanel = createRef();
     },
 
     componentWillReceiveProps: function(newProps) {
