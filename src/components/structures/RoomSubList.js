@@ -82,8 +82,14 @@ const RoomSubList = createReactClass({
         };
     },
 
-    componentDidMount: function() {
+    UNSAFE_componentWillMount: function() {
+        this._header = createRef();
+        this._subList = createRef();
+        this._scroller = createRef();
         this._headerButton = createRef();
+    },
+
+    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
 
@@ -103,7 +109,7 @@ const RoomSubList = createReactClass({
     // The header is collapsible if it is hidden or not stuck
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isCollapsibleOnClick: function() {
-        const stuck = this.refs.header.dataset.stuck;
+        const stuck = this._header.current.dataset.stuck;
         if (!this.props.forceExpand && (this.state.hidden || stuck === undefined || stuck === "none")) {
             return true;
         } else {
@@ -135,7 +141,7 @@ const RoomSubList = createReactClass({
             });
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
-            this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
+            this.props.onHeaderClick(this.state.hidden, this._header.current.dataset.originalPosition);
         }
     },
 
@@ -159,7 +165,7 @@ const RoomSubList = createReactClass({
                     this.onClick();
                 } else if (!this.props.forceExpand) {
                     // sublist is expanded, go to first room
-                    const element = this.refs.subList && this.refs.subList.querySelector(".mx_RoomTile");
+                    const element = this._subList.current && this._subList.current.querySelector(".mx_RoomTile");
                     if (element) {
                         element.focus();
                     }
@@ -328,7 +334,7 @@ const RoomSubList = createReactClass({
         }
 
         return (
-            <div className="mx_RoomSubList_labelContainer" title={title} ref="header" onKeyDown={this.onHeaderKeyDown}>
+            <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
                 <AccessibleButton
                     onClick={this.onClick}
                     className="mx_RoomSubList_label"
@@ -349,14 +355,14 @@ const RoomSubList = createReactClass({
     },
 
     checkOverflow: function() {
-        if (this.refs.scroller) {
-            this.refs.scroller.checkOverflow();
+        if (this._scroller.current) {
+            this._scroller.current.checkOverflow();
         }
     },
 
     setHeight: function(height) {
-        if (this.refs.subList) {
-            this.refs.subList.style.height = `${height}px`;
+        if (this._subList.current) {
+            this._subList.current.style.height = `${height}px`;
         }
         this._updateLazyRenderHeight(height);
     },
@@ -366,7 +372,7 @@ const RoomSubList = createReactClass({
     },
 
     _onScroll: function() {
-        this.setState({scrollTop: this.refs.scroller.getScrollTop()});
+        this.setState({scrollTop: this._scroller.current.getScrollTop()});
     },
 
     _canUseLazyListRendering() {
@@ -391,7 +397,7 @@ const RoomSubList = createReactClass({
                 // no body
             } else if (this._canUseLazyListRendering()) {
                 content = (
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
+                    <IndicatorScrollbar ref={this._scroller} className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
                         <LazyRenderList
                             scrollTop={this.state.scrollTop }
                             height={ this.state.scrollerHeight }
@@ -404,7 +410,7 @@ const RoomSubList = createReactClass({
                 const roomTiles = this.props.list.map(r => this.makeRoomTile(r));
                 const tiles = roomTiles.concat(this.props.extraTiles);
                 content = (
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
+                    <IndicatorScrollbar ref={this._scroller} className="mx_RoomSubList_scroll" onScroll={this._onScroll}>
                         { tiles }
                     </IndicatorScrollbar>
                 );
@@ -418,7 +424,7 @@ const RoomSubList = createReactClass({
 
         return (
             <div
-                ref="subList"
+                ref={this._subList}
                 className={subListClasses}
                 role="group"
                 aria-label={this.props.label}

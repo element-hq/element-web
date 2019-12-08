@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
@@ -106,10 +106,14 @@ module.exports = createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._textinput = createRef();
+    },
+
     componentDidMount: function() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
-            this.refs.textinput.value = this.props.value;
+            this._textinput.current.value = this.props.value;
         }
     },
 
@@ -126,8 +130,8 @@ module.exports = createReactClass({
         let selectedList = this.state.selectedList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local selectedList
-        if (this.refs.textinput.value !== '') {
-            selectedList = this._addAddressesToList([this.refs.textinput.value]);
+        if (this._textinput.current.value !== '') {
+            selectedList = this._addAddressesToList([this._textinput.current.value]);
             if (selectedList === null) return;
         }
         this.props.onFinished(true, selectedList);
@@ -154,23 +158,23 @@ module.exports = createReactClass({
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.chooseSelection();
-        } else if (this.refs.textinput.value.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
+        } else if (this._textinput.current.value.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
             this.onDismissed(this.state.selectedList.length - 1)();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.refs.textinput.value === '') {
+            if (this._textinput.current.value === '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addAddressesToList([this.refs.textinput.value]);
+                this._addAddressesToList([this._textinput.current.value]);
             }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            this._addAddressesToList([this.refs.textinput.value]);
+            this._addAddressesToList([this._textinput.current.value]);
         }
     },
 
@@ -647,7 +651,7 @@ module.exports = createReactClass({
                 onPaste={this._onPaste}
                 rows="1"
                 id="textinput"
-                ref="textinput"
+                ref={this._textinput}
                 className="mx_AddressPickerDialog_input"
                 onChange={this.onQueryChanged}
                 placeholder={this.getPlaceholder()}

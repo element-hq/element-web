@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
@@ -86,6 +86,10 @@ module.exports = createReactClass({
         return successful;
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._content = createRef();
+    },
+
     componentDidMount: function() {
         this._unmounted = false;
         if (!this.props.editState) {
@@ -94,13 +98,13 @@ module.exports = createReactClass({
     },
 
     _applyFormatting() {
-        this.activateSpoilers(this.refs.content.children);
+        this.activateSpoilers(this._content.current.children);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks(this.refs.content.children, this.props.mxEvent);
-        HtmlUtils.linkifyElement(this.refs.content);
+        pillifyLinks(this._content.current.children, this.props.mxEvent);
+        HtmlUtils.linkifyElement(this._content.current);
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
@@ -163,7 +167,7 @@ module.exports = createReactClass({
         //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
-            let links = this.findLinks(this.refs.content.children);
+            let links = this.findLinks(this._content.current.children);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -327,7 +331,7 @@ module.exports = createReactClass({
             },
 
             getInnerText: () => {
-                return this.refs.content.innerText;
+                return this._content.current.innerText;
             },
         };
     },
@@ -452,7 +456,7 @@ module.exports = createReactClass({
             case "m.emote":
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
-                    <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
+                    <span ref={this._content} className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
@@ -467,14 +471,14 @@ module.exports = createReactClass({
                 );
             case "m.notice":
                 return (
-                    <span ref="content" className="mx_MNoticeBody mx_EventTile_content">
+                    <span ref={this._content} className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>
                 );
             default: // including "m.text"
                 return (
-                    <span ref="content" className="mx_MTextBody mx_EventTile_content">
+                    <span ref={this._content} className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>

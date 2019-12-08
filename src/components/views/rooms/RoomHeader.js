@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -56,6 +56,10 @@ module.exports = createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._topic = createRef();
+    },
+
     componentDidMount: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
@@ -70,8 +74,8 @@ module.exports = createReactClass({
     },
 
     componentDidUpdate: function() {
-        if (this.refs.topic) {
-            linkifyElement(this.refs.topic);
+        if (this._topic.current) {
+            linkifyElement(this._topic.current);
         }
     },
 
@@ -204,7 +208,7 @@ module.exports = createReactClass({
             }
         }
         const topicElement =
-            <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
+            <div className="mx_RoomHeader_topic" ref={this._topic} title={topic} dir="auto">{ topic }</div>;
         const avatarSize = 28;
         let roomAvatar;
         if (this.props.room) {

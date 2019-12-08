@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 
@@ -65,6 +65,8 @@ export default class MImageBody extends React.Component {
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
         };
+
+        this._image = createRef();
     }
 
     componentWillMount() {
@@ -158,8 +160,8 @@ export default class MImageBody extends React.Component {
 
         let loadedImageDimensions;
 
-        if (this.refs.image) {
-            const { naturalWidth, naturalHeight } = this.refs.image;
+        if (this._image.current) {
+            const { naturalWidth, naturalHeight } = this._image.current;
             // this is only used as a fallback in case content.info.w/h is missing
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
@@ -342,7 +344,7 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{display: 'none'}} src={thumbUrl} ref="image"
+                        <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
                              alt={content.body}
                              onError={this.onImageError}
                              onLoad={this.onImageLoad}
@@ -385,7 +387,7 @@ export default class MImageBody extends React.Component {
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
                      style={{ maxWidth: maxWidth + "px" }}
                      alt={content.body}
                      onError={this.onImageError}

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {createRef} from "react";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { KeyCode } from '../../Keyboard';
@@ -166,6 +166,8 @@ module.exports = createReactClass({
         }
 
         this.resetScrollState();
+
+        this._itemlist = createRef();
     },
 
     componentDidMount: function() {
@@ -328,7 +330,7 @@ module.exports = createReactClass({
             this._isFilling = true;
         }
 
-        const itemlist = this.refs.itemlist;
+        const itemlist = this._itemlist.current;
         const firstTile = itemlist && itemlist.firstElementChild;
         const contentTop = firstTile && firstTile.offsetTop;
         const fillPromises = [];
@@ -373,7 +375,7 @@ module.exports = createReactClass({
 
         const origExcessHeight = excessHeight;
 
-        const tiles = this.refs.itemlist.children;
+        const tiles = this._itemlist.current.children;
 
         // The scroll token of the first/last tile to be unpaginated
         let markerScrollToken = null;
@@ -602,7 +604,7 @@ module.exports = createReactClass({
         const scrollNode = this._getScrollNode();
         const viewportBottom = scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight);
 
-        const itemlist = this.refs.itemlist;
+        const itemlist = this._itemlist.current;
         const messages = itemlist.children;
         let node = null;
 
@@ -644,7 +646,7 @@ module.exports = createReactClass({
             const sn = this._getScrollNode();
             sn.scrollTop = sn.scrollHeight;
         } else if (scrollState.trackedScrollToken) {
-            const itemlist = this.refs.itemlist;
+            const itemlist = this._itemlist.current;
             const trackedNode = this._getTrackedNode();
             if (trackedNode) {
                 const newBottomOffset = this._topFromBottom(trackedNode);
@@ -682,7 +684,7 @@ module.exports = createReactClass({
         }
 
         const sn = this._getScrollNode();
-        const itemlist = this.refs.itemlist;
+        const itemlist = this._itemlist.current;
         const contentHeight = this._getMessagesHeight();
         const minHeight = sn.clientHeight;
         const height = Math.max(minHeight, contentHeight);
@@ -724,7 +726,7 @@ module.exports = createReactClass({
 
         if (!trackedNode || !trackedNode.parentElement) {
             let node;
-            const messages = this.refs.itemlist.children;
+            const messages = this._itemlist.current.children;
             const scrollToken = scrollState.trackedScrollToken;
 
             for (let i = messages.length-1; i >= 0; --i) {
@@ -756,7 +758,7 @@ module.exports = createReactClass({
     },
 
     _getMessagesHeight() {
-        const itemlist = this.refs.itemlist;
+        const itemlist = this._itemlist.current;
         const lastNode = itemlist.lastElementChild;
         const lastNodeBottom = lastNode ? lastNode.offsetTop + lastNode.clientHeight : 0;
         const firstNodeTop = itemlist.firstElementChild ? itemlist.firstElementChild.offsetTop : 0;
@@ -765,7 +767,7 @@ module.exports = createReactClass({
     },
 
     _topFromBottom(node) {
-        return this.refs.itemlist.clientHeight - node.offsetTop;
+        return this._itemlist.current.clientHeight - node.offsetTop;
     },
 
     /* get the DOM node which has the scrollTop property we care about for our
@@ -797,7 +799,7 @@ module.exports = createReactClass({
     the same minimum bottom offset, effectively preventing the timeline to shrink.
     */
     preventShrinking: function() {
-        const messageList = this.refs.itemlist;
+        const messageList = this._itemlist.current;
         const tiles = messageList && messageList.children;
         if (!messageList) {
             return;
@@ -824,7 +826,7 @@ module.exports = createReactClass({
 
     /** Clear shrinking prevention. Used internally, and when the timeline is reloaded. */
     clearPreventShrinking: function() {
-        const messageList = this.refs.itemlist;
+        const messageList = this._itemlist.current;
         const balanceElement = messageList && messageList.parentElement;
         if (balanceElement) balanceElement.style.paddingBottom = null;
         this.preventShrinkingState = null;
@@ -843,7 +845,7 @@ module.exports = createReactClass({
         if (this.preventShrinkingState) {
             const sn = this._getScrollNode();
             const scrollState = this.scrollState;
-            const messageList = this.refs.itemlist;
+            const messageList = this._itemlist.current;
             const {offsetNode, offsetFromBottom} = this.preventShrinkingState;
             // element used to set paddingBottom to balance the typing notifs disappearing
             const balanceElement = messageList.parentElement;
@@ -879,7 +881,7 @@ module.exports = createReactClass({
                 onScroll={this.onScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
-                        <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
+                        <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite">
                             { this.props.children }
                         </ol>
                     </div>

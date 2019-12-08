@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
@@ -49,6 +49,11 @@ module.exports = createReactClass({
         onResize: PropTypes.func,
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._local = createRef();
+        this._remote = createRef();
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
@@ -58,7 +63,7 @@ module.exports = createReactClass({
     },
 
     getRemoteVideoElement: function() {
-        return ReactDOM.findDOMNode(this.refs.remote);
+        return ReactDOM.findDOMNode(this._remote.current);
     },
 
     getRemoteAudioElement: function() {
@@ -74,7 +79,7 @@ module.exports = createReactClass({
     },
 
     getLocalVideoElement: function() {
-        return ReactDOM.findDOMNode(this.refs.local);
+        return ReactDOM.findDOMNode(this._local.current);
     },
 
     setContainer: function(c) {
@@ -125,11 +130,11 @@ module.exports = createReactClass({
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={this.props.onClick}>
                 <div className="mx_VideoView_remoteVideoFeed">
-                    <VideoFeed ref="remote" onResize={this.props.onResize}
+                    <VideoFeed ref={this._remote} onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
                 </div>
                 <div className={localVideoFeedClasses}>
-                    <VideoFeed ref="local" />
+                    <VideoFeed ref={this._local} />
                 </div>
             </div>
         );
