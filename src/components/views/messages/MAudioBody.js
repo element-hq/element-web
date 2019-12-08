@@ -80,7 +80,7 @@ export default class MAudioBody extends React.Component {
 
         if (this.state.error !== null) {
             return (
-                <span className="mx_MAudioBody" ref="body">
+                <span className="mx_MAudioBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting audio") }
                 </span>

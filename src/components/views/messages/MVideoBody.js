@@ -132,7 +132,7 @@ module.exports = createReactClass({
 
         if (this.state.error !== null) {
             return (
-                <span className="mx_MVideoBody" ref="body">
+                <span className="mx_MVideoBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting video") }
                 </span>
@@ -144,8 +144,8 @@ module.exports = createReactClass({
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
             return (
-                <span className="mx_MVideoBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
+                <span className="mx_MVideoBody">
+                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner">
                         <img src={require("../../../../res/img/spinner.gif")} alt={content.body} width="16" height="16" />
                     </div>
                 </span>

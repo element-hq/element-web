@@ -325,7 +325,7 @@ module.exports = createReactClass({
                 };
 
                 return (
-                    <span className="mx_MFileBody" ref="body">
+                    <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }

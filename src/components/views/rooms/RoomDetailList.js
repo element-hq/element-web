@@ -55,7 +55,7 @@ export default createReactClass({
         if (rows.length === 0) {
             rooms = <i>{ _t('No rooms to show') }</i>;
         } else {
-            rooms = <table ref="directory_table" className="mx_RoomDirectory_table">
+            rooms = <table className="mx_RoomDirectory_table">
                 <tbody>
                     { this.getRows() }
                 </tbody>
