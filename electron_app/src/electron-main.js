@@ -64,11 +64,6 @@ if (argv["help"]) {
     app.exit();
 }
 
-// boolean flag set whilst we are doing one-time origin migration
-// We only serve the origin migration script while we're actually
-// migrating to mitigate any risk of it being used maliciously.
-let migratingOrigin = false;
-
 if (argv['profile-dir']) {
     app.setPath('userData', argv['profile-dir']);
 } else if (argv['profile']) {
@@ -230,17 +225,6 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             } else {
                 mainWindow.focus();
             }
-            break;
-        case 'origin_migrate':
-            // NB. The code to call this has now been removed so this
-            // should never be called. This code itself has been removed
-            // with the migration to the riot-desktop repo, with the
-            // expectation that this version will go away and be superseeded
-            // by the riot-desktop version, after which this version will
-            // be removed and all the origin migrationm code will go away.
-            migratingOrigin = true;
-            await migrateFromOldOrigin();
-            migratingOrigin = false;
             break;
         case 'getConfig':
             ret = vectorConfig;

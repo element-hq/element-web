@@ -190,7 +190,7 @@ module.exports = {
             chunks: ['mobileguide'],
         }),
     ],
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
 
     // configuration for the webpack-dev-server
     devServer: {

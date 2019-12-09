@@ -165,8 +165,7 @@
         "from": "electron_app/img",
         "to": "img"
       },
-      "webapp/**/*",
-      "origin_migrator/**/*"
+      "webapp/**/*"
     ],
     "linux": {
       "target": "deb",
