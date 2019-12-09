@@ -401,13 +401,18 @@ module.exports = createReactClass({
                 label={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
             />;
         }
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
-            <div
-                key="editedMarker" className="mx_EventTile_edited"
+            <AccessibleButton
+                key="editedMarker"
+                className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
                 onMouseEnter={this._onMouseEnterEditedMarker}
                 onMouseLeave={this._onMouseLeaveEditedMarker}
-            >{editedTooltip}<span>{`(${_t("edited")})`}</span></div>
+            >
+                { editedTooltip }<span>{`(${_t("edited")})`}</span>
+            </AccessibleButton>
         );
     },
 
