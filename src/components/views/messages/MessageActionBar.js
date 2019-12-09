@@ -78,14 +78,17 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
     </React.Fragment>;
 };
 
-const ReactButton = ({mxEvent, reactions}) => {
+const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    useEffect(() => {
+        onFocusChange(menuDisplayed);
+    }, [onFocusChange, menuDisplayed]);
 
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
@@ -162,7 +165,9 @@ export default class MessageActionBar extends React.PureComponent {
 
         if (isContentActionable(this.props.mxEvent)) {
             if (this.context.room.canReact) {
-                reactButton = <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} />;
+                reactButton = (
+                    <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} onFocusChange={this.onFocusChange} />
+                );
             }
             if (this.context.room.canReply) {
                 replyButton = <AccessibleButton

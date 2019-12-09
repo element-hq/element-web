@@ -70,10 +70,13 @@ export class ContextMenu extends React.Component {
 
         // on resize callback
         windowResize: PropTypes.func,
+
+        catchTab: PropTypes.bool, // whether to close the ContextMenu on TAB (default=true)
     };
 
     static defaultProps = {
         hasBackground: true,
+        catchTab: true,
     };
 
     constructor() {
@@ -187,6 +190,11 @@ export class ContextMenu extends React.Component {
 
         switch (ev.key) {
             case Key.TAB:
+                if (!this.props.catchTab) {
+                    handled = false;
+                    break;
+                }
+                // fallthrough
             case Key.ESCAPE:
                 this.props.onFinished();
                 break;
