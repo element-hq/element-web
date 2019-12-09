@@ -53,12 +53,6 @@ export default class BridgeSettingsTab extends React.Component {
         const protocolName = content.protocol.displayname || content.protocol.id;
         const channelName = channel.displayname || channel.id;
         const networkName = network ? network.displayname || network.id : "";
-        let status = null;
-        if (content.status === "active") {
-            status = (<p> Status: <b>Active</b> </p>);
-        } else if (content.status === "disabled") {
-            status = (<p> Status: <b>Disabled</b> </p>);
-        }
 
         let creator = null;
         if (content.creator) {
@@ -122,7 +116,6 @@ export default class BridgeSettingsTab extends React.Component {
                 <h3>{channelIcon} {channelName} {networkName ? ` on ${networkName}` : ""} {networkIcon}</h3>
                 <p> Connected via {protocolName} </p>
                 <details>
-                    {status}
                     {creator}
                     {bot}
                     {chanAndNetworkInfo}
