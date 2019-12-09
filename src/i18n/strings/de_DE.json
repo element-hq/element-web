@@ -1471,7 +1471,7 @@
     "Please supply a https:// or http:// widget URL": "Bitte gib eine https:// oder http:// Widget-URL an",
     "Sends the given emote coloured as a rainbow": "Sended das Emoji in Regenbogenfarben",
     "%(senderName)s made no change.": "%(senderName)s hat keine Änderung vorgenommen.",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Betreten des Raumes für %(targetDisplayName)s zurückgezogen.",
+    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Raumbeitritt für %(targetDisplayName)s zurückgezogen.",
     "Cannot reach homeserver": "Der Heimserver ist nicht erreichbar",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Stelle sicher, dass du eine stabile Internetverbindung hast oder wende dich an deinen Server-Administrator",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Wende dich an deinen Riot Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
