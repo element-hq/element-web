@@ -24,6 +24,8 @@ import Matrix from "matrix-js-sdk";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
+// what-input helps improve keyboard accessibility
+import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
