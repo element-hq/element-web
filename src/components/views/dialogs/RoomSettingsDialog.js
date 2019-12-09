@@ -28,7 +28,7 @@ import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
-import SettingsStore from "../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {

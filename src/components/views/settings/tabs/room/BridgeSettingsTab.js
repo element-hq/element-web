@@ -52,28 +52,31 @@ export default class BridgeSettingsTab extends React.Component {
         const { channel, network } = content;
         const protocolName = content.protocol.displayname || content.protocol.id;
         const channelName = channel.displayname || channel.id;
-        const networkName = network ? network.displayname || network.id : "";
+        const networkName = network ? network.displayname || network.id : protocolName;
 
         let creator = null;
         if (content.creator) {
-            creator = (<p>
-                This bridge was provisioned by <Pill
-                    type={Pill.TYPE_USER_MENTION}
-                    room={room}
-                    url={makeUserPermalink(content.creator)}
-                    shouldShowPillAvatar={true}
-                />
-            </p>);
+            const pill = <Pill
+                type={Pill.TYPE_USER_MENTION}
+                room={room}
+                url={makeUserPermalink(content.creator)}
+                shouldShowPillAvatar={true}
+            />;
+            creator = (<p>{
+                _t("This bridge was provisioned by %(pill)s", {
+                    pill,
+                })
+            } </p>);
         }
 
-        const bot = (<p>
-            The bridge is managed by the <Pill
-            type={Pill.TYPE_USER_MENTION}
-            room={room}
-            url={makeUserPermalink(event.getSender())}
-            shouldShowPillAvatar={true}
-            /> bot user.</p>
-        );
+        const bot = (<p> {_t("This bridge is managed by the %(pill)s bot user.", {
+            pill: <Pill
+                type={Pill.TYPE_USER_MENTION}
+                room={room}
+                url={makeUserPermalink(event.getSender())}
+                shouldShowPillAvatar={true}
+                />,
+        })} </p>);
         let channelLink = channelName;
         if (channel.external_url) {
             channelLink = <a target="_blank" href={channel.external_url}>{channelName}</a>;
@@ -85,7 +88,11 @@ export default class BridgeSettingsTab extends React.Component {
         }
 
         const chanAndNetworkInfo = (
-            <p> Bridged into {channelLink} {networkLink}, on {protocolName}</p>
+            (_t("Bridged into %(channelLink)s %(networkLink)s, on %(protocolName)s", {
+                channelLink,
+                networkLink,
+                protocolName,
+            }))
         );
 
         let networkIcon = null;
@@ -111,14 +118,21 @@ export default class BridgeSettingsTab extends React.Component {
                             url={ avatarUrl } />;
         }
 
+        const heading = _t("Connected to %(channelIcon)s %(channelName)s on %(networkIcon)s %(networkName)s", {
+            channelIcon,
+            channelName,
+            networkName,
+            networkIcon,
+        });
+
         return (<li key={event.stateKey}>
             <div>
-                <h3>{channelIcon} {channelName} {networkName ? ` on ${networkName}` : ""} {networkIcon}</h3>
-                <p> Connected via {protocolName} </p>
+                <h3> {heading} </h3>
+                <p>{_t("Connected via %(protocolName)s", { protocolName })}</p>
                 <details>
                     {creator}
                     {bot}
-                    {chanAndNetworkInfo}
+                    <p>{chanAndNetworkInfo}</p>
                 </details>
             </div>
         </li>);
@@ -146,7 +160,7 @@ export default class BridgeSettingsTab extends React.Component {
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Bridge Info")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <p> Below is a list of bridges connected to this room. </p>
+                    <p>{ _t("Below is a list of bridges connected to this room.") }</p>
                     <ul className="mx_RoomSettingsDialog_BridgeList">
                         { bridgeEvents.map((event) => this._renderBridgeCard(event, room)) }
                     </ul>

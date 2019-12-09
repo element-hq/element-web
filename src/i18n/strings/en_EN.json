@@ -342,6 +342,7 @@
     "Send verification requests in direct message, including a new verification UX in the member panel.": "Send verification requests in direct message, including a new verification UX in the member panel.",
     "Enable cross-signing to verify per-user instead of per-device (in development)": "Enable cross-signing to verify per-user instead of per-device (in development)",
     "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
+    "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Use the new, faster, composer for writing messages": "Use the new, faster, composer for writing messages",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
@@ -725,7 +726,13 @@
     "Room version:": "Room version:",
     "Developer options": "Developer options",
     "Open Devtools": "Open Devtools",
+    "This bridge was provisioned by %(pill)s": "This bridge was provisioned by %(pill)s",
+    "This bridge is managed by the %(pill)s bot user.": "This bridge is managed by the %(pill)s bot user.",
+    "Bridged into %(channelLink)s %(networkLink)s, on %(protocolName)s": "Bridged into %(channelLink)s %(networkLink)s, on %(protocolName)s",
+    "Connected to %(channelIcon)s %(channelName)s on %(networkIcon)s %(networkName)s": "Connected to %(channelIcon)s %(channelName)s on %(networkIcon)s %(networkName)s",
+    "Connected via %(protocolName)s": "Connected via %(protocolName)s",
     "Bridge Info": "Bridge Info",
+    "Below is a list of bridges connected to this room.": "Below is a list of bridges connected to this room.",
     "Room Addresses": "Room Addresses",
     "Publish this room to the public in %(domain)s's room directory?": "Publish this room to the public in %(domain)s's room directory?",
     "URL Previews": "URL Previews",
@@ -1932,6 +1939,5 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
-    "Show info about bridges in room settings": "Show info about bridges in room settings"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }
