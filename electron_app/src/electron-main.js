@@ -232,6 +232,10 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             }
             break;
         case 'origin_migrate':
+            // NB. The code to call this has now been removed so this
+            // should never be called. This code itself has been removed
+            // with the migration to the riot-desktop repo, with the
+            // expectation that this will become the new home for this code.
             migratingOrigin = true;
             await migrateFromOldOrigin();
             migratingOrigin = false;

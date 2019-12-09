@@ -355,10 +355,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.location.reload(false);
     }
 
-    async migrateFromOldOrigin() {
-        return this._ipcCall('origin_migrate');
-    }
-
     async _ipcCall(name, ...args) {
         const ipcCallId = ++this._nextIpcCallId;
         return new Promise((resolve, reject) => {
