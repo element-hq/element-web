@@ -173,12 +173,4 @@ export default class VectorBasePlatform extends BasePlatform {
     getDefaultDeviceDisplayName(): string {
         return _t("Unknown device");
     }
-
-    /**
-     * Migrate account data from a previous origin
-     * Used only for the electron app
-     */
-    async migrateFromOldOrigin() {
-        return false;
-    }
 }
