@@ -411,7 +411,7 @@ export const toRightOf = (elementRect, chevronOffset=12) => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
-    return {left, top};
+    return {left, top, chevronOffset};
 };
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
