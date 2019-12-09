@@ -235,7 +235,9 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             // NB. The code to call this has now been removed so this
             // should never be called. This code itself has been removed
             // with the migration to the riot-desktop repo, with the
-            // expectation that this will become the new home for this code.
+            // expectation that this version will go away and be superseeded
+            // by the riot-desktop version, after which this version will
+            // be removed and all the origin migrationm code will go away.
             migratingOrigin = true;
             await migrateFromOldOrigin();
             migratingOrigin = false;
