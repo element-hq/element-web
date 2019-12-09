@@ -28,6 +28,7 @@ import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
+import SettingsStore from "../settings/SettingsStore";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -53,7 +54,8 @@ export default class RoomSettingsDialog extends React.Component {
 
     _getTabs() {
         const tabs = [];
-        const shouldShowBridgeIcon = BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
+        const featureFlag = SettingsStore.isFeatureEnabled("feature_bridge_state");
+        const shouldShowBridgeIcon = featureFlag && BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
 
         tabs.push(new Tab(
             _td("General"),
