@@ -1936,5 +1936,7 @@
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "您將要把此聊天室從 <oldVersion /> 升級到 <newVersion />。",
     "Upgrade": "升級",
     "Notification settings": "通知設定",
-    "User Status": "使用者狀態"
+    "User Status": "使用者狀態",
+    "Reactions": "反應",
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> 反應了 %(content)s</reactedWith>"
 }
