@@ -57,19 +57,31 @@ module.exports = createReactClass({
     },
 
     render: function() {
-        const searchButtonClasses = classNames({ mx_SearchBar_searchButton: true, mx_SearchBar_searching: this.props.searchInProgress });
-        const thisRoomClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'Room' });
-        const allRoomsClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'All' });
+        const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
+            mx_SearchBar_searching: this.props.searchInProgress,
+        });
+        const thisRoomClasses = classNames("mx_SearchBar_button", {
+            mx_SearchBar_unselected: this.state.scope !== 'Room',
+        });
+        const allRoomsClasses = classNames("mx_SearchBar_button", {
+            mx_SearchBar_unselected: this.state.scope !== 'All',
+        });
 
         return (
             <div className="mx_SearchBar">
-                <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick}>{_t("This Room")}</AccessibleButton>
-                <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick}>{_t("All Rooms")}</AccessibleButton>
+                <div className="mx_SearchBar_buttons" role="radiogroup">
+                    <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick} aria-checked={this.state.scope === 'Room'} role="radio">
+                        {_t("This Room")}
+                    </AccessibleButton>
+                    <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick} aria-checked={this.state.scope === 'All'} role="radio">
+                        {_t("All Rooms")}
+                    </AccessibleButton>
+                </div>
                 <div className="mx_SearchBar_input mx_textinput">
                     <input ref="search_term" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
-                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}></AccessibleButton>
+                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
                 </div>
-                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}></AccessibleButton>
+                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
             </div>
         );
     },

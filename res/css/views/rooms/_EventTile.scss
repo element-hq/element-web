@@ -169,6 +169,7 @@ limitations under the License.
 
 .mx_EventTile:hover .mx_MessageActionBar,
 .mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
+[data-whatinput='keyboard'] .mx_EventTile:focus-within .mx_MessageActionBar,
 .mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
     visibility: visible;
 }
