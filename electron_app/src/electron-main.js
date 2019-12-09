@@ -35,7 +35,6 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
-const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
@@ -467,13 +466,7 @@ app.on('ready', () => {
 
         let baseDir;
         // first part of the path determines where we serve from
-        if (migratingOrigin && target[1] === 'origin_migrator_dest') {
-            // the origin migrator destination page
-            // (only the destination script needs to come from the
-            // custom protocol: the source part is loaded from a
-            // file:// as that's the origin we're migrating from).
-            baseDir = __dirname + "/../../origin_migrator/dest";
-        } else if (target[1] === 'webapp') {
+        if (target[1] === 'webapp') {
             baseDir = __dirname + "/../../webapp";
         } else {
             callback({error: -6}); // FILE_NOT_FOUND
