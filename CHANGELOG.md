@@ -1,3 +1,9 @@
+Changes in [1.7.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.5) (2019-12-09)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.5-rc.1...v1.7.5)
+
+ * No changes since rc.1
+
 Changes in [1.7.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.5-rc.1) (2019-12-04)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.4...v1.7.5-rc.1)
