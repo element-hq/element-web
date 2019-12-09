@@ -1,3 +1,51 @@
+Changes in [1.5.6](https://github.com/vector-im/riot-web/releases/tag/v1.5.6) (2019-12-09)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.6-rc.1...v1.5.6)
+
+ * No changes since rc.1
+
+Changes in [1.5.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.6-rc.1) (2019-12-04)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.5...v1.5.6-rc.1)
+
+ * Update Lithuanian language name
+   [\#11599](https://github.com/vector-im/riot-web/pull/11599)
+ * Enable more languages
+   [\#11592](https://github.com/vector-im/riot-web/pull/11592)
+ * Fix Docker build for develop and publish a /version file
+   [\#11588](https://github.com/vector-im/riot-web/pull/11588)
+ * Remove unused translations
+   [\#11540](https://github.com/vector-im/riot-web/pull/11540)
+ * Update from Weblate
+   [\#11591](https://github.com/vector-im/riot-web/pull/11591)
+ * Update riot.im enable_presence_by_hs_url for new matrix.org client URL
+   [\#11565](https://github.com/vector-im/riot-web/pull/11565)
+ * Remove mention of vector.im as default identity server on mobile guide
+   [\#11544](https://github.com/vector-im/riot-web/pull/11544)
+ * Clean up and standardise app config
+   [\#11549](https://github.com/vector-im/riot-web/pull/11549)
+ * make it clear that seshat requires electron-build-env (at least on macOS)
+   [\#11527](https://github.com/vector-im/riot-web/pull/11527)
+ * Add postcss-easings
+   [\#11521](https://github.com/vector-im/riot-web/pull/11521)
+ * ElectronPlatform: Add support for a event index using Seshat.
+   [\#11125](https://github.com/vector-im/riot-web/pull/11125)
+ * Sign all of the Windows executable files
+   [\#11516](https://github.com/vector-im/riot-web/pull/11516)
+ * Clarify that cross-signing is in development
+   [\#11493](https://github.com/vector-im/riot-web/pull/11493)
+ * get rid of bluebird
+   [\#11301](https://github.com/vector-im/riot-web/pull/11301)
+ * Update from Weblate
+   [\#11488](https://github.com/vector-im/riot-web/pull/11488)
+ * Add note in README about self-hosted riot installs requiring custom caching
+   headers
+   [\#8702](https://github.com/vector-im/riot-web/pull/8702)
+ * De-dup theming code
+   [\#11445](https://github.com/vector-im/riot-web/pull/11445)
+ * Add eslint-plugin-jest because we inherit js-sdk's eslintrc and it wants
+   [\#11448](https://github.com/vector-im/riot-web/pull/11448)
+
 Changes in [1.5.5](https://github.com/vector-im/riot-web/releases/tag/v1.5.5) (2019-11-27)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.4...v1.5.5)
