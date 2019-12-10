@@ -20,19 +20,6 @@ import MatrixClientPeg from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
 
-// This stores the cross-signing private keys in memory for the JS SDK. They are
-// also persisted to Secure Secret Storage in account data by the JS SDK when
-// created.
-const crossSigningKeys = {};
-
-// XXX: On desktop platforms, we plan to store only the SSSS default key in a
-// secure enclave, while the cross-signing private keys will still be retrieved
-// from SSSS, so it's unclear that we actually need these cross-signing
-// application callbacks for Riot. Should the JS SDK default to in-memory
-// storage of these itself?
-export const getCrossSigningKey = k => crossSigningKeys[k];
-export const saveCrossSigningKeys = newKeys => Object.assign(crossSigningKeys, newKeys);
-
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
 // during the same session. It is considered unsafe to persist this to normal
