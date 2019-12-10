@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 const classNames = require('classnames');
 const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
@@ -27,6 +27,10 @@ module.exports = createReactClass({
         return ({
             scope: 'Room',
         });
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._search_term = createRef();
     },
 
     onThisRoomClick: function() {
@@ -47,13 +51,13 @@ module.exports = createReactClass({
     },
 
     _searchIfQuery: function() {
-        if (this.refs.search_term.value) {
+        if (this._search_term.current.value) {
             this.onSearch();
         }
     },
 
     onSearch: function() {
-        this.props.onSearch(this.refs.search_term.value, this.state.scope);
+        this.props.onSearch(this._search_term.current.value, this.state.scope);
     },
 
     render: function() {
@@ -78,7 +82,7 @@ module.exports = createReactClass({
                     </AccessibleButton>
                 </div>
                 <div className="mx_SearchBar_input mx_textinput">
-                    <input ref="search_term" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                    <input ref={this._search_term} type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
                     <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
                 </div>
                 <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />

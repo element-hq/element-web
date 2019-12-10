@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
@@ -54,17 +54,19 @@ module.exports = createReactClass({
         }, (error)=>{
             console.error("Failed to get URL preview: " + error);
         });
+
+        this._description = createRef();
     },
 
     componentDidMount: function() {
-        if (this.refs.description) {
-            linkifyElement(this.refs.description);
+        if (this._description.current) {
+            linkifyElement(this._description.current);
         }
     },
 
     componentDidUpdate: function() {
-        if (this.refs.description) {
-            linkifyElement(this.refs.description);
+        if (this._description.current) {
+            linkifyElement(this._description.current);
         }
     },
 
@@ -129,7 +131,7 @@ module.exports = createReactClass({
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noopener">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
-                    <div className="mx_LinkPreviewWidget_description" ref="description">
+                    <div className="mx_LinkPreviewWidget_description" ref={this._description}>
                         { p["og:description"] }
                     </div>
                 </div>

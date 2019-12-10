@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import {_t} from "../../../languageHandler";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
@@ -48,13 +48,15 @@ export default class ProfileSettings extends React.Component {
             avatarFile: null,
             enableProfileSave: false,
         };
+
+        this._avatarUpload = createRef();
     }
 
     _uploadAvatar = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        this.refs.avatarUpload.click();
+        this._avatarUpload.current.click();
     };
 
     _saveProfile = async (e) => {
@@ -156,7 +158,7 @@ export default class ProfileSettings extends React.Component {
 
         return (
             <form onSubmit={this._saveProfile} autoComplete="off" noValidate={true}>
-                <input type="file" ref="avatarUpload" className="mx_ProfileSettings_avatarUpload"
+                <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
                        onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
@@ -54,6 +54,10 @@ module.exports = createReactClass({
             // the call this view is displaying (if any)
             call: null,
         };
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._video = createRef();
     },
 
     componentDidMount: function() {
@@ -128,7 +132,7 @@ module.exports = createReactClass({
     },
 
     getVideoView: function() {
-        return this.refs.video;
+        return this._video.current;
     },
 
     render: function() {
@@ -147,7 +151,9 @@ module.exports = createReactClass({
 
         return (
             <div>
-                <VideoView ref="video" onClick={this.props.onClick}
+                <VideoView
+                    ref={this._video}
+                    onClick={this.props.onClick}
                     onResize={this.props.onResize}
                     maxHeight={this.props.maxVideoHeight}
                 />

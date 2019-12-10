@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import sdk from '../../../index';
@@ -74,6 +74,8 @@ export default class ShareDialog extends React.Component {
             // MatrixEvent defaults to share linkSpecificEvent
             linkSpecificEvent: this.props.target instanceof MatrixEvent,
         };
+
+        this._link = createRef();
     }
 
     static _selectText(target) {
@@ -94,7 +96,7 @@ export default class ShareDialog extends React.Component {
     onCopyClick(e) {
         e.preventDefault();
 
-        ShareDialog._selectText(this.refs.link);
+        ShareDialog._selectText(this._link.current);
 
         let successful;
         try {
@@ -195,7 +197,7 @@ export default class ShareDialog extends React.Component {
         >
             <div className="mx_ShareDialog_content">
                 <div className="mx_ShareDialog_matrixto">
-                    <a ref="link"
+                    <a ref={this._link}
                        href={matrixToUrl}
                        onClick={ShareDialog.onLinkClick}
                        className="mx_ShareDialog_matrixto_link"

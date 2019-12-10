@@ -19,7 +19,7 @@ limitations under the License.
 
 import ReplyThread from "../elements/ReplyThread";
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 const classNames = require("classnames");
@@ -224,6 +224,9 @@ module.exports = createReactClass({
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
         this._verifyEvent(this.props.mxEvent);
+
+        this._tile = createRef();
+        this._replyThread = createRef();
     },
 
     componentDidMount: function() {
@@ -512,11 +515,11 @@ module.exports = createReactClass({
     },
 
     getTile() {
-        return this.refs.tile;
+        return this._tile.current;
     },
 
     getReplyThread() {
-        return this.refs.replyThread;
+        return this._replyThread.current;
     },
 
     getReactions() {
@@ -748,7 +751,7 @@ module.exports = createReactClass({
                             </a>
                         </div>
                         <div className="mx_EventTile_line">
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -762,7 +765,7 @@ module.exports = createReactClass({
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_line">
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -792,7 +795,7 @@ module.exports = createReactClass({
                         this.props.mxEvent,
                         this.props.onHeightChanged,
                         this.props.permalinkCreator,
-                        'replyThread',
+                        this._replyThread,
                     );
                 }
                 return (
@@ -805,7 +808,7 @@ module.exports = createReactClass({
                             </a>
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -820,7 +823,7 @@ module.exports = createReactClass({
                     this.props.mxEvent,
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
-                    'replyThread',
+                    this._replyThread,
                 );
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
@@ -839,7 +842,7 @@ module.exports = createReactClass({
                             </a>
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            replacingEventId={this.props.replacingEventId}
                                            editState={this.props.editState}

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {createRef} from "react";
 import dis from "../../../dispatcher";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
@@ -45,6 +45,8 @@ export default class RoomBreadcrumbs extends React.Component {
         // The room IDs we're waiting to come down the Room handler and when we
         // started waiting for them. Used to track a room over an upgrade/autojoin.
         this._waitingRoomQueue = [/* { roomId, addedTs } */];
+
+        this._scroller = createRef();
     }
 
     componentWillMount() {
@@ -284,8 +286,8 @@ export default class RoomBreadcrumbs extends React.Component {
         }
         this.setState({rooms});
 
-        if (this.refs.scroller) {
-            this.refs.scroller.moveToOrigin();
+        if (this._scroller.current) {
+            this._scroller.current.moveToOrigin();
         }
 
         // We don't track room aesthetics (badges, membership, etc) over the wire so we
@@ -390,7 +392,7 @@ export default class RoomBreadcrumbs extends React.Component {
         return (
             <div role="toolbar" aria-label={_t("Recent rooms")}>
                 <IndicatorScrollbar
-                    ref="scroller"
+                    ref={this._scroller}
                     className="mx_RoomBreadcrumbs"
                     trackHorizontalOverflow={true}
                     verticalScrollsHorizontally={true}

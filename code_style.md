@@ -174,12 +174,6 @@ React
   <Foo onClick={this.onFooClick}> // Best, if onFooClick would do anything other than directly calling doStuff
   ```
 
-  Not doing so is acceptable in a single case: in function-refs:
-
-  ```jsx
-  <Foo ref={(self) => this.component = self}>
-  ```
-
 - Prefer classes that extend `React.Component` (or `React.PureComponent`) instead of `React.createClass`
   - You can avoid the need to bind handler functions by using [property initializers](https://reactjs.org/docs/react-component.html#constructor):
 
@@ -208,3 +202,5 @@ React
   ```
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
+
+- Avoid things marked as Legacy or Deprecated in React 16 (e.g string refs and legacy contexts)
