@@ -121,6 +121,19 @@ export default class RightPanelStore extends Store {
             return;
         }
 
+        if (payload.action === 'view_room' || payload.action === 'view_group') {
+            // Reset to the member list if we're viewing member info
+            const memberInfoPhases = [RIGHT_PANEL_PHASES.RoomMemberInfo, RIGHT_PANEL_PHASES.Room3pidMemberInfo];
+            if (memberInfoPhases.includes(this._state.lastRoomPhase)) {
+                this._setState({lastRoomPhase: RIGHT_PANEL_PHASES.RoomMemberList, lastRoomPhaseParams: {}});
+            }
+
+            // Do the same for groups
+            if (this._state.lastGroupPhase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
+                this._setState({lastGroupPhase: RIGHT_PANEL_PHASES.GroupMemberList});
+            }
+        }
+
         if (payload.action !== 'set_right_panel_phase' || this._inhibitUpdates) return;
 
         const targetPhase = payload.phase;
