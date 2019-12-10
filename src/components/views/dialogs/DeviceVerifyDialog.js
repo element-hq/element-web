@@ -100,9 +100,15 @@ export default class DeviceVerifyDialog extends React.Component {
             if (!verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
                 const roomId = await ensureDMExistsAndOpen(this.props.userId);
                 // throws upon cancellation before having started
-                this._verifier = await client.requestVerificationDM(
+                const request = await client.requestVerificationDM(
                     this.props.userId, roomId, [verificationMethods.SAS],
                 );
+                await request.waitFor(r => r.ready || r.started);
+                if (request.ready) {
+                    this._verifier = request.beginKeyVerification(verificationMethods.SAS);
+                } else {
+                    this._verifier = request.verifier;
+                }
             } else {
                 this._verifier = client.beginKeyVerification(
                     verificationMethods.SAS, this.props.userId, this.props.device.deviceId,

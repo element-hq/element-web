@@ -22,7 +22,7 @@ export const RIGHT_PANEL_PHASES = Object.freeze({
     NotificationPanel: 'NotificationPanel',
     RoomMemberInfo: 'RoomMemberInfo',
     Room3pidMemberInfo: 'Room3pidMemberInfo',
-
+    EncryptionPanel: 'EncryptionPanel',
     // Group stuff
     GroupMemberList: 'GroupMemberList',
     GroupRoomList: 'GroupRoomList',

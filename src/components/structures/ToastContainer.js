@@ -26,6 +26,7 @@ export default class ToastContainer extends React.Component {
     }
 
     componentDidMount() {
+        console.log("ToastContainer mounted");
         this._dispatcherRef = dis.register(this.onAction);
     }
 

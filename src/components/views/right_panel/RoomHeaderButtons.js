@@ -27,6 +27,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 const MEMBER_PHASES = [
     RIGHT_PANEL_PHASES.RoomMemberList,
     RIGHT_PANEL_PHASES.RoomMemberInfo,
+    RIGHT_PANEL_PHASES.EncryptionPanel,
     RIGHT_PANEL_PHASES.Room3pidMemberInfo,
 ];
 

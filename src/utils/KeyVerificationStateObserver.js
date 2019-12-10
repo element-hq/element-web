@@ -161,6 +161,7 @@ export default class KeyVerificationStateObserver {
         }
 
         this.otherPartyUserId = fromUserId === this._client.getUserId() ? toUserId : fromUserId;
+        console.log("KeyVerificationStateObserver update for txnId", this._requestEvent.getId(), {accepted: this.accepted, cancelled: this.cancelled, done: this.done});
     }
 }
 
