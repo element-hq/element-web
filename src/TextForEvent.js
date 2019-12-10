@@ -509,7 +509,7 @@ function textForWidgetEvent(event) {
 
 function textForMjolnirEvent(event) {
     const senderName = event.getSender();
-    const {entity: prevEntity, recommendation: prevRecommendation, reason: prevReason} = event.getPrevContent();
+    const {entity: prevEntity} = event.getPrevContent();
     const {entity, recommendation, reason} = event.getContent();
 
     // Rule removed
