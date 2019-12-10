@@ -451,16 +451,21 @@ module.exports = createReactClass({
                 if (isDM) {
                     title = _t("Do you want to chat with %(user)s?",
                         { user: inviteMember.name });
+                    subTitle = [
+                        avatar,
+                        _t("<userName/> wants to chat", {}, {userName: () => inviterElement}),
+                    ];
+                    primaryActionLabel = _t("Start chatting");
                 } else {
                     title = _t("Do you want to join %(roomName)s?",
                         { roomName: this._roomName() });
+                    subTitle = [
+                        avatar,
+                        _t("<userName/> invited you", {}, {userName: () => inviterElement}),
+                    ];
+                    primaryActionLabel = _t("Accept");
                 }
-                subTitle = [
-                    avatar,
-                    _t("<userName/> invited you", {}, {userName: () => inviterElement}),
-                ];
 
-                primaryActionLabel = _t("Accept");
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
                 secondaryActionHandler = this.props.onRejectClick;
