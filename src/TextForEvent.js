@@ -19,6 +19,7 @@ import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
+import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -506,6 +507,87 @@ function textForWidgetEvent(event) {
     }
 }
 
+function textForMjolnirEvent(event) {
+    const senderName = event.getSender();
+    const {entity: prevEntity, recommendation: prevRecommendation, reason: prevReason} = event.getPrevContent();
+    const {entity, recommendation, reason} = event.getContent();
+
+    // Rule removed
+    if (!entity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning users matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning rooms matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning servers matching %(glob)s",
+                {senderName, glob: prevEntity});
+        }
+
+        // Unknown type. We'll say something, but we shouldn't end up here.
+        return _t("%(senderName)s removed a ban rule matching %(glob)s", {senderName, glob: prevEntity});
+    }
+
+    // Invalid rule
+    if (!recommendation || !reason) return _t(`%(senderName)s updated an invalid ban rule`, {senderName});
+
+    // Rule updated
+    if (entity === prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s updated a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // New rule
+    if (!prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s created a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // else the entity !== prevEntity - count as a removal & add
+    if (USER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    }
+
+    // Unknown type. We'll say something but we shouldn't end up here.
+    return _t("%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s " +
+        "for %(reason)s", {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+}
+
 const handlers = {
     'm.room.message': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
@@ -532,6 +614,11 @@ const stateHandlers = {
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };
+
+// Add all the Mjolnir stuff to the renderer
+for (const evType of ALL_RULE_TYPES) {
+    stateHandlers[evType] = textForMjolnirEvent;
+}
 
 module.exports = {
     textForEvent: function(ev) {
