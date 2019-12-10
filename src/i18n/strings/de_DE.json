@@ -1471,7 +1471,7 @@
     "Please supply a https:// or http:// widget URL": "Bitte gib eine https:// oder http:// Widget-URL an",
     "Sends the given emote coloured as a rainbow": "Sended das Emoji in Regenbogenfarben",
     "%(senderName)s made no change.": "%(senderName)s hat keine Änderung vorgenommen.",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Betreten des Raumes für %(targetDisplayName)s zurückgezogen.",
+    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Raumbeitritt für %(targetDisplayName)s zurückgezogen.",
     "Cannot reach homeserver": "Der Heimserver ist nicht erreichbar",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Stelle sicher, dass du eine stabile Internetverbindung hast oder wende dich an deinen Server-Administrator",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "Wende dich an deinen Riot Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
@@ -1579,5 +1579,11 @@
     "Change identity server": "Wechsle den Identitätsserver",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du solltest deine <b>persönlichen Daten</b> vom Identitätsserver <idserver /> entfernen, bevor du die Verbindung trennst. Leider ist der Identitätsserver <idserver /> derzeit offline oder kann nicht erreicht werden.",
     "You should:": "Du solltest:",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "Überprüfe deinen Browser auf Erweiterungen, die den Identitätsserver blockieren könnten (z.B. Privacy Badger)"
+    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "Überprüfe deinen Browser auf Erweiterungen, die den Identitätsserver blockieren könnten (z.B. Privacy Badger)",
+    "Error upgrading room": "Fehler beim Raum-Aufrüsten",
+    "Double check that your server supports the room version chosen and try again.": "Überprüfe nochmal ob dein Server die ausgewählte Raumversion unterstützt und versuche es nochmal.",
+    "%(senderName)s placed a voice call.": "%(senderName)s tätigte einen Sprachanruf.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s tätigte einen Sprachanruf (Nicht von diesem Browser unterstützt)",
+    "%(senderName)s placed a video call.": "%(senderName)s tätigte einen Videoanruf.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s tätigte einen Videoanruf (Nicht von diesem Browser unterstützt)"
 }
