@@ -108,7 +108,7 @@ export default class ShareDialog extends React.Component {
         const buttonRect = e.target.getBoundingClientRect();
         const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
         const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
-            ...toRightOf(buttonRect, 11),
+            ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         });
         // Drop a reference to this close handler for componentWillUnmount
