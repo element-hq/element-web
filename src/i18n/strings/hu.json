@@ -1941,5 +1941,18 @@
     "Reactions": "Reakciók",
     "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ezzel reagáltak: %(content)s</reactedWith>",
     "<userName/> wants to chat": "<userName/> csevegni szeretne",
-    "Start chatting": "Beszélgetés elkezdése"
+    "Start chatting": "Beszélgetés elkezdése",
+    "Send cross-signing keys to homeserver": "Kereszt-aláírás kulcsok küldése a matrix szervernek",
+    "Cross-signing public keys:": "Kereszt-aláírás nyilvános kulcsok:",
+    "on device": "eszközön",
+    "not found": "nem található",
+    "Cross-signing private keys:": "Kereszt-aláírás privát kulcsok:",
+    "in secret storage": "biztonsági tárolóban",
+    "Secret storage public key:": "Biztonsági tároló nyilvános kulcs:",
+    "in account data": "fiók adatokban",
+    "Bootstrap Secure Secret Storage": "Biztonsági Titok Tároló megnyitása",
+    "Cross-signing": "Kereszt-aláírás",
+    "Enter secret storage passphrase": "Add meg a jelmondatot a biztonsági tárolóhoz",
+    "Unable to access secret storage. Please verify that you entered the correct passphrase.": "A biztonsági tárolóhoz nem lehet hozzáférni. Kérlek ellenőrizd, hogy jó jelmondatot adtál-e meg.",
+    "<b>Warning</b>: You should only access secret storage from a trusted computer.": "<b>Figyelem</b>: Csak biztonságos eszközről férj hozzá a biztonságos tárolóhoz."
 }
