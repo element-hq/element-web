@@ -70,7 +70,6 @@ const LoggedInView = createReactClass({
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
         onRegistered: PropTypes.func,
-        collapsedRhs: PropTypes.bool,
 
         // Used by the RoomView to handle joining rooms
         viaServers: PropTypes.arrayOf(PropTypes.string),
@@ -554,7 +553,6 @@ const LoggedInView = createReactClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}
-                        collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                         resizeNotifier={this.props.resizeNotifier}
                     />;
@@ -585,7 +583,6 @@ const LoggedInView = createReactClass({
                 pageElement = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
-                    collapsedRhs={this.props.collapsedRhs}
                 />;
                 break;
         }

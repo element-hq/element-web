@@ -1,9 +1,9 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,13 +28,15 @@ import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
+import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
+import RightPanelStore from "../../stores/RightPanelStore";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {
             roomId: PropTypes.string, // if showing panels for a given room, this is set
             groupId: PropTypes.string, // if showing panels for a given group, this is set
-            user: PropTypes.object,
+            user: PropTypes.object, // used if we know the user ahead of opening the panel
         };
     }
 
@@ -44,23 +46,12 @@ export default class RightPanel extends React.Component {
         };
     }
 
-    static Phase = Object.freeze({
-        RoomMemberList: 'RoomMemberList',
-        GroupMemberList: 'GroupMemberList',
-        GroupRoomList: 'GroupRoomList',
-        GroupRoomInfo: 'GroupRoomInfo',
-        FilePanel: 'FilePanel',
-        NotificationPanel: 'NotificationPanel',
-        RoomMemberInfo: 'RoomMemberInfo',
-        Room3pidMemberInfo: 'Room3pidMemberInfo',
-        GroupMemberInfo: 'GroupMemberInfo',
-    });
-
     constructor(props, context) {
         super(props, context);
         this.state = {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
+            member: this._getUserForPanel(),
         };
         this.onAction = this.onAction.bind(this);
         this.onRoomStateMember = this.onRoomStateMember.bind(this);
@@ -73,13 +64,30 @@ export default class RightPanel extends React.Component {
         }, 500);
     }
 
+    // Helper function to split out the logic for _getPhaseFromProps() and the constructor
+    // as both are called at the same time in the constructor.
+    _getUserForPanel() {
+        if (this.state && this.state.member) return this.state.member;
+        const lastParams = RightPanelStore.getSharedInstance().roomPanelPhaseParams;
+        return this.props.user || lastParams['member'];
+    }
+
     _getPhaseFromProps() {
+        const rps = RightPanelStore.getSharedInstance();
         if (this.props.groupId) {
-            return RightPanel.Phase.GroupMemberList;
-        } else if (this.props.user) {
-            return RightPanel.Phase.RoomMemberInfo;
+            if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
+                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.GroupMemberList});
+                return RIGHT_PANEL_PHASES.GroupMemberList;
+            }
+            return rps.groupPanelPhase;
+        } else if (this._getUserForPanel()) {
+            return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
-            return RightPanel.Phase.RoomMemberList;
+            if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
+                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.RoomMemberList});
+                return RIGHT_PANEL_PHASES.RoomMemberList;
+            }
+            return rps.roomPanelPhase;
         }
     }
 
@@ -88,9 +96,6 @@ export default class RightPanel extends React.Component {
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
-        if (this.props.user) {
-            this.setState({member: this.props.user});
-        }
     }
 
     componentWillUnmount() {
@@ -126,7 +131,7 @@ export default class RightPanel extends React.Component {
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             this.setState({
-                phase: RightPanel.Phase.GroupMemberList,
+                phase: RIGHT_PANEL_PHASES.GroupMemberList,
             });
         });
     }
@@ -142,9 +147,9 @@ export default class RightPanel extends React.Component {
             return;
         }
         // redraw the badge on the membership list
-        if (this.state.phase === RightPanel.Phase.RoomMemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
-        } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo && member.roomId === this.props.roomId &&
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
@@ -152,7 +157,7 @@ export default class RightPanel extends React.Component {
     }
 
     onAction(payload) {
-        if (payload.action === "view_right_panel_phase") {
+        if (payload.action === "after_right_panel_phase_change") {
             this.setState({
                 phase: payload.phase,
                 groupRoomId: payload.groupRoomId,
@@ -178,13 +183,13 @@ export default class RightPanel extends React.Component {
 
         let panel = <div />;
 
-        if (this.props.roomId && this.state.phase === RightPanel.Phase.RoomMemberList) {
+        if (this.props.roomId && this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList) {
             panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
-        } else if (this.props.groupId && this.state.phase === RightPanel.Phase.GroupMemberList) {
+        } else if (this.props.groupId && this.state.phase === RIGHT_PANEL_PHASES.GroupMemberList) {
             panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
             if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
@@ -201,9 +206,9 @@ export default class RightPanel extends React.Component {
             } else {
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
             }
-        } else if (this.state.phase === RightPanel.Phase.Room3pidMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
-        } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
             if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
                 const onClose = () => {
                     dis.dispatch({
@@ -225,14 +230,14 @@ export default class RightPanel extends React.Component {
                     />
                 );
             }
-        } else if (this.state.phase === RightPanel.Phase.GroupRoomInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomInfo) {
             panel = <GroupRoomInfo
                 groupRoomId={this.state.groupRoomId}
                 groupId={this.props.groupId}
                 key={this.state.groupRoomId} />;
-        } else if (this.state.phase === RightPanel.Phase.NotificationPanel) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.NotificationPanel) {
             panel = <NotificationPanel />;
-        } else if (this.state.phase === RightPanel.Phase.FilePanel) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
         }
 

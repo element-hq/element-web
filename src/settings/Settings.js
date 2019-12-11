@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import {
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
+import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -462,5 +464,21 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show previews/thumbnails for images"),
         default: true,
+    },
+    "showRightPanelInRoom": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "showRightPanelInGroup": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "lastRightPanelPhaseForRoom": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: RIGHT_PANEL_PHASES.RoomMemberInfo,
+    },
+    "lastRightPanelPhaseForGroup": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: RIGHT_PANEL_PHASES.GroupMemberList,
     },
 };

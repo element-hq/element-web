@@ -39,7 +39,6 @@ module.exports = createReactClass({
         room: PropTypes.object,
         oobData: PropTypes.object,
         inRoom: PropTypes.bool,
-        collapsedRhs: PropTypes.bool,
         onSettingsClick: PropTypes.func,
         onPinnedClick: PropTypes.func,
         onSearchClick: PropTypes.func,
@@ -308,7 +307,7 @@ module.exports = createReactClass({
                     { topicElement }
                     { cancelButton }
                     { rightRow }
-                    <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} />
+                    <RoomHeaderButtons />
                 </div>
             </div>
         );

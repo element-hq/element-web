@@ -38,6 +38,7 @@ import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk";
 import {allSettled, sleep} from "../../utils/promise";
+import RightPanelStore from "../../stores/RightPanelStore";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -542,10 +543,6 @@ export default createReactClass({
         });
     },
 
-    _onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
-    },
-
     _onEditClick: function() {
         this.setState({
             editing: true,
@@ -582,6 +579,10 @@ export default createReactClass({
                     editing: false,
                     profileForm: null,
                 });
+                break;
+            case 'after_right_panel_phase_change':
+                // We don't keep state on the right panel, so just re-render to update
+                this.forceUpdate();
                 break;
             default:
                 break;
@@ -1298,7 +1299,9 @@ export default createReactClass({
                 );
             }
 
-            const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
+            const rightPanel = !RightPanelStore.getSharedInstance().isOpenForGroup
+                ? <RightPanel groupId={this.props.groupId} />
+                : undefined;
 
             const headerClasses = {
                 "mx_GroupView_header": true,
@@ -1326,9 +1329,9 @@ export default createReactClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
-                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
+                        <GroupHeaderButtons />
                     </div>
-                    <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
+                    <MainSplit panel={rightPanel}>
                         <GeminiScrollbarWrapper className="mx_GroupView_body">
                             { this._getMembershipSection() }
                             { this._getGroupSection() }

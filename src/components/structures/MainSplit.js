@@ -62,30 +62,13 @@ export default class MainSplit extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.panel && !this.props.collapsedRhs) {
+        if (this.props.panel) {
             this._createResizer();
         }
     }
 
     componentWillUnmount() {
         if (this.resizer) {
-            this.resizer.detach();
-            this.resizer = null;
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        const wasExpanded = !this.props.collapsedRhs && prevProps.collapsedRhs;
-        const wasCollapsed = this.props.collapsedRhs && !prevProps.collapsedRhs;
-        const wasPanelSet = this.props.panel && !prevProps.panel;
-        const wasPanelCleared = !this.props.panel && prevProps.panel;
-
-        if (this.resizeContainer && (wasExpanded || wasPanelSet)) {
-            // The resizer can only be created when **both** expanded and the panel is
-            // set. Once both are true, the container ref will mount, which is required
-            // for the resizer to work.
-            this._createResizer();
-        } else if (this.resizer && (wasCollapsed || wasPanelCleared)) {
             this.resizer.detach();
             this.resizer = null;
         }

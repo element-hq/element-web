@@ -181,8 +181,7 @@ export default class Stickerpicker extends React.Component {
             case "stickerpicker_close":
                 this.setState({showStickers: false});
                 break;
-            case "show_right_panel":
-            case "hide_right_panel":
+            case "after_right_panel_phase_change":
             case "show_left_panel":
             case "hide_left_panel":
                 this.setState({showStickers: false});
