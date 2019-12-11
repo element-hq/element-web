@@ -1938,5 +1938,7 @@
     "Notification settings": "通知設定",
     "User Status": "使用者狀態",
     "Reactions": "反應",
-    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> 反應了 %(content)s</reactedWith>"
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> 反應了 %(content)s</reactedWith>",
+    "<userName/> wants to chat": "<userName/> 想要聊天",
+    "Start chatting": "開始聊天"
 }
