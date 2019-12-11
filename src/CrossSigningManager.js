@@ -20,12 +20,25 @@ import MatrixClientPeg from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
 
+// This stores the secret storage private keys in memory for the JS SDK. This is
+// only meant to act as a cache to avoid prompting the user multiple times
+// during the same session. It is considered unsafe to persist this to normal
+// web storage. For platforms with a secure enclave, we will store this key
+// there.
+const secretStorageKeys = {};
+
 export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
     }
     const [name, info] = keyInfoEntries[0];
+
+    // Check the in-memory cache
+    if (secretStorageKeys[name]) {
+        return [name, secretStorageKeys[name]];
+    }
+
     const inputToKey = async ({ passphrase, recoveryKey }) => {
         if (passphrase) {
             return deriveKey(
@@ -54,5 +67,9 @@ export const getSecretStorageKey = async ({ keys: keyInfos }) => {
         throw new Error("Secret storage access canceled");
     }
     const key = await inputToKey(input);
+
+    // Save to cache to avoid future prompts in the current session
+    secretStorageKeys[name] = key;
+
     return [name, key];
 };
