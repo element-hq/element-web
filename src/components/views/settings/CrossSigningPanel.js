@@ -19,7 +19,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import Modal from '../../../Modal';
+import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -78,38 +78,8 @@ export default class CrossSigningPanel extends React.PureComponent {
      */
     _bootstrapSecureSecretStorage = async () => {
         this.setState({ error: null });
-        const cli = MatrixClientPeg.get();
         try {
-            if (!cli.hasSecretStorageKey()) {
-                // This dialog calls bootstrap itself after guiding the user through
-                // passphrase creation.
-                const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
-                    import("../../../async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
-                    null, null, /* priority = */ false, /* static = */ true,
-                );
-                const [confirmed] = await finished;
-                if (!confirmed) {
-                    throw new Error("Secret storage creation canceled");
-                }
-            } else {
-                const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
-                await cli.bootstrapSecretStorage({
-                    authUploadDeviceSigningKeys: async (makeRequest) => {
-                        const { finished } = Modal.createTrackedDialog(
-                            'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                            {
-                                title: _t("Send cross-signing keys to homeserver"),
-                                matrixClient: MatrixClientPeg.get(),
-                                makeRequest,
-                            },
-                        );
-                        const [confirmed] = await finished;
-                        if (!confirmed) {
-                            throw new Error("Cross-signing key upload auth canceled");
-                        }
-                    },
-                });
-            }
+            await accessSecretStorage();
         } catch (e) {
             this.setState({ error: e });
             console.error("Error bootstrapping secret storage", e);

@@ -19,13 +19,14 @@ import sdk from './index';
 import MatrixClientPeg from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
+import { _t } from './languageHandler';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
-// during the same session. It is considered unsafe to persist this to normal
-// web storage. For platforms with a secure enclave, we will store this key
-// there.
-const secretStorageKeys = {};
+// during the same single operation. Use `accessSecretStorage` below to scope a
+// single secret storage operation, as it will clear the cached keys once the
+// operation ends.
+let secretStorageKeys = {};
 
 export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const keyInfoEntries = Object.entries(keyInfos);
@@ -73,3 +74,71 @@ export const getSecretStorageKey = async ({ keys: keyInfos }) => {
 
     return [name, key];
 };
+
+export const crossSigningCallbacks = {
+    getSecretStorageKey,
+};
+
+/**
+ * This helper should be used whenever you need to access secret storage. It
+ * ensures that secret storage (and also cross-signing since they each depend on
+ * each other in a cycle of sorts) have been bootstrapped before running the
+ * provided function.
+ *
+ * Bootstrapping secret storage may take one of these paths:
+ * 1. Create secret storage from a passphrase and store cross-signing keys
+ *    in secret storage.
+ * 2. Access existing secret storage by requesting passphrase and accessing
+ *    cross-signing keys as needed.
+ * 3. All keys are loaded and there's nothing to do.
+ *
+ * Additionally, the secret storage keys are cached during the scope of this function
+ * to ensure the user is prompted only once for their secret storage
+ * passphrase. The cache is then
+ *
+ * @param {Function} [func] An operation to perform once secret storage has been
+ * bootstrapped. Optional.
+ */
+export async function accessSecretStorage(func = async () => { }) {
+    const cli = MatrixClientPeg.get();
+
+    try {
+        if (!cli.hasSecretStorageKey()) {
+            // This dialog calls bootstrap itself after guiding the user through
+            // passphrase creation.
+            const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
+                import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
+                null, null, /* priority = */ false, /* static = */ true,
+            );
+            const [confirmed] = await finished;
+            if (!confirmed) {
+                throw new Error("Secret storage creation canceled");
+            }
+        } else {
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+            await cli.bootstrapSecretStorage({
+                authUploadDeviceSigningKeys: async (makeRequest) => {
+                    const { finished } = Modal.createTrackedDialog(
+                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                        {
+                            title: _t("Send cross-signing keys to homeserver"),
+                            matrixClient: MatrixClientPeg.get(),
+                            makeRequest,
+                        },
+                    );
+                    const [confirmed] = await finished;
+                    if (!confirmed) {
+                        throw new Error("Cross-signing key upload auth canceled");
+                    }
+                },
+            });
+        }
+
+        // `return await` needed here to ensure `finally` block runs after the
+        // inner operation completes.
+        return await func();
+    } finally {
+        // Clear secret storage key cache now that work is complete
+        secretStorageKeys = {};
+    }
+}
