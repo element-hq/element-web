@@ -90,7 +90,7 @@ function isInLowerLeftHalf(x, y, rect) {
  * tooltip along one edge of the target.
  */
 export default class InteractiveTooltip extends React.Component {
-    propTypes: {
+    static propTypes = {
         // Content to show in the tooltip
         content: PropTypes.node.isRequired,
         // Function to call when visibility of the tooltip changes

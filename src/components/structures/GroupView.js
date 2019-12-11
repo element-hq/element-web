@@ -1214,25 +1214,25 @@ export default createReactClass({
 
                 const EditableText = sdk.getComponent("elements.EditableText");
 
-                nameNode = <EditableText ref="nameEditor"
-                     className="mx_GroupView_editable"
-                     placeholderClassName="mx_GroupView_placeholder"
-                     placeholder={_t('Community Name')}
-                     blurToCancel={false}
-                     initialValue={this.state.profileForm.name}
-                     onValueChanged={this._onNameChange}
-                     tabIndex="0"
-                     dir="auto" />;
+                nameNode = <EditableText
+                    className="mx_GroupView_editable"
+                    placeholderClassName="mx_GroupView_placeholder"
+                    placeholder={_t('Community Name')}
+                    blurToCancel={false}
+                    initialValue={this.state.profileForm.name}
+                    onValueChanged={this._onNameChange}
+                    tabIndex="0"
+                    dir="auto" />;
 
-                shortDescNode = <EditableText ref="descriptionEditor"
-                     className="mx_GroupView_editable"
-                     placeholderClassName="mx_GroupView_placeholder"
-                     placeholder={_t("Description")}
-                     blurToCancel={false}
-                     initialValue={this.state.profileForm.short_description}
-                     onValueChanged={this._onShortDescChange}
-                     tabIndex="0"
-                     dir="auto" />;
+                shortDescNode = <EditableText
+                    className="mx_GroupView_editable"
+                    placeholderClassName="mx_GroupView_placeholder"
+                    placeholder={_t("Description")}
+                    blurToCancel={false}
+                    initialValue={this.state.profileForm.short_description}
+                    onValueChanged={this._onShortDescChange}
+                    tabIndex="0"
+                    dir="auto" />;
             } else {
                 const onGroupHeaderItemClick = this.state.isUserMember ? this._onEditClick : null;
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
@@ -51,6 +51,8 @@ export default class EditHistoryMessage extends React.PureComponent {
         }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
         this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
+
+        this._content = createRef();
     }
 
     _onAssociatedStatusChanged = () => {
@@ -78,8 +80,8 @@ export default class EditHistoryMessage extends React.PureComponent {
 
     pillifyLinks() {
         // not present for redacted events
-        if (this.refs.content) {
-            pillifyLinks(this.refs.content.children, this.props.mxEvent);
+        if (this._content.current) {
+            pillifyLinks(this._content.current.children, this.props.mxEvent);
         }
     }
 
@@ -102,9 +104,9 @@ export default class EditHistoryMessage extends React.PureComponent {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         // hide the button when already redacted
         let redactButton;
-        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent) {
+        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
-                <AccessibleButton onClick={this._onRedactClick} disabled={!this.state.canRedact}>
+                <AccessibleButton onClick={this._onRedactClick}>
                     {_t("Remove")}
                 </AccessibleButton>
             );
@@ -140,13 +142,13 @@ export default class EditHistoryMessage extends React.PureComponent {
             if (mxEvent.getContent().msgtype === "m.emote") {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 contentContainer = (
-                    <div className="mx_EventTile_content" ref="content">*&nbsp;
+                    <div className="mx_EventTile_content" ref={this._content}>*&nbsp;
                         <span className="mx_MEmoteBody_sender">{ name }</span>
                         &nbsp;{contentElements}
                     </div>
                 );
             } else {
-                contentContainer = <div className="mx_EventTile_content" ref="content">{contentElements}</div>;
+                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{contentElements}</div>;
             }
         }
 

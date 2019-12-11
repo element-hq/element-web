@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import sdk from '../../../index';
@@ -47,8 +47,12 @@ module.exports = createReactClass({
         maxImageHeight: PropTypes.number,
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._body = createRef();
+    },
+
     getEventTileOps: function() {
-        return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
+        return this._body.current && this._body.current.getEventTileOps ? this._body.current.getEventTileOps() : null;
     },
 
     onTileUpdate: function() {
@@ -103,7 +107,8 @@ module.exports = createReactClass({
         }
 
         return <BodyType
-            ref="body" mxEvent={this.props.mxEvent}
+            ref={this._body}
+            mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
             highlightLink={this.props.highlightLink}
             showUrlPreview={this.props.showUrlPreview}

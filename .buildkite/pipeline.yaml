@@ -1,10 +1,6 @@
 steps:
   - label: ":eslint: Lint"
     command:
-      # TODO: Remove hacky chmod for BuildKite
-      - "echo '--- Setup'"
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
       - "yarn lintwithexclusions"

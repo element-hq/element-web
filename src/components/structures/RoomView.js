@@ -23,7 +23,7 @@ limitations under the License.
 
 import shouldHideEvent from '../../shouldHideEvent';
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -207,6 +207,9 @@ module.exports = createReactClass({
         this._onCiderUpdated();
         this._ciderWatcherRef = SettingsStore.watchSetting(
             "useCiderComposer", null, this._onCiderUpdated);
+
+        this._roomView = createRef();
+        this._searchResultsPanel = createRef();
     },
 
     _onCiderUpdated: function() {
@@ -459,8 +462,8 @@ module.exports = createReactClass({
     },
 
     componentDidUpdate: function() {
-        if (this.refs.roomView) {
-            const roomView = ReactDOM.findDOMNode(this.refs.roomView);
+        if (this._roomView.current) {
+            const roomView = ReactDOM.findDOMNode(this._roomView.current);
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
@@ -474,10 +477,10 @@ module.exports = createReactClass({
         // in render() prevents the ref from being set on first mount, so we try and
         // catch the messagePanel when it does mount. Because we only want the ref once,
         // we use a boolean flag to avoid duplicate work.
-        if (this.refs.messagePanel && !this.state.atEndOfLiveTimelineInit) {
+        if (this._messagePanel && !this.state.atEndOfLiveTimelineInit) {
             this.setState({
                 atEndOfLiveTimelineInit: true,
-                atEndOfLiveTimeline: this.refs.messagePanel.isAtEndOfLiveTimeline(),
+                atEndOfLiveTimeline: this._messagePanel.isAtEndOfLiveTimeline(),
             });
         }
     },
@@ -499,12 +502,12 @@ module.exports = createReactClass({
         // stop tracking room changes to format permalinks
         this._stopAllPermalinkCreators();
 
-        if (this.refs.roomView) {
+        if (this._roomView.current) {
             // disconnect the D&D event listeners from the room view. This
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            const roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            const roomView = ReactDOM.findDOMNode(this._roomView.current);
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -701,10 +704,10 @@ module.exports = createReactClass({
     },
 
     canResetTimeline: function() {
-        if (!this.refs.messagePanel) {
+        if (!this._messagePanel) {
             return true;
         }
-        return this.refs.messagePanel.canResetTimeline();
+        return this._messagePanel.canResetTimeline();
     },
 
     // called when state.room is first initialised (either at initial load,
@@ -1046,7 +1049,7 @@ module.exports = createReactClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messagePanel.isAtEndOfLiveTimeline()) {
+        if (this._messagePanel.isAtEndOfLiveTimeline()) {
             this.setState({
                 numUnreadMessages: 0,
                 atEndOfLiveTimeline: true,
@@ -1119,8 +1122,8 @@ module.exports = createReactClass({
 
         // if we already have a search panel, we need to tell it to forget
         // about its scroll state.
-        if (this.refs.searchResultsPanel) {
-            this.refs.searchResultsPanel.resetScrollState();
+        if (this._searchResultsPanel.current) {
+            this._searchResultsPanel.current.resetScrollState();
         }
 
         // make sure that we don't end up showing results from
@@ -1225,7 +1228,7 @@ module.exports = createReactClass({
         // once dynamic content in the search results load, make the scrollPanel check
         // the scroll offsets.
         const onHeightChanged = () => {
-            const scrollPanel = this.refs.searchResultsPanel;
+            const scrollPanel = this._searchResultsPanel.current;
             if (scrollPanel) {
                 scrollPanel.checkScroll();
             }
@@ -1370,28 +1373,28 @@ module.exports = createReactClass({
 
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
-        this.refs.messagePanel.jumpToLiveTimeline();
+        this._messagePanel.jumpToLiveTimeline();
         dis.dispatch({action: 'focus_composer'});
     },
 
     // jump up to wherever our read marker is
     jumpToReadMarker: function() {
-        this.refs.messagePanel.jumpToReadMarker();
+        this._messagePanel.jumpToReadMarker();
     },
 
     // update the read marker to match the read-receipt
     forgetReadMarker: function(ev) {
         ev.stopPropagation();
-        this.refs.messagePanel.forgetReadMarker();
+        this._messagePanel.forgetReadMarker();
     },
 
     // decide whether or not the top 'unread messages' bar should be shown
     _updateTopUnreadMessagesBar: function() {
-        if (!this.refs.messagePanel) {
+        if (!this._messagePanel) {
             return;
         }
 
-        const showBar = this.refs.messagePanel.canJumpToReadMarker();
+        const showBar = this._messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
             this.setState({showTopUnreadMessagesBar: showBar});
         }
@@ -1401,7 +1404,7 @@ module.exports = createReactClass({
     // restored when we switch back to it.
     //
     _getScrollState: function() {
-        const messagePanel = this.refs.messagePanel;
+        const messagePanel = this._messagePanel;
         if (!messagePanel) return null;
 
         // if we're following the live timeline, we want to return null; that
@@ -1506,10 +1509,10 @@ module.exports = createReactClass({
      */
     handleScrollKey: function(ev) {
         let panel;
-        if (this.refs.searchResultsPanel) {
-            panel = this.refs.searchResultsPanel;
-        } else if (this.refs.messagePanel) {
-            panel = this.refs.messagePanel;
+        if (this._searchResultsPanel.current) {
+            panel = this._searchResultsPanel.current;
+        } else if (this._messagePanel) {
+            panel = this._messagePanel;
         }
 
         if (panel) {
@@ -1530,7 +1533,7 @@ module.exports = createReactClass({
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
-        this.refs.messagePanel = r;
+        this._messagePanel = r;
         if (r) {
             console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
@@ -1719,7 +1722,7 @@ module.exports = createReactClass({
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
-            aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
+            aux = <SearchBar searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
             hideCancel = true;
@@ -1775,7 +1778,7 @@ module.exports = createReactClass({
         }
 
         const auxPanel = (
-            <AuxPanel ref="auxPanel" room={this.state.room}
+            <AuxPanel room={this.state.room}
               fullHeight={false}
               userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
@@ -1875,7 +1878,7 @@ module.exports = createReactClass({
                 searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
             } else {
                 searchResultsPanel = (
-                    <ScrollPanel ref="searchResultsPanel"
+                    <ScrollPanel ref={this._searchResultsPanel}
                         className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                         onFillRequest={this.onSearchResultsFillRequest}
                         resizeNotifier={this.props.resizeNotifier}
@@ -1898,7 +1901,8 @@ module.exports = createReactClass({
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         const messagePanel = (
-            <TimelinePanel ref={this._gatherTimelinePanelRef}
+            <TimelinePanel
+                ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 showReadReceipts={SettingsStore.getValue('showReadReceipts')}
                 manageReadReceipts={!this.state.isPeeking}
@@ -1952,9 +1956,11 @@ module.exports = createReactClass({
         const collapsedRhs = hideRightPanel || this.props.collapsedRhs;
 
         return (
-            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
+            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
                 <ErrorBoundary>
-                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                    <RoomHeader
+                        room={this.state.room}
+                        searchInfo={searchInfo}
                         oobData={this.props.oobData}
                         inRoom={myMembership === 'join'}
                         collapsedRhs={collapsedRhs}

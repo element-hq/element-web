@@ -18,7 +18,7 @@ limitations under the License.
 
 import url from 'url';
 import qs from 'querystring';
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import WidgetMessaging from '../../../WidgetMessaging';
@@ -35,7 +35,7 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {createMenu} from "../../structures/ContextualMenu";
+import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
@@ -62,6 +62,10 @@ export default class AppTile extends React.Component {
         this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
         this._onPopoutWidgetClick = this._onPopoutWidgetClick.bind(this);
         this._onReloadWidgetClick = this._onReloadWidgetClick.bind(this);
+
+        this._contextMenuButton = createRef();
+        this._appFrame = createRef();
+        this._menu_bar = createRef();
     }
 
     /**
@@ -89,6 +93,7 @@ export default class AppTile extends React.Component {
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
+            menuDisplayed: false,
         };
     }
 
@@ -334,14 +339,14 @@ export default class AppTile extends React.Component {
                     // HACK: This is a really dirty way to ensure that Jitsi cleans up
                     // its hold on the webcam. Without this, the widget holds a media
                     // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-                    if (this.refs.appFrame) {
+                    if (this._appFrame.current) {
                         // In practice we could just do `+= ''` to trick the browser
                         // into thinking the URL changed, however I can foresee this
                         // being optimized out by a browser. Instead, we'll just point
                         // the iframe at a page that is reasonably safe to use in the
                         // event the iframe doesn't wink away.
                         // This is relative to where the Riot instance is located.
-                        this.refs.appFrame.src = 'about:blank';
+                        this._appFrame.current.src = 'about:blank';
                     }
 
                     WidgetUtils.setRoomWidget(
@@ -386,7 +391,7 @@ export default class AppTile extends React.Component {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
         const widgetMessaging = new WidgetMessaging(
-            this.props.id, this.props.url, this.props.userWidget, this.refs.appFrame.contentWindow);
+            this.props.id, this.props.url, this.props.userWidget, this._appFrame.current.contentWindow);
         ActiveWidgetStore.setWidgetMessaging(this.props.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.id} requested capabilities: ` + requestedCapabilities);
@@ -493,7 +498,7 @@ export default class AppTile extends React.Component {
         ev.preventDefault();
 
         // Ignore clicks on menu bar children
-        if (ev.target !== this.refs.menu_bar) {
+        if (ev.target !== this._menu_bar.current) {
             return;
         }
 
@@ -552,48 +557,15 @@ export default class AppTile extends React.Component {
 
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
-        this.refs.appFrame.src = this.refs.appFrame.src;
+        this._appFrame.current.src = this._appFrame.current.src;
     }
 
-    _getMenuOptions(ev) {
-        // TODO: This block of code gets copy/pasted a lot. We should make that happen less.
-        const menuOptions = {};
-        const buttonRect = ev.target.getBoundingClientRect();
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const buttonLeft = buttonRect.left + window.pageXOffset;
-        const buttonTop = buttonRect.top + window.pageYOffset;
-        // Align the right edge of the menu to the left edge of the button
-        menuOptions.right = window.innerWidth - buttonLeft;
-        // Align the menu vertically on whichever side of the button has more
-        // space available.
-        if (buttonTop < window.innerHeight / 2) {
-            menuOptions.top = buttonTop;
-        } else {
-            menuOptions.bottom = window.innerHeight - buttonTop;
-        }
-        return menuOptions;
-    }
+    _onContextMenuClick = () => {
+        this.setState({ menuDisplayed: true });
+    };
 
-    _onContextMenuClick = (ev) => {
-        const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
-        const menuOptions = {
-            ...this._getMenuOptions(ev),
-
-            // A revoke handler is always required
-            onRevokeClicked: this._onRevokeClicked,
-        };
-
-        const canUserModify = this._canUserModify();
-        const showEditButton = Boolean(this._scalarClient && canUserModify);
-        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
-        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
-
-        if (showEditButton) menuOptions.onEditClicked = this._onEditClick;
-        if (showDeleteButton) menuOptions.onDeleteClicked = this._onDeleteClick;
-        if (showPictureSnapshotButton) menuOptions.onSnapshotClicked = this._onSnapshotClick;
-        if (this.props.showReload) menuOptions.onReloadClicked = this._onReloadWidgetClick;
-
-        createMenu(WidgetContextMenu, menuOptions);
+    _closeContextMenu = () => {
+        this.setState({ menuDisplayed: false });
     };
 
     render() {
@@ -601,7 +573,7 @@ export default class AppTile extends React.Component {
 
         // Don't render widget if it is in the process of being deleted
         if (this.state.deleting) {
-            return <div></div>;
+            return <div />;
         }
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
@@ -656,7 +628,7 @@ export default class AppTile extends React.Component {
                             { this.state.loading && loadingElement }
                             <iframe
                                 allow={iframeFeatures}
-                                ref="appFrame"
+                                ref={this._appFrame}
                                 src={this._getSafeUrl()}
                                 allowFullScreen={true}
                                 sandbox={sandboxFlags}
@@ -697,10 +669,34 @@ export default class AppTile extends React.Component {
             mx_AppTileMenuBar_expanded: this.props.show,
         });
 
-        return (
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+
+            const canUserModify = this._canUserModify();
+            const showEditButton = Boolean(this._scalarClient && canUserModify);
+            const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
+            const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
+
+            const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
+            contextMenu = (
+                <ContextMenu {...aboveLeftOf(elementRect, null)} onFinished={this._closeContextMenu}>
+                    <WidgetContextMenu
+                        onRevokeClicked={this._onRevokeClicked}
+                        onEditClicked={showEditButton ? this._onEditClick : undefined}
+                        onDeleteClicked={showDeleteButton ? this._onDeleteClick : undefined}
+                        onSnapshotClicked={showPictureSnapshotButton ? this._onSnapshotClick : undefined}
+                        onReloadClicked={this.props.showReload ? this._onReloadWidgetClick : undefined}
+                        onFinished={this._closeContextMenu}
+                    />
+                </ContextMenu>
+            );
+        }
+
+        return <React.Fragment>
             <div className={appTileClass} id={this.props.id}>
                 { this.props.showMenubar &&
-                <div ref="menu_bar" className={menuBarClasses} onClick={this.onClickMenuBar}>
+                <div ref={this._menu_bar} className={menuBarClasses} onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
                         { /* Minimise widget */ }
                         { showMinimiseButton && <AccessibleButton
@@ -725,20 +721,24 @@ export default class AppTile extends React.Component {
                             onClick={this._onPopoutWidgetClick}
                         /> }
                         { /* Context menu */ }
-                        { <AccessibleButton
+                        { <ContextMenuButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
-                            title={_t('More options')}
+                            label={_t('More options')}
+                            isExpanded={this.state.menuDisplayed}
+                            inputRef={this._contextMenuButton}
                             onClick={this._onContextMenuClick}
                         /> }
                     </span>
                 </div> }
                 { appTileBody }
             </div>
-        );
+
+            { contextMenu }
+        </React.Fragment>;
     }
 }
 
-AppTile.displayName ='AppTile';
+AppTile.displayName = 'AppTile';
 
 AppTile.propTypes = {
     id: PropTypes.string.isRequired,

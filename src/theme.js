@@ -80,6 +80,8 @@ export class ThemeWatcher {
     }
 
     getEffectiveTheme() {
+        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
+
         // If the user has specifically enabled the system matching option (excluding default),
         // then use that over anything else. We pick the lowest possible level for the setting
         // to ensure the ordering otherwise works.

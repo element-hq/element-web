@@ -62,7 +62,7 @@ EMOJIBASE.forEach(emoji => {
         DATA_BY_CATEGORY[categoryId].push(emoji);
     }
     // This is used as the string to match the query against when filtering emojis.
-    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`;
+    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`.toLowerCase();
 });
 
 export const CATEGORY_HEADER_HEIGHT = 22;
@@ -201,6 +201,7 @@ class EmojiPicker extends React.Component {
     }
 
     onChangeFilter(filter) {
+        filter = filter.toLowerCase(); // filter is case insensitive stored lower-case
         for (const cat of this.categories) {
             let emojis;
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.

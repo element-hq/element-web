@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import {_t} from '../../../languageHandler';
+import {MenuItem} from "../../structures/ContextMenu";
 
 export default class WidgetContextMenu extends React.Component {
     static propTypes = {
@@ -71,50 +71,45 @@ export default class WidgetContextMenu extends React.Component {
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
-
         const options = [];
 
         if (this.props.onEditClicked) {
             options.push(
-                <AccessibleButton className='mx_WidgetContextMenu_option' onClick={this.onEditClicked} key='edit'>
+                <MenuItem className='mx_WidgetContextMenu_option' onClick={this.onEditClicked} key='edit'>
                     {_t("Edit")}
-                </AccessibleButton>,
+                </MenuItem>,
             );
         }
 
         if (this.props.onReloadClicked) {
             options.push(
-                <AccessibleButton className='mx_WidgetContextMenu_option' onClick={this.onReloadClicked}
-                                  key='reload'>
+                <MenuItem className='mx_WidgetContextMenu_option' onClick={this.onReloadClicked} key='reload'>
                     {_t("Reload")}
-                </AccessibleButton>,
+                </MenuItem>,
             );
         }
 
         if (this.props.onSnapshotClicked) {
             options.push(
-                <AccessibleButton className='mx_WidgetContextMenu_option' onClick={this.onSnapshotClicked}
-                                  key='snap'>
+                <MenuItem className='mx_WidgetContextMenu_option' onClick={this.onSnapshotClicked} key='snap'>
                     {_t("Take picture")}
-                </AccessibleButton>,
+                </MenuItem>,
             );
         }
 
         if (this.props.onDeleteClicked) {
             options.push(
-                <AccessibleButton className='mx_WidgetContextMenu_option' onClick={this.onDeleteClicked}
-                                  key='delete'>
+                <MenuItem className='mx_WidgetContextMenu_option' onClick={this.onDeleteClicked} key='delete'>
                     {_t("Remove for everyone")}
-                </AccessibleButton>,
+                </MenuItem>,
             );
         }
 
         // Push this last so it appears last. It's always present.
         options.push(
-            <AccessibleButton className='mx_WidgetContextMenu_option' onClick={this.onRevokeClicked} key='revoke'>
+            <MenuItem className='mx_WidgetContextMenu_option' onClick={this.onRevokeClicked} key='revoke'>
                 {_t("Remove for me")}
-            </AccessibleButton>,
+            </MenuItem>,
         );
 
         // Put separators between the options

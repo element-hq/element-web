@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk';
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -129,6 +129,8 @@ const LoggedInView = createReactClass({
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
 
         fixupColorFonts();
+
+        this._roomView = createRef();
     },
 
     componentDidUpdate(prevProps) {
@@ -165,10 +167,10 @@ const LoggedInView = createReactClass({
     },
 
     canResetTimelineInRoom: function(roomId) {
-        if (!this.refs.roomView) {
+        if (!this._roomView.current) {
             return true;
         }
-        return this.refs.roomView.canResetTimeline();
+        return this._roomView.current.canResetTimeline();
     },
 
     _setStateFromSessionStore() {
@@ -401,6 +403,11 @@ const LoggedInView = createReactClass({
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === Key.SPACE || ev.key === Key.ENTER);
 
+            // Do not capture the context menu key to improve keyboard accessibility
+            if (ev.key === Key.CONTEXT_MENU) {
+                return;
+            }
+
             // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
             // If using Slate, consume the Backspace without first focusing as it causes an implosion
             if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
@@ -423,8 +430,8 @@ const LoggedInView = createReactClass({
      * @param {Object} ev The key event
      */
     _onScrollKeyPressed: function(ev) {
-        if (this.refs.roomView) {
-            this.refs.roomView.handleScrollKey(ev);
+        if (this._roomView.current) {
+            this._roomView.current.handleScrollKey(ev);
         }
     },
 
@@ -538,7 +545,7 @@ const LoggedInView = createReactClass({
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 pageElement = <RoomView
-                        ref='roomView'
+                        ref={this._roomView}
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
                         thirdPartyInvite={this.props.thirdPartyInvite}

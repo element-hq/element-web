@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -159,6 +159,10 @@ export default class MessagePanel extends React.Component {
             SettingsStore.getValue("showHiddenEventsInTimeline");
 
         this._isMounted = false;
+
+        this._readMarkerNode = createRef();
+        this._whoIsTyping = createRef();
+        this._scrollPanel = createRef();
     }
 
     componentDidMount() {
@@ -191,8 +195,7 @@ export default class MessagePanel extends React.Component {
     /* return true if the content is fully scrolled down right now; else false.
      */
     isAtBottom() {
-        return this.refs.scrollPanel
-            && this.refs.scrollPanel.isAtBottom();
+        return this._scrollPanel.current && this._scrollPanel.current.isAtBottom();
     }
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
@@ -201,8 +204,7 @@ export default class MessagePanel extends React.Component {
      * returns null if we are not mounted.
      */
     getScrollState() {
-        if (!this.refs.scrollPanel) { return null; }
-        return this.refs.scrollPanel.getScrollState();
+        return this._scrollPanel.current ? this._scrollPanel.current.getScrollState() : null;
     }
 
     // returns one of:
@@ -212,8 +214,8 @@ export default class MessagePanel extends React.Component {
     //   0: read marker is within the window
     //  +1: read marker is below the window
     getReadMarkerPosition() {
-        const readMarker = this.refs.readMarkerNode;
-        const messageWrapper = this.refs.scrollPanel;
+        const readMarker = this._readMarkerNode.current;
+        const messageWrapper = this._scrollPanel.current;
 
         if (!readMarker || !messageWrapper) {
             return null;
@@ -236,16 +238,16 @@ export default class MessagePanel extends React.Component {
     /* jump to the top of the content.
      */
     scrollToTop() {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.scrollToTop();
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.scrollToTop();
         }
     }
 
     /* jump to the bottom of the content.
      */
     scrollToBottom() {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.scrollToBottom();
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.scrollToBottom();
         }
     }
 
@@ -255,8 +257,8 @@ export default class MessagePanel extends React.Component {
      * @param {number} mult: -1 to page up, +1 to page down
      */
     scrollRelative(mult) {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.scrollRelative(mult);
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.scrollRelative(mult);
         }
     }
 
@@ -266,8 +268,8 @@ export default class MessagePanel extends React.Component {
      * @param {KeyboardEvent} ev: the keyboard event to handle
      */
     handleScrollKey(ev) {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.handleScrollKey(ev);
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.handleScrollKey(ev);
         }
     }
 
@@ -282,8 +284,8 @@ export default class MessagePanel extends React.Component {
      * defaults to 0.
      */
     scrollToEvent(eventId, pixelOffset, offsetBase) {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.scrollToToken(eventId, pixelOffset, offsetBase);
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.scrollToToken(eventId, pixelOffset, offsetBase);
         }
     }
 
@@ -297,8 +299,8 @@ export default class MessagePanel extends React.Component {
     /* check the scroll state and send out pagination requests if necessary.
      */
     checkFillState() {
-        if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.checkFillState();
+        if (this._scrollPanel.current) {
+            this._scrollPanel.current.checkFillState();
         }
     }
 
@@ -345,7 +347,7 @@ export default class MessagePanel extends React.Component {
             }
 
             return (
-                <li key={"readMarker_"+eventId} ref="readMarkerNode"
+                <li key={"readMarker_"+eventId} ref={this._readMarkerNode}
                       className="mx_RoomView_myReadMarker_container">
                     { hr }
                 </li>
@@ -693,6 +695,10 @@ export default class MessagePanel extends React.Component {
 
         const readReceipts = this._readReceiptsByEvent[eventId];
 
+        // Dev note: `this._isUnmounting.bind(this)` is important - it ensures that
+        // the function is run in the context of this class and not EventTile, therefore
+        // ensuring the right `this._mounted` variable is used by read receipts (which
+        // don't update their position if we, the MessagePanel, is unmounting).
         ret.push(
             <li key={eventId}
                 ref={this._collectEventNode.bind(this, eventId)}
@@ -707,7 +713,7 @@ export default class MessagePanel extends React.Component {
                     readReceipts={readReceipts}
                     readReceiptMap={this._readReceiptMap}
                     showUrlPreview={this.props.showUrlPreview}
-                    checkUnmounting={this._isUnmounting}
+                    checkUnmounting={this._isUnmounting.bind(this)}
                     eventSendStatus={mxEv.getAssociatedStatus()}
                     tileShape={this.props.tileShape}
                     isTwelveHour={this.props.isTwelveHour}
@@ -825,14 +831,14 @@ export default class MessagePanel extends React.Component {
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
     _onHeightChanged = () => {
-        const scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this._scrollPanel.current;
         if (scrollPanel) {
             scrollPanel.checkScroll();
         }
     };
 
     _onTypingShown = () => {
-        const scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this._scrollPanel.current;
         // this will make the timeline grow, so checkScroll
         scrollPanel.checkScroll();
         if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
@@ -841,7 +847,7 @@ export default class MessagePanel extends React.Component {
     };
 
     _onTypingHidden = () => {
-        const scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this._scrollPanel.current;
         if (scrollPanel) {
             // as hiding the typing notifications doesn't
             // update the scrollPanel, we tell it to apply
@@ -854,11 +860,11 @@ export default class MessagePanel extends React.Component {
     };
 
     updateTimelineMinHeight() {
-        const scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this._scrollPanel.current;
 
         if (scrollPanel) {
             const isAtBottom = scrollPanel.isAtBottom();
-            const whoIsTyping = this.refs.whoIsTyping;
+            const whoIsTyping = this._whoIsTyping.current;
             const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
             // when messages get added to the timeline,
             // but somebody else is still typing,
@@ -871,7 +877,7 @@ export default class MessagePanel extends React.Component {
     }
 
     onTimelineReset() {
-        const scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this._scrollPanel.current;
         if (scrollPanel) {
             scrollPanel.clearPreventShrinking();
         }
@@ -905,19 +911,22 @@ export default class MessagePanel extends React.Component {
                 room={this.props.room}
                 onShown={this._onTypingShown}
                 onHidden={this._onTypingHidden}
-                ref="whoIsTyping" />
+                ref={this._whoIsTyping} />
             );
         }
 
         return (
-            <ScrollPanel ref="scrollPanel" className={className}
-                    onScroll={this.props.onScroll}
-                    onResize={this.onResize}
-                    onFillRequest={this.props.onFillRequest}
-                    onUnfillRequest={this.props.onUnfillRequest}
-                    style={style}
-                    stickyBottom={this.props.stickyBottom}
-                    resizeNotifier={this.props.resizeNotifier}>
+            <ScrollPanel
+                ref={this._scrollPanel}
+                className={className}
+                onScroll={this.props.onScroll}
+                onResize={this.onResize}
+                onFillRequest={this.props.onFillRequest}
+                onUnfillRequest={this.props.onUnfillRequest}
+                style={style}
+                stickyBottom={this.props.stickyBottom}
+                resizeNotifier={this.props.resizeNotifier}
+            >
                 { topSpinner }
                 { this._getEventTiles() }
                 { whoIsTyping }

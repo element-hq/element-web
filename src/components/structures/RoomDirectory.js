@@ -572,7 +572,7 @@ module.exports = createReactClass({
             if (rows.length === 0 && !this.state.loading) {
                 scrollpanel_content = <i>{ _t('No rooms to show') }</i>;
             } else {
-                scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
+                scrollpanel_content = <table className="mx_RoomDirectory_table">
                     <tbody>
                         { rows }
                     </tbody>

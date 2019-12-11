@@ -20,6 +20,8 @@ import {DEFAULT_THEME, enumerateThemes} from "../../theme";
 
 export default class ThemeController extends SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
+        if (!calculatedValue) return null; // Don't override null themes
+
         const themes = enumerateThemes();
         // Override in case some no longer supported theme is stored here
         if (!themes[calculatedValue]) {
