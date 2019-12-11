@@ -1939,5 +1939,7 @@
     "Notification settings": "Értesítések beállítása",
     "User Status": "Felhasználó állapota",
     "Reactions": "Reakciók",
-    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ezzel reagáltak: %(content)s</reactedWith>"
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ezzel reagáltak: %(content)s</reactedWith>",
+    "<userName/> wants to chat": "<userName/> csevegni szeretne",
+    "Start chatting": "Beszélgetés elkezdése"
 }
