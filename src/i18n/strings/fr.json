@@ -1940,5 +1940,10 @@
     "Reactions": "Réactions",
     "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ont réagi avec %(content)s</reactedWith>",
     "<userName/> wants to chat": "<userName/> veut discuter",
-    "Start chatting": "Commencer à discuter"
+    "Start chatting": "Commencer à discuter",
+    "Send cross-signing keys to homeserver": "Envoyer les clés de signature croisée au serveur d’accueil",
+    "Cross-signing public keys:": "Clés publiques de signature croisée :",
+    "on device": "sur l’appareil",
+    "not found": "non trouvé",
+    "Cross-signing private keys:": "Clés privées de signature croisée :"
 }
