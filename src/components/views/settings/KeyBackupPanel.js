@@ -21,6 +21,8 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import SettingsStore from '../../../../lib/settings/SettingsStore';
+import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -123,6 +125,31 @@ export default class KeyBackupPanel extends React.PureComponent {
                 },
             },
         );
+    }
+
+    _startNewBackupWithSecureSecretStorage = async () => {
+        const cli = MatrixClientPeg.get();
+        let info;
+        try {
+            await accessSecretStorage(async () => {
+                info = await cli.prepareKeyBackupVersion(
+                    null /* random key */,
+                    { secureSecretStorage: true },
+                );
+                info = await cli.createKeyBackupVersion(info);
+            });
+            await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
+            this._loadBackupStatus();
+        } catch (e) {
+            console.error("Error creating key backup", e);
+            // TODO: If creating a version succeeds, but backup fails, should we
+            // delete the version, disable backup, or do nothing?  If we just
+            // disable without deleting, we'll enable on next app reload since
+            // it is trusted.
+            if (info && info.version) {
+                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
+            }
+        }
     }
 
     _deleteBackup = () => {
@@ -299,6 +326,22 @@ export default class KeyBackupPanel extends React.PureComponent {
                 </div>
             </div>;
         } else {
+            // This is a temporary button for testing the new path which stores
+            // the key backup key in SSSS. Initialising SSSS depends on
+            // cross-signing and is part of the same project, so we only show
+            // this mode when the cross-signing feature is enabled.
+            // TODO: Clean this up when removing the feature flag.
+            let secureSecretStorageKeyBackup;
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                secureSecretStorageKeyBackup = (
+                    <div className="mx_KeyBackupPanel_buttonRow">
+                        <AccessibleButton kind="primary" onClick={this._startNewBackupWithSecureSecretStorage}>
+                            {_t("Start using Key Backup with Secure Secret Storage")}
+                        </AccessibleButton>
+                    </div>
+                );
+            }
+
             return <div>
                 <div>
                     <p>{_t(
@@ -313,6 +356,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {_t("Start using Key Backup")}
                     </AccessibleButton>
                 </div>
+                {secureSecretStorageKeyBackup}
             </div>;
         }
     }

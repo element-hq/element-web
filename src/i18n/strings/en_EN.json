@@ -540,6 +540,7 @@
     "This backup is trusted because it has been restored on this device": "This backup is trusted because it has been restored on this device",
     "Backup version: ": "Backup version: ",
     "Algorithm: ": "Algorithm: ",
+    "Start using Key Backup with Secure Secret Storage": "Start using Key Backup with Secure Secret Storage",
     "Your keys are <b>not being backed up from this device</b>.": "Your keys are <b>not being backed up from this device</b>.",
     "Back up your keys before signing out to avoid losing them.": "Back up your keys before signing out to avoid losing them.",
     "Start using Key Backup": "Start using Key Backup",
