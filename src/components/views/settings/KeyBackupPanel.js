@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,13 +25,6 @@ import Modal from '../../../Modal';
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
-
-        this._startNewBackup = this._startNewBackup.bind(this);
-        this._deleteBackup = this._deleteBackup.bind(this);
-        this._onKeyBackupSessionsRemaining =
-            this._onKeyBackupSessionsRemaining.bind(this);
-        this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
-        this._restoreBackup = this._restoreBackup.bind(this);
 
         this._unmounted = false;
         this.state = {
@@ -63,13 +57,13 @@ export default class KeyBackupPanel extends React.PureComponent {
         }
     }
 
-    _onKeyBackupSessionsRemaining(sessionsRemaining) {
+    _onKeyBackupSessionsRemaining = (sessionsRemaining) => {
         this.setState({
             sessionsRemaining,
         });
     }
 
-    _onKeyBackupStatus() {
+    _onKeyBackupStatus = () => {
         // This just loads the current backup status rather than forcing
         // a re-check otherwise we risk causing infinite loops
         this._loadBackupStatus();
@@ -120,7 +114,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         }
     }
 
-    _startNewBackup() {
+    _startNewBackup = () => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
@@ -131,7 +125,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         );
     }
 
-    _deleteBackup() {
+    _deleteBackup = () => {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
@@ -151,7 +145,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         });
     }
 
-    _restoreBackup() {
+    _restoreBackup = () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         });
@@ -295,14 +289,14 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
                 </details>
-                <p>
+                <div className="mx_KeyBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         {restoreButtonCaption}
                     </AccessibleButton>&nbsp;&nbsp;&nbsp;
                     <AccessibleButton kind="danger" onClick={this._deleteBackup}>
                         { _t("Delete Backup") }
                     </AccessibleButton>
-                </p>
+                </div>
             </div>;
         } else {
             return <div>
@@ -314,9 +308,11 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
                 </div>
-                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
-                    { _t("Start using Key Backup") }
-                </AccessibleButton>
+                <div className="mx_KeyBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                        {_t("Start using Key Backup")}
+                    </AccessibleButton>
+                </div>
             </div>;
         }
     }

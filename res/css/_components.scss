@@ -64,7 +64,6 @@
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
-@import "./views/dialogs/_RestoreKeyBackupDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
 @import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_RoomUpgradeWarningDialog.scss";
@@ -83,6 +82,8 @@
 @import "./views/dialogs/keybackup/_CreateKeyBackupDialog.scss";
 @import "./views/dialogs/keybackup/_KeyBackupFailedDialog.scss";
 @import "./views/dialogs/keybackup/_RestoreKeyBackupDialog.scss";
+@import "./views/dialogs/secretstorage/_AccessSecretStorageDialog.scss";
+@import "./views/dialogs/secretstorage/_CreateSecretStorageDialog.scss";
 @import "./views/directory/_NetworkDropdown.scss";
 @import "./views/elements/_AccessibleButton.scss";
 @import "./views/elements/_AddressSelector.scss";
@@ -174,6 +175,7 @@
 @import "./views/rooms/_Stickers.scss";
 @import "./views/rooms/_TopUnreadMessagesBar.scss";
 @import "./views/rooms/_WhoIsTypingTile.scss";
+@import "./views/settings/_CrossSigningPanel.scss";
 @import "./views/settings/_DevicesPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
 @import "./views/settings/_IntegrationManager.scss";

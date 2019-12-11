@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
+import * as CrossSigningManager from './CrossSigningManager';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -220,14 +222,9 @@ class MatrixClientPeg {
             identityServer: new IdentityAuthClient(),
         };
 
+        opts.cryptoCallbacks = {};
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            // TODO: Cross-signing keys are temporarily in memory only. A
-            // separate task in the cross-signing project will build from here.
-            const keys = [];
-            opts.cryptoCallbacks = {
-                getCrossSigningKey: k => keys[k],
-                saveCrossSigningKeys: newKeys => Object.assign(keys, newKeys),
-            };
+            Object.assign(opts.cryptoCallbacks, CrossSigningManager);
         }
 
         this.matrixClient = createMatrixClient(opts);
