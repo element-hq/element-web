@@ -34,6 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -68,6 +69,11 @@ const stateEventTileTypes = {
     'm.room.guest_access': 'messages.TextualEvent',
     'm.room.related_groups': 'messages.TextualEvent',
 };
+
+// Add all the Mjolnir stuff to the renderer
+for (const evType of ALL_RULE_TYPES) {
+    stateEventTileTypes[evType] = 'messages.TextualEvent';
+}
 
 function getHandlerTile(ev) {
     const type = ev.getType();
