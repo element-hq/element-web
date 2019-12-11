@@ -1938,5 +1938,7 @@
     "Notification settings": "Paramètres de notification",
     "User Status": "Statut de l’utilisateur",
     "Reactions": "Réactions",
-    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ont réagi avec %(content)s</reactedWith>"
+    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> ont réagi avec %(content)s</reactedWith>",
+    "<userName/> wants to chat": "<userName/> veut discuter",
+    "Start chatting": "Commencer à discuter"
 }
