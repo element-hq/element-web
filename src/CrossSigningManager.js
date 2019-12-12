@@ -27,8 +27,9 @@ import { _t } from './languageHandler';
 // single secret storage operation, as it will clear the cached keys once the
 // operation ends.
 let secretStorageKeys = {};
+let cachingAllowed = false;
 
-export const getSecretStorageKey = async ({ keys: keyInfos }) => {
+async function getSecretStorageKey({ keys: keyInfos }) {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
@@ -36,7 +37,7 @@ export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const [name, info] = keyInfoEntries[0];
 
     // Check the in-memory cache
-    if (secretStorageKeys[name]) {
+    if (cachingAllowed && secretStorageKeys[name]) {
         return [name, secretStorageKeys[name]];
     }
 
@@ -70,10 +71,12 @@ export const getSecretStorageKey = async ({ keys: keyInfos }) => {
     const key = await inputToKey(input);
 
     // Save to cache to avoid future prompts in the current session
-    secretStorageKeys[name] = key;
+    if (cachingAllowed) {
+        secretStorageKeys[name] = key;
+    }
 
     return [name, key];
-};
+}
 
 export const crossSigningCallbacks = {
     getSecretStorageKey,
@@ -101,6 +104,7 @@ export const crossSigningCallbacks = {
  */
 export async function accessSecretStorage(func = async () => { }) {
     const cli = MatrixClientPeg.get();
+    cachingAllowed = true;
 
     try {
         if (!cli.hasSecretStorageKey()) {
@@ -139,6 +143,7 @@ export async function accessSecretStorage(func = async () => { }) {
         return await func();
     } finally {
         // Clear secret storage key cache now that work is complete
+        cachingAllowed = false;
         secretStorageKeys = {};
     }
 }
