@@ -33,6 +33,8 @@ export default class KeyBackupPanel extends React.PureComponent {
             loading: true,
             error: null,
             backupInfo: null,
+            backupSigStatus: null,
+            backupKeyStored: null,
             sessionsRemaining: 0,
         };
     }
@@ -74,9 +76,11 @@ export default class KeyBackupPanel extends React.PureComponent {
     async _checkKeyBackupStatus() {
         try {
             const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
             this.setState({
                 backupInfo,
                 backupSigStatus: trustInfo,
+                backupKeyStored,
                 error: null,
                 loading: false,
             });
@@ -87,6 +91,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
+                backupKeyStored: null,
                 loading: false,
             });
         }
@@ -97,11 +102,13 @@ export default class KeyBackupPanel extends React.PureComponent {
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
             if (this._unmounted) return;
             this.setState({
                 error: null,
                 backupInfo,
                 backupSigStatus,
+                backupKeyStored,
                 loading: false,
             });
         } catch (e) {
@@ -111,6 +118,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
+                backupKeyStored: null,
                 loading: false,
             });
         }
@@ -218,6 +226,13 @@ export default class KeyBackupPanel extends React.PureComponent {
                     )}</p>
                 </div>;
                 restoreButtonCaption = _t("Connect this device to Key Backup");
+            }
+
+            let keyStatus;
+            if (this.state.backupKeyStored === true) {
+                keyStatus = _t("in secret storage");
+            } else {
+                keyStatus = _t("not stored");
             }
 
             let uploadStatus;
@@ -331,6 +346,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <summary>{_t("Advanced")}</summary>
                     <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
                     <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
+                    <div>{_t("Backup key stored: ")}{keyStatus}</div>
                     {uploadStatus}
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
