@@ -180,10 +180,23 @@ export default class KeyBackupPanel extends React.PureComponent {
         });
     }
 
-    _restoreBackup = () => {
-        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
-        });
+    _restoreBackup = async () => {
+        // Use legacy path if backup key not stored in secret storage
+        if (!this.state.backupKeyStored) {
+            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog);
+            return;
+        }
+
+        try {
+            await accessSecretStorage(async () => {
+                await MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
+                    this.state.backupInfo,
+                );
+            });
+        } catch (e) {
+            console.log("Error restoring backup", e);
+        }
     }
 
     render() {
@@ -340,6 +353,24 @@ export default class KeyBackupPanel extends React.PureComponent {
                 trustedLocally = _t("This backup is trusted because it has been restored on this device");
             }
 
+            let buttonRow = (
+                <div className="mx_KeyBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                        {restoreButtonCaption}
+                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
+                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                        {_t("Delete Backup")}
+                    </AccessibleButton>
+                </div>
+            );
+            if (this.state.backupKeyStored && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                buttonRow = <p>⚠️ {_t(
+                    "Backup key stored in secret storage, but this feature is not " +
+                    "enabled on this device. Please enable cross-signing in Labs to " +
+                    "modify key backup state.",
+                )}</p>;
+            }
+
             return <div>
                 <div>{clientBackupStatus}</div>
                 <details>
@@ -351,14 +382,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
                 </details>
-                <div className="mx_KeyBackupPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                        {restoreButtonCaption}
-                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                        { _t("Delete Backup") }
-                    </AccessibleButton>
-                </div>
+                {buttonRow}
             </div>;
         } else {
             // This is a temporary button for testing the new path which stores
