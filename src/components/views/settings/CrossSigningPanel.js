@@ -36,6 +36,8 @@ export default class CrossSigningPanel extends React.PureComponent {
     componentDidMount() {
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
+        cli.on("userTrustStatusChanged", this.onStatusChanged);
+        cli.on("crossSigning.keysChanged", this.onStatusChanged);
     }
 
     componentWillUnmount() {
@@ -43,6 +45,8 @@ export default class CrossSigningPanel extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         if (!cli) return;
         cli.removeListener("accountData", this.onAccountData);
+        cli.removeListener("userTrustStatusChanged", this.onStatusChanged);
+        cli.removeListener("crossSigning.keysChanged", this.onStatusChanged);
     }
 
     onAccountData = (event) => {
@@ -50,6 +54,10 @@ export default class CrossSigningPanel extends React.PureComponent {
         if (type.startsWith("m.cross_signing") || type.startsWith("m.secret_storage")) {
             this.setState(this._getUpdatedStatus());
         }
+    };
+
+    onStatusChanged = () => {
+        this.setState(this._getUpdatedStatus());
     };
 
     _getUpdatedStatus() {
