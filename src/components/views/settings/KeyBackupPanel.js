@@ -250,10 +250,29 @@ export default class KeyBackupPanel extends React.PureComponent {
                     sig.device &&
                     sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
                 );
+                const fromThisUser = (
+                    sig.crossSigningId &&
+                    sig.deviceId === MatrixClientPeg.get().getCrossSigningId()
+                );
                 let sigStatus;
-                if (!sig.device) {
+                if (sig.valid && fromThisUser) {
                     sigStatus = _t(
-                        "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.",
+                        "Backup has a <validity>valid</validity> signature from this user",
+                        {}, { validity },
+                    );
+                } else if (!sig.valid && fromThisUser) {
+                    sigStatus = _t(
+                        "Backup has a <validity>invalid</validity> signature from this user",
+                        {}, { validity },
+                    );
+                } else if (sig.crossSigningId) {
+                    sigStatus = _t(
+                        "Backup has a signature from <verify>unknown</verify> user with ID %(deviceId)s",
+                        { deviceId: sig.deviceId }, { verify },
+                    );
+                } else if (!sig.device) {
+                    sigStatus = _t(
+                        "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s",
                         { deviceId: sig.deviceId }, { verify },
                     );
                 } else if (sig.valid && fromThisDevice) {
