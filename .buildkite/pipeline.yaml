@@ -35,24 +35,24 @@ steps:
       - docker#v3.0.1:
           image: "node:12"
 
-  - label: ":chains: End-to-End Tests"
-    agents:
-      # We use a xlarge sized instance instead of the normal small ones because
-      # e2e tests otherwise take +-8min
-      queue: "xlarge"
-    command:
-      # TODO: Remove hacky chmod for BuildKite
-      - "echo '--- Setup'"
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
-      - "./scripts/ci/end-to-end-tests.sh"
-    plugins:
-      - docker#v3.0.1:
-          image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
-          propagate-environment: true
-
+#  - label: ":chains: End-to-End Tests"
+#    agents:
+#      # We use a xlarge sized instance instead of the normal small ones because
+#      # e2e tests otherwise take +-8min
+#      queue: "xlarge"
+#    command:
+#      # TODO: Remove hacky chmod for BuildKite
+#      - "echo '--- Setup'"
+#      - "chmod +x ./scripts/ci/*.sh"
+#      - "chmod +x ./scripts/*"
+#      - "echo '--- Install js-sdk'"
+#      - "./scripts/ci/install-deps.sh"
+#      - "./scripts/ci/end-to-end-tests.sh"
+#    plugins:
+#      - docker#v3.0.1:
+#          image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
+#          propagate-environment: true
+#
 #  - label: ":karma: Tests"
 #    agents:
 #      # We use a medium sized instance instead of the normal small ones because
