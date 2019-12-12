@@ -20,10 +20,10 @@ import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 const request = require('browser-request');
 
-const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require('./MatrixClientPeg');
 
 import * as Matrix from 'matrix-js-sdk';
+import SdkConfig from "./SdkConfig";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
