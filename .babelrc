@@ -1,20 +1,25 @@
 {
+    "sourceMaps": "inline",
     "presets": [
-        "react",
-        "es2015",
-        "es2016"
+        ["@babel/preset-env", {
+            "targets": {
+                "browsers": [
+                    "last 2 versions"
+                ],
+                "node": 12
+            },
+            "modules": "commonjs"
+        }],
+        "@babel/preset-typescript",
+        "@babel/preset-flow",
+        "@babel/preset-react"
     ],
     "plugins": [
-        [
-            "transform-builtin-extend",
-            {
-                "globals": ["Error"]
-            }
-        ],
-        "transform-class-properties",
-        "transform-object-rest-spread",
-        "transform-runtime",
-        "add-module-exports",
-        "syntax-dynamic-import"
+        "@babel/plugin-proposal-numeric-separator",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-flow-comments",
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-transform-runtime"
     ]
 }

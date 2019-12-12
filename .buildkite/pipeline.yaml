@@ -1,13 +1,39 @@
 steps:
-  - label: ":eslint: Lint"
+  - label: ":eslint: JS Lint"
     command:
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
-      - "yarn lintwithexclusions"
-      - "yarn stylelint"
+      - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
-          image: "node:10"
+          image: "node:12"
+
+  - label: ":eslint: TS Lint"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "yarn lint:ts"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: ":eslint: Types Lint"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "yarn lint:types"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: "🛠 Build"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "yarn build"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
 
   - label: ":chains: End-to-End Tests"
     agents:
