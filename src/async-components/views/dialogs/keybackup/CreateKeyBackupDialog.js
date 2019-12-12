@@ -16,12 +16,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import FileSaver from 'file-saver';
+
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
-
-import FileSaver from 'file-saver';
-
 import { _t } from '../../../../languageHandler';
 
 const PHASE_PASSPHRASE = 0;
@@ -118,7 +117,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 phase: PHASE_DONE,
             });
         } catch (e) {
-            console.log("Error creating key backup", e);
+            console.error("Error creating key backup", e);
             // TODO: If creating a version succeeds, but backup fails, should we
             // delete the version, disable backup, or do nothing?  If we just
             // disable without deleting, we'll enable on next app reload since

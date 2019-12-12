@@ -31,7 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import * as CrossSigningManager from './CrossSigningManager';
+import { crossSigningCallbacks } from './CrossSigningManager';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -224,7 +224,7 @@ class MatrixClientPeg {
 
         opts.cryptoCallbacks = {};
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            Object.assign(opts.cryptoCallbacks, CrossSigningManager);
+            Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
         }
 
         this.matrixClient = createMatrixClient(opts);
