@@ -164,12 +164,12 @@ function DevicesSection({devices, userId, loading}) {
     if (verifiedDevices.length) {
         if (isExpanded) {
             expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(false)}>
-                <div>{_t("Hide verified Sign-In's")}</div>
+                <div>{_t("Hide verified sessions")}</div>
             </AccessibleButton>);
         } else {
             expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(true)}>
                 <div className="mx_E2EIcon mx_E2EIcon_verified" />
-                <div>{_t("%(count)s verified Sign-In's", {count: verifiedDevices.length})}</div>
+                <div>{_t("%(count)s verified sessions", {count: verifiedDevices.length})}</div>
             </AccessibleButton>);
         }
     }
