@@ -102,28 +102,59 @@ export default class CrossSigningPanel extends React.PureComponent {
             errorSection = <div className="error">{error.toString()}</div>;
         }
 
+        const enabled = (
+            crossSigningPublicKeysOnDevice &&
+            crossSigningPrivateKeysInStorage &&
+            secretStorageKeyInAccount
+        );
+
+        let summarisedStatus;
+        if (enabled) {
+            summarisedStatus = <p>✅ {_t(
+                "Cross-signing and secret storage are enabled.",
+            )}</p>;
+        } else if (crossSigningPrivateKeysInStorage) {
+            summarisedStatus = <p>{_t(
+                "Your account has a cross-signing identity in secret storage, but it " +
+                "is not yet trusted by this device.",
+            )}</p>;
+        } else {
+            summarisedStatus = <p>{_t(
+                "Cross-signing and secret storage are not yet set up.",
+            )}</p>;
+        }
+
+        let bootstrapButton;
+        if (!enabled) {
+            bootstrapButton = <div className="mx_CrossSigningPanel_buttonRow">
+                <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                    {_t("Bootstrap cross-signing and secret storage")}
+                </AccessibleButton>
+            </div>;
+        }
+
         return (
             <div>
-                <table className="mx_CrossSigningPanel_statusList"><tbody>
-                    <tr>
-                        <td>{_t("Cross-signing public keys:")}</td>
-                        <td>{crossSigningPublicKeysOnDevice ? _t("on device") : _t("not found")}</td>
-                    </tr>
-                    <tr>
-                        <td>{_t("Cross-signing private keys:")}</td>
-                        <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found")}</td>
-                    </tr>
-                    <tr>
-                        <td>{_t("Secret storage public key:")}</td>
-                        <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
-                    </tr>
-                </tbody></table>
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
-                        {_t("Bootstrap Secure Secret Storage")}
-                    </AccessibleButton>
-                </div>
+                {summarisedStatus}
+                <details>
+                    <summary>{_t("Advanced")}</summary>
+                    <table className="mx_CrossSigningPanel_statusList"><tbody>
+                        <tr>
+                            <td>{_t("Cross-signing public keys:")}</td>
+                            <td>{crossSigningPublicKeysOnDevice ? _t("on device") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Cross-signing private keys:")}</td>
+                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Secret storage public key:")}</td>
+                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                        </tr>
+                    </tbody></table>
+                </details>
                 {errorSection}
+                {bootstrapButton}
             </div>
         );
     }
