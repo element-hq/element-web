@@ -23,9 +23,9 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
+import rate_limited_func from "../../../ratelimitedfunc";
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
 const CallHandler = require("../../../CallHandler");
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
@@ -187,7 +187,7 @@ module.exports = createReactClass({
         }
     },
 
-    _updateList: new rate_limited_func(function() {
+    _updateList: rate_limited_func(function() {
         this._updateListNow();
     }, 500),
 
