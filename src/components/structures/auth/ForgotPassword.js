@@ -26,6 +26,7 @@ import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from 'classnames';
+import AuthPage from "../../views/auth/AuthPage";
 
 // Phases
 // Show controls to configure server details
@@ -367,7 +368,6 @@ module.exports = createReactClass({
     },
 
     render: function() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
 

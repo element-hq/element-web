@@ -24,6 +24,7 @@ import Modal from '../../../Modal';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import url from 'url';
+import AuthPage from "../../views/auth/AuthPage";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -284,7 +285,6 @@ export default class SoftLogout extends React.Component {
     }
 
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
