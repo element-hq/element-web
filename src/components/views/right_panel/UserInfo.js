@@ -58,9 +58,20 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const _getE2EStatus = (devices) => {
-    const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
-    return hasUnverifiedDevice ? "warning" : "verified";
+const _getE2EStatus = (cli, userId, devices) => {
+    if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
+        return hasUnverifiedDevice ? "warning" : "verified";
+    }
+    const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+    const allDevicesVerified = devices.every(device => {
+        const { deviceId } = device;
+        return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+    });
+    if (allDevicesVerified) {
+        return userVerified ? "verified" : "normal";
+    }
+    return "warning";
 };
 
 async function unverifyUser(matrixClient, userId) {
@@ -1264,7 +1275,8 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
     let e2eIcon;
     if (isRoomEncrypted && devices) {
-        e2eIcon = <E2EIcon size={18} status={_getE2EStatus(devices)} isUser={true} />;
+        const e2eStatus = _getE2EStatus(cli, user.userId, devices);
+        e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
     return (
