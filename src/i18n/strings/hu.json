@@ -2003,5 +2003,11 @@
     "Start using Key Backup with Secure Secret Storage": "Kulcs Mentés és Biztonsági Titok Tároló használatának megkezdése",
     "Hide verified sessions": "Ellenőrzött munkamenetek eltakarása",
     "%(count)s verified sessions|other": "%(count)s ellenőrzött munkamenet",
-    "%(count)s verified sessions|one": "1 ellenőrzött munkamenet"
+    "%(count)s verified sessions|one": "1 ellenőrzött munkamenet",
+    "Backup key stored in secret storage, but this feature is not enabled on this device. Please enable cross-signing in Labs to modify key backup state.": "Visszaállítási kulcs a biztonsági tárolóban van elmentve, de ezen az eszközön ez a lehetőség nincs engedélyezve. Engedélyezd a kulcs mentés állapotának módosításához a kereszt-aláírást a Laborban.",
+    "Close preview": "Előnézet bezárása",
+    "Access your secure message history and your cross-signing identity for verifying other devices by entering your passphrase.": "A jelmondat megadásával hozzáférhetsz a titkosított üzeneteidhez és a kereszt-aláíráshoz tartozó azonosítódhoz amivel más eszközöket ellenőrizhetsz.",
+    "Access your secure message history and your cross-signing identity for verifying other devices by entering your recovery key.": "A visszaállítási kulcs megadásával hozzáférhetsz a titkosított üzeneteidhez és a kereszt-aláíráshoz tartozó azonosítódhoz amivel más eszközöket ellenőrizhetsz.",
+    "We'll use secret storage to optionally store an encrypted copy of your cross-signing identity for verifying other devices and message keys on our server. Protect your access to encrypted messages with a passphrase to keep it secure.": "Biztonsági tárolót fogunk használni, hogy tárolhassuk a kereszt-aláíráshoz tartozó azonosítót titkosított formában, amivel más eszközöket és üzenet kulcsokat lehet ellenőrizni. Védd a titkosított üzenetekhez való hozzáférést jelmondattal és azt tartsd titokban.",
+    "Without setting up secret storage, you won't be able to restore your access to encrypted messages or your cross-signing identity for verifying other devices if you log out or use another device.": "A biztonsági tároló beállítása nélkül ha kijelentkezel és egy másik eszközön lépsz be nem fogsz hozzáférni a titkosított üzeneteidhez és a kereszt-aláíráshoz tartozó azonosítódhoz amivel más eszközöket ellenőrizhetsz."
 }
