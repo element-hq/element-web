@@ -32,7 +32,6 @@ describe('Registration', function() {
     let parentDiv;
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
     });

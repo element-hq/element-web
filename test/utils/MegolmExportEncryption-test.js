@@ -74,10 +74,6 @@ describe('MegolmExportEncryption', function() {
         }
     });
 
-    beforeEach(function() {
-        testUtils.beforeEach(this);
-    });
-
     describe('decrypt', function() {
         it('should handle missing header', function() {
             const input=stringToArray(`-----`);

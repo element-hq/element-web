@@ -69,7 +69,6 @@ describe('Permalinks', function() {
     let sandbox;
 
     beforeEach(function() {
-        testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
         peg.get().credentials = { userId: "@test:example.com" };
     });

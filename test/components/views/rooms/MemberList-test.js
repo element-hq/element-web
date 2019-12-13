@@ -38,7 +38,6 @@ describe('MemberList', () => {
     let defaultUsers = [];
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
         client.hasLazyLoadMembersEnabled = () => false;

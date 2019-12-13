@@ -36,7 +36,6 @@ describe('InteractiveAuthDialog', function() {
     let sandbox;
 
     beforeEach(function() {
-        test_utils.beforeEach(this);
         sandbox = test_utils.stubClient(sandbox);
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);

@@ -11,26 +11,6 @@ import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';
 const MatrixEvent = jssdk.MatrixEvent;
 
-/**
- * Perform common actions before each test case, e.g. printing the test case
- * name to stdout.
- * @param {Mocha.Context} context  The test context
- */
-export function beforeEach(context) {
-    const desc = context.currentTest.fullTitle();
-
-    console.log();
-
-    // this puts a mark in the chrome devtools timeline, which can help
-    // figure out what's been going on.
-    if (console.timeStamp) {
-        console.timeStamp(desc);
-    }
-
-    console.log(desc);
-    console.log(new Array(1 + desc.length).join("="));
-}
-
 export function getRenderer() {
     // Old: ReactTestUtils.createRenderer();
     return new ShallowRenderer();

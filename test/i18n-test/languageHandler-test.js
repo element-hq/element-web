@@ -8,7 +8,6 @@ describe('languageHandler', function() {
     let sandbox;
 
     beforeEach(function(done) {
-        testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
 
         languageHandler.setLanguage('en').then(done);

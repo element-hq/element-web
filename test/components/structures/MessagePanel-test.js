@@ -75,7 +75,6 @@ describe('MessagePanel', function() {
     let sandbox = null;
 
     beforeEach(function() {
-        test_utils.beforeEach(this);
         sandbox = test_utils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:here'};

@@ -45,7 +45,6 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};

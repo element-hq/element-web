@@ -70,8 +70,6 @@ describe("GroupMemberList", function() {
     };
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
-
         httpBackend = new MockHttpBackend();
 
         Matrix.request(httpBackend.requestFn);

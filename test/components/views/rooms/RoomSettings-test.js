@@ -36,7 +36,6 @@
 //     }
 //
 //     beforeEach(function(done) {
-//         testUtils.beforeEach(this);
 //         sandbox = testUtils.stubClient();
 //         client = MatrixClientPeg.get();
 //         client.credentials = {userId: '@me:domain.com'};

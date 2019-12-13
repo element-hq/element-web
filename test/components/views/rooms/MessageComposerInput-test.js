@@ -29,7 +29,6 @@ xdescribe('MessageComposerInput', () => {
         room = testUtils.mkStubRoom('!DdJkzRliezrwpNebLk:matrix.org');
 
     beforeEach(function() {
-        testUtils.beforeEach(this);
         sandbox = testUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:domain.com'};
