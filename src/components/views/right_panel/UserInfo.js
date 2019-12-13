@@ -114,7 +114,7 @@ function verifyDevice(userId, device) {
     Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
         userId: userId,
         device: device,
-    });
+    }, null, /* priority = */ false, /* static = */ true);
 }
 
 function DeviceItem({userId, device}) {

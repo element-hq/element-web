@@ -59,7 +59,7 @@ export default createReactClass({
         Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
             userId: this.props.userId,
             device: this.state.device,
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     },
 
     onUnverifyClick: function() {
