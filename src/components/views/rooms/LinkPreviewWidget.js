@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import { _t } from "../../../languageHandler";
 
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -125,6 +127,7 @@ module.exports = createReactClass({
                   </div>;
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget" >
                 { img }
@@ -135,9 +138,10 @@ module.exports = createReactClass({
                         { p["og:description"] }
                     </div>
                 </div>
-                <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
-                    src={require("../../../../res/img/cancel.svg")} width="18" height="18"
-                    onClick={this.props.onCancelClick} />
+                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
+                    <img className="mx_filterFlipColor" alt="" role="presentation"
+                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
+                </AccessibleButton>
             </div>
         );
     },
