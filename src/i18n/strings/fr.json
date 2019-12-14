@@ -2007,5 +2007,6 @@
     "Start using Key Backup with Secure Secret Storage": "Commencer à utiliser la sauvegarde de clés avec le coffre secret sécurisé",
     "Hide verified sessions": "Masquer les sessions vérifiées",
     "%(count)s verified sessions|other": "%(count)s sessions vérifiées",
-    "%(count)s verified sessions|one": "1 session vérifiée"
+    "%(count)s verified sessions|one": "1 session vérifiée",
+    "Close preview": "Fermer l’aperçu"
 }
