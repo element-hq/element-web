@@ -18,7 +18,6 @@ limitations under the License.
 
 import * as MegolmExportEncryption from '../../src/utils/MegolmExportEncryption';
 
-import * as testUtils from '../test-utils';
 import expect from 'expect';
 
 const TEST_VECTORS=[

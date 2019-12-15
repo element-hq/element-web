@@ -21,7 +21,6 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import sdk from 'matrix-react-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
-import * as TestUtils from '../../../test-utils';
 import {mkServerConfig} from "../../../test-utils";
 
 const Registration = sdk.getComponent(
