@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
+import {Key} from "../../../Keyboard";
 
 class MenuOption extends React.Component {
     constructor(props) {
@@ -48,9 +49,13 @@ class MenuOption extends React.Component {
             mx_Dropdown_option_highlight: this.props.highlighted,
         });
 
-        return <div className={optClasses}
+        return <div
+            className={optClasses}
             onClick={this._onClick}
             onMouseEnter={this._onMouseEnter}
+            role="option"
+            aria-selected={this.props.highlighted}
+            ref={this.props.inputRef}
         >
             { this.props.children }
         </div>;
@@ -66,6 +71,7 @@ MenuOption.propTypes = {
     dropdownKey: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     onMouseEnter: PropTypes.func.isRequired,
+    inputRef: PropTypes.any,
 };
 
 /*
@@ -177,32 +183,43 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputKeyPress(e) {
-        // This needs to be on the keypress event because otherwise
-        // it can't cancel the form submission
-        if (e.key == 'Enter') {
-            this.setState({
-                expanded: false,
-            });
-            this.props.onOptionChange(this.state.highlightedOption);
+        // This needs to be on the keypress event because otherwise it can't cancel the form submission
+        if (e.key === Key.ENTER) {
             e.preventDefault();
         }
     }
 
     _onInputKeyUp(e) {
-        // These keys don't generate keypress events and so needs to
-        // be on keyup
-        if (e.key == 'Escape') {
-            this.setState({
-                expanded: false,
-            });
-        } else if (e.key == 'ArrowDown') {
-            this.setState({
-                highlightedOption: this._nextOption(this.state.highlightedOption),
-            });
-        } else if (e.key == 'ArrowUp') {
-            this.setState({
-                highlightedOption: this._prevOption(this.state.highlightedOption),
-            });
+        // These keys don't generate keypress events and so needs to be on keyup
+        switch (e.key) {
+            case Key.ENTER:
+                this.props.onOptionChange(this.state.highlightedOption);
+                // fallthrough
+            case Key.ESCAPE:
+                this.setState({
+                    expanded: false,
+                });
+                break;
+            case Key.ARROW_DOWN:
+                this.setState({
+                    highlightedOption: this._nextOption(this.state.highlightedOption),
+                });
+                break;
+            case Key.ARROW_UP:
+                this.setState({
+                    highlightedOption: this._prevOption(this.state.highlightedOption),
+                });
+                break;
+            case Key.HOME:
+                this.setState({
+                    highlightedOption: this._firstOption(),
+                });
+                break;
+            case Key.END:
+                this.setState({
+                    highlightedOption: this._lastOption(),
+                });
+                break;
         }
     }
 
@@ -250,13 +267,36 @@ export default class Dropdown extends React.Component {
         return keys[(index - 1) % keys.length];
     }
 
+    _firstOption() {
+        const keys = Object.keys(this.childrenByKey);
+        return keys[0];
+    }
+
+    _lastOption() {
+        const keys = Object.keys(this.childrenByKey);
+        return keys[keys.length - 1];
+    }
+
+    _scrollIntoView(node) {
+        if (node) {
+            node.scrollIntoView({
+                block: "nearest",
+                behavior: "auto",
+            });
+        }
+    }
+
     _getMenuOptions() {
         const options = React.Children.map(this.props.children, (child) => {
+            const highlighted = this.state.highlightedOption === child.key;
             return (
-                <MenuOption key={child.key} dropdownKey={child.key}
-                    highlighted={this.state.highlightedOption == child.key}
+                <MenuOption
+                    key={child.key}
+                    dropdownKey={child.key}
+                    highlighted={highlighted}
                     onMouseEnter={this._setHighlightedOption}
                     onClick={this._onMenuOptionClick}
+                    inputRef={highlighted ? this._scrollIntoView : undefined}
                 >
                     { child }
                 </MenuOption>
@@ -280,13 +320,14 @@ export default class Dropdown extends React.Component {
         if (this.state.expanded) {
             if (this.props.searchEnabled) {
                 currentValue = <input type="text" className="mx_Dropdown_option"
-                    ref={this._collectInputTextBox} onKeyPress={this._onInputKeyPress}
+                    ref={this._collectInputTextBox}
+                    onKeyPress={this._onInputKeyPress}
                     onKeyUp={this._onInputKeyUp}
                     onChange={this._onInputChange}
                     value={this.state.searchQuery}
                 />;
             }
-            menu = <div className="mx_Dropdown_menu" style={menuStyle}>
+            menu = <div className="mx_Dropdown_menu" style={menuStyle} role="listbox">
                 { this._getMenuOptions() }
             </div>;
         }
@@ -313,7 +354,7 @@ export default class Dropdown extends React.Component {
         return <div className={classnames(dropdownClasses)} ref={this._collectRoot}>
             <AccessibleButton className="mx_Dropdown_input mx_no_textinput" onClick={this._onInputClick}>
                 { currentValue }
-                <span className="mx_Dropdown_arrow"></span>
+                <span className="mx_Dropdown_arrow" />
                 { menu }
             </AccessibleButton>
         </div>;
