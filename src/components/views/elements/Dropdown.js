@@ -221,16 +221,6 @@ export default class Dropdown extends React.Component {
                     highlightedOption: this._prevOption(this.state.highlightedOption),
                 });
                 break;
-            case Key.HOME:
-                this.setState({
-                    highlightedOption: this._firstOption(),
-                });
-                break;
-            case Key.END:
-                this.setState({
-                    highlightedOption: this._lastOption(),
-                });
-                break;
         }
     }
 
@@ -276,16 +266,6 @@ export default class Dropdown extends React.Component {
         const keys = Object.keys(this.childrenByKey);
         const index = keys.indexOf(optionKey);
         return keys[(index - 1) % keys.length];
-    }
-
-    _firstOption() {
-        const keys = Object.keys(this.childrenByKey);
-        return keys[0];
-    }
-
-    _lastOption() {
-        const keys = Object.keys(this.childrenByKey);
-        return keys[keys.length - 1];
     }
 
     _scrollIntoView(node) {
