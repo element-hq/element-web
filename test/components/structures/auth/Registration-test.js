@@ -58,7 +58,7 @@ describe('Registration', function() {
     });
 
     it('should show form when custom URLs disabled', function() {
-        jest.spyOn(SdkConfig, "get").returns({
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
             disable_custom_urls: true,
         });
 

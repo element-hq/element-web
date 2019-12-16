@@ -78,8 +78,9 @@ describe('MessagePanel', function() {
         client.credentials = {userId: '@me:here'};
 
         // HACK: We assume all settings want to be disabled
-        SettingsStore.getValue = jest.fn().returns(false);
-        SettingsStore.getValue.withArgs('showDisplaynameChanges').returns(true);
+        SettingsStore.getValue = jest.fn((arg) => {
+            return arg === "showDisplaynameChanges";
+        });
 
         // This option clobbers the duration of all animations to be 1ms
         // which makes unit testing a lot simpler (the animation doesn't

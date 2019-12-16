@@ -69,7 +69,7 @@ describe('Login', function() {
     });
 
     it('should show form without change server link when custom URLs disabled', function() {
-        jest.spyOn(SdkConfig, "get").returns({
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
             disable_custom_urls: true,
         });
 
