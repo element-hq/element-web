@@ -24,7 +24,7 @@ import classNames from 'classnames';
 
 import { MatrixClient } from 'matrix-js-sdk';
 
-import { KeyCode } from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
@@ -102,7 +102,7 @@ export default createReactClass({
         if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
         }
-        if (this.props.hasCancel && e.keyCode === KeyCode.ESCAPE) {
+        if (this.props.hasCancel && e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
