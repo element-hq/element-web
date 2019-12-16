@@ -1,18 +1,24 @@
 const path = require('path');
-const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const webpack = require("webpack");
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
 
+const minification = {minimize: false};
+if (process.env.NODE_ENV === 'production') {
+    console.log("Enabling minification");
+    minification.minimize = true;
+    minification.minimizer = [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})];
+}
+
 module.exports = {
     entry: {
-        // Load babel-polyfill first to avoid issues where some imports (namely react)
-        // are potentially loaded before babel-polyfill.
-        "bundle": ["babel-polyfill", "./src/vector/index.js"],
+        "bundle": "./src/vector/index.js",
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
-
         "mobileguide": "./src/vector/mobile_guide/index.js",
 
         // CSS themes
@@ -21,10 +27,134 @@ module.exports = {
         "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
         "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
     },
+
+    optimization: {
+        // Put all of our CSS into one useful place - this is needed for MiniCssExtractPlugin.
+        // Previously we used a different extraction plugin that did this magic for us, but
+        // now we need to consider that the CSS needs to be bundled up together.
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    test: /\.css$/,
+                    enforce: true,
+                    // Do not add `chunks: 'all'` here because you'll break the app entry point.
+                },
+            },
+        },
+        ...minification,
+    },
+
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
+
+    resolve: {
+        mainFields: ['matrix_main', 'matrix_browser', 'main', 'browser'],
+        aliasFields: ['matrix_browser', 'browser'],
+        //extensions: ['.js', '.json', '.ts', '.gif', '.png'],
+        alias: {
+            // alias any requires to the react module to the one in our path,
+            // otherwise we tend to get the react source included twice when
+            // using `npm link` / `yarn link`.
+            "react": path.resolve(__dirname, 'node_modules/react'),
+            "react-dom": path.resolve(__dirname, 'node_modules/react-dom'),
+
+            // same goes for js-sdk, but we also want to point at the source
+            // of each SDK so we can compile it for ourselves.
+            "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
+            // "matrix-js-sdk/lib": path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
+            // "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
+            // "matrix-react-sdk/res": path.resolve(__dirname, 'node_modules/matrix-react-sdk/res'),
+            // "matrix-react-sdk/lib": path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
+            // "matrix-react-sdk": path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
+
+            "$webapp": path.resolve(__dirname, 'webapp'),
+        },
+    },
+
     module: {
+        noParse: [
+            // for cross platform compatibility use [\\\/] as the path separator
+            // this ensures that the regex trips on both Windows and *nix
+
+            // don't parse the languages within highlight.js. They cause stack
+            // overflows (https://github.com/webpack/webpack/issues/1721), and
+            // there is no need for webpack to parse them - they can just be
+            // included as-is.
+            /highlight\.js[\\\/]lib[\\\/]languages/,
+
+            // olm takes ages for webpack to process, and it's already heavily
+            // optimised, so there is little to gain by us uglifying it.
+            /olm[\\\/](javascript[\\\/])?olm\.js$/,
+        ],
         rules: [
-            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
-            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
+            {
+                test: /\.(ts|js)x?$/,
+                //include: path.resolve(__dirname, 'src'),
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                options: {
+                    cacheDirectory: true,
+                    sourceMaps: "inline",
+                    presets: [
+                        ["@babel/preset-env", {
+                            "targets": {
+                                "browsers": [
+                                    "last 2 versions",
+                                ],
+                                "node": 12,
+                            },
+                        }],
+                        "@babel/preset-typescript",
+                        "@babel/preset-flow",
+                        "@babel/preset-react",
+                    ],
+                    plugins: [
+                        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+                        "@babel/plugin-proposal-numeric-separator",
+                        "@babel/plugin-proposal-class-properties",
+                        "@babel/plugin-proposal-object-rest-spread",
+                        "@babel/plugin-transform-flow-comments",
+                        "@babel/plugin-syntax-dynamic-import",
+                        "@babel/plugin-transform-runtime"
+                    ],
+                }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {importLoaders: 1}},
+                    {
+                        loader: 'postcss-loader',
+                        ident: 'postcss',
+                        options: {
+                            plugins: () => [
+                                require('postcss-preset-env')({browsers: 'last 2 versions'}),
+                                require("postcss-strip-inline-comments")(),
+                            ],
+                        },
+                    },
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {importLoaders: 1}},
+                    {
+                        loader: 'postcss-loader',
+                        ident: 'postcss',
+                        options: {
+                            plugins: () => [
+                                require('postcss-preset-env')({browsers: 'last 2 versions'}),
+                                require("postcss-strip-inline-comments")(),
+                            ],
+                            parser: "postcss-scss",
+                        },
+                    },
+                ]
+            },
             {
                 test: /\.wasm$/,
                 loader: "file-loader",
@@ -33,34 +163,6 @@ module.exports = {
                     name: '[name].[hash:7].[ext]',
                     outputPath: '.',
                 },
-            },
-            {
-                test: /\.scss$/,
-                // 1. postcss-loader turns the SCSS into normal CSS.
-                // 2. css-loader turns the CSS into a JS module whose default
-                //    export is a string containing the CSS, while also adding
-                //    the images and fonts from CSS as Webpack inputs.
-                // 3. ExtractTextPlugin turns that string into a separate asset.
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        "css-loader",
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                config: {
-                                    path: './postcss.config.js',
-                                },
-                            },
-                        },
-                    ],
-                }),
-            },
-            {
-                // this works similarly to the scss case, without postcss.
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: "css-loader",
-                }),
             },
             {
                 // cache-bust languages.json file placed in
@@ -82,6 +184,7 @@ module.exports = {
                         issuer: /\.(scss|css)$/,
                         loader: 'file-loader',
                         options: {
+                            esModule: false,
                             name: '[name].[hash:7].[ext]',
                             outputPath: getImgOutputPath,
                             publicPath: function(url, resourcePath) {
@@ -97,6 +200,7 @@ module.exports = {
                         // Assets referenced in HTML and JS files
                         loader: 'file-loader',
                         options: {
+                            esModule: false,
                             name: '[name].[hash:7].[ext]',
                             outputPath: getImgOutputPath,
                             publicPath: function(url, resourcePath) {
@@ -107,26 +211,47 @@ module.exports = {
                     },
                 ],
             },
-        ],
-        noParse: [
-            // for cross platform compatibility use [\\\/] as the path separator
-            // this ensures that the regex trips on both Windows and *nix
-
-            // don't parse the languages within highlight.js. They cause stack
-            // overflows (https://github.com/webpack/webpack/issues/1721), and
-            // there is no need for webpack to parse them - they can just be
-            // included as-is.
-            /highlight\.js[\\\/]lib[\\\/]languages/,
-
-            // olm takes ages for webpack to process, and it's already heavily
-            // optimised, so there is little to gain by us uglifying it.
-            /olm[\\\/](javascript[\\\/])?olm\.js$/,
-        ],
+        ]
     },
+
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            },
+        }),
+
+        new MiniCssExtractPlugin({
+            filename: 'bundles/[hash]/[name].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+        }),
+
+        new HtmlWebpackPlugin({
+            template: './src/vector/index.html',
+
+            // we inject the links ourselves via the template, because
+            // HtmlWebpackPlugin will screw up our formatting like the names
+            // of the themes and which chunks we actually care about.
+            inject: false,
+            excludeChunks: ['mobileguide'],
+            minify: minification.minimize,
+            vars: {
+                og_image_url: og_image_url,
+            },
+        }),
+
+        new HtmlWebpackPlugin({
+            template: './src/vector/mobile_guide/index.html',
+            filename: 'mobile_guide/index.html',
+            minify: minification.minimize,
+            chunks: ['mobileguide'],
+        }),
+    ],
+
     output: {
         path: path.join(__dirname, "webapp"),
 
-        // The generated JS (and CSS, from the ExtractTextPlugin) are put in a
+        // The generated JS (and CSS, from the extraction plugin) are put in a
         // unique subdirectory for the build. There will only be one such
         // 'bundle' directory in the generated tarball; however, hosting
         // servers can collect 'bundles' from multiple versions into one
@@ -135,62 +260,7 @@ module.exports = {
         // chunks even after the app is redeployed.
         filename: "bundles/[hash]/[name].js",
         chunkFilename: "bundles/[hash]/[name].js",
-        devtoolModuleFilenameTemplate: function(info) {
-            // Reading input source maps gives only relative paths here for
-            // everything. Until I figure out how to fix this, this is a
-            // workaround.
-            // We use the relative resource path with any '../'s on the front
-            // removed which gives a tree with matrix-react-sdk and vector
-            // trees smashed together, but this fixes everything being under
-            // various levels of '.' and '..'
-            // Also, sometimes the resource path is absolute.
-            return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
-        },
     },
-    resolve: {
-        alias: {
-            // alias any requires to the react module to the one in our path,
-            // otherwise we tend to get the react source included twice when
-            // using `npm link` / `yarn link`.
-            "react": path.resolve('./node_modules/react'),
-            "react-dom": path.resolve('./node_modules/react-dom'),
-
-            // same goes for js-sdk
-            "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
-
-            "$webapp": path.resolve('./webapp'),
-        },
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-            },
-        }),
-        new ExtractTextPlugin("bundles/[hash]/[name].css", {
-            allChunks: true,
-        }),
-
-        new HtmlWebpackPlugin({
-            template: './src/vector/index.html',
-
-            // we inject the links ourselves via the template, because
-            // HtmlWebpackPlugin wants to put the script tags either at the
-            // bottom of <head> or the bottom of <body>, and I'm a bit scared
-            // about moving them.
-            inject: false,
-            excludeChunks: ['mobileguide'],
-            vars: {
-                og_image_url: og_image_url,
-            },
-        }),
-        new HtmlWebpackPlugin({
-            template: './src/vector/mobile_guide/index.html',
-            filename: 'mobile_guide/index.html',
-            chunks: ['mobileguide'],
-        }),
-    ],
-    devtool: 'source-map',
 
     // configuration for the webpack-dev-server
     devServer: {
@@ -202,7 +272,7 @@ module.exports = {
             chunks: false,
         },
 
-        // hot mdule replacement doesn't work (I think we'd need react-hot-reload?)
+        // hot module replacement doesn't work (I think we'd need react-hot-reload?)
         // so webpack-dev-server reloads the page on every update which is quite
         // tedious in Riot since that can take a while.
         hot: false,

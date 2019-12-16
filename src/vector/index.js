@@ -484,4 +484,5 @@ async function verifyServerConfig() {
     return SdkConfig.get();
 }
 
+console.log("Starting app...");
 loadApp();
