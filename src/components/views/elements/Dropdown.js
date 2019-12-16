@@ -178,7 +178,7 @@ export default class Dropdown extends React.Component {
         }
     }
 
-    _onMenuOptionClick(dropdownKey) {
+    _close() {
         this.setState({
             expanded: false,
         });
@@ -186,6 +186,10 @@ export default class Dropdown extends React.Component {
         if (this._button.current) {
             this._button.current.focus();
         }
+    }
+
+    _onMenuOptionClick(dropdownKey) {
+        this._close();
         this.props.onOptionChange(dropdownKey);
     }
 
@@ -203,13 +207,7 @@ export default class Dropdown extends React.Component {
                 this.props.onOptionChange(this.state.highlightedOption);
                 // fallthrough
             case Key.ESCAPE:
-                this.setState({
-                    expanded: false,
-                });
-                // their focus was on the input, its getting unmounted, move it to the button
-                if (this._button.current) {
-                    this._button.current.focus();
-                }
+                this._close();
                 break;
             case Key.ARROW_DOWN:
                 this.setState({
