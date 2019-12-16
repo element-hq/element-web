@@ -162,6 +162,7 @@ export default class RoomProfileSettings extends React.Component {
                     </div>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl}
+                        avatarName={this.state.displayName || this.props.roomId}
                         avatarAltText={_t("Room avatar")}
                         uploadAvatar={this.state.canSetAvatar ? this._uploadAvatar : undefined}
                         removeAvatar={this.state.canSetAvatar ? this._removeAvatar : undefined} />

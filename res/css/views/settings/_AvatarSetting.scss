@@ -55,6 +55,10 @@ limitations under the License.
         color: $button-danger-bg-color;
     }
 
+    & > img {
+        cursor: pointer;
+    }
+
     & > img,
     .mx_AvatarSetting_avatarPlaceholder {
         display: block;

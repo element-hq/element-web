@@ -157,6 +157,7 @@ export default class ProfileSettings extends React.Component {
                     </div>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl}
+                        avatarName={this.state.displayName || this.state.userId}
                         avatarAltText={_t("Profile picture")}
                         uploadAvatar={this._uploadAvatar}
                         removeAvatar={this._removeAvatar} />

@@ -14,18 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {useCallback} from "react";
 import PropTypes from "prop-types";
 
 import sdk from "../../../index";
 import {_t} from "../../../languageHandler";
+import Modal from "../../../Modal";
 
-const AvatarSetting = ({avatarUrl, avatarAltText, uploadAvatar, removeAvatar}) => {
+const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar}) => {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+    const openImageView = useCallback(() => {
+        const ImageView = sdk.getComponent("elements.ImageView");
+        Modal.createDialog(ImageView, {
+            src: avatarUrl,
+            name: avatarName,
+        }, "mx_Dialog_lightbox");
+    }, [avatarUrl, avatarName]);
 
     let avatarElement = <div className="mx_AvatarSetting_avatarPlaceholder" />;
     if (avatarUrl) {
-        avatarElement = <img src={avatarUrl} alt={avatarAltText} />;
+        avatarElement = (
+            <AccessibleButton
+                element="img"
+                src={avatarUrl}
+                alt={avatarAltText}
+                aria-label={avatarAltText}
+                onClick={openImageView} />
+        );
     }
 
     let uploadAvatarBtn;
@@ -53,6 +69,7 @@ const AvatarSetting = ({avatarUrl, avatarAltText, uploadAvatar, removeAvatar}) =
 
 AvatarSetting.propTypes = {
     avatarUrl: PropTypes.string,
+    avatarName: PropTypes.string.isRequired, // name of user/room the avatar belongs to
     uploadAvatar: PropTypes.func,
     removeAvatar: PropTypes.func,
     avatarAltText: PropTypes.string.isRequired,
