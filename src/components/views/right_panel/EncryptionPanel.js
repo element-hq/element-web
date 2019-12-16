@@ -1,7 +1,4 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 Vector Creations Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +15,27 @@ limitations under the License.
 */
 
 import React from 'react';
+import EncryptionInfo from "./EncryptionInfo";
+import VerificationPanel from "./VerificationPanel";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class EncryptionPanel extends React.PureComponent {
     render() {
-        const request = this.props.verificationRequest;
+        const request = this.props.verificationRequest || this.state.verificationRequest;
+        const {member} = this.props;
         if (request) {
-            return <p>got a request, go straight to wizard</p>;
-        } else if (this.props.member) {
-            return <p>show encryption options for member {this.props.member.name}</p>;
-        } else {
-            return <p>nada</p>;
+            return <VerificationPanel request={request} />;
+        } else if (member) {
+            return <EncryptionInfo onStartVerification={this._onStartVerification} member={member} />;
         }
     }
+
+    _onStartVerification = async () => {
+        const client = MatrixClientPeg.get();
+        const {member} = this.props;
+        // TODO: get the room id of the DM here?
+        // will this panel be shown in non-DM rooms?
+        const verificationRequest = await client.requestVerificationDM(member.userId, member.roomId);
+        this.setState({verificationRequest});
+    };
 }
