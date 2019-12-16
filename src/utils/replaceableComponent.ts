@@ -17,6 +17,6 @@ limitations under the License.
 import React from 'react';
 import sdk from '../index';
 
-export function replaceComponent(name: string, origComponent: React.Component) {
+export function replaceableComponent(name: string, origComponent: React.Component) {
     return () => sdk.getComponent(name) || origComponent;
 }

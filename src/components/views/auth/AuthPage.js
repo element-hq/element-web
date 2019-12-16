@@ -18,9 +18,9 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import {replaceComponent} from "../../../utils/replaceComponent";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceComponent("views.auth.AuthPage")
+@replaceableComponent("views.auth.AuthPage")
 export default class AuthPage extends React.PureComponent {
     render() {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
