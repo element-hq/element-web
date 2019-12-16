@@ -52,6 +52,10 @@ limitations under the License.
     border-radius: 4px;
 }
 
+.mx_ProfileSettings_avatar img {
+    object-fit: cover;
+}
+
 .mx_ProfileSettings_avatar .mx_ProfileSettings_avatarOverlay_disabled {
     cursor: default;
 }
