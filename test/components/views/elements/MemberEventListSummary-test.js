@@ -1,8 +1,7 @@
-import expect from 'expect';
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ShallowRenderer from "react-test-renderer/shallow";
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../skinned-sdk';
 import * as languageHandler from '../../../../src/languageHandler';
 import * as testUtils from '../../../test-utils';
 
@@ -12,8 +11,6 @@ const MemberEventListSummary = testUtils.wrapInMatrixClientContext(
 );
 
 describe('MemberEventListSummary', function() {
-    let sandbox;
-
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events) => {
         return events.map((e) => {
@@ -88,16 +85,12 @@ describe('MemberEventListSummary', function() {
     };
 
     beforeEach(function(done) {
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
 
         languageHandler.setLanguage('en').then(done);
         languageHandler.setMissingEntryGenerator(function(key) {
             return key.split('|', 2)[1];
         });
-    });
-
-    afterEach(function() {
-        sandbox.restore();
     });
 
     it('renders expanded events if there are less than props.threshold', function() {

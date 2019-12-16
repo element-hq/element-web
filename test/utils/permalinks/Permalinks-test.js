@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import peg from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
@@ -66,15 +65,9 @@ function mockRoom(roomId, members, serverACL) {
 }
 
 describe('Permalinks', function() {
-    let sandbox;
-
     beforeEach(function() {
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
         peg.get().credentials = { userId: "@test:example.com" };
-    });
-
-    afterEach(function() {
-        sandbox.restore();
     });
 
     it('should pick no candidate servers when the room has no members', function() {

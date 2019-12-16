@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
 import lolex from 'lolex';
 
-import * as TestUtils from 'test-utils';
+import * as TestUtils from '../../../test-utils';
 
 import sdk from '../../../../src/index';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
@@ -31,7 +30,6 @@ describe('RoomList', () => {
     }
 
     let parentDiv = null;
-    let sandbox = null;
     let client = null;
     let root = null;
     const myUserId = '@me:domain';
@@ -45,7 +43,7 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(function() {
-        sandbox = TestUtils.stubClient(sandbox);
+        TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
@@ -111,7 +109,6 @@ describe('RoomList', () => {
             parentDiv.remove();
             parentDiv = null;
         }
-        sandbox.restore();
 
         clock.uninstall();
 

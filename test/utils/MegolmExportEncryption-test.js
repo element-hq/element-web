@@ -16,9 +16,7 @@ limitations under the License.
 
 "use strict";
 
-import * as MegolmExportEncryption from '../../src/utils/MegolmExportEncryption';
-
-import expect from 'expect';
+import SubtleCrypto from 'subtle';
 
 const TEST_VECTORS=[
     [
@@ -58,19 +56,22 @@ const TEST_VECTORS=[
         "bWnSXS9oymiqwUIGs08sXI33ZA==\n" +
         "-----END MEGOLM SESSION DATA-----",
     ],
-]
-;
+];
 
 function stringToArray(s) {
     return new TextEncoder().encode(s).buffer;
 }
 
 describe('MegolmExportEncryption', function() {
-    before(function() {
-        // if we don't have subtlecrypto, go home now
-        if (!window.crypto.subtle && !window.crypto.webkitSubtle) {
-            this.skip();
-        }
+    let MegolmExportEncryption;
+
+    beforeAll(() => {
+        window.crypto = { subtle: SubtleCrypto };
+        MegolmExportEncryption = require("../../src/utils/MegolmExportEncryption");
+    });
+
+    afterAll(() => {
+        window.crypto = undefined;
     });
 
     describe('decrypt', function() {

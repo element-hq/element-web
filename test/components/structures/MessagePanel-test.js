@@ -23,10 +23,9 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
-import sinon from 'sinon';
 import { EventEmitter } from "events";
 
-const sdk = require('matrix-react-sdk');
+import sdk from '../../skinned-sdk';
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
 import MatrixClientPeg from '../../../src/MatrixClientPeg';
@@ -72,15 +71,14 @@ describe('MessagePanel', function() {
     const clock = mockclock.clock();
     const realSetTimeout = window.setTimeout;
     const events = mkEvents();
-    let sandbox = null;
 
     beforeEach(function() {
-        sandbox = test_utils.stubClient();
+        test_utils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:here'};
 
         // HACK: We assume all settings want to be disabled
-        SettingsStore.getValue = sinon.stub().returns(false);
+        SettingsStore.getValue = jest.fn().returns(false);
         SettingsStore.getValue.withArgs('showDisplaynameChanges').returns(true);
 
         // This option clobbers the duration of all animations to be 1ms
@@ -94,7 +92,6 @@ describe('MessagePanel', function() {
         delete Velocity.mock;
 
         clock.uninstall();
-        sandbox.restore();
     });
 
     function mkEvents() {

@@ -1,7 +1,4 @@
-import expect from 'expect';
-
 import RoomViewStore from '../../src/stores/RoomViewStore';
-
 
 import peg from '../../src/MatrixClientPeg';
 
@@ -10,18 +7,12 @@ import * as testUtils from '../test-utils';
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);
 
 describe('RoomViewStore', function() {
-    let sandbox;
-
     beforeEach(function() {
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
         peg.get().credentials = { userId: "@test:example.com" };
 
         // Reset the state of the store
         RoomViewStore.reset();
-    });
-
-    afterEach(function() {
-        sandbox.restore();
     });
 
     it('can be used to view a room by ID and join', function(done) {

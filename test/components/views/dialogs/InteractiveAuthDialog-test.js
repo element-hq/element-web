@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import sinon from 'sinon';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../skinned-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
@@ -33,10 +31,9 @@ const InteractiveAuthDialog = sdk.getComponent(
 
 describe('InteractiveAuthDialog', function() {
     let parentDiv;
-    let sandbox;
 
     beforeEach(function() {
-        sandbox = test_utils.stubClient(sandbox);
+        test_utils.stubClient();
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
     });
@@ -44,12 +41,11 @@ describe('InteractiveAuthDialog', function() {
     afterEach(function() {
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
-        sandbox.restore();
     });
 
     it('Should successfully complete a password flow', function() {
-        const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(Promise.resolve({a: 1}));
+        const onFinished = jest.fn();
+        const doRequest = jest.fn().mockResolvedValue({a: 1});
 
         // tell the stub matrixclient to return a real userid
         const client = MatrixClientPeg.get();
@@ -108,8 +104,8 @@ describe('InteractiveAuthDialog', function() {
             // let the request complete
             return sleep(1);
         }).then(() => {
-            expect(onFinished.callCount).toEqual(1);
-            expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);
+            expect(onFinished).toBeCalledTimes(1);
+            expect(onFinished).toBeCalledWith(true, {a: 1});
         });
     });
 });

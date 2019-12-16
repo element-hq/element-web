@@ -5,16 +5,10 @@ import * as languageHandler from '../../src/languageHandler';
 const testUtils = require('../test-utils');
 
 describe('languageHandler', function() {
-    let sandbox;
-
     beforeEach(function(done) {
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
 
         languageHandler.setLanguage('en').then(done);
-    });
-
-    afterEach(function() {
-        sandbox.restore();
     });
 
     it('translates a string to german', function() {

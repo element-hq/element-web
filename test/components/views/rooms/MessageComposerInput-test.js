@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
-import sinon from 'sinon';
 import * as testUtils from '../../../test-utils';
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../skinned-sdk';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import {sleep} from "../../../../src/utils/promise";
@@ -23,13 +21,12 @@ function addTextToDraft(text) {
 
 xdescribe('MessageComposerInput', () => {
     let parentDiv = null,
-        sandbox = null,
         client = null,
         mci = null,
         room = testUtils.mkStubRoom('!DdJkzRliezrwpNebLk:matrix.org');
 
     beforeEach(function() {
-        sandbox = testUtils.stubClient(sandbox);
+        testUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:domain.com'};
 
@@ -54,7 +51,6 @@ xdescribe('MessageComposerInput', () => {
                 parentDiv.remove();
                 parentDiv = null;
             }
-            sandbox.restore();
             done();
         });
     });
@@ -75,66 +71,66 @@ xdescribe('MessageComposerInput', () => {
     });
 
     it('should not send messages when composer is empty', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(true);
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
-        expect(spy.calledOnce).toEqual(false, 'should not send message');
+        expect(spy).not.toBeCalled();
     });
 
     it('should not change content unnecessarily on RTE -> Markdown conversion', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(true);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('a');
     });
 
     it('should not change content unnecessarily on Markdown -> RTE conversion', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('a');
     });
 
     it('should send emoji messages when rich text is enabled', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true, 'should send message');
     });
 
     it('should send emoji messages when Markdown is enabled', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('☹');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true, 'should send message');
     });
 
     // FIXME
     // it('should convert basic Markdown to rich text correctly', () => {
-    //     const spy = sinon.spy(client, 'sendHtmlMessage');
+    //     const spy = jest.spyOn(client, 'sendHtmlMessage');
     //     mci.enableRichtext(false);
     //     addTextToDraft('*abc*');
     //     mci.handleKeyCommand('toggle-mode');
-    //     mci.handleReturn(sinon.stub());
+    //     mci.handleReturn(jest.fn());
     //     console.error(spy.args[0][2]);
     //     expect(spy.args[0][2]).toContain('<em>abc');
     // });
     //
     // it('should convert basic rich text to Markdown correctly', () => {
-    //     const spy = sinon.spy(client, 'sendHtmlMessage');
+    //     const spy = jest.spyOn(client, 'sendHtmlMessage');
     //     mci.enableRichtext(true);
     //     process.nextTick(() => {
     //
@@ -142,43 +138,43 @@ xdescribe('MessageComposerInput', () => {
     //     mci.handleKeyCommand('italic');
     //     addTextToDraft('abc');
     //     mci.handleKeyCommand('toggle-mode');
-    //     mci.handleReturn(sinon.stub());
+    //     mci.handleReturn(jest.fn());
     //     expect(['_abc_', '*abc*']).toContain(spy.args[0][1]);
     // });
 
     it('should insert formatting characters in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         mci.handleKeyCommand('italic');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
         expect(['__', '**']).toContain(spy.args[0][1].body);
     });
 
     it('should not entity-encode " in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('"');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('"');
     });
 
     it('should escape characters without other markup in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('\\*escaped\\*');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('*escaped*');
     });
 
     it('should escape characters with other markup in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('\\*escaped\\* *italic*');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('\\*escaped\\* *italic*');
@@ -186,20 +182,20 @@ xdescribe('MessageComposerInput', () => {
     });
 
     it('should not convert -_- into a horizontal rule in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('-_-');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('-_-');
     });
 
     it('should not strip <del> tags in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('<del>striked-out</del>');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('<del>striked-out</del>');
@@ -207,30 +203,30 @@ xdescribe('MessageComposerInput', () => {
     });
 
     it('should not strike-through ~~~ in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('~~~striked-out~~~');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('~~~striked-out~~~');
     });
 
     it('should not mark single unmarkedup paragraphs as HTML in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
     });
 
     it('should not mark two unmarkedup paragraphs as HTML in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1].body).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
@@ -238,7 +234,7 @@ xdescribe('MessageComposerInput', () => {
 
     it('should strip tab-completed mentions so that only the display name is sent in the plain body in Markdown mode', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(false);
         mci.setDisplayedCompletion({
             completion: 'Some Member',
@@ -246,7 +242,7 @@ xdescribe('MessageComposerInput', () => {
             href: `https://matrix.to/#/@some_member:domain.bla`,
         });
 
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.args[0][1].body).toEqual(
             'Some Member',
@@ -260,7 +256,7 @@ xdescribe('MessageComposerInput', () => {
 
     it('should strip tab-completed mentions so that only the display name is sent in the plain body in RTE mode', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         mci.enableRichtext(true);
         mci.setDisplayedCompletion({
             completion: 'Some Member',
@@ -268,7 +264,7 @@ xdescribe('MessageComposerInput', () => {
             href: `https://matrix.to/#/@some_member:domain.bla`,
         });
 
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.args[0][1].body).toEqual('Some Member');
         expect(spy.args[0][1].formatted_body).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>');
@@ -276,12 +272,12 @@ xdescribe('MessageComposerInput', () => {
 
     it('should not strip non-tab-completed mentions when manually typing MD', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         // Markdown mode enabled
         mci.enableRichtext(false);
         addTextToDraft('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
 
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.args[0][1].body).toEqual('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
         expect(spy.args[0][1].formatted_body).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">My Not-Tab-Completed Mention</a>');
@@ -289,12 +285,12 @@ xdescribe('MessageComposerInput', () => {
 
     it('should not strip arbitrary typed (i.e. not tab-completed) MD links', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendMessage');
+        const spy = jest.spyOn(client, 'sendMessage');
         // Markdown mode enabled
         mci.enableRichtext(false);
         addTextToDraft('[Click here](https://some.lovely.url)');
 
-        mci.handleReturn(sinon.stub());
+        mci.handleReturn(jest.fn());
 
         expect(spy.args[0][1].body).toEqual('[Click here](https://some.lovely.url)');
         expect(spy.args[0][1].formatted_body).toEqual('<a href="https://some.lovely.url">Click here</a>');

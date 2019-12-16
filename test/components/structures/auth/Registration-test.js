@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import {mkServerConfig} from "../../../test-utils";
 
@@ -36,7 +34,6 @@ describe('Registration', function() {
     });
 
     afterEach(function() {
-        sinon.restore();
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
     });
@@ -61,7 +58,7 @@ describe('Registration', function() {
     });
 
     it('should show form when custom URLs disabled', function() {
-        sinon.stub(SdkConfig, "get").returns({
+        jest.spyOn(SdkConfig, "get").returns({
             disable_custom_urls: true,
         });
 
