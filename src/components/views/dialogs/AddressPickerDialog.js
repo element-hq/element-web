@@ -142,6 +142,8 @@ module.exports = createReactClass({
     },
 
     onKeyDown: function(e) {
+        const textInput = this._textinput.current ? this._textinput.current.value : undefined;
+
         if (e.keyCode === 27) { // escape
             e.stopPropagation();
             e.preventDefault();
@@ -158,23 +160,23 @@ module.exports = createReactClass({
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.chooseSelection();
-        } else if (this._textinput.current.value.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
+        } else if (textInput.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
             this.onDismissed(this.state.selectedList.length - 1)();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this._textinput.current.value === '') {
+            if (textInput === '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addAddressesToList([this._textinput.current.value]);
+                this._addAddressesToList([textInput]);
             }
-        } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
+        } else if (textInput && (e.keyCode === 188 || e.keyCode === 9)) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            this._addAddressesToList([this._textinput.current.value]);
+            this._addAddressesToList([textInput]);
         }
     },
 
