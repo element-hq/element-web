@@ -2005,5 +2005,6 @@
     "Set up secret storage": "Imposta l'archivio segreto",
     "Secure your encrypted messages with a passphrase": "Proteggi i tuoi messaggi cifrati con una password",
     "Storing secrets...": "Memorizzo i segreti...",
-    "Unable to set up secret storage": "Impossibile impostare un archivio segreto"
+    "Unable to set up secret storage": "Impossibile impostare un archivio segreto",
+    "Close preview": "Chiudi anteprima"
 }
