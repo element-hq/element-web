@@ -5,8 +5,7 @@
             "targets": {
                 "browsers": [
                     "last 2 versions"
-                ],
-                "node": 12
+                ]
             },
             "modules": "commonjs"
         }],
