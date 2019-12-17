@@ -52,7 +52,7 @@
     "stylelint": "stylelint 'res/css/**/*.scss'",
     "clean": "rimraf lib",
     "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
-    "test": "jest --testMatch **/*-test.js",
+    "test": "jest --testMatch '**/*-test.js'",
     "e2etests": "./test/end-to-end-tests/run.sh --riot-url http://localhost:8080"
   },
   "dependencies": {
