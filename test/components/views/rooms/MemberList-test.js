@@ -5,7 +5,7 @@ import lolex from 'lolex';
 
 import * as TestUtils from '../../../test-utils';
 
-import sdk from '../../../../src/index';
+import sdk from '../../../skinned-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 import {Room, RoomMember, User} from 'matrix-js-sdk';

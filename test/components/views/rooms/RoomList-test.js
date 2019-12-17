@@ -5,7 +5,7 @@ import lolex from 'lolex';
 
 import * as TestUtils from '../../../test-utils';
 
-import sdk from '../../../../src/index';
+import sdk from '../../../skinned-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import { DragDropContext } from 'react-beautiful-dnd';
 
@@ -177,7 +177,7 @@ describe('RoomList', () => {
 
     function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
         // TODO: Re-enable dragging tests when we support dragging again.
-        xdescribe('does correct optimistic update when dragging from', () => {
+        describe.skip('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
                 expectCorrectMove(undefined, 'im.vector.fake.direct');
             });

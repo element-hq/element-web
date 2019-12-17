@@ -9,9 +9,7 @@ describe('languageHandler', function() {
         testUtils.stubClient();
 
         languageHandler.setLanguage('en').then(done);
-        languageHandler.setMissingEntryGenerator(function(key) {
-            return key.split('|', 2)[1];
-        });
+        languageHandler.setMissingEntryGenerator(key => key.split("|", 2)[1]);
     });
 
     it('translates a string to german', function() {

@@ -16,7 +16,7 @@ describe('RoomViewStore', function() {
     });
 
     it('can be used to view a room by ID and join', function(done) {
-        peg.get().joinRoom = (roomAddress) => {
+        peg.get().joinRoom = async (roomAddress) => {
             expect(roomAddress).toBe("!randomcharacters:aser.ver");
             done();
         };
@@ -28,7 +28,7 @@ describe('RoomViewStore', function() {
 
     it('can be used to view a room by alias and join', function(done) {
         peg.get().getRoomIdForAlias.mockResolvedValue({room_id: "!randomcharacters:aser.ver"});
-        peg.get().joinRoom = (roomAddress) => {
+        peg.get().joinRoom = async (roomAddress) => {
             expect(roomAddress).toBe("#somealias2:aser.ver");
             done();
         };

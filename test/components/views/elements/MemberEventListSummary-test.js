@@ -84,13 +84,8 @@ describe('MemberEventListSummary', function() {
         return eventsForUsers;
     };
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         testUtils.stubClient();
-
-        languageHandler.setLanguage('en').then(done);
-        languageHandler.setMissingEntryGenerator(function(key) {
-            return key.split('|', 2)[1];
-        });
     });
 
     it('renders expanded events if there are less than props.threshold', function() {

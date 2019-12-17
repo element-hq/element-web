@@ -4,12 +4,13 @@ import ReactDOM from 'react-dom';
 import jest from 'jest-mock';
 import * as testUtils from '../../../test-utils';
 import sdk from '../../../skinned-sdk';
-const WrappedRoomSettings = testUtils.wrapInMatrixClientContext(sdk.getComponent('views.rooms.RoomSettings'));
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 
 
 describe.skip('RoomSettings', () => {
+    const WrappedRoomSettings = testUtils.wrapInMatrixClientContext(sdk.getComponent('views.rooms.RoomSettings'));
+
     let parentDiv = null;
     let client = null;
     let roomSettings = null;

@@ -24,6 +24,7 @@ import sdk from "../../../skinned-sdk";
 import Matrix from "matrix-js-sdk";
 
 import * as TestUtils from "../../../test-utils";
+import * as languageHandler from "../../../../src/languageHandler";
 const { waitForUpdate } = TestUtils;
 
 const GroupMemberList = sdk.getComponent("views.groups.GroupMemberList");
