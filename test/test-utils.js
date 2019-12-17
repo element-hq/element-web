@@ -22,8 +22,6 @@ export function getRenderer() {
  * TODO: once the components are updated to get their MatrixClients from
  * the react context, we can get rid of this and just inject a test client
  * via the context instead.
- *
- * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
     const client = createTestClient();
