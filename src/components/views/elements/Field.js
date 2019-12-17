@@ -119,7 +119,8 @@ export default class Field extends React.PureComponent {
             allowEmpty,
         });
 
-        // this method is async and we may have been blurred since validate was called so check
+        // this method is async and so we may have been blurred since the method was called
+        // if we have then hide the feedback as withValidation does
         if (this.state.focused && feedback) {
             this.setState({
                 valid,
