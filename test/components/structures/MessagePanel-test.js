@@ -31,8 +31,8 @@ const MessagePanel = sdk.getComponent('structures.MessagePanel');
 import MatrixClientPeg from '../../../src/MatrixClientPeg';
 import Matrix from 'matrix-js-sdk';
 
-const test_utils = require('test-utils');
-const mockclock = require('mock-clock');
+const test_utils = require('../../test-utils');
+const mockclock = require('../../mock-clock');
 
 import Velocity from 'velocity-animate';
 

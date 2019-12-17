@@ -91,8 +91,8 @@ describe('InteractiveAuthDialog', function() {
             expect(submitNode.disabled).toBe(false);
             ReactTestUtils.Simulate.submit(formNode, {});
 
-            expect(doRequest.callCount).toEqual(1);
-            expect(doRequest.calledWithMatch({
+            expect(doRequest).toHaveBeenCalledTimes(1);
+            expect(doRequest).toBeCalledWith(expect.objectContaining({
                 session: "sess",
                 type: "m.login.password",
                 password: "s3kr3t",
@@ -100,7 +100,7 @@ describe('InteractiveAuthDialog', function() {
                     type: "m.id.user",
                     user: "@user:id",
                 },
-            })).toBe(true);
+            }));
             // let the request complete
             return sleep(1);
         }).then(() => {

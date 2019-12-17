@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * jasmine-core and exposed as a standalone module. The interface is just the
  * same as that of jasmine.clock. For example:
  *
- *    var mock_clock = require("mock-clock").clock();
+ *    var mock_clock = require("../../mock-clock").clock();
  *    mock_clock.install();
  *    setTimeout(function() {
  *        timerCallback();

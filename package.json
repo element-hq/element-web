@@ -114,6 +114,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@peculiar/webcrypto": "^1.0.22",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
@@ -154,7 +155,6 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "mocha": "^5.0.5",
-    "node-webcrypto-shim": "^0.0.1",
     "react-test-renderer": "^16.9.0",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
@@ -164,8 +164,12 @@
     "stylelint-scss": "^3.9.0",
     "subtle": "^0.1.8",
     "walk": "^2.3.9",
-    "webcrypto": "^0.1.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js"
+    }
   }
 }

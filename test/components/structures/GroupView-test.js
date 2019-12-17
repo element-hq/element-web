@@ -191,13 +191,13 @@ describe('GroupView', function() {
             const name = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_name');
             const nameElement = ReactDOM.findDOMNode(name);
             expect(nameElement).toBeTruthy();
-            expect(nameElement.innerText).toContain('The name of a community');
-            expect(nameElement.innerText).toContain(groupId);
+            expect(nameElement.textContent).toContain('The name of a community');
+            expect(nameElement.textContent).toContain(groupId);
 
             const shortDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_shortDesc');
             const shortDescElement = ReactDOM.findDOMNode(shortDesc);
             expect(shortDescElement).toBeTruthy();
-            expect(shortDescElement.innerText).toBe('This is a community');
+            expect(shortDescElement.textContent).toBe('This is a community');
         });
 
         httpBackend.when('GET', '/groups/' + groupIdEncoded + '/summary').respond(200, summaryResponse);
@@ -217,7 +217,7 @@ describe('GroupView', function() {
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
             expect(longDescElement).toBeTruthy();
-            expect(longDescElement.innerText).toBe('This is a LONG description.');
+            expect(longDescElement.textContent).toBe('This is a LONG description.');
             expect(longDescElement.innerHTML).toBe('<div dir="auto">This is a <b>LONG</b> description.</div>');
         });
 
@@ -331,7 +331,7 @@ describe('GroupView', function() {
             const roomDetailListRoomNameElement = ReactDOM.findDOMNode(roomDetailListRoomName);
 
             expect(roomDetailListRoomNameElement).toBeTruthy();
-            expect(roomDetailListRoomNameElement.innerText).toEqual('Some room name');
+            expect(roomDetailListRoomNameElement.textContent).toEqual('Some room name');
         });
 
         httpBackend.when('GET', '/groups/' + groupIdEncoded + '/summary').respond(200, summaryResponse);
@@ -362,7 +362,7 @@ describe('GroupView', function() {
             const shortDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_shortDesc');
             const shortDescElement = ReactDOM.findDOMNode(shortDesc);
             expect(shortDescElement).toBeTruthy();
-            expect(shortDescElement.innerText).toBe('This is a community');
+            expect(shortDescElement.textContent).toBe('This is a community');
         });
 
         httpBackend.when('GET', '/groups/' + groupIdEncoded + '/summary').respond(200, summaryResponse);
