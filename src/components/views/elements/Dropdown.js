@@ -94,8 +94,6 @@ export default class Dropdown extends React.Component {
         this._onRootClick = this._onRootClick.bind(this);
         this._onDocumentClick = this._onDocumentClick.bind(this);
         this._onMenuOptionClick = this._onMenuOptionClick.bind(this);
-        this._onInputKeyPress = this._onInputKeyPress.bind(this);
-        this._onInputKeyUp = this._onInputKeyUp.bind(this);
         this._onInputChange = this._onInputChange.bind(this);
         this._collectRoot = this._collectRoot.bind(this);
         this._collectInputTextBox = this._collectInputTextBox.bind(this);
@@ -193,19 +191,14 @@ export default class Dropdown extends React.Component {
         this.props.onOptionChange(dropdownKey);
     }
 
-    _onInputKeyPress(e) {
-        // This needs to be on the keypress event because otherwise it can't cancel the form submission
-        if (e.key === Key.ENTER) {
-            e.preventDefault();
-        }
-    }
+    _onInputKeyDown = (e) => {
+        let handled = true;
 
-    _onInputKeyUp(e) {
         // These keys don't generate keypress events and so needs to be on keyup
         switch (e.key) {
             case Key.ENTER:
                 this.props.onOptionChange(this.state.highlightedOption);
-                // fallthrough
+            // fallthrough
             case Key.ESCAPE:
                 this._close();
                 break;
@@ -219,6 +212,13 @@ export default class Dropdown extends React.Component {
                     highlightedOption: this._prevOption(this.state.highlightedOption),
                 });
                 break;
+            default:
+                handled = false;
+        }
+
+        if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
         }
     }
 
@@ -314,8 +314,7 @@ export default class Dropdown extends React.Component {
                         type="text"
                         className="mx_Dropdown_option"
                         ref={this._collectInputTextBox}
-                        onKeyPress={this._onInputKeyPress}
-                        onKeyUp={this._onInputKeyUp}
+                        onKeyDown={this._onInputKeyDown}
                         onChange={this._onInputChange}
                         value={this.state.searchQuery}
                         role="combobox"
