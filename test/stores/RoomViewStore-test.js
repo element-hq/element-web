@@ -27,13 +27,7 @@ describe('RoomViewStore', function() {
     });
 
     it('can be used to view a room by alias and join', function(done) {
-        peg.get().getRoomIdForAlias.mockResolvedValue({room_id: "!randomcharacters:aser.ver"});
-        peg.get().joinRoom = async (roomAddress) => {
-            expect(roomAddress).toBe("#somealias2:aser.ver");
-            done();
-        };
-
-        RoomViewStore.addListener(() => {
+        const token = RoomViewStore.addListener(() => {
             // Wait until the room alias has resolved and the room ID is
             if (!RoomViewStore.isRoomLoading()) {
                 expect(RoomViewStore.getRoomId()).toBe("!randomcharacters:aser.ver");
@@ -41,6 +35,13 @@ describe('RoomViewStore', function() {
                 expect(RoomViewStore.isJoining()).toBe(true);
             }
         });
+
+        peg.get().getRoomIdForAlias.mockResolvedValue({room_id: "!randomcharacters:aser.ver"});
+        peg.get().joinRoom = async (roomAddress) => {
+            token.remove(); // stop RVS listener
+            expect(roomAddress).toBe("#somealias2:aser.ver");
+            done();
+        };
 
         dispatch({ action: 'view_room', room_alias: '#somealias2:aser.ver' });
     });
