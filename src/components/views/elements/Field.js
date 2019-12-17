@@ -66,10 +66,14 @@ export default class Field extends React.PureComponent {
         this.state = {
             valid: undefined,
             feedback: undefined,
+            focused: false,
         };
     }
 
     onFocus = (ev) => {
+        this.setState({
+            focused: true,
+        });
         this.validate({
             focused: true,
         });
@@ -88,6 +92,9 @@ export default class Field extends React.PureComponent {
     };
 
     onBlur = (ev) => {
+        this.setState({
+            focused: false,
+        });
         this.validate({
             focused: false,
         });
@@ -112,7 +119,8 @@ export default class Field extends React.PureComponent {
             allowEmpty,
         });
 
-        if (feedback) {
+        // this method is async and we may have been blurred since validate was called so check
+        if (this.state.focused && feedback) {
             this.setState({
                 valid,
                 feedback,
