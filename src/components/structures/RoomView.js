@@ -44,7 +44,7 @@ import ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -561,15 +561,15 @@ module.exports = createReactClass({
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
-        switch (ev.keyCode) {
-            case KeyCode.KEY_D:
+        switch (ev.key) {
+            case Key.D:
                 if (ctrlCmdOnly) {
                     this.onMuteAudioClick();
                     handled = true;
                 }
                 break;
 
-            case KeyCode.KEY_E:
+            case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
                     handled = true;

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {Key} from "../../../Keyboard";
+
 const React = require("react");
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
@@ -83,7 +85,7 @@ module.exports = createReactClass({
     },
 
     onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
+        if (e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
