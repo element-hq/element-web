@@ -174,7 +174,7 @@ module.exports = createReactClass({
             } else {
                 this._addAddressesToList([textInput]);
             }
-        } else if (e.key === Key.COMMA || e.key === Key.TAB) {
+        } else if (textInput && (e.key === Key.COMMA || e.key === Key.TAB)) {
             e.stopPropagation();
             e.preventDefault();
             this._addAddressesToList([textInput]);
