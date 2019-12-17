@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { KeyCode } from '../../../Keyboard';
+import {Key} from '../../../Keyboard';
 
 /**
  * AccessibleButton is a generic wrapper for any element that should be treated
@@ -40,23 +40,23 @@ export default function AccessibleButton(props) {
         // Browsers handle space and enter keypresses differently and we are only adjusting to the
         // inconsistencies here
         restProps.onKeyDown = function(e) {
-            if (e.keyCode === KeyCode.ENTER) {
+            if (e.key === Key.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
                 return onClick(e);
             }
-            if (e.keyCode === KeyCode.SPACE) {
+            if (e.key === Key.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();
             }
         };
         restProps.onKeyUp = function(e) {
-            if (e.keyCode === KeyCode.SPACE) {
+            if (e.key === Key.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();
                 return onClick(e);
             }
-            if (e.keyCode === KeyCode.ENTER) {
+            if (e.key === Key.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
             }
