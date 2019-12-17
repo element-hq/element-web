@@ -154,7 +154,7 @@ export default class RightPanelStore extends Store {
                 });
             }
         } else {
-            if (targetPhase === this._state.lastRoomPhase) {
+            if (targetPhase === this._state.lastRoomPhase && !payload.refireParams) {
                 this._setState({
                     showRoomPanel: !this._state.showRoomPanel,
                 });
