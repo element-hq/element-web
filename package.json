@@ -24,7 +24,6 @@
     "webpack.config.js"
   ],
   "style": "bundle.css",
-  "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
