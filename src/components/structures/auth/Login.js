@@ -26,6 +26,7 @@ import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
+import AuthPage from "../../views/auth/AuthPage";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -608,7 +609,6 @@ module.exports = createReactClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() ? <div className="mx_Login_loader"><Loader /></div> : null;

@@ -30,6 +30,7 @@ import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDisc
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import AuthPage from "../../views/auth/AuthPage";
 
 // Phases
 // Show controls to configure server details
@@ -576,7 +577,6 @@ module.exports = createReactClass({
     render: function() {
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
-        const AuthPage = sdk.getComponent('auth.AuthPage');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let errorText;

@@ -48,7 +48,7 @@ interface MatrixClientCreds {
  * This module provides a singleton instance of this class so the 'current'
  * Matrix Client object is available easily.
  */
-class MatrixClientPeg {
+class _MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
         this._justRegisteredUserId = null;
@@ -245,6 +245,7 @@ class MatrixClientPeg {
 }
 
 if (!global.mxMatrixClientPeg) {
-    global.mxMatrixClientPeg = new MatrixClientPeg();
+    global.mxMatrixClientPeg = new _MatrixClientPeg();
 }
 export default global.mxMatrixClientPeg;
+export const MatrixClientPeg = global.mxMatrixClientPeg;

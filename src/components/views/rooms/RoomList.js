@@ -27,7 +27,7 @@ const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
+import rate_limited_func from "../../../ratelimitedfunc";
 import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
@@ -384,7 +384,7 @@ module.exports = createReactClass({
         this._delayedRefreshRoomList();
     },
 
-    _delayedRefreshRoomList: new rate_limited_func(function() {
+    _delayedRefreshRoomList: rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
 
