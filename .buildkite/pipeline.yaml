@@ -40,7 +40,7 @@ steps:
       - "echo '--- Installing Dependencies'"
       - "./scripts/ci/install-deps.sh"
       - "echo '+++ Running Tests'"
-      - "./scripts/ci/unit-tests.sh"
+      - "yarn test"
     plugins:
       - docker#v3.0.1:
           image: "node:10"
