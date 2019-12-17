@@ -150,16 +150,6 @@ export default createReactClass({
         makeRegistrationUrl: PropTypes.func.isRequired,
     },
 
-    childContextTypes: {
-        appConfig: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            appConfig: this.props.config,
-        };
-    },
-
     getInitialState: function() {
         const s = {
             // the master view we are showing.

@@ -80,8 +80,8 @@ export default class BasicMessageEditor extends React.Component {
         initialCaret: PropTypes.object, // See DocumentPosition in editor/model.js
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             autoComplete: null,
         };

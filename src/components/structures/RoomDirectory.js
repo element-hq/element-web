@@ -30,6 +30,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -62,16 +63,6 @@ module.exports = createReactClass({
             includeAll: false,
             roomServer: null,
             filterString: null,
-        };
-    },
-
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
         };
     },
 

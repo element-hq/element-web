@@ -19,10 +19,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 module.exports = createReactClass({
     displayName: 'BaseAvatar',
@@ -40,8 +40,8 @@ module.exports = createReactClass({
         defaultToInitialLetter: PropTypes.bool, // true to add default url
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getDefaultProps: function() {
@@ -59,12 +59,12 @@ module.exports = createReactClass({
 
     componentDidMount() {
         this.unmounted = false;
-        this.context.matrixClient.on('sync', this.onClientSync);
+        this.context.on('sync', this.onClientSync);
     },
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this.context.removeListener('sync', this.onClientSync);
     },
 
     componentWillReceiveProps: function(nextProps) {
