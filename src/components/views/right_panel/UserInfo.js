@@ -109,14 +109,14 @@ function openDMForUser(matrixClient, userId) {
 }
 
 function useIsEncrypted(cli, room) {
-    const [isEncrypted, setIsEncrypted] = useState(cli.isRoomEncrypted(room.roomId));
+    const [isEncrypted, setIsEncrypted] = useState(room ? cli.isRoomEncrypted(room.roomId) : undefined);
 
     const update = useCallback((event) => {
         if (event.getType() === "m.room.encryption") {
             setIsEncrypted(cli.isRoomEncrypted(room.roomId));
         }
     }, [cli, room]);
-    useEventEmitter(room.currentState, "RoomState.events", update);
+    useEventEmitter(room ? room.currentState : undefined, "RoomState.events", update);
     return isEncrypted;
 }
 
