@@ -247,5 +247,10 @@ class _MatrixClientPeg {
 if (!global.mxMatrixClientPeg) {
     global.mxMatrixClientPeg = new _MatrixClientPeg();
 }
+
+// We export both because the syntax is slightly different with
+// our babel changes. We maintain both for backwards compatibility
+// and for babel to be happy.
+// TODO: Convert this to a single export
 export default global.mxMatrixClientPeg;
 export const MatrixClientPeg = global.mxMatrixClientPeg;
