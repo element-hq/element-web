@@ -103,7 +103,7 @@ describe('InteractiveAuthDialog', function() {
             }));
             // let the request complete
             return sleep(1);
-        }).then(() => {
+        }).then(sleep(1)).then(() => {
             expect(onFinished).toBeCalledTimes(1);
             expect(onFinished).toBeCalledWith(true, {a: 1});
         });
