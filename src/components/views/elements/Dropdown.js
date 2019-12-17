@@ -198,7 +198,7 @@ export default class Dropdown extends React.Component {
         switch (e.key) {
             case Key.ENTER:
                 this.props.onOptionChange(this.state.highlightedOption);
-            // fallthrough
+                // fallthrough
             case Key.ESCAPE:
                 this._close();
                 break;
