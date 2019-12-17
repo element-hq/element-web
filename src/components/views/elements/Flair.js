@@ -18,7 +18,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClient} from 'matrix-js-sdk';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

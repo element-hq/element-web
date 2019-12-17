@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import {MatrixClient} from 'matrix-js-sdk';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';

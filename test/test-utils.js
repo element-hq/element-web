@@ -2,7 +2,6 @@
 
 import sinon from 'sinon';
 import React from 'react';
-import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';

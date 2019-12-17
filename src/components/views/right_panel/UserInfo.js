@@ -857,8 +857,6 @@ function useRoomPermissions(cli, room, user) {
 }
 
 const PowerLevelSection = ({user, room, roomPermissions, powerLevels}) => {
-    const cli = useContext(MatrixClientContext);
-
     const [isEditing, setEditing] = useState(false);
     if (room && user.roomId) { // is in room
         if (isEditing) {

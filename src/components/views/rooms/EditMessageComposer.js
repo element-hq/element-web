@@ -26,7 +26,6 @@ import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import {PartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
-import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
