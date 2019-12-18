@@ -22,6 +22,7 @@ export default class VerificationPanel extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
+        this._hasVerifier = !!props.request.verifier;
     }
 
     render() {
@@ -53,12 +54,10 @@ export default class VerificationPanel extends React.PureComponent {
 
     _startSAS = async () => {
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
-        verifier.on('show_sas', this._onVerifierShowSas);
         try {
-            await this._verifier.verify();
+            await verifier.verify();
         } finally {
             this.setState({sasEvent: null});
-            verifier.removeListener('show_sas', this._onVerifierShowSas);
         }
     };
 
@@ -75,6 +74,18 @@ export default class VerificationPanel extends React.PureComponent {
     };
 
     _onRequestChange = () => {
+        const {request} = this.props;
+        if (!this._hasVerifier && !!request.verifier) {
+            request.verifier.on('show_sas', this._onVerifierShowSas);
+            try {
+                request.verifier.verify();
+            } catch (err) {
+                console.error("error verify", err);
+            }
+        } else if (this._hasVerifier && !request.verifier) {
+            request.verifier.removeListener('show_sas', this._onVerifierShowSas);
+        }
+        this._hasVerifier = !!request.verifier;
         this.forceUpdate();
     };
 
