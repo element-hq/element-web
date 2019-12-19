@@ -273,6 +273,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // click the button are aware they're making a change to their account.
         // Once we're confident enough in this (and it's supported enough) we can do
         // it automatically.
+        // https://github.com/vector-im/riot-web/issues/11696
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
