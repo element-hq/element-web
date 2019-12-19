@@ -1156,14 +1156,16 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
     const avatarElement = (
         <div className="mx_UserInfo_avatar">
             <div>
-                <MemberAvatar
-                    member={user}
-                    width={0.3 * window.outerHeight} // ~30vh
-                    height={0.3 * window.outerHeight} // ~30vh
-                    resizeMethod="scale"
-                    fallbackUserId={user.userId}
-                    onClick={onMemberAvatarClick}
-                    urls={user.avatarUrl ? [user.avatarUrl] : undefined} />
+                <div>
+                    <MemberAvatar
+                        member={user}
+                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        resizeMethod="scale"
+                        fallbackUserId={user.userId}
+                        onClick={onMemberAvatarClick}
+                        urls={user.avatarUrl ? [user.avatarUrl] : undefined} />
+                </div>
             </div>
         </div>
     );
