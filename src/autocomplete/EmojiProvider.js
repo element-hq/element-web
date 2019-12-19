@@ -68,7 +68,6 @@ export default class EmojiProvider extends AutocompleteProvider {
         this.matcher = new QueryMatcher(EMOJI_SHORTNAMES, {
             keys: ['emoji.emoticon', 'shortname'],
             funcs: [
-            //     (o) => `:${o.emoji.shortcodes[0]}:`, // shortname
                 (o) => o.emoji.shortcodes.length > 1 ? o.emoji.shortcodes.slice(1).map(s => `:${s}:`).join(" ") : "", // aliases
             ],
             // For matching against ascii equivalents
