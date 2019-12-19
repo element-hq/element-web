@@ -56,7 +56,7 @@ export default class MKeyVerificationRequest extends React.Component {
                 dis.dispatch({
                     action: "set_right_panel_phase",
                     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                    verificationRequest: request,
+                    refireParams: {verificationRequest: request},
                 });
             } catch (err) {
                 console.error(err.message);
