@@ -301,6 +301,7 @@
     "No homeserver URL provided": "No homeserver URL provided",
     "Unexpected error resolving homeserver configuration": "Unexpected error resolving homeserver configuration",
     "Unexpected error resolving identity server configuration": "Unexpected error resolving identity server configuration",
+    "The message you are trying to send is too large.": "The message you are trying to send is too large.",
     "This homeserver has hit its Monthly Active User limit.": "This homeserver has hit its Monthly Active User limit.",
     "This homeserver has exceeded one of its resource limits.": "This homeserver has exceeded one of its resource limits.",
     "Please <a>contact your service administrator</a> to continue using the service.": "Please <a>contact your service administrator</a> to continue using the service.",
