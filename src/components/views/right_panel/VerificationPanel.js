@@ -49,6 +49,8 @@ export default class VerificationPanel extends React.PureComponent {
             }
         } else if (request.done) {
             return <p>verified {request.otherUserId}!!</p>;
+        } else if (request.cancelled) {
+            return <p>cancelled by {request.cancellingUserId}!</p>;
         }
     }
 
