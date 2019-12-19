@@ -269,7 +269,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhaseMigrate() {
-        // This is a temporary screen so people who have the labs flag turned on and
+        // TODO: This is a temporary screen so people who have the labs flag turned on and
         // click the button are aware they're making a change to their account.
         // Once we're confident enough in this (and it's supported enough) we can do
         // it automatically.
