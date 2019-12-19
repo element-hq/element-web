@@ -141,8 +141,8 @@ export default class MessageComposerInput extends React.Component {
     autocomplete: Autocomplete;
     historyManager: SlateComposerHistoryManager;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         const isRichTextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 

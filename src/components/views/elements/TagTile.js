@@ -20,7 +20,6 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import {_t} from '../../../languageHandler';
@@ -31,6 +30,7 @@ import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -46,8 +46,8 @@ export default createReactClass({
         tag: PropTypes.string,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -81,7 +81,7 @@ export default createReactClass({
     _onFlairStoreUpdated() {
         if (this.unmounted) return;
         FlairStore.getGroupProfileCached(
-            this.context.matrixClient,
+            this.context,
             this.props.tag,
         ).then((profile) => {
             if (this.unmounted) return;
@@ -145,7 +145,7 @@ export default createReactClass({
         const name = profile.name || this.props.tag;
         const avatarHeight = 40;
 
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
+        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
 

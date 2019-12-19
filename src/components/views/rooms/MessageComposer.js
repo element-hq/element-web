@@ -107,8 +107,8 @@ class UploadButton extends React.Component {
         roomId: PropTypes.string.isRequired,
     }
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
@@ -165,8 +165,8 @@ class UploadButton extends React.Component {
 }
 
 export default class MessageComposer extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);

@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useMemo, useState, useEffect} from 'react';
+import React, {useCallback, useMemo, useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
@@ -37,9 +37,9 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
-import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -203,7 +203,9 @@ function DevicesSection({devices, userId, loading}) {
     );
 }
 
-const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, isIgnored, canInvite, devices}) => {
+const UserOptionsSection = ({member, isIgnored, canInvite, devices}) => {
+    const cli = useContext(MatrixClientContext);
+
     let ignoreButton = null;
     let insertPillButton = null;
     let inviteUserButton = null;
@@ -336,7 +338,7 @@ const UserOptionsSection = withLegacyMatrixClient(({matrixClient: cli, member, i
             </div>
         </div>
     );
-});
+};
 
 const _warnSelfDemote = async () => {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -404,7 +406,9 @@ const useRoomPowerLevels = (cli, room) => {
     return powerLevels;
 };
 
-const RoomKickButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
+const RoomKickButton = ({member, startUpdating, stopUpdating}) => {
+    const cli = useContext(MatrixClientContext);
+
     const onKick = async () => {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         const {finished} = Modal.createTrackedDialog(
@@ -444,9 +448,11 @@ const RoomKickButton = withLegacyMatrixClient(({matrixClient: cli, member, start
     return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onKick}>
         { kickLabel }
     </AccessibleButton>;
-});
+};
 
-const RedactMessagesButton = withLegacyMatrixClient(({matrixClient: cli, member}) => {
+const RedactMessagesButton = ({member}) => {
+    const cli = useContext(MatrixClientContext);
+
     const onRedactAllMessages = async () => {
         const {roomId, userId} = member;
         const room = cli.getRoom(roomId);
@@ -517,9 +523,11 @@ const RedactMessagesButton = withLegacyMatrixClient(({matrixClient: cli, member}
     return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onRedactAllMessages}>
         { _t("Remove recent messages") }
     </AccessibleButton>;
-});
+};
 
-const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, startUpdating, stopUpdating}) => {
+const BanToggleButton = ({member, startUpdating, stopUpdating}) => {
+    const cli = useContext(MatrixClientContext);
+
     const onBanOrUnban = async () => {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         const {finished} = Modal.createTrackedDialog(
@@ -573,207 +581,206 @@ const BanToggleButton = withLegacyMatrixClient(({matrixClient: cli, member, star
     return <AccessibleButton className={classes} onClick={onBanOrUnban}>
         { label }
     </AccessibleButton>;
-});
+};
 
-const MuteToggleButton = withLegacyMatrixClient(
-    ({matrixClient: cli, member, room, powerLevels, startUpdating, stopUpdating}) => {
-        const isMuted = _isMuted(member, powerLevels);
-        const onMuteToggle = async () => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            const roomId = member.roomId;
-            const target = member.userId;
+const MuteToggleButton = ({member, room, powerLevels, startUpdating, stopUpdating}) => {
+    const cli = useContext(MatrixClientContext);
 
-            // if muting self, warn as it may be irreversible
-            if (target === cli.getUserId()) {
-                try {
-                    if (!(await _warnSelfDemote())) return;
-                } catch (e) {
-                    console.error("Failed to warn about self demotion: ", e);
-                    return;
-                }
+    const isMuted = _isMuted(member, powerLevels);
+    const onMuteToggle = async () => {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const roomId = member.roomId;
+        const target = member.userId;
+
+        // if muting self, warn as it may be irreversible
+        if (target === cli.getUserId()) {
+            try {
+                if (!(await _warnSelfDemote())) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+                return;
             }
+        }
 
-            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-            if (!powerLevelEvent) return;
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
 
-            const powerLevels = powerLevelEvent.getContent();
-            const levelToSend = (
-                (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
-                powerLevels.events_default
-            );
-            let level;
-            if (isMuted) { // unmute
-                level = levelToSend;
-            } else { // mute
-                level = levelToSend - 1;
-            }
-            level = parseInt(level);
+        const powerLevels = powerLevelEvent.getContent();
+        const levelToSend = (
+            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+            powerLevels.events_default
+        );
+        let level;
+        if (isMuted) { // unmute
+            level = levelToSend;
+        } else { // mute
+            level = levelToSend - 1;
+        }
+        level = parseInt(level);
 
-            if (!isNaN(level)) {
-                startUpdating();
-                cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
-                    console.log("Mute toggle success");
-                }, function(err) {
-                    console.error("Mute error: " + err);
-                    Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
-                        title: _t("Error"),
-                        description: _t("Failed to mute user"),
-                    });
-                }).finally(() => {
-                    stopUpdating();
+        if (!isNaN(level)) {
+            startUpdating();
+            cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mute toggle success");
+            }, function(err) {
+                console.error("Mute error: " + err);
+                Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
+                    title: _t("Error"),
+                    description: _t("Failed to mute user"),
                 });
-            }
+            }).finally(() => {
+                stopUpdating();
+            });
+        }
+    };
+
+    const classes = classNames("mx_UserInfo_field", {
+        mx_UserInfo_destructive: !isMuted,
+    });
+
+    const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
+    return <AccessibleButton className={classes} onClick={onMuteToggle}>
+        { muteLabel }
+    </AccessibleButton>;
+};
+
+const RoomAdminToolsContainer = ({room, children, member, startUpdating, stopUpdating, powerLevels}) => {
+    const cli = useContext(MatrixClientContext);
+    let kickButton;
+    let banButton;
+    let muteButton;
+    let redactButton;
+
+    const editPowerLevel = (
+        (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
+        powerLevels.state_default
+    );
+
+    const me = room.getMember(cli.getUserId());
+    const isMe = me.userId === member.userId;
+    const canAffectUser = member.powerLevel < me.powerLevel || isMe;
+
+    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+        kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+    }
+    if (me.powerLevel >= powerLevels.redact) {
+        redactButton = (
+            <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
+        );
+    }
+    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+        banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+    }
+    if (canAffectUser && me.powerLevel >= editPowerLevel) {
+        muteButton = (
+            <MuteToggleButton
+                member={member}
+                room={room}
+                powerLevels={powerLevels}
+                startUpdating={startUpdating}
+                stopUpdating={stopUpdating}
+            />
+        );
+    }
+
+    if (kickButton || banButton || muteButton || redactButton || children) {
+        return <GenericAdminToolsContainer>
+            { muteButton }
+            { kickButton }
+            { banButton }
+            { redactButton }
+            { children }
+        </GenericAdminToolsContainer>;
+    }
+
+    return <div />;
+};
+
+const GroupAdminToolsSection = ({children, groupId, groupMember, startUpdating, stopUpdating}) => {
+    const cli = useContext(MatrixClientContext);
+
+    const [isPrivileged, setIsPrivileged] = useState(false);
+    const [isInvited, setIsInvited] = useState(false);
+
+    // Listen to group store changes
+    useEffect(() => {
+        let unmounted = false;
+
+        const onGroupStoreUpdated = () => {
+            if (unmounted) return;
+            setIsPrivileged(GroupStore.isUserPrivileged(groupId));
+            setIsInvited(GroupStore.getGroupInvitedMembers(groupId).some(
+                (m) => m.userId === groupMember.userId,
+            ));
         };
 
-        const classes = classNames("mx_UserInfo_field", {
-            mx_UserInfo_destructive: !isMuted,
-        });
+        GroupStore.registerListener(groupId, onGroupStoreUpdated);
+        onGroupStoreUpdated();
+        // Handle unmount
+        return () => {
+            unmounted = true;
+            GroupStore.unregisterListener(onGroupStoreUpdated);
+        };
+    }, [groupId, groupMember.userId]);
 
-        const muteLabel = isMuted ? _t("Unmute") : _t("Mute");
-        return <AccessibleButton className={classes} onClick={onMuteToggle}>
-            { muteLabel }
-        </AccessibleButton>;
-    },
-);
+    if (isPrivileged) {
+        const _onKick = async () => {
+            const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+            const {finished} = Modal.createDialog(ConfirmUserActionDialog, {
+                matrixClient: cli,
+                groupMember,
+                action: isInvited ? _t('Disinvite') : _t('Remove from community'),
+                title: isInvited ? _t('Disinvite this user from community?')
+                    : _t('Remove this user from community?'),
+                danger: true,
+            });
 
-const RoomAdminToolsContainer = withLegacyMatrixClient(
-    ({matrixClient: cli, room, children, member, startUpdating, stopUpdating, powerLevels}) => {
-        let kickButton;
-        let banButton;
-        let muteButton;
-        let redactButton;
+            const [proceed] = await finished;
+            if (!proceed) return;
 
-        const editPowerLevel = (
-            (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
-            powerLevels.state_default
+            startUpdating();
+            cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
+                // return to the user list
+                dis.dispatch({
+                    action: "view_user",
+                    member: null,
+                });
+            }).catch((e) => {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
+                    title: _t('Error'),
+                    description: isInvited ?
+                        _t('Failed to withdraw invitation') :
+                        _t('Failed to remove user from community'),
+                });
+                console.log(e);
+            }).finally(() => {
+                stopUpdating();
+            });
+        };
+
+        const kickButton = (
+            <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={_onKick}>
+                { isInvited ? _t('Disinvite') : _t('Remove from community') }
+            </AccessibleButton>
         );
 
-        const me = room.getMember(cli.getUserId());
-        const isMe = me.userId === member.userId;
-        const canAffectUser = member.powerLevel < me.powerLevel || isMe;
+        // No make/revoke admin API yet
+        /*const opLabel = this.state.isTargetMod ? _t("Revoke Moderator") : _t("Make Moderator");
+        giveModButton = <AccessibleButton className="mx_UserInfo_field" onClick={this.onModToggle}>
+            {giveOpLabel}
+        </AccessibleButton>;*/
 
-        if (canAffectUser && me.powerLevel >= powerLevels.kick) {
-            kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
-        }
-        if (me.powerLevel >= powerLevels.redact) {
-            redactButton = (
-                <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
-            );
-        }
-        if (canAffectUser && me.powerLevel >= powerLevels.ban) {
-            banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
-        }
-        if (canAffectUser && me.powerLevel >= editPowerLevel) {
-            muteButton = (
-                <MuteToggleButton
-                    member={member}
-                    room={room}
-                    powerLevels={powerLevels}
-                    startUpdating={startUpdating}
-                    stopUpdating={stopUpdating}
-                />
-            );
-        }
+        return <GenericAdminToolsContainer>
+            { kickButton }
+            { children }
+        </GenericAdminToolsContainer>;
+    }
 
-        if (kickButton || banButton || muteButton || redactButton || children) {
-            return <GenericAdminToolsContainer>
-                { muteButton }
-                { kickButton }
-                { banButton }
-                { redactButton }
-                { children }
-            </GenericAdminToolsContainer>;
-        }
-
-        return <div />;
-    },
-);
-
-const GroupAdminToolsSection = withLegacyMatrixClient(
-    ({matrixClient: cli, children, groupId, groupMember, startUpdating, stopUpdating}) => {
-        const [isPrivileged, setIsPrivileged] = useState(false);
-        const [isInvited, setIsInvited] = useState(false);
-
-        // Listen to group store changes
-        useEffect(() => {
-            let unmounted = false;
-
-            const onGroupStoreUpdated = () => {
-                if (unmounted) return;
-                setIsPrivileged(GroupStore.isUserPrivileged(groupId));
-                setIsInvited(GroupStore.getGroupInvitedMembers(groupId).some(
-                    (m) => m.userId === groupMember.userId,
-                ));
-            };
-
-            GroupStore.registerListener(groupId, onGroupStoreUpdated);
-            onGroupStoreUpdated();
-            // Handle unmount
-            return () => {
-                unmounted = true;
-                GroupStore.unregisterListener(onGroupStoreUpdated);
-            };
-        }, [groupId, groupMember.userId]);
-
-        if (isPrivileged) {
-            const _onKick = async () => {
-                const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-                const {finished} = Modal.createDialog(ConfirmUserActionDialog, {
-                    matrixClient: cli,
-                    groupMember,
-                    action: isInvited ? _t('Disinvite') : _t('Remove from community'),
-                    title: isInvited ? _t('Disinvite this user from community?')
-                        : _t('Remove this user from community?'),
-                    danger: true,
-                });
-
-                const [proceed] = await finished;
-                if (!proceed) return;
-
-                startUpdating();
-                cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
-                    // return to the user list
-                    dis.dispatch({
-                        action: "view_user",
-                        member: null,
-                    });
-                }).catch((e) => {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
-                        title: _t('Error'),
-                        description: isInvited ?
-                            _t('Failed to withdraw invitation') :
-                            _t('Failed to remove user from community'),
-                    });
-                    console.log(e);
-                }).finally(() => {
-                    stopUpdating();
-                });
-            };
-
-            const kickButton = (
-                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={_onKick}>
-                    { isInvited ? _t('Disinvite') : _t('Remove from community') }
-                </AccessibleButton>
-            );
-
-            // No make/revoke admin API yet
-            /*const opLabel = this.state.isTargetMod ? _t("Revoke Moderator") : _t("Make Moderator");
-            giveModButton = <AccessibleButton className="mx_UserInfo_field" onClick={this.onModToggle}>
-                {giveOpLabel}
-            </AccessibleButton>;*/
-
-            return <GenericAdminToolsContainer>
-                { kickButton }
-                { children }
-            </GenericAdminToolsContainer>;
-        }
-
-        return <div />;
-    },
-);
+    return <div />;
+};
 
 const GroupMember = PropTypes.shape({
     userId: PropTypes.string.isRequired,
@@ -849,7 +856,7 @@ function useRoomPermissions(cli, room, user) {
     return roomPermissions;
 }
 
-const PowerLevelSection = withLegacyMatrixClient(({matrixClient: cli, user, room, roomPermissions, powerLevels}) => {
+const PowerLevelSection = ({user, room, roomPermissions, powerLevels}) => {
     const [isEditing, setEditing] = useState(false);
     if (room && user.roomId) { // is in room
         if (isEditing) {
@@ -876,9 +883,11 @@ const PowerLevelSection = withLegacyMatrixClient(({matrixClient: cli, user, room
     } else {
         return null;
     }
-});
+};
 
-const PowerLevelEditor = withLegacyMatrixClient(({matrixClient: cli, user, room, roomPermissions, onFinished}) => {
+const PowerLevelEditor = ({user, room, roomPermissions, onFinished}) => {
+    const cli = useContext(MatrixClientContext);
+
     const [isUpdating, setIsUpdating] = useState(false);
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(parseInt(user.powerLevel, 10));
     const [isDirty, setIsDirty] = useState(false);
@@ -982,10 +991,11 @@ const PowerLevelEditor = withLegacyMatrixClient(({matrixClient: cli, user, room,
             {buttonOrSpinner}
         </div>
     );
-});
+};
 
-// cli is injected by withLegacyMatrixClient
-const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, roomId, onClose}) => {
+const UserInfo = ({user, groupId, roomId, onClose}) => {
+    const cli = useContext(MatrixClientContext);
+
     // Load room if we are given a room id and memoize it
     const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
 
@@ -1316,7 +1326,7 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
             </AutoHideScrollbar>
         </div>
     );
-});
+};
 
 UserInfo.propTypes = {
     user: PropTypes.oneOfType([
