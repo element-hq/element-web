@@ -1249,15 +1249,13 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                 setDevices(null);
             }
         }
-        if (isRoomEncrypted) {
-            _downloadDeviceList();
-        }
+        _downloadDeviceList();
 
         // Handle being unmounted
         return () => {
             cancelled = true;
         };
-    }, [cli, user.userId, isRoomEncrypted]);
+    }, [cli, user.userId]);
 
     // Listen to changes
     useEffect(() => {
@@ -1273,18 +1271,13 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                 });
             }
         };
-
-        if (isRoomEncrypted) {
-            cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
-        }
+        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
         // Handle being unmounted
         return () => {
             cancel = true;
-            if (isRoomEncrypted) {
-                cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
-            }
+            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
         };
-    }, [cli, user.userId, isRoomEncrypted]);
+    }, [cli, user.userId]);
 
     let text;
     if (!isRoomEncrypted) {
@@ -1299,9 +1292,6 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
-    const devicesSection = isRoomEncrypted ?
-        (<DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />) : null;
-
     const userVerified = cli.checkUserTrust(user.userId).isVerified();
     let verifyButton;
     if (!userVerified) {
@@ -1309,6 +1299,10 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
             {_t("Verify")}
         </AccessibleButton>;
     }
+
+    const devicesSection = <DevicesSection
+        loading={devices === undefined}
+        devices={devices} userId={user.userId} />;
 
     const securitySection = (
         <div className="mx_UserInfo_container">
