@@ -597,8 +597,7 @@ module.exports = createReactClass({
             if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
                 return true;
             }
-            const lcRoomName = room.name ? utils.removeHiddenChars(room.name).toLowerCase() : "";
-            return lcRoomName.includes(fuzzyFilter);
+            return room.name ? utils.removeHiddenChars(room.name).toLowerCase().includes(fuzzyFilter) : false;
         });
     },
 
