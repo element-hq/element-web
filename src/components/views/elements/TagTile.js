@@ -112,12 +112,10 @@ export default createReactClass({
     },
 
     onMouseOver: function() {
-        console.log("DEBUG onMouseOver");
         this.setState({hover: true});
     },
 
     onMouseOut: function() {
-        console.log("DEBUG onMouseOut");
         this.setState({hover: false});
     },
 
@@ -140,7 +138,6 @@ export default createReactClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const Tooltip = sdk.getComponent('elements.Tooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
         const avatarHeight = 40;
@@ -164,9 +161,6 @@ export default createReactClass({
             badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
         }
 
-        const tip = this.state.hover ?
-            <Tooltip className="mx_TagTile_tooltip" label={name} /> :
-            <div />;
         // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
         const contextButton = this.state.hover || this.state.menuDisplayed ?
             <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this._contextMenuButton}>
@@ -184,14 +178,9 @@ export default createReactClass({
             );
         }
 
+        const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
         return <React.Fragment>
-            <ContextMenuButton
-                className={className}
-                onClick={this.onClick}
-                onContextMenu={this.openMenu}
-                label={_t("Options")}
-                isExpanded={this.state.menuDisplayed}
-            >
+            <AccessibleTooltipButton className={className} onClick={this.onClick} onContextMenu={this.openMenu} title={name}>
                 <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                     <BaseAvatar
                         name={name}
@@ -200,11 +189,10 @@ export default createReactClass({
                         width={avatarHeight}
                         height={avatarHeight}
                     />
-                    { tip }
                     { contextButton }
                     { badgeElement }
                 </div>
-            </ContextMenuButton>
+            </AccessibleTooltipButton>
 
             { contextMenu }
         </React.Fragment>;

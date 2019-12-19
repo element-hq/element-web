@@ -82,6 +82,31 @@ limitations under the License.
     // opacity: 1;
 }
 
+.mx_TagPanel .mx_TagTile_plus {
+    margin-bottom: 12px;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: $button-primary-fg-color;
+    opacity: 0.11;
+    position: relative;
+    /* overwrite mx_RoleButton inline-block */
+    display: block !important;
+
+    &::before {
+        mask-image: url('$(res)/img/feather-customised/plus.svg');
+        mask-position: center;
+        background-color: $tagpanel-bg-color;
+        mask-repeat: no-repeat;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
     content: '';
     height: 56px;
@@ -89,7 +114,7 @@ limitations under the License.
     width: 5px;
     position: absolute;
     left: -15px;
-    border-radius: 0 2px 2px 0;
+    border-radius: 0 3px 3px 0;
     top: -8px; // (56 - 40)/2
 }
 

@@ -243,7 +243,6 @@ const LeftPanel = createReactClass({
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
                 { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
-                <TagPanelButtons />
             </div>);
         }
 
