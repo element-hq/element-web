@@ -32,7 +32,6 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
-import RoomTileOnlineDot from "./RoomTileOnlineDot";
 
 module.exports = createReactClass({
     displayName: 'RoomTile',
