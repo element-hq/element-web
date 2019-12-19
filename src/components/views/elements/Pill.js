@@ -127,7 +127,7 @@ const Pill = createReactClass({
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                const localMember = nextProps.room.getMember(resourceId);
+                const localMember = nextProps.room ? nextProps.room.getMember(resourceId) : null;
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
