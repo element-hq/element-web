@@ -20,6 +20,11 @@ import VerificationPanel from "./VerificationPanel";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class EncryptionPanel extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
     render() {
         const request = this.props.verificationRequest || this.state.verificationRequest;
         const {member} = this.props;
@@ -27,6 +32,8 @@ export default class EncryptionPanel extends React.PureComponent {
             return <VerificationPanel request={request} />;
         } else if (member) {
             return <EncryptionInfo onStartVerification={this._onStartVerification} member={member} />;
+        } else {
+            return <p>Not a member nor request, not sure what to render</p>;
         }
     }
 

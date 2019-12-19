@@ -33,7 +33,7 @@ export default class VerificationPanel extends React.PureComponent {
         if (request.requested) {
             return (<p>Waiting for {request.otherUserId} to accept ... <Spinner /></p>);
         } else if (request.ready) {
-            return (<p>{request.otherUserId} is ready, start <AccessibleButton onClick={this._startSAS}>Verify by emoji</AccessibleButton></p>);
+            return (<p>{request.otherUserId} is ready, start <AccessibleButton kind="primary" onClick={this._startSAS}>Verify by emoji</AccessibleButton></p>);
         } else if (request.started) {
             if (this.state.sasEvent) {
                 const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
@@ -56,6 +56,8 @@ export default class VerificationPanel extends React.PureComponent {
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
         try {
             await verifier.verify();
+        } catch (err) {
+            console.error(err);
         } finally {
             this.setState({sasEvent: null});
         }

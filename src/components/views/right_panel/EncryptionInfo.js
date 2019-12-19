@@ -21,9 +21,9 @@ export default class EncryptionInfo extends React.PureComponent {
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (<div>
-            <p>End-to-end encryption is great!</p>
+            <p>End-to-end encryption is great! You should try it.</p>
             <div>
-                <AccessibleButton onClick={this.props.onStartVerification}>Start verification</AccessibleButton>
+                <AccessibleButton kind="primary" onClick={this.props.onStartVerification}>Start verification</AccessibleButton>
             </div>
         </div>);
     }
