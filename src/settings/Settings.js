@@ -136,13 +136,6 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
-    "feature_dm_verification": {
-        isFeature: true,
-        displayName: _td("Send verification requests in direct message," +
-            " including a new verification UX in the member panel."),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_cross_signing": {
         isFeature: true,
         displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),

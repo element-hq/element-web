@@ -190,7 +190,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",
@@ -209,7 +209,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",
