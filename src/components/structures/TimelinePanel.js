@@ -1136,7 +1136,7 @@ const TimelinePanel = createReactClass({
         const allowPartial = opts.allowPartial || false;
 
         const messagePanel = this._messagePanel.current;
-        if (messagePanel === undefined) return null;
+        if (!messagePanel) return null;
 
         const EventTile = sdk.getComponent('rooms.EventTile');
 
