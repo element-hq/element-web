@@ -1293,8 +1293,9 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     }
 
     const userVerified = cli.checkUserTrust(user.userId).isVerified();
+    const isMe = user.userId === cli.getUserId();
     let verifyButton;
-    if (!userVerified) {
+    if (!userVerified && !isMe) {
         verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
             {_t("Verify")}
         </AccessibleButton>;
