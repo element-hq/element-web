@@ -2016,5 +2016,7 @@
     "All users in this encrypted room are verified by you and they have verified their own devices.": "Tous les utilisateurs de ce salon chiffré ont été vérifiés par vous et ont vérifié leurs propres appareils.",
     "Language Dropdown": "Sélection de la langue",
     "Country Dropdown": "Sélection du pays",
-    "The message you are trying to send is too large.": "Le message que vous essayez d’envoyer est trop gros."
+    "The message you are trying to send is too large.": "Le message que vous essayez d’envoyer est trop gros.",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Le coffre secret sera configuré en utilisant vos informations de sauvegarde de clés existantes. Votre phrase de passe et votre clé de récupération seront les mêmes que pour la sauvegarde de clés",
+    "Migrate from Key Backup": "Migrer depuis la sauvegarde de clés"
 }
