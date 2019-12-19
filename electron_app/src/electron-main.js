@@ -47,7 +47,11 @@ let Seshat = null;
 try {
     Seshat = require('matrix-seshat');
 } catch (e) {
-    console.warn("seshat unavailable", e);
+    if (e.code === "MODULE_NOT_FOUND") {
+        console.log("Seshat isn't installed, event indexing is disabled.");
+    } else {
+        console.warn("Seshat unexpected error:", e);
+    }
 }
 
 if (argv["help"]) {
