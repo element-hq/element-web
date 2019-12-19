@@ -357,7 +357,6 @@
     "Render simple counters in room header": "Render simple counters in room header",
     "Multiple integration managers": "Multiple integration managers",
     "Try out new ways to ignore people (experimental)": "Try out new ways to ignore people (experimental)",
-    "Send verification requests in direct message, including a new verification UX in the member panel.": "Send verification requests in direct message, including a new verification UX in the member panel.",
     "Enable cross-signing to verify per-user instead of per-device (in development)": "Enable cross-signing to verify per-user instead of per-device (in development)",
     "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
     "Use the new, faster, composer for writing messages": "Use the new, faster, composer for writing messages",
