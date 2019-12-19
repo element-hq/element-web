@@ -88,7 +88,7 @@ const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
