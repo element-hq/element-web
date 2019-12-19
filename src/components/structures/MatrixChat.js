@@ -1492,7 +1492,7 @@ export default createReactClass({
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
                     verifier,
-                });
+                }, null, /* priority = */ false, /* static = */ true);
             });
         }
         // Fire the tinter right on startup to ensure the default theme is applied

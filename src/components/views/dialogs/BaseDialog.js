@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,13 +18,13 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import FocusTrap from 'focus-trap-react';
+import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import { MatrixClient } from 'matrix-js-sdk';
 
-import { KeyCode } from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
@@ -101,7 +102,7 @@ export default createReactClass({
         if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
         }
-        if (this.props.hasCancel && e.keyCode === KeyCode.ESCAPE) {
+        if (this.props.hasCancel && e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
@@ -121,20 +122,24 @@ export default createReactClass({
         }
 
         return (
-            <FocusTrap onKeyDown={this._onKeyDown}
+            <FocusLock
+                returnFocus={true}
+                lockProps={{
+                    onKeyDown: this._onKeyDown,
+                    role: "dialog",
+                    ["aria-labelledby"]: "mx_BaseDialog_title",
+                    // This should point to a node describing the dialog.
+                    // If we were about to completely follow this recommendation we'd need to
+                    // make all the components relying on BaseDialog to be aware of it.
+                    // So instead we will use the whole content as the description.
+                    // Description comes first and if the content contains more text,
+                    // AT users can skip its presentation.
+                    ["aria-describedby"]: this.props.contentId,
+                }}
                 className={classNames({
                     [this.props.className]: true,
                     'mx_Dialog_fixedWidth': this.props.fixedWidth,
                 })}
-                role="dialog"
-                aria-labelledby='mx_BaseDialog_title'
-                // This should point to a node describing the dialog.
-                // If we were about to completely follow this recommendation we'd need to
-                // make all the components relying on BaseDialog to be aware of it.
-                // So instead we will use the whole content as the description.
-                // Description comes first and if the content contains more text,
-                // AT users can skip its presentation.
-                aria-describedby={this.props.contentId}
             >
                 <div className={classNames('mx_Dialog_header', {
                     'mx_Dialog_headerWithButton': !!this.props.headerButton,
@@ -146,7 +151,7 @@ export default createReactClass({
                     { cancelButton }
                 </div>
                 { this.props.children }
-            </FocusTrap>
+            </FocusLock>
         );
     },
 });

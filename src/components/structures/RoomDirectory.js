@@ -270,6 +270,7 @@ module.exports = createReactClass({
             roomServer: server,
             instanceId: instanceId,
             includeAll: includeAll,
+            error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side

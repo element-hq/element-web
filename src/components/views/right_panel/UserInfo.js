@@ -58,9 +58,20 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const _getE2EStatus = (devices) => {
-    const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
-    return hasUnverifiedDevice ? "warning" : "verified";
+const _getE2EStatus = (cli, userId, devices) => {
+    if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
+        return hasUnverifiedDevice ? "warning" : "verified";
+    }
+    const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+    const allDevicesVerified = devices.every(device => {
+        const { deviceId } = device;
+        return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+    });
+    if (allDevicesVerified) {
+        return userVerified ? "verified" : "normal";
+    }
+    return "warning";
 };
 
 async function unverifyUser(matrixClient, userId) {
@@ -98,14 +109,14 @@ function openDMForUser(matrixClient, userId) {
 }
 
 function useIsEncrypted(cli, room) {
-    const [isEncrypted, setIsEncrypted] = useState(cli.isRoomEncrypted(room.roomId));
+    const [isEncrypted, setIsEncrypted] = useState(room ? cli.isRoomEncrypted(room.roomId) : undefined);
 
     const update = useCallback((event) => {
         if (event.getType() === "m.room.encryption") {
             setIsEncrypted(cli.isRoomEncrypted(room.roomId));
         }
     }, [cli, room]);
-    useEventEmitter(room.currentState, "RoomState.events", update);
+    useEventEmitter(room ? room.currentState : undefined, "RoomState.events", update);
     return isEncrypted;
 }
 
@@ -114,7 +125,7 @@ function verifyDevice(userId, device) {
     Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
         userId: userId,
         device: device,
-    });
+    }, null, /* priority = */ false, /* static = */ true);
 }
 
 function DeviceItem({userId, device}) {
@@ -1264,7 +1275,8 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
 
     let e2eIcon;
     if (isRoomEncrypted && devices) {
-        e2eIcon = <E2EIcon size={18} status={_getE2EStatus(devices)} isUser={true} />;
+        const e2eStatus = _getE2EStatus(cli, user.userId, devices);
+        e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
     return (

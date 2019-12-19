@@ -33,7 +33,7 @@ import classNames from 'classnames';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import {processCommandInput} from '../../../SlashCommands';
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
+import { isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -608,12 +608,12 @@ export default class MessageComposerInput extends React.Component {
         // Navigate autocomplete list with arrow keys
         if (this.autocomplete.countCompletions() > 0) {
             if (!(ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey)) {
-                switch (ev.keyCode) {
-                    case KeyCode.UP:
+                switch (ev.key) {
+                    case Key.ARROW_UP:
                         this.autocomplete.moveSelection(-1);
                         ev.preventDefault();
                         return true;
-                    case KeyCode.DOWN:
+                    case Key.ARROW_DOWN:
                         this.autocomplete.moveSelection(+1);
                         ev.preventDefault();
                         return true;
@@ -623,38 +623,38 @@ export default class MessageComposerInput extends React.Component {
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
-        if (ev.keyCode === KeyCode.LEFT) {
+        if (ev.key === Key.ARROW_LEFT) {
             this.direction = 'Previous';
-        } else if (ev.keyCode === KeyCode.RIGHT) {
+        } else if (ev.key === Key.ARROW_RIGHT) {
             this.direction = 'Next';
         }
 
-        switch (ev.keyCode) {
-            case KeyCode.ENTER:
+        switch (ev.key) {
+            case Key.ENTER:
                 return this.handleReturn(ev, change);
-            case KeyCode.BACKSPACE:
+            case Key.BACKSPACE:
                 return this.onBackspace(ev, change);
-            case KeyCode.UP:
+            case Key.ARROW_UP:
                 return this.onVerticalArrow(ev, true);
-            case KeyCode.DOWN:
+            case Key.ARROW_DOWN:
                 return this.onVerticalArrow(ev, false);
-            case KeyCode.TAB:
+            case Key.TAB:
                 return this.onTab(ev);
-            case KeyCode.ESCAPE:
+            case Key.ESCAPE:
                 return this.onEscape(ev);
-            case KeyCode.SPACE:
+            case Key.SPACE:
                 return this.onSpace(ev, change);
         }
 
         if (isOnlyCtrlOrCmdKeyEvent(ev)) {
             const ctrlCmdCommand = {
                 // C-m => Toggles between rich text and markdown modes
-                [KeyCode.KEY_M]: 'toggle-mode',
-                [KeyCode.KEY_B]: 'bold',
-                [KeyCode.KEY_I]: 'italic',
-                [KeyCode.KEY_U]: 'underlined',
-                [KeyCode.KEY_J]: 'inline-code',
-            }[ev.keyCode];
+                [Key.M]: 'toggle-mode',
+                [Key.B]: 'bold',
+                [Key.I]: 'italic',
+                [Key.U]: 'underlined',
+                [Key.J]: 'inline-code',
+            }[ev.key];
 
             if (ctrlCmdCommand) {
                 ev.preventDefault(); // to prevent clashing with Mac's minimize window

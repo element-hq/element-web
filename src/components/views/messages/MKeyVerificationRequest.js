@@ -52,7 +52,7 @@ export default class MKeyVerificationRequest extends React.Component {
         const verifier = MatrixClientPeg.get().acceptVerificationDM(this.props.mxEvent, verificationMethods.SAS);
         Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
             verifier,
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     };
 
     _onRejectClicked = () => {

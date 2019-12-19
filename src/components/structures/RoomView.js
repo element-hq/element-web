@@ -44,7 +44,7 @@ import ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -561,15 +561,15 @@ module.exports = createReactClass({
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
-        switch (ev.keyCode) {
-            case KeyCode.KEY_D:
+        switch (ev.key) {
+            case Key.D:
                 if (ctrlCmdOnly) {
                     this.onMuteAudioClick();
                     handled = true;
                 }
                 break;
 
-            case KeyCode.KEY_E:
+            case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
                     handled = true;
@@ -792,11 +792,12 @@ module.exports = createReactClass({
         this._updateE2EStatus(room);
     },
 
-    _updateE2EStatus: function(room) {
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
+    _updateE2EStatus: async function(room) {
+        const cli = MatrixClientPeg.get();
+        if (!cli.isRoomEncrypted(room.roomId)) {
             return;
         }
-        if (!MatrixClientPeg.get().isCryptoEnabled()) {
+        if (!cli.isCryptoEnabled()) {
             // If crypto is not currently enabled, we aren't tracking devices at all,
             // so we don't know what the answer is. Let's error on the safe side and show
             // a warning for this case.
@@ -805,10 +806,38 @@ module.exports = createReactClass({
             });
             return;
         }
-        room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
-            this.setState({
-                e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
+                this.setState({
+                    e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+                });
             });
+            return;
+        }
+        const e2eMembers = await room.getEncryptionTargetMembers();
+        for (const member of e2eMembers) {
+            const { userId } = member;
+            const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+            if (!userVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+            const devices = await cli.getStoredDevicesForUser(userId);
+            const allDevicesVerified = devices.every(device => {
+                const { deviceId } = device;
+                return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+            });
+            if (!allDevicesVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+        }
+        this.setState({
+            e2eStatus: "verified",
         });
     },
 
