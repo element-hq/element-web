@@ -1466,7 +1466,7 @@ export default createReactClass({
             }
         });
 
-        if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             cli.on("crypto.verification.request", request => {
                 let requestObserver;
                 if (request.event.getRoomId()) {
