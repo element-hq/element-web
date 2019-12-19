@@ -87,7 +87,7 @@ limitations under the License.
     height: 40px;
     width: 40px;
     border-radius: 20px;
-    background-color: $button-primary-fg-color;
+    background-color: $tagpanel-button-color;
     opacity: 0.11;
     position: relative;
     /* overwrite mx_RoleButton inline-block */
@@ -96,7 +96,7 @@ limitations under the License.
     &::before {
         mask-image: url('$(res)/img/feather-customised/plus.svg');
         mask-position: center;
-        background-color: $tagpanel-bg-color;
+        background-color: $button-primary-fg-color;
         mask-repeat: no-repeat;
         content: '';
         position: absolute;

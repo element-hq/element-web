@@ -129,6 +129,7 @@ export class TopLeftMenu extends React.Component {
     }
 
     openHelp() {
+        this.closeMenu();
         const RedesignFeedbackDialog = sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
         Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
     }
