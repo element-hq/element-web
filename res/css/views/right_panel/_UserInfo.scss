@@ -63,7 +63,6 @@ limitations under the License.
 
     .mx_UserInfo_avatar {
         margin: 24px 32px 0 32px;
-        cursor: pointer;
     }
 
     .mx_UserInfo_avatar > div {
@@ -77,12 +76,27 @@ limitations under the License.
         that's why we had to put the margin to center on a parent div),
         and not a % of the parent height. */
         padding-top: 100%;
-        height: 0;
+        position: relative;
+    }
+
+    .mx_UserInfo_avatar > div > div * {
         border-radius: 100%;
-        box-sizing: content-box;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // override the calculated sizes so that the letter isn't HUGE
+        font-size: 26px !important;
+        width: 100% !important;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
