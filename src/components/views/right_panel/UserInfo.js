@@ -1051,16 +1051,9 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         }
     }, [cli, user.userId]);
 
-
-    const onMemberAvatarKey = e => {
-        if (e.key === "Enter") {
-            onMemberAvatarClick();
-        }
-    };
-
     const onMemberAvatarClick = useCallback(() => {
         const member = user;
-        const avatarUrl = member.getMxcAvatarUrl();
+        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
         if (!avatarUrl) return;
 
         const httpUrl = cli.mxcUrlToHttp(avatarUrl);
@@ -1158,21 +1151,22 @@ const UserInfo = withLegacyMatrixClient(({matrixClient: cli, user, groupId, room
         statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
     }
 
-    const avatarUrl = user.getMxcAvatarUrl ? user.getMxcAvatarUrl() : user.avatarUrl;
-    let avatarElement;
-    if (avatarUrl) {
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl, 800, 800);
-        avatarElement = <div
-            className="mx_UserInfo_avatar"
-            onClick={onMemberAvatarClick}
-            onKeyDown={onMemberAvatarKey}
-            tabIndex="0"
-            role="img"
-            aria-label={_t("Profile picture")}
-        >
-            <div><div style={{backgroundImage: `url(${httpUrl})`}} /></div>
-        </div>;
-    }
+    // const avatarUrl = user.getMxcAvatarUrl ? user.getMxcAvatarUrl() : user.avatarUrl;
+    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+    const avatarElement = (
+        <div className="mx_UserInfo_avatar">
+            <div>
+                <MemberAvatar
+                    member={user}
+                    width={0.3 * window.outerHeight} // ~30vh
+                    height={0.3 * window.outerHeight} // ~30vh
+                    resizeMethod="scale"
+                    fallbackUserId={user.userId}
+                    onClick={onMemberAvatarClick}
+                    urls={user.avatarUrl ? [user.avatarUrl] : undefined} />
+            </div>
+        </div>
+    );
 
     let closeButton;
     if (onClose) {
