@@ -62,7 +62,6 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
-import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
