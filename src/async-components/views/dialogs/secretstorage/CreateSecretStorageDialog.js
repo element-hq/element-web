@@ -122,7 +122,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this.setState({
             phase: PHASE_STORING,
             error: null,
-            keyBackupInfo: this.state.backupInfo,
         });
         const cli = MatrixClientPeg.get();
         try {
@@ -143,6 +142,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     }
                 },
                 createSecretStorageKey: async () => this._keyInfo,
+                keyBackupInfo: this.state.backupInfo,
             });
             this.setState({
                 phase: PHASE_DONE,
