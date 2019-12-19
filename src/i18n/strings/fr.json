@@ -2015,5 +2015,6 @@
     "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "Certains utilisateurs dans ce salon chiffré n’ont pas été vérifiés par vous ou n’ont pas vérifié leurs propres appareils.",
     "All users in this encrypted room are verified by you and they have verified their own devices.": "Tous les utilisateurs de ce salon chiffré ont été vérifiés par vous et ont vérifié leurs propres appareils.",
     "Language Dropdown": "Sélection de la langue",
-    "Country Dropdown": "Sélection du pays"
+    "Country Dropdown": "Sélection du pays",
+    "The message you are trying to send is too large.": "Le message que vous essayez d’envoyer est trop gros."
 }
