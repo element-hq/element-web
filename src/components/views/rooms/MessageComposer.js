@@ -22,10 +22,10 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
+import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -100,6 +100,32 @@ function HangupButton(props) {
 
 HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
+};
+
+const EmojiButton = ({addEmoji}) => {
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const buttonRect = button.current.getBoundingClientRect();
+        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+            <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
+        </ContextMenu>;
+    }
+
+    return <React.Fragment>
+        <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_stickers"
+                           onClick={openMenu}
+                           isExpanded={menuDisplayed}
+                           label={_t('Upload file')}
+                           inputRef={button}
+        >
+
+        </ContextMenuButton>
+
+        { contextMenu }
+    </React.Fragment>;
 };
 
 class UploadButton extends React.Component {
@@ -298,6 +324,13 @@ export default class MessageComposer extends React.Component {
         }
     }
 
+    addEmoji(emoji) {
+        dis.dispatch({
+            action: "insert_emoji",
+            emoji,
+        });
+    }
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -321,7 +354,7 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator} />,
-                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
+                <EmojiButton key='stickerpicker_controls_button' addEmoji={this.addEmoji} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
                 callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
