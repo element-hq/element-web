@@ -32,6 +32,7 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
+import RoomTileOnlineDot from "./RoomTileOnlineDot";
 
 module.exports = createReactClass({
     displayName: 'RoomTile',
@@ -66,11 +67,6 @@ module.exports = createReactClass({
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
             statusMessage: this._getStatusMessage(),
         });
-    },
-
-    _isDirectMessageRoom: function(roomId) {
-        const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        return Boolean(dmRooms);
     },
 
     _shouldShowStatusMessage() {
@@ -371,8 +367,11 @@ module.exports = createReactClass({
 
         let ariaLabel = name;
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+
         let dmIndicator;
-        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+        let dmOnline;
+        if (dmUserId) {
             dmIndicator = <img
                 src={require("../../../../res/img/icon_person.svg")}
                 className="mx_RoomTile_dm"
@@ -380,6 +379,11 @@ module.exports = createReactClass({
                 height="13"
                 alt="dm"
             />;
+
+            if (this.props.room.getMember(dmUserId).membership === "join") {
+                const RoomTileOnlineDot = sdk.getComponent('rooms.RoomTileOnlineDot');
+                dmOnline = <RoomTileOnlineDot userId={dmUserId} />;
+            }
         }
 
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
@@ -428,6 +432,7 @@ module.exports = createReactClass({
                         { label }
                         { subtextLabel }
                     </div>
+                    { dmOnline }
                     { contextMenuButton }
                     { badge }
                 </div>
