@@ -18,6 +18,7 @@ import React from 'react';
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import {ensureDMExists} from "../../../createRoom";
 
 export default class EncryptionPanel extends React.PureComponent {
     constructor(props) {
@@ -40,9 +41,8 @@ export default class EncryptionPanel extends React.PureComponent {
     _onStartVerification = async () => {
         const client = MatrixClientPeg.get();
         const {member} = this.props;
-        // TODO: get the room id of the DM here?
-        // will this panel be shown in non-DM rooms?
-        const verificationRequest = await client.requestVerificationDM(member.userId, member.roomId);
+        const roomId = await ensureDMExists(client, member.userId);
+        const verificationRequest = await client.requestVerificationDM(member.userId, roomId);
         this.setState({verificationRequest});
     };
 }

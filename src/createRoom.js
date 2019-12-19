@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
-
+import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
 
 /**
@@ -35,7 +36,7 @@ import {getAddressType} from "./UserAddress";
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-function createRoom(opts) {
+export default function createRoom(opts) {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
 
@@ -140,4 +141,22 @@ function createRoom(opts) {
     });
 }
 
-module.exports = createRoom;
+export async function ensureDMExists(client, userId) {
+    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
+    const rooms = roomIds.map(id => client.getRoom(id));
+    const suitableDMRooms = rooms.filter(r => {
+        if (r && r.getMyMembership() === "join") {
+            const member = r.getMember(userId);
+            return member && (member.membership === "invite" || member.membership === "join");
+        }
+        return false;
+    });
+    let roomId;
+    if (suitableDMRooms.length) {
+        const room = suitableDMRooms[0];
+        roomId = room.roomId;
+    } else {
+        roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
+    }
+    return roomId;
+}

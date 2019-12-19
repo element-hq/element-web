@@ -24,8 +24,7 @@ import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
-import DMRoomMap from '../../../utils/DMRoomMap';
-import createRoom from "../../../createRoom";
+import {ensureDMExists} from "../../../createRoom";
 import dis from "../../../dispatcher";
 import SettingsStore from '../../../settings/SettingsStore';
 
@@ -322,23 +321,7 @@ export default class DeviceVerifyDialog extends React.Component {
 }
 
 async function ensureDMExistsAndOpen(userId) {
-    const client = MatrixClientPeg.get();
-    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        if (r && r.getMyMembership() === "join") {
-            const member = r.getMember(userId);
-            return member && (member.membership === "invite" || member.membership === "join");
-        }
-        return false;
-    });
-    let roomId;
-    if (suitableDMRooms.length) {
-        const room = suitableDMRooms[0];
-        roomId = room.roomId;
-    } else {
-        roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
-    }
+    const roomId = ensureDMExists(MatrixClientPeg.get(), userId);
     // don't use andView and spinner in createRoom, together, they cause this dialog to close and reopen,
     // we causes us to loose the verifier and restart, and we end up having two verification requests
     dis.dispatch({
