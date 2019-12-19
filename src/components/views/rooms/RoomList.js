@@ -22,6 +22,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import utils from "matrix-js-sdk/lib/utils";
 import { _t } from '../../../languageHandler';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
@@ -588,11 +589,17 @@ module.exports = createReactClass({
 
     _applySearchFilter: function(list, filter) {
         if (filter === "") return list;
+        const fuzzyFilter = utils.removeHiddenChars(filter).toLowerCase();
         const lcFilter = filter.toLowerCase();
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
-        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
-            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
+        return list.filter((room) => {
+            if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
+                return true;
+            }
+            const lcRoomName = room.name ? utils.removeHiddenChars(room.name).toLowerCase() : "";
+            return lcRoomName.includes(fuzzyFilter);
+        });
     },
 
     _handleCollapsedState: function(key, collapsed) {
