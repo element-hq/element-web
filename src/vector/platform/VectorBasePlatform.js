@@ -19,9 +19,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import dis from 'matrix-react-sdk/src/dispatcher';
 import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
