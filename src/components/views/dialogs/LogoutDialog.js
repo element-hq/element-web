@@ -19,7 +19,7 @@ import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import SettingsStore from "../../../settings/SettingsStore";
 
 export default class LogoutDialog extends React.Component {

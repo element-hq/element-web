@@ -35,7 +35,7 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import withLegacyMatrixClient from "../../../utils/withLegacyMatrixClient";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";

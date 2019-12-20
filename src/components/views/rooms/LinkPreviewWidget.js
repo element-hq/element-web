@@ -19,9 +19,9 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
 const ImageUtils = require('../../../ImageUtils');
 const Modal = require('../../../Modal');
 

@@ -25,7 +25,7 @@ import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
 import _sortBy from 'lodash/sortBy';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../utils/permalinks/Permalinks";

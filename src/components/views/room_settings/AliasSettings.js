@@ -17,7 +17,7 @@ limitations under the License.
 
 const React = require('react');
 import PropTypes from 'prop-types';
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";

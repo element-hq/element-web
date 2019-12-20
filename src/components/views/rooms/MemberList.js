@@ -24,7 +24,7 @@ import dis from '../../../dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 const sdk = require('../../../index');
 const CallHandler = require("../../../CallHandler");
 

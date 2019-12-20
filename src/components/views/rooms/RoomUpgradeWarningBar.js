@@ -21,7 +21,7 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 module.exports = createReactClass({
     displayName: 'RoomUpgradeWarningBar',

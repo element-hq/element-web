@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from "../MatrixClientPeg";
+import {MatrixClientPeg} from "../MatrixClientPeg";
 import {ALL_RULE_TYPES, BanList} from "./BanList";
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {_t} from "../languageHandler";

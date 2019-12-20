@@ -16,7 +16,7 @@ limitations under the License.
 
 import { createClient, SERVICE_TYPES } from 'matrix-js-sdk';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';

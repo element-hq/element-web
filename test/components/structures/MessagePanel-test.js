@@ -29,7 +29,7 @@ import { EventEmitter } from "events";
 const sdk = require('matrix-react-sdk');
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
-import MatrixClientPeg from '../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../src/MatrixClientPeg';
 import Matrix from 'matrix-js-sdk';
 
 const test_utils = require('test-utils');

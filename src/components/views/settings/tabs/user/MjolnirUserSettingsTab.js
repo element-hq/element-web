@@ -20,7 +20,7 @@ import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
 import {ListRule} from "../../../../../mjolnir/ListRule";
 import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 
 const sdk = require("../../../../..");
 

@@ -19,7 +19,7 @@ import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
 import { ContentRepo } from 'matrix-js-sdk';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 

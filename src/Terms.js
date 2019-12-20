@@ -16,7 +16,7 @@ limitations under the License.
 
 import classNames from 'classnames';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import * as sdk from './';
 import Modal from './Modal';
 

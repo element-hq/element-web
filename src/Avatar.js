@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 import {ContentRepo} from 'matrix-js-sdk';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
 
 module.exports = {

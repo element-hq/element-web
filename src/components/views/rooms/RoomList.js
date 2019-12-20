@@ -23,7 +23,7 @@ import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');

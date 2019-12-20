@@ -20,7 +20,7 @@ import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 const Modal = require("../../../Modal");
 const sdk = require("../../../index");
 

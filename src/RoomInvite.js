@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import { getAddressType } from './UserAddress';

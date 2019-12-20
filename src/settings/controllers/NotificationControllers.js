@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 
 // XXX: This feels wrong.
 import {PushProcessor} from "matrix-js-sdk/src/pushprocessor";

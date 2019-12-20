@@ -18,7 +18,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';

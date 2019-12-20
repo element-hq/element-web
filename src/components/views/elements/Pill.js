@@ -22,7 +22,7 @@ import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";

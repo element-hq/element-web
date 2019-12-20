@@ -21,7 +21,7 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import url from 'url';
 import AuthPage from "../../views/auth/AuthPage";

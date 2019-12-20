@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {_t} from "../../../languageHandler";
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';

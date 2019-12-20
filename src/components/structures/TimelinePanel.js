@@ -29,7 +29,7 @@ const EventTimeline = Matrix.EventTimeline;
 
 const sdk = require('../../index');
 import { _t } from '../../languageHandler';
-const MatrixClientPeg = require("../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 const dis = require("../../dispatcher");
 import * as ObjectUtils from "../../ObjectUtils";
 const Modal = require("../../Modal");

@@ -6,7 +6,7 @@
 // import * as testUtils from '../../../test-utils';
 // import sdk from 'matrix-react-sdk';
 // const WrappedRoomSettings = testUtils.wrapInMatrixClientContext(sdk.getComponent('views.rooms.RoomSettings'));
-// import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+// import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 // import SettingsStore from '../../../../src/settings/SettingsStore';
 //
 //

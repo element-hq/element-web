@@ -24,7 +24,7 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import {_t} from '../../../languageHandler';
 import classNames from 'classnames';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 
 // XXX this class copies a lot from RoomTile.js

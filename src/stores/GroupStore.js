@@ -17,7 +17,7 @@ limitations under the License.
 import EventEmitter from 'events';
 import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
 import FlairStore from './FlairStore';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 function parseMembersResponse(response) {
     return response.chunk.map((apiMember) => groupMemberFromApiObject(apiMember));

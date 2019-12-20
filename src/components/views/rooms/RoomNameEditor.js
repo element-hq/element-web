@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
 import { _t } from '../../../languageHandler';
 
 module.exports = createReactClass({

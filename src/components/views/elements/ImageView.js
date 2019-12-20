@@ -19,9 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
 const filesize = require('filesize');
 const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
