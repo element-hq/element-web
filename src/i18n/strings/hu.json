@@ -2016,5 +2016,8 @@
     "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "Néhány felhasználót még nem ellenőriztél ebben a titkosított szobában vagy még ők nem ellenőrizték az összes eszközüket.",
     "All users in this encrypted room are verified by you and they have verified their own devices.": "Minden felhasználót ellenőriztél ebben a titkosított szobában és ők ellenőrizték az összes eszközüket.",
     "Language Dropdown": "Nyelvválasztó lenyíló menü",
-    "Country Dropdown": "Ország lenyíló menü"
+    "Country Dropdown": "Ország lenyíló menü",
+    "The message you are trying to send is too large.": "Túl nagy képet próbálsz elküldeni.",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "A Biztonsági Tároló a már létező kulcs mentés adatai felhasználásával lesz létrehozva. A biztonsági tároló jelmondata és a visszaállítási kulcs meg fog egyezni a kulcs mentésénél használttal",
+    "Migrate from Key Backup": "Mozgatás a Kulcs Mentésből"
 }
