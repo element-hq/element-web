@@ -61,7 +61,7 @@ module.exports = {
 
             // same goes for js-sdk, but we also want to point at the source
             // of each SDK so we can compile it for ourselves.
-            "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
+            "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
             "matrix-react-sdk": path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
 
             "$webapp": path.resolve(__dirname, 'webapp'),
