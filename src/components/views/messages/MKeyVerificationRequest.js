@@ -99,13 +99,14 @@ export default class MKeyVerificationRequest extends React.Component {
         const {mxEvent} = this.props;
         const request = mxEvent.verificationRequest;
 
+        if (!request) {
+            return null;
+        }
+
         let title;
         let subtitle;
         let stateNode;
 
-        if (!request) {
-            return <p>This is a verification request tile without a request.</p>;
-        }
 
         if (request.ready || request.started || request.cancelled) {
             let stateLabel;

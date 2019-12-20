@@ -48,12 +48,14 @@ export default class MKeyVerificationConclusion extends React.Component {
     render() {
         const {mxEvent} = this.props;
         const request = mxEvent.verificationRequest;
+
+        if (!request) {
+            return null;
+        }
+
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
 
-        if (!request) {
-            return <p>This is a verification conclusion tile without a request.</p>;
-        }
 
         let title;
 
@@ -67,6 +69,8 @@ export default class MKeyVerificationConclusion extends React.Component {
                 title = _t("%(name)s cancelled verifying",
                     {name: getNameForEventRoom(request.otherUserId, mxEvent)});
             }
+        } else {
+            title = `request conclusion tile with phase ${request.phase}`;
         }
 
         if (title) {
