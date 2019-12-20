@@ -22,7 +22,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
  * This is identical to `CustomServerDialog` except for replacing "this app"
  * with "Riot".
  */
-module.exports = ({onFinished}) => {
+export default ({onFinished}) => {
     return (
         <div className="mx_ErrorDialog">
             <div className="mx_Dialog_title">
@@ -44,4 +44,6 @@ module.exports = ({onFinished}) => {
         </div>
     );
 };
+
+// TODO: {TravisR} - Fix
 module.exports.replaces = 'CustomServerDialog';

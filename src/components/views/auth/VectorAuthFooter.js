@@ -20,7 +20,7 @@ import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = () => {
+export default () => {
     const brandingConfig = SdkConfig.get().branding;
     let links = [
         {"text": "blog", "url": "https://medium.com/@RiotChat"},
@@ -48,4 +48,6 @@ module.exports = () => {
         </div>
     );
 };
+
+// TODO: {TravisR} - Fix
 module.exports.replaces = 'AuthFooter';
