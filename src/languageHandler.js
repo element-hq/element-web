@@ -410,11 +410,12 @@ export function pickBestLanguage(langs) {
 }
 
 function getLangsJson() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let url;
         try {
             // $webapp is a webpack resolve alias pointing to the output directory, see webpack config
-            url = require('$webapp/i18n/languages.json');
+            url = import('$webapp/i18n/languages.json');
+            if (url.then) url = (await url).default; // webpack resolves to a Module through a promise.
         } catch (e) {
             url = i18nFolder + 'languages.json';
         }
