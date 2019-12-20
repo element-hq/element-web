@@ -22,7 +22,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';
 import { _t } from '../languageHandler';
 
-import rageshake from './rageshake';
+import * as rageshake from './rageshake';
 
 
 // polyfill textencoder if necessary

@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ const {delay} = require('./util');
 
 const DEFAULT_TIMEOUT = 20000;
 
-module.exports = class RiotSession {
+export default class RiotSession {
     constructor(browser, page, username, riotserver, hsUrl) {
         this.browser = browser;
         this.page = page;

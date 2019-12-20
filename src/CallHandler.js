@@ -583,4 +583,4 @@ if (global.mxCallHandler === undefined) {
     global.mxCallHandler = callHandler;
 }
 
-module.exports = global.mxCallHandler;
+export default global.mxCallHandler;

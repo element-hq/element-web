@@ -21,7 +21,7 @@ const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {

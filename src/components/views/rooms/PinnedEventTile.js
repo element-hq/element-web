@@ -25,7 +25,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PinnedEventTile',
     propTypes: {
         mxRoom: PropTypes.object.isRequired,

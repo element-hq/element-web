@@ -20,7 +20,7 @@ const classNames = require('classnames');
 const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchBar',
 
     getInitialState: function() {

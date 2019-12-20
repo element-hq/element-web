@@ -38,7 +38,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomDirectory',
 
     propTypes: {

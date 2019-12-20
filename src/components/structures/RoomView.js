@@ -72,7 +72,7 @@ const RoomContext = PropTypes.shape({
     room: PropTypes.instanceOf(Room),
 });
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,

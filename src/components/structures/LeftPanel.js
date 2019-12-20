@@ -308,4 +308,4 @@ const LeftPanel = createReactClass({
     },
 });
 
-module.exports = LeftPanel;
+export default LeftPanel;

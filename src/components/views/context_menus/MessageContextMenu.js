@@ -37,7 +37,7 @@ function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MessageContextMenu',
 
     propTypes: {

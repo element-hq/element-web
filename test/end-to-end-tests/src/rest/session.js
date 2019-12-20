@@ -19,7 +19,7 @@ const Logger = require('../logger');
 const RestRoom = require('./room');
 const {approveConsent} = require('./consent');
 
-module.exports = class RestSession {
+export default class RestSession {
     constructor(credentials) {
         this.log = new Logger(credentials.userId);
         this._credentials = credentials;

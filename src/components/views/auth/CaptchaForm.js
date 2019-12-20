@@ -24,7 +24,7 @@ const DIV_ID = 'mx_recaptcha';
 /**
  * A pure UI component which displays a captcha form.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'CaptchaForm',
 
     propTypes: {

@@ -620,10 +620,8 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-module.exports = {
-    textForEvent: function(ev) {
-        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-        if (handler) return handler(ev);
-        return '';
-    },
-};
+export function textForEvent(ev) {
+    const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
+    if (handler) return handler(ev);
+    return '';
+}

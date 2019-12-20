@@ -19,7 +19,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TooltipButton',
 
     getInitialState: function() {

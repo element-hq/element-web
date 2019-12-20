@@ -23,7 +23,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomUpgradeWarningBar',
 
     propTypes: {

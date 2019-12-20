@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import { _t } from "../../../languageHandler";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTopicEditor',
 
     propTypes: {

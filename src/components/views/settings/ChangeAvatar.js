@@ -21,7 +21,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangeAvatar',
     propTypes: {
         initialAvatarUrl: PropTypes.string,

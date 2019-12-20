@@ -35,7 +35,7 @@ import {getAddressType} from "./UserAddress";
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-function createRoom(opts) {
+export default function createRoom(opts) {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
 
@@ -139,5 +139,3 @@ function createRoom(opts) {
         return null;
     });
 }
-
-module.exports = createRoom;

@@ -23,7 +23,7 @@ import Timer from '../../../utils/Timer';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'WhoIsTypingTile',
 
     propTypes: {

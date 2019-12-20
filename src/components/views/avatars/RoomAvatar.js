@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import sdk from "../../../index";
 import Avatar from '../../../Avatar';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomAvatar',
 
     // Room may be left unset here, but if it is,

@@ -55,4 +55,4 @@ class MatrixDispatcher extends flux.Dispatcher {
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();
 }
-module.exports = global.mxDispatcher;
+export default global.mxDispatcher;

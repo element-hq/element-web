@@ -41,7 +41,7 @@ const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from of
 /**
  * A pure UI component which displays a registration form.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RegistrationForm',
 
     propTypes: {

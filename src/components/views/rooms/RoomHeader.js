@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomHeader',
 
     propTypes: {

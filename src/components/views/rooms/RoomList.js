@@ -49,7 +49,7 @@ function labelForTagName(tagName) {
     return tagName;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomList',
 
     propTypes: {

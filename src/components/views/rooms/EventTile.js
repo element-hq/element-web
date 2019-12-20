@@ -118,7 +118,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EventTile',
 
     propTypes: {

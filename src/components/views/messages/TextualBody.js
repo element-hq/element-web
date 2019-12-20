@@ -35,7 +35,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TextualBody',
 
     propTypes: {

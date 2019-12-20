@@ -41,7 +41,7 @@ const PHASE_REGISTRATION = 1;
 // Enable phases for registration
 const PHASES_ENABLED = true;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Registration',
 
     propTypes: {

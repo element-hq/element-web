@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
 const assert = require('assert');
 
-module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
+export default async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
     const charly1to5 = charlies.slice("charly-1..5", 0, 5);
     const charly6to10 = charlies.slice("charly-6..10", 5);

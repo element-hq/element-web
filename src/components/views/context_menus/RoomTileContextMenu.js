@@ -63,7 +63,7 @@ const NotifOption = ({active, onClick, src, label}) => {
     );
 };
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {

@@ -1347,4 +1347,4 @@ const TimelinePanel = createReactClass({
     },
 });
 
-module.exports = TimelinePanel;
+export default TimelinePanel;

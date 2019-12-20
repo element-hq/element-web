@@ -30,7 +30,7 @@ import { _t } from '../../../languageHandler';
 
 import sessionStore from '../../../stores/SessionStore';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangePassword',
 
     propTypes: {
