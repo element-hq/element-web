@@ -23,7 +23,7 @@ import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
-import sdk from '../../../../index';
+import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 
 /*

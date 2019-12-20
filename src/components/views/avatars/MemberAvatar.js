@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const Avatar = require('../../../Avatar');
+import * as Avatar from '../../../Avatar';
 const sdk = require("../../../index");
 const dispatcher = require("../../../dispatcher");
 

@@ -19,7 +19,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import { _t } from '../languageHandler';
 import MatrixClientPeg from '../MatrixClientPeg';
 import {PillCompletion} from './Components';
-import sdk from '../index';
+import * as sdk from '../index';
 import type {Completion, SelectionRange} from "./Autocompleter";
 
 const AT_ROOM_REGEX = /@\S*/g;

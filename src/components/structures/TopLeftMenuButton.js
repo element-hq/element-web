@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import {TopLeftMenu} from '../views/context_menus/TopLeftMenu';
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import MatrixClientPeg from '../../MatrixClientPeg';
-import Avatar from '../../Avatar';
+import * as Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
 import {ContextMenu, ContextMenuButton} from "./ContextMenu";
