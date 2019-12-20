@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';

@@ -19,15 +19,15 @@ limitations under the License.
 
 import {MatrixClient, MemoryStore} from 'matrix-js-sdk';
 
-import * as utils from 'matrix-js-sdk/lib/utils';
-import {EventTimeline} from 'matrix-js-sdk/lib/models/event-timeline';
-import {EventTimelineSet} from 'matrix-js-sdk/lib/models/event-timeline-set';
+import * as utils from 'matrix-js-sdk/src/utils';
+import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
+import {EventTimelineSet} from 'matrix-js-sdk/src/models/event-timeline-set';
 import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import Modal from './Modal';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';

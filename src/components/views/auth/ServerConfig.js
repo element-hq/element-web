@@ -24,7 +24,7 @@ import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
-import { createClient } from 'matrix-js-sdk/lib/matrix';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import classNames from 'classnames';
 
 /*
