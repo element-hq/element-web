@@ -104,7 +104,7 @@ export default class MKeyVerificationRequest extends React.Component {
         let stateNode;
 
         if (!request) {
-            return <p>This is an invalid request, ho ho ho!</p>;
+            return <p>This is a verification request tile without a request.</p>;
         }
 
         if (request.ready || request.started || request.cancelled) {
