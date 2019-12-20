@@ -20,9 +20,12 @@
             { "text": "SciCat", "url": "https://scitest.esss.lu.se/" }
         ]
     },
-    "integrations_ui_url": "",
-    "integrations_rest_url": "",
-    "integrations_jitsi_widget_url": "",
+    "integrations_ui_url": "https://scichat-integration.esss.lu.se/riot",
+    "integrations_rest_url": "https://scichat-integration.esss.lu.se/api/v1/scalar",
+    "integrations_widgets_urls": [
+        "https://scichat-integration.esss.lu.se/widgets"
+    ],
+    "integrations_jitsi_widget_url": "https://scichat-integration.esss.lu.se/widgets/jitsi",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "defaultCountryCode": "SE",
     "showLabsSettings": false,
