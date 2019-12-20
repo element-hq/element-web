@@ -19,102 +19,60 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import KeyVerificationStateObserver, {getNameForEventRoom, userLabelForEventRoom}
+import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
 
 export default class MKeyVerificationConclusion extends React.Component {
     constructor(props) {
         super(props);
-        this.keyVerificationState = null;
-        this.state = {
-            done: false,
-            cancelled: false,
-            otherPartyUserId: null,
-            cancelPartyUserId: null,
-        };
-        const rel = this.props.mxEvent.getRelation();
-        if (rel) {
-            const client = MatrixClientPeg.get();
-            const room = client.getRoom(this.props.mxEvent.getRoomId());
-            const requestEvent = room.findEventById(rel.event_id);
-            if (requestEvent) {
-                this._createStateObserver(requestEvent, client);
-                this.state = this._copyState();
-            } else {
-                const findEvent = event => {
-                    if (event.getId() === rel.event_id) {
-                        this._createStateObserver(event, client);
-                        this.setState(this._copyState());
-                        room.removeListener("Room.timeline", findEvent);
-                    }
-                };
-                room.on("Room.timeline", findEvent);
-            }
-        }
-    }
-
-    _createStateObserver(requestEvent, client) {
-        this.keyVerificationState = new KeyVerificationStateObserver(requestEvent, client, () => {
-            this.setState(this._copyState());
-        });
-    }
-
-    _copyState() {
-        const {done, cancelled, otherPartyUserId, cancelPartyUserId} = this.keyVerificationState;
-        return {done, cancelled, otherPartyUserId, cancelPartyUserId};
     }
 
     componentDidMount() {
-        if (this.keyVerificationState) {
-            this.keyVerificationState.attach();
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            request.on("change", this._onRequestChanged);
         }
     }
 
     componentWillUnmount() {
-        if (this.keyVerificationState) {
-            this.keyVerificationState.detach();
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            request.off("change", this._onRequestChanged);
         }
     }
 
-    _getName(userId) {
-        const roomId = this.props.mxEvent.getRoomId();
-        const client = MatrixClientPeg.get();
-        const room = client.getRoom(roomId);
-        const member = room.getMember(userId);
-        return member ? member.name : userId;
-    }
-
-    _userLabel(userId) {
-        const name = this._getName(userId);
-        if (name !== userId) {
-            return _t("%(name)s (%(userId)s)", {name, userId});
-        } else {
-            return userId;
-        }
-    }
+    _onRequestChanged = () => {
+        this.forceUpdate();
+    };
 
     render() {
         const {mxEvent} = this.props;
+        const request = mxEvent.verificationRequest;
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
+
+        if (!request) {
+            return <p>This is a verification conclusion tile without a request.</p>;
+        }
+
         let title;
 
-        if (this.state.done) {
-            title = _t("You verified %(name)s", {name: getNameForEventRoom(this.state.otherPartyUserId, mxEvent)});
-        } else if (this.state.cancelled) {
+        if (request.done) {
+            title = _t("You verified %(name)s", {name: getNameForEventRoom(request.otherUserId, mxEvent)});
+        } else if (request.cancelled) {
             if (mxEvent.getSender() === myUserId) {
                 title = _t("You cancelled verifying %(name)s",
-                    {name: getNameForEventRoom(this.state.otherPartyUserId, mxEvent)});
-            } else if (mxEvent.getSender() === this.state.otherPartyUserId) {
+                    {name: getNameForEventRoom(request.otherUserId, mxEvent)});
+            } else if (mxEvent.getSender() === request.otherUserId) {
                 title = _t("%(name)s cancelled verifying",
-                    {name: getNameForEventRoom(this.state.otherPartyUserId, mxEvent)});
+                    {name: getNameForEventRoom(request.otherUserId, mxEvent)});
             }
         }
 
         if (title) {
-            const subtitle = userLabelForEventRoom(this.state.otherPartyUserId, mxEvent);
+            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent);
             const classes = classNames("mx_EventTile_bubble", "mx_KeyVerification", "mx_KeyVerification_icon", {
-                mx_KeyVerification_icon_verified: this.state.done,
+                mx_KeyVerification_icon_verified: request.done,
             });
             return (<div className={classes}>
                 <div className="mx_KeyVerification_title">{title}</div>
