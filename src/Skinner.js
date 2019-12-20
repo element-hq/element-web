@@ -58,7 +58,7 @@ class Skinner {
         // components have to be functions.
         const validType = typeof comp === 'function';
         if (!validType) {
-            throw new Error(`Not a valid component: ${name}.`);
+            throw new Error(`Not a valid component: ${name} (type = ${typeof(comp)}).`);
         }
         return comp;
     }
