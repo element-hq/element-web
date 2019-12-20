@@ -75,7 +75,7 @@ for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
 }
 
-function getHandlerTile(ev) {
+export function getHandlerTile(ev) {
     const type = ev.getType();
 
     // don't show verification requests we're not involved in,
@@ -879,7 +879,7 @@ function isMessageEvent(ev) {
     return (messageTypes.includes(ev.getType()));
 }
 
-module.exports.haveTileForEvent = function(e) {
+export function haveTileForEvent(e) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
@@ -895,7 +895,7 @@ module.exports.haveTileForEvent = function(e) {
     } else {
         return true;
     }
-};
+}
 
 function E2ePadlockUndecryptable(props) {
     return (
@@ -964,5 +964,3 @@ class E2ePadlock extends React.Component {
         );
     }
 }
-
-module.exports.getHandlerTile = getHandlerTile;

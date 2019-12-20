@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports.scrollToTimelineTop = async function(session) {
+export async function scrollToTimelineTop(session) {
     session.log.step(`scrolls to the top of the timeline`);
     await session.page.evaluate(() => {
         return Promise.resolve().then(async () => {
@@ -40,9 +41,9 @@ module.exports.scrollToTimelineTop = async function(session) {
         });
     });
     session.log.done();
-};
+}
 
-module.exports.receiveMessage = async function(session, expectedMessage) {
+export async function receiveMessage(session, expectedMessage) {
     session.log.step(`receives message "${expectedMessage.body}" from ${expectedMessage.sender}`);
     // wait for a response to come in that contains the message
     // crude, but effective
@@ -66,10 +67,10 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     });
     assertMessage(lastMessage, expectedMessage);
     session.log.done();
-};
+}
 
 
-module.exports.checkTimelineContains = async function(session, expectedMessages, sendersDescription) {
+export async function checkTimelineContains(session, expectedMessages, sendersDescription) {
     session.log.step(`checks timeline contains ${expectedMessages.length} ` +
         `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);
     const eventTiles = await getAllEventTiles(session);
@@ -101,7 +102,7 @@ module.exports.checkTimelineContains = async function(session, expectedMessages,
     });
 
     session.log.done();
-};
+}
 
 function assertMessage(foundMessage, expectedMessage) {
     assert(foundMessage, `message ${JSON.stringify(expectedMessage)} not found in timeline`);

@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-async function openMemberInfo(session, name) {
+export async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
     const matchingLabel = membersAndNames.filter((m) => {
         return m.displayName === name;
@@ -24,9 +25,7 @@ async function openMemberInfo(session, name) {
     await matchingLabel.click();
 }
 
-module.exports.openMemberInfo = openMemberInfo;
-
-module.exports.verifyDeviceForUser = async function(session, name, expectedDevice) {
+export async function verifyDeviceForUser(session, name, expectedDevice) {
     session.log.step(`verifies e2e device for ${name}`);
     const membersAndNames = await getMembersInMemberlist(session);
     const matchingLabel = membersAndNames.filter((m) => {
@@ -59,9 +58,9 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
     await closeMemberInfo.click();
     session.log.done();
-};
+}
 
-async function getMembersInMemberlist(session) {
+export async function getMembersInMemberlist(session) {
     const memberPanelButton = await session.query(".mx_RightPanel_membersButton");
     try {
         await session.query(".mx_RightPanel_headerButton_highlight", 500);
@@ -78,5 +77,3 @@ async function getMembersInMemberlist(session) {
         return {label: el, displayName: await session.innerText(el)};
     }));
 }
-
-module.exports.getMembersInMemberlist = getMembersInMemberlist;
