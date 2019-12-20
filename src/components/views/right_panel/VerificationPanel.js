@@ -35,7 +35,9 @@ export default class VerificationPanel extends React.PureComponent {
         } else if (request.ready) {
             return (<p>{request.otherUserId} is ready, start <AccessibleButton kind="primary" onClick={this._startSAS}>Verify by emoji</AccessibleButton></p>);
         } else if (request.started) {
-            if (this.state.sasEvent) {
+            if (this.state.sasWaitingForOtherParty) {
+                return <p>Waiting for {request.otherUserId} to confirm ...</p>;
+            } else if (this.state.sasEvent) {
                 const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
                 return (<div>
                     <VerificationShowSas
@@ -66,6 +68,7 @@ export default class VerificationPanel extends React.PureComponent {
     };
 
     _onSasMatchesClick = () => {
+        this.setState({sasWaitingForOtherParty: true});
         this.state.sasEvent.confirm();
     };
 
