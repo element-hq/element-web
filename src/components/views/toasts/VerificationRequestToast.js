@@ -18,10 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import Modal from "../../../Modal";
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
-import KeyVerificationStateObserver, {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";
 
 export default class VerificationRequestToast extends React.PureComponent {
@@ -33,16 +32,9 @@ export default class VerificationRequestToast extends React.PureComponent {
         const remaining = Math.max(0, timeout - age);
         const counter = Math.ceil(remaining / 1000);
         this.state = {counter};
-        if (this.props.requestObserver) {
-            this.props.requestObserver.setCallback(this._checkRequestIsPending);
-        }
     }
 
     componentDidMount() {
-        if (this.props.requestObserver) {
-            this.props.requestObserver.attach();
-            this._checkRequestIsPending();
-        }
         this._intervalHandle = setInterval(() => {
             let {counter} = this.state;
             counter -= 1;
@@ -52,20 +44,22 @@ export default class VerificationRequestToast extends React.PureComponent {
                 this.setState({counter});
             }
         }, 1000);
+        const {request} = this.props;
+        request.on("change", this._checkRequestIsPending);
     }
 
     componentWillUnmount() {
         clearInterval(this._intervalHandle);
-        if (this.props.requestObserver) {
-            this.props.requestObserver.detach();
-        }
+        const {request} = this.props;
+        request.off("change", this._checkRequestIsPending);
     }
 
     _checkRequestIsPending = () => {
-        if (!this.props.requestObserver.pending) {
+        const {request} = this.props;
+        if (request.ready || request.started || request.done || request.cancelled) {
             this.props.dismiss();
         }
-    }
+    };
 
     cancel = () => {
         this.props.dismiss();
@@ -76,9 +70,10 @@ export default class VerificationRequestToast extends React.PureComponent {
         }
     }
 
-    accept = () => {
+    accept = async () => {
         this.props.dismiss();
-        const {event} = this.props.request;
+        const {request} = this.props;
+        const {event} = request;
         // no room id for to_device requests
         if (event.getRoomId()) {
             dis.dispatch({
@@ -87,18 +82,24 @@ export default class VerificationRequestToast extends React.PureComponent {
                 should_peek: false,
             });
         }
-
-        const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
-        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
-        Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-            verifier,
-        }, null, /* priority = */ false, /* static = */ true);
+        try {
+            await request.accept();
+            dis.dispatch({action: "show_right_panel"});
+            dis.dispatch({
+                action: "set_right_panel_phase",
+                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                refireParams: {verificationRequest: request},
+            });
+        } catch (err) {
+            console.error(err.message);
+        }
     };
 
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
-        const {event} = this.props.request;
-        const userId = event.getSender();
+        const {request} = this.props;
+        const {event} = request;
+        const userId = request.otherUserId;
         let nameLabel = event.getRoomId() ? userLabelForEventRoom(userId, event) : userId;
         // for legacy to_device verification requests
         if (nameLabel === userId) {
@@ -121,5 +122,4 @@ export default class VerificationRequestToast extends React.PureComponent {
 VerificationRequestToast.propTypes = {
     dismiss: PropTypes.func.isRequired,
     request: PropTypes.object.isRequired,
-    requestObserver: PropTypes.instanceOf(KeyVerificationStateObserver),
 };
