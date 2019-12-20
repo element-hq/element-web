@@ -35,6 +35,7 @@ import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
+import {haveTileForEvent} from "../views/rooms/EventTile";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1179,7 +1180,7 @@ const TimelinePanel = createReactClass({
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
+            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
