@@ -16,7 +16,7 @@ limitations under the License.
 
 /* joining.js: tests for the various paths when joining a room */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
 
 require('skin-sdk');
@@ -33,8 +33,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-dom/test-utils');
 const expect = require('expect');
-import {makeType} from "matrix-react-sdk/lib/utils/TypeUtils";
-import {ValidatedServerConfig} from "matrix-react-sdk/lib/utils/AutoDiscoveryUtils";
+import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
 
 const test_utils = require('../test-utils');
