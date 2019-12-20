@@ -1463,7 +1463,7 @@ export default createReactClass({
                     dis.dispatch({
                         action: "show_toast",
                         toast: {
-                            key: request.event.getId(),
+                            key: request.channel.transactionId,
                             title: _t("Verification Request"),
                             icon: "verification",
                             props: {request},

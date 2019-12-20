@@ -30,7 +30,7 @@ export default class EncryptionPanel extends React.PureComponent {
         const request = this.props.verificationRequest || this.state.verificationRequest;
         const {member} = this.props;
         if (request) {
-            return <VerificationPanel request={request} />;
+            return <VerificationPanel request={request} key={request.channel.transactionId} />;
         } else if (member) {
             return <EncryptionInfo onStartVerification={this._onStartVerification} member={member} />;
         } else {
