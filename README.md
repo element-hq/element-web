@@ -105,7 +105,7 @@ To build it yourself, follow the instructions below.
 2. Install Electron and run it:
 
    ```bash
-   yarn electron
+   yarn add electron
    ```
 
 To build packages, use `electron-builder`. This is configured to output:
