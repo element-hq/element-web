@@ -51,7 +51,7 @@ module.exports = {
     resolve: {
         mainFields: ['matrix_main', 'matrix_browser', 'main', 'browser'],
         aliasFields: ['matrix_browser', 'browser'],
-        //extensions: ['.js', '.json', '.ts', '.gif', '.png'],
+        extensions: ['.js', '.json', '.ts', '.gif', '.png'],
         alias: {
             // alias any requires to the react module to the one in our path,
             // otherwise we tend to get the react source included twice when
