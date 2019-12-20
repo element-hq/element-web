@@ -52,7 +52,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import ElectronPlatform from './platform/ElectronPlatform';
 import WebPlatform from './platform/WebPlatform';
 
-import MatrixClientPeg from 'matrix-react-sdk/src/MatrixClientPeg';
+import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import {setTheme} from "matrix-react-sdk/src/theme";

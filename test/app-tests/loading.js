@@ -30,7 +30,7 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import jssdk from 'matrix-js-sdk';
 
 import sdk from 'matrix-react-sdk';
-import MatrixClientPeg from 'matrix-react-sdk/src/MatrixClientPeg';
+import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher';
