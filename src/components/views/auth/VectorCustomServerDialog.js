@@ -22,7 +22,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
  * This is identical to `CustomServerDialog` except for replacing "this app"
  * with "Riot".
  */
-export default ({onFinished}) => {
+const VectorCustomServerDialog = ({onFinished}) => {
     return (
         <div className="mx_ErrorDialog">
             <div className="mx_Dialog_title">
@@ -45,5 +45,6 @@ export default ({onFinished}) => {
     );
 };
 
-// TODO: {TravisR} - Fix
-module.exports.replaces = 'CustomServerDialog';
+VectorCustomServerDialog.replaces = 'CustomServerDialog';
+
+export default VectorCustomServerDialog;

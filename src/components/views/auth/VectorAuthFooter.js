@@ -17,10 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
-
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 
-export default () => {
+const VectorAuthFooter = () => {
     const brandingConfig = SdkConfig.get().branding;
     let links = [
         {"text": "blog", "url": "https://medium.com/@RiotChat"},
@@ -49,5 +48,6 @@ export default () => {
     );
 };
 
-// TODO: {TravisR} - Fix
-module.exports.replaces = 'AuthFooter';
+VectorAuthFooter.replaces = 'AuthFooter';
+
+export default VectorAuthFooter;
