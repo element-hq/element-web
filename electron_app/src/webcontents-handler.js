@@ -56,7 +56,7 @@ function onLinkContextMenu(ev, params) {
     let addSaveAs = false;
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
         popupMenu.append(new MenuItem({
-            label: 'Copy image',
+            label: '&Copy image',
             click() {
                 if (url.startsWith('data:')) {
                     clipboard.writeImage(nativeImage.createFromDataURL(url));
@@ -76,14 +76,14 @@ function onLinkContextMenu(ev, params) {
         // Special-case e-mail URLs to strip the `mailto:` like modern browsers do
         if (url.startsWith(MAILTO_PREFIX)) {
             popupMenu.append(new MenuItem({
-                label: 'Copy email address',
+                label: 'Copy email &address',
                 click() {
                     clipboard.writeText(url.substr(MAILTO_PREFIX.length));
                 },
             }));
         } else {
             popupMenu.append(new MenuItem({
-                label: 'Copy link address',
+                label: 'Copy link &address',
                 click() {
                     clipboard.writeText(url);
                 },
@@ -93,7 +93,7 @@ function onLinkContextMenu(ev, params) {
 
     if (addSaveAs) {
         popupMenu.append(new MenuItem({
-            label: 'Save image as...',
+            label: 'Sa&ve image as...',
             click() {
                 const targetFileName = params.titleText || "image.png";
                 const filePath = dialog.showSaveDialog({
@@ -128,18 +128,22 @@ function onLinkContextMenu(ev, params) {
 function _CutCopyPasteSelectContextMenus(params) {
     return [{
         role: 'cut',
+        label: 'Cu&t',
         enabled: params.editFlags.canCut,
     }, {
         role: 'copy',
+        label: '&Copy',
         enabled: params.editFlags.canCopy,
     }, {
         role: 'paste',
+        label: '&Paste',
         enabled: params.editFlags.canPaste,
     }, {
         role: 'pasteandmatchstyle',
         enabled: params.editFlags.canPaste,
     }, {
         role: 'selectall',
+        label: "Select &All",
         enabled: params.editFlags.canSelectAll,
     }];
 }
