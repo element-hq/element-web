@@ -336,6 +336,10 @@ export function getLanguagesFromBrowser() {
     return [navigator.userLanguage || "en"];
 }
 
+export function getLanguageFromBrowser() {
+    return getLanguagesFromBrowser()[0];
+}
+
 /**
  * Turns a language string, normalises it,
  * (see normalizeLanguageKey) into an array of language strings
