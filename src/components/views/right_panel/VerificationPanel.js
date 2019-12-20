@@ -26,6 +26,14 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     render() {
+        return <div class="mx_UserInfo">
+            <div class="mx_UserInfo_container">
+                { this.renderStatus() }
+            </div>
+        </div>;
+    }
+
+    renderStatus() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const Spinner = sdk.getComponent('elements.Spinner');
         const {request} = this.props;
