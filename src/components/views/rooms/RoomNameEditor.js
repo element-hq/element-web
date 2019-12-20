@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-const sdk = require('../../../index');
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 
 module.exports = createReactClass({

@@ -21,8 +21,7 @@ import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermal
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
-
-const SdkConfig = require("../../SdkConfig");
+import SdkConfig from "../../SdkConfig";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org

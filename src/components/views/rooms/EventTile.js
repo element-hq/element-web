@@ -18,17 +18,14 @@ limitations under the License.
 */
 
 import ReplyThread from "../elements/ReplyThread";
-
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const classNames = require("classnames");
+import classNames from "classnames";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
-const Modal = require('../../../Modal');
-
-const sdk = require('../../../index');
-
+import Modal from "../../../Modal";
+import * as sdk from "../../../index";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus, MatrixClient} from 'matrix-js-sdk';

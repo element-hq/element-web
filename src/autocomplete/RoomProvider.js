@@ -48,7 +48,7 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();

@@ -91,7 +91,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher

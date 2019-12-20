@@ -18,22 +18,19 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
-
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-
-const Matrix = require("matrix-js-sdk");
-const EventTimeline = Matrix.EventTimeline;
-
-const sdk = require('../../index');
+import {EventTimeline} from "matrix-js-sdk";
+import * as Matrix from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
-const dis = require("../../dispatcher");
 import * as ObjectUtils from "../../ObjectUtils";
-const Modal = require("../../Modal");
-const UserActivity = require("../../UserActivity");
+import UserActivity from "../../UserActivity";
+import Modal from "../../Modal";
+import dis from "../../dispatcher";
+import * as sdk from "../../index";
 import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';

@@ -19,8 +19,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
-
-const sdk = require('../../index');
+import * as sdk from "../../index";
 
 /*
  * Component which shows the global notification list using a TimelinePanel

@@ -16,7 +16,6 @@ limitations under the License.
 
 import { asyncAction } from './actionCreators';
 import RoomListStore from '../stores/RoomListStore';
-
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';

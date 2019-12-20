@@ -21,8 +21,8 @@ import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-const Modal = require("../../../../../Modal");
-const sdk = require("../../../../..");
+import * as sdk from "../../../../../index";
+import Modal from "../../../../../Modal";
 
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {

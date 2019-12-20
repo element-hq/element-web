@@ -18,8 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as Avatar from '../../../Avatar';
-const sdk = require("../../../index");
-const dispatcher = require("../../../dispatcher");
+import * as sdk from "../../../index";
+import dis from "../../../dispatcher";
 
 module.exports = createReactClass({
     displayName: 'MemberAvatar',

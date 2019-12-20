@@ -25,8 +25,8 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-const sdk = require('../../../index');
-const CallHandler = require("../../../CallHandler");
+import * as sdk from "../../../index";
+import CallHandler from "../../../CallHandler";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;

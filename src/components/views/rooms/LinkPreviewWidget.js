@@ -20,10 +20,9 @@ import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-
-const sdk = require('../../../index');
-const ImageUtils = require('../../../ImageUtils');
-const Modal = require('../../../Modal');
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
+import * as ImageUtils from "../../../ImageUtils";
 
 module.exports = createReactClass({
     displayName: 'LinkPreviewWidget',

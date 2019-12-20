@@ -20,11 +20,9 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import {ContentRepo} from "matrix-js-sdk";
 import {MatrixClientPeg} from "../../MatrixClientPeg";
-
-const Modal = require('../../Modal');
-const sdk = require('../../index');
-const dis = require('../../dispatcher');
-
+import * as sdk from "../../index";
+import dis from "../../dispatcher";
+import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';

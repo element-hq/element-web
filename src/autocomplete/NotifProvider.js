@@ -30,7 +30,7 @@ export default class NotifProvider extends AutocompleteProvider {
         this.room = room;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?:boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: SelectionRange, force:boolean = false): Array<Completion> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();

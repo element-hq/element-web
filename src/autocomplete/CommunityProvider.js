@@ -46,7 +46,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues

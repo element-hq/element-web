@@ -18,14 +18,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-
-const sdk = require('../../../index');
-
-const Velociraptor = require('../../../Velociraptor');
-require('../../../VelocityBounce');
+import('../../../VelocityBounce');
 import { _t } from '../../../languageHandler';
-
 import {formatDate} from '../../../DateUtils';
+import Velociraptor from "../../../Velociraptor";
+import * as sdk from "../../../index";
 
 let bounce = false;
 try {

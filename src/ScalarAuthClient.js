@@ -19,7 +19,7 @@ import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 import {MatrixClientPeg} from "./MatrixClientPeg";
-const request = require('browser-request');
+import request from "browser-request";
 
 import * as Matrix from 'matrix-js-sdk';
 import SdkConfig from "./SdkConfig";
