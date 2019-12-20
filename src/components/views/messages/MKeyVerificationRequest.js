@@ -108,11 +108,12 @@ export default class MKeyVerificationRequest extends React.Component {
         let stateNode;
 
 
-        if (request.ready || request.started || request.cancelled) {
+        const accepted = request.ready || request.started || request.done;
+        if (accepted || request.cancelled) {
             let stateLabel;
-            if (request.ready || request.started) {
+            if (accepted) {
                 stateLabel = this._acceptedLabel(request.receivingUserId);
-            } else if (request.cancelled) {
+            } else {
                 stateLabel = this._cancelledLabel(request.cancellingUserId);
             }
             stateNode = (<div className="mx_KeyVerification_state">{stateLabel}</div>);
