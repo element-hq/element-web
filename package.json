@@ -28,6 +28,7 @@
   },
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
+  "matrix_src_main": "./src/index.js",
   "scripts": {
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
