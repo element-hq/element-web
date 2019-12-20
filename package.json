@@ -61,7 +61,7 @@
     "prepareSteps": "yarn clean && yarn build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers VectorChromeHeadless",
     "test-multi": "karma start",
-    "tmp": "webpack --profile --progress"
+    "tmp": "webpack --profile --progress --mode=development"
   },
   "dependencies": {
     "browser-request": "^0.3.3",

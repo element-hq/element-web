@@ -8,14 +8,7 @@ const webpack = require("webpack");
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
 
-const minification = {minimize: false};
-if (process.env.NODE_ENV === 'production') {
-    console.log("Enabling minification");
-    minification.minimize = true;
-    minification.minimizer = [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})];
-}
-
-module.exports = {
+module.exports = (env, argv) => ({
     entry: {
         "bundle": "./src/vector/index.js",
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
@@ -42,7 +35,8 @@ module.exports = {
                 },
             },
         },
-        ...minification,
+        minimize: argv.mode === 'production',
+        minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -231,7 +225,7 @@ module.exports = {
             // of the themes and which chunks we actually care about.
             inject: false,
             excludeChunks: ['mobileguide'],
-            minify: minification.minimize,
+            minify: argv.mode === 'production',
             vars: {
                 og_image_url: og_image_url,
             },
@@ -240,7 +234,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/vector/mobile_guide/index.html',
             filename: 'mobile_guide/index.html',
-            minify: minification.minimize,
+            minify: argv.mode === 'production',
             chunks: ['mobileguide'],
         }),
     ],
@@ -275,7 +269,7 @@ module.exports = {
         hot: false,
         inline: false,
     },
-};
+});
 
 /**
  * Merge assets found via CSS and imports into a single tree, while also preserving
