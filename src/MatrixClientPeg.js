@@ -19,9 +19,9 @@ limitations under the License.
 
 import {MatrixClient, MemoryStore} from 'matrix-js-sdk';
 
-import utils from 'matrix-js-sdk/lib/utils';
-import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
-import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
+import * as utils from 'matrix-js-sdk/lib/utils';
+import {EventTimeline} from 'matrix-js-sdk/lib/models/event-timeline';
+import {EventTimelineSet} from 'matrix-js-sdk/lib/models/event-timeline-set';
 import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';

@@ -17,7 +17,7 @@ limitations under the License.
 import ReactDOM from 'react-dom';
 import MatrixClientPeg from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
+import {PushProcessor} from 'matrix-js-sdk/lib/pushprocessor';
 import * as sdk from '../index';
 
 export function pillifyLinks(nodes, mxEvent) {

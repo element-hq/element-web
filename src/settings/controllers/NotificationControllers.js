@@ -18,7 +18,7 @@ import SettingController from "./SettingController";
 import MatrixClientPeg from '../../MatrixClientPeg';
 
 // XXX: This feels wrong.
-import PushProcessor from "matrix-js-sdk/lib/pushprocessor";
+import {PushProcessor} from "matrix-js-sdk/lib/pushprocessor";
 
 function isMasterRuleEnabled() {
     // Return the value of the master push rule as a default
