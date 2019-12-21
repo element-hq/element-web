@@ -591,7 +591,7 @@ module.exports = createReactClass({
         if (filter === "") return list;
         const lcFilter = filter.toLowerCase();
         // apply toLowerCase before and after removeHiddenChars because different rules get applied
-        // e.g M -> M but m -> n, yet some unicode homoglyphs come out as uppsercase, e.g 𝚮 -> H
+        // e.g M -> M but m -> n, yet some unicode homoglyphs come out as uppercase, e.g 𝚮 -> H
         const fuzzyFilter = utils.removeHiddenChars(lcFilter).toLowerCase();
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
