@@ -129,17 +129,20 @@ function verifyDevice(userId, device) {
 }
 
 function DeviceItem({userId, device}) {
+    const cli = useContext(MatrixClientContext);
+    const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
+
     const classes = classNames("mx_UserInfo_device", {
-        mx_UserInfo_device_verified: device.isVerified(),
-        mx_UserInfo_device_unverified: !device.isVerified(),
+        mx_UserInfo_device_verified: deviceTrust.isVerified(),
+        mx_UserInfo_device_unverified: !deviceTrust.isVerified(),
     });
     const iconClasses = classNames("mx_E2EIcon", {
-        mx_E2EIcon_verified: device.isVerified(),
-        mx_E2EIcon_warning: !device.isVerified(),
+        mx_E2EIcon_verified: deviceTrust.isVerified(),
+        mx_E2EIcon_warning: !deviceTrust.isVerified(),
     });
 
     const onDeviceClick = () => {
-        if (!device.isVerified()) {
+        if (!deviceTrust.isVerified()) {
             verifyDevice(userId, device);
         }
     };
@@ -147,7 +150,7 @@ function DeviceItem({userId, device}) {
     const deviceName = device.ambiguous ?
             (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
             device.getDisplayName();
-    const trustedLabel = device.isVerified() ? _t("Trusted") : _t("Not trusted");
+    const trustedLabel = deviceTrust.isVerified() ? _t("Trusted") : _t("Not trusted");
     return (<AccessibleButton className={classes} onClick={onDeviceClick}>
         <div className={iconClasses} />
         <div className="mx_UserInfo_device_name">{deviceName}</div>
@@ -157,6 +160,7 @@ function DeviceItem({userId, device}) {
 
 function DevicesSection({devices, userId, loading}) {
     const Spinner = sdk.getComponent("elements.Spinner");
+    const cli = useContext(MatrixClientContext);
 
     const [isExpanded, setExpanded] = useState(false);
 
@@ -167,9 +171,21 @@ function DevicesSection({devices, userId, loading}) {
     if (devices === null) {
         return _t("Unable to load device list");
     }
+    const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
 
-    const unverifiedDevices = devices.filter(d => !d.isVerified());
-    const verifiedDevices = devices.filter(d => d.isVerified());
+    const unverifiedDevices = [];
+    const verifiedDevices = [];
+
+    for (let i = 0; i < devices.length; ++i) {
+        const device = devices[i];
+        const deviceTrust = deviceTrusts[i];
+
+        if (deviceTrust.isVerified()) {
+            verifiedDevices.push(device);
+        } else {
+            unverifiedDevices.push(device);
+        }
+    }
 
     let expandButton;
     if (verifiedDevices.length) {
