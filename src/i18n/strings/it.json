@@ -2006,5 +2006,12 @@
     "Secure your encrypted messages with a passphrase": "Proteggi i tuoi messaggi cifrati con una password",
     "Storing secrets...": "Memorizzo i segreti...",
     "Unable to set up secret storage": "Impossibile impostare un archivio segreto",
-    "Close preview": "Chiudi anteprima"
+    "Close preview": "Chiudi anteprima",
+    "This user has not verified all of their devices.": "Questo utente non ha verificato tutti i suoi dispositivi.",
+    "You have not verified this user. This user has verified all of their devices.": "Non hai verificato questo utente. Questo utente ha verificato tutti i suoi dispositivi.",
+    "You have verified this user. This user has verified all of their devices.": "Hai verificato questo utente. Questo utente ha verificato tutti i suoi dispositivi.",
+    "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "Non hai verificato alcuni utenti in questa stanza criptata o essi non hanno verificato i loro dispositivi.",
+    "All users in this encrypted room are verified by you and they have verified their own devices.": "Hai verificato tutti gli utenti in questa stanza criptata ed essi hanno verificato i loro dispositivi.",
+    "Language Dropdown": "Lingua a tendina",
+    "Country Dropdown": "Nazione a tendina"
 }
