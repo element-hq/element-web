@@ -589,15 +589,17 @@ module.exports = createReactClass({
 
     _applySearchFilter: function(list, filter) {
         if (filter === "") return list;
-        const fuzzyFilter = utils.removeHiddenChars(filter).toLowerCase();
         const lcFilter = filter.toLowerCase();
+        // apply toLowerCase before and after removeHiddenChars because different rules get applied
+        // e.g M -> M but m -> n, yet some unicode homoglyphs come out as uppercase, e.g 𝚮 -> H
+        const fuzzyFilter = utils.removeHiddenChars(lcFilter).toLowerCase();
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
         return list.filter((room) => {
             if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
                 return true;
             }
-            return room.name ? utils.removeHiddenChars(room.name).toLowerCase().includes(fuzzyFilter) : false;
+            return room.name && utils.removeHiddenChars(room.name.toLowerCase()).toLowerCase().includes(fuzzyFilter);
         });
     },
 
