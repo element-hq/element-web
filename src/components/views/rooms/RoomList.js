@@ -636,7 +636,6 @@ module.exports = createReactClass({
         const defaultProps = {
             collapsed: this.props.collapsed,
             isFiltered: !!this.props.searchFilter,
-            incomingCall: this.state.incomingCall,
         };
 
         subListsProps.forEach((p) => {
@@ -649,7 +648,7 @@ module.exports = createReactClass({
         }));
 
         return subListsProps.reduce((components, props, i) => {
-            props = Object.assign({}, defaultProps, props);
+            props = {...defaultProps, ...props};
             const isLast = i === subListsProps.length - 1;
             const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
             const {key, label, onHeaderClick, ...otherProps} = props;
@@ -660,12 +659,12 @@ module.exports = createReactClass({
                     onHeaderClick(collapsed);
                 }
             };
-            let startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
+            const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
             this._layoutSections.push({
                 id: chosenKey,
                 count: len,
             });
-            let subList = (<RoomSubList
+            const subList = (<RoomSubList
                 ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
                 forceExpand={!!this.props.searchFilter}
