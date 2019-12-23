@@ -17,9 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-
-const Avatar = require("../../../Avatar");
-const sdk = require('../../../index');
+import * as Avatar from '../../../Avatar';
+import * as sdk from "../../../index";
 
 module.exports = createReactClass({
     displayName: 'UserTile',

@@ -18,13 +18,11 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-
-const MatrixClientPeg = require('../../MatrixClientPeg');
-const ContentRepo = require("matrix-js-sdk").ContentRepo;
-const Modal = require('../../Modal');
-const sdk = require('../../index');
-const dis = require('../../dispatcher');
-
+import {ContentRepo} from "matrix-js-sdk";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
+import dis from "../../dispatcher";
+import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';

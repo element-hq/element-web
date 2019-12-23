@@ -15,13 +15,11 @@ limitations under the License.
 */
 
 import SettingsStore from "../../../settings/SettingsStore";
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-
-const sdk = require('../../../index');
-const dis = require('../../../dispatcher');
+import * as sdk from "../../../index";
+import dis from "../../../dispatcher";
 import { _t } from '../../../languageHandler';
 
 module.exports = createReactClass({

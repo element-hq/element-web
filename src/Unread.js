@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const MatrixClientPeg = require('./MatrixClientPeg');
+import {MatrixClientPeg} from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-const sdk = require('./index');
+import * as sdk from "./index";
 
 module.exports = {
     /**

@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.auth.AuthPage")

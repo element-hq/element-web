@@ -17,7 +17,7 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import Matrix from 'matrix-js-sdk';

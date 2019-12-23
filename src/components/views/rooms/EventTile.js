@@ -18,25 +18,21 @@ limitations under the License.
 */
 
 import ReplyThread from "../elements/ReplyThread";
-
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const classNames = require("classnames");
+import classNames from "classnames";
 import { _t, _td } from '../../../languageHandler';
-const Modal = require('../../../Modal');
-
-const sdk = require('../../../index');
-const TextForEvent = require('../../../TextForEvent');
-
+import * as TextForEvent from "../../../TextForEvent";
+import Modal from "../../../Modal";
+import * as sdk from "../../../index";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
-
-const ObjectUtils = require('../../../ObjectUtils');
+import * as ObjectUtils from "../../../ObjectUtils";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',

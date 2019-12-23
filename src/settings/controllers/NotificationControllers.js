@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 
 // XXX: This feels wrong.
-import PushProcessor from "matrix-js-sdk/lib/pushprocessor";
+import {PushProcessor} from "matrix-js-sdk/src/pushprocessor";
 
 function isMasterRuleEnabled() {
     // Return the value of the master push rule as a default

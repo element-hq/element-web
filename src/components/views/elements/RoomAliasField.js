@@ -16,9 +16,9 @@ limitations under the License.
 import { _t } from '../../../languageHandler';
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import withValidation from './Validation';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
 export default class RoomAliasField extends React.PureComponent {
     static propTypes = {

@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../languageHandler';
-const sdk = require('../../index');
-const MatrixClientPeg = require("../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
 
 /*
  * Component which shows the global notification list using a TimelinePanel

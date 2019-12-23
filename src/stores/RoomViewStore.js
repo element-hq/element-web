@@ -16,8 +16,8 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
-import MatrixClientPeg from '../MatrixClientPeg';
-import sdk from '../index';
+import {MatrixClientPeg} from '../MatrixClientPeg';
+import * as sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
 import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';

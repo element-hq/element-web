@@ -19,8 +19,8 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import Matrix from 'matrix-js-sdk';
-import sdk from '../../index';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import * as sdk from '../../index';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import { _t } from '../../languageHandler';
 
 /*
