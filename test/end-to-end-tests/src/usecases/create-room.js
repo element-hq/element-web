@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-async function openRoomDirectory(session) {
+export async function openRoomDirectory(session) {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_explore .mx_AccessibleButton');
     await roomDirectoryButton.click();
 }
 
-async function createRoom(session, roomName) {
+export async function createRoom(session, roomName) {
     session.log.step(`creates room "${roomName}"`);
 
     const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
@@ -42,5 +43,3 @@ async function createRoom(session, roomName) {
     await session.query('.mx_MessageComposer');
     session.log.done();
 }
-
-module.exports = {openRoomDirectory, createRoom};

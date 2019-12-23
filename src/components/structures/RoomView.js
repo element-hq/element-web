@@ -32,15 +32,15 @@ import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import CallHandler from '../../CallHandler';
 import dis from '../../dispatcher';
 import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
-import ObjectUtils from '../../ObjectUtils';
+import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
@@ -66,13 +66,13 @@ if (DEBUG) {
     debuglog = console.log.bind(console);
 }
 
-const RoomContext = PropTypes.shape({
+export const RoomContext = PropTypes.shape({
     canReact: PropTypes.bool.isRequired,
     canReply: PropTypes.bool.isRequired,
     room: PropTypes.instanceOf(Room),
 });
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,
@@ -2002,5 +2002,3 @@ module.exports = createReactClass({
         );
     },
 });
-
-module.exports.RoomContext = RoomContext;

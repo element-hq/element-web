@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ const {receiveMessage} = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
 const changeRoomSettings = require('../usecases/room-settings');
 
-module.exports = async function roomDirectoryScenarios(alice, bob) {
+export default async function roomDirectoryScenarios(alice, bob) {
     console.log(" creating a public room and join through directory:");
     const room = 'test';
     await createRoom(alice, room);

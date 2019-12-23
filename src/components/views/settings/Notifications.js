@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -63,7 +63,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Notifications',
 
     phases: {

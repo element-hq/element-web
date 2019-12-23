@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require("react");
+import React from "react";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-const sdk = require('../../../index');
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
-module.exports = createReactClass({
+const sdk = require('../../../index');
+
+export default createReactClass({
     displayName: 'EncryptedEventDialog',
 
     propTypes: {

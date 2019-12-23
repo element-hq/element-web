@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import WhoIsTyping from '../../../WhoIsTyping';
+import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'WhoIsTypingTile',
 
     propTypes: {

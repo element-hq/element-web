@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,13 +20,12 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { linkifyElement } from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
+import * as ImageUtils from "../../../ImageUtils";
 
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const ImageUtils = require('../../../ImageUtils');
-const Modal = require('../../../Modal');
-
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {

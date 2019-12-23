@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-module.exports.range = function(start, amount, step = 1) {
+export function range(start, amount, step = 1) {
     const r = [];
     for (let i = 0; i < amount; ++i) {
         r.push(start + (i * step));
     }
     return r;
-};
+}
 
-module.exports.delay = function(ms) {
+export function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
-};
+}

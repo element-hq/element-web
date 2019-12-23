@@ -30,12 +30,12 @@ import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerial
 
 import classNames from 'classnames';
 
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import type {MatrixClient} from 'matrix-js-sdk/src/matrix';
 import {processCommandInput} from '../../../SlashCommands';
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 

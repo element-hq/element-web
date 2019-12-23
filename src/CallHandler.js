@@ -53,10 +53,10 @@ limitations under the License.
  * }
  */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
@@ -302,7 +302,7 @@ function _onAction(payload) {
     switch (payload.action) {
         case 'place_call':
             {
-                if (module.exports.getAnyActiveCall()) {
+                if (callHandler.getAnyActiveCall()) {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
                         title: _t('Existing Call'),
@@ -355,7 +355,7 @@ function _onAction(payload) {
             break;
         case 'incoming_call':
             {
-                if (module.exports.getAnyActiveCall()) {
+                if (callHandler.getAnyActiveCall()) {
                     // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
                     // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
                     // in future we could signal a "local busy" as a warning to the caller.
@@ -523,7 +523,7 @@ if (!global.mxCallHandler) {
 
 const callHandler = {
     getCallForRoom: function(roomId) {
-        let call = module.exports.getCall(roomId);
+        let call = callHandler.getCall(roomId);
         if (call) return call;
 
         if (ConferenceHandler) {
@@ -583,4 +583,4 @@ if (global.mxCallHandler === undefined) {
     global.mxCallHandler = callHandler;
 }
 
-module.exports = global.mxCallHandler;
+export default global.mxCallHandler;

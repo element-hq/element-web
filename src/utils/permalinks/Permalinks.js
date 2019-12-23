@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from "../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import isIp from "is-ip";
-import utils from 'matrix-js-sdk/lib/utils';
+import * as utils from 'matrix-js-sdk/src/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
-
-const SdkConfig = require("../../SdkConfig");
+import SdkConfig from "../../SdkConfig";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org

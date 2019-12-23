@@ -37,7 +37,7 @@ import TypingStore from "../../../stores/TypingStore";
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 import SettingsStore from "../../../settings/SettingsStore";
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {Key} from "../../../Keyboard";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');

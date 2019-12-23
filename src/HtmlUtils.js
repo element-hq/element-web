@@ -29,7 +29,7 @@ import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import url from 'url';
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';

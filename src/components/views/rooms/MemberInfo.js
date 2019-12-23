@@ -34,11 +34,11 @@ import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import Unread from '../../../Unread';
+import * as Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -47,10 +47,10 @@ import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {EventTimeline} from "matrix-js-sdk";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberInfo',
 
     propTypes: {

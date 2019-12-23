@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
+import React from "react";
 import PropTypes from 'prop-types';
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const sdk = require("../../../index");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
-const Modal = require("../../../Modal");
+import Modal from "../../../Modal";
 
 export default class AliasSettings extends React.Component {
     static propTypes = {

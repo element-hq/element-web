@@ -7,7 +7,7 @@ import lolex from 'lolex';
 import * as TestUtils from 'test-utils';
 
 import sdk from '../../../../src/index';
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher';

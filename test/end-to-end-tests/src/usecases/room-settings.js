@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +30,7 @@ async function setSettingsToggle(session, toggle, enabled) {
     }
 }
 
-module.exports = async function changeRoomSettings(session, settings) {
+export default async function changeRoomSettings(session, settings) {
     session.log.startGroup(`changes the room settings`);
     /// XXX delay is needed here, possibly because the header is being rerendered
     /// click doesn't do anything otherwise
