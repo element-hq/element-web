@@ -425,6 +425,9 @@ const useRoomPowerLevels = (cli, room) => {
 const RoomKickButton = ({member, startUpdating, stopUpdating}) => {
     const cli = useContext(MatrixClientContext);
 
+    // check if user can be kicked/disinvited
+    if (member.membership !== "invite" && member.membership !== "join") return null;
+
     const onKick = async () => {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         const {finished} = Modal.createTrackedDialog(
@@ -601,6 +604,9 @@ const BanToggleButton = ({member, startUpdating, stopUpdating}) => {
 
 const MuteToggleButton = ({member, room, powerLevels, startUpdating, stopUpdating}) => {
     const cli = useContext(MatrixClientContext);
+
+    // Don't show the mute/unmute option if the user is not in the room
+    if (member.membership !== "join") return null;
 
     const isMuted = _isMuted(member, powerLevels);
     const onMuteToggle = async () => {
