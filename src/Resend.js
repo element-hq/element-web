@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,40 +19,43 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher';
 import { EventStatus } from 'matrix-js-sdk';
 
-module.exports = {
-    resendUnsentEvents: function(room) {
-        room.getPendingEvents().filter(function(ev) {
+export default class Resend {
+    static resendUnsentEvents(room) {
+        room.getPendingEvents().filter(function (ev) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function(event) {
-            module.exports.resend(event);
+        }).forEach(function (event) {
+            Resend.resend(event);
         });
-    },
-    cancelUnsentEvents: function(room) {
-        room.getPendingEvents().filter(function(ev) {
+    }
+
+    static cancelUnsentEvents(room) {
+        room.getPendingEvents().filter(function (ev) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function(event) {
-            module.exports.removeFromQueue(event);
+        }).forEach(function (event) {
+            Resend.removeFromQueue(event);
         });
-    },
-    resend: function(event) {
+    }
+
+    static resend(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
+        MatrixClientPeg.get().resendEvent(event, room).then(function (res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event,
             });
-        }, function(err) {
+        }, function (err) {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/riot-web/issues/3148
-            console.log('Resend got send failure: ' + err.name + '('+err+')');
+            console.log('Resend got send failure: ' + err.name + '(' + err + ')');
 
             dis.dispatch({
                 action: 'message_send_failed',
                 event: event,
             });
         });
-    },
-    removeFromQueue: function(event) {
+    }
+
+    static removeFromQueue(event) {
         MatrixClientPeg.get().cancelPendingEvent(event);
-    },
-};
+    }
+}

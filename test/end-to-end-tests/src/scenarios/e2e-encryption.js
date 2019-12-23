@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ const changeRoomSettings = require('../usecases/room-settings');
 const {startSasVerifcation, acceptSasVerification} = require('../usecases/verify');
 const assert = require('assert');
 
-module.exports = async function e2eEncryptionScenarios(alice, bob) {
+export default async function e2eEncryptionScenarios(alice, bob) {
     console.log(" creating an e2e encrypted room and join through invite:");
     const room = "secrets";
     await createRoom(bob, room);

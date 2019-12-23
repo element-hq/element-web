@@ -106,5 +106,5 @@ class Skinner {
 if (global.mxSkinner === undefined) {
     global.mxSkinner = new Skinner();
 }
-module.exports = global.mxSkinner;
+export default global.mxSkinner;
 

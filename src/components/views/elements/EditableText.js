@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EditableText',
 
     propTypes: {

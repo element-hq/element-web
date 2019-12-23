@@ -22,7 +22,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import AuthPage from "../../views/auth/AuthPage";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PostRegistration',
 
     propTypes: {

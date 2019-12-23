@@ -43,7 +43,7 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomPreviewBar',
 
     propTypes: {

@@ -21,7 +21,7 @@ import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MessageEvent',
 
     propTypes: {

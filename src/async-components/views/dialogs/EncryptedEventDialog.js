@@ -22,7 +22,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 const sdk = require('../../../index');
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EncryptedEventDialog',
 
     propTypes: {

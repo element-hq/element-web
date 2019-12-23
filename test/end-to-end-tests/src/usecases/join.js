@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 const {openRoomDirectory} = require('./create-room');
 
-module.exports = async function join(session, roomName) {
+export default async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);
     await openRoomDirectory(session);
     const roomInput = await session.query('.mx_DirectorySearchBox input');

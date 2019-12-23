@@ -194,7 +194,7 @@ function computedStyle(element) {
     return cssText;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MFileBody',
 
     getInitialState: function() {

@@ -33,7 +33,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTile',
 
     propTypes: {

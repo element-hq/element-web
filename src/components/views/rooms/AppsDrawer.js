@@ -34,7 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AppsDrawer',
 
     propTypes: {

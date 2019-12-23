@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ import PinnedEventTile from "./PinnedEventTile";
 import { _t } from '../../../languageHandler';
 import PinningUtils from "../../../utils/PinningUtils";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PinnedEventsPanel',
     propTypes: {
         // The Room from the js-sdk we're going to show pinned events for

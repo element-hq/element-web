@@ -40,7 +40,7 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ForgotPassword',
 
     propTypes: {

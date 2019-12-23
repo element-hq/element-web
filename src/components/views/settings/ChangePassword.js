@@ -28,7 +28,7 @@ import Modal from "../../../Modal";
 
 import sessionStore from '../../../stores/SessionStore';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangePassword',
 
     propTypes: {
