@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
 

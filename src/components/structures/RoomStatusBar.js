@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';

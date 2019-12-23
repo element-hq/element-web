@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';

@@ -24,7 +24,7 @@ import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {ContextMenu, ContextMenuButton, toRightOf} from '../../structures/ContextMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';

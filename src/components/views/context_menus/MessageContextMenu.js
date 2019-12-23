@@ -24,7 +24,7 @@ import {EventStatus} from 'matrix-js-sdk';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import Resend from '../../../Resend';

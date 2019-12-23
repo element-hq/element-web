@@ -25,7 +25,7 @@ import WidgetMessaging from '../../../WidgetMessaging';
 import AccessibleButton from './AccessibleButton';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';

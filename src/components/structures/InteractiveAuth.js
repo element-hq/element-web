@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 
 import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
 
-import sdk from '../../index';
+import * as sdk from '../../index';
 
 export default createReactClass({
     displayName: 'InteractiveAuth',

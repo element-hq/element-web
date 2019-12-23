@@ -35,7 +35,7 @@ import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
 import {processCommandInput} from '../../../SlashCommands';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
