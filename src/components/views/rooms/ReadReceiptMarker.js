@@ -178,7 +178,7 @@ module.exports = createReactClass({
     render: function() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
-            return <div />;
+            return <div ref={this._avatar} />;
         }
 
         const style = {
