@@ -45,7 +45,7 @@ module.exports = (env, argv) => ({
     resolve: {
         mainFields: ['matrix_main', 'matrix_browser', 'main', 'browser'],
         aliasFields: ['matrix_browser', 'browser'],
-        extensions: ['.js', '.json', '.ts', '.gif', '.png'],
+        extensions: ['.js', '.json', '.css', '.scss', '.ts', '.gif', '.png'],
         alias: {
             // alias any requires to the react module to the one in our path,
             // otherwise we tend to get the react source included twice when
@@ -115,15 +115,32 @@ module.exports = (env, argv) => ({
                 test: /\.css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {loader: 'css-loader', options: {importLoaders: 1}},
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            sourceMap: true,
+                        }
+                    },
                     {
                         loader: 'postcss-loader',
                         ident: 'postcss',
                         options: {
+                            sourceMap: true,
                             plugins: () => [
-                                require('postcss-preset-env')({browsers: 'last 2 versions'}),
+                                // Note that we use significantly fewer plugins on the plain
+                                // CSS parser. If we start to parse plain CSS, we end with all
+                                // kinds of nasty problems (like stylesheets not loading).
+
+                                require("postcss-simple-vars")(),
                                 require("postcss-strip-inline-comments")(),
+
+                                // It's important that this plugin is last otherwise we end
+                                // up with broken CSS.
+                                require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                             ],
+                            parser: "postcss-scss",
+                            "local-plugins": true,
                         },
                     },
                 ]
@@ -132,16 +149,33 @@ module.exports = (env, argv) => ({
                 test: /\.scss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {loader: 'css-loader', options: {importLoaders: 1}},
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            sourceMap: true,
+                        }
+                    },
                     {
                         loader: 'postcss-loader',
                         ident: 'postcss',
                         options: {
+                            sourceMap: true,
                             plugins: () => [
-                                require('postcss-preset-env')({browsers: 'last 2 versions'}),
+                                require('postcss-import')(),
+                                require("postcss-simple-vars")(),
+                                require("postcss-extend")(),
+                                require("postcss-nested")(),
+                                require("postcss-mixins")(),
+                                require("postcss-easings")(),
                                 require("postcss-strip-inline-comments")(),
+
+                                // It's important that this plugin is last otherwise we end
+                                // up with broken CSS.
+                                require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                             ],
                             parser: "postcss-scss",
+                            "local-plugins": true,
                         },
                     },
                 ]
