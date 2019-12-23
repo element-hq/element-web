@@ -48,7 +48,6 @@ import Markdown from '../../../Markdown';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 import ContentMessages from '../../../ContentMessages';
 
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
@@ -61,6 +60,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SlateComposerHistoryManager from "../../../SlateComposerHistoryManager";
 import TypingStore from "../../../stores/TypingStore";
+import {EMOTICON_TO_EMOJI} from "../../../emoji";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -141,8 +141,8 @@ export default class MessageComposerInput extends React.Component {
     autocomplete: Autocomplete;
     historyManager: SlateComposerHistoryManager;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         const isRichTextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
@@ -464,7 +464,7 @@ export default class MessageComposerInput extends React.Component {
                 const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(text.slice(0, currentStartOffset));
                 if (emoticonMatch) {
                     const query = emoticonMatch[1].toLowerCase().replace("-", "");
-                    const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
+                    const data = EMOTICON_TO_EMOJI.get(query);
 
                     // only perform replacement if we found a match, otherwise we would be not letting user type
                     if (data) {

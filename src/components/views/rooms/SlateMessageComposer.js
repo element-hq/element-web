@@ -137,8 +137,8 @@ class UploadButton extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
     }
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
@@ -193,8 +193,8 @@ class UploadButton extends React.Component {
 }
 
 export default class SlateMessageComposer extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);

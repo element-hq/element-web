@@ -2,6 +2,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
 
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import EmojiData from '../stripped-emoji.json';
+import EMOJIBASE from 'emojibase-data/en/compact.json';
 
 const LIMIT = 20;
 
@@ -38,19 +39,15 @@ const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', '
 // XXX: it's very unclear why we bother with this generated emojidata file.
 // all it means is that we end up bloating the bundle with precomputed stuff
 // which would be trivial to calculate and cache on demand.
-const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
-    (a, b) => {
-        if (a.category === b.category) {
-            return a.emoji_order - b.emoji_order;
-        }
-        return a.category - b.category;
-    },
-).map((a, index) => {
+const EMOJI_SHORTNAMES = EMOJIBASE.sort((a, b) => {
+    if (a.group === b.group) {
+        return a.order - b.order;
+    }
+    return a.group - b.group;
+}).map((emoji, index) => {
     return {
-        name: a.name,
-        shortname: a.shortname,
-        aliases: a.aliases ? a.aliases.join(' ') : '',
-        aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
+        emoji,
+        shortname: `:${emoji.shortcodes[0]}:`,
         // Include the index so that we can preserve the original order
         _orderBy: index,
     };
@@ -69,12 +66,15 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher(EMOJI_SHORTNAMES, {
-            keys: ['aliases_ascii', 'shortname', 'aliases'],
+            keys: ['emoji.emoticon', 'shortname'],
+            funcs: [
+                (o) => o.emoji.shortcodes.length > 1 ? o.emoji.shortcodes.slice(1).map(s => `:${s}:`).join(" ") : "", // aliases
+            ],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
         this.nameMatcher = new QueryMatcher(EMOJI_SHORTNAMES, {
-            keys: ['name'],
+            keys: ['emoji.annotation'],
             // For removing punctuation
             shouldMatchWordsOnly: true,
         });
@@ -96,7 +96,7 @@ export default class EmojiProvider extends AutocompleteProvider {
 
             const sorters = [];
             // make sure that emoticons come first
-            sorters.push((c) => score(matchedString, c.aliases_ascii));
+            sorters.push((c) => score(matchedString, c.emoji.emoticon || ""));
 
             // then sort by score (Infinity if matchedString not in shortname)
             sorters.push((c) => score(matchedString, c.shortname));
@@ -110,8 +110,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             sorters.push((c) => c._orderBy);
             completions = _sortBy(_uniq(completions), sorters);
 
-            completions = completions.map((result) => {
-                const { shortname } = result;
+            completions = completions.map(({shortname}) => {
                 const unicode = shortcodeToUnicode(shortname);
                 return {
                     completion: unicode,

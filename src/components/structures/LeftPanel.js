@@ -19,7 +19,6 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk';
 import { Key } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -36,10 +35,6 @@ const LeftPanel = createReactClass({
     // shouldComponentUpdate!
     propTypes: {
         collapsed: PropTypes.bool.isRequired,
-    },
-
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getInitialState: function() {

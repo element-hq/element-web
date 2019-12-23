@@ -31,8 +31,8 @@ export default class GroupInviteTileContextMenu extends React.Component {
         onFinished: PropTypes.func,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._onClickReject = this._onClickReject.bind(this);
     }
