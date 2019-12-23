@@ -128,11 +128,11 @@ export class TopLeftMenu extends React.Component {
         </div>;
     }
 
-    openHelp() {
+    openHelp = () => {
         this.closeMenu();
         const RedesignFeedbackDialog = sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
         Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
-    }
+    };
 
     viewHomePage() {
         dis.dispatch({action: 'view_home_page'});
