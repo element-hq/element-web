@@ -103,6 +103,7 @@ const TagPanel = createReactClass({
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const ActionButton = sdk.getComponent('elements.ActionButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
@@ -153,6 +154,13 @@ const TagPanel = createReactClass({
                                 ref={provided.innerRef}
                             >
                                 { tags }
+                                <div>
+                                    <ActionButton
+                                        tooltip
+                                        label={_t("Communities")}
+                                        action="toggle_my_groups"
+                                        className="mx_TagTile mx_TagTile_plus" />
+                                </div>
                                 { provided.placeholder }
                             </div>
                     ) }

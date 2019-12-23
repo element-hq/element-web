@@ -23,7 +23,6 @@ import { Key } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
-import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
@@ -238,7 +237,6 @@ const LeftPanel = createReactClass({
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
                 { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
-                <TagPanelButtons />
             </div>);
         }
 
