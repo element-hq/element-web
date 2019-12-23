@@ -35,17 +35,32 @@ module.exports = (env, argv) => ({
                 },
             },
         },
+
+        // Minification is normally enabled by default for webpack in production mode, but
+        // we use a CSS optimizer too and need to manage it ourselves.
         minimize: argv.mode === 'production',
         minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
     },
 
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-
     resolve: {
-        mainFields: ['matrix_main', 'matrix_browser', 'main', 'browser'],
-        aliasFields: ['matrix_browser', 'browser'],
-        extensions: ['.js', '.json', '.css', '.scss', '.ts', '.gif', '.png'],
+        // We need to ensure we can resolve TS files, but that also means we need to define
+        // every single extension we might see, ever.
+        extensions: [
+            '.js',
+            '.json',
+            '.css',
+            '.scss',
+            '.ts',
+            '.gif',
+            '.png',
+            '.svg',
+            '.ttf',
+            '.woff',
+            '.woff2',
+            '.xml',
+            '.ico',
+            '.wasm',
+        ],
         alias: {
             // alias any requires to the react module to the one in our path,
             // otherwise we tend to get the react source included twice when
@@ -53,11 +68,10 @@ module.exports = (env, argv) => ({
             "react": path.resolve(__dirname, 'node_modules/react'),
             "react-dom": path.resolve(__dirname, 'node_modules/react-dom'),
 
-            // same goes for js-sdk, but we also want to point at the source
-            // of each SDK so we can compile it for ourselves.
+            // same goes for js-sdk - we don't need two copies.
             "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
-            //"matrix-react-sdk": path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
 
+            // Define a variable so the i18n stuff can load
             "$webapp": path.resolve(__dirname, 'webapp'),
         },
     },
@@ -80,19 +94,19 @@ module.exports = (env, argv) => ({
         rules: [
             {
                 test: /\.(ts|js)x?$/,
-                //include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
+                    // We have the babel config here rather than a file to help
+                    // make it clearer what we're compiling to.
                     cacheDirectory: true,
-                    sourceMaps: "inline",
+                    sourceMaps: true,
                     presets: [
                         ["@babel/preset-env", {
                             "targets": {
                                 "browsers": [
                                     "last 2 versions",
-                                ],
-                                "node": 12,
+                                ]
                             },
                         }],
                         "@babel/preset-typescript",
@@ -100,6 +114,8 @@ module.exports = (env, argv) => ({
                         "@babel/preset-react",
                     ],
                     plugins: [
+                        // Most of these plugins are for the react-sdk to make itself
+                        // work correctly.
                         ["@babel/plugin-proposal-decorators", {"legacy": true}],
                         "@babel/plugin-proposal-export-default-from",
                         "@babel/plugin-proposal-numeric-separator",
@@ -162,6 +178,8 @@ module.exports = (env, argv) => ({
                         options: {
                             sourceMap: true,
                             plugins: () => [
+                                // Note that we use slightly different plugins for SCSS.
+
                                 require('postcss-import')(),
                                 require("postcss-simple-vars")(),
                                 require("postcss-extend")(),
@@ -246,11 +264,13 @@ module.exports = (env, argv) => ({
             },
         }),
 
+        // This exports our CSS using the splitChunks and loaders above.
         new MiniCssExtractPlugin({
             filename: 'bundles/[hash]/[name].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
 
+        // This is the app's main entry point.
         new HtmlWebpackPlugin({
             template: './src/vector/index.html',
 
@@ -265,6 +285,7 @@ module.exports = (env, argv) => ({
             },
         }),
 
+        // This is the mobile guide's entry point (separate for faster mobile loading)
         new HtmlWebpackPlugin({
             template: './src/vector/mobile_guide/index.html',
             filename: 'mobile_guide/index.html',
@@ -286,6 +307,11 @@ module.exports = (env, argv) => ({
         filename: "bundles/[hash]/[name].js",
         chunkFilename: "bundles/[hash]/[name].js",
     },
+
+    // DO NOT enable this option. It makes the source maps all wonky. Instead,
+    // we end up including the sourcemaps through the loaders which makes them
+    // more accurate.
+    //devtool: "source-map",
 
     // configuration for the webpack-dev-server
     devServer: {
