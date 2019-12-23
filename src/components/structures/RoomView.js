@@ -25,7 +25,6 @@ import shouldHideEvent from '../../shouldHideEvent';
 
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { _t } from '../../languageHandler';
@@ -440,7 +439,7 @@ module.exports = createReactClass({
 
     componentDidUpdate: function() {
         if (this._roomView.current) {
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
@@ -484,7 +483,7 @@ module.exports = createReactClass({
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
