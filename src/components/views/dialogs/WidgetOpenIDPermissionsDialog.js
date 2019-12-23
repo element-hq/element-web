@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import WidgetUtils from "../../../utils/WidgetUtils";
 

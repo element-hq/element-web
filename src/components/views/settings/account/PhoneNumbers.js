@@ -23,7 +23,7 @@ import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
-import sdk from '../../../../index';
+import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 
 /*

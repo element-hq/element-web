@@ -30,7 +30,7 @@ import PropTypes from "prop-types";
 import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import PlatformPeg from "../../../../../PlatformPeg";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";

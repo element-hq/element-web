@@ -31,7 +31,7 @@ const sdk = require('../../index');
 import { _t } from '../../languageHandler';
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const dis = require("../../dispatcher");
-const ObjectUtils = require('../../ObjectUtils');
+import * as ObjectUtils from "../../ObjectUtils";
 const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
 import { KeyCode } from '../../Keyboard';

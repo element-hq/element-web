@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClient} from 'matrix-js-sdk';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
 

@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import * as recent from './recent';

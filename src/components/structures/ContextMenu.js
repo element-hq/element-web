@@ -21,7 +21,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Key} from "../../Keyboard";
-import sdk from "../../index";
+import * as sdk from "../../index";
 import AccessibleButton from "../views/elements/AccessibleButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way

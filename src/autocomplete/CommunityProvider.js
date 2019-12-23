@@ -21,7 +21,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import MatrixClientPeg from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import sdk from '../index';
+import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";

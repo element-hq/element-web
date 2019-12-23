@@ -22,7 +22,7 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
-import sdk from '../index';
+import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
 import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';

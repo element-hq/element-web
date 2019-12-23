@@ -24,10 +24,10 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 const classNames = require("classnames");
 import { _t, _td } from '../../../languageHandler';
+import * as TextForEvent from "../../../TextForEvent";
 const Modal = require('../../../Modal');
 
 const sdk = require('../../../index');
-const TextForEvent = require('../../../TextForEvent');
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -35,8 +35,7 @@ import {EventStatus, MatrixClient} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
-
-const ObjectUtils = require('../../../ObjectUtils');
+import * as ObjectUtils from "../../../ObjectUtils";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',

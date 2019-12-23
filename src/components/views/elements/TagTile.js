@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import {_t} from '../../../languageHandler';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';

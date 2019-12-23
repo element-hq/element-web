@@ -24,7 +24,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
-import sdk from '../index';
+import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";

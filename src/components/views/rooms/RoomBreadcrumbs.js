@@ -21,7 +21,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import Analytics from "../../../Analytics";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";

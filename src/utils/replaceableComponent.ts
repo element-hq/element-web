@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../index';
+import * as sdk from '../index';
 
 /**
  * Replaces a component with a skinned version if a skinned version exists.

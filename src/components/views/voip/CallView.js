@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import CallHandler from '../../../CallHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 

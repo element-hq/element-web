@@ -19,8 +19,8 @@ import createReactClass from 'create-react-class';
 import {ContentRepo} from "matrix-js-sdk";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
-import sdk from "../../../index";
-import Avatar from '../../../Avatar';
+import * as sdk from "../../../index";
+import * as Avatar from '../../../Avatar';
 
 module.exports = createReactClass({
     displayName: 'RoomAvatar',

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';

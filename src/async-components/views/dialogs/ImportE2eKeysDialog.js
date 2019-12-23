@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 function readFileAsArrayBuffer(file) {

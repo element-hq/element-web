@@ -26,7 +26,7 @@ import { Key, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';

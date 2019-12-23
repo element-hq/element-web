@@ -28,7 +28,7 @@ import Presence from './Presence';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";

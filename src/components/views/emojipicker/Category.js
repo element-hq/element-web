@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 const OVERFLOW_ROWS = 3;
 

@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClient} from 'matrix-js-sdk';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 
