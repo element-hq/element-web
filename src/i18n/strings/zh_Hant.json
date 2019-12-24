@@ -2018,5 +2018,6 @@
     "Country Dropdown": "國家下拉式選單",
     "The message you are trying to send is too large.": "您正試圖傳送的訊息太大了。",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "秘密儲存空間將使用你既有的金鑰備份資訊來設定。您的秘密儲存空間密碼與復原金鑰會與您的金鑰備份相同",
-    "Migrate from Key Backup": "從金鑰備份導入"
+    "Migrate from Key Backup": "從金鑰備份導入",
+    "Help": "說明"
 }
