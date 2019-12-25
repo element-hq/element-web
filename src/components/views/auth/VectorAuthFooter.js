@@ -16,9 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
-
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 const VectorAuthFooter = () => {
     const brandingConfig = SdkConfig.get().branding;

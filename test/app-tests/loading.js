@@ -16,7 +16,7 @@ limitations under the License.
 
 /* loading.js: test the myriad paths we have for loading the application */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
 
 import 'skin-sdk';
@@ -30,16 +30,16 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import jssdk from 'matrix-js-sdk';
 
 import sdk from 'matrix-react-sdk';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
-import {VIEWS} from 'matrix-react-sdk/lib/components/structures/MatrixChat';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
+import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
+import dis from 'matrix-react-sdk/src/dispatcher';
 
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
-import {makeType} from "matrix-react-sdk/lib/utils/TypeUtils";
-import {ValidatedServerConfig} from "matrix-react-sdk/lib/utils/AutoDiscoveryUtils";
+import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
 
 const DEFAULT_HS_URL='http://my_server';
