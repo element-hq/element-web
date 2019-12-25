@@ -16,7 +16,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s",
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
-    "Custom Server Options": "Xüsusi Server Seçimləri",
+    "Custom Server Options": "Fərdi Server Seçimləri",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli bir URL-sini göstərərək digər Matrix serverlərinə daxil olmaq üçün xüsusi server seçimlərindən istifadə edə bilərsiniz. Bu, fərqli bir ev serverda mövcud Matrix hesabı ilə Riot istifadə etməyə imkan verir.",
     "Dismiss": "Rədd et",
     "Room Directory": "Otaq kataloqu",
