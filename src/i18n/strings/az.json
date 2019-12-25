@@ -17,7 +17,7 @@
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Custom Server Options": "Fərdi Server Seçimləri",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli bir URL-sini göstərərək digər Matrix serverlərinə daxil olmaq üçün xüsusi server seçimlərindən istifadə edə bilərsiniz. Bu, fərqli bir ev serverda mövcud Matrix hesabı ilə Riot istifadə etməyə imkan verir.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli server URL-ni təyin etməklə digər Matrix serverlərinə daxil olmaq üçün fərdi server seçimlərini istifadə edə bilərsiniz. Bu sizə başqa serverdə qaldırılmış mövcud Matrix hesabınızla Riot-u işlətməyə imkan verir.",
     "Dismiss": "Rədd et",
     "Room Directory": "Otaq kataloqu",
     "Welcome to Riot.im": "Riot.im-ə xoş gəlmişsiniz",
