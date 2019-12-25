@@ -2019,5 +2019,6 @@
     "Country Dropdown": "Ország lenyíló menü",
     "The message you are trying to send is too large.": "Túl nagy képet próbálsz elküldeni.",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "A Biztonsági Tároló a már létező kulcs mentés adatai felhasználásával lesz létrehozva. A biztonsági tároló jelmondata és a visszaállítási kulcs meg fog egyezni a kulcs mentésénél használttal",
-    "Migrate from Key Backup": "Mozgatás a Kulcs Mentésből"
+    "Migrate from Key Backup": "Mozgatás a Kulcs Mentésből",
+    "Help": "Segítség"
 }
