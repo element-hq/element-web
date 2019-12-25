@@ -12,7 +12,7 @@
     "Your Riot is misconfigured": "Riot yanlış quraşdırılıb",
     "Unexpected error preparing the app. See console for details.": "Proqramın başlanmasında gözlənilməz xəta. İzah üçün konsola baxın",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: bunlardan yalnız birini təyin edin - default_server_config, default_server_name, və ya default_hs_url.",
-    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib.",
+    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s",
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
