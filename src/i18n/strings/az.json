@@ -350,7 +350,7 @@
     "Failed to invite users to community": "İstifadəçiləri cəmiyyətə dəvət etmək alınmadı",
     "Unnamed Room": "Adı açıqlanmayan otaq",
     "Unable to load! Check your network connectivity and try again.": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
-    "Dismiss": "Rədd et",
+    "Dismiss": "Nəzərə almayın",
     "Riot does not have permission to send you notifications - please check your browser settings": "Riot-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
     "Riot was not given permission to send notifications - please try again": "Riot bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
     "This email address was not found": "Bu e-poçt ünvanı tapılmadı",
@@ -447,5 +447,6 @@
     "%(senderDisplayName)s enabled flair for %(groups)s in this room.": "Bu otaqda %(qruplar)s üçün %(senderDisplayName)s aktiv oldu.",
     "%(senderDisplayName)s disabled flair for %(groups)s in this room.": "Bu otaqda %(groups)s üçün %(senderDisplayName)s aktiv oldu.",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
-    "Custom Server Options": "Xüsusi Server Seçimləri"
+    "Custom Server Options": "Fərdi Server Seçimləri",
+    "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "Bu otaqda %(newGroups)s üçün aktiv və %(oldGroups)s üçün %(senderDisplayName)s deaktiv oldu."
 }
