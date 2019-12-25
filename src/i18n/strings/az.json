@@ -10,7 +10,7 @@
     "Chat with Riot Bot": "Riot Bot-la söhbət edin",
     "Explore rooms": "Otaqları kəşf edin",
     "Your Riot is misconfigured": "Riot yanlış quraşdırılıb",
-    "Unexpected error preparing the app. See console for details.": "Proqramı başladarkən gözlənilməz xəta. Ətraflı məlumat üçün konsola baxın.",
+    "Unexpected error preparing the app. See console for details.": "Proqramın başlanmasında gözlənilməz xəta. İzah üçün konsola baxın",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: default_server_config, default_server_name, və ya default_hs_url-dən yalnız birini təyin etməlisiniz.",
     "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib.",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s",
@@ -19,5 +19,7 @@
     "Custom Server Options": "Xüsusi Server Seçimləri",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli bir URL-sini göstərərək digər Matrix serverlərinə daxil olmaq üçün xüsusi server seçimlərindən istifadə edə bilərsiniz. Bu, fərqli bir ev serverda mövcud Matrix hesabı ilə Riot istifadə etməyə imkan verir.",
     "Dismiss": "Rədd et",
-    "Room Directory": "Otaq kataloqu"
+    "Room Directory": "Otaq kataloqu",
+    "Welcome to Riot.im": "Riot.im-ə xoş gəlmişsiniz",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] tərəfindən təchiz edilmiş mərkəziləşdirilməmiş, şifrələnmiş çat və əməkdaşlıq platforması"
 }
