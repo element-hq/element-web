@@ -20,7 +20,7 @@ import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = () => {
+const VectorAuthFooter = () => {
     const brandingConfig = SdkConfig.get().branding;
     let links = [
         {"text": "blog", "url": "https://medium.com/@RiotChat"},
@@ -48,4 +48,7 @@ module.exports = () => {
         </div>
     );
 };
-module.exports.replaces = 'AuthFooter';
+
+VectorAuthFooter.replaces = 'AuthFooter';
+
+export default VectorAuthFooter;
