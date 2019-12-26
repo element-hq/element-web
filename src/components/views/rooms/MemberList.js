@@ -33,7 +33,7 @@ const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
 // Regex applied to member names before applying sort, to fuzzy it a little
-const SORT_REGEX = /[.?!,;:\-()[\]{}'"&@]+/g;
+const SORT_REGEX = /[.?!,;:\-()[\]{}'"&@#\\/+_=]+/g;
 
 module.exports = createReactClass({
     displayName: 'MemberList',
