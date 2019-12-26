@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-const RoomTileOnlineDot = ({userId}) => {
+const UserOnlineDot = ({userId}) => {
     const cli = useContext(MatrixClientContext);
     const user = useMemo(() => cli.getUser(userId), [cli, userId]);
 
@@ -38,11 +38,11 @@ const RoomTileOnlineDot = ({userId}) => {
     useEventEmitter(user, "User.currentlyActive", currentlyActiveHandler);
     useEventEmitter(user, "User.presence", currentlyActiveHandler);
 
-    return isOnline ? <span className="mx_RoomTile_online_dot" /> : null;
+    return isOnline ? <span className="mx_UserOnlineDot" /> : null;
 };
 
-RoomTileOnlineDot.propTypes = {
+UserOnlineDot.propTypes = {
     userId: PropTypes.string.isRequired,
 };
 
-export default RoomTileOnlineDot;
+export default UserOnlineDot;
