@@ -1931,7 +1931,8 @@ module.exports = createReactClass({
             />);
 
         let topUnreadMessagesBar = null;
-        if (this.state.showTopUnreadMessagesBar) {
+        // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
+        if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (<TopUnreadMessagesBar
                                        onScrollUpClick={this.jumpToReadMarker}
@@ -1939,7 +1940,8 @@ module.exports = createReactClass({
                                     />);
         }
         let jumpToBottom;
-        if (!this.state.atEndOfLiveTimeline) {
+        // Do not show JumpToBottomButton if we have search results showing, it makes no sense
+        if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
                 numUnreadMessages={this.state.numUnreadMessages}
