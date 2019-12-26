@@ -379,7 +379,8 @@ module.exports = createReactClass({
                 alt="dm"
             />;
 
-            if (this.props.room.getMember(dmUserId).membership === "join") {
+            const { room } = this.props;
+            if (room.getMember(dmUserId).membership === "join" && room.getJoinedMemberCount() === 2) {
                 const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
                 dmOnline = <UserOnlineDot userId={dmUserId} />;
             }
