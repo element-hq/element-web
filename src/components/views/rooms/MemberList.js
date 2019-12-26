@@ -32,6 +32,9 @@ const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
+// Regex applied to member names before applying sort, to fuzzy it a little
+const SORT_REGEX = /[.?!,;:\-()[\]{}'"&@]+/g;
+
 module.exports = createReactClass({
     displayName: 'MemberList',
 
@@ -336,10 +339,13 @@ module.exports = createReactClass({
         }
 
         // Fourth by name (alphabetical)
-        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+        const nameA = (memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name).replace(SORT_REGEX, "");
+        const nameB = (memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name).replace(SORT_REGEX, "");
         // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
-        return nameA.localeCompare(nameB);
+        return nameA.localeCompare(nameB, {
+            ignorePunctuation: true,
+            sensitivity: "base",
+        });
     },
 
     onSearchQueryChanged: function(searchQuery) {
