@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EditableItemList from "../elements/EditableItemList";
+
 const React = require('react');
 import PropTypes from 'prop-types';
 const MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -22,7 +24,28 @@ const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import AccessibleButton from "../elements/AccessibleButton";
 const Modal = require("../../../Modal");
+
+class EditableAliasesList extends EditableItemList {
+    _renderNewItemField() {
+        const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
+        const onChange = (alias) => this._onNewItemChanged({target: {value: alias}});
+        return (
+            <form onSubmit={this._onItemAdded} autoComplete="off"
+                  noValidate={true} className="mx_EditableItemList_newItem">
+                <RoomAliasField
+                    id={`mx_EditableItemList_new_${this.props.id}`}
+                    onChange={onChange}
+                    value={this.props.newItem || ""}
+                    domain={this.props.domain} />
+                <AccessibleButton onClick={this._onItemAdded} kind="primary">
+                    {_t("Add")}
+                </AccessibleButton>
+            </form>
+        );
+    }
+}
 
 export default class AliasSettings extends React.Component {
     static propTypes = {
@@ -47,7 +70,6 @@ export default class AliasSettings extends React.Component {
             remoteDomains: [], // [ domain.com, foobar.com ]
             canonicalAlias: null, // #canonical:domain.com
             updatingCanonicalAlias: false,
-            newItem: "",
         };
 
         const localDomain = MatrixClientPeg.get().getDomain();
@@ -181,7 +203,6 @@ export default class AliasSettings extends React.Component {
     };
 
     render() {
-        const EditableItemList = sdk.getComponent("elements.EditableItemList");
         const localDomain = MatrixClientPeg.get().getDomain();
 
         let found = false;
@@ -233,7 +254,7 @@ export default class AliasSettings extends React.Component {
         return (
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
-                <EditableItemList
+                <EditableAliasesList
                     id="roomAliases"
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}
@@ -248,6 +269,7 @@ export default class AliasSettings extends React.Component {
                     placeholder={_t(
                         'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
                     )}
+                    domain={localDomain}
                 />
                 {remoteAliasesSection}
             </div>
