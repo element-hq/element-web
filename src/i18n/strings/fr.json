@@ -2008,5 +2008,16 @@
     "Hide verified sessions": "Masquer les sessions vérifiées",
     "%(count)s verified sessions|other": "%(count)s sessions vérifiées",
     "%(count)s verified sessions|one": "1 session vérifiée",
-    "Close preview": "Fermer l’aperçu"
+    "Close preview": "Fermer l’aperçu",
+    "This user has not verified all of their devices.": "Cet utilisateur n'a pas vérifié tous ses appareils.",
+    "You have not verified this user. This user has verified all of their devices.": "Vous n'avez pas vérifié cet utilisateur. Cet utilisateur a vérifié tous ses appareils.",
+    "You have verified this user. This user has verified all of their devices.": "Vous avez vérifié cet utilisateur. Cet utilisateur a vérifié tous ses appareils.",
+    "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "Certains utilisateurs dans ce salon chiffré n’ont pas été vérifiés par vous ou n’ont pas vérifié leurs propres appareils.",
+    "All users in this encrypted room are verified by you and they have verified their own devices.": "Tous les utilisateurs de ce salon chiffré ont été vérifiés par vous et ont vérifié leurs propres appareils.",
+    "Language Dropdown": "Sélection de la langue",
+    "Country Dropdown": "Sélection du pays",
+    "The message you are trying to send is too large.": "Le message que vous essayez d’envoyer est trop gros.",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Le coffre secret sera configuré en utilisant vos informations de sauvegarde de clés existantes. Votre phrase de passe et votre clé de récupération seront les mêmes que pour la sauvegarde de clés",
+    "Migrate from Key Backup": "Migrer depuis la sauvegarde de clés",
+    "Help": "Aide"
 }
