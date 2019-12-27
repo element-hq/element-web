@@ -405,7 +405,7 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s вилучив/ла %(widgetName)s",
     "Failure to create room": "Не вдалося створити кімнату",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сервер може бути недоступний, перевантажений, або ж ви натрапили на ваду.",
-    "Send anyway": "Все-таки надіслати",
+    "Send anyway": "Надіслати хоч би там що",
     "Unnamed Room": "Кімната без назви",
     "This homeserver has hit its Monthly Active User limit.": "Цей домашній сервер досягнув свого ліміту щомісячних активних користувачів.",
     "This homeserver has exceeded one of its resource limits.": "Цей домашній сервер досягнув одного зі своїх лімітів ресурсів.",
