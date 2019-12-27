@@ -315,8 +315,8 @@ export default class Stickerpicker extends React.Component {
 
         // Offset the chevron location, which is relative to the left of the context menu
         //  (10 = offset when context menu would not be displayed off viewport)
-        //  (8 = value required in practice (possibly 10 - 2 where the 2 = context menu borders)
-        const stickerPickerChevronOffset = Math.max(10, 8 + window.pageXOffset + buttonRect.left - x);
+        //  (2 = context menu borders)
+        const stickerPickerChevronOffset = Math.max(10, 2 + window.pageXOffset + buttonRect.left - x);
 
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
