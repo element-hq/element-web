@@ -984,7 +984,7 @@ const PowerLevelEditor = ({user, room, roomPermissions, onFinished}) => {
                 });
 
                 const [confirmed] = await finished;
-                if (confirmed) return;
+                if (!confirmed) return;
             }
             await _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
         } finally {
