@@ -32,15 +32,19 @@ class EditableAliasesList extends EditableItemList {
         const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
         const onChange = (alias) => this._onNewItemChanged({target: {value: alias}});
         return (
-            <form onSubmit={this._onItemAdded} autoComplete="off"
-                  noValidate={true} className="mx_EditableItemList_newItem">
+            <form
+                onSubmit={this._onItemAdded}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_EditableItemList_newItem"
+            >
                 <RoomAliasField
                     id={`mx_EditableItemList_new_${this.props.id}`}
                     onChange={onChange}
                     value={this.props.newItem || ""}
                     domain={this.props.domain} />
                 <AccessibleButton onClick={this._onItemAdded} kind="primary">
-                    {_t("Add")}
+                    { _t("Add") }
                 </AccessibleButton>
             </form>
         );
