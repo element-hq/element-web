@@ -2016,5 +2016,6 @@
     "Country Dropdown": "Nazione a tendina",
     "The message you are trying to send is too large.": "Il messaggio che stai tentando di inviare è troppo grande.",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "L'archivio segreto verrà impostato usando i dettagli del tuo backup chiavi. La password dell'archivio segreto e la chiave di ripristino saranno le stesse del tuo backup chiavi",
-    "Migrate from Key Backup": "Migra dal backup chiavi"
+    "Migrate from Key Backup": "Migra dal backup chiavi",
+    "Help": "Aiuto"
 }
