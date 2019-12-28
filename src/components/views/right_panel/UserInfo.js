@@ -32,7 +32,7 @@ import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventTimeline} from "matrix-js-sdk";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import * as RoomViewStore from "../../../stores/RoomViewStore";
+import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
