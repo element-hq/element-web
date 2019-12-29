@@ -243,3 +243,12 @@ $breadcrumb-placeholder-bg-color: #272c35;
         }
     }
 }
+
+// Fixes diff color inversion by swapping add / del colors
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
+}
