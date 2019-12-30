@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import filesize from 'filesize';
@@ -26,6 +26,7 @@ import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
 import Modal from '../../../Modal';
+import SdkConfig from "../../../SdkConfig";
 
 
 // A cached tinted copy of require("../../../../res/img/download.svg")
@@ -214,10 +215,6 @@ module.exports = createReactClass({
         tileShape: PropTypes.string,
     },
 
-    contextTypes: {
-        appConfig: PropTypes.object,
-    },
-
     /**
      * Extracts a human readable label for the file attachment to use as
      * link text.
@@ -251,6 +248,12 @@ module.exports = createReactClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url);
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._iframe = createRef();
+        this._dummyLink = createRef();
+        this._downloadImage = createRef();
+    },
+
     componentDidMount: function() {
         // Add this to the list of mounted components to receive notifications
         // when the tint changes.
@@ -272,17 +275,17 @@ module.exports = createReactClass({
 
     tint: function() {
         // Update our tinted copy of require("../../../../res/img/download.svg")
-        if (this.refs.downloadImage) {
-            this.refs.downloadImage.src = tintedDownloadImageURL;
+        if (this._downloadImage.current) {
+            this._downloadImage.current.src = tintedDownloadImageURL;
         }
-        if (this.refs.iframe) {
+        if (this._iframe.current) {
             // If the attachment is encrypted then the download image
             // will be inside the iframe so we wont be able to update
             // it directly.
-            this.refs.iframe.contentWindow.postMessage({
+            this._iframe.current.contentWindow.postMessage({
                 code: remoteSetTint.toString(),
                 imgSrc: tintedDownloadImageURL,
-                style: computedStyle(this.refs.dummyLink),
+                style: computedStyle(this._dummyLink.current),
             }, "*");
         }
     },
@@ -325,7 +328,7 @@ module.exports = createReactClass({
                 };
 
                 return (
-                    <span className="mx_MFileBody" ref="body">
+                    <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
@@ -340,7 +343,7 @@ module.exports = createReactClass({
                 ev.target.contentWindow.postMessage({
                     code: remoteRender.toString(),
                     imgSrc: tintedDownloadImageURL,
-                    style: computedStyle(this.refs.dummyLink),
+                    style: computedStyle(this._dummyLink.current),
                     blob: this.state.decryptedBlob,
                     // Set a download attribute for encrypted files so that the file
                     // will have the correct name when the user tries to download it.
@@ -354,8 +357,9 @@ module.exports = createReactClass({
 
             // If the attachment is encryped then put the link inside an iframe.
             let renderer_url = DEFAULT_CROSS_ORIGIN_RENDERER;
-            if (this.context.appConfig && this.context.appConfig.cross_origin_renderer_url) {
-                renderer_url = this.context.appConfig.cross_origin_renderer_url;
+            const appConfig = SdkConfig.get();
+            if (appConfig && appConfig.cross_origin_renderer_url) {
+                renderer_url = appConfig.cross_origin_renderer_url;
             }
             renderer_url += "?origin=" + encodeURIComponent(window.location.origin);
             return (
@@ -367,9 +371,9 @@ module.exports = createReactClass({
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
                               */ }
-                            <a ref="dummyLink" />
+                            <a ref={this._dummyLink} />
                         </div>
-                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe" />
+                        <iframe src={renderer_url} onLoad={onIframeLoad} ref={this._iframe} />
                     </div>
                 </span>
             );
@@ -439,7 +443,7 @@ module.exports = createReactClass({
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
                             <a {...downloadProps}>
-                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
+                                <img src={tintedDownloadImageURL} width="12" height="14" ref={this._downloadImage} />
                                 { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>

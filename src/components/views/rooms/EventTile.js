@@ -19,7 +19,7 @@ limitations under the License.
 
 import ReplyThread from "../elements/ReplyThread";
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 const classNames = require("classnames");
@@ -31,9 +31,11 @@ const TextForEvent = require('../../../TextForEvent');
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {EventStatus, MatrixClient} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -68,6 +70,11 @@ const stateEventTileTypes = {
     'm.room.guest_access': 'messages.TextualEvent',
     'm.room.related_groups': 'messages.TextualEvent',
 };
+
+// Add all the Mjolnir stuff to the renderer
+for (const evType of ALL_RULE_TYPES) {
+    stateEventTileTypes[evType] = 'messages.TextualEvent';
+}
 
 function getHandlerTile(ev) {
     const type = ev.getType();
@@ -216,19 +223,22 @@ module.exports = createReactClass({
         };
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
         this._verifyEvent(this.props.mxEvent);
+
+        this._tile = createRef();
+        this._replyThread = createRef();
     },
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        const client = this.context.matrixClient;
+        const client = this.context;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -253,7 +263,7 @@ module.exports = createReactClass({
     },
 
     componentWillUnmount: function() {
-        const client = this.context.matrixClient;
+        const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -282,7 +292,7 @@ module.exports = createReactClass({
             return;
         }
 
-        const verified = await this.context.matrixClient.isEventSenderVerified(mxEvent);
+        const verified = await this.context.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
         }, () => {
@@ -340,11 +350,11 @@ module.exports = createReactClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.context.matrixClient.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === this.context.matrixClient.credentials.userId) {
+        if (this.props.mxEvent.getSender() === this.context.credentials.userId) {
             return false;
         }
 
@@ -452,7 +462,7 @@ module.exports = createReactClass({
         // Cancel any outgoing key request for this event and resend it. If a response
         // is received for the request with the required keys, the event could be
         // decrypted successfully.
-        this.context.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
+        this.context.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
     },
 
     onPermalinkClicked: function(e) {
@@ -485,7 +495,7 @@ module.exports = createReactClass({
             }
         }
 
-        if (this.context.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+        if (this.context.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
@@ -512,11 +522,11 @@ module.exports = createReactClass({
     },
 
     getTile() {
-        return this.refs.tile;
+        return this._tile.current;
     },
 
     getReplyThread() {
-        return this.refs.replyThread;
+        return this._replyThread.current;
     },
 
     getReactions() {
@@ -732,7 +742,7 @@ module.exports = createReactClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
-                const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+                const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
@@ -748,7 +758,7 @@ module.exports = createReactClass({
                             </a>
                         </div>
                         <div className="mx_EventTile_line">
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -762,7 +772,7 @@ module.exports = createReactClass({
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_line">
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -792,7 +802,7 @@ module.exports = createReactClass({
                         this.props.mxEvent,
                         this.props.onHeightChanged,
                         this.props.permalinkCreator,
-                        'replyThread',
+                        this._replyThread,
                     );
                 }
                 return (
@@ -805,7 +815,7 @@ module.exports = createReactClass({
                             </a>
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -820,7 +830,7 @@ module.exports = createReactClass({
                     this.props.mxEvent,
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
-                    'replyThread',
+                    this._replyThread,
                 );
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
@@ -839,7 +849,7 @@ module.exports = createReactClass({
                             </a>
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
-                            <EventTileType ref="tile"
+                            <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
                                            replacingEventId={this.props.replacingEventId}
                                            editState={this.props.editState}

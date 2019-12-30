@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd.
 Copyright 2017 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import TintableSvg from '../elements/TintableSvg';
-import RightPanel from '../../structures/RightPanel';
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -163,8 +164,8 @@ export default createReactClass({
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             dis.dispatch({
-                action: 'view_right_panel_phase',
-                phase: RightPanel.Phase.GroupMemberList,
+                action: 'set_right_panel_phase',
+                phase: RIGHT_PANEL_PHASES.GroupMemberList,
                 groupId: this.props.groupId,
             });
         });

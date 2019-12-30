@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
@@ -44,13 +44,15 @@ export default class NotificationsSettingsTab extends React.Component {
             }
             this.setState({currentSound: soundData.name || soundData.url});
         });
+
+        this._soundUpload = createRef();
     }
 
     async _triggerUploader(e) {
         e.stopPropagation();
         e.preventDefault();
 
-        this.refs.soundUpload.click();
+        this._soundUpload.current.click();
     }
 
     async _onSoundUploadChanged(e) {
@@ -157,7 +159,7 @@ export default class NotificationsSettingsTab extends React.Component {
                     <div>
                         <h3>{_t("Set a new custom sound")}</h3>
                         <form autoComplete="off" noValidate={true}>
-                            <input ref="soundUpload" className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
+                            <input ref={this._soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
                         </form>
 
                         {currentUploadedFile}

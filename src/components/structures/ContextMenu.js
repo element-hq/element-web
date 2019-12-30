@@ -70,10 +70,13 @@ export class ContextMenu extends React.Component {
 
         // on resize callback
         windowResize: PropTypes.func,
+
+        managed: PropTypes.bool, // whether this context menu should be focus managed. If false it must handle itself
     };
 
     static defaultProps = {
         hasBackground: true,
+        managed: true,
     };
 
     constructor() {
@@ -183,6 +186,15 @@ export class ContextMenu extends React.Component {
     };
 
     _onKeyDown = (ev) => {
+        if (!this.props.managed) {
+            if (ev.key === Key.ESCAPE) {
+                this.props.onFinished();
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+            return;
+        }
+
         let handled = true;
 
         switch (ev.key) {
@@ -313,7 +325,7 @@ export class ContextMenu extends React.Component {
 
         return (
             <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
-                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role="menu">
+                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role={this.props.managed ? "menu" : undefined}>
                     { chevron }
                     { props.children }
                 </div>
@@ -411,7 +423,7 @@ export const toRightOf = (elementRect, chevronOffset=12) => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
-    return {left, top};
+    return {left, top, chevronOffset};
 };
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect

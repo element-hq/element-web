@@ -23,12 +23,10 @@ limitations under the License.
 
 import shouldHideEvent from '../../shouldHideEvent';
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
@@ -44,7 +42,7 @@ import ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -54,6 +52,8 @@ import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
+import RightPanelStore from "../../stores/RightPanelStore";
+import RoomContext from "../../contexts/RoomContext";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -64,12 +64,6 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
 }
-
-const RoomContext = PropTypes.shape({
-    canReact: PropTypes.bool.isRequired,
-    canReply: PropTypes.bool.isRequired,
-    room: PropTypes.instanceOf(Room),
-});
 
 module.exports = createReactClass({
     displayName: 'RoomView',
@@ -97,9 +91,6 @@ module.exports = createReactClass({
         //  * inviterName (string) The display name of the person who
         //  *                      invited us to the room
         oobData: PropTypes.object,
-
-        // is the RightPanel collapsed?
-        collapsedRhs: PropTypes.bool,
 
         // Servers the RoomView can use to try and assist joins
         viaServers: PropTypes.arrayOf(PropTypes.string),
@@ -171,21 +162,6 @@ module.exports = createReactClass({
         };
     },
 
-    childContextTypes: {
-        room: RoomContext,
-    },
-
-    getChildContext: function() {
-        const {canReact, canReply, room} = this.state;
-        return {
-            room: {
-                canReact,
-                canReply,
-                room,
-            },
-        };
-    },
-
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room", this.onRoom);
@@ -207,6 +183,9 @@ module.exports = createReactClass({
         this._onCiderUpdated();
         this._ciderWatcherRef = SettingsStore.watchSetting(
             "useCiderComposer", null, this._onCiderUpdated);
+
+        this._roomView = createRef();
+        this._searchResultsPanel = createRef();
     },
 
     _onCiderUpdated: function() {
@@ -459,8 +438,8 @@ module.exports = createReactClass({
     },
 
     componentDidUpdate: function() {
-        if (this.refs.roomView) {
-            const roomView = ReactDOM.findDOMNode(this.refs.roomView);
+        if (this._roomView.current) {
+            const roomView = this._roomView.current;
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
@@ -474,10 +453,10 @@ module.exports = createReactClass({
         // in render() prevents the ref from being set on first mount, so we try and
         // catch the messagePanel when it does mount. Because we only want the ref once,
         // we use a boolean flag to avoid duplicate work.
-        if (this.refs.messagePanel && !this.state.atEndOfLiveTimelineInit) {
+        if (this._messagePanel && !this.state.atEndOfLiveTimelineInit) {
             this.setState({
                 atEndOfLiveTimelineInit: true,
-                atEndOfLiveTimeline: this.refs.messagePanel.isAtEndOfLiveTimeline(),
+                atEndOfLiveTimeline: this._messagePanel.isAtEndOfLiveTimeline(),
             });
         }
     },
@@ -499,12 +478,12 @@ module.exports = createReactClass({
         // stop tracking room changes to format permalinks
         this._stopAllPermalinkCreators();
 
-        if (this.refs.roomView) {
+        if (this._roomView.current) {
             // disconnect the D&D event listeners from the room view. This
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            const roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            const roomView = this._roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -560,15 +539,15 @@ module.exports = createReactClass({
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
-        switch (ev.keyCode) {
-            case KeyCode.KEY_D:
+        switch (ev.key) {
+            case Key.D:
                 if (ctrlCmdOnly) {
                     this.onMuteAudioClick();
                     handled = true;
                 }
                 break;
 
-            case KeyCode.KEY_E:
+            case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
                     handled = true;
@@ -584,6 +563,10 @@ module.exports = createReactClass({
 
     onAction: function(payload) {
         switch (payload.action) {
+            case 'after_right_panel_phase_change':
+                // We don't keep state on the right panel, so just re-render to update
+                this.forceUpdate();
+                break;
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
@@ -701,10 +684,10 @@ module.exports = createReactClass({
     },
 
     canResetTimeline: function() {
-        if (!this.refs.messagePanel) {
+        if (!this._messagePanel) {
             return true;
         }
-        return this.refs.messagePanel.canResetTimeline();
+        return this._messagePanel.canResetTimeline();
     },
 
     // called when state.room is first initialised (either at initial load,
@@ -787,11 +770,12 @@ module.exports = createReactClass({
         this._updateE2EStatus(room);
     },
 
-    _updateE2EStatus: function(room) {
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
+    _updateE2EStatus: async function(room) {
+        const cli = MatrixClientPeg.get();
+        if (!cli.isRoomEncrypted(room.roomId)) {
             return;
         }
-        if (!MatrixClientPeg.get().isCryptoEnabled()) {
+        if (!cli.isCryptoEnabled()) {
             // If crypto is not currently enabled, we aren't tracking devices at all,
             // so we don't know what the answer is. Let's error on the safe side and show
             // a warning for this case.
@@ -800,10 +784,38 @@ module.exports = createReactClass({
             });
             return;
         }
-        room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
-            this.setState({
-                e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
+                this.setState({
+                    e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+                });
             });
+            return;
+        }
+        const e2eMembers = await room.getEncryptionTargetMembers();
+        for (const member of e2eMembers) {
+            const { userId } = member;
+            const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+            if (!userVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+            const devices = await cli.getStoredDevicesForUser(userId);
+            const allDevicesVerified = devices.every(device => {
+                const { deviceId } = device;
+                return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+            });
+            if (!allDevicesVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+        }
+        this.setState({
+            e2eStatus: "verified",
         });
     },
 
@@ -1046,7 +1058,7 @@ module.exports = createReactClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messagePanel.isAtEndOfLiveTimeline()) {
+        if (this._messagePanel.isAtEndOfLiveTimeline()) {
             this.setState({
                 numUnreadMessages: 0,
                 atEndOfLiveTimeline: true,
@@ -1119,8 +1131,8 @@ module.exports = createReactClass({
 
         // if we already have a search panel, we need to tell it to forget
         // about its scroll state.
-        if (this.refs.searchResultsPanel) {
-            this.refs.searchResultsPanel.resetScrollState();
+        if (this._searchResultsPanel.current) {
+            this._searchResultsPanel.current.resetScrollState();
         }
 
         // make sure that we don't end up showing results from
@@ -1225,7 +1237,7 @@ module.exports = createReactClass({
         // once dynamic content in the search results load, make the scrollPanel check
         // the scroll offsets.
         const onHeightChanged = () => {
-            const scrollPanel = this.refs.searchResultsPanel;
+            const scrollPanel = this._searchResultsPanel.current;
             if (scrollPanel) {
                 scrollPanel.checkScroll();
             }
@@ -1370,28 +1382,28 @@ module.exports = createReactClass({
 
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
-        this.refs.messagePanel.jumpToLiveTimeline();
+        this._messagePanel.jumpToLiveTimeline();
         dis.dispatch({action: 'focus_composer'});
     },
 
     // jump up to wherever our read marker is
     jumpToReadMarker: function() {
-        this.refs.messagePanel.jumpToReadMarker();
+        this._messagePanel.jumpToReadMarker();
     },
 
     // update the read marker to match the read-receipt
     forgetReadMarker: function(ev) {
         ev.stopPropagation();
-        this.refs.messagePanel.forgetReadMarker();
+        this._messagePanel.forgetReadMarker();
     },
 
     // decide whether or not the top 'unread messages' bar should be shown
     _updateTopUnreadMessagesBar: function() {
-        if (!this.refs.messagePanel) {
+        if (!this._messagePanel) {
             return;
         }
 
-        const showBar = this.refs.messagePanel.canJumpToReadMarker();
+        const showBar = this._messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
             this.setState({showTopUnreadMessagesBar: showBar});
         }
@@ -1401,7 +1413,7 @@ module.exports = createReactClass({
     // restored when we switch back to it.
     //
     _getScrollState: function() {
-        const messagePanel = this.refs.messagePanel;
+        const messagePanel = this._messagePanel;
         if (!messagePanel) return null;
 
         // if we're following the live timeline, we want to return null; that
@@ -1506,10 +1518,10 @@ module.exports = createReactClass({
      */
     handleScrollKey: function(ev) {
         let panel;
-        if (this.refs.searchResultsPanel) {
-            panel = this.refs.searchResultsPanel;
-        } else if (this.refs.messagePanel) {
-            panel = this.refs.messagePanel;
+        if (this._searchResultsPanel.current) {
+            panel = this._searchResultsPanel.current;
+        } else if (this._messagePanel) {
+            panel = this._messagePanel;
         }
 
         if (panel) {
@@ -1530,7 +1542,7 @@ module.exports = createReactClass({
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
-        this.refs.messagePanel = r;
+        this._messagePanel = r;
         if (r) {
             console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
@@ -1714,12 +1726,12 @@ module.exports = createReactClass({
         let aux = null;
         let previewBar;
         let hideCancel = false;
-        let hideRightPanel = false;
+        let forceHideRightPanel = false;
         if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
-            aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
+            aux = <SearchBar searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
             hideCancel = true;
@@ -1760,7 +1772,7 @@ module.exports = createReactClass({
                     </div>
                 );
             } else {
-                hideRightPanel = true;
+                forceHideRightPanel = true;
             }
         } else if (hiddenHighlightCount > 0) {
             aux = (
@@ -1775,7 +1787,7 @@ module.exports = createReactClass({
         }
 
         const auxPanel = (
-            <AuxPanel ref="auxPanel" room={this.state.room}
+            <AuxPanel room={this.state.room}
               fullHeight={false}
               userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
@@ -1875,7 +1887,7 @@ module.exports = createReactClass({
                 searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
             } else {
                 searchResultsPanel = (
-                    <ScrollPanel ref="searchResultsPanel"
+                    <ScrollPanel ref={this._searchResultsPanel}
                         className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                         onFillRequest={this.onSearchResultsFillRequest}
                         resizeNotifier={this.props.resizeNotifier}
@@ -1898,7 +1910,8 @@ module.exports = createReactClass({
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         const messagePanel = (
-            <TimelinePanel ref={this._gatherTimelinePanelRef}
+            <TimelinePanel
+                ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 showReadReceipts={SettingsStore.getValue('showReadReceipts')}
                 manageReadReceipts={!this.state.isPeeking}
@@ -1918,7 +1931,8 @@ module.exports = createReactClass({
             />);
 
         let topUnreadMessagesBar = null;
-        if (this.state.showTopUnreadMessagesBar) {
+        // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
+        if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (<TopUnreadMessagesBar
                                        onScrollUpClick={this.jumpToReadMarker}
@@ -1926,7 +1940,8 @@ module.exports = createReactClass({
                                     />);
         }
         let jumpToBottom;
-        if (!this.state.atEndOfLiveTimeline) {
+        // Do not show JumpToBottomButton if we have search results showing, it makes no sense
+        if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
                 numUnreadMessages={this.state.numUnreadMessages}
@@ -1947,50 +1962,54 @@ module.exports = createReactClass({
             },
         );
 
-        const rightPanel = !hideRightPanel && this.state.room &&
-            <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
-        const collapsedRhs = hideRightPanel || this.props.collapsedRhs;
+        const showRightPanel = !forceHideRightPanel && this.state.room
+            && RightPanelStore.getSharedInstance().isOpenForRoom;
+        const rightPanel = showRightPanel
+            ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />
+            : null;
 
         return (
-            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
-                <ErrorBoundary>
-                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
-                        oobData={this.props.oobData}
-                        inRoom={myMembership === 'join'}
-                        collapsedRhs={collapsedRhs}
-                        onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick}
-                        onPinnedClick={this.onPinnedClick}
-                        onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
-                        onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
-                        onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
-                        e2eStatus={this.state.e2eStatus}
-                    />
-                    <MainSplit
-                        panel={rightPanel}
-                        collapsedRhs={collapsedRhs}
-                        resizeNotifier={this.props.resizeNotifier}
-                    >
-                        <div className={fadableSectionClasses}>
-                            {auxPanel}
-                            <div className="mx_RoomView_timeline">
-                                {topUnreadMessagesBar}
-                                {jumpToBottom}
-                                {messagePanel}
-                                {searchResultsPanel}
-                            </div>
-                            <div className={statusBarAreaClass}>
-                                <div className="mx_RoomView_statusAreaBox">
-                                    <div className="mx_RoomView_statusAreaBox_line"></div>
-                                    {statusBar}
+            <RoomContext.Provider value={this.state}>
+                <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
+                    <ErrorBoundary>
+                        <RoomHeader
+                            room={this.state.room}
+                            searchInfo={searchInfo}
+                            oobData={this.props.oobData}
+                            inRoom={myMembership === 'join'}
+                            onSearchClick={this.onSearchClick}
+                            onSettingsClick={this.onSettingsClick}
+                            onPinnedClick={this.onPinnedClick}
+                            onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
+                            onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
+                            onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
+                            e2eStatus={this.state.e2eStatus}
+                        />
+                        <MainSplit
+                            panel={rightPanel}
+                            resizeNotifier={this.props.resizeNotifier}
+                        >
+                            <div className={fadableSectionClasses}>
+                                {auxPanel}
+                                <div className="mx_RoomView_timeline">
+                                    {topUnreadMessagesBar}
+                                    {jumpToBottom}
+                                    {messagePanel}
+                                    {searchResultsPanel}
                                 </div>
+                                <div className={statusBarAreaClass}>
+                                    <div className="mx_RoomView_statusAreaBox">
+                                        <div className="mx_RoomView_statusAreaBox_line" />
+                                        {statusBar}
+                                    </div>
+                                </div>
+                                {previewBar}
+                                {messageComposer}
                             </div>
-                            {previewBar}
-                            {messageComposer}
-                        </div>
-                    </MainSplit>
-                </ErrorBoundary>
-            </main>
+                        </MainSplit>
+                    </ErrorBoundary>
+                </main>
+            </RoomContext.Provider>
         );
     },
 });

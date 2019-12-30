@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import sdk from '../../../index';
-import React from 'react';
+import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
 import { ContentRepo } from 'matrix-js-sdk';
@@ -49,9 +49,13 @@ export default createReactClass({
     },
 
     _linkifyTopic: function() {
-        if (this.refs.topic) {
-            linkifyElement(this.refs.topic);
+        if (this._topic.current) {
+            linkifyElement(this._topic.current);
         }
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._topic = createRef();
     },
 
     componentDidMount: function() {
@@ -104,7 +108,7 @@ export default createReactClass({
             <td className="mx_RoomDirectory_roomDescription">
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                 { perms }
-                <div className="mx_RoomDirectory_topic" ref="topic" onClick={this.onTopicClick}>
+                <div className="mx_RoomDirectory_topic" ref={this._topic} onClick={this.onTopicClick}>
                     { room.topic }
                 </div>
                 <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>

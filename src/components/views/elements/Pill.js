@@ -20,12 +20,13 @@ import createReactClass from 'create-react-class';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
+import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
@@ -64,17 +65,6 @@ const Pill = createReactClass({
         shouldShowPillAvatar: PropTypes.bool,
         // Whether to render this pill as if it were highlit by a selection
         isSelected: PropTypes.bool,
-    },
-
-
-    childContextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    },
-
-    getChildContext() {
-        return {
-            matrixClient: this._matrixClient,
-        };
     },
 
     getInitialState() {
@@ -127,7 +117,7 @@ const Pill = createReactClass({
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                const localMember = nextProps.room.getMember(resourceId);
+                const localMember = nextProps.room ? nextProps.room.getMember(resourceId) : undefined;
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
@@ -276,15 +266,17 @@ const Pill = createReactClass({
         });
 
         if (this.state.pillType) {
-            return this.props.inMessage ?
-                <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
-                    { avatar }
-                    { linkText }
-                </a> :
-                <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
-                    { avatar }
-                    { linkText }
-                </span>;
+            return <MatrixClientContext.Provider value={this._matrixClient}>
+                { this.props.inMessage ?
+                    <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
+                        { avatar }
+                        { linkText }
+                    </a> :
+                    <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
+                        { avatar }
+                        { linkText }
+                    </span> }
+            </MatrixClientContext.Provider>;
         } else {
             // Deliberately render nothing if the URL isn't recognised
             return null;

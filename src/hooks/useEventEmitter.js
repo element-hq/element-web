@@ -28,6 +28,9 @@ export const useEventEmitter = (emitter, eventName, handler) => {
 
     useEffect(
         () => {
+            // allow disabling this hook by passing a falsy emitter
+            if (!emitter) return;
+
             // Create event listener that calls handler function stored in ref
             const eventListener = event => savedHandler.current(event);
 

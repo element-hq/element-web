@@ -22,7 +22,9 @@ limitations under the License.
     display: block;
 }
 
-.mx_E2EIcon_verified::after, .mx_E2EIcon_warning::after {
+.mx_E2EIcon_warning::after,
+.mx_E2EIcon_normal::after,
+.mx_E2EIcon_verified::after {
     content: "";
     display: block;
     position: absolute;
@@ -34,10 +36,14 @@ limitations under the License.
     background-size: contain;
 }
 
-.mx_E2EIcon_verified::after {
-    background-image: url('$(res)/img/e2e/verified.svg');
-}
-
 .mx_E2EIcon_warning::after {
     background-image: url('$(res)/img/e2e/warning.svg');
+}
+
+.mx_E2EIcon_normal::after {
+    background-image: url('$(res)/img/e2e/normal.svg');
+}
+
+.mx_E2EIcon_verified::after {
+    background-image: url('$(res)/img/e2e/verified.svg');
 }

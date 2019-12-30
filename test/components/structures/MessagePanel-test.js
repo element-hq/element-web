@@ -36,27 +36,14 @@ const test_utils = require('test-utils');
 const mockclock = require('mock-clock');
 
 import Velocity from 'velocity-animate';
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import RoomContext from "../../../src/contexts/RoomContext";
 
 let client;
 const room = new Matrix.Room();
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
 const WrappedMessagePanel = createReactClass({
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-        room: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: client,
-            room: {
-                canReact: true,
-                canReply: true,
-            },
-        };
-    },
-
     getInitialState: function() {
         return {
             resizeNotifier: new EventEmitter(),
@@ -64,7 +51,11 @@ const WrappedMessagePanel = createReactClass({
     },
 
     render: function() {
-        return <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />;
+        return <MatrixClientContext.Provider value={client}>
+            <RoomContext.Provider value={{ canReact: true, canReply: true }}>
+                <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
+            </RoomContext.Provider>
+        </MatrixClientContext.Provider>;
     },
 });
 

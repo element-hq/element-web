@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
-import {RoomContext} from "../../structures/RoomView";
+import RoomContext from "../../../contexts/RoomContext";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -78,14 +78,17 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
     </React.Fragment>;
 };
 
-const ReactButton = ({mxEvent, reactions}) => {
+const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    useEffect(() => {
+        onFocusChange(menuDisplayed);
+    }, [onFocusChange, menuDisplayed]);
 
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
@@ -114,9 +117,7 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
-    static contextTypes = {
-        room: RoomContext,
-    };
+    static contextType = RoomContext;
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
@@ -161,10 +162,12 @@ export default class MessageActionBar extends React.PureComponent {
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            if (this.context.room.canReact) {
-                reactButton = <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} />;
+            if (this.context.canReact) {
+                reactButton = (
+                    <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} onFocusChange={this.onFocusChange} />
+                );
             }
-            if (this.context.room.canReply) {
+            if (this.context.canReply) {
                 replyButton = <AccessibleButton
                     className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}

@@ -30,6 +30,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -62,16 +63,6 @@ module.exports = createReactClass({
             includeAll: false,
             roomServer: null,
             filterString: null,
-        };
-    },
-
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
         };
     },
 
@@ -108,20 +99,9 @@ module.exports = createReactClass({
                 ),
             });
         });
-
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: true,
-        //     middleDisabled: true,
-        // });
     },
 
     componentWillUnmount: function() {
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: false,
-        //     middleDisabled: false,
-        // });
         if (this.filterTimeout) {
             clearTimeout(this.filterTimeout);
         }
@@ -281,6 +261,7 @@ module.exports = createReactClass({
             roomServer: server,
             instanceId: instanceId,
             includeAll: includeAll,
+            error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side
@@ -572,7 +553,7 @@ module.exports = createReactClass({
             if (rows.length === 0 && !this.state.loading) {
                 scrollpanel_content = <i>{ _t('No rooms to show') }</i>;
             } else {
-                scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
+                scrollpanel_content = <table className="mx_RoomDirectory_table">
                     <tbody>
                         { rows }
                     </tbody>
