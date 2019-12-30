@@ -55,7 +55,8 @@ export default class RoomSettingsDialog extends React.Component {
     _getTabs() {
         const tabs = [];
         const featureFlag = SettingsStore.isFeatureEnabled("feature_bridge_state");
-        const shouldShowBridgeIcon = featureFlag && BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
+        const shouldShowBridgeIcon = featureFlag && 
+            BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
 
         tabs.push(new Tab(
             _td("General"),
