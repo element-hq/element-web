@@ -160,7 +160,7 @@
     "The server may be unavailable or overloaded": "Сервер може бути недосяжним або перевантаженим",
     "Room not found": "Кімнату не знайдено",
     "Reject": "Відмовитись",
-    "Failed to set Direct Message status of room": "Не вдалось встановити статус прямого спілкування в кімнаті",
+    "Failed to set Direct Message status of room": "Не вдалося встановити статус прямого спілкування в кімнаті",
     "Monday": "Понеділок",
     "Remove from Directory": "Прибрати з каталогу",
     "Enable them now": "Увімкнути їх зараз",
@@ -577,7 +577,11 @@
     "Upload %(count)s other files|other": "Відвантажити %(count)s інших файли(ів)",
     "Upload Error": "Помилка відвантаження",
     "Failed to upload image": "Не вдалось відвантажити зображення",
-    "Upload avatar": "Відвантажити аватар",
+    "Upload avatar": "Завантажити аватар",
     "For security, this session has been signed out. Please sign in again.": "З метою безпеки вашу сесію було завершено. Зайдіть, будь ласка, знову.",
-    "Upload an avatar:": "Відвантажити аватар:"
+    "Upload an avatar:": "Завантажити аватар:",
+    "Send cross-signing keys to homeserver": "Надсилання ключей підпису на домашній сервер",
+    "Custom (%(level)s)": "Власний (%(level)s)",
+    "Error upgrading room": "Помилка оновлення кімнати",
+    "Double check that your server supports the room version chosen and try again.": "Перевірте, чи підримує ваш сервер вказану версію кімнати та спробуйте ще."
 }
