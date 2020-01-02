@@ -24,7 +24,6 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 const classNames = require("classnames");
 import { _t, _td } from '../../../languageHandler';
-const Modal = require('../../../Modal');
 
 const sdk = require('../../../index');
 const TextForEvent = require('../../../TextForEvent');
