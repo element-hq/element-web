@@ -2007,5 +2007,16 @@
     "Set up secret storage": "Ezarri biltegi sekretua",
     "Secure your encrypted messages with a passphrase": "Babestu zure zifratutako mezuak pasa-esaldi batekin",
     "Storing secrets...": "Sekretuak gordetzen...",
-    "Unable to set up secret storage": "Ezin izan da biltegi sekretua ezarri"
+    "Unable to set up secret storage": "Ezin izan da biltegi sekretua ezarri",
+    "The message you are trying to send is too large.": "Bidali nahi duzun mezua handiegia da.",
+    "This user has not verified all of their devices.": "Erabiltzaileak ez ditu bere gailu guztiak egiaztatu.",
+    "You have not verified this user. This user has verified all of their devices.": "Ez duzu erabiltzaile hau egiaztatu. Erabiltzaile honek bere gailu guztiak egiaztatu ditu.",
+    "You have verified this user. This user has verified all of their devices.": "Erabiltzaile hau egiaztatu duzu. Erabiltzaile honek bere gailu guztiak egiaztatu ditu.",
+    "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "Ez dituzu zifratutako gela honetako erabiltzaile batzuk egiaztatu, edo hauek ez dituzte bere gailu guztiak egiaztatu.",
+    "All users in this encrypted room are verified by you and they have verified their own devices.": "Zifratutako gela honetako erabiltzaile guztiak egiaztatu dituzu, eta hauek bere gailu guztiak egiaztatu dituzte.",
+    "Language Dropdown": "Hizkuntza menua",
+    "Help": "Laguntza",
+    "Country Dropdown": "Herrialde menua",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Biltegi sekretua zure oraingo gakoen babes-kopiaren xehetasunak erabiliz ezarriko da. Zure biltegi sekretuaren pasa-esaldia eta berreskuratze gakoa lehen gakoen babes-kopiarako ziren berdinak izango dira",
+    "Migrate from Key Backup": "Migratu gakoen babes-kopiatik"
 }
