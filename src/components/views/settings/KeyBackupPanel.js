@@ -1,6 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -181,22 +181,11 @@ export default class KeyBackupPanel extends React.PureComponent {
     }
 
     _restoreBackup = async () => {
-        // Use legacy path if backup key not stored in secret storage
-        if (!this.state.backupKeyStored) {
-            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog);
-            return;
-        }
-
-        try {
-            await accessSecretStorage(async () => {
-                await MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
-                );
-            });
-        } catch (e) {
-            console.log("Error restoring backup", e);
-        }
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            /* priority = */ false, /* static = */ true,
+        );
     }
 
     render() {
