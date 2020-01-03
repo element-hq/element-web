@@ -1999,5 +1999,21 @@
     "User Status": "Потребителски статус",
     "Country Dropdown": "Падащо меню за избор на държава",
     "Verification Request": "Заявка за потвърждение",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)"
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Секретно Складиране ще бъде настроено със съществуващия ви резервен ключ. Паролата и ключа за секретно складиране ще бъдат същите каквито са за резервно складиране",
+    "<b>Warning</b>: You should only set up secret storage from a trusted computer.": "<b>Внимание</b>: Желателно е да настройвате секретно складиране само от доверен компютър.",
+    "We'll use secret storage to optionally store an encrypted copy of your cross-signing identity for verifying other devices and message keys on our server. Protect your access to encrypted messages with a passphrase to keep it secure.": "Ще използваме секретно складиране за да предоставим опцията да се съхрани шифровано копие на идентичността ви за кръстосано-подписване, за потвърждаване на други устройства и ключове. Защитете достъпа си до шифровани съобщения с парола за да е защитено.",
+    "Set up with a recovery key": "Настрой с ключ за възстановяване",
+    "As a safety net, you can use it to restore your access to encrypted messages if you forget your passphrase.": "Като предпазна мярка, ако забравите паролата, може да го използвате за да възстановите достъпа до шифрованите съобщения.",
+    "As a safety net, you can use it to restore your access to encrypted messages.": "Като предпазна мярка, може да го използвате за да възстановите достъпа до шифрованите съобщения.",
+    "Keep your recovery key somewhere very secure, like a password manager (or a safe).": "Съхранявайте ключа за възстановяване на сигурно място, като в password manager (или сейф).",
+    "Your recovery key has been <b>copied to your clipboard</b>, paste it to:": "Ключа за възстановяване беше <b>копиран в клиборд</b>, поставете го в:",
+    "Your recovery key is in your <b>Downloads</b> folder.": "Ключа за възстановяване е във вашата папка <b>Изтегляния</b>.",
+    "Your access to encrypted messages is now protected.": "Достъпът ви до шифровани съобщения вече е защитен.",
+    "Without setting up secret storage, you won't be able to restore your access to encrypted messages or your cross-signing identity for verifying other devices if you log out or use another device.": "Без настройка на секретно складиране, ако излезе от профила или използвате друго устройство, няма да можете да възстановите достъпа до шифровани съобщения или идентичността за кръстосано-подписване за потвърждаване на други устройства.",
+    "Set up secret storage": "Настрой секретно складиране",
+    "Migrate from Key Backup": "Мигрирай от резервно копие на ключове",
+    "Secure your encrypted messages with a passphrase": "Защитете шифрованите съобщения с парола",
+    "Storing secrets...": "Складиране на тайни...",
+    "Unable to set up secret storage": "Неуспешна настройка на секретно складиране"
 }
