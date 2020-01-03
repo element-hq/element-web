@@ -95,7 +95,9 @@ export default class DMInviteDialog extends React.Component {
             const member = room.getMember(userId);
             if (!member) continue; // just skip people who don't have memberships for some reason
 
-            const lastEventTs = room.timeline && room.timeline.length ? room.timeline[room.timeline.length - 1].getTs() : 0;
+            const lastEventTs = room.timeline && room.timeline.length
+                ? room.timeline[room.timeline.length - 1].getTs()
+                : 0;
             if (!lastEventTs) continue; // something weird is going on with this room
 
             recents.push({userId, user: member, lastActive: lastEventTs});
@@ -145,16 +147,19 @@ export default class DMInviteDialog extends React.Component {
                 <AccessibleButton onClick={this._showMoreRecents} kind="link">
                     {_t("Show more")}
                 </AccessibleButton>
-            )
+            );
         }
 
+        const tiles = toRender.map(r => (
+            <DMRoomTile member={r.user} lastActiveTs={r.lastActive} key={r.userId} onToggle={this._toggleMember} />
+        ));
         return (
             <div className='mx_DMInviteDialog_section'>
                 <h3>{_t("Recent Conversations")}</h3>
-                {toRender.map(r => <DMRoomTile member={r.user} lastActiveTs={r.lastActive} key={r.userId} onToggle={this._toggleMember} />)}
+                {tiles}
                 {showMore}
             </div>
-        )
+        );
     }
 
     render() {
@@ -170,7 +175,7 @@ export default class DMInviteDialog extends React.Component {
                     id="inviteTargets"
                     value={this.state.filterText}
                     onChange={this._updateFilter}
-                    placeholder="TODO: Implement filtering/searching (https://github.com/vector-im/riot-web/issues/11199)"
+                    placeholder="TODO: Implement filtering/searching (vector-im/riot-web#11199)"
                 />
             </div>
         );
