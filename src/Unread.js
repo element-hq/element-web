@@ -77,7 +77,7 @@ export function doesRoomHaveUnreadMessages(room) {
             // that counts and we can stop looking because the user's read
             // this and everything before.
             return false;
-        } else if (!shouldHideEvent(ev) && this.eventTriggersUnreadCount(ev)) {
+        } else if (!shouldHideEvent(ev) && eventTriggersUnreadCount(ev)) {
             // We've found a message that counts before we hit
             // the user's read receipt, so this room is definitely unread.
             return true;
