@@ -55,7 +55,7 @@ export default class BridgeSettingsTab extends React.Component {
                 })}</p>;
         }
 
-        const bot = (<p> {_t("This bridge is managed by the <user /> bot user.", {}, {
+        const bot = (<p> {_t("This bridge is managed by <user />.", {}, {
             user: <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={room}

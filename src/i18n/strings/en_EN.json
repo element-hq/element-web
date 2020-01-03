@@ -764,7 +764,7 @@
     "Developer options": "Developer options",
     "Open Devtools": "Open Devtools",
     "This bridge was provisioned by <user />": "This bridge was provisioned by <user />",
-    "This bridge is managed by the <user /> bot user.": "This bridge is managed by the <user /> bot user.",
+    "This bridge is managed by <user />.": "This bridge is managed by <user />.",
     "Bridged into <channelLink /> <networkLink />, on <protocolName />": "Bridged into <channelLink /> <networkLink />, on <protocolName />",
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "Connected via %(protocolName)s",
