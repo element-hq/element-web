@@ -74,17 +74,6 @@ const _getE2EStatus = (cli, userId, devices) => {
     return "warning";
 };
 
-async function unverifyUser(matrixClient, userId) {
-    const devices = await matrixClient.getStoredDevicesForUser(userId);
-    for (const device of devices) {
-        if (device.isVerified()) {
-            matrixClient.setDeviceVerified(
-                userId, device.deviceId, false,
-            );
-        }
-    }
-}
-
 function openDMForUser(matrixClient, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
@@ -331,14 +320,6 @@ const UserOptionsSection = ({member, isIgnored, canInvite, devices}) => {
             </AccessibleButton>
         );
     }
-    let unverifyButton;
-    if (devices && devices.some(device => device.isVerified())) {
-        unverifyButton = (
-            <AccessibleButton onClick={() => unverifyUser(cli, member.userId)} className="mx_UserInfo_field mx_UserInfo_destructive">
-                { _t('Unverify user') }
-            </AccessibleButton>
-        );
-    }
 
     return (
         <div className="mx_UserInfo_container">
@@ -350,7 +331,6 @@ const UserOptionsSection = ({member, isIgnored, canInvite, devices}) => {
                 { insertPillButton }
                 { inviteUserButton }
                 { ignoreButton }
-                { unverifyButton }
             </div>
         </div>
     );
