@@ -446,7 +446,7 @@
     "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "共有キーリクエストは、他の端末に自動的に送信されます。 他の端末での共有キーリクエストを拒否または却下した場合は、ここをクリックしてこのセッションのキーを再度要求してください。",
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "他の端末にこのメッセージのキーがない場合、それらの端末を復号化することはできません。",
     "Key request sent.": "キーリクエストが送信されました。",
-    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "他の端末から<requestLink>暗号化キーを再リクエスト</ requestLink>します。",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "他の端末から<requestLink>暗号化キーを再リクエスト</requestLink>します。",
     "Undecryptable": "解読不能",
     "Encrypted by an unverified device": "未検証の端末によって暗号化されました",
     "Unencrypted message": "暗号化されていないメッセージ",
