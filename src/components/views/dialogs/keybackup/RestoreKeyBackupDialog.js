@@ -76,7 +76,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
     }
 

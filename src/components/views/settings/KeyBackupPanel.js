@@ -128,36 +128,24 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
+                secureSecretStorage: false,
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
     }
 
     _startNewBackupWithSecureSecretStorage = async () => {
-        const cli = MatrixClientPeg.get();
-        let info;
-        try {
-            await accessSecretStorage(async () => {
-                info = await cli.prepareKeyBackupVersion(
-                    null /* random key */,
-                    { secureSecretStorage: true },
-                );
-                info = await cli.createKeyBackupVersion(info);
-            });
-            await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
-            this._loadBackupStatus();
-        } catch (e) {
-            console.error("Error creating key backup", e);
-            // TODO: If creating a version succeeds, but backup fails, should we
-            // delete the version, disable backup, or do nothing?  If we just
-            // disable without deleting, we'll enable on next app reload since
-            // it is trusted.
-            if (info && info.version) {
-                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
-            }
-        }
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            {
+                secureSecretStorage: true,
+                onFinished: () => {
+                    this._loadBackupStatus();
+                },
+            }, null, /* priority = */ false, /* static = */ true,
+        );
     }
 
     _deleteBackup = () => {

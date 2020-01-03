@@ -102,6 +102,7 @@ export default class LogoutDialog extends React.Component {
         } else {
             Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
                 import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
+                null, null, /* priority = */ false, /* static = */ true,
             );
         }
 
