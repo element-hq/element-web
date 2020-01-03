@@ -154,14 +154,14 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                         onClick={this.onSetupClick}>
                         {setupCaption}
                     </AccessibleButton>
-                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                    <AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onOnNotNowClick}>
                         { _t("Not now") }
-                    </AccessibleButton></p>
-                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onDontAskAgainClick}>
                         { _t("Don't ask me again") }
-                    </AccessibleButton></p>
+                    </AccessibleButton>
                 </div>
             </div>
         );
