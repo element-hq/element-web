@@ -1114,7 +1114,6 @@
     "%(count)s verified sessions|other": "%(count)s verified sessions",
     "%(count)s verified sessions|one": "1 verified session",
     "Direct message": "Direct message",
-    "Unverify user": "Unverify user",
     "Remove from community": "Remove from community",
     "Disinvite this user from community?": "Disinvite this user from community?",
     "Remove this user from community?": "Remove this user from community?",
