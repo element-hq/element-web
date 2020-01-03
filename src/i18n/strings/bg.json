@@ -1962,5 +1962,13 @@
     "Room ID": "Идентификатор на стаята",
     "Widget ID": "Идентификатор на приспособлението",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Използването на това приспособление може да сподели данни <helpIcon /> с %(widgetDomain)s и с мениджъра на интеграции.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Използването на това приспособление може да сподели данни <helpIcon /> с %(widgetDomain)s."
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Използването на това приспособление може да сподели данни <helpIcon /> с %(widgetDomain)s.",
+    "Widgets do not use message encryption.": "Приспособленията не използваш шифроване на съобщенията.",
+    "Widget added by": "Приспособлението е добавено от",
+    "This widget may use cookies.": "Това приспособление може да използва бисквитки.",
+    "More options": "Още опции",
+    "Language Dropdown": "Избор на език",
+    "Integrations are disabled": "Интеграциите са изключени",
+    "Enable 'Manage Integrations' in Settings to do this.": "Включете 'Управление на интеграции' от настройките за направите това.",
+    "Integrations not allowed": "Интеграциите не са разрешени"
 }
