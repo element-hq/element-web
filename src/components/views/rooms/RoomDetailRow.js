@@ -18,10 +18,10 @@ import * as sdk from '../../../index';
 import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import { ContentRepo } from 'matrix-js-sdk';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -101,7 +101,7 @@ export default createReactClass({
             <td className="mx_RoomDirectory_roomAvatar">
                 <BaseAvatar width={24} height={24} resizeMethod='crop'
                     name={name} idName={name}
-                    url={ContentRepo.getHttpUriForMxc(
+                    url={getHttpUriForMxc(
                             MatrixClientPeg.get().getHomeserverUrl(),
                             room.avatarUrl, 24, 24, "crop")} />
             </td>
