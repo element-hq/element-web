@@ -29,7 +29,7 @@ import * as humanize from "humanize";
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
-class DMRoomTile extends React.Component {
+class DMRoomTile extends React.PureComponent {
     static propTypes = {
         member: PropTypes.object.isRequired,
         lastActiveTs: PropTypes.number,
@@ -70,7 +70,7 @@ class DMRoomTile extends React.Component {
     }
 }
 
-export default class DMInviteDialog extends React.Component {
+export default class DMInviteDialog extends React.PureComponent {
     static propTypes = {
         // Takes an array of user IDs/emails to invite.
         onFinished: PropTypes.func.isRequired,
