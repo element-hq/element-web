@@ -26,8 +26,8 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     render() {
-        return <div class="mx_UserInfo">
-            <div class="mx_UserInfo_container">
+        return <div className="mx_UserInfo">
+            <div className="mx_UserInfo_container">
                 { this.renderStatus() }
             </div>
         </div>;

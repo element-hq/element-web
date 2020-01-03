@@ -21,7 +21,7 @@ import {_t} from "../../../languageHandler";
 export default class EncryptionInfo extends React.PureComponent {
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return (<div class="mx_UserInfo"><div class="mx_UserInfo_container">
+        return (<div className="mx_UserInfo"><div className="mx_UserInfo_container">
             <h3>{_t("Verify User")}</h3>
             <p>{_t("For extra security, verify this user by checking a one-time code on both of your devices.")}</p>
             <p>{_t("For maximum security, do this in person.")}</p>

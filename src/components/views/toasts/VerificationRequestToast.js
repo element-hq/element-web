@@ -26,25 +26,16 @@ import dis from "../../../dispatcher";
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
         super(props);
-        const {event, timeout} = props.request;
-        // to_device requests don't have a timestamp, so consider them age=0
-        const age = event.getTs() ? event.getLocalAge() : 0;
-        const remaining = Math.max(0, timeout - age);
-        const counter = Math.ceil(remaining / 1000);
-        this.state = {counter};
+        this.state = {counter: Math.ceil(props.request.timeout / 1000)};
     }
 
     componentDidMount() {
+        const {request} = this.props;
         this._intervalHandle = setInterval(() => {
             let {counter} = this.state;
-            counter -= 1;
-            if (counter <= 0) {
-                this.cancel();
-            } else {
-                this.setState({counter});
-            }
+            counter = Math.max(0, counter - 1);
+            this.setState({counter});
         }, 1000);
-        const {request} = this.props;
         request.on("change", this._checkRequestIsPending);
     }
 
@@ -56,7 +47,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        if (request.ready || request.started || request.done || request.cancelled) {
+        if (request.ready || request.started || request.done || request.cancelled || request.observeOnly) {
             this.props.dismiss();
         }
     };

@@ -45,32 +45,51 @@ export default class MKeyVerificationConclusion extends React.Component {
         this.forceUpdate();
     };
 
+    _shouldRender(mxEvent, request) {
+        // normally should not happen
+        if (!request) {
+            return false;
+        }
+        // .cancel event that was sent after the verification finished, ignore
+        if (mxEvent.getType() === "m.key.verification.cancel" && !request.cancelled) {
+            return false;
+        }
+        // .done event that was sent after the verification cancelled, ignore
+        if (mxEvent.getType() === "m.key.verification.done" && !request.done) {
+            return false;
+        }
+
+        // request hasn't concluded yet
+        if (request.pending) {
+            return false;
+        }
+        return true;
+    }
+
     render() {
         const {mxEvent} = this.props;
         const request = mxEvent.verificationRequest;
 
-        if (!request) {
+        if (!this._shouldRender(mxEvent, request)) {
             return null;
         }
 
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
 
-
         let title;
 
         if (request.done) {
             title = _t("You verified %(name)s", {name: getNameForEventRoom(request.otherUserId, mxEvent)});
         } else if (request.cancelled) {
-            if (mxEvent.getSender() === myUserId) {
+            const userId = request.cancellingUserId;
+            if (userId === myUserId) {
                 title = _t("You cancelled verifying %(name)s",
                     {name: getNameForEventRoom(request.otherUserId, mxEvent)});
-            } else if (mxEvent.getSender() === request.otherUserId) {
+            } else {
                 title = _t("%(name)s cancelled verifying",
-                    {name: getNameForEventRoom(request.otherUserId, mxEvent)});
+                    {name: getNameForEventRoom(userId, mxEvent)});
             }
-        } else {
-            title = `request conclusion tile with phase ${request.phase}`;
         }
 
         if (title) {
