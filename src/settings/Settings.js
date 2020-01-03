@@ -128,6 +128,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_ftue_dms": {
+        isFeature: true,
+        displayName: _td("New DM invite dialog (under development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
