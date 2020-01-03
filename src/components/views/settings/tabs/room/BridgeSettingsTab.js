@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,17 +33,6 @@ export default class BridgeSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
-    constructor() {
-        super();
-
-        this.state = {
-        };
-    }
-
-    componentWillMount() {
-
-    }
-
     _renderBridgeCard(event, room) {
         const content = event.getContent();
         if (!content || !content.channel || !content.protocol) {
@@ -56,21 +45,18 @@ export default class BridgeSettingsTab extends React.Component {
 
         let creator = null;
         if (content.creator) {
-            const pill = <Pill
-                type={Pill.TYPE_USER_MENTION}
-                room={room}
-                url={makeUserPermalink(content.creator)}
-                shouldShowPillAvatar={true}
-            />;
-            creator = (<p>{
-                _t("This bridge was provisioned by %(pill)s", {
-                    pill,
-                })
-            } </p>);
+            creator = <p> { _t("This bridge was provisioned by <user />", {}, {
+                    user: <Pill
+                        type={Pill.TYPE_USER_MENTION}
+                        room={room}
+                        url={makeUserPermalink(content.creator)}
+                        shouldShowPillAvatar={true}
+                    />,
+                })}</p>;
         }
 
-        const bot = (<p> {_t("This bridge is managed by the %(pill)s bot user.", {
-            pill: <Pill
+        const bot = (<p> {_t("This bridge is managed by the <user /> bot user.", {}, {
+            user: <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={room}
                 url={makeUserPermalink(event.getSender())}
@@ -79,20 +65,20 @@ export default class BridgeSettingsTab extends React.Component {
         })} </p>);
         let channelLink = channelName;
         if (channel.external_url) {
-            channelLink = <a target="_blank" href={channel.external_url}>{channelName}</a>;
+            channelLink = <a target="_blank" href={channel.external_url} rel="noopener">{channelName}</a>;
         }
 
         let networkLink = networkName;
         if (network && network.external_url) {
-            networkLink = <a target="_blank" href={network.external_url}>{networkName}</a>;
+            networkLink = <a target="_blank" href={network.external_url} rel="noopener">{networkName}</a>;
         }
 
         const chanAndNetworkInfo = (
-            (_t("Bridged into %(channelLink)s %(networkLink)s, on %(protocolName)s", {
+            _t("Bridged into <channelLink /> <networkLink />, on <protocolName />", {}, {
                 channelLink,
                 networkLink,
                 protocolName,
-            }))
+            })
         );
 
         let networkIcon = null;
@@ -101,9 +87,13 @@ export default class BridgeSettingsTab extends React.Component {
                 MatrixClientPeg.get().getHomeserverUrl(),
                 network.avatar, 32, 32, "crop",
             );
-            networkIcon = <BaseAvatar width={32} height={32} resizeMethod='crop'
-                            name={ networkName } idName={ networkName }
-                            url={ avatarUrl } />;
+            networkIcon = <BaseAvatar
+                              width={32}
+                              height={32}
+                              resizeMethod='crop'
+                              name={ networkName }
+                              idName={ networkName }
+                              url={ avatarUrl } />;
         }
 
         let channelIcon = null;
@@ -112,13 +102,16 @@ export default class BridgeSettingsTab extends React.Component {
                 MatrixClientPeg.get().getHomeserverUrl(),
                 channel.avatar, 32, 32, "crop",
             );
-            console.log(channel.avatar);
-            channelIcon = <BaseAvatar width={32} height={32} resizeMethod='crop'
-                            name={ networkName } idName={ networkName }
-                            url={ avatarUrl } />;
+            channelIcon = <BaseAvatar
+                              width={32}
+                              height={32}
+                              resizeMethod='crop'
+                              name={ networkName }
+                              idName={ networkName }
+                              url={ avatarUrl } />;
         }
 
-        const heading = _t("Connected to %(channelIcon)s %(channelName)s on %(networkIcon)s %(networkName)s", {
+        const heading = _t("Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />", { }, {
             channelIcon,
             channelName,
             networkName,
@@ -127,7 +120,7 @@ export default class BridgeSettingsTab extends React.Component {
 
         return (<li key={event.stateKey}>
             <div>
-                <h3> {heading} </h3>
+                <h3>{heading}</h3>
                 <p>{_t("Connected via %(protocolName)s", { protocolName })}</p>
                 <details>
                     {creator}
