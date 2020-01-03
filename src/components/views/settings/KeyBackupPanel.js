@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import SettingsStore from '../../../../lib/settings/SettingsStore';
-import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
