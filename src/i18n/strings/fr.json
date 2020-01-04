@@ -2019,5 +2019,11 @@
     "The message you are trying to send is too large.": "Le message que vous essayez d’envoyer est trop gros.",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Le coffre secret sera configuré en utilisant vos informations de sauvegarde de clés existantes. Votre phrase de passe et votre clé de récupération seront les mêmes que pour la sauvegarde de clés",
     "Migrate from Key Backup": "Migrer depuis la sauvegarde de clés",
-    "Help": "Aide"
+    "Help": "Aide",
+    "New DM invite dialog (under development)": "Nouveau dialogue d’invitation aux MD (en développement)",
+    "Show more": "En savoir plus",
+    "Recent Conversations": "Conversations récentes",
+    "Direct Messages": "Messages directs",
+    "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Si vous n’arrivez pas à trouver quelqu’un, demandez-lui son nom d’utilisateur ou partagez votre nom d’utilisateur (%(userId)s) ou <a>votre lien de profil</a>.",
+    "Go": "C’est parti"
 }
