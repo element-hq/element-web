@@ -2019,5 +2019,11 @@
     "Migrate from Key Backup": "Siirrä tiedot vanhasta avainten varmuuskopiointijärjestelmästä",
     "Secure your encrypted messages with a passphrase": "Turvaa salatut viestisi salalauseella",
     "Storing secrets...": "Tallennetaan salaisuuksia...",
-    "Unable to set up secret storage": "Salavaraston käyttöönotto epäonnistui"
+    "Unable to set up secret storage": "Salavaraston käyttöönotto epäonnistui",
+    "New DM invite dialog (under development)": "Uusi dialogi kutsuille yksityiskeskusteluun (kehitysversio)",
+    "Show more": "Näytä lisää",
+    "Recent Conversations": "Viimeaikaiset keskustelut",
+    "Direct Messages": "Yksityisviestit",
+    "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Jos et löydä jotakuta, kysy hänen käyttäjätunnusta, tai anna oma käyttäjätunnuksesi (%(userId)s) tai <a>linkin profiiliisi</a> hänelle.",
+    "Go": "Mene"
 }
