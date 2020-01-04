@@ -24,6 +24,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/lib/matrix";
 import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
+import {htmlEntitiesEncode} from "../../../HtmlUtils";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -35,6 +36,7 @@ class DMRoomTile extends React.PureComponent {
         member: PropTypes.object.isRequired,
         lastActiveTs: PropTypes.number,
         onToggle: PropTypes.func.isRequired,
+        highlightWord: PropTypes.string,
     };
 
     _onClick = (e) => {
@@ -44,6 +46,44 @@ class DMRoomTile extends React.PureComponent {
 
         this.props.onToggle(this.props.member.userId);
     };
+
+    _highlightName(str: string) {
+        if (!this.props.highlightWord) return str;
+
+        // First encode the thing to avoid injection
+        str = htmlEntitiesEncode(str);
+
+        // We convert things to lowercase for index searching, but pull substrings from
+        // the submitted text to preserve case.
+        const lowerStr = str.toLowerCase();
+        const filterStr = this.props.highlightWord.toLowerCase();
+
+        const result = [];
+
+        let i = 0;
+        let ii;
+        while ((ii = lowerStr.indexOf(filterStr, i)) >= 0) {
+            // Push any text we missed (first bit/middle of text)
+            if (ii > i) {
+                // Push any text we aren't highlighting (middle of text match)
+                result.push(<span key={i + 'mid'}>{str.substring(i, ii)}</span>);
+            }
+
+            i = ii; // copy over ii only if we have a match (to preserve i for end-of-text matching)
+
+            // Highlight the word the user entered
+            const substr = str.substring(i, filterStr.length + i);
+            result.push(<span className='mx_DMInviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
+            i += substr.length;
+        }
+
+        // Push any text we missed (end of text)
+        if (i < (str.length - 1)) {
+            result.push(<span key={i + 'end'}>{str.substring(i)}</span>);
+        }
+
+        return result;
+    }
 
     render() {
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
@@ -59,8 +99,8 @@ class DMRoomTile extends React.PureComponent {
         return (
             <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
                 <MemberAvatar member={this.props.member} width={36} height={36} />
-                <span className='mx_DMInviteDialog_roomTile_name'>{this.props.member.name}</span>
-                <span className='mx_DMInviteDialog_roomTile_userId'>{this.props.member.userId}</span>
+                <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
+                <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
             </div>
         );
@@ -158,7 +198,7 @@ export default class DMInviteDialog extends React.PureComponent {
             }
             return b.score - a.score;
         });
-        return members.map(m => ({userId: m.userId, user: m.member}));
+        return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
     _startDm = () => {
@@ -190,13 +230,31 @@ export default class DMInviteDialog extends React.PureComponent {
     };
 
     _renderSection(kind: "recents"|"suggestions") {
-        const sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
+        let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
 
+        // Hide the section if there's nothing to filter by
         if (!sourceMembers || sourceMembers.length === 0) return null;
+
+        // Do some simple filtering on the input before going much further. If we get no results, say so.
+        if (this.state.filterText) {
+            const filterBy = this.state.filterText.toLowerCase();
+            sourceMembers = sourceMembers
+                .filter(m => m.user.name.toLowerCase().includes(filterBy) || m.userId.toLowerCase().includes(filterBy));
+
+            if (sourceMembers.length === 0) {
+                return (
+                    <div className='mx_DMInviteDialog_section'>
+                        <h3>{sectionName}</h3>
+                        <p>{_t("No results")}</p>
+                    </div>
+                );
+            }
+        }
+
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
         // with the member's tile instead.
@@ -217,7 +275,13 @@ export default class DMInviteDialog extends React.PureComponent {
         }
 
         const tiles = toRender.map(r => (
-            <DMRoomTile member={r.user} lastActiveTs={lastActive(r)} key={r.userId} onToggle={this._toggleMember} />
+            <DMRoomTile
+                member={r.user}
+                lastActiveTs={lastActive(r)}
+                key={r.userId}
+                onToggle={this._toggleMember}
+                highlightWord={this.state.filterText}
+            />
         ));
         return (
             <div className='mx_DMInviteDialog_section'>
@@ -241,7 +305,6 @@ export default class DMInviteDialog extends React.PureComponent {
                     id="inviteTargets"
                     value={this.state.filterText}
                     onChange={this._updateFilter}
-                    placeholder="TODO: Implement filtering/searching (vector-im/riot-web#11199)"
                 />
             </div>
         );
