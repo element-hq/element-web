@@ -25,14 +25,41 @@ import {RoomMember} from "matrix-js-sdk/lib/matrix";
 import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
 import {htmlEntitiesEncode} from "../../../HtmlUtils";
+import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
+class DirectoryMember {
+    _userId: string;
+    _displayName: string;
+    _avatarUrl: string;
+
+    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string}) {
+        this._userId = userDirResult.user_id;
+        this._displayName = userDirResult.display_name;
+        this._avatarUrl = userDirResult.avatar_url;
+    }
+
+    // These next members are to implement the contract expected by DMRoomTile
+    get name(): string {
+        return this._displayName || this._userId;
+    }
+
+    get userId(): string {
+        return this._userId;
+    }
+
+    getMxcAvatarUrl(): string {
+        return this._avatarUrl;
+    }
+}
+
 class DMRoomTile extends React.PureComponent {
     static propTypes = {
+        // Has properties to match RoomMember: userId (str), name (str), getMxcAvatarUrl(): string
         member: PropTypes.object.isRequired,
         lastActiveTs: PropTypes.number,
         onToggle: PropTypes.func.isRequired,
@@ -86,7 +113,7 @@ class DMRoomTile extends React.PureComponent {
     }
 
     render() {
-        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
         let timestamp = null;
         if (this.props.lastActiveTs) {
@@ -96,9 +123,20 @@ class DMRoomTile extends React.PureComponent {
             timestamp = <span className='mx_DMInviteDialog_roomTile_time'>{humanTs}</span>;
         }
 
+        const avatarSize = 36;
+        const avatarUrl = getHttpUriForMxc(
+            MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
+            avatarSize, avatarSize, "crop");
+
         return (
             <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
-                <MemberAvatar member={this.props.member} width={36} height={36} />
+                <BaseAvatar
+                    url={avatarUrl}
+                    name={this.props.member.name}
+                    idName={this.props.member.userId}
+                    width={avatarSize}
+                    height={avatarSize}
+                />
                 <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
                 <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
@@ -113,6 +151,8 @@ export default class DMInviteDialog extends React.PureComponent {
         onFinished: PropTypes.func.isRequired,
     };
 
+    _debounceTimer: number = null;
+
     constructor() {
         super();
 
@@ -123,6 +163,7 @@ export default class DMInviteDialog extends React.PureComponent {
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this._buildSuggestions(),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
+            serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
         };
     }
 
@@ -210,7 +251,35 @@ export default class DMInviteDialog extends React.PureComponent {
     };
 
     _updateFilter = (e) => {
-        this.setState({filterText: e.target.value});
+        const term = e.target.value;
+        this.setState({filterText: term});
+
+        // Debounce server lookups to reduce spam. We don't clear the existing server
+        // results because they might still be vaguely accurate, likewise for races which
+        // could happen here.
+        if (this._debounceTimer) {
+            clearTimeout(this._debounceTimer);
+        }
+        this._debounceTimer = setTimeout(() => {
+            MatrixClientPeg.get().searchUserDirectory({term}).then(r => {
+                if (term !== this.state.filterText) {
+                    // Discard the results - we were probably too slow on the server-side to make
+                    // these results useful. This is a race we want to avoid because we could overwrite
+                    // more accurate results.
+                    return;
+                }
+                this.setState({
+                    serverResultsMixin: r.results.map(u => ({
+                        userId: u.user_id,
+                        user: new DirectoryMember(u),
+                    })),
+                });
+            }).catch(e => {
+                console.error("Error searching user directory:");
+                console.error(e);
+                this.setState({serverResultsMixin: []}); // clear results because it's moderately fatal
+            });
+        }, 150); // 150ms debounce (human reaction time + some)
     };
 
     _showMoreRecents = () => {
@@ -235,6 +304,15 @@ export default class DMInviteDialog extends React.PureComponent {
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+
+        // Mix in the server results if we have any, but only if we're searching
+        if (this.state.filterText && this.state.serverResultsMixin && kind === 'suggestions') {
+            // only pick out the server results that aren't already covered though
+            const uniqueServerResults = this.state.serverResultsMixin
+                .filter(u => !sourceMembers.some(m => m.userId === u.userId));
+
+            sourceMembers = sourceMembers.concat(uniqueServerResults);
+        }
 
         // Hide the section if there's nothing to filter by
         if (!sourceMembers || sourceMembers.length === 0) return null;
