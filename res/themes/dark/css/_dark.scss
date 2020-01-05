@@ -245,6 +245,7 @@ $breadcrumb-placeholder-bg-color: #272c35;
 }
 
 // diff highlight colors
+// intentionally swapped to avoid inversion
 .hljs-addition {
     background: #fdd;
 }
