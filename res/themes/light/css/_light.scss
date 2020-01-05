@@ -338,3 +338,12 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
     color: $accent-color;
     text-decoration: none;
 }
+
+// diff highlight colors
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
+}
