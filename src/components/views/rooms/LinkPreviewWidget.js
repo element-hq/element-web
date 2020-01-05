@@ -18,7 +18,9 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { linkifyElement } from '../../../HtmlUtils';
+import { AllHtmlEntities } from 'html-entities';
+
+import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 
@@ -128,15 +130,15 @@ module.exports = createReactClass({
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        // Escape </> to prevent any HTML injections, we can't replace & as the description may contain & encoded html entities
-        const safeDescription = (p["og:description"] || "").replace("<", "&lt;").replace(">", "&gt;");
         return (
             <div className="mx_LinkPreviewWidget" >
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noopener">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
-                    <div className="mx_LinkPreviewWidget_description" ref={this._description} dangerouslySetInnerHTML={{ __html: safeDescription }} />
+                    <div className="mx_LinkPreviewWidget_description" ref={this._description}>
+                        { AllHtmlEntities.decode(p["og:description"] || "") }
+                    </div>
                 </div>
                 <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
                     <img className="mx_filterFlipColor" alt="" role="presentation"
