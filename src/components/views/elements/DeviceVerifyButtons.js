@@ -22,6 +22,8 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
+// XXX: This component is *not* cross-signing aware. Once everything is
+// cross-signing, this component should just go away.
 export default createReactClass({
     displayName: 'DeviceVerifyButtons',
 

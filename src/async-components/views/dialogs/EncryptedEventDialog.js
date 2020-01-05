@@ -23,6 +23,9 @@ import { _t } from '../../../languageHandler';
 const sdk = require('../../../index');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 
+// XXX: This component is not cross-signing aware.
+// https://github.com/vector-im/riot-web/issues/11752 tracks either updating this
+// component or taking it out to pasture.
 module.exports = createReactClass({
     displayName: 'EncryptedEventDialog',
 
