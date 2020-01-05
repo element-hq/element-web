@@ -56,8 +56,13 @@ export default class RoomHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+            // send the active phase to trigger a toggle
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        }
     }
 
     _onFilesClicked() {
