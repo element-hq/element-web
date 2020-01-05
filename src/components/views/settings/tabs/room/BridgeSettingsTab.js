@@ -88,12 +88,12 @@ export default class BridgeSettingsTab extends React.Component {
                 network.avatar, 32, 32, "crop",
             );
             networkIcon = <BaseAvatar
-                              width={32}
-                              height={32}
-                              resizeMethod='crop'
-                              name={ networkName }
-                              idName={ networkName }
-                              url={ avatarUrl } />;
+    width={32}
+    height={32}
+    resizeMethod='crop'
+    name={ networkName }
+    idName={ networkName }
+    url={ avatarUrl } />;
         }
 
         let channelIcon = null;
@@ -103,12 +103,12 @@ export default class BridgeSettingsTab extends React.Component {
                 channel.avatar, 32, 32, "crop",
             );
             channelIcon = <BaseAvatar
-                              width={32}
-                              height={32}
-                              resizeMethod='crop'
-                              name={ networkName }
-                              idName={ networkName }
-                              url={ avatarUrl } />;
+    width={32}
+    height={32}
+    resizeMethod='crop'
+    name={ networkName }
+    idName={ networkName }
+    url={ avatarUrl } />;
         }
 
         const heading = _t("Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />", { }, {
