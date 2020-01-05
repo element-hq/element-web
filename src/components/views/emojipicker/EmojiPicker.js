@@ -48,9 +48,7 @@ class EmojiPicker extends React.Component {
         };
 
         // Convert recent emoji characters to emoji data, removing unknowns and duplicates
-        this.recentlyUsed = Array.from(new Set(recent.get()
-            .map(unicode => getEmojiFromUnicode(unicode))
-            .filter(data => !!data)));
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,
