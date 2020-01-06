@@ -2025,5 +2025,13 @@
     "Recent Conversations": "Conversations récentes",
     "Direct Messages": "Messages directs",
     "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Si vous n’arrivez pas à trouver quelqu’un, demandez-lui son nom d’utilisateur ou partagez votre nom d’utilisateur (%(userId)s) ou <a>votre lien de profil</a>.",
-    "Go": "C’est parti"
+    "Go": "C’est parti",
+    "Show info about bridges in room settings": "Afficher des informations à propos des passerelles dans les paramètres du salon",
+    "This bridge was provisioned by <user />": "Cette passerelle est fournie par <user />",
+    "This bridge is managed by <user />.": "Cette passerelle est gérée par <user />.",
+    "Bridged into <channelLink /> <networkLink />, on <protocolName />": "Relié à <channelLink /> <networkLink />, sur <protocolName />",
+    "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Connecté à <channelIcon /> <channelName /> sur <networkIcon /> <networkName />",
+    "Connected via %(protocolName)s": "Connecté via %(protocolName)s",
+    "Bridge Info": "Informations de la passerelle",
+    "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon."
 }
