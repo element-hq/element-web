@@ -89,7 +89,7 @@ export default class ProfileSettings extends React.Component {
             newState.originalAvatarUrl = newState.avatarUrl;
             newState.avatarFile = null;
         } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
-            await client.setAvatarUrl(""); // use empty string as Synapse 500's on undefined
+            await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
         }
 
         this.setState(newState);
