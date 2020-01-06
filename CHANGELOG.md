@@ -1,3 +1,32 @@
+Changes in [1.5.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.7-rc.1) (2020-01-06)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.6...v1.5.7-rc.1)
+
+ * Update from Weblate
+   [\#11784](https://github.com/vector-im/riot-web/pull/11784)
+ * Add docs for feature_bridge_state flag
+   [\#11778](https://github.com/vector-im/riot-web/pull/11778)
+ * Add docs for feature_ftue_dms flag
+   [\#11758](https://github.com/vector-im/riot-web/pull/11758)
+ * Fix version file for Docker images
+   [\#11721](https://github.com/vector-im/riot-web/pull/11721)
+ * Add accelerators to context menu options like cut&paste in electron
+   [\#11690](https://github.com/vector-im/riot-web/pull/11690)
+ * electron-main: Provide a better error message if Seshat isn't installed.
+   [\#11691](https://github.com/vector-im/riot-web/pull/11691)
+ * Update from Weblate
+   [\#11672](https://github.com/vector-im/riot-web/pull/11672)
+ * Remove babel-plugin-transform-async-to-bluebird
+   [\#11662](https://github.com/vector-im/riot-web/pull/11662)
+ * Clarify which versions of what we support
+   [\#11658](https://github.com/vector-im/riot-web/pull/11658)
+ * Remove the code that calls the origin migrator
+   [\#11631](https://github.com/vector-im/riot-web/pull/11631)
+ * yarn upgrade
+   [\#11617](https://github.com/vector-im/riot-web/pull/11617)
+ * Remove draft-js dependency
+   [\#11616](https://github.com/vector-im/riot-web/pull/11616)
+
 Changes in [1.5.6](https://github.com/vector-im/riot-web/releases/tag/v1.5.6) (2019-12-09)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.6-rc.1...v1.5.6)
