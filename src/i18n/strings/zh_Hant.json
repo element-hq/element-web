@@ -2008,5 +2008,22 @@
     "Secure your encrypted messages with a passphrase": "使用密碼保護您的加密訊息",
     "Storing secrets...": "正在儲存秘密……",
     "Unable to set up secret storage": "無法設定秘密儲存空間",
-    "Close preview": "關閉預覽"
+    "Close preview": "關閉預覽",
+    "This user has not verified all of their devices.": "這個使用者尚未驗證所有裝置。",
+    "You have not verified this user. This user has verified all of their devices.": "您尚未驗證此使用者。此使用者已驗證所有裝置。",
+    "You have verified this user. This user has verified all of their devices.": "您已驗證此使用者。此使用者已驗證所有裝置。",
+    "Some users in this encrypted room are not verified by you or they have not verified their own devices.": "在此已加密的聊天室中的某些使用者尚未被您驗證，或是他們尚未驗證他們的裝置。",
+    "All users in this encrypted room are verified by you and they have verified their own devices.": "在此已加密的聊天室中的所有使用者已被您驗證，他們也已驗證所有裝置。",
+    "Language Dropdown": "語言下拉式選單",
+    "Country Dropdown": "國家下拉式選單",
+    "The message you are trying to send is too large.": "您正試圖傳送的訊息太大了。",
+    "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "秘密儲存空間將使用你既有的金鑰備份資訊來設定。您的秘密儲存空間密碼與復原金鑰會與您的金鑰備份相同",
+    "Migrate from Key Backup": "從金鑰備份導入",
+    "Help": "說明",
+    "New DM invite dialog (under development)": "新的直接訊息邀請對話框（開發中）",
+    "Show more": "顯示更多",
+    "Recent Conversations": "最近的對話",
+    "Direct Messages": "直接訊息",
+    "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "如果您找不到某人，請向他們詢問他們的使用者名稱，或是分享您的使用者名稱 (%(userId)s) 或<a>簡介連結</a>。",
+    "Go": "到"
 }
