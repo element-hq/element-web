@@ -238,6 +238,7 @@ export function mkStubRoom(roomId = null) {
         getMember: sinon.stub().returns({
             userId: '@member:domain.bla',
             name: 'Member',
+            rawDisplayName: 'Member',
             roomId: roomId,
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
         }),
