@@ -1830,5 +1830,7 @@
     "My Ban List": "Мой список запрещенных",
     "Ignored/Blocked": "Игнорируемые/Заблокированные",
     "Error adding ignored user/server": "Ошибка добавления игнорируемого пользователя/сервера",
-    "Error subscribing to list": "Ошибка при подписке на список"
+    "Error subscribing to list": "Ошибка при подписке на список",
+    "Send cross-signing keys to homeserver": "Отправка ключей перекрестной подписи на домашний сервер",
+    "Error upgrading room": "Ошибка обновления комнаты"
 }
