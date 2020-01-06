@@ -341,3 +341,12 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
     color: $accent-color;
     text-decoration: none;
 }
+
+// diff highlight colors
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
+}
