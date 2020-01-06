@@ -528,8 +528,3 @@ export function checkBlockNode(node) {
             return false;
     }
 }
-
-export function htmlEntitiesEncode(str: string) {
-    // Source: https://stackoverflow.com/a/18750001/7037379
-    return str.replace(/[\u00A0-\u9999<>&]/gim, i => `&#${i.charCodeAt(0)};`);
-}

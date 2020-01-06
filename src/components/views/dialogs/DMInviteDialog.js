@@ -24,7 +24,6 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/lib/matrix";
 import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
-import {htmlEntitiesEncode} from "../../../HtmlUtils";
 import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
@@ -77,11 +76,9 @@ class DMRoomTile extends React.PureComponent {
     _highlightName(str: string) {
         if (!this.props.highlightWord) return str;
 
-        // First encode the thing to avoid injection
-        str = htmlEntitiesEncode(str);
-
         // We convert things to lowercase for index searching, but pull substrings from
-        // the submitted text to preserve case.
+        // the submitted text to preserve case. Note: we don't need to htmlEntities the
+        // string because React will safely encode the text for us.
         const lowerStr = str.toLowerCase();
         const filterStr = this.props.highlightWord.toLowerCase();
 
@@ -92,8 +89,8 @@ class DMRoomTile extends React.PureComponent {
         while ((ii = lowerStr.indexOf(filterStr, i)) >= 0) {
             // Push any text we missed (first bit/middle of text)
             if (ii > i) {
-                // Push any text we aren't highlighting (middle of text match)
-                result.push(<span key={i + 'mid'}>{str.substring(i, ii)}</span>);
+                // Push any text we aren't highlighting (middle of text match, or beginning of text)
+                result.push(<span key={i + 'begin'}>{str.substring(i, ii)}</span>);
             }
 
             i = ii; // copy over ii only if we have a match (to preserve i for end-of-text matching)
@@ -332,7 +329,6 @@ export default class DMInviteDialog extends React.PureComponent {
                 );
             }
         }
-
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
         // with the member's tile instead.
