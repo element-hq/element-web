@@ -2009,5 +2009,12 @@
     "Help": "Ndihmë",
     "Country Dropdown": "Menu Hapmbyll Vendesh",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Depozita e Fshehtë do të ujdiset duke përdorur hollësitë tuaja ekzistuese për kopjeruajtje kyçesh.Frazëkalimi juaj për në depozitën e fshehtë dhe kyçi i rimarrjes do të jenë të njëjtë me ata për kopjeruajtjen tuaj të kyçeve",
-    "Migrate from Key Backup": "Migroji prej Kopjeruajtje Kyçesh"
+    "Migrate from Key Backup": "Migroji prej Kopjeruajtje Kyçesh",
+    "Show info about bridges in room settings": "Shfaq te rregullime dhome të dhëna rreth urash",
+    "This bridge was provisioned by <user />": "Kjo urë është dhënë nga <user />",
+    "This bridge is managed by <user />.": "Kjo urë administrohet nga <user />.",
+    "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Lidhur me <channelIcon /> <channelName /> në <networkIcon /> <networkName />",
+    "Connected via %(protocolName)s": "Lidhur përmes %(protocolName)s",
+    "Bridge Info": "Të dhëna Ure",
+    "Below is a list of bridges connected to this room.": "Më poshtë keni një listë urash të lidhura në këtë dhomë."
 }
