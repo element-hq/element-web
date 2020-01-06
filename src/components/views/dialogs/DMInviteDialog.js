@@ -115,6 +115,8 @@ export default class DMInviteDialog extends React.PureComponent {
         const joinedRooms = client.getRooms()
             .filter(r => r.getMyMembership() === 'join')
             .filter(r => r.getJoinedMemberCount() <= maxConsideredMembers);
+
+        // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
@@ -136,7 +138,9 @@ export default class DMInviteDialog extends React.PureComponent {
                 }
             }
             return members;
-        }, {/* userId => {member, rooms[]} */});
+        }, {});
+
+        // Generates { userId: {member, numRooms, score} }
         const memberScores = Object.values(memberRooms).reduce((scores, entry) => {
             const numMembersTotal = entry.rooms.reduce((c, r) => c + r.getJoinedMemberCount(), 0);
             const maxRange = maxConsideredMembers * entry.rooms.length;
@@ -146,7 +150,8 @@ export default class DMInviteDialog extends React.PureComponent {
                 score: Math.max(0, Math.pow(1 - (numMembersTotal / maxRange), 5)),
             };
             return scores;
-        }, {/* userId => {member, numRooms, score} */});
+        }, {});
+
         const members = Object.values(memberScores);
         members.sort((a, b) => {
             if (a.score === b.score) {
