@@ -6,6 +6,8 @@ import { configure, mount } from "enzyme";
 import sdk from "../../../skinned-sdk";
 import {mkEvent, mkStubRoom} from "../../../test-utils";
 import MatrixClientPeg from "../../../../src/MatrixClientPeg";
+import * as languageHandler from "../../../../src/languageHandler";
+import {sleep} from "../../../../src/utils/promise";
 
 const TextualBody = sdk.getComponent("views.messages.TextualBody");
 
@@ -188,6 +190,66 @@ describe("<TextualBody />", () => {
                 '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
                 'width="16" height="16" title="@member:domain.bla" alt="">Member</a>' +
                 '</span></span>');
+        });
+    });
+
+    describe("renders url previews correctly", () => {
+        languageHandler.setMissingEntryGenerator(key => key.split('|', 2)[1]);
+
+        MatrixClientPeg.matrixClient = {
+            getRoom: () => mkStubRoom("room_id"),
+            getAccountData: () => undefined,
+            getUrlPreview: (url) => new Promise(() => {}),
+        };
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: "room_id",
+            user: "sender",
+            content: {
+                body: "Visit https://matrix.org/",
+                msgtype: "m.text",
+            },
+            event: true,
+        });
+
+        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} />);
+        expect(wrapper.text()).toBe(ev.getContent().body);
+
+        let widgets = wrapper.find("LinkPreviewWidget");
+        // at this point we should have exactly one widget
+        expect(widgets.length).toBe(1);
+        expect(widgets.at(0).prop("link")).toBe("https://matrix.org/");
+
+        // simulate an event edit and check the transition from the old URL preview to the new one
+        const ev2 = mkEvent({
+            type: "m.room.message",
+            room: "room_id",
+            user: "sender",
+            content: {
+                "m.new_content": {
+                    body: "Visit https://vector.im/ and https://riot.im/",
+                    msgtype: "m.text",
+                },
+            },
+            event: true,
+        });
+        ev.makeReplaced(ev2);
+
+        wrapper.setProps({
+            mxEvent: ev,
+            replacingEventId: ev.getId(),
+        }, () => {
+            expect(wrapper.text()).toBe(ev2.getContent()["m.new_content"].body + "(edited)");
+
+            // XXX: this is to give TextualBody enough time for state to settle
+            wrapper.setState({}, () => {
+                widgets = wrapper.find("LinkPreviewWidget");
+                // at this point we should have exactly two widgets (not the matrix.org one anymore)
+                expect(widgets.length).toBe(2);
+                expect(widgets.at(0).prop("link")).toBe("https://vector.im/");
+                expect(widgets.at(1).prop("link")).toBe("https://riot.im/");
+            });
         });
     });
 });
