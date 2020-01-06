@@ -161,11 +161,6 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "useCiderComposer": {
-        displayName: _td("Use the new, faster, composer for writing messages"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: true,
-    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),

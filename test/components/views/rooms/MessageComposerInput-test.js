@@ -19,7 +19,7 @@ function addTextToDraft(text) {
     }
 }
 
-// FIXME: These tests need to be updated from Draft to Slate.
+// FIXME: These tests need to be updated from Draft to CIDER.
 
 xdescribe('MessageComposerInput', () => {
     let parentDiv = null,

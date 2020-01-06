@@ -393,13 +393,6 @@ const LoggedInView = createReactClass({
                 return;
             }
 
-            // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
-            // If using Slate, consume the Backspace without first focusing as it causes an implosion
-            if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
-                ev.stopPropagation();
-                return;
-            }
-
             if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
