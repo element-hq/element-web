@@ -68,11 +68,6 @@ module.exports = createReactClass({
         });
     },
 
-    _isDirectMessageRoom: function(roomId) {
-        const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        return Boolean(dmRooms);
-    },
-
     _shouldShowStatusMessage() {
         if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
             return false;
@@ -371,8 +366,11 @@ module.exports = createReactClass({
 
         let ariaLabel = name;
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+
         let dmIndicator;
-        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+        let dmOnline;
+        if (dmUserId) {
             dmIndicator = <img
                 src={require("../../../../res/img/icon_person.svg")}
                 className="mx_RoomTile_dm"
@@ -380,6 +378,13 @@ module.exports = createReactClass({
                 height="13"
                 alt="dm"
             />;
+
+            const { room } = this.props;
+            const member = room.getMember(dmUserId);
+            if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
+                const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
+                dmOnline = <UserOnlineDot userId={dmUserId} />;
+            }
         }
 
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
@@ -428,6 +433,7 @@ module.exports = createReactClass({
                         { label }
                         { subtextLabel }
                     </div>
+                    { dmOnline }
                     { contextMenuButton }
                     { badge }
                 </div>

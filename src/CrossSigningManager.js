@@ -97,7 +97,7 @@ export const crossSigningCallbacks = {
  *
  * Additionally, the secret storage keys are cached during the scope of this function
  * to ensure the user is prompted only once for their secret storage
- * passphrase. The cache is then
+ * passphrase. The cache is then cleared once the provided function completes.
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.

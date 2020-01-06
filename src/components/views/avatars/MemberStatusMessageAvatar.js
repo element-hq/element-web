@@ -38,8 +38,8 @@ export default class MemberStatusMessageAvatar extends React.Component {
         resizeMethod: 'crop',
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             hasStatus: this.hasStatus,

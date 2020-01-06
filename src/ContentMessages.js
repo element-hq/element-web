@@ -422,6 +422,9 @@ export default class ContentMessages {
 
         const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
         let uploadAll = false;
+        // Promise to complete before sending next file into room, used for synchronisation of file-sending
+        // to match the order the files were specified in
+        let promBefore = Promise.resolve();
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
@@ -440,11 +443,11 @@ export default class ContentMessages {
                 });
                 if (!shouldContinue) break;
             }
-            this._sendContentToRoom(file, roomId, matrixClient);
+            promBefore = this._sendContentToRoom(file, roomId, matrixClient, promBefore);
         }
     }
 
-    _sendContentToRoom(file, roomId, matrixClient) {
+    _sendContentToRoom(file, roomId, matrixClient, promBefore) {
         const content = {
             body: file.name || 'Attachment',
             info: {
@@ -517,7 +520,10 @@ export default class ContentMessages {
                 content.file = result.file;
                 content.url = result.url;
             });
-        }).then(function(url) {
+        }).then((url) => {
+            // Await previous message being sent into the room
+            return promBefore;
+        }).then(function() {
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             error = err;

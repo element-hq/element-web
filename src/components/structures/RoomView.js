@@ -25,10 +25,8 @@ import shouldHideEvent from '../../shouldHideEvent';
 
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
@@ -55,6 +53,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
+import RoomContext from "../../contexts/RoomContext";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -65,12 +64,6 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
 }
-
-const RoomContext = PropTypes.shape({
-    canReact: PropTypes.bool.isRequired,
-    canReply: PropTypes.bool.isRequired,
-    room: PropTypes.instanceOf(Room),
-});
 
 module.exports = createReactClass({
     displayName: 'RoomView',
@@ -166,21 +159,6 @@ module.exports = createReactClass({
             canReply: false,
 
             useCider: false,
-        };
-    },
-
-    childContextTypes: {
-        room: RoomContext,
-    },
-
-    getChildContext: function() {
-        const {canReact, canReply, room} = this.state;
-        return {
-            room: {
-                canReact,
-                canReply,
-                room,
-            },
         };
     },
 
@@ -461,7 +439,7 @@ module.exports = createReactClass({
 
     componentDidUpdate: function() {
         if (this._roomView.current) {
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
@@ -505,7 +483,7 @@ module.exports = createReactClass({
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -1953,7 +1931,8 @@ module.exports = createReactClass({
             />);
 
         let topUnreadMessagesBar = null;
-        if (this.state.showTopUnreadMessagesBar) {
+        // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
+        if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (<TopUnreadMessagesBar
                                        onScrollUpClick={this.jumpToReadMarker}
@@ -1961,7 +1940,8 @@ module.exports = createReactClass({
                                     />);
         }
         let jumpToBottom;
-        if (!this.state.atEndOfLiveTimeline) {
+        // Do not show JumpToBottomButton if we have search results showing, it makes no sense
+        if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
                 numUnreadMessages={this.state.numUnreadMessages}
@@ -1989,45 +1969,47 @@ module.exports = createReactClass({
             : null;
 
         return (
-            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
-                <ErrorBoundary>
-                    <RoomHeader
-                        room={this.state.room}
-                        searchInfo={searchInfo}
-                        oobData={this.props.oobData}
-                        inRoom={myMembership === 'join'}
-                        onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick}
-                        onPinnedClick={this.onPinnedClick}
-                        onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
-                        onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
-                        onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
-                        e2eStatus={this.state.e2eStatus}
-                    />
-                    <MainSplit
-                        panel={rightPanel}
-                        resizeNotifier={this.props.resizeNotifier}
-                    >
-                        <div className={fadableSectionClasses}>
-                            {auxPanel}
-                            <div className="mx_RoomView_timeline">
-                                {topUnreadMessagesBar}
-                                {jumpToBottom}
-                                {messagePanel}
-                                {searchResultsPanel}
-                            </div>
-                            <div className={statusBarAreaClass}>
-                                <div className="mx_RoomView_statusAreaBox">
-                                    <div className="mx_RoomView_statusAreaBox_line"></div>
-                                    {statusBar}
+            <RoomContext.Provider value={this.state}>
+                <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
+                    <ErrorBoundary>
+                        <RoomHeader
+                            room={this.state.room}
+                            searchInfo={searchInfo}
+                            oobData={this.props.oobData}
+                            inRoom={myMembership === 'join'}
+                            onSearchClick={this.onSearchClick}
+                            onSettingsClick={this.onSettingsClick}
+                            onPinnedClick={this.onPinnedClick}
+                            onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
+                            onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
+                            onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
+                            e2eStatus={this.state.e2eStatus}
+                        />
+                        <MainSplit
+                            panel={rightPanel}
+                            resizeNotifier={this.props.resizeNotifier}
+                        >
+                            <div className={fadableSectionClasses}>
+                                {auxPanel}
+                                <div className="mx_RoomView_timeline">
+                                    {topUnreadMessagesBar}
+                                    {jumpToBottom}
+                                    {messagePanel}
+                                    {searchResultsPanel}
                                 </div>
+                                <div className={statusBarAreaClass}>
+                                    <div className="mx_RoomView_statusAreaBox">
+                                        <div className="mx_RoomView_statusAreaBox_line" />
+                                        {statusBar}
+                                    </div>
+                                </div>
+                                {previewBar}
+                                {messageComposer}
                             </div>
-                            {previewBar}
-                            {messageComposer}
-                        </div>
-                    </MainSplit>
-                </ErrorBoundary>
-            </main>
+                        </MainSplit>
+                    </ErrorBoundary>
+                </main>
+            </RoomContext.Provider>
         );
     },
 });

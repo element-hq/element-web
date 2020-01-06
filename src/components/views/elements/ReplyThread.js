@@ -21,10 +21,11 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
-import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
+import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import escapeHtml from "escape-html";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -38,12 +39,10 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             // The loaded events to be rendered as linear-replies
@@ -187,7 +186,7 @@ export default class ReplyThread extends React.Component {
 
     componentWillMount() {
         this.unmounted = false;
-        this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
+        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
         this.room.on("Room.redaction", this.onRoomRedaction);
         // same event handler as Room.redaction as for both we just do forceUpdate
         this.room.on("Room.redactionCancelled", this.onRoomRedaction);
@@ -259,7 +258,7 @@ export default class ReplyThread extends React.Component {
         try {
             // ask the client to fetch the event we want using the context API, only interface to do so is to ask
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
-            await this.context.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
+            await this.context.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
             // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
@@ -300,7 +299,7 @@ export default class ReplyThread extends React.Component {
         } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
-            const room = this.context.matrixClient.getRoom(ev.getRoomId());
+            const room = this.context.getRoom(ev.getRoomId());
             header = <blockquote className="mx_ReplyThread">
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
