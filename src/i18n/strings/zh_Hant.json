@@ -2025,5 +2025,13 @@
     "Recent Conversations": "最近的對話",
     "Direct Messages": "直接訊息",
     "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "如果您找不到某人，請向他們詢問他們的使用者名稱，或是分享您的使用者名稱 (%(userId)s) 或<a>簡介連結</a>。",
-    "Go": "到"
+    "Go": "到",
+    "Show info about bridges in room settings": "顯示關於聊天室設定中橋接相關的資訊",
+    "This bridge was provisioned by <user />": "此橋接由 <user /> 配置",
+    "This bridge is managed by <user />.": "此橋接由 <user /> 管理。",
+    "Bridged into <channelLink /> <networkLink />, on <protocolName />": "橋接於 <channelLink /> <networkLink />，在 <protocolName /> 上",
+    "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "連線到 <channelIcon /> <channelName /> 於 <networkIcon /> <networkName />",
+    "Connected via %(protocolName)s": "透過 %(protocolName)s 連線",
+    "Bridge Info": "橋接資訊",
+    "Below is a list of bridges connected to this room.": "以下是連線到此聊天室的橋接列表。"
 }
