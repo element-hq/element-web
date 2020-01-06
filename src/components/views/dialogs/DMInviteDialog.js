@@ -23,6 +23,7 @@ import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/lib/matrix";
 import * as humanize from "humanize";
+import SdkConfig from "../../../SdkConfig";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -35,10 +36,6 @@ class DMRoomTile extends React.PureComponent {
         lastActiveTs: PropTypes.number,
         onToggle: PropTypes.func.isRequired,
     };
-
-    constructor() {
-        super();
-    }
 
     _onClick = (e) => {
         // Stop the browser from highlighting text
@@ -84,6 +81,8 @@ export default class DMInviteDialog extends React.PureComponent {
             filterText: "",
             recents: this._buildRecents(),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
+            suggestions: this._buildSuggestions(),
+            numSuggestionsShown: INITIAL_ROOMS_SHOWN,
         };
     }
 
@@ -109,6 +108,64 @@ export default class DMInviteDialog extends React.PureComponent {
         return recents;
     }
 
+    _buildSuggestions(): {userId: string, user: RoomMember} {
+        const maxConsideredMembers = 200;
+        const client = MatrixClientPeg.get();
+        const excludedUserIds = [client.getUserId(), SdkConfig.get()['welcomeUserId']];
+        const joinedRooms = client.getRooms()
+            .filter(r => r.getMyMembership() === 'join')
+            .filter(r => r.getJoinedMemberCount() <= maxConsideredMembers);
+
+        // Generates { userId: {member, rooms[]} }
+        const memberRooms = joinedRooms.reduce((members, room) => {
+            const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
+            for (const member of joinedMembers) {
+                if (!members[member.userId]) {
+                    members[member.userId] = {
+                        member: member,
+                        // Track the room size of the 'picked' member so we can use the profile of
+                        // the smallest room (likely a DM).
+                        pickedMemberRoomSize: room.getJoinedMemberCount(),
+                        rooms: [],
+                    };
+                }
+
+                members[member.userId].rooms.push(room);
+
+                if (room.getJoinedMemberCount() < members[member.userId].pickedMemberRoomSize) {
+                    members[member.userId].member = member;
+                    members[member.userId].pickedMemberRoomSize = room.getJoinedMemberCount();
+                }
+            }
+            return members;
+        }, {});
+
+        // Generates { userId: {member, numRooms, score} }
+        const memberScores = Object.values(memberRooms).reduce((scores, entry) => {
+            const numMembersTotal = entry.rooms.reduce((c, r) => c + r.getJoinedMemberCount(), 0);
+            const maxRange = maxConsideredMembers * entry.rooms.length;
+            scores[entry.member.userId] = {
+                member: entry.member,
+                numRooms: entry.rooms.length,
+                score: Math.max(0, Math.pow(1 - (numMembersTotal / maxRange), 5)),
+            };
+            return scores;
+        }, {});
+
+        const members = Object.values(memberScores);
+        members.sort((a, b) => {
+            if (a.score === b.score) {
+                if (a.numRooms === b.numRooms) {
+                    return a.member.userId.localeCompare(b.member.userId);
+                }
+
+                return b.numRooms - a.numRooms;
+            }
+            return b.score - a.score;
+        });
+        return members.map(m => ({userId: m.userId, user: m.member}));
+    }
+
     _startDm = () => {
         this.props.onFinished(this.state.targets);
     };
@@ -125,6 +182,10 @@ export default class DMInviteDialog extends React.PureComponent {
         this.setState({numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN});
     };
 
+    _showMoreSuggestions = () => {
+        this.setState({numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN});
+    };
+
     _toggleMember = (userId) => {
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(userId);
@@ -133,29 +194,39 @@ export default class DMInviteDialog extends React.PureComponent {
         this.setState({targets});
     };
 
-    _renderRecents() {
-        if (!this.state.recents || this.state.recents.length === 0) return null;
+    _renderSection(kind: "recents"|"suggestions") {
+        const sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
+        let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
+        const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
+        const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
+        const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+
+        if (!sourceMembers || sourceMembers.length === 0) return null;
+
+        // If we're going to hide one member behind 'show more', just use up the space of the button
+        // with the member's tile instead.
+        if (showNum === sourceMembers.length - 1) showNum++;
 
         // .slice() will return an incomplete array but won't error on us if we go too far
-        const toRender = this.state.recents.slice(0, this.state.numRecentsShown);
-        const hasMore = toRender.length < this.state.recents.length;
+        const toRender = sourceMembers.slice(0, showNum);
+        const hasMore = toRender.length < sourceMembers.length;
 
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         let showMore = null;
         if (hasMore) {
             showMore = (
-                <AccessibleButton onClick={this._showMoreRecents} kind="link">
+                <AccessibleButton onClick={showMoreFn} kind="link">
                     {_t("Show more")}
                 </AccessibleButton>
             );
         }
 
         const tiles = toRender.map(r => (
-            <DMRoomTile member={r.user} lastActiveTs={r.lastActive} key={r.userId} onToggle={this._toggleMember} />
+            <DMRoomTile member={r.user} lastActiveTs={lastActive(r)} key={r.userId} onToggle={this._toggleMember} />
         ));
         return (
             <div className='mx_DMInviteDialog_section'>
-                <h3>{_t("Recent Conversations")}</h3>
+                <h3>{sectionName}</h3>
                 {tiles}
                 {showMore}
             </div>
@@ -209,7 +280,8 @@ export default class DMInviteDialog extends React.PureComponent {
                             {_t("Go")}
                         </AccessibleButton>
                     </div>
-                    {this._renderRecents()}
+                    {this._renderSection('recents')}
+                    {this._renderSection('suggestions')}
                 </div>
             </BaseDialog>
         );
