@@ -154,7 +154,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "7.1.3",
+    "electronVersion": "7.1.7",
     "files": [
       "node_modules/**",
       "src/**"
