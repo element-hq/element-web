@@ -17,24 +17,62 @@ limitations under the License.
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
+import SettingsStore from '../../../settings/SettingsStore';
 
 export default function(props) {
+    const { isUser } = props;
+    const isNormal = props.status === "normal";
     const isWarning = props.status === "warning";
     const isVerified = props.status === "verified";
     const e2eIconClasses = classNames({
         mx_E2EIcon: true,
         mx_E2EIcon_warning: isWarning,
+        mx_E2EIcon_normal: isNormal,
         mx_E2EIcon_verified: isVerified,
     }, props.className);
     let e2eTitle;
-    if (isWarning) {
-        e2eTitle = props.isUser ?
-            _t("Some devices for this user are not trusted") :
-            _t("Some devices in this encrypted room are not trusted");
-    } else if (isVerified) {
-        e2eTitle = props.isUser ?
-            _t("All devices for this user are trusted") :
-            _t("All devices in this encrypted room are trusted");
+
+    const crossSigning = SettingsStore.isFeatureEnabled("feature_cross_signing");
+    if (crossSigning && isUser) {
+        if (isWarning) {
+            e2eTitle = _t(
+                "This user has not verified all of their devices.",
+            );
+        } else if (isNormal) {
+            e2eTitle = _t(
+                "You have not verified this user. " +
+                "This user has verified all of their devices.",
+            );
+        } else if (isVerified) {
+            e2eTitle = _t(
+                "You have verified this user. " +
+                "This user has verified all of their devices.",
+            );
+        }
+    } else if (crossSigning && !isUser) {
+        if (isWarning) {
+            e2eTitle = _t(
+                "Some users in this encrypted room are not verified by you or " +
+                "they have not verified their own devices.",
+            );
+        } else if (isVerified) {
+            e2eTitle = _t(
+                "All users in this encrypted room are verified by you and " +
+                "they have verified their own devices.",
+            );
+        }
+    } else if (!crossSigning && isUser) {
+        if (isWarning) {
+            e2eTitle = _t("Some devices for this user are not trusted");
+        } else if (isVerified) {
+            e2eTitle = _t("All devices for this user are trusted");
+        }
+    } else if (!crossSigning && !isUser) {
+        if (isWarning) {
+            e2eTitle = _t("Some devices in this encrypted room are not trusted");
+        } else if (isVerified) {
+            e2eTitle = _t("All devices in this encrypted room are trusted");
+        }
     }
 
     let style = null;

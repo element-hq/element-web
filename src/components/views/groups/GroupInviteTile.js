@@ -16,17 +16,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import {_t} from '../../../languageHandler';
 import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
+// XXX this class copies a lot from RoomTile.js
 export default createReactClass({
     displayName: 'GroupInviteTile',
 
@@ -34,8 +35,8 @@ export default createReactClass({
         group: PropTypes.object.isRequired,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState: function() {
@@ -45,10 +46,6 @@ export default createReactClass({
             menuDisplayed: false,
             selected: this.props.group.groupId === null, // XXX: this needs linking to LoggedInView/GroupView state
         });
-    },
-
-    componentDidMount: function() {
-        this._contextMenuButton = createRef();
     },
 
     onClick: function(e) {
@@ -61,7 +58,7 @@ export default createReactClass({
     onMouseEnter: function() {
         const state = {hover: true};
         // Only allow non-guests to access the context menu
-        if (!this.context.matrixClient.isGuest()) {
+        if (!this.context.isGuest()) {
             state.badgeHover = true;
         }
         this.setState(state);
@@ -74,16 +71,12 @@ export default createReactClass({
         });
     },
 
-    openMenu: function(e) {
+    _showContextMenu: function(boundingClientRect) {
         // Only allow non-guests to access the context menu
         if (MatrixClientPeg.get().isGuest()) return;
 
-        // Prevent the GroupInviteTile onClick event firing as well
-        e.stopPropagation();
-        e.preventDefault();
-
         const state = {
-            menuDisplayed: true,
+            contextMenuPosition: boundingClientRect,
         };
 
         // If the badge is clicked, then no longer show tooltip
@@ -94,9 +87,28 @@ export default createReactClass({
         this.setState(state);
     },
 
+    onContextMenuButtonClick: function(e) {
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
+        e.preventDefault();
+
+        this._showContextMenu(e.target.getBoundingClientRect());
+    },
+
+    onContextMenu: function(e) {
+        // Prevent the native context menu
+        e.preventDefault();
+
+        this._showContextMenu({
+            right: e.clientX,
+            top: e.clientY,
+            height: 0,
+        });
+    },
+
     closeMenu: function() {
         this.setState({
-            menuDisplayed: false,
+            contextMenuPosition: null,
         });
     },
 
@@ -106,19 +118,20 @@ export default createReactClass({
 
         const groupName = this.props.group.name || this.props.group.groupId;
         const httpAvatarUrl = this.props.group.avatarUrl ?
-            this.context.matrixClient.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
+            this.context.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
 
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 
+        const isMenuDisplayed = Boolean(this.state.contextMenuPosition);
         const nameClasses = classNames('mx_RoomTile_name mx_RoomTile_invite mx_RoomTile_badgeShown', {
-            'mx_RoomTile_badgeShown': this.state.badgeHover || this.state.menuDisplayed,
+            'mx_RoomTile_badgeShown': this.state.badgeHover || isMenuDisplayed,
         });
 
         const label = <div title={this.props.group.groupId} className={nameClasses} dir="auto">
             { groupName }
         </div>;
 
-        const badgeEllipsis = this.state.badgeHover || this.state.menuDisplayed;
+        const badgeEllipsis = this.state.badgeHover || isMenuDisplayed;
         const badgeClasses = classNames('mx_RoomTile_badge mx_RoomTile_highlight', {
             'mx_RoomTile_badgeButton': badgeEllipsis,
         });
@@ -127,10 +140,9 @@ export default createReactClass({
         const badge = (
             <ContextMenuButton
                 className={badgeClasses}
-                inputRef={this._contextMenuButton}
-                onClick={this.openMenu}
+                onClick={this.onContextMenuButtonClick}
                 label={_t("Options")}
-                isExpanded={this.state.menuDisplayed}
+                isExpanded={isMenuDisplayed}
             >
                 { badgeContent }
             </ContextMenuButton>
@@ -143,17 +155,16 @@ export default createReactClass({
         }
 
         const classes = classNames('mx_RoomTile mx_RoomTile_highlight', {
-            'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
+            'mx_RoomTile_menuDisplayed': isMenuDisplayed,
             'mx_RoomTile_selected': this.state.selected,
             'mx_GroupInviteTile': true,
         });
 
         let contextMenu;
-        if (this.state.menuDisplayed) {
-            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+        if (isMenuDisplayed) {
             const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
             contextMenu = (
-                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
+                <ContextMenu {...toRightOf(this.state.contextMenuPosition)} onFinished={this.closeMenu}>
                     <GroupInviteTileContextMenu group={this.props.group} onFinished={this.closeMenu} />
                 </ContextMenu>
             );

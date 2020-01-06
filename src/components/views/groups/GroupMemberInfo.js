@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -26,12 +25,13 @@ import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 module.exports = createReactClass({
     displayName: 'GroupMemberInfo',
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     propTypes: {
@@ -85,7 +85,7 @@ module.exports = createReactClass({
     _onKick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
-            matrixClient: this.context.matrixClient,
+            matrixClient: this.context,
             groupMember: this.props.groupMember,
             action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
             title: this.state.isUserInvited ? _t('Disinvite this user from community?')
@@ -95,7 +95,7 @@ module.exports = createReactClass({
                 if (!proceed) return;
 
                 this.setState({removingUser: true});
-                this.context.matrixClient.removeUserFromGroup(
+                this.context.removeUserFromGroup(
                     this.props.groupId, this.props.groupMember.userId,
                 ).then(() => {
                     // return to the user list
@@ -171,7 +171,7 @@ module.exports = createReactClass({
         const avatarUrl = this.props.groupMember.avatarUrl;
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = (<div className="mx_MemberInfo_avatar">
                             <img src={httpUrl} />
                         </div>);

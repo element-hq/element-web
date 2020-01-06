@@ -173,7 +173,7 @@ export default createReactClass({
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
-                    <RoomAliasField id="alias" ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} />
+                    <RoomAliasField id="alias" ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
                 </div>
             );
         } else {

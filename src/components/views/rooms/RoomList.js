@@ -22,6 +22,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import utils from "matrix-js-sdk/lib/utils";
 import { _t } from '../../../languageHandler';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
@@ -589,10 +590,17 @@ module.exports = createReactClass({
     _applySearchFilter: function(list, filter) {
         if (filter === "") return list;
         const lcFilter = filter.toLowerCase();
+        // apply toLowerCase before and after removeHiddenChars because different rules get applied
+        // e.g M -> M but m -> n, yet some unicode homoglyphs come out as uppercase, e.g 𝚮 -> H
+        const fuzzyFilter = utils.removeHiddenChars(lcFilter).toLowerCase();
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
-        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
-            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
+        return list.filter((room) => {
+            if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
+                return true;
+            }
+            return room.name && utils.removeHiddenChars(room.name.toLowerCase()).toLowerCase().includes(fuzzyFilter);
+        });
     },
 
     _handleCollapsedState: function(key, collapsed) {
@@ -628,7 +636,6 @@ module.exports = createReactClass({
         const defaultProps = {
             collapsed: this.props.collapsed,
             isFiltered: !!this.props.searchFilter,
-            incomingCall: this.state.incomingCall,
         };
 
         subListsProps.forEach((p) => {
@@ -641,7 +648,7 @@ module.exports = createReactClass({
         }));
 
         return subListsProps.reduce((components, props, i) => {
-            props = Object.assign({}, defaultProps, props);
+            props = {...defaultProps, ...props};
             const isLast = i === subListsProps.length - 1;
             const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
             const {key, label, onHeaderClick, ...otherProps} = props;
@@ -652,12 +659,12 @@ module.exports = createReactClass({
                     onHeaderClick(collapsed);
                 }
             };
-            let startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
+            const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
             this._layoutSections.push({
                 id: chosenKey,
                 count: len,
             });
-            let subList = (<RoomSubList
+            const subList = (<RoomSubList
                 ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
                 forceExpand={!!this.props.searchFilter}

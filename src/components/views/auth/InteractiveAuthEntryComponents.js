@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import url from 'url';
@@ -581,6 +581,8 @@ export const FallbackAuthEntry = createReactClass({
         // the popup if we open it immediately.
         this._popupWindow = null;
         window.addEventListener("message", this._onReceiveMessage);
+
+        this._fallbackButton = createRef();
     },
 
     componentWillUnmount: function() {
@@ -591,8 +593,8 @@ export const FallbackAuthEntry = createReactClass({
     },
 
     focus: function() {
-        if (this.refs.fallbackButton) {
-            this.refs.fallbackButton.focus();
+        if (this._fallbackButton.current) {
+            this._fallbackButton.current.focus();
         }
     },
 
@@ -624,7 +626,7 @@ export const FallbackAuthEntry = createReactClass({
         }
         return (
             <div>
-                <a ref="fallbackButton" onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
+                <a ref={this._fallbackButton} onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
                 {errorSection}
             </div>
         );

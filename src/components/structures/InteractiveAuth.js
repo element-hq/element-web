@@ -18,7 +18,7 @@ limitations under the License.
 import Matrix from 'matrix-js-sdk';
 const InteractiveAuth = Matrix.InteractiveAuth;
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
@@ -129,6 +129,8 @@ export default createReactClass({
                 this._authLogic.poll();
             }, 2000);
         }
+
+        this._stageComponent = createRef();
     },
 
     componentWillUnmount: function() {
@@ -153,8 +155,8 @@ export default createReactClass({
     },
 
     tryContinue: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.tryContinue) {
-            this.refs.stageComponent.tryContinue();
+        if (this._stageComponent.current && this._stageComponent.current.tryContinue) {
+            this._stageComponent.current.tryContinue();
         }
     },
 
@@ -192,8 +194,8 @@ export default createReactClass({
     },
 
     _setFocus: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.focus) {
-            this.refs.stageComponent.focus();
+        if (this._stageComponent.current && this._stageComponent.current.focus) {
+            this._stageComponent.current.focus();
         }
     },
 
@@ -214,7 +216,8 @@ export default createReactClass({
 
         const StageComponent = getEntryComponentForLoginType(stage);
         return (
-            <StageComponent ref="stageComponent"
+            <StageComponent
+                ref={this._stageComponent}
                 loginType={stage}
                 matrixClient={this.props.matrixClient}
                 authSessionId={this._authLogic.getSessionId()}

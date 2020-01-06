@@ -64,6 +64,8 @@ export default class AppTile extends React.Component {
         this._onReloadWidgetClick = this._onReloadWidgetClick.bind(this);
 
         this._contextMenuButton = createRef();
+        this._appFrame = createRef();
+        this._menu_bar = createRef();
     }
 
     /**
@@ -337,14 +339,14 @@ export default class AppTile extends React.Component {
                     // HACK: This is a really dirty way to ensure that Jitsi cleans up
                     // its hold on the webcam. Without this, the widget holds a media
                     // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-                    if (this.refs.appFrame) {
+                    if (this._appFrame.current) {
                         // In practice we could just do `+= ''` to trick the browser
                         // into thinking the URL changed, however I can foresee this
                         // being optimized out by a browser. Instead, we'll just point
                         // the iframe at a page that is reasonably safe to use in the
                         // event the iframe doesn't wink away.
                         // This is relative to where the Riot instance is located.
-                        this.refs.appFrame.src = 'about:blank';
+                        this._appFrame.current.src = 'about:blank';
                     }
 
                     WidgetUtils.setRoomWidget(
@@ -389,7 +391,7 @@ export default class AppTile extends React.Component {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
         const widgetMessaging = new WidgetMessaging(
-            this.props.id, this.props.url, this.props.userWidget, this.refs.appFrame.contentWindow);
+            this.props.id, this.props.url, this.props.userWidget, this._appFrame.current.contentWindow);
         ActiveWidgetStore.setWidgetMessaging(this.props.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.id} requested capabilities: ` + requestedCapabilities);
@@ -496,7 +498,7 @@ export default class AppTile extends React.Component {
         ev.preventDefault();
 
         // Ignore clicks on menu bar children
-        if (ev.target !== this.refs.menu_bar) {
+        if (ev.target !== this._menu_bar.current) {
             return;
         }
 
@@ -555,7 +557,7 @@ export default class AppTile extends React.Component {
 
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
-        this.refs.appFrame.src = this.refs.appFrame.src;
+        this._appFrame.current.src = this._appFrame.current.src;
     }
 
     _onContextMenuClick = () => {
@@ -626,7 +628,7 @@ export default class AppTile extends React.Component {
                             { this.state.loading && loadingElement }
                             <iframe
                                 allow={iframeFeatures}
-                                ref="appFrame"
+                                ref={this._appFrame}
                                 src={this._getSafeUrl()}
                                 allowFullScreen={true}
                                 sandbox={sandboxFlags}
@@ -694,7 +696,7 @@ export default class AppTile extends React.Component {
         return <React.Fragment>
             <div className={appTileClass} id={this.props.id}>
                 { this.props.showMenubar &&
-                <div ref="menu_bar" className={menuBarClasses} onClick={this.onClickMenuBar}>
+                <div ref={this._menu_bar} className={menuBarClasses} onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
                         { /* Minimise widget */ }
                         { showMinimiseButton && <AccessibleButton

@@ -188,14 +188,15 @@ module.exports = createReactClass({
         }
 
         const callView = (
-            <CallView ref="callView" room={this.props.room}
+            <CallView
+                room={this.props.room}
                 ConferenceHandler={this.props.conferenceHandler}
                 onResize={this.props.onResize}
                 maxVideoHeight={this.props.maxHeight}
             />
         );
 
-        const appsDrawer = <AppsDrawer ref="appsDrawer"
+        const appsDrawer = <AppsDrawer
             room={this.props.room}
             userId={this.props.userId}
             maxHeight={this.props.maxHeight}

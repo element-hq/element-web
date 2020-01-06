@@ -49,6 +49,12 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
     }
 }
 
+export function messageForSendError(errorData) {
+    if (errorData.errcode === "M_TOO_LARGE") {
+        return _t("The message you are trying to send is too large.");
+    }
+}
+
 export function messageForSyncError(err) {
     if (err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
         const limitError = messageForResourceLimitError(

@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,26 +16,28 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
+import { MatrixClient } from 'matrix-js-sdk';
+
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
-
-import { MatrixClient } from 'matrix-js-sdk';
-
 import { _t } from '../../../../languageHandler';
 import {Key} from "../../../../Keyboard";
+import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
+const RESTORE_TYPE_SECRET_STORAGE = 2;
 
-/**
+/*
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
-export default createReactClass({
-    getInitialState: function() {
-        return {
+export default class RestoreKeyBackupDialog extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
             backupInfo: null,
+            backupKeyStored: null,
             loading: false,
             loadError: null,
             restoreError: null,
@@ -45,27 +48,27 @@ export default createReactClass({
             passPhrase: '',
             restoreType: null,
         };
-    },
+    }
 
-    componentWillMount: function() {
+    componentDidMount() {
         this._loadBackupStatus();
-    },
+    }
 
-    _onCancel: function() {
+    _onCancel = () => {
         this.props.onFinished(false);
-    },
+    }
 
-    _onDone: function() {
+    _onDone = () => {
         this.props.onFinished(true);
-    },
+    }
 
-    _onUseRecoveryKeyClick: function() {
+    _onUseRecoveryKeyClick = () => {
         this.setState({
             forceRecoveryKey: true,
         });
-    },
+    }
 
-    _onResetRecoveryClick: function() {
+    _onResetRecoveryClick = () => {
         this.props.onFinished(false);
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
@@ -73,18 +76,18 @@ export default createReactClass({
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
-    },
+    }
 
-    _onRecoveryKeyChange: function(e) {
+    _onRecoveryKeyChange = (e) => {
         this.setState({
             recoveryKey: e.target.value,
             recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
         });
-    },
+    }
 
-    _onPassPhraseNext: async function() {
+    _onPassPhraseNext = async () => {
         this.setState({
             loading: true,
             restoreError: null,
@@ -105,9 +108,9 @@ export default createReactClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onRecoveryKeyNext: async function() {
+    _onRecoveryKeyNext = async () => {
         this.setState({
             loading: true,
             restoreError: null,
@@ -128,37 +131,73 @@ export default createReactClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onPassPhraseChange: function(e) {
+    _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
         });
-    },
+    }
 
-    _onPassPhraseKeyPress: function(e) {
+    _onPassPhraseKeyPress = (e) => {
         if (e.key === Key.ENTER) {
             this._onPassPhraseNext();
         }
-    },
+    }
 
-    _onRecoveryKeyKeyPress: function(e) {
+    _onRecoveryKeyKeyPress = (e) => {
         if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
             this._onRecoveryKeyNext();
         }
-    },
+    }
 
-    _loadBackupStatus: async function() {
+    async _restoreWithSecretStorage() {
+        this.setState({
+            loading: true,
+            restoreError: null,
+            restoreType: RESTORE_TYPE_SECRET_STORAGE,
+        });
+        try {
+            // `accessSecretStorage` may prompt for storage access as needed.
+            const recoverInfo = await accessSecretStorage(async () => {
+                return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
+                    this.state.backupInfo,
+                );
+            });
+            this.setState({
+                loading: false,
+                recoverInfo,
+            });
+        } catch (e) {
+            console.log("Error restoring backup", e);
+            this.setState({
+                restoreError: e,
+                loading: false,
+            });
+        }
+    }
+
+    async _loadBackupStatus() {
         this.setState({
             loading: true,
             loadError: null,
         });
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            this.setState({
+                backupInfo,
+                backupKeyStored,
+            });
+
+            // If the backup key is stored, we can proceed directly to restore.
+            if (backupKeyStored) {
+                return this._restoreWithSecretStorage();
+            }
+
             this.setState({
                 loadError: null,
                 loading: false,
-                backupInfo,
             });
         } catch (e) {
             console.log("Error loading backup status", e);
@@ -167,9 +206,9 @@ export default createReactClass({
                 loading: false,
             });
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -296,7 +335,7 @@ export default createReactClass({
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: you should only set up key backup " +
+                    "<b>Warning</b>: You should only set up key backup " +
                     "from a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
@@ -322,7 +361,7 @@ export default createReactClass({
                     />
                 </div>
                 {_t(
-                    "If you've forgotten your recovery passphrase you can "+
+                    "If you've forgotten your recovery key you can "+
                     "<button>set up new recovery options</button>"
                 , {}, {
                     button: s => <AccessibleButton className="mx_linkButton"
@@ -345,5 +384,5 @@ export default createReactClass({
             </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

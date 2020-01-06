@@ -17,6 +17,17 @@ limitations under the License.
 module.exports = async function invite(session, userId) {
     session.log.step(`invites "${userId}" to room`);
     await session.delay(1000);
+    const memberPanelButton = await session.query(".mx_RightPanel_membersButton");
+    try {
+        await session.query(".mx_RightPanel_headerButton_highlight", 500);
+        // Right panel is open - toggle it to ensure it's the member list
+        // Sometimes our tests have this opened to MemberInfo
+        await memberPanelButton.click();
+        await memberPanelButton.click();
+    } catch (e) {
+        // Member list is closed - open it
+        await memberPanelButton.click();
+    }
     const inviteButton = await session.query(".mx_MemberList_invite");
     await inviteButton.click();
     const inviteTextArea = await session.query(".mx_AddressPickerDialog textarea");

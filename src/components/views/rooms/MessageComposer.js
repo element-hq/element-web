@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
@@ -107,10 +107,12 @@ class UploadButton extends React.Component {
         roomId: PropTypes.string.isRequired,
     }
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
+
+        this._uploadInput = createRef();
     }
 
     onUploadClick(ev) {
@@ -118,7 +120,7 @@ class UploadButton extends React.Component {
             dis.dispatch({action: 'require_registration'});
             return;
         }
-        this.refs.uploadInput.click();
+        this._uploadInput.current.click();
     }
 
     onUploadFileInputChange(ev) {
@@ -150,7 +152,9 @@ class UploadButton extends React.Component {
                 onClick={this.onUploadClick}
                 title={_t('Upload file')}
             >
-                <input ref="uploadInput" type="file"
+                <input
+                    ref={this._uploadInput}
+                    type="file"
                     style={uploadInputStyle}
                     multiple
                     onChange={this.onUploadFileInputChange}
@@ -161,8 +165,8 @@ class UploadButton extends React.Component {
 }
 
 export default class MessageComposer extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);

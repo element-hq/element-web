@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -59,18 +59,13 @@ module.exports = createReactClass({
         return ({
             hover: false,
             badgeHover: false,
-            menuDisplayed: false,
+            contextMenuPosition: null, // DOM bounding box, null if non-shown
             roomName: this.props.room.name,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             notificationCount: this.props.room.getUnreadNotificationCount(),
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
             statusMessage: this._getStatusMessage(),
         });
-    },
-
-    _isDirectMessageRoom: function(roomId) {
-        const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        return Boolean(dmRooms);
     },
 
     _shouldShowStatusMessage() {
@@ -145,8 +140,6 @@ module.exports = createReactClass({
     },
 
     componentDidMount: function() {
-        this._contextMenuButton = createRef();
-
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
         cli.on("Room.name", this.onRoomName);
@@ -241,16 +234,12 @@ module.exports = createReactClass({
         this.setState( { badgeHover: false } );
     },
 
-    openMenu: function(e) {
+    _showContextMenu: function(boundingClientRect) {
         // Only allow non-guests to access the context menu
         if (MatrixClientPeg.get().isGuest()) return;
 
-        // Prevent the RoomTile onClick event firing as well
-        e.stopPropagation();
-        e.preventDefault();
-
         const state = {
-            menuDisplayed: true,
+            contextMenuPosition: boundingClientRect,
         };
 
         // If the badge is clicked, then no longer show tooltip
@@ -261,9 +250,28 @@ module.exports = createReactClass({
         this.setState(state);
     },
 
+    onContextMenuButtonClick: function(e) {
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
+        e.preventDefault();
+
+        this._showContextMenu(e.target.getBoundingClientRect());
+    },
+
+    onContextMenu: function(e) {
+        // Prevent the native context menu
+        e.preventDefault();
+
+        this._showContextMenu({
+            right: e.clientX,
+            top: e.clientY,
+            height: 0,
+        });
+    },
+
     closeMenu: function() {
         this.setState({
-            menuDisplayed: false,
+            contextMenuPosition: null,
         });
         this.props.refreshSubList();
     },
@@ -282,6 +290,8 @@ module.exports = createReactClass({
             subtext = this.state.statusMessage;
         }
 
+        const isMenuDisplayed = Boolean(this.state.contextMenuPosition);
+
         const classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.state.selected,
@@ -289,7 +299,7 @@ module.exports = createReactClass({
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
             'mx_RoomTile_invited': isInvite,
-            'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
+            'mx_RoomTile_menuDisplayed': isMenuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
@@ -301,7 +311,7 @@ module.exports = createReactClass({
 
         const badgeClasses = classNames({
             'mx_RoomTile_badge': true,
-            'mx_RoomTile_badgeButton': this.state.badgeHover || this.state.menuDisplayed,
+            'mx_RoomTile_badgeButton': this.state.badgeHover || isMenuDisplayed,
         });
 
         let name = this.state.roomName;
@@ -323,7 +333,7 @@ module.exports = createReactClass({
             const nameClasses = classNames({
                 'mx_RoomTile_name': true,
                 'mx_RoomTile_invite': this.props.isInvite,
-                'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
+                'mx_RoomTile_badgeShown': badges || this.state.badgeHover || isMenuDisplayed,
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
@@ -346,10 +356,9 @@ module.exports = createReactClass({
             contextMenuButton = (
                 <ContextMenuButton
                     className="mx_RoomTile_menuButton"
-                    inputRef={this._contextMenuButton}
                     label={_t("Options")}
-                    isExpanded={this.state.menuDisplayed}
-                    onClick={this.openMenu} />
+                    isExpanded={isMenuDisplayed}
+                    onClick={this.onContextMenuButtonClick} />
             );
         }
 
@@ -357,8 +366,11 @@ module.exports = createReactClass({
 
         let ariaLabel = name;
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+
         let dmIndicator;
-        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+        let dmOnline;
+        if (dmUserId) {
             dmIndicator = <img
                 src={require("../../../../res/img/icon_person.svg")}
                 className="mx_RoomTile_dm"
@@ -366,6 +378,13 @@ module.exports = createReactClass({
                 height="13"
                 alt="dm"
             />;
+
+            const { room } = this.props;
+            const member = room.getMember(dmUserId);
+            if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
+                const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
+                dmOnline = <UserOnlineDot userId={dmUserId} />;
+            }
         }
 
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
@@ -382,11 +401,10 @@ module.exports = createReactClass({
         }
 
         let contextMenu;
-        if (this.state.menuDisplayed && this._contextMenuButton.current) {
-            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+        if (isMenuDisplayed) {
             const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
             contextMenu = (
-                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
+                <ContextMenu {...toRightOf(this.state.contextMenuPosition)} onFinished={this.closeMenu}>
                     <RoomTileContextMenu room={this.props.room} onFinished={this.closeMenu} />
                 </ContextMenu>
             );
@@ -399,7 +417,7 @@ module.exports = createReactClass({
                 onClick={this.onClick}
                 onMouseEnter={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
-                onContextMenu={this.openMenu}
+                onContextMenu={this.onContextMenu}
                 aria-label={ariaLabel}
                 aria-selected={this.state.selected}
                 role="treeitem"
@@ -415,6 +433,7 @@ module.exports = createReactClass({
                         { label }
                         { subtextLabel }
                     </div>
+                    { dmOnline }
                     { contextMenuButton }
                     { badge }
                 </div>

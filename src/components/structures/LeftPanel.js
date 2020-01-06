@@ -19,12 +19,10 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk';
 import { Key } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
-import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
@@ -37,10 +35,6 @@ const LeftPanel = createReactClass({
     // shouldComponentUpdate!
     propTypes: {
         collapsed: PropTypes.bool.isRequired,
-    },
-
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getInitialState: function() {
@@ -243,7 +237,6 @@ const LeftPanel = createReactClass({
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
                 { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
-                <TagPanelButtons />
             </div>);
         }
 

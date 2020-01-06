@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,23 +21,19 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import SettingsStore from '../../../../lib/settings/SettingsStore';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
-
-        this._startNewBackup = this._startNewBackup.bind(this);
-        this._deleteBackup = this._deleteBackup.bind(this);
-        this._onKeyBackupSessionsRemaining =
-            this._onKeyBackupSessionsRemaining.bind(this);
-        this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
-        this._restoreBackup = this._restoreBackup.bind(this);
 
         this._unmounted = false;
         this.state = {
             loading: true,
             error: null,
             backupInfo: null,
+            backupSigStatus: null,
+            backupKeyStored: null,
             sessionsRemaining: 0,
         };
     }
@@ -63,13 +60,13 @@ export default class KeyBackupPanel extends React.PureComponent {
         }
     }
 
-    _onKeyBackupSessionsRemaining(sessionsRemaining) {
+    _onKeyBackupSessionsRemaining = (sessionsRemaining) => {
         this.setState({
             sessionsRemaining,
         });
     }
 
-    _onKeyBackupStatus() {
+    _onKeyBackupStatus = () => {
         // This just loads the current backup status rather than forcing
         // a re-check otherwise we risk causing infinite loops
         this._loadBackupStatus();
@@ -78,9 +75,11 @@ export default class KeyBackupPanel extends React.PureComponent {
     async _checkKeyBackupStatus() {
         try {
             const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
             this.setState({
                 backupInfo,
                 backupSigStatus: trustInfo,
+                backupKeyStored,
                 error: null,
                 loading: false,
             });
@@ -91,6 +90,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
+                backupKeyStored: null,
                 loading: false,
             });
         }
@@ -101,11 +101,13 @@ export default class KeyBackupPanel extends React.PureComponent {
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
             if (this._unmounted) return;
             this.setState({
                 error: null,
                 backupInfo,
                 backupSigStatus,
+                backupKeyStored,
                 loading: false,
             });
         } catch (e) {
@@ -115,23 +117,37 @@ export default class KeyBackupPanel extends React.PureComponent {
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
+                backupKeyStored: null,
                 loading: false,
             });
         }
     }
 
-    _startNewBackup() {
+    _startNewBackup = () => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
+                secureSecretStorage: false,
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
     }
 
-    _deleteBackup() {
+    _startNewBackupWithSecureSecretStorage = async () => {
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            {
+                secureSecretStorage: true,
+                onFinished: () => {
+                    this._loadBackupStatus();
+                },
+            }, null, /* priority = */ false, /* static = */ true,
+        );
+    }
+
+    _deleteBackup = () => {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
@@ -151,10 +167,12 @@ export default class KeyBackupPanel extends React.PureComponent {
         });
     }
 
-    _restoreBackup() {
+    _restoreBackup = async () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
-        });
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            /* priority = */ false, /* static = */ true,
+        );
     }
 
     render() {
@@ -199,6 +217,13 @@ export default class KeyBackupPanel extends React.PureComponent {
                 restoreButtonCaption = _t("Connect this device to Key Backup");
             }
 
+            let keyStatus;
+            if (this.state.backupKeyStored === true) {
+                keyStatus = _t("in secret storage");
+            } else {
+                keyStatus = _t("not stored");
+            }
+
             let uploadStatus;
             const { sessionsRemaining } = this.state;
             if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
@@ -221,7 +246,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {sub}
                     </span>;
                 const verify = sub =>
-                    <span className={sig.device && sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
+                    <span className={sig.device && sig.deviceTrust.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
                         {sub}
                     </span>;
                 const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;
@@ -229,10 +254,29 @@ export default class KeyBackupPanel extends React.PureComponent {
                     sig.device &&
                     sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
                 );
+                const fromThisUser = (
+                    sig.crossSigningId &&
+                    sig.deviceId === MatrixClientPeg.get().getCrossSigningId()
+                );
                 let sigStatus;
-                if (!sig.device) {
+                if (sig.valid && fromThisUser) {
                     sigStatus = _t(
-                        "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.",
+                        "Backup has a <validity>valid</validity> signature from this user",
+                        {}, { validity },
+                    );
+                } else if (!sig.valid && fromThisUser) {
+                    sigStatus = _t(
+                        "Backup has a <validity>invalid</validity> signature from this user",
+                        {}, { validity },
+                    );
+                } else if (sig.crossSigningId) {
+                    sigStatus = _t(
+                        "Backup has a signature from <verify>unknown</verify> user with ID %(deviceId)s",
+                        { deviceId: sig.deviceId }, { verify },
+                    );
+                } else if (!sig.device) {
+                    sigStatus = _t(
+                        "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s",
                         { deviceId: sig.deviceId }, { verify },
                     );
                 } else if (sig.valid && fromThisDevice) {
@@ -285,26 +329,54 @@ export default class KeyBackupPanel extends React.PureComponent {
                 trustedLocally = _t("This backup is trusted because it has been restored on this device");
             }
 
+            let buttonRow = (
+                <div className="mx_KeyBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                        {restoreButtonCaption}
+                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
+                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                        {_t("Delete Backup")}
+                    </AccessibleButton>
+                </div>
+            );
+            if (this.state.backupKeyStored && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                buttonRow = <p>⚠️ {_t(
+                    "Backup key stored in secret storage, but this feature is not " +
+                    "enabled on this device. Please enable cross-signing in Labs to " +
+                    "modify key backup state.",
+                )}</p>;
+            }
+
             return <div>
                 <div>{clientBackupStatus}</div>
                 <details>
                     <summary>{_t("Advanced")}</summary>
                     <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
                     <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
+                    <div>{_t("Backup key stored: ")}{keyStatus}</div>
                     {uploadStatus}
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
                 </details>
-                <p>
-                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                        {restoreButtonCaption}
-                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                        { _t("Delete Backup") }
-                    </AccessibleButton>
-                </p>
+                {buttonRow}
             </div>;
         } else {
+            // This is a temporary button for testing the new path which stores
+            // the key backup key in SSSS. Initialising SSSS depends on
+            // cross-signing and is part of the same project, so we only show
+            // this mode when the cross-signing feature is enabled.
+            // TODO: Clean this up when removing the feature flag.
+            let secureSecretStorageKeyBackup;
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                secureSecretStorageKeyBackup = (
+                    <div className="mx_KeyBackupPanel_buttonRow">
+                        <AccessibleButton kind="primary" onClick={this._startNewBackupWithSecureSecretStorage}>
+                            {_t("Start using Key Backup with Secure Secret Storage")}
+                        </AccessibleButton>
+                    </div>
+                );
+            }
+
             return <div>
                 <div>
                     <p>{_t(
@@ -314,9 +386,12 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
                 </div>
-                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
-                    { _t("Start using Key Backup") }
-                </AccessibleButton>
+                <div className="mx_KeyBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                        {_t("Start using Key Backup")}
+                    </AccessibleButton>
+                </div>
+                {secureSecretStorageKeyBackup}
             </div>;
         }
     }

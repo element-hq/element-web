@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +16,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
+import FileSaver from 'file-saver';
+import PropTypes from 'prop-types';
+
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
-
-import FileSaver from 'file-saver';
-
 import { _t } from '../../../../languageHandler';
+import { accessSecretStorage } from '../../../../CrossSigningManager';
+import SettingsStore from '../../../../../lib/settings/SettingsStore';
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -45,13 +47,25 @@ function selectText(target) {
     selection.addRange(range);
 }
 
-/**
+/*
  * Walks the user through the process of creating an e2e key backup
  * on the server.
  */
-export default createReactClass({
-    getInitialState: function() {
-        return {
+export default class CreateKeyBackupDialog extends React.PureComponent {
+    static propTypes = {
+        secureSecretStorage: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
+
+        this._recoveryKeyNode = null;
+        this._keyBackupInfo = null;
+        this._setZxcvbnResultTimeout = null;
+
+        this.state = {
+            secureSecretStorage: props.secureSecretStorage,
             phase: PHASE_PASSPHRASE,
             passPhrase: '',
             passPhraseConfirm: '',
@@ -60,25 +74,38 @@ export default createReactClass({
             zxcvbnResult: null,
             setPassPhrase: false,
         };
-    },
 
-    componentWillMount: function() {
-        this._recoveryKeyNode = null;
-        this._keyBackupInfo = null;
-        this._setZxcvbnResultTimeout = null;
-    },
+        if (this.state.secureSecretStorage === undefined) {
+            this.state.secureSecretStorage =
+                SettingsStore.isFeatureEnabled("feature_cross_signing");
+        }
 
-    componentWillUnmount: function() {
+        // If we're using secret storage, skip ahead to the backing up step, as
+        // `accessSecretStorage` will handle passphrases as needed.
+        if (this.state.secureSecretStorage) {
+            this.state.phase = PHASE_BACKINGUP;
+        }
+    }
+
+    componentDidMount() {
+        // If we're using secret storage, skip ahead to the backing up step, as
+        // `accessSecretStorage` will handle passphrases as needed.
+        if (this.state.secureSecretStorage) {
+            this._createBackup();
+        }
+    }
+
+    componentWillUnmount() {
         if (this._setZxcvbnResultTimeout !== null) {
             clearTimeout(this._setZxcvbnResultTimeout);
         }
-    },
+    }
 
-    _collectRecoveryKeyNode: function(n) {
+    _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
-    },
+    }
 
-    _onCopyClick: function() {
+    _onCopyClick = () => {
         selectText(this._recoveryKeyNode);
         const successful = document.execCommand('copy');
         if (successful) {
@@ -87,9 +114,9 @@ export default createReactClass({
                 phase: PHASE_KEEPITSAFE,
             });
         }
-    },
+    }
 
-    _onDownloadClick: function() {
+    _onDownloadClick = () => {
         const blob = new Blob([this._keyBackupInfo.recovery_key], {
             type: 'text/plain;charset=us-ascii',
         });
@@ -99,24 +126,35 @@ export default createReactClass({
             downloaded: true,
             phase: PHASE_KEEPITSAFE,
         });
-    },
+    }
 
-    _createBackup: async function() {
+    _createBackup = async () => {
+        const { secureSecretStorage } = this.state;
         this.setState({
             phase: PHASE_BACKINGUP,
             error: null,
         });
         let info;
         try {
-            info = await MatrixClientPeg.get().createKeyBackupVersion(
-                this._keyBackupInfo,
-            );
+            if (secureSecretStorage) {
+                await accessSecretStorage(async () => {
+                    info = await MatrixClientPeg.get().prepareKeyBackupVersion(
+                        null /* random key */,
+                        { secureSecretStorage: true },
+                    );
+                    info = await MatrixClientPeg.get().createKeyBackupVersion(info);
+                });
+            } else {
+                info = await MatrixClientPeg.get().createKeyBackupVersion(
+                    this._keyBackupInfo,
+                );
+            }
             await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
             this.setState({
                 phase: PHASE_DONE,
             });
         } catch (e) {
-            console.log("Error creating key backup", e);
+            console.error("Error creating key backup", e);
             // TODO: If creating a version succeeds, but backup fails, should we
             // delete the version, disable backup, or do nothing?  If we just
             // disable without deleting, we'll enable on next app reload since
@@ -128,38 +166,38 @@ export default createReactClass({
                 error: e,
             });
         }
-    },
+    }
 
-    _onCancel: function() {
+    _onCancel = () => {
         this.props.onFinished(false);
-    },
+    }
 
-    _onDone: function() {
+    _onDone = () => {
         this.props.onFinished(true);
-    },
+    }
 
-    _onOptOutClick: function() {
+    _onOptOutClick = () => {
         this.setState({phase: PHASE_OPTOUT_CONFIRM});
-    },
+    }
 
-    _onSetUpClick: function() {
+    _onSetUpClick = () => {
         this.setState({phase: PHASE_PASSPHRASE});
-    },
+    }
 
-    _onSkipPassPhraseClick: async function() {
+    _onSkipPassPhraseClick = async () => {
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion();
         this.setState({
             copied: false,
             downloaded: false,
             phase: PHASE_SHOWKEY,
         });
-    },
+    }
 
-    _onPassPhraseNextClick: function() {
+    _onPassPhraseNextClick = () => {
         this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
-    },
+    }
 
-    _onPassPhraseKeyPress: async function(e) {
+    _onPassPhraseKeyPress = async (e) => {
         if (e.key === 'Enter') {
             // If we're waiting for the timeout before updating the result at this point,
             // skip ahead and do it now, otherwise we'll deny the attempt to proceed
@@ -177,9 +215,9 @@ export default createReactClass({
                 this._onPassPhraseNextClick();
             }
         }
-    },
+    }
 
-    _onPassPhraseConfirmNextClick: async function() {
+    _onPassPhraseConfirmNextClick = async () => {
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion(this.state.passPhrase);
         this.setState({
             setPassPhrase: true,
@@ -187,30 +225,30 @@ export default createReactClass({
             downloaded: false,
             phase: PHASE_SHOWKEY,
         });
-    },
+    }
 
-    _onPassPhraseConfirmKeyPress: function(e) {
+    _onPassPhraseConfirmKeyPress = (e) => {
         if (e.key === 'Enter' && this.state.passPhrase === this.state.passPhraseConfirm) {
             this._onPassPhraseConfirmNextClick();
         }
-    },
+    }
 
-    _onSetAgainClick: function() {
+    _onSetAgainClick = () => {
         this.setState({
             passPhrase: '',
             passPhraseConfirm: '',
             phase: PHASE_PASSPHRASE,
             zxcvbnResult: null,
         });
-    },
+    }
 
-    _onKeepItSafeBackClick: function() {
+    _onKeepItSafeBackClick = () => {
         this.setState({
             phase: PHASE_SHOWKEY,
         });
-    },
+    }
 
-    _onPassPhraseChange: function(e) {
+    _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
         });
@@ -227,19 +265,19 @@ export default createReactClass({
                 zxcvbnResult: scorePassword(this.state.passPhrase),
             });
         }, PASSPHRASE_FEEDBACK_DELAY);
-    },
+    }
 
-    _onPassPhraseConfirmChange: function(e) {
+    _onPassPhraseConfirmChange = (e) => {
         this.setState({
             passPhraseConfirm: e.target.value,
         });
-    },
+    }
 
-    _passPhraseIsValid: function() {
+    _passPhraseIsValid() {
         return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
-    },
+    }
 
-    _renderPhasePassPhrase: function() {
+    _renderPhasePassPhrase() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         let strengthMeter;
@@ -266,7 +304,7 @@ export default createReactClass({
 
         return <div>
             <p>{_t(
-                "<b>Warning</b>: you should only set up key backup from a trusted computer.", {},
+                "<b>Warning</b>: You should only set up key backup from a trusted computer.", {},
                 { b: sub => <b>{sub}</b> },
             )}</p>
             <p>{_t(
@@ -305,9 +343,9 @@ export default createReactClass({
                 </button></p>
             </details>
         </div>;
-    },
+    }
 
-    _renderPhasePassPhraseConfirm: function() {
+    _renderPhasePassPhraseConfirm() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let matchText;
@@ -361,9 +399,9 @@ export default createReactClass({
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             />
         </div>;
-    },
+    }
 
-    _renderPhaseShowKey: function() {
+    _renderPhaseShowKey() {
         let bodyText;
         if (this.state.setPassPhrase) {
             bodyText = _t(
@@ -380,7 +418,7 @@ export default createReactClass({
                 "access to your encrypted messages if you forget your passphrase.",
             )}</p>
             <p>{_t(
-                "Keep your recovery key somewhere very secure, like a password manager (or a safe)",
+                "Keep your recovery key somewhere very secure, like a password manager (or a safe).",
             )}</p>
             <p>{bodyText}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
@@ -402,18 +440,18 @@ export default createReactClass({
                 </div>
             </div>
         </div>;
-    },
+    }
 
-    _renderPhaseKeepItSafe: function() {
+    _renderPhaseKeepItSafe() {
         let introText;
         if (this.state.copied) {
             introText = _t(
-                "Your Recovery Key has been <b>copied to your clipboard</b>, paste it to:",
+                "Your recovery key has been <b>copied to your clipboard</b>, paste it to:",
                 {}, {b: s => <b>{s}</b>},
             );
         } else if (this.state.downloaded) {
             introText = _t(
-                "Your Recovery Key is in your <b>Downloads</b> folder.",
+                "Your recovery key is in your <b>Downloads</b> folder.",
                 {}, {b: s => <b>{s}</b>},
             );
         }
@@ -431,16 +469,16 @@ export default createReactClass({
                 <button onClick={this._onKeepItSafeBackClick}>{_t("Back")}</button>
             </DialogButtons>
         </div>;
-    },
+    }
 
-    _renderBusyPhase: function(text) {
+    _renderBusyPhase(text) {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         return <div>
             <Spinner />
         </div>;
-    },
+    }
 
-    _renderPhaseDone: function() {
+    _renderPhaseDone() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
@@ -451,9 +489,9 @@ export default createReactClass({
                 hasCancel={false}
             />
         </div>;
-    },
+    }
 
-    _renderPhaseOptOutConfirm: function() {
+    _renderPhaseOptOutConfirm() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {_t(
@@ -467,9 +505,9 @@ export default createReactClass({
                 <button onClick={this._onCancel}>I understand, continue without</button>
             </DialogButtons>
         </div>;
-    },
+    }
 
-    _titleForPhase: function(phase) {
+    _titleForPhase(phase) {
         switch (phase) {
             case PHASE_PASSPHRASE:
                 return _t('Secure your backup with a passphrase');
@@ -488,9 +526,9 @@ export default createReactClass({
             default:
                 return _t("Create Key Backup");
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         let content;
@@ -543,5 +581,5 @@ export default createReactClass({
             </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

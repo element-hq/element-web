@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -169,6 +170,7 @@ limitations under the License.
 
 .mx_EventTile:hover .mx_MessageActionBar,
 .mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
+[data-whatinput='keyboard'] .mx_EventTile:focus-within .mx_MessageActionBar,
 .mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
     visibility: visible;
 }
@@ -352,7 +354,6 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     left: 46px;
     width: 15px;
     height: 15px;
-    cursor: pointer;
     display: block;
     bottom: 0;
     right: 0;

@@ -24,6 +24,8 @@ import Matrix from "matrix-js-sdk";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
+// what-input helps improve keyboard accessibility
+import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -148,16 +150,6 @@ export default createReactClass({
         makeRegistrationUrl: PropTypes.func.isRequired,
     },
 
-    childContextTypes: {
-        appConfig: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            appConfig: this.props.config,
-        };
-    },
-
     getInitialState: function() {
         const s = {
             // the master view we are showing.
@@ -175,10 +167,9 @@ export default createReactClass({
             viewUserId: null,
             // this is persisted as mx_lhs_size, loaded in LoggedInView
             collapseLhs: false,
-            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
-            rightDisabled: false,
+            // the right panel's disabled state is tracked in its store.
 
             version: null,
             newVersion: null,
@@ -657,23 +648,11 @@ export default createReactClass({
                     collapseLhs: false,
                 });
                 break;
-            case 'hide_right_panel':
-                window.localStorage.setItem("mx_rhs_collapsed", true);
-                this.setState({
-                    collapsedRhs: true,
-                });
-                break;
-            case 'show_right_panel':
-                window.localStorage.setItem("mx_rhs_collapsed", false);
-                this.setState({
-                    collapsedRhs: false,
-                });
-                break;
             case 'panel_disable': {
                 this.setState({
                     leftDisabled: payload.leftDisabled || payload.sideDisabled || false,
                     middleDisabled: payload.middleDisabled || false,
-                    rightDisabled: payload.rightDisabled || payload.sideDisabled || false,
+                    // We don't track the right panel being disabled here - it's tracked in the store.
                 });
                 break;
             }
@@ -1245,7 +1224,6 @@ export default createReactClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapsedRhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';
@@ -1261,7 +1239,6 @@ export default createReactClass({
             view: VIEWS.SOFT_LOGOUT,
             ready: false,
             collapseLhs: false,
-            collapsedRhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';
@@ -1479,7 +1456,7 @@ export default createReactClass({
             }
         });
 
-        if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             cli.on("crypto.verification.request", request => {
                 let requestObserver;
                 if (request.event.getRoomId()) {
@@ -1505,7 +1482,7 @@ export default createReactClass({
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
                     verifier,
-                });
+                }, null, /* priority = */ false, /* static = */ true);
             });
         }
         // Fire the tinter right on startup to ensure the default theme is applied
@@ -1592,9 +1569,17 @@ export default createReactClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
-            const segments = screen.substring(5).split('/');
-            const roomString = segments[0];
-            let eventId = segments.splice(1).join("/"); // empty string if no event id given
+            // Rooms can have the following formats:
+            // #room_alias:domain or !opaque_id:domain
+            const room = screen.substring(5);
+            const domainOffset = room.indexOf(':') + 1; // 0 in case room does not contain a :
+            let eventOffset = room.length;
+            // room aliases can contain slashes only look for slash after domain
+            if (room.substring(domainOffset).indexOf('/') > -1) {
+                eventOffset = domainOffset + room.substring(domainOffset).indexOf('/');
+            }
+            const roomString = room.substring(0, eventOffset);
+            let eventId = room.substring(eventOffset + 1); // empty string if no event id given
 
             // Previously we pulled the eventID from the segments in such a way
             // where if there was no eventId then we'd get undefined. However, we
@@ -1705,20 +1690,12 @@ export default createReactClass({
     handleResize: function(e) {
         const hideLhsThreshold = 1000;
         const showLhsThreshold = 1000;
-        const hideRhsThreshold = 820;
-        const showRhsThreshold = 820;
 
         if (this._windowWidth > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
             dis.dispatch({ action: 'hide_left_panel' });
         }
         if (this._windowWidth <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
             dis.dispatch({ action: 'show_left_panel' });
-        }
-        if (this._windowWidth > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
-            dis.dispatch({ action: 'hide_right_panel' });
-        }
-        if (this._windowWidth <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
-            dis.dispatch({ action: 'show_right_panel' });
         }
 
         this.state.resizeNotifier.notifyWindowResized();

@@ -2,13 +2,13 @@
 
 import sinon from 'sinon';
 import React from 'react';
-import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
 import {makeType} from "../src/utils/TypeUtils";
 import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';
+import MatrixClientContext from "../src/contexts/MatrixClientContext";
 const MatrixEvent = jssdk.MatrixEvent;
 
 /**
@@ -291,22 +291,16 @@ export function getDispatchForStore(store) {
 
 export function wrapInMatrixClientContext(WrappedComponent) {
     class Wrapper extends React.Component {
-        static childContextTypes = {
-            matrixClient: PropTypes.object,
-        }
+        constructor(props) {
+            super(props);
 
-        getChildContext() {
-            return {
-                matrixClient: this._matrixClient,
-            };
-        }
-
-        componentWillMount() {
             this._matrixClient = peg.get();
         }
 
         render() {
-            return <WrappedComponent ref={this.props.wrappedRef} {...this.props} />;
+            return <MatrixClientContext.Provider value={this._matrixClient}>
+                <WrappedComponent ref={this.props.wrappedRef} {...this.props} />
+            </MatrixClientContext.Provider>;
         }
     }
     return Wrapper;
