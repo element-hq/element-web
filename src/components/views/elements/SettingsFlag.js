@@ -34,13 +34,12 @@ module.exports = createReactClass({
 
     getInitialState: function() {
         return {
-            // convert to Boolean to protect against null-capable "tri-state" Settings e.g fallbackICEServerAllowed
-            value: Boolean(SettingsStore.getValueAt(
+            value: SettingsStore.getValueAt(
                 this.props.level,
                 this.props.name,
                 this.props.roomId,
                 this.props.isExplicit,
-            )),
+            ),
         };
     },
 
