@@ -170,6 +170,7 @@ class DMRoomTile extends React.PureComponent {
         lastActiveTs: PropTypes.number,
         onToggle: PropTypes.func.isRequired, // takes 1 argument, the member being toggled
         highlightWord: PropTypes.string,
+        isSelected: PropTypes.bool,
     };
 
     _onClick = (e) => {
@@ -228,7 +229,7 @@ class DMRoomTile extends React.PureComponent {
         }
 
         const avatarSize = 36;
-        const avatar = this.props.member.isEmail
+        let avatar = this.props.member.isEmail
             ? <img
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
@@ -241,9 +242,24 @@ class DMRoomTile extends React.PureComponent {
                 width={avatarSize}
                 height={avatarSize} />;
 
+        let checkmark = null;
+        if (this.props.isSelected) {
+            // To reduce flickering we put the 'selected' room tile above the real avatar
+            checkmark = <div className='mx_DMInviteDialog_roomTile_selected' />;
+        }
+
+        // To reduce flickering we put the checkmark on top of the actual avatar (prevents
+        // the browser from reloading the image source when the avatar remounts).
+        let stackedAvatar = (
+            <span className='mx_DMInviteDialog_roomTile_avatarStack'>
+                {avatar}
+                {checkmark}
+            </span>
+        );
+
         return (
             <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
-                {avatar}
+                {stackedAvatar}
                 <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
                 <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
@@ -492,6 +508,7 @@ export default class DMInviteDialog extends React.PureComponent {
                 key={r.userId}
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
+                isSelected={this.state.targets.some(t => t.userId === r.userId)}
             />
         ));
         return (
