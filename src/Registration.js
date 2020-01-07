@@ -67,9 +67,15 @@ export async function startAnyRegistrationFlow(options) {
     //} else {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
-            title: _t("Registration Required"),
-            description: _t("You need to register to do this. Would you like to register now?"),
+            title: _t("Login or Registration Required"),
+            description: _t("You need to login or register to do this."),
             button: _t("Register"),
+            extraButtons: [
+                <button className="mx_Dialog_primary"
+                onClick={() => {dis.dispatch({action: 'start_login'});}}>
+                    { _t('Login') }
+                </button>,
+            ],
             onFinished: (proceed) => {
                 if (proceed) {
                     dis.dispatch({action: 'start_registration'});
@@ -101,4 +107,3 @@ export async function startAnyRegistrationFlow(options) {
 //     }
 //     throw new Error("Register request succeeded when it should have returned 401!");
 // }
-
