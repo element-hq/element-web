@@ -229,7 +229,7 @@ class DMRoomTile extends React.PureComponent {
         }
 
         const avatarSize = 36;
-        let avatar = this.props.member.isEmail
+        const avatar = this.props.member.isEmail
             ? <img
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
@@ -250,7 +250,7 @@ class DMRoomTile extends React.PureComponent {
 
         // To reduce flickering we put the checkmark on top of the actual avatar (prevents
         // the browser from reloading the image source when the avatar remounts).
-        let stackedAvatar = (
+        const stackedAvatar = (
             <span className='mx_DMInviteDialog_roomTile_avatarStack'>
                 {avatar}
                 {checkmark}
@@ -538,7 +538,7 @@ export default class DMInviteDialog extends React.PureComponent {
                 {targets}
                 {input}
             </div>
-        )
+        );
     }
 
     render() {
