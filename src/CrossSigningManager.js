@@ -17,8 +17,8 @@ limitations under the License.
 import Modal from './Modal';
 import * as sdk from './index';
 import MatrixClientPeg from './MatrixClientPeg';
-import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
-import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
+import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
+import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
