@@ -18,7 +18,7 @@ import ReactDOM from 'react-dom';
 import MatrixClientPeg from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
-import sdk from '../index';
+import * as sdk from '../index';
 
 export function pillifyLinks(nodes, mxEvent) {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());

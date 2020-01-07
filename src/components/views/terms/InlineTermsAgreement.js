@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import {_t, pickBestLanguage} from "../../../languageHandler";
-import sdk from "../../..";
+import * as sdk from "../../..";
 
 export default class InlineTermsAgreement extends React.Component {
     static propTypes = {

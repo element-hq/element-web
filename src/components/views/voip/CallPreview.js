@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
 import dis from '../../../dispatcher';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 module.exports = createReactClass({
     displayName: 'CallPreview',

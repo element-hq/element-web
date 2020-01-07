@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t, _td} from "../../../../../languageHandler";
 import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 

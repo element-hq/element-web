@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import MatrixClientPeg from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';

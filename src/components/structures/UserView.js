@@ -19,7 +19,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Matrix from "matrix-js-sdk";
 import MatrixClientPeg from "../../MatrixClientPeg";
-import sdk from "../../index";
+import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 

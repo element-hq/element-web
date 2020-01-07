@@ -17,7 +17,7 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import request from 'browser-request';
 import { _t } from '../../../languageHandler';
 

@@ -18,7 +18,7 @@ import React from 'react';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class CrossSigningPanel extends React.PureComponent {

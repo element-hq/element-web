@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from './index';
+import * as sdk from './index';
 
 function isMatch(query, name, uid) {
     query = query.toLowerCase();

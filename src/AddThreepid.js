@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import sdk from './index';
+import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';

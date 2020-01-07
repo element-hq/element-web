@@ -24,7 +24,7 @@ import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 

@@ -17,7 +17,7 @@ limitations under the License.
 */
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
