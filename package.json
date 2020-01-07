@@ -34,22 +34,9 @@
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
-<<<<<<< HEAD
-    "emoji-data-strip": "node scripts/emoji-data-strip.js",
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
     "rethemendex": "res/css/rethemendex.sh",
-=======
-    "build": "yarn reskindex && yarn start:init",
-    "build:watch": "babel src -w --skip-initial-build -d lib --source-maps --copy-files",
-    "start": "yarn start:init && yarn start:all",
-    "start:all": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n build,reskindex \"yarn build:watch\" \"yarn reskindex:watch\"",
-    "start:init": "babel src -d lib --source-maps --copy-files",
-    "lint": "eslint src/",
-    "lintall": "eslint src/ test/",
-    "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
-    "stylelint": "stylelint 'res/css/**/*.scss'",
->>>>>>> develop
     "clean": "rimraf lib",
     "build": "yarn clean && git rev-parse HEAD > git-revision.txt && yarn build:compile && yarn build:types",
     "build:compile": "yarn reskindex && babel -d lib --verbose --extensions \".ts,.js\" src",
