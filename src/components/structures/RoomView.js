@@ -66,17 +66,7 @@ if (DEBUG) {
     debuglog = console.log.bind(console);
 }
 
-<<<<<<< HEAD
-export const RoomContext = PropTypes.shape({
-    canReact: PropTypes.bool.isRequired,
-    canReply: PropTypes.bool.isRequired,
-    room: PropTypes.instanceOf(Room),
-});
-
 export default createReactClass({
-=======
-module.exports = createReactClass({
->>>>>>> develop
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,
