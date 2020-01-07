@@ -87,13 +87,5 @@ EMOJIBASE.forEach(emoji => {
  * @returns {string} stripped string
  */
 function stripVariation(str) {
-    let ret = '';
-    for (let i = 0; i < str.length; ++i) {
-        const charCode = str.charCodeAt(i);
-        // append to output only if it's outside the variation selector range
-        if (charCode < 0xFE00 && charCode > 0xFE0F) {
-            ret += str.charAt(i);
-        }
-    }
-    return ret;
+    return str.replace("\uFE00-\uFE0F", "");
 }
