@@ -99,7 +99,7 @@ limitations under the License.
         width: 36px;
         height: 36px;
 
-        &>* {
+        & > * {
             position: absolute;
             top: 0;
             left: 0;
@@ -178,7 +178,7 @@ limitations under the License.
         }
 
         img.mx_DMInviteDialog_userTile_avatar {
-           vertical-align: top;
+            vertical-align: top;
         }
 
         .mx_DMInviteDialog_userTile_name {
