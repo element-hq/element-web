@@ -87,5 +87,5 @@ EMOJIBASE.forEach(emoji => {
  * @returns {string} stripped string
  */
 function stripVariation(str) {
-    return str.replace("\uFE00-\uFE0F", "");
+    return str.replace(/[\uFE00-\uFE0F]/, "");
 }
