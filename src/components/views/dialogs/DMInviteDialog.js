@@ -84,35 +84,6 @@ class DirectoryMember extends Member {
     }
 }
 
-class ThreepidMember extends Member {
-    _id: string;
-
-    constructor(id: string) {
-        super();
-        this._id = id;
-    }
-
-    // This is a getter that would be falsey on all other implementations. Until we have
-    // better type support in the react-sdk we can use this trick to determine the kind
-    // of 3PID we're dealing with, if any.
-    get isEmail(): boolean {
-        return this._id.includes('@');
-    }
-
-    // These next class members are for the Member interface
-    get name(): string {
-        return this._id;
-    }
-
-    get userId(): string {
-        return this._id;
-    }
-
-    getMxcAvatarUrl(): string {
-        return null;
-    }
-}
-
 class DMUserTile extends React.PureComponent {
     static propTypes = {
         member: PropTypes.object.isRequired, // Should be a Member (see interface above)
