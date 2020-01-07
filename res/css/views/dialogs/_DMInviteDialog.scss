@@ -21,15 +21,51 @@ limitations under the License.
     .mx_DMInviteDialog_editor {
         flex: 1;
         width: 100%; // Needed to make the Field inside grow
-    }
+        background-color: $user-tile-hover-bg-color;
+        border-radius: 4px;
+        min-height: 25px;
+        padding-left: 8px;
+        overflow-x: hidden;
+        overflow-y: auto;
 
-    .mx_Field {
-        margin: 0;
+        .mx_DMInviteDialog_userTile {
+            display: inline-block;
+            float: left;
+            position: relative;
+            top: 7px;
+        }
+
+        // Using a textarea for this element, to circumvent autofill
+        // Mostly copied from AddressPickerDialog
+        textarea,
+        textarea:focus {
+            height: 34px;
+            line-height: 34px;
+            font-size: 14px;
+            padding-left: 12px;
+            margin: 0 !important;
+            border: 0 !important;
+            outline: 0 !important;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+            word-wrap: nowrap;
+
+            // Roughly fill about 2/5ths of the available space. This is to try and 'fill' the
+            // remaining space after a bunch of pills, but is a bit hacky. Ideally we'd have
+            // support for "fill remaining width", but traditional tricks don't work with what
+            // we're pushing into this "field". Flexbox just makes things worse. The theory is
+            // that users won't need more than about 2/5ths of the input to find the person
+            // they're looking for.
+            width: 40%;
+        }
     }
 
     .mx_DMInviteDialog_goButton {
         width: 48px;
         margin-left: 10px;
+        height: 25px;
+        line-height: 25px;
     }
 }
 
@@ -83,3 +119,38 @@ limitations under the License.
     }
 }
 
+// Many of these styles are stolen from mx_UserPill, but adjusted for the invite dialog.
+.mx_DMInviteDialog_userTile {
+    margin-right: 8px;
+
+    .mx_DMInviteDialog_userTile_pill {
+        background-color: $username-variant1-color;
+        border-radius: 12px;
+        display: inline-block;
+        height: 24px;
+        line-height: 24px;
+        padding-left: 8px;
+        padding-right: 8px;
+        color: #ffffff; // this is fine without a var because it's for both themes
+
+        .mx_DMInviteDialog_userTile_avatar {
+            border-radius: 20px;
+            position: relative;
+            left: -5px;
+            top: 2px;
+        }
+
+        img.mx_DMInviteDialog_userTile_avatar {
+           vertical-align: top;
+        }
+
+        .mx_DMInviteDialog_userTile_name {
+            vertical-align: top;
+        }
+    }
+
+    .mx_DMInviteDialog_userTile_remove {
+        display: inline-block;
+        margin-left: 4px;
+    }
+}
