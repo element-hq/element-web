@@ -32,15 +32,11 @@ const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
-<<<<<<< HEAD
-export default createReactClass({
-=======
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
-module.exports = createReactClass({
->>>>>>> develop
+export default createReactClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
