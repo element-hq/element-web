@@ -306,4 +306,4 @@ class Analytics {
 if (!global.mxAnalytics) {
     global.mxAnalytics = new Analytics();
 }
-module.exports = global.mxAnalytics;
+export default global.mxAnalytics;

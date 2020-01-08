@@ -32,7 +32,7 @@ const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberList',
 
     getInitialState: function() {

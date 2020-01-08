@@ -29,7 +29,7 @@ import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AuxPanel',
 
     propTypes: {

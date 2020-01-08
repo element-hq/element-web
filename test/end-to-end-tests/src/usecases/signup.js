@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function signup(session, username, password, homeserver) {
+export default async function signup(session, username, password, homeserver) {
     session.log.step("signs up");
     await session.goto(session.url('/#/register'));
     // change the homeserver by clicking the advanced section

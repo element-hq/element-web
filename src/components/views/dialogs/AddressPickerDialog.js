@@ -43,7 +43,7 @@ const addressTypeName = {
 };
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: "AddressPickerDialog",
 
     propTypes: {

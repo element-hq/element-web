@@ -340,4 +340,4 @@ let singletonGroupStore = null;
 if (!singletonGroupStore) {
     singletonGroupStore = new GroupStore();
 }
-module.exports = singletonGroupStore;
+export default singletonGroupStore;

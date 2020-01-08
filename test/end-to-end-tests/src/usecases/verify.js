@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +38,7 @@ async function getSasCodes(session) {
     return sasLabels;
 }
 
-module.exports.startSasVerifcation = async function(session, name) {
+export async function startSasVerifcation(session, name) {
     await startVerification(session, name);
     // expect "Verify device" dialog and click "Begin Verification"
     await assertDialog(session, "Verify device");
@@ -50,9 +51,9 @@ module.exports.startSasVerifcation = async function(session, name) {
     // click "Got it" when verification is done
     await acceptDialog(session);
     return sasCodes;
-};
+}
 
-module.exports.acceptSasVerification = async function(session, name) {
+export async function acceptSasVerification(session, name) {
     await assertDialog(session, "Incoming Verification Request");
     const opponentLabelElement = await session.query(".mx_IncomingSasDialog_opponentProfile h2");
     const opponentLabel = await session.innerText(opponentLabelElement);
@@ -66,4 +67,4 @@ module.exports.acceptSasVerification = async function(session, name) {
     // click "Got it" when verification is done
     await acceptDialog(session);
     return sasCodes;
-};
+}

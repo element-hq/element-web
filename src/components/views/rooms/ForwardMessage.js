@@ -23,7 +23,7 @@ import dis from '../../../dispatcher';
 import { KeyCode } from '../../../Keyboard';
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ForwardMessage',
 
     propTypes: {

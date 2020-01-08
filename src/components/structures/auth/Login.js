@@ -54,7 +54,7 @@ _td("General failure");
 /**
  * A wire component which glues together login UI components and Login logic
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Login',
 
     propTypes: {

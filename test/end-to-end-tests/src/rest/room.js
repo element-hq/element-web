@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ limitations under the License.
 const uuidv4 = require('uuid/v4');
 
 /* no pun intented */
-module.exports = class RestRoom {
+export default class RestRoom {
     constructor(session, roomId, log) {
         this.session = session;
         this._roomId = roomId;

@@ -4,7 +4,7 @@
 import React from 'react';
 import createReactClass from 'create-react-class';
 
-module.exports = function(opts) {
+export default function(opts) {
     opts = opts || {};
     if (!opts.displayName) {
         opts.displayName = 'StubComponent';

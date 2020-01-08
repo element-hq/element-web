@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ async function openSettings(session, section) {
     }
 }
 
-module.exports.enableLazyLoading = async function(session) {
+export async function enableLazyLoading(session) {
     session.log.step(`enables lazy loading of members in the lab settings`);
     const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
     await settingsButton.click();
@@ -38,9 +39,9 @@ module.exports.enableLazyLoading = async function(session) {
     const closeButton = await session.query(".mx_RoomHeader_cancelButton");
     await closeButton.click();
     session.log.done();
-};
+}
 
-module.exports.getE2EDeviceFromSettings = async function(session) {
+export async function getE2EDeviceFromSettings(session) {
     session.log.step(`gets e2e device/key from settings`);
     await openSettings(session, "security");
     const deviceAndKey = await session.queryAll(".mx_SettingsTab_section .mx_SecurityUserSettingsTab_deviceInfo code");
@@ -51,4 +52,4 @@ module.exports.getE2EDeviceFromSettings = async function(session) {
     await closeButton.click();
     session.log.done();
     return {id, key};
-};
+}

@@ -50,7 +50,7 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {EventTimeline} from "matrix-js-sdk";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberInfo',
 
     propTypes: {
