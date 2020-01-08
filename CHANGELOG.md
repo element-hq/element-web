@@ -1,3 +1,9 @@
+Changes in [1.5.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.7-rc.2) (2020-01-08)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.7-rc.1...v1.5.7-rc.2)
+
+ * Update to react-sdk rc.2 to fix build
+
 Changes in [1.5.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.7-rc.1) (2020-01-06)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.6...v1.5.7-rc.1)
