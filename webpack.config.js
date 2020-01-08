@@ -55,24 +55,8 @@ module.exports = (env, argv) => ({
         mainFields: ['matrix_src_browser', 'matrix_src_main', 'browser', 'main'],
         aliasFields: ['matrix_src_browser', 'browser'],
 
-        // We need to ensure we can resolve TS files, but that also means we need to define
-        // every single extension we might see, ever.
-        extensions: [
-            '.js',
-            '.json',
-            '.css',
-            '.scss',
-            '.ts',
-            '.gif',
-            '.png',
-            '.svg',
-            '.ttf',
-            '.woff',
-            '.woff2',
-            '.xml',
-            '.ico',
-            '.wasm',
-        ],
+        // We need to specify that TS can be resolved without an extension
+        extensions: ['.js', '.json', '.ts'],
         alias: {
             // alias any requires to the react module to the one in our path,
             // otherwise we tend to get the react source included twice when
