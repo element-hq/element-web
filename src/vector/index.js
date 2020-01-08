@@ -35,15 +35,15 @@ global.React = React;
 
 import './modernizr';
 import ReactDOM from 'react-dom';
-import sdk from 'matrix-react-sdk';
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import * as sdk from 'matrix-react-sdk';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
-import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
-import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
-import {_t, _td, newTranslatableError} from 'matrix-react-sdk/lib/languageHandler';
-import AutoDiscoveryUtils from 'matrix-react-sdk/lib/utils/AutoDiscoveryUtils';
-import {AutoDiscovery} from "matrix-js-sdk/lib/autodiscovery";
-import * as Lifecycle from "matrix-react-sdk/lib/Lifecycle";
+import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
+import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import {_t, _td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
+import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
+import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
+import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 
 import url from 'url';
 
@@ -52,14 +52,14 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import ElectronPlatform from './platform/ElectronPlatform';
 import WebPlatform from './platform/WebPlatform';
 
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
-import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
-import {setTheme} from "matrix-react-sdk/lib/theme";
+import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
+import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import {setTheme} from "matrix-react-sdk/src/theme";
 
 import Olm from 'olm';
 
-import CallHandler from 'matrix-react-sdk/lib/CallHandler';
+import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
 let lastLocationHashSet = null;
 
