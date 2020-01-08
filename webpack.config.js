@@ -93,34 +93,16 @@ module.exports = (env, argv) => ({
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
-                    // We have the babel config here rather than a file to help
-                    // make it clearer what we're compiling to.
                     cacheDirectory: true,
-                    sourceMaps: true,
-                    presets: [
-                        ["@babel/preset-env", {
-                            "targets": {
-                                "browsers": [
-                                    "last 2 versions",
-                                ]
-                            },
-                        }],
-                        "@babel/preset-typescript",
-                        "@babel/preset-flow",
-                        "@babel/preset-react",
-                    ],
-                    plugins: [
-                        // Most of these plugins are for the react-sdk to make itself
-                        // work correctly.
-                        ["@babel/plugin-proposal-decorators", {"legacy": true}],
-                        "@babel/plugin-proposal-export-default-from",
-                        "@babel/plugin-proposal-numeric-separator",
-                        "@babel/plugin-proposal-class-properties",
-                        "@babel/plugin-proposal-object-rest-spread",
-                        "@babel/plugin-transform-flow-comments",
-                        "@babel/plugin-syntax-dynamic-import",
-                        "@babel/plugin-transform-runtime"
-                    ],
+
+                    // These two options are needed to load the babelrc file and
+                    // apply it to node_modules (ie: react-sdk and js-sdk). We
+                    // could put the babel config in this block instead, but we
+                    // publish riot-web to npm for some reason and that seems to
+                    // ship a lib directory. Therefore, we need the babel config
+                    // in a place where babel and babel-loader can reach it.
+                    babelrc: true,
+                    configFile: path.resolve(__dirname, ".babelrc"),
                 }
             },
             {
