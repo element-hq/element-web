@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import qs from 'querystring';
+import * as qs from 'querystring';
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
