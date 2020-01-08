@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
 import { _t } from '../../../languageHandler';
 

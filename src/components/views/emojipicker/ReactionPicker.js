@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from "prop-types";
 import EmojiPicker from "./EmojiPicker";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 class ReactionPicker extends React.Component {
     static propTypes = {

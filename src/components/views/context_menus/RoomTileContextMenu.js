@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import * as Rooms from '../../../Rooms';

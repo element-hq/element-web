@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import {sleep} from "../../../../src/utils/promise";
 
 function addTextToDraft(text) {

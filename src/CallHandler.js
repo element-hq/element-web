@@ -53,7 +53,7 @@ limitations under the License.
  * }
  */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import * as sdk from './index';

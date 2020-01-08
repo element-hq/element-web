@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';

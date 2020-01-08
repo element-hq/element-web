@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Modal from "../../../Modal";
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import KeyVerificationStateObserver, {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";

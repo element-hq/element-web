@@ -18,8 +18,8 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ContentMessages from '../../ContentMessages';
-const dis = require('../../dispatcher');
-const filesize = require('filesize');
+import dis from "../../dispatcher";
+import filesize from "filesize";
 import { _t } from '../../languageHandler';
 
 module.exports = createReactClass({

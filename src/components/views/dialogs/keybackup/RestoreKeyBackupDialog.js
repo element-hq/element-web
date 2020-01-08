@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
 
 import { MatrixClient } from 'matrix-js-sdk';

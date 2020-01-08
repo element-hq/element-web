@@ -16,7 +16,7 @@ limitations under the License.
 
 import {createNewMatrixCall, Room} from "matrix-js-sdk";
 import CallHandler from './CallHandler';
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 
 // FIXME: this is Riot (Vector) specific code, but will be removed shortly when
 // we switch over to jitsi entirely for video conferencing.

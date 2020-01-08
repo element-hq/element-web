@@ -19,7 +19,7 @@ import expect from 'expect';
 import sinon from 'sinon';
 
 import ScalarAuthClient from '../src/ScalarAuthClient';
-import MatrixClientPeg from '../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../src/MatrixClientPeg';
 import { stubClient } from './test-utils';
 
 describe('ScalarAuthClient', function() {

@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';

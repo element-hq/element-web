@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {EventStatus} from 'matrix-js-sdk';
 
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';

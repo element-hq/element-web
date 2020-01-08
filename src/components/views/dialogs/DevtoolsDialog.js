@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Field from "../elements/Field";
 
 class DevtoolsComponent extends React.Component {

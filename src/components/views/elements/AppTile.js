@@ -20,7 +20,7 @@ import url from 'url';
 import qs from 'querystring';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import WidgetMessaging from '../../../WidgetMessaging';
 import AccessibleButton from './AccessibleButton';
 import Modal from '../../../Modal';

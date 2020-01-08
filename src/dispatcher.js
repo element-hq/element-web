@@ -17,7 +17,7 @@ limitations under the License.
 
 'use strict';
 
-const flux = require("flux");
+import flux from "flux";
 
 class MatrixDispatcher extends flux.Dispatcher {
     /**

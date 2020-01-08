@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
 module.exports = createReactClass({
