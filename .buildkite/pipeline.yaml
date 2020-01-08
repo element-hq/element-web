@@ -1,8 +1,7 @@
 steps:
   - label: ":eslint: JS Lint"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      - "yarn install"
       - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
@@ -20,8 +19,7 @@ steps:
 
   - label: ":eslint: Types Lint"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      - "yarn install"
       - "yarn lint:types"
     plugins:
       - docker#v3.0.1:
@@ -29,8 +27,8 @@ steps:
 
   - label: "🛠 Build"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      # TODO: This probably needs to be more sophisticated than "just install stuff"
+      - "yarn install"
       - "yarn build"
     plugins:
       - docker#v3.0.1:
