@@ -32,7 +32,7 @@ export function avatarUrlForMember(member, width, height, resizeMethod) {
         // member can be null here currently since on invites, the JS SDK
         // does not have enough info to build a RoomMember object for
         // the inviter.
-        url = this.defaultAvatarUrlForString(member ? member.userId : '');
+        url = defaultAvatarUrlForString(member ? member.userId : '');
     }
     return url;
 }
