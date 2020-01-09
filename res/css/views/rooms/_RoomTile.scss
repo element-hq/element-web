@@ -216,7 +216,7 @@ limitations under the License.
 
     &::before {
         background-color: $roomtile-name-color;
-        mask-image: url('$(res)/img/lock.svg');
+        mask-image: url('$(res)/img/feather-customised/lock-solid.svg');
         mask-position: center;
         mask-repeat: no-repeat;
         mask-size: contain;
