@@ -2033,5 +2033,6 @@
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Connecté à <channelIcon /> <channelName /> sur <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "Connecté via %(protocolName)s",
     "Bridge Info": "Informations de la passerelle",
-    "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon."
+    "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon.",
+    "Suggestions": "Suggestions"
 }

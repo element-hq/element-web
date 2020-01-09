@@ -2015,5 +2015,20 @@
     "Migrate from Key Backup": "Мигрирай от резервно копие на ключове",
     "Secure your encrypted messages with a passphrase": "Защитете шифрованите съобщения с парола",
     "Storing secrets...": "Складиране на тайни...",
-    "Unable to set up secret storage": "Неуспешна настройка на секретно складиране"
+    "Unable to set up secret storage": "Неуспешна настройка на секретно складиране",
+    "New DM invite dialog (under development)": "Нов процес за канене чрез директни съобщения (все още се разработва)",
+    "Show info about bridges in room settings": "Показвай информация за връзки с други мрежи в настройките на стаята",
+    "This bridge was provisioned by <user />": "Тази връзка с друга мрежа е била настроена от <user />",
+    "This bridge is managed by <user />.": "Тази връзка с друга мрежа се управлява от <user />.",
+    "Bridged into <channelLink /> <networkLink />, on <protocolName />": "Свързано с <channelLink /><networkLink />, посредством <protocolName />",
+    "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Свързано с <channelIcon /><channelName /> посредством <networkIcon /><networkName />",
+    "Connected via %(protocolName)s": "Свързано посредством %(protocolName)s",
+    "Bridge Info": "Информация за връзката с друга мрежа",
+    "Below is a list of bridges connected to this room.": "По-долу е списък на връзки с други мрежи свързани с тази стая.",
+    "Recent Conversations": "Скорошни разговори",
+    "Suggestions": "Предложения",
+    "Show more": "Покажи повече",
+    "Direct Messages": "Директни съобщения",
+    "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Ако не можете да намерите някой, питайте за потребителското им име, или споделете своето (%(userId)s) или <a>връзка към профила</a>.",
+    "Go": "Давай"
 }
