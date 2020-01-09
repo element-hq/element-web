@@ -2034,5 +2034,6 @@
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Ide csatlakozva: <channelIcon /> <channelName /> itt: <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "Ezzel a protokollal csatlakozva: %(protocolName)s",
     "Bridge Info": "Híd információ",
-    "Below is a list of bridges connected to this room.": "Alább látható a lista a szobához kapcsolódó hidakról."
+    "Below is a list of bridges connected to this room.": "Alább látható a lista a szobához kapcsolódó hidakról.",
+    "Suggestions": "Javaslatok"
 }
