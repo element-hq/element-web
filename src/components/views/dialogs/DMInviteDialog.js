@@ -30,6 +30,7 @@ import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../ut
 import {abbreviateUrl} from "../../../utils/UrlUtils";
 import dis from "../../../dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
+import Modal from "../../../Modal";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -502,6 +503,70 @@ export default class DMInviteDialog extends React.PureComponent {
         }
     };
 
+    _onPaste = async (e) => {
+        // Prevent the text being pasted into the textarea
+        e.preventDefault();
+
+        // Process it as a list of addresses to add instead
+        const text = e.clipboardData.getData("text");
+        const possibleMembers = [
+            // If we can avoid hitting the profile endpoint, we should.
+            ...this.state.recents,
+            ...this.state.suggestions,
+            ...this.state.serverResultsMixin,
+            ...this.state.threepidResultsMixin,
+        ];
+        const toAdd = [];
+        const failed = [];
+        const potentialAddresses = text.split(/[\s,]+/);
+        for (const address of potentialAddresses) {
+            const member = possibleMembers.find(m => m.userId === address);
+            if (member) {
+                toAdd.push(member.user);
+                continue;
+            }
+
+            if (address.indexOf('@') > 0 && Email.looksValid(address)) {
+                toAdd.push(new ThreepidMember(address));
+                continue;
+            }
+
+            if (address[0] !== '@') {
+                failed.push(address); // not a user ID
+                continue;
+            }
+
+            try {
+                const profile = await MatrixClientPeg.get().getProfileInfo(address);
+                const displayName = profile ? profile.displayname : null;
+                const avatarUrl = profile ? profile.avatar_url : null;
+                toAdd.push(new DirectoryMember({
+                    user_id: address,
+                    display_name: displayName,
+                    avatar_url: avatarUrl,
+                }));
+            } catch (e) {
+                console.error("Error looking up profile for " + address);
+                console.error(e);
+                failed.push(address);
+            }
+        }
+
+        if (failed.length > 0) {
+            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
+            Modal.createTrackedDialog('Invite Paste Fail', '', QuestionDialog, {
+                title: _t('Failed to find the following users'),
+                description: _t(
+                    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
+                    {csvNames: failed.join(", ")},
+                ),
+                button: _t('OK'),
+            });
+        }
+
+        this.setState({targets: [...this.state.targets, ...toAdd]});
+    };
+
     _onClickInputArea = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
@@ -624,6 +689,7 @@ export default class DMInviteDialog extends React.PureComponent {
                 onChange={this._updateFilter}
                 defaultValue={this.state.filterText}
                 ref={this._editorRef}
+                onPaste={this._onPaste}
             />
         );
         return (
