@@ -63,7 +63,7 @@ if (argv["help"]) {
     console.log("  --hidden:             Start the application hidden in the system tray.");
     console.log("  --help:               Displays this help message.");
     console.log("And more such as --proxy, see:" +
-        "https://github.com/electron/electron/blob/master/docs/api/chrome-command-line-switches.md");
+        "https://electronjs.org/docs/api/chrome-command-line-switches#supported-chrome-command-line-switches");
     app.exit();
 }
 
