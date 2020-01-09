@@ -25,12 +25,7 @@ import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
-<<<<<<< HEAD
 import {MatrixClientPeg} from '../../MatrixClientPeg';
-import { MatrixClient } from 'matrix-js-sdk';
-=======
-import MatrixClientPeg from '../../MatrixClientPeg';
->>>>>>> develop
 import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 

@@ -20,12 +20,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-<<<<<<< HEAD
-import { MatrixClient } from 'matrix-js-sdk';
 import * as sdk from '../../../index';
-=======
-import sdk from '../../../index';
->>>>>>> develop
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as FormattingUtils from '../../../utils/FormattingUtils';

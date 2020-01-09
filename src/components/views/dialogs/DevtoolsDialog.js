@@ -16,18 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-=======
 import { Room } from "matrix-js-sdk";
-
-import sdk from '../../../index';
-import SyntaxHighlight from '../elements/SyntaxHighlight';
-import { _t } from '../../../languageHandler';
->>>>>>> develop
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 

@@ -16,12 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-<<<<<<< HEAD
 import * as sdk from '../../../index';
-import { MatrixClient } from 'matrix-js-sdk';
-=======
-import sdk from '../../../index';
->>>>>>> develop
 import { _t } from '../../../languageHandler';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 

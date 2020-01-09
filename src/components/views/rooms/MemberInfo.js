@@ -46,13 +46,8 @@ import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-<<<<<<< HEAD
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {EventTimeline} from "matrix-js-sdk";
-=======
-import MatrixClientPeg from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
->>>>>>> develop
 
 export default createReactClass({
     displayName: 'MemberInfo',

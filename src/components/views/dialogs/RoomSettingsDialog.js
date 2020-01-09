@@ -24,14 +24,9 @@ import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
-<<<<<<< HEAD
+import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-=======
-import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
->>>>>>> develop
 import dis from "../../../dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 

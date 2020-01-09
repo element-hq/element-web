@@ -27,11 +27,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-<<<<<<< HEAD
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
-=======
-import MatrixClientContext from "../../contexts/MatrixClientContext";
->>>>>>> develop
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;

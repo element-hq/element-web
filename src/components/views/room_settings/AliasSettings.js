@@ -15,25 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-<<<<<<< HEAD
-import React from "react";
-=======
 import EditableItemList from "../elements/EditableItemList";
-
 import React, {createRef} from 'react';
->>>>>>> develop
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
-<<<<<<< HEAD
-import Modal from "../../../Modal";
-=======
 import AccessibleButton from "../elements/AccessibleButton";
-const Modal = require("../../../Modal");
->>>>>>> develop
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {

@@ -18,12 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-<<<<<<< HEAD
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
-=======
-import sdk from "../../../../..";
->>>>>>> develop
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";

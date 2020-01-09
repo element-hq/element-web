@@ -21,14 +21,11 @@ import createReactClass from 'create-react-class';
 import { AllHtmlEntities } from 'html-entities';
 import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
-<<<<<<< HEAD
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
-=======
 import { _t } from "../../../languageHandler";
->>>>>>> develop
 
 export default createReactClass({
     displayName: 'LinkPreviewWidget',

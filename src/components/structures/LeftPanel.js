@@ -22,12 +22,7 @@ import classNames from 'classnames';
 import { Key } from '../../Keyboard';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
-<<<<<<< HEAD
 import * as VectorConferenceHandler from '../../VectorConferenceHandler';
-import TagPanelButtons from './TagPanelButtons';
-=======
-import VectorConferenceHandler from '../../VectorConferenceHandler';
->>>>>>> develop
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";

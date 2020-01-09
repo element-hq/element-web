@@ -20,12 +20,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-<<<<<<< HEAD
-import { MatrixClient } from 'matrix-js-sdk';
 import * as AvatarLogic from '../../../Avatar';
-=======
-import AvatarLogic from '../../../Avatar';
->>>>>>> develop
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

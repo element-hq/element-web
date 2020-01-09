@@ -16,13 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
-import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
-import * as sdk from '../../../index';
-=======
 import {MatrixEvent} from 'matrix-js-sdk';
-import sdk from '../../../index';
->>>>>>> develop
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import ErrorDialog from "../dialogs/ErrorDialog";

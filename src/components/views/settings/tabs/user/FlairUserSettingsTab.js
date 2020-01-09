@@ -17,12 +17,6 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import GroupUserSettings from "../../../groups/GroupUserSettings";
-<<<<<<< HEAD
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import PropTypes from "prop-types";
-import {MatrixClient} from "matrix-js-sdk";
-=======
->>>>>>> develop
 
 export default class FlairUserSettingsTab extends React.Component {
     render() {

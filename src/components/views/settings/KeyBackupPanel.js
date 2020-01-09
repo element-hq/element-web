@@ -21,12 +21,7 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-<<<<<<< HEAD
-import SettingsStore from '../../../../src/settings/SettingsStore';
-import { accessSecretStorage } from '../../../CrossSigningManager';
-=======
 import SettingsStore from '../../../settings/SettingsStore';
->>>>>>> develop
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {

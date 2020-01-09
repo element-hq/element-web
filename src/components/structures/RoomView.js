@@ -53,11 +53,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
-<<<<<<< HEAD
 import {haveTileForEvent} from "../views/rooms/EventTile";
-=======
 import RoomContext from "../../contexts/RoomContext";
->>>>>>> develop
 
 const DEBUG = false;
 let debuglog = function() {};

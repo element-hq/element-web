@@ -22,14 +22,11 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
-<<<<<<< HEAD
 import filesize from "filesize";
 import AccessibleButton from "./AccessibleButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
-=======
 import {Key} from "../../../Keyboard";
->>>>>>> develop
 
 export default class ImageView extends React.Component {
     static propTypes = {
