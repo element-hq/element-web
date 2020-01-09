@@ -21,7 +21,9 @@
         "feature_mjolnir": "labs",
         "feature_dm_verification": "labs",
         "feature_cross_signing": "labs",
-        "feature_event_indexing": "labs"
+        "feature_event_indexing": "labs",
+        "feature_ftue_dms": "labs",
+        "feature_bridge_state": "labs"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
