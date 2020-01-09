@@ -128,6 +128,8 @@
     "babel-preset-react": "^6.24.1",
     "chokidar": "^2.1.2",
     "concurrently": "^4.0.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^5.12.0",
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-babel": "^5.2.1",

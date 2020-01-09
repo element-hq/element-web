@@ -261,7 +261,7 @@ const Pill = createReactClass({
         }
 
         const classes = classNames("mx_Pill", pillClass, {
-            "mx_UserPill_me": userId === MatrixClientPeg.get().credentials.userId,
+            "mx_UserPill_me": userId === MatrixClientPeg.get().getUserId(),
             "mx_UserPill_selected": this.props.isSelected,
         });
 
