@@ -18,7 +18,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -26,6 +25,7 @@ import * as sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default class MImageBody extends React.Component {
     static propTypes = {
@@ -39,9 +39,7 @@ export default class MImageBody extends React.Component {
         maxImageHeight: PropTypes.number,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
@@ -71,7 +69,7 @@ export default class MImageBody extends React.Component {
 
     componentWillMount() {
         this.unmounted = false;
-        this.context.matrixClient.on('sync', this.onClientSync);
+        this.context.on('sync', this.onClientSync);
     }
 
     // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
@@ -174,7 +172,7 @@ export default class MImageBody extends React.Component {
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
-            return this.context.matrixClient.mxcUrlToHttp(content.url);
+            return this.context.mxcUrlToHttp(content.url);
         }
     }
 
@@ -198,7 +196,7 @@ export default class MImageBody extends React.Component {
             // special case to return clientside sender-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
-            return this.context.matrixClient.mxcUrlToHttp(
+            return this.context.mxcUrlToHttp(
                 content.info.thumbnail_url,
                 thumbWidth,
                 thumbHeight,
@@ -221,7 +219,7 @@ export default class MImageBody extends React.Component {
                 pixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
-                return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
+                return this.context.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
             } else {
                 // we should only request thumbnails if the image is bigger than 800x600
                 // (or 1600x1200 on retina) otherwise the image in the timeline will just
@@ -242,7 +240,7 @@ export default class MImageBody extends React.Component {
                     // image is too large physically and bytewise to clutter our timeline so
                     // we ask for a thumbnail, despite knowing that it will be max 800x600
                     // despite us being retina (as synapse doesn't do 1600x1200 thumbs yet).
-                    return this.context.matrixClient.mxcUrlToHttp(
+                    return this.context.mxcUrlToHttp(
                         content.url,
                         thumbWidth,
                         thumbHeight,
@@ -251,7 +249,7 @@ export default class MImageBody extends React.Component {
                     // download the original image otherwise, so we can scale it client side
                     // to take pixelRatio into account.
                     // ( no width/height means we want the original image)
-                    return this.context.matrixClient.mxcUrlToHttp(
+                    return this.context.mxcUrlToHttp(
                         content.url,
                     );
                 }
@@ -308,7 +306,7 @@ export default class MImageBody extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this.context.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
 
         if (this.state.decryptedUrl) {

@@ -63,16 +63,6 @@ export default createReactClass({
         };
     },
 
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    },
-
     componentWillMount: function() {
         this._unmounted = false;
         this.nextBatch = null;
@@ -268,6 +258,7 @@ export default createReactClass({
             roomServer: server,
             instanceId: instanceId,
             includeAll: includeAll,
+            error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side

@@ -1,8 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,15 +24,15 @@ import createReactClass from 'create-react-class';
 import classNames from "classnames";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
-import Modal from "../../../Modal";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {EventStatus, MatrixClient} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 import * as ObjectUtils from "../../../ObjectUtils";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -218,8 +218,8 @@ export default createReactClass({
         };
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     componentWillMount: function() {
@@ -233,7 +233,7 @@ export default createReactClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        const client = this.context.matrixClient;
+        const client = this.context;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -258,7 +258,7 @@ export default createReactClass({
     },
 
     componentWillUnmount: function() {
-        const client = this.context.matrixClient;
+        const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
@@ -287,7 +287,7 @@ export default createReactClass({
             return;
         }
 
-        const verified = await this.context.matrixClient.isEventSenderVerified(mxEvent);
+        const verified = await this.context.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
         }, () => {
@@ -345,11 +345,11 @@ export default createReactClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.context.matrixClient.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === this.context.matrixClient.credentials.userId) {
+        if (this.props.mxEvent.getSender() === this.context.credentials.userId) {
             return false;
         }
 
@@ -438,15 +438,6 @@ export default createReactClass({
         });
     },
 
-    onCryptoClick: function(e) {
-        const event = this.props.mxEvent;
-
-        Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
-            import('../../../async-components/views/dialogs/EncryptedEventDialog'),
-            {event},
-        );
-    },
-
     onRequestKeysClick: function() {
         this.setState({
             // Indicate in the UI that the keys have been requested (this is expected to
@@ -457,7 +448,7 @@ export default createReactClass({
         // Cancel any outgoing key request for this event and resend it. If a response
         // is received for the request with the required keys, the event could be
         // decrypted successfully.
-        this.context.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
+        this.context.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
     },
 
     onPermalinkClicked: function(e) {
@@ -474,11 +465,10 @@ export default createReactClass({
 
     _renderE2EPadlock: function() {
         const ev = this.props.mxEvent;
-        const props = {onClick: this.onCryptoClick};
 
         // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
-            return <E2ePadlockUndecryptable {...props} />;
+            return <E2ePadlockUndecryptable />;
         }
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
@@ -486,11 +476,11 @@ export default createReactClass({
             if (this.state.verified) {
                 return; // no icon for verified
             } else {
-                return (<E2ePadlockUnverified {...props} />);
+                return (<E2ePadlockUnverified />);
             }
         }
 
-        if (this.context.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+        if (this.context.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
@@ -503,7 +493,7 @@ export default createReactClass({
                 return; // we expect this to be unencrypted
             }
             // if the event is not encrypted, but it's an e2e room, show the open padlock
-            return <E2ePadlockUnencrypted {...props} />;
+            return <E2ePadlockUnencrypted />;
         }
 
         // no padlock needed
@@ -737,7 +727,7 @@ export default createReactClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
-                const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+                const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
@@ -915,7 +905,6 @@ class E2ePadlock extends React.Component {
     static propTypes = {
         icon: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        onClick: PropTypes.func,
     };
 
     constructor() {
@@ -925,10 +914,6 @@ class E2ePadlock extends React.Component {
             hover: false,
         };
     }
-
-    onClick = (e) => {
-        if (this.props.onClick) this.props.onClick(e);
-    };
 
     onHoverStart = () => {
         this.setState({hover: true});

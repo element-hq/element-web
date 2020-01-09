@@ -97,7 +97,7 @@ export default createReactClass({
         }
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src={require("../../../../res/img/warning.svg")} width="24" height="23" />
+                <img className="mx_MatrixToolbar_warning" src={require("../../../../res/img/warning.svg")} width="24" height="23" alt="" />
                 <div className="mx_MatrixToolbar_content">
                     {_t("A new version of Riot is available.")}
                 </div>

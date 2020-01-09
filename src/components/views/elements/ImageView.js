@@ -26,6 +26,7 @@ import filesize from "filesize";
 import AccessibleButton from "./AccessibleButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
+import {Key} from "../../../Keyboard";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -60,7 +61,7 @@ export default class ImageView extends React.Component {
     }
 
     onKeyDown = (ev) => {
-        if (ev.keyCode === 27) { // escape
+        if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();

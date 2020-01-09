@@ -18,7 +18,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { KeyCode } from '../../Keyboard';
+import { Key } from '../../Keyboard';
 import dis from '../../dispatcher';
 import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
@@ -93,8 +93,8 @@ export default createReactClass({
     }, 200, {trailing: true, leading: true}),
 
     _onKeyDown: function(ev) {
-        switch (ev.keyCode) {
-            case KeyCode.ESCAPE:
+        switch (ev.key) {
+            case Key.ESCAPE:
                 this._clearSearch("keyboard");
                 break;
         }

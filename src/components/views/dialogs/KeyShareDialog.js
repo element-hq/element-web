@@ -99,7 +99,7 @@ export default createReactClass({
                     this.props.onFinished(true);
                 }
             },
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     },
 
     _onShareClicked: function() {

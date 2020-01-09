@@ -16,6 +16,7 @@ $room-highlight-color: #343a46;
 // typical text (dark-on-white in light skin)
 $primary-fg-color: $text-primary-color;
 $primary-bg-color: $bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -172,6 +173,8 @@ $interactive-tooltip-fg-color: #ffffff;
 
 $breadcrumb-placeholder-bg-color: #272c35;
 
+$user-tile-hover-bg-color: $header-panel-bg-color;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
@@ -242,4 +245,14 @@ $breadcrumb-placeholder-bg-color: #272c35;
             background-color: #080808;
         }
     }
+}
+
+// diff highlight colors
+// intentionally swapped to avoid inversion
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
 }

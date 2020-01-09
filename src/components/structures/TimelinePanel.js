@@ -31,7 +31,7 @@ import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher";
 import * as sdk from "../../index";
-import { KeyCode } from '../../Keyboard';
+import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
@@ -940,8 +940,7 @@ const TimelinePanel = createReactClass({
 
         // jump to the live timeline on ctrl-end, rather than the end of the
         // timeline window.
-        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey &&
-            ev.keyCode == KeyCode.END) {
+        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey && ev.key === Key.END) {
             this.jumpToLiveTimeline();
         } else {
             this._messagePanel.current.handleScrollKey(ev);

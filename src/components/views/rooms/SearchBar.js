@@ -19,6 +19,7 @@ import createReactClass from 'create-react-class';
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
+import {Key} from "../../../Keyboard";
 
 export default createReactClass({
     displayName: 'SearchBar',
@@ -42,11 +43,13 @@ export default createReactClass({
     },
 
     onSearchChange: function(e) {
-        if (e.keyCode === 13) { // on enter...
-            this.onSearch();
-        }
-        if (e.keyCode === 27) { // escape...
-            this.props.onCancelClick();
+        switch (e.key) {
+            case Key.ENTER:
+                this.onSearch();
+                break;
+            case Key.ESCAPE:
+                this.props.onCancelClick();
+                break;
         }
     },
 

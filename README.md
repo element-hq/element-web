@@ -4,7 +4,7 @@ matrix-react-sdk
 This is a react-based SDK for inserting a Matrix chat/voip client into a web page.
 
 This package provides the React components needed to build a Matrix web client
-using React.  It is not useable in isolation, and instead must must be used from
+using React.  It is not useable in isolation, and instead must be used from
 a 'skin'. A skin provides:
  * Customised implementations of presentation components.
  * Custom CSS
@@ -83,7 +83,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
     'Stealing' styling information from other components (including parents)
     is not cool, as it breaks the independence of the components.
 
-  * CSS classes are named with an app-specific namespacing prefix to try to avoid
+  * CSS classes are named with an app-specific name-spacing prefix to try to avoid
     CSS collisions.  The base skin shipped by Matrix.org with the matrix-react-sdk
     uses the naming prefix "mx_".  A company called Yoyodyne Inc might use a
     prefix like "yy_" for its app-specific classes.
@@ -108,7 +108,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
     .mx_RoomTile {} in RoomList.css - only RoomTile.css is allowed to define its
     own CSS.  Instead, say .mx_RoomList .mx_RoomTile {} to scope the override
     only to the context of RoomList views.  N.B. overrides should be relatively
-    rare as in general CSS inheritence should be enough.
+    rare as in general CSS inheritance should be enough.
 
   * Components should render only within the bounding box of their outermost DOM
     element. Page-absolute positioning and negative CSS margins and similar are

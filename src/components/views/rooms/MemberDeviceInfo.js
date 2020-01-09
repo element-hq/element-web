@@ -23,6 +23,8 @@ import classNames from 'classnames';
 export default class MemberDeviceInfo extends React.Component {
     render() {
         const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+        // XXX: These checks are not cross-signing aware but this component is only used
+        // from the old, pre-cross-signing memberinfopanel
         const iconClasses = classNames({
             mx_MemberDeviceInfo_icon: true,
             mx_MemberDeviceInfo_icon_blacklisted: this.props.device.isBlocked(),

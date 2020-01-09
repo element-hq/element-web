@@ -1,6 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import SettingsStore from '../../../../src/settings/SettingsStore';
-import { accessSecretStorage } from '../../../CrossSigningManager';
+import SettingsStore from '../../../settings/SettingsStore';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -128,36 +127,24 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
+                secureSecretStorage: false,
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
     }
 
     _startNewBackupWithSecureSecretStorage = async () => {
-        const cli = MatrixClientPeg.get();
-        let info;
-        try {
-            await accessSecretStorage(async () => {
-                info = await cli.prepareKeyBackupVersion(
-                    null /* random key */,
-                    { secureSecretStorage: true },
-                );
-                info = await cli.createKeyBackupVersion(info);
-            });
-            await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
-            this._loadBackupStatus();
-        } catch (e) {
-            console.error("Error creating key backup", e);
-            // TODO: If creating a version succeeds, but backup fails, should we
-            // delete the version, disable backup, or do nothing?  If we just
-            // disable without deleting, we'll enable on next app reload since
-            // it is trusted.
-            if (info && info.version) {
-                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
-            }
-        }
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            {
+                secureSecretStorage: true,
+                onFinished: () => {
+                    this._loadBackupStatus();
+                },
+            }, null, /* priority = */ false, /* static = */ true,
+        );
     }
 
     _deleteBackup = () => {
@@ -181,22 +168,11 @@ export default class KeyBackupPanel extends React.PureComponent {
     }
 
     _restoreBackup = async () => {
-        // Use legacy path if backup key not stored in secret storage
-        if (!this.state.backupKeyStored) {
-            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog);
-            return;
-        }
-
-        try {
-            await accessSecretStorage(async () => {
-                await MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
-                );
-            });
-        } catch (e) {
-            console.log("Error restoring backup", e);
-        }
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            /* priority = */ false, /* static = */ true,
+        );
     }
 
     render() {
@@ -270,7 +246,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {sub}
                     </span>;
                 const verify = sub =>
-                    <span className={sig.device && sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
+                    <span className={sig.device && sig.deviceTrust.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
                         {sub}
                     </span>;
                 const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;

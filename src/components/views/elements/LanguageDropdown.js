@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+import { _t } from "../../../languageHandler";
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().indexOf(query.toUpperCase()) == 0) return true;
@@ -105,9 +106,14 @@ export default class LanguageDropdown extends React.Component {
           value = this.props.value || language;
         }
 
-        return <Dropdown className={this.props.className}
-            onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
-            searchEnabled={true} value={value}
+        return <Dropdown
+            id="mx_LanguageDropdown"
+            className={this.props.className}
+            onOptionChange={this.props.onOptionChange}
+            onSearchChange={this._onSearchChange}
+            searchEnabled={true}
+            value={value}
+            label={_t("Language Dropdown")}
         >
             { options }
         </Dropdown>;

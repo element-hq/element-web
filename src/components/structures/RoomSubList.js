@@ -25,7 +25,7 @@ import * as Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import IndicatorScrollbar from './IndicatorScrollbar';
-import {Key, KeyCode} from '../../Keyboard';
+import {Key} from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
@@ -186,7 +186,7 @@ export default class RoomSubList extends React.PureComponent {
         dis.dispatch({
             action: 'view_room',
             room_id: roomId,
-            clear_search: (ev && (ev.keyCode === KeyCode.ENTER || ev.keyCode === KeyCode.SPACE)),
+            clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
         });
     };
 

@@ -32,6 +32,7 @@ import IdentityAuthClient from '../../../IdentityAuthClient';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../utils/IdentityServerUtils';
 import { abbreviateUrl } from '../../../utils/UrlUtils';
 import {sleep} from "../../../utils/promise";
+import {Key} from "../../../Keyboard";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -142,39 +143,41 @@ export default createReactClass({
     },
 
     onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
+        const textInput = this._textinput.current ? this._textinput.current.value : undefined;
+
+        if (e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
-        } else if (e.keyCode === 38) { // up arrow
+        } else if (e.key === Key.ARROW_UP) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.moveSelectionUp();
-        } else if (e.keyCode === 40) { // down arrow
+        } else if (e.key === Key.ARROW_DOWN) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.moveSelectionDown();
-        } else if (this.state.suggestedList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+        } else if (this.state.suggestedList.length > 0 && [Key.COMMA, Key.ENTER, Key.TAB].includes(e.key)) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.chooseSelection();
-        } else if (this._textinput.current.value.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
+        } else if (textInput.length === 0 && this.state.selectedList.length && e.key === Key.BACKSPACE) {
             e.stopPropagation();
             e.preventDefault();
             this.onDismissed(this.state.selectedList.length - 1)();
-        } else if (e.keyCode === 13) { // enter
+        } else if (e.key === Key.ENTER) {
             e.stopPropagation();
             e.preventDefault();
-            if (this._textinput.current.value === '') {
+            if (textInput === '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addAddressesToList([this._textinput.current.value]);
+                this._addAddressesToList([textInput]);
             }
-        } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
+        } else if (textInput && (e.key === Key.COMMA || e.key === Key.TAB)) {
             e.stopPropagation();
             e.preventDefault();
-            this._addAddressesToList([this._textinput.current.value]);
+            this._addAddressesToList([textInput]);
         }
     },
 

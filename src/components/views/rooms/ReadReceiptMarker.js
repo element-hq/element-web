@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import('../../../VelocityBounce');
@@ -88,6 +87,10 @@ export default createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._avatar = createRef();
+    },
+
     componentWillUnmount: function() {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
@@ -103,7 +106,7 @@ export default createReactClass({
             return;
         }
 
-        const avatarNode = ReactDOM.findDOMNode(this);
+        const avatarNode = this._avatar.current;
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
@@ -123,7 +126,7 @@ export default createReactClass({
             oldTop = oldInfo.top + oldInfo.parent.getBoundingClientRect().top;
         }
 
-        const newElement = ReactDOM.findDOMNode(this);
+        const newElement = this._avatar.current;
         let startTopOffset;
         if (!newElement.offsetParent) {
             // this seems to happen sometimes for reasons I don't understand
@@ -173,7 +176,7 @@ export default createReactClass({
     render: function() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
-            return <div />;
+            return <div ref={this._avatar} />;
         }
 
         const style = {
@@ -213,6 +216,7 @@ export default createReactClass({
                     style={style}
                     title={title}
                     onClick={this.props.onClick}
+                    inputRef={this._avatar}
                 />
             </Velociraptor>
         );

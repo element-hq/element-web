@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
+import {Key} from "../../../Keyboard";
 
 export default class IntegrationManager extends React.Component {
     static propTypes = {
@@ -52,7 +53,7 @@ export default class IntegrationManager extends React.Component {
     }
 
     onKeyDown = (ev) => {
-        if (ev.keyCode === 27) { // escape
+        if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();

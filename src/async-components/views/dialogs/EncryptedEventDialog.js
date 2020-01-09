@@ -19,9 +19,12 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {Key} from "../../../Keyboard";
+import * as sdk from "../../../index";
 
-const sdk = require('../../../index');
-
+// XXX: This component is not cross-signing aware.
+// https://github.com/vector-im/riot-web/issues/11752 tracks either updating this
+// component or taking it out to pasture.
 export default createReactClass({
     displayName: 'EncryptedEventDialog',
 
@@ -84,7 +87,7 @@ export default createReactClass({
     },
 
     onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
+        if (e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);

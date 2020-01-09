@@ -25,8 +25,8 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 export default class DevicesPanel extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             devices: undefined,

@@ -1,5 +1,6 @@
 /*
-Copyright 2018-2019 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,9 +41,11 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
 
     onSetupClick = async () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
-            onFinished: this.props.onFinished,
-        });
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, {
+                onFinished: this.props.onFinished,
+            }, null, /* priority = */ false, /* static = */ true,
+        );
     }
 
     render() {

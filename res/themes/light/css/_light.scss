@@ -21,6 +21,7 @@ $header-panel-bg-color: #f3f8fd;
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #2e2f32;
 $primary-bg-color: #ffffff;
+$muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
 // used for dialog box text
 $light-fg-color: #747474;
@@ -293,6 +294,8 @@ $interactive-tooltip-fg-color: #ffffff;
 
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
+$user-tile-hover-bg-color: $header-panel-bg-color;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
@@ -337,4 +340,13 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 @define-mixin mx_Dialog_link {
     color: $accent-color;
     text-decoration: none;
+}
+
+// diff highlight colors
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
 }

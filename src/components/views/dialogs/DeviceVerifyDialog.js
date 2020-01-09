@@ -97,7 +97,7 @@ export default class DeviceVerifyDialog extends React.Component {
         const client = MatrixClientPeg.get();
         const verifyingOwnDevice = this.props.userId === client.getUserId();
         try {
-            if (!verifyingOwnDevice && SettingsStore.getValue("feature_dm_verification")) {
+            if (!verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
                 const roomId = await ensureDMExistsAndOpen(this.props.userId);
                 // throws upon cancellation before having started
                 this._verifier = await client.requestVerificationDM(
