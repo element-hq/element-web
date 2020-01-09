@@ -303,6 +303,7 @@ module.exports = createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
+            'mx_RoomTile_isEncrypted': MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId),
         });
 
         const avatarClasses = classNames({
@@ -428,6 +429,7 @@ module.exports = createReactClass({
                         { dmIndicator }
                     </div>
                 </div>
+                <div className="mx_RoomTile_E2EIcon" />
                 <div className="mx_RoomTile_nameContainer">
                     <div className="mx_RoomTile_labelContainer">
                         { label }
