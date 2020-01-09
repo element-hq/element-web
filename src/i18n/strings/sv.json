@@ -1634,5 +1634,15 @@
     "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "Ditt Riot tillåter dig inte att använda en Integrationshanterare för att göra detta. Vänligen kontakta en administratör.",
     "Your homeserver doesn't seem to support this feature.": "Din hemserver verkar inte stödja den här funktionen.",
     "Message edits": "Meddelandedigeringar",
-    "Preview": "Förhandsvisa"
+    "Preview": "Förhandsvisa",
+    "The message you are trying to send is too large.": "Meddelandet du försöker skicka är för stort.",
+    "New DM invite dialog (under development)": "Ny inbjudningsdialog för direktmeddelanden (under utveckling)",
+    "Enable cross-signing to verify per-user instead of per-device (in development)": "Aktivera korssignering för att verifiera per användare istället för per enhet (under utveckling)",
+    "Find others by phone or email": "Hitta andra via telefon eller epost",
+    "Be found by phone or email": "Bli hittad via telefon eller e-post",
+    "Terms of Service": "Användarvillkor",
+    "To continue you need to accept the terms of this service.": "För att fortsätta måste du acceptera villkoren för denna tjänst.",
+    "Service": "Tjänst",
+    "Summary": "Sammanfattning",
+    "Document": "Dokument"
 }
