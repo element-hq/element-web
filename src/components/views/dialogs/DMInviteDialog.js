@@ -541,10 +541,10 @@ export default class DMInviteDialog extends React.PureComponent {
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
         if (this.state.filterText && hasMixins && kind === 'suggestions') {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
-            function notAlreadyExists(u: Member): boolean {
+            const notAlreadyExists = (u: Member): boolean => {
                 return !sourceMembers.some(m => m.userId === u.userId)
                     && !additionalMembers.some(m => m.userId === u.userId);
-            }
+            };
 
             const uniqueServerResults = this.state.serverResultsMixin.filter(notAlreadyExists);
             additionalMembers = additionalMembers.concat(...uniqueServerResults);
