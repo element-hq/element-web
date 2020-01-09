@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
 import lolex from 'lolex';
 
-import * as TestUtils from 'test-utils';
+import * as TestUtils from '../../../test-utils';
 
-import sdk from '../../../../src/index';
 import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import sdk from '../../../skinned-sdk';
 
 import {Room, RoomMember, User} from 'matrix-js-sdk';
 
@@ -26,7 +25,6 @@ describe('MemberList', () => {
     }
 
     let parentDiv = null;
-    let sandbox = null;
     let client = null;
     let root = null;
     let clock = null;
@@ -38,8 +36,7 @@ describe('MemberList', () => {
     let defaultUsers = [];
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
-        sandbox = TestUtils.stubClient(sandbox);
+        TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.hasLazyLoadMembersEnabled = () => false;
 
@@ -116,7 +113,6 @@ describe('MemberList', () => {
             parentDiv.remove();
             parentDiv = null;
         }
-        sandbox.restore();
 
         clock.uninstall();
 
