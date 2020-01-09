@@ -21,7 +21,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import utils from "matrix-js-sdk/lib/utils";
+import * as utils from "matrix-js-sdk/src/utils";
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import rate_limited_func from "../../../ratelimitedfunc";

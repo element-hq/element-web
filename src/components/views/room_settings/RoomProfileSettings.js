@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 
 // TODO: Merge with ProfileSettings?
 export default class RoomProfileSettings extends React.Component {

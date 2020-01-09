@@ -20,7 +20,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import {User} from "matrix-js-sdk";
 import { getHostingLink } from '../../../utils/HostingLink';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 
 export default class ProfileSettings extends React.Component {
     constructor() {

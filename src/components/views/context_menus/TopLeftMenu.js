@@ -25,7 +25,7 @@ import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {
