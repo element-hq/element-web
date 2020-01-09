@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import sdk from "../../../index";
@@ -31,18 +31,44 @@ import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
-class DirectoryMember {
+// This is the interface that is expected by various components in this file. It is a bit
+// awkward because it also matches the RoomMember class from the js-sdk with some extra support
+// for 3PIDs/email addresses.
+//
+// XXX: We should use TypeScript interfaces instead of this weird "abstract" class.
+class Member {
+    /**
+     * The display name of this Member. For users this should be their profile's display
+     * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
+     */
+    get name(): string { throw new Error("Member class not implemented"); }
+
+    /**
+     * The ID of this Member. For users this should be their user ID. For 3PIDs this should
+     * be the 3PID address (email).
+     */
+    get userId(): string { throw new Error("Member class not implemented"); }
+
+    /**
+     * Gets the MXC URL of this Member's avatar. For users this should be their profile's
+     * avatar MXC URL or null if none set. For 3PIDs this should always be null.
+     */
+    getMxcAvatarUrl(): string { throw new Error("Member class not implemented"); }
+}
+
+class DirectoryMember extends Member {
     _userId: string;
     _displayName: string;
     _avatarUrl: string;
 
     constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string}) {
+        super();
         this._userId = userDirResult.user_id;
         this._displayName = userDirResult.display_name;
         this._avatarUrl = userDirResult.avatar_url;
     }
 
-    // These next members are to implement the contract expected by DMRoomTile
+    // These next class members are for the Member interface
     get name(): string {
         return this._displayName || this._userId;
     }
@@ -56,13 +82,64 @@ class DirectoryMember {
     }
 }
 
+class DMUserTile extends React.PureComponent {
+    static propTypes = {
+        member: PropTypes.object.isRequired, // Should be a Member (see interface above)
+        onRemove: PropTypes.func.isRequired, // takes 1 argument, the member being removed
+    };
+
+    _onRemove = (e) => {
+        // Stop the browser from highlighting text
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.props.onRemove(this.props.member);
+    };
+
+    render() {
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+
+        const avatarSize = 20;
+        const avatar = this.props.member.isEmail
+            ? <img
+                className='mx_DMInviteDialog_userTile_avatar'
+                src={require("../../../../res/img/icon-email-pill-avatar.svg")}
+                width={avatarSize} height={avatarSize} />
+            : <BaseAvatar
+                className='mx_DMInviteDialog_userTile_avatar'
+                url={getHttpUriForMxc(
+                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
+                    avatarSize, avatarSize, "crop")}
+                name={this.props.member.name}
+                idName={this.props.member.userId}
+                width={avatarSize}
+                height={avatarSize} />;
+
+        return (
+            <span className='mx_DMInviteDialog_userTile'>
+                <span className='mx_DMInviteDialog_userTile_pill'>
+                    {avatar}
+                    <span className='mx_DMInviteDialog_userTile_name'>{this.props.member.name}</span>
+                </span>
+                <AccessibleButton
+                    className='mx_DMInviteDialog_userTile_remove'
+                    onClick={this._onRemove}
+                >
+                    <img src={require("../../../../res/img/icon-pill-remove.svg")} alt={_t('Remove')} width={8} height={8} />
+                </AccessibleButton>
+            </span>
+        );
+    }
+}
+
 class DMRoomTile extends React.PureComponent {
     static propTypes = {
-        // Has properties to match RoomMember: userId (str), name (str), getMxcAvatarUrl(): string
-        member: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired, // Should be a Member (see interface above)
         lastActiveTs: PropTypes.number,
-        onToggle: PropTypes.func.isRequired,
+        onToggle: PropTypes.func.isRequired, // takes 1 argument, the member being toggled
         highlightWord: PropTypes.string,
+        isSelected: PropTypes.bool,
     };
 
     _onClick = (e) => {
@@ -70,7 +147,7 @@ class DMRoomTile extends React.PureComponent {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.onToggle(this.props.member.userId);
+        this.props.onToggle(this.props.member);
     };
 
     _highlightName(str: string) {
@@ -121,19 +198,37 @@ class DMRoomTile extends React.PureComponent {
         }
 
         const avatarSize = 36;
-        const avatarUrl = getHttpUriForMxc(
-            MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
-            avatarSize, avatarSize, "crop");
+        const avatar = this.props.member.isEmail
+            ? <img
+                src={require("../../../../res/img/icon-email-pill-avatar.svg")}
+                width={avatarSize} height={avatarSize} />
+            : <BaseAvatar
+                url={getHttpUriForMxc(
+                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
+                    avatarSize, avatarSize, "crop")}
+                name={this.props.member.name}
+                idName={this.props.member.userId}
+                width={avatarSize}
+                height={avatarSize} />;
+
+        let checkmark = null;
+        if (this.props.isSelected) {
+            // To reduce flickering we put the 'selected' room tile above the real avatar
+            checkmark = <div className='mx_DMInviteDialog_roomTile_selected' />;
+        }
+
+        // To reduce flickering we put the checkmark on top of the actual avatar (prevents
+        // the browser from reloading the image source when the avatar remounts).
+        const stackedAvatar = (
+            <span className='mx_DMInviteDialog_roomTile_avatarStack'>
+                {avatar}
+                {checkmark}
+            </span>
+        );
 
         return (
             <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
-                <BaseAvatar
-                    url={avatarUrl}
-                    name={this.props.member.name}
-                    idName={this.props.member.userId}
-                    width={avatarSize}
-                    height={avatarSize}
-                />
+                {stackedAvatar}
                 <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
                 <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
@@ -149,12 +244,13 @@ export default class DMInviteDialog extends React.PureComponent {
     };
 
     _debounceTimer: number = null;
+    _editorRef: any = null;
 
     constructor() {
         super();
 
         this.state = {
-            targets: [], // string[] of mxids/email addresses
+            targets: [], // array of Member objects (see interface above)
             filterText: "",
             recents: this._buildRecents(),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
@@ -162,6 +258,8 @@ export default class DMInviteDialog extends React.PureComponent {
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
         };
+
+        this._editorRef = createRef();
     }
 
     _buildRecents(): {userId: string, user: RoomMember, lastActive: number} {
@@ -245,7 +343,7 @@ export default class DMInviteDialog extends React.PureComponent {
     }
 
     _startDm = () => {
-        this.props.onFinished(this.state.targets);
+        this.props.onFinished(this.state.targets.map(t => t.userId));
     };
 
     _cancel = () => {
@@ -292,12 +390,31 @@ export default class DMInviteDialog extends React.PureComponent {
         this.setState({numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN});
     };
 
-    _toggleMember = (userId) => {
+    _toggleMember = (member: Member) => {
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
-        const idx = targets.indexOf(userId);
+        const idx = targets.indexOf(member);
         if (idx >= 0) targets.splice(idx, 1);
-        else targets.push(userId);
+        else targets.push(member);
         this.setState({targets});
+    };
+
+    _removeMember = (member: Member) => {
+        const targets = this.state.targets.map(t => t); // cheap clone for mutation
+        const idx = targets.indexOf(member);
+        if (idx >= 0) {
+            targets.splice(idx, 1);
+            this.setState({targets});
+        }
+    };
+
+    _onClickInputArea = (e) => {
+        // Stop the browser from highlighting text
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (this._editorRef && this._editorRef.current) {
+            this._editorRef.current.focus();
+        }
     };
 
     _renderSection(kind: "recents"|"suggestions") {
@@ -360,6 +477,7 @@ export default class DMInviteDialog extends React.PureComponent {
                 key={r.userId}
                 onToggle={this._toggleMember}
                 highlightWord={this.state.filterText}
+                isSelected={this.state.targets.some(t => t.userId === r.userId)}
             />
         ));
         return (
@@ -371,23 +489,30 @@ export default class DMInviteDialog extends React.PureComponent {
         );
     }
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const Field = sdk.getComponent("elements.Field");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
-        // Dev note: The use of Field is temporary/incomplete pending https://github.com/vector-im/riot-web/issues/11197
-        // For now, we just list who the targets are.
-        const editor = (
-            <div className='mx_DMInviteDialog_editor'>
-                <Field
-                    id="inviteTargets"
-                    value={this.state.filterText}
-                    onChange={this._updateFilter}
-                />
+    _renderEditor() {
+        const targets = this.state.targets.map(t => (
+            <DMUserTile member={t} onRemove={this._removeMember} key={t.userId} />
+        ));
+        const input = (
+            <textarea
+                key={"input"}
+                rows={1}
+                onChange={this._updateFilter}
+                defaultValue={this.state.filterText}
+                ref={this._editorRef}
+            />
+        );
+        return (
+            <div className='mx_DMInviteDialog_editor' onClick={this._onClickInputArea}>
+                {targets}
+                {input}
             </div>
         );
-        const targets = this.state.targets.map(t => <div key={t}>{t}</div>);
+    }
+
+    render() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         const userId = MatrixClientPeg.get().getUserId();
         return (
@@ -406,9 +531,8 @@ export default class DMInviteDialog extends React.PureComponent {
                             {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
                         )}
                     </p>
-                    {targets}
                     <div className='mx_DMInviteDialog_addressBar'>
-                        {editor}
+                        {this._renderEditor()}
                         <AccessibleButton
                             kind="primary"
                             onClick={this._startDm}
