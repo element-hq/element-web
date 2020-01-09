@@ -32,14 +32,10 @@
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
-<<<<<<< HEAD
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
     "clean": "rimraf lib webapp electron_app/dist",
     "build": "yarn clean && yarn build:res && yarn build:compile && yarn build:types && yarn build:bundle",
-=======
-    "postinstall": "node scripts/yarn-sub.js matrix-js-sdk install && node scripts/yarn-sub.js matrix-react-sdk install",
->>>>>>> develop
     "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:compile": "yarn reskindex && babel -d lib --verbose --extensions \".ts,.js\" src",
