@@ -184,6 +184,10 @@ limitations under the License.
         .mx_DMInviteDialog_userTile_name {
             vertical-align: top;
         }
+
+        .mx_DMInviteDialog_userTile_threepidAvatar {
+            background-color: #ffffff; // this is fine without a var because it's for both themes
+        }
     }
 
     .mx_DMInviteDialog_userTile_remove {
