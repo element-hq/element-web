@@ -2017,5 +2017,20 @@
     "The message you are trying to send is too large.": "Il messaggio che stai tentando di inviare è troppo grande.",
     "Secret Storage will be set up using your existing key backup details.Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "L'archivio segreto verrà impostato usando i dettagli del tuo backup chiavi. La password dell'archivio segreto e la chiave di ripristino saranno le stesse del tuo backup chiavi",
     "Migrate from Key Backup": "Migra dal backup chiavi",
-    "Help": "Aiuto"
+    "Help": "Aiuto",
+    "New DM invite dialog (under development)": "Nuovo invito via messaggio diretto (in sviluppo)",
+    "Show info about bridges in room settings": "Mostra info sui bridge nelle impostazioni stanza",
+    "This bridge was provisioned by <user />": "Questo bridge è stato fornito da <user />",
+    "This bridge is managed by <user />.": "Questo bridge è gestito da <user />.",
+    "Bridged into <channelLink /> <networkLink />, on <protocolName />": "Bridge in <channelLink /> <networkLink />, su <protocolName />",
+    "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Connesso a <channelIcon /> <channelName /> su <networkIcon /> <networkName />",
+    "Connected via %(protocolName)s": "Connesso via %(protocolName)s",
+    "Bridge Info": "Info bridge",
+    "Below is a list of bridges connected to this room.": "Sotto vedi una lista di brdige connessi a questa stanza.",
+    "Recent Conversations": "Conversazioni recenti",
+    "Suggestions": "Suggerimenti",
+    "Show more": "Mostra altro",
+    "Direct Messages": "Messaggi diretti",
+    "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Se non riesci a trovare qualcuno, chiedigli il nome utente o condividi il tuo (%(userId)s) o il <a>link al profilo</a>.",
+    "Go": "Vai"
 }
