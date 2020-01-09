@@ -27,7 +27,11 @@ import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
+<<<<<<< HEAD
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+=======
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+>>>>>>> develop
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -60,16 +64,6 @@ export default createReactClass({
             includeAll: false,
             roomServer: null,
             filterString: null,
-        };
-    },
-
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
         };
     },
 
@@ -268,6 +262,7 @@ export default createReactClass({
             roomServer: server,
             instanceId: instanceId,
             includeAll: includeAll,
+            error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side

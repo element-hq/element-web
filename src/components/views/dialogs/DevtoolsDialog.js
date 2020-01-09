@@ -16,23 +16,26 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+=======
+import { Room } from "matrix-js-sdk";
+
+import sdk from '../../../index';
+import SyntaxHighlight from '../elements/SyntaxHighlight';
+import { _t } from '../../../languageHandler';
+>>>>>>> develop
 import Field from "../elements/Field";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-class DevtoolsComponent extends React.Component {
-    static contextTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
-}
-
-class GenericEditor extends DevtoolsComponent {
+class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this._onChange = this._onChange.bind(this);
         this.onBack = this.onBack.bind(this);
     }
@@ -67,12 +70,15 @@ class SendCustomEvent extends GenericEditor {
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
         forceStateEvent: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
         this._send = this._send.bind(this);
 
         const {eventType, stateKey, evContent} = Object.assign({
@@ -91,11 +97,11 @@ class SendCustomEvent extends GenericEditor {
     }
 
     send(content) {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         if (this.state.isStateEvent) {
-            return cli.sendStateEvent(this.context.roomId, this.state.eventType, content, this.state.stateKey);
+            return cli.sendStateEvent(this.props.room.roomId, this.state.eventType, content, this.state.stateKey);
         } else {
-            return cli.sendEvent(this.context.roomId, this.state.eventType, content);
+            return cli.sendEvent(this.props.room.roomId, this.state.eventType, content);
         }
     }
 
@@ -154,13 +160,16 @@ class SendAccountData extends GenericEditor {
     static getLabel() { return _t('Send Account Data'); }
 
     static propTypes = {
+        room: PropTypes.instanceOf(Room).isRequired,
         isRoomAccountData: PropTypes.bool,
         forceMode: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
         this._send = this._send.bind(this);
 
         const {eventType, evContent} = Object.assign({
@@ -177,9 +186,9 @@ class SendAccountData extends GenericEditor {
     }
 
     send(content) {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         if (this.state.isRoomAccountData) {
-            return cli.setRoomAccountData(this.context.roomId, this.state.eventType, content);
+            return cli.setRoomAccountData(this.props.room.roomId, this.state.eventType, content);
         }
         return cli.setAccountData(this.state.eventType, content);
     }
@@ -234,7 +243,7 @@ class SendAccountData extends GenericEditor {
 const INITIAL_LOAD_TILES = 20;
 const LOAD_TILES_STEP_SIZE = 50;
 
-class FilteredList extends React.Component {
+class FilteredList extends React.PureComponent {
     static propTypes = {
         children: PropTypes.any,
         query: PropTypes.string,
@@ -247,8 +256,8 @@ class FilteredList extends React.Component {
         return children.filter((child) => child.key.toLowerCase().includes(lcQuery));
     }
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             filteredChildren: FilteredList.filterChildren(this.props.children, this.props.query),
@@ -305,19 +314,20 @@ class FilteredList extends React.Component {
     }
 }
 
-class RoomStateExplorer extends DevtoolsComponent {
+class RoomStateExplorer extends React.PureComponent {
     static getLabel() { return _t('Explore Room State'); }
-
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
 
-        const room = MatrixClientPeg.get().getRoom(this.context.roomId);
-        this.roomStateEvents = room.currentState.events;
+    constructor(props) {
+        super(props);
+
+        this.roomStateEvents = this.props.room.currentState.events;
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
@@ -373,7 +383,7 @@ class RoomStateExplorer extends DevtoolsComponent {
     render() {
         if (this.state.event) {
             if (this.state.editing) {
-                return <SendCustomEvent forceStateEvent={true} onBack={this.onBack} inputs={{
+                return <SendCustomEvent room={this.props.room} forceStateEvent={true} onBack={this.onBack} inputs={{
                     eventType: this.state.event.getType(),
                     evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
                     stateKey: this.state.event.getStateKey(),
@@ -442,15 +452,18 @@ class RoomStateExplorer extends DevtoolsComponent {
     }
 }
 
-class AccountDataExplorer extends DevtoolsComponent {
+class AccountDataExplorer extends React.PureComponent {
     static getLabel() { return _t('Explore Account Data'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
@@ -467,11 +480,10 @@ class AccountDataExplorer extends DevtoolsComponent {
     }
 
     getData() {
-        const cli = MatrixClientPeg.get();
         if (this.state.isRoomAccountData) {
-            return cli.getRoom(this.context.roomId).accountData;
+            return this.props.room.accountData;
         }
-        return cli.store.accountData;
+        return this.context.store.accountData;
     }
 
     onViewSourceClick(event) {
@@ -505,10 +517,14 @@ class AccountDataExplorer extends DevtoolsComponent {
     render() {
         if (this.state.event) {
             if (this.state.editing) {
-                return <SendAccountData isRoomAccountData={this.state.isRoomAccountData} onBack={this.onBack} inputs={{
-                    eventType: this.state.event.getType(),
-                    evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
-                }} forceMode={true} />;
+                return <SendAccountData
+                    room={this.props.room}
+                    isRoomAccountData={this.state.isRoomAccountData}
+                    onBack={this.onBack}
+                    inputs={{
+                        eventType: this.state.event.getType(),
+                        evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
+                    }} forceMode={true} />;
             }
 
             return <div className="mx_ViewSource">
@@ -553,17 +569,20 @@ class AccountDataExplorer extends DevtoolsComponent {
     }
 }
 
-class ServersInRoomList extends DevtoolsComponent {
+class ServersInRoomList extends React.PureComponent {
     static getLabel() { return _t('View Servers in Room'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
 
-        const room = MatrixClientPeg.get().getRoom(this.context.roomId);
+    constructor(props) {
+        super(props);
+
+        const room = this.props.room;
         const servers = new Set();
         room.currentState.getStateEvents("m.room.member").forEach(ev => servers.add(ev.getSender().split(":")[1]));
         this.servers = Array.from(servers).map(s =>
@@ -602,19 +621,14 @@ const Entries = [
     ServersInRoomList,
 ];
 
-export default class DevtoolsDialog extends React.Component {
-    static childContextTypes = {
-        roomId: PropTypes.string.isRequired,
-        // client: PropTypes.instanceOf(MatixClient),
-    };
-
+export default class DevtoolsDialog extends React.PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onBack = this.onBack.bind(this);
         this.onCancel = this.onCancel.bind(this);
 
@@ -625,10 +639,6 @@ export default class DevtoolsDialog extends React.Component {
 
     componentWillUnmount() {
         this._unmounted = true;
-    }
-
-    getChildContext() {
-        return { roomId: this.props.roomId };
     }
 
     _setMode(mode) {
@@ -654,15 +664,17 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <div>
-                <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
-                <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
-                <div className="mx_DevTools_label_bottom" />
-                <this.state.mode onBack={this.onBack} />
-            </div>;
+            body = <MatrixClientContext.Consumer>
+                {(cli) => <React.Fragment>
+                    <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
+                    <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
+                    <div className="mx_DevTools_label_bottom" />
+                    <this.state.mode onBack={this.onBack} room={cli.getRoom(this.props.roomId)} />
+                </React.Fragment>}
+            </MatrixClientContext.Consumer>;
         } else {
             const classes = "mx_DevTools_RoomStateExplorer_button";
-            body = <div>
+            body = <React.Fragment>
                 <div>
                     <div className="mx_DevTools_label_left">{ _t('Toolbox') }</div>
                     <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
@@ -679,7 +691,7 @@ export default class DevtoolsDialog extends React.Component {
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>{ _t('Cancel') }</button>
                 </div>
-            </div>;
+            </React.Fragment>;
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');

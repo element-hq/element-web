@@ -17,10 +17,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+<<<<<<< HEAD
 import {MatrixClient} from 'matrix-js-sdk';
 import * as sdk from '../../../index';
+=======
+import sdk from '../../../index';
+>>>>>>> develop
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const GroupRoomTile = createReactClass({
     displayName: 'GroupRoomTile',
@@ -41,7 +46,7 @@ const GroupRoomTile = createReactClass({
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
+        const avatarUrl = this.context.mxcUrlToHttp(
             this.props.groupRoom.avatarUrl,
             36, 36, 'crop',
         );
@@ -66,9 +71,7 @@ const GroupRoomTile = createReactClass({
     },
 });
 
-GroupRoomTile.contextTypes = {
-    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-};
+GroupRoomTile.contextType = MatrixClientContext;
 
 
 export default GroupRoomTile;

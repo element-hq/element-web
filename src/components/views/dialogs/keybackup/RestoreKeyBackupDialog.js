@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,17 +16,23 @@ limitations under the License.
 */
 
 import React from 'react';
+<<<<<<< HEAD
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
-import Modal from '../../../../Modal';
-
+=======
 import { MatrixClient } from 'matrix-js-sdk';
 
+import sdk from '../../../../index';
+import MatrixClientPeg from '../../../../MatrixClientPeg';
+>>>>>>> develop
+import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
 import {Key} from "../../../../Keyboard";
+import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
+const RESTORE_TYPE_SECRET_STORAGE = 2;
 
 /*
  * Dialog for restoring e2e keys from a backup and the user's recovery key
@@ -35,6 +42,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         super(props);
         this.state = {
             backupInfo: null,
+            backupKeyStored: null,
             loading: false,
             loadError: null,
             restoreError: null,
@@ -73,7 +81,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
     }
 
@@ -148,6 +156,32 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         }
     }
 
+    async _restoreWithSecretStorage() {
+        this.setState({
+            loading: true,
+            restoreError: null,
+            restoreType: RESTORE_TYPE_SECRET_STORAGE,
+        });
+        try {
+            // `accessSecretStorage` may prompt for storage access as needed.
+            const recoverInfo = await accessSecretStorage(async () => {
+                return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
+                    this.state.backupInfo,
+                );
+            });
+            this.setState({
+                loading: false,
+                recoverInfo,
+            });
+        } catch (e) {
+            console.log("Error restoring backup", e);
+            this.setState({
+                restoreError: e,
+                loading: false,
+            });
+        }
+    }
+
     async _loadBackupStatus() {
         this.setState({
             loading: true,
@@ -155,10 +189,20 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         });
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            this.setState({
+                backupInfo,
+                backupKeyStored,
+            });
+
+            // If the backup key is stored, we can proceed directly to restore.
+            if (backupKeyStored) {
+                return this._restoreWithSecretStorage();
+            }
+
             this.setState({
                 loadError: null,
                 loading: false,
-                backupInfo,
             });
         } catch (e) {
             console.log("Error loading backup status", e);

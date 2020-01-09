@@ -23,13 +23,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
-import { MatrixClient } from 'matrix-js-sdk';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -40,14 +40,10 @@ export default class RightPanel extends React.Component {
         };
     }
 
-    static get contextTypes() {
-        return {
-            matrixClient: PropTypes.instanceOf(MatrixClient),
-        };
-    }
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
@@ -93,15 +89,15 @@ export default class RightPanel extends React.Component {
 
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        const cli = this.context.matrixClient;
+        const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        if (this.context.matrixClient) {
-            this.context.matrixClient.removeListener("RoomState.members", this.onRoomStateMember);
+        if (this.context) {
+            this.context.removeListener("RoomState.members", this.onRoomStateMember);
         }
         this._unregisterGroupStore(this.props.groupId);
     }
@@ -190,7 +186,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",
@@ -209,7 +205,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
             panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
+            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",

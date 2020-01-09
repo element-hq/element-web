@@ -19,13 +19,18 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+<<<<<<< HEAD
 import { MatrixClient } from 'matrix-js-sdk';
 import * as sdk from '../../../index';
+=======
+import sdk from '../../../index';
+>>>>>>> develop
 import dis from '../../../dispatcher';
 import {_t} from '../../../languageHandler';
 import classNames from 'classnames';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // XXX this class copies a lot from RoomTile.js
 export default createReactClass({
@@ -35,8 +40,8 @@ export default createReactClass({
         group: PropTypes.object.isRequired,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState: function() {
@@ -58,7 +63,7 @@ export default createReactClass({
     onMouseEnter: function() {
         const state = {hover: true};
         // Only allow non-guests to access the context menu
-        if (!this.context.matrixClient.isGuest()) {
+        if (!this.context.isGuest()) {
             state.badgeHover = true;
         }
         this.setState(state);
@@ -118,7 +123,7 @@ export default createReactClass({
 
         const groupName = this.props.group.name || this.props.group.groupId;
         const httpAvatarUrl = this.props.group.avatarUrl ?
-            this.context.matrixClient.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
+            this.context.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
 
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 

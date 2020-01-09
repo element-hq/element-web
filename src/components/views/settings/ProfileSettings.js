@@ -18,10 +18,9 @@ import React, {createRef} from 'react';
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import AccessibleButton from "../elements/AccessibleButton";
-import classNames from 'classnames';
 import {User} from "matrix-js-sdk";
 import { getHostingLink } from '../../../utils/HostingLink';
+import sdk from "../../../index";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
@@ -52,11 +51,18 @@ export default class ProfileSettings extends React.Component {
         this._avatarUpload = createRef();
     }
 
-    _uploadAvatar = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-
+    _uploadAvatar = () => {
         this._avatarUpload.current.click();
+    };
+
+    _removeAvatar = () => {
+        // clear file upload field so same file can be selected
+        this._avatarUpload.current.value = "";
+        this.setState({
+            avatarUrl: undefined,
+            avatarFile: undefined,
+            enableProfileSave: true,
+        });
     };
 
     _saveProfile = async (e) => {
@@ -82,6 +88,8 @@ export default class ProfileSettings extends React.Component {
             newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
             newState.originalAvatarUrl = newState.avatarUrl;
             newState.avatarFile = null;
+        } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+            await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
         }
 
         this.setState(newState);
@@ -117,29 +125,6 @@ export default class ProfileSettings extends React.Component {
     };
 
     render() {
-        // TODO: Why is rendering a box with an overlay so complicated? Can the DOM be reduced?
-
-        let showOverlayAnyways = true;
-        let avatarElement = <div className="mx_ProfileSettings_avatarPlaceholder" />;
-        if (this.state.avatarUrl) {
-            showOverlayAnyways = false;
-            avatarElement = <img src={this.state.avatarUrl}
-                                 alt={_t("Profile picture")} />;
-        }
-
-        const avatarOverlayClasses = classNames({
-            "mx_ProfileSettings_avatarOverlay": true,
-            "mx_ProfileSettings_avatarOverlay_show": showOverlayAnyways,
-        });
-        const avatarHoverElement = (
-            <div className={avatarOverlayClasses} onClick={this._uploadAvatar}>
-                <span className="mx_ProfileSettings_avatarOverlayText">{_t("Upload profile picture")}</span>
-                <div className="mx_ProfileSettings_avatarOverlayImgContainer">
-                    <div className="mx_ProfileSettings_avatarOverlayImg" />
-                </div>
-            </div>
-        );
-
         const hostingSignupLink = getHostingLink('user-settings');
         let hostingSignup = null;
         if (hostingSignupLink) {
@@ -156,6 +141,8 @@ export default class ProfileSettings extends React.Component {
             </span>;
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
             <form onSubmit={this._saveProfile} autoComplete="off" noValidate={true}>
                 <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
@@ -170,10 +157,12 @@ export default class ProfileSettings extends React.Component {
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} />
                     </div>
-                    <div className="mx_ProfileSettings_avatar">
-                        {avatarElement}
-                        {avatarHoverElement}
-                    </div>
+                    <AvatarSetting
+                        avatarUrl={this.state.avatarUrl}
+                        avatarName={this.state.displayName || this.state.userId}
+                        avatarAltText={_t("Profile picture")}
+                        uploadAvatar={this._uploadAvatar}
+                        removeAvatar={this._removeAvatar} />
                 </div>
                 <AccessibleButton onClick={this._saveProfile} kind="primary"
                                   disabled={!this.state.enableProfileSave}>

@@ -20,17 +20,21 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
+<<<<<<< HEAD
 import { MatrixClient } from 'matrix-js-sdk';
 import * as sdk from '../../../index';
+=======
+import sdk from '../../../index';
+>>>>>>> develop
 import dis from '../../../dispatcher';
-import {_t} from '../../../languageHandler';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import {ContextMenu, toRightOf} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -46,8 +50,8 @@ export default createReactClass({
         tag: PropTypes.string,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -56,6 +60,8 @@ export default createReactClass({
             hover: false,
             // The profile data of the group if this.props.tag is a group ID
             profile: null,
+            // Whether or not the context menu is open
+            menuDisplayed: false,
         };
     },
 
@@ -81,7 +87,7 @@ export default createReactClass({
     _onFlairStoreUpdated() {
         if (this.unmounted) return;
         FlairStore.getGroupProfileCached(
-            this.context.matrixClient,
+            this.context,
             this.props.tag,
         ).then((profile) => {
             if (this.unmounted) return;
@@ -112,12 +118,10 @@ export default createReactClass({
     },
 
     onMouseOver: function() {
-        console.log("DEBUG onMouseOver");
         this.setState({hover: true});
     },
 
     onMouseOut: function() {
-        console.log("DEBUG onMouseOut");
         this.setState({hover: false});
     },
 
@@ -140,12 +144,11 @@ export default createReactClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const Tooltip = sdk.getComponent('elements.Tooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
         const avatarHeight = 40;
 
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
+        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
 
@@ -164,9 +167,6 @@ export default createReactClass({
             badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
         }
 
-        const tip = this.state.hover ?
-            <Tooltip className="mx_TagTile_tooltip" label={name} /> :
-            <div />;
         // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
         const contextButton = this.state.hover || this.state.menuDisplayed ?
             <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this._contextMenuButton}>
@@ -184,14 +184,9 @@ export default createReactClass({
             );
         }
 
+        const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
         return <React.Fragment>
-            <ContextMenuButton
-                className={className}
-                onClick={this.onClick}
-                onContextMenu={this.openMenu}
-                label={_t("Options")}
-                isExpanded={this.state.menuDisplayed}
-            >
+            <AccessibleTooltipButton className={className} onClick={this.onClick} onContextMenu={this.openMenu} title={name}>
                 <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                     <BaseAvatar
                         name={name}
@@ -200,11 +195,10 @@ export default createReactClass({
                         width={avatarHeight}
                         height={avatarHeight}
                     />
-                    { tip }
                     { contextButton }
                     { badgeElement }
                 </div>
-            </ContextMenuButton>
+            </AccessibleTooltipButton>
 
             { contextMenu }
         </React.Fragment>;

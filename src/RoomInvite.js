@@ -25,6 +25,7 @@ import * as sdk from './';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import { _t } from './languageHandler';
+import SettingsStore from "./settings/SettingsStore";
 
 /**
  * Invites multiple addresses to a room
@@ -41,6 +42,18 @@ function inviteMultipleToRoom(roomId, addrs) {
 }
 
 export function showStartChatInviteDialog() {
+    if (SettingsStore.isFeatureEnabled("feature_ftue_dms")) {
+        const DMInviteDialog = sdk.getComponent("dialogs.DMInviteDialog");
+        Modal.createTrackedDialog('Start DM', '', DMInviteDialog, {
+            onFinished: (inviteIds) => {
+                // TODO: Replace _onStartDmFinished with less hacks
+                if (inviteIds.length > 0) _onStartDmFinished(true, inviteIds.map(i => ({address: i})));
+                // else ignore and just do nothing
+            },
+        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+        return;
+    }
+
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
 
     Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
@@ -99,7 +112,7 @@ export function isValid3pidInvite(event) {
     return true;
 }
 
-// TODO: Immutable DMs replaces this
+// TODO: Canonical DMs replaces this
 function _onStartDmFinished(shouldInvite, addrs) {
     if (!shouldInvite) return;
 

@@ -23,8 +23,8 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {formatDate} from '../../../DateUtils';
 
 export default class DevicesPanelEntry extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._unmounted = false;
         this.onDeviceToggled = this.onDeviceToggled.bind(this);

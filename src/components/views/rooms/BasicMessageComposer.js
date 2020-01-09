@@ -34,11 +34,11 @@ import {parsePlainTextMessage} from '../../../editor/deserialize';
 import {renderModel} from '../../../editor/render';
 import {Room} from 'matrix-js-sdk';
 import TypingStore from "../../../stores/TypingStore";
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 import SettingsStore from "../../../settings/SettingsStore";
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 import * as sdk from '../../../index';
 import {Key} from "../../../Keyboard";
+import {EMOTICON_TO_EMOJI} from "../../../emoji";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -80,8 +80,8 @@ export default class BasicMessageEditor extends React.Component {
         initialCaret: PropTypes.object, // See DocumentPosition in editor/model.js
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             autoComplete: null,
         };
@@ -108,7 +108,8 @@ export default class BasicMessageEditor extends React.Component {
         const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(range.text);
         if (emoticonMatch) {
             const query = emoticonMatch[1].toLowerCase().replace("-", "");
-            const data = EMOJIBASE.find(e => e.emoticon ? e.emoticon.toLowerCase() === query : false);
+            const data = EMOTICON_TO_EMOJI.get(query);
+
             if (data) {
                 const {partCreator} = model;
                 const hasPrecedingSpace = emoticonMatch[0][0] === " ";

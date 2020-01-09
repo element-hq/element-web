@@ -25,10 +25,8 @@ import shouldHideEvent from '../../shouldHideEvent';
 
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Room} from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
@@ -44,7 +42,7 @@ import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -55,7 +53,11 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
+<<<<<<< HEAD
 import {haveTileForEvent} from "../views/rooms/EventTile";
+=======
+import RoomContext from "../../contexts/RoomContext";
+>>>>>>> develop
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -67,6 +69,7 @@ if (DEBUG) {
     debuglog = console.log.bind(console);
 }
 
+<<<<<<< HEAD
 export const RoomContext = PropTypes.shape({
     canReact: PropTypes.bool.isRequired,
     canReply: PropTypes.bool.isRequired,
@@ -74,6 +77,9 @@ export const RoomContext = PropTypes.shape({
 });
 
 export default createReactClass({
+=======
+module.exports = createReactClass({
+>>>>>>> develop
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,
@@ -165,23 +171,6 @@ export default createReactClass({
 
             canReact: false,
             canReply: false,
-
-            useCider: false,
-        };
-    },
-
-    childContextTypes: {
-        room: RoomContext,
-    },
-
-    getChildContext: function() {
-        const {canReact, canReply, room} = this.state;
-        return {
-            room: {
-                canReact,
-                canReply,
-                room,
-            },
         };
     },
 
@@ -203,16 +192,8 @@ export default createReactClass({
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
 
-        this._onCiderUpdated();
-        this._ciderWatcherRef = SettingsStore.watchSetting(
-            "useCiderComposer", null, this._onCiderUpdated);
-
         this._roomView = createRef();
         this._searchResultsPanel = createRef();
-    },
-
-    _onCiderUpdated: function() {
-        this.setState({useCider: SettingsStore.getValue("useCiderComposer")});
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -462,7 +443,7 @@ export default createReactClass({
 
     componentDidUpdate: function() {
         if (this._roomView.current) {
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
@@ -506,7 +487,7 @@ export default createReactClass({
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            const roomView = ReactDOM.findDOMNode(this._roomView.current);
+            const roomView = this._roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -562,15 +543,15 @@ export default createReactClass({
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
-        switch (ev.keyCode) {
-            case KeyCode.KEY_D:
+        switch (ev.key) {
+            case Key.D:
                 if (ctrlCmdOnly) {
                     this.onMuteAudioClick();
                     handled = true;
                 }
                 break;
 
-            case KeyCode.KEY_E:
+            case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
                     handled = true;
@@ -793,11 +774,12 @@ export default createReactClass({
         this._updateE2EStatus(room);
     },
 
-    _updateE2EStatus: function(room) {
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
+    _updateE2EStatus: async function(room) {
+        const cli = MatrixClientPeg.get();
+        if (!cli.isRoomEncrypted(room.roomId)) {
             return;
         }
-        if (!MatrixClientPeg.get().isCryptoEnabled()) {
+        if (!cli.isCryptoEnabled()) {
             // If crypto is not currently enabled, we aren't tracking devices at all,
             // so we don't know what the answer is. Let's error on the safe side and show
             // a warning for this case.
@@ -806,10 +788,38 @@ export default createReactClass({
             });
             return;
         }
-        room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
-            this.setState({
-                e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
+                this.setState({
+                    e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+                });
             });
+            return;
+        }
+        const e2eMembers = await room.getEncryptionTargetMembers();
+        for (const member of e2eMembers) {
+            const { userId } = member;
+            const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+            if (!userVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+            const devices = await cli.getStoredDevicesForUser(userId);
+            const allDevicesVerified = devices.every(device => {
+                const { deviceId } = device;
+                return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+            });
+            if (!allDevicesVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+        }
+        this.setState({
+            e2eStatus: "verified",
         });
     },
 
@@ -1800,29 +1810,16 @@ export default createReactClass({
             myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
-            if (this.state.useCider) {
-                const MessageComposer = sdk.getComponent('rooms.MessageComposer');
-                messageComposer =
-                    <MessageComposer
-                        room={this.state.room}
-                        callState={this.state.callState}
-                        disabled={this.props.disabled}
-                        showApps={this.state.showApps}
-                        e2eStatus={this.state.e2eStatus}
-                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
-                    />;
-            } else {
-                const SlateMessageComposer = sdk.getComponent('rooms.SlateMessageComposer');
-                messageComposer =
-                    <SlateMessageComposer
-                        room={this.state.room}
-                        callState={this.state.callState}
-                        disabled={this.props.disabled}
-                        showApps={this.state.showApps}
-                        e2eStatus={this.state.e2eStatus}
-                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
-                    />;
-            }
+            const MessageComposer = sdk.getComponent('rooms.MessageComposer');
+            messageComposer =
+                <MessageComposer
+                    room={this.state.room}
+                    callState={this.state.callState}
+                    disabled={this.props.disabled}
+                    showApps={this.state.showApps}
+                    e2eStatus={this.state.e2eStatus}
+                    permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
+                />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1925,7 +1922,8 @@ export default createReactClass({
             />);
 
         let topUnreadMessagesBar = null;
-        if (this.state.showTopUnreadMessagesBar) {
+        // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
+        if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (<TopUnreadMessagesBar
                                        onScrollUpClick={this.jumpToReadMarker}
@@ -1933,7 +1931,8 @@ export default createReactClass({
                                     />);
         }
         let jumpToBottom;
-        if (!this.state.atEndOfLiveTimeline) {
+        // Do not show JumpToBottomButton if we have search results showing, it makes no sense
+        if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
                 numUnreadMessages={this.state.numUnreadMessages}
@@ -1961,45 +1960,47 @@ export default createReactClass({
             : null;
 
         return (
-            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
-                <ErrorBoundary>
-                    <RoomHeader
-                        room={this.state.room}
-                        searchInfo={searchInfo}
-                        oobData={this.props.oobData}
-                        inRoom={myMembership === 'join'}
-                        onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick}
-                        onPinnedClick={this.onPinnedClick}
-                        onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
-                        onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
-                        onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
-                        e2eStatus={this.state.e2eStatus}
-                    />
-                    <MainSplit
-                        panel={rightPanel}
-                        resizeNotifier={this.props.resizeNotifier}
-                    >
-                        <div className={fadableSectionClasses}>
-                            {auxPanel}
-                            <div className="mx_RoomView_timeline">
-                                {topUnreadMessagesBar}
-                                {jumpToBottom}
-                                {messagePanel}
-                                {searchResultsPanel}
-                            </div>
-                            <div className={statusBarAreaClass}>
-                                <div className="mx_RoomView_statusAreaBox">
-                                    <div className="mx_RoomView_statusAreaBox_line"></div>
-                                    {statusBar}
+            <RoomContext.Provider value={this.state}>
+                <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
+                    <ErrorBoundary>
+                        <RoomHeader
+                            room={this.state.room}
+                            searchInfo={searchInfo}
+                            oobData={this.props.oobData}
+                            inRoom={myMembership === 'join'}
+                            onSearchClick={this.onSearchClick}
+                            onSettingsClick={this.onSettingsClick}
+                            onPinnedClick={this.onPinnedClick}
+                            onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
+                            onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
+                            onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
+                            e2eStatus={this.state.e2eStatus}
+                        />
+                        <MainSplit
+                            panel={rightPanel}
+                            resizeNotifier={this.props.resizeNotifier}
+                        >
+                            <div className={fadableSectionClasses}>
+                                {auxPanel}
+                                <div className="mx_RoomView_timeline">
+                                    {topUnreadMessagesBar}
+                                    {jumpToBottom}
+                                    {messagePanel}
+                                    {searchResultsPanel}
                                 </div>
+                                <div className={statusBarAreaClass}>
+                                    <div className="mx_RoomView_statusAreaBox">
+                                        <div className="mx_RoomView_statusAreaBox_line" />
+                                        {statusBar}
+                                    </div>
+                                </div>
+                                {previewBar}
+                                {messageComposer}
                             </div>
-                            {previewBar}
-                            {messageComposer}
-                        </div>
-                    </MainSplit>
-                </ErrorBoundary>
-            </main>
+                        </MainSplit>
+                    </ErrorBoundary>
+                </main>
+            </RoomContext.Provider>
         );
     },
 });

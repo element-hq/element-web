@@ -17,7 +17,7 @@ limitations under the License.
 import React, {createRef} from "react";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { KeyCode } from '../../Keyboard';
+import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
@@ -532,26 +532,26 @@ export default createReactClass({
      * @param {object} ev the keyboard event
      */
     handleScrollKey: function(ev) {
-        switch (ev.keyCode) {
-            case KeyCode.PAGE_UP:
+        switch (ev.key) {
+            case Key.PAGE_UP:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollRelative(-1);
                 }
                 break;
 
-            case KeyCode.PAGE_DOWN:
+            case Key.PAGE_DOWN:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollRelative(1);
                 }
                 break;
 
-            case KeyCode.HOME:
+            case Key.HOME:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollToTop();
                 }
                 break;
 
-            case KeyCode.END:
+            case Key.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollToBottom();
                 }

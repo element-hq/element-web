@@ -17,12 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';
 import * as sdk from '../../../index';
 import {MenuItem} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default class TagTileContextMenu extends React.Component {
     static propTypes = {
@@ -31,9 +31,7 @@ export default class TagTileContextMenu extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     constructor() {
         super();
@@ -51,7 +49,7 @@ export default class TagTileContextMenu extends React.Component {
     }
 
     _onRemoveClick() {
-        dis.dispatch(TagOrderActions.removeTag(this.context.matrixClient, this.props.tag));
+        dis.dispatch(TagOrderActions.removeTag(this.context, this.props.tag));
         this.props.onFinished();
     }
 

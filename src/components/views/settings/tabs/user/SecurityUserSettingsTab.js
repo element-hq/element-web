@@ -37,12 +37,13 @@ export class IgnoredUser extends React.Component {
     };
 
     render() {
+        const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
-                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm'>
-                    {_t('Unignore')}
+                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id}>
+                    { _t('Unignore') }
                 </AccessibleButton>
-                <span>{this.props.userId}</span>
+                <span id={id}>{ this.props.userId }</span>
             </div>
         );
     }

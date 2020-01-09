@@ -26,11 +26,11 @@ import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
 import {PartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
-import {MatrixClient} from 'matrix-js-sdk';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import {Key} from "../../../Keyboard";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -105,12 +105,10 @@ export default class EditMessageComposer extends React.Component {
         editState: PropTypes.instanceOf(EditorStateTransfer).isRequired,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.model = null;
         this._editorRef = null;
 
@@ -124,7 +122,7 @@ export default class EditMessageComposer extends React.Component {
     };
 
     _getRoom() {
-        return this.context.matrixClient.getRoom(this.props.editState.getEvent().getRoomId());
+        return this.context.getRoom(this.props.editState.getEvent().getRoomId());
     }
 
     _onKeyDown = (event) => {
@@ -190,7 +188,7 @@ export default class EditMessageComposer extends React.Component {
         if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
-            this.context.matrixClient.sendMessage(roomId, editContent);
+            this.context.sendMessage(roomId, editContent);
         }
 
         // close the event editing and focus composer
@@ -205,7 +203,7 @@ export default class EditMessageComposer extends React.Component {
             previousEdit.status === EventStatus.QUEUED ||
             previousEdit.status === EventStatus.NOT_SENT
         )) {
-            this.context.matrixClient.cancelPendingEvent(previousEdit);
+            this.context.cancelPendingEvent(previousEdit);
         }
     }
 
@@ -232,7 +230,7 @@ export default class EditMessageComposer extends React.Component {
     _createEditorModel() {
         const {editState} = this.props;
         const room = this._getRoom();
-        const partCreator = new PartCreator(room, this.context.matrixClient);
+        const partCreator = new PartCreator(room, this.context);
         let parts;
         if (editState.hasEditorState()) {
             // if restoring state from a previous editor,

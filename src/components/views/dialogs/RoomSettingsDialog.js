@@ -24,9 +24,16 @@ import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
+<<<<<<< HEAD
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+=======
+import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
+import sdk from "../../../index";
+import MatrixClientPeg from "../../../MatrixClientPeg";
+>>>>>>> develop
 import dis from "../../../dispatcher";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -52,6 +59,9 @@ export default class RoomSettingsDialog extends React.Component {
 
     _getTabs() {
         const tabs = [];
+        const featureFlag = SettingsStore.isFeatureEnabled("feature_bridge_state");
+        const shouldShowBridgeIcon = featureFlag &&
+            BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
 
         tabs.push(new Tab(
             _td("General"),
@@ -73,6 +83,15 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_rolesIcon",
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
+
+        if (shouldShowBridgeIcon) {
+            tabs.push(new Tab(
+                _td("Bridge Info"),
+                "mx_RoomSettingsDialog_bridgesIcon",
+                <BridgeSettingsTab roomId={this.props.roomId} />,
+            ));
+        }
+
         tabs.push(new Tab(
             _td("Advanced"),
             "mx_RoomSettingsDialog_warningIcon",

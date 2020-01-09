@@ -18,21 +18,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
+<<<<<<< HEAD
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
+=======
+import sdk from "../../../../..";
+>>>>>>> develop
 import AccessibleButton from "../../../elements/AccessibleButton";
-import {MatrixClient} from "matrix-js-sdk";
 import dis from "../../../../../dispatcher";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 export default class GeneralRoomSettingsTab extends React.Component {
-    static childContextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
-
     static propTypes = {
         roomId: PropTypes.string.isRequired,
     };
+
+    static contextType = MatrixClientContext;
 
     constructor() {
         super();
@@ -42,14 +44,8 @@ export default class GeneralRoomSettingsTab extends React.Component {
         };
     }
 
-    getChildContext() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    }
-
     componentWillMount() {
-        MatrixClientPeg.get().getRoomDirectoryVisibility(this.props.roomId).then((result => {
+        this.context.getRoomDirectoryVisibility(this.props.roomId).then((result => {
             this.setState({isRoomPublished: result.visibility === 'public'});
         }));
     }
@@ -59,7 +55,7 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const newValue = !valueBefore;
         this.setState({isRoomPublished: newValue});
 
-        MatrixClientPeg.get().setRoomDirectoryVisibility(
+        this.context.setRoomDirectoryVisibility(
             this.props.roomId,
             newValue ? 'public' : 'private',
         ).catch(() => {
@@ -80,7 +76,7 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
         const UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
 
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this

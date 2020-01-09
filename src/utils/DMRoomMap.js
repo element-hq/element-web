@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import _uniq from 'lodash/uniq';
+import {Room} from "matrix-js-sdk/lib/matrix";
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -142,6 +144,13 @@ export default class DMRoomMap {
             }
         }
         return this.roomToUser[roomId];
+    }
+
+    getUniqueRoomsWithIndividuals(): {[userId: string]: Room} {
+        return Object.keys(this.roomToUser)
+            .map(r => ({userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r)}))
+            .filter(r => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
+            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
     }
 
     _getUserToRooms() {

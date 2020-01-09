@@ -15,14 +15,68 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+<<<<<<< HEAD
 import React from "react";
+=======
+import EditableItemList from "../elements/EditableItemList";
+
+import React, {createRef} from 'react';
+>>>>>>> develop
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
+<<<<<<< HEAD
 import Modal from "../../../Modal";
+=======
+import AccessibleButton from "../elements/AccessibleButton";
+const Modal = require("../../../Modal");
+>>>>>>> develop
+
+class EditableAliasesList extends EditableItemList {
+    constructor(props) {
+        super(props);
+
+        this._aliasField = createRef();
+    }
+
+    _onAliasAdded = async () => {
+        await this._aliasField.current.validate({ allowEmpty: false });
+
+        if (this._aliasField.current.isValid) {
+            if (this.props.onItemAdded) this.props.onItemAdded(this.props.newItem);
+            return;
+        }
+
+        this._aliasField.current.focus();
+        this._aliasField.current.validate({ allowEmpty: false, focused: true });
+    };
+
+    _renderNewItemField() {
+        const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
+        const onChange = (alias) => this._onNewItemChanged({target: {value: alias}});
+        return (
+            <form
+                onSubmit={this._onAliasAdded}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_EditableItemList_newItem"
+            >
+                <RoomAliasField
+                    id={`mx_EditableItemList_new_${this.props.id}`}
+                    ref={this._aliasField}
+                    onChange={onChange}
+                    value={this.props.newItem || ""}
+                    domain={this.props.domain} />
+                <AccessibleButton onClick={this._onAliasAdded} kind="primary">
+                    { _t("Add") }
+                </AccessibleButton>
+            </form>
+        );
+    }
+}
 
 export default class AliasSettings extends React.Component {
     static propTypes = {
@@ -47,7 +101,6 @@ export default class AliasSettings extends React.Component {
             remoteDomains: [], // [ domain.com, foobar.com ]
             canonicalAlias: null, // #canonical:domain.com
             updatingCanonicalAlias: false,
-            newItem: "",
         };
 
         const localDomain = MatrixClientPeg.get().getDomain();
@@ -71,11 +124,6 @@ export default class AliasSettings extends React.Component {
             );
         });
         return dict;
-    }
-
-    isAliasValid(alias) {
-        // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
-        return (alias.match(/^#([^/:,]+?):(.+)$/) && encodeURI(alias) === alias);
     }
 
     changeCanonicalAlias(alias) {
@@ -113,38 +161,31 @@ export default class AliasSettings extends React.Component {
 
         const localDomain = MatrixClientPeg.get().getDomain();
         if (!alias.includes(':')) alias += ':' + localDomain;
-        if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
-            MatrixClientPeg.get().createAlias(alias, this.props.roomId).then(() => {
-                const localAliases = this.state.domainToAliases[localDomain] || [];
-                const domainAliases = Object.assign({}, this.state.domainToAliases);
-                domainAliases[localDomain] = [...localAliases, alias];
 
-                this.setState({
-                    domainToAliases: domainAliases,
-                    // Reset the add field
-                    newAlias: "",
-                });
+        MatrixClientPeg.get().createAlias(alias, this.props.roomId).then(() => {
+            const localAliases = this.state.domainToAliases[localDomain] || [];
+            const domainAliases = Object.assign({}, this.state.domainToAliases);
+            domainAliases[localDomain] = [...localAliases, alias];
 
-                if (!this.state.canonicalAlias) {
-                    this.changeCanonicalAlias(alias);
-                }
-            }).catch((err) => {
-                console.error(err);
-                Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
-                    title: _t("Error creating alias"),
-                    description: _t(
-                        "There was an error creating that alias. It may not be allowed by the server " +
-                        "or a temporary failure occurred.",
-                    ),
-                });
+            this.setState({
+                domainToAliases: domainAliases,
+                // Reset the add field
+                newAlias: "",
             });
-        } else {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Invalid alias format', '', ErrorDialog, {
-                title: _t('Invalid alias format'),
-                description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
+
+            if (!this.state.canonicalAlias) {
+                this.changeCanonicalAlias(alias);
+            }
+        }).catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
+                title: _t("Error creating alias"),
+                description: _t(
+                    "There was an error creating that alias. It may not be allowed by the server " +
+                    "or a temporary failure occurred.",
+                ),
             });
-        }
+        });
     };
 
     onLocalAliasDeleted = (index) => {
@@ -181,7 +222,6 @@ export default class AliasSettings extends React.Component {
     };
 
     render() {
-        const EditableItemList = sdk.getComponent("elements.EditableItemList");
         const localDomain = MatrixClientPeg.get().getDomain();
 
         let found = false;
@@ -233,7 +273,7 @@ export default class AliasSettings extends React.Component {
         return (
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
-                <EditableItemList
+                <EditableAliasesList
                     id="roomAliases"
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}
@@ -248,6 +288,7 @@ export default class AliasSettings extends React.Component {
                     placeholder={_t(
                         'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
                     )}
+                    domain={localDomain}
                 />
                 {remoteAliasesSection}
             </div>

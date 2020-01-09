@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import { KeyCode } from '../../../Keyboard';
+import {Key} from '../../../Keyboard';
 
 
 export default createReactClass({
@@ -52,8 +52,8 @@ export default createReactClass({
     },
 
     _onKeyDown: function(ev) {
-        switch (ev.keyCode) {
-            case KeyCode.ESCAPE:
+        switch (ev.key) {
+            case Key.ESCAPE:
                 this.props.onCancelClick();
                 break;
         }

@@ -25,8 +25,8 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
 export default class BugReportDialog extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             sendLogs: true,
             busy: false,

@@ -25,6 +25,7 @@ import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
+import sdk from "../../../index";
 
 export class TopLeftMenu extends React.Component {
     static propTypes = {
@@ -100,6 +101,12 @@ export class TopLeftMenu extends React.Component {
             );
         }
 
+        const helpItem = (
+            <MenuItem className="mx_TopLeftMenu_icon_help" onClick={this.openHelp}>
+                {_t("Help")}
+            </MenuItem>
+        );
+
         const settingsItem = (
             <MenuItem className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>
                 {_t("Settings")}
@@ -115,10 +122,17 @@ export class TopLeftMenu extends React.Component {
             <ul className="mx_TopLeftMenu_section_withIcon" role="none">
                 {homePageItem}
                 {settingsItem}
+                {helpItem}
                 {signInOutItem}
             </ul>
         </div>;
     }
+
+    openHelp = () => {
+        this.closeMenu();
+        const RedesignFeedbackDialog = sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
+        Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
+    };
 
     viewHomePage() {
         dis.dispatch({action: 'view_home_page'});

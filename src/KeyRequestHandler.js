@@ -111,6 +111,12 @@ export default class KeyRequestHandler {
             this._currentUser = null;
             this._currentDevice = null;
 
+            if (!this._pendingKeyRequests[userId] || !this._pendingKeyRequests[userId][deviceId]) {
+                // request was removed in the time the dialog was displayed
+                this._processNextRequest();
+                return;
+            }
+
             if (r) {
                 for (const req of this._pendingKeyRequests[userId][deviceId]) {
                     req.share();

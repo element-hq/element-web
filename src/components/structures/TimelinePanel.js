@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 import {EventTimeline} from "matrix-js-sdk";
 import * as Matrix from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
+<<<<<<< HEAD
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as ObjectUtils from "../../ObjectUtils";
 import UserActivity from "../../UserActivity";
@@ -32,6 +33,14 @@ import Modal from "../../Modal";
 import dis from "../../dispatcher";
 import * as sdk from "../../index";
 import { KeyCode } from '../../Keyboard';
+=======
+const MatrixClientPeg = require("../../MatrixClientPeg");
+const dis = require("../../dispatcher");
+const ObjectUtils = require('../../ObjectUtils');
+const Modal = require("../../Modal");
+const UserActivity = require("../../UserActivity");
+import {Key} from '../../Keyboard';
+>>>>>>> develop
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
@@ -940,8 +949,7 @@ const TimelinePanel = createReactClass({
 
         // jump to the live timeline on ctrl-end, rather than the end of the
         // timeline window.
-        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey &&
-            ev.keyCode == KeyCode.END) {
+        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey && ev.key === Key.END) {
             this.jumpToLiveTimeline();
         } else {
             this._messagePanel.current.handleScrollKey(ev);

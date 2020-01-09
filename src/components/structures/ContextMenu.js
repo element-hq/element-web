@@ -71,12 +71,12 @@ export class ContextMenu extends React.Component {
         // on resize callback
         windowResize: PropTypes.func,
 
-        catchTab: PropTypes.bool, // whether to close the ContextMenu on TAB (default=true)
+        managed: PropTypes.bool, // whether this context menu should be focus managed. If false it must handle itself
     };
 
     static defaultProps = {
         hasBackground: true,
-        catchTab: true,
+        managed: true,
     };
 
     constructor() {
@@ -186,15 +186,19 @@ export class ContextMenu extends React.Component {
     };
 
     _onKeyDown = (ev) => {
+        if (!this.props.managed) {
+            if (ev.key === Key.ESCAPE) {
+                this.props.onFinished();
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+            return;
+        }
+
         let handled = true;
 
         switch (ev.key) {
             case Key.TAB:
-                if (!this.props.catchTab) {
-                    handled = false;
-                    break;
-                }
-                // fallthrough
             case Key.ESCAPE:
                 this.props.onFinished();
                 break;
@@ -321,7 +325,7 @@ export class ContextMenu extends React.Component {
 
         return (
             <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
-                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role="menu">
+                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role={this.props.managed ? "menu" : undefined}>
                     { chevron }
                     { props.children }
                 </div>

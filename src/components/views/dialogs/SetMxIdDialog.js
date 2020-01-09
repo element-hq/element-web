@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import classnames from 'classnames';
-import { KeyCode } from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import { _t } from '../../../languageHandler';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 
@@ -101,7 +101,7 @@ export default createReactClass({
     },
 
     onKeyUp: function(ev) {
-        if (ev.keyCode === KeyCode.ENTER) {
+        if (ev.key === Key.ENTER) {
             this.onSubmit();
         }
     },

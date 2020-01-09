@@ -90,7 +90,9 @@ export default class VerificationRequestToast extends React.PureComponent {
 
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
         const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
-        Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {verifier});
+        Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+            verifier,
+        }, null, /* priority = */ false, /* static = */ true);
     };
 
     render() {

@@ -35,8 +35,8 @@ export default class ReplyPreview extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.unmounted = false;
 
         this.state = {

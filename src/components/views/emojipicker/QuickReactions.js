@@ -19,15 +19,15 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import { findEmojiData } from '../../../HtmlUtils';
+import {getEmojiFromUnicode} from "../../../emoji";
 
+// We use the variation-selector Heart in Quick Reactions for some reason
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map(emoji => {
-    const data = findEmojiData(emoji);
+    const data = getEmojiFromUnicode(emoji);
     if (!data) {
         throw new Error(`Emoji ${emoji} doesn't exist in emojibase`);
     }
-    // Prefer our unicode value for quick reactions (which does not have
-    // variation selectors).
+    // Prefer our unicode value for quick reactions as we sometimes use variation selectors.
     return Object.assign({}, data, { unicode: emoji });
 });
 

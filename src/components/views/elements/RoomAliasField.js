@@ -20,11 +20,13 @@ import * as sdk from '../../../index';
 import withValidation from './Validation';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
+// Controlled form component wrapping Field for inputting a room alias scoped to a given domain
 export default class RoomAliasField extends React.PureComponent {
     static propTypes = {
         id: PropTypes.string.isRequired,
         domain: PropTypes.string.isRequired,
         onChange: PropTypes.func,
+        value: PropTypes.string.isRequired,
     };
 
     constructor(props) {
@@ -53,6 +55,7 @@ export default class RoomAliasField extends React.PureComponent {
                     onValidate={this._onValidate}
                     placeholder={_t("e.g. my-room")}
                     onChange={this._onChange}
+                    value={this.props.value.substring(1, this.props.value.length - this.props.domain.length - 1)}
                     maxLength={maxlength} />
         );
     }
@@ -61,7 +64,7 @@ export default class RoomAliasField extends React.PureComponent {
         if (this.props.onChange) {
             this.props.onChange(this._asFullAlias(ev.target.value));
         }
-    }
+    };
 
     _onValidate = async (fieldState) => {
         const result = await this._validationRules(fieldState);

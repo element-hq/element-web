@@ -16,11 +16,17 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import * as sdk from '../../../index';
+=======
+import {MatrixEvent} from 'matrix-js-sdk';
+import sdk from '../../../index';
+>>>>>>> develop
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import ErrorDialog from "../dialogs/ErrorDialog";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
@@ -31,9 +37,7 @@ export default class RelatedGroupSettings extends React.Component {
         relatedGroupsEvent: PropTypes.instanceOf(MatrixEvent),
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     static defaultProps = {
         canSetRelatedGroups: false,
@@ -49,7 +53,7 @@ export default class RelatedGroupSettings extends React.Component {
     }
 
     updateGroups(newGroupsList) {
-        this.context.matrixClient.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
+        this.context.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
             groups: newGroupsList,
         }, '').catch((err) => {
             console.error(err);
@@ -99,7 +103,7 @@ export default class RelatedGroupSettings extends React.Component {
     };
 
     render() {
-        const localDomain = this.context.matrixClient.getDomain();
+        const localDomain = this.context.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return <div>
             <EditableItemList

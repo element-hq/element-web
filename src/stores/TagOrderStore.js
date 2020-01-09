@@ -141,8 +141,13 @@ class TagOrderStore extends Store {
                             newTags = [...this._state.selectedTags, payload.tag];
                         }
                     } else {
-                        // Select individual tag
-                        newTags = [payload.tag];
+                        if (this._state.selectedTags.length === 1 && this._state.selectedTags.includes(payload.tag)) {
+                            // Existing (only) selected tag is being normally clicked again, clear tags
+                            newTags = [];
+                        } else {
+                            // Select individual tag
+                            newTags = [payload.tag];
+                        }
                     }
                     // Only set the anchor tag if the tag was previously unselected, otherwise
                     // the next range starts with an unselected tag.

@@ -14,7 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+<<<<<<< HEAD
 import React from "react";
+=======
+import {Key} from "../../../Keyboard";
+
+const React = require("react");
+>>>>>>> develop
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
@@ -22,7 +28,14 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 const sdk = require('../../../index');
 
+<<<<<<< HEAD
 export default createReactClass({
+=======
+// XXX: This component is not cross-signing aware.
+// https://github.com/vector-im/riot-web/issues/11752 tracks either updating this
+// component or taking it out to pasture.
+module.exports = createReactClass({
+>>>>>>> develop
     displayName: 'EncryptedEventDialog',
 
     propTypes: {
@@ -84,7 +97,7 @@ export default createReactClass({
     },
 
     onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
+        if (e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);

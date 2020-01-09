@@ -20,10 +20,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+<<<<<<< HEAD
 import { MatrixClient } from 'matrix-js-sdk';
 import * as AvatarLogic from '../../../Avatar';
+=======
+import AvatarLogic from '../../../Avatar';
+>>>>>>> develop
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default createReactClass({
     displayName: 'BaseAvatar',
@@ -39,10 +44,16 @@ export default createReactClass({
         // XXX resizeMethod not actually used.
         resizeMethod: PropTypes.string,
         defaultToInitialLetter: PropTypes.bool, // true to add default url
+        inputRef: PropTypes.oneOfType([
+            // Either a function
+            PropTypes.func,
+            // Or the instance of a DOM native element
+            PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+        ]),
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getDefaultProps: function() {
@@ -60,12 +71,12 @@ export default createReactClass({
 
     componentDidMount() {
         this.unmounted = false;
-        this.context.matrixClient.on('sync', this.onClientSync);
+        this.context.on('sync', this.onClientSync);
     },
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this.context.removeListener('sync', this.onClientSync);
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -149,7 +160,7 @@ export default createReactClass({
 
         const {
             name, idName, title, url, urls, width, height, resizeMethod,
-            defaultToInitialLetter, onClick,
+            defaultToInitialLetter, onClick, inputRef,
             ...otherProps
         } = this.props;
 
@@ -172,7 +183,7 @@ export default createReactClass({
             if (onClick != null) {
                 return (
                     <AccessibleButton element='span' className="mx_BaseAvatar"
-                        onClick={onClick} {...otherProps}
+                        onClick={onClick} inputRef={inputRef} {...otherProps}
                     >
                         { textNode }
                         { imgNode }
@@ -180,7 +191,7 @@ export default createReactClass({
                 );
             } else {
                 return (
-                    <span className="mx_BaseAvatar" {...otherProps}>
+                    <span className="mx_BaseAvatar" ref={inputRef} {...otherProps}>
                         { textNode }
                         { imgNode }
                     </span>
@@ -189,21 +200,26 @@ export default createReactClass({
         }
         if (onClick != null) {
             return (
-                <AccessibleButton className="mx_BaseAvatar mx_BaseAvatar_image"
+                <AccessibleButton
+                    className="mx_BaseAvatar mx_BaseAvatar_image"
                     element='img'
                     src={imageUrl}
                     onClick={onClick}
                     onError={this.onError}
                     width={width} height={height}
                     title={title} alt=""
+                    inputRef={inputRef}
                     {...otherProps} />
             );
         } else {
             return (
-                <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
+                <img
+                    className="mx_BaseAvatar mx_BaseAvatar_image"
+                    src={imageUrl}
                     onError={this.onError}
                     width={width} height={height}
                     title={title} alt=""
+                    ref={inputRef}
                     {...otherProps} />
             );
         }

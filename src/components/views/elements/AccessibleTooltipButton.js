@@ -48,7 +48,7 @@ export default class AccessibleTooltipButton extends React.PureComponent {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        const {title, ...props} = this.props;
+        const {title, children, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
@@ -57,6 +57,7 @@ export default class AccessibleTooltipButton extends React.PureComponent {
         /> : <div />;
         return (
             <AccessibleButton {...props} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} aria-label={title}>
+                { children }
                 { tip }
             </AccessibleButton>
         );

@@ -14,18 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import PropTypes from "prop-types";
-import {MatrixClient} from "matrix-js-sdk";
-
-// Higher Order Component to allow use of legacy MatrixClient React Context
-// in Functional Components which do not otherwise support legacy React Contexts
-export default (Component) => class extends React.PureComponent {
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
-
-    render() {
-        return <Component {...this.props} matrixClient={this.context.matrixClient} />;
-    }
-};
+.mx_UserOnlineDot {
+    border-radius: 50%;
+    background-color: $accent-color;
+    height: 5px;
+    width: 5px;
+    display: inline-block;
+}

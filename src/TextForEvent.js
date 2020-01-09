@@ -473,7 +473,7 @@ function textForPowerEvent(event) {
 }
 
 function textForPinnedEvent(event) {
-    const senderName = event.getSender();
+    const senderName = event.sender ? event.sender.name : event.getSender();
     return _t("%(senderName)s changed the pinned messages for the room.", {senderName});
 }
 

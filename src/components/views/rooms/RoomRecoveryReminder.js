@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,10 +71,14 @@ export default class RoomRecoveryReminder extends React.PureComponent {
             // verified, so restore the backup which will give us the keys from it and
             // allow us to trust it (ie. upload keys to it)
             const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {});
+            Modal.createTrackedDialog(
+                'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+                /* priority = */ false, /* static = */ true,
+            );
         } else {
             Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
                 import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
+                null, null, /* priority = */ false, /* static = */ true,
             );
         }
     }
@@ -150,14 +155,14 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                         onClick={this.onSetupClick}>
                         {setupCaption}
                     </AccessibleButton>
-                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                    <AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onOnNotNowClick}>
                         { _t("Not now") }
-                    </AccessibleButton></p>
-                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onDontAskAgainClick}>
                         { _t("Don't ask me again") }
-                    </AccessibleButton></p>
+                    </AccessibleButton>
                 </div>
             </div>
         );

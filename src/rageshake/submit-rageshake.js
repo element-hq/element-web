@@ -27,6 +27,7 @@ import * as rageshake from './rageshake';
 
 // polyfill textencoder if necessary
 import * as TextEncodingUtf8 from 'text-encoding-utf-8';
+import SettingsStore from "../settings/SettingsStore";
 let TextEncoder = window.TextEncoder;
 if (!TextEncoder) {
     TextEncoder = TextEncodingUtf8.TextEncoder;
@@ -83,6 +84,12 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
 
     if (opts.label) {
         body.append('label', opts.label);
+    }
+
+    // add labs options
+    const enabledLabs = SettingsStore.getLabsFeatures().filter(SettingsStore.isFeatureEnabled);
+    if (enabledLabs.length) {
+        body.append('enabled_labs', enabledLabs.join(', '));
     }
 
     if (opts.sendLogs) {

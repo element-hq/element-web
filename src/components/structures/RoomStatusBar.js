@@ -26,7 +26,7 @@ import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher';
-import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -273,7 +273,7 @@ export default createReactClass({
                 unsentMessages[0].error.data &&
                 unsentMessages[0].error.data.error
             ) {
-                title = unsentMessages[0].error.data.error;
+                title = messageForSendError(unsentMessages[0].error.data) || unsentMessages[0].error.data.error;
             } else {
                 title = _t('%(count)s of your messages have not been sent.', { count: unsentMessages.length });
             }

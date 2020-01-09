@@ -38,6 +38,7 @@ import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
 import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, CollapseDistributor} from '../../resizer';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -75,21 +76,6 @@ const LoggedInView = createReactClass({
         viaServers: PropTypes.arrayOf(PropTypes.string),
 
         // and lots and lots of other stuff.
-    },
-
-    childContextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-        authCache: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: this._matrixClient,
-            authCache: {
-                auth: {},
-                lastUpdate: 0,
-            },
-        };
     },
 
     getInitialState: function() {
@@ -407,13 +393,6 @@ const LoggedInView = createReactClass({
                 return;
             }
 
-            // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
-            // If using Slate, consume the Backspace without first focusing as it causes an implosion
-            if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
-                ev.stopPropagation();
-                return;
-            }
-
             if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.dispatch({action: 'focus_composer'}, true);
@@ -631,21 +610,30 @@ const LoggedInView = createReactClass({
         }
 
         return (
-            <div onPaste={this._onPaste} onKeyDown={this._onReactKeyDown} className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
-                { topBar }
-                <ToastContainer />
-                <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div ref={this._setResizeContainerRef} className={bodyClasses}>
-                        <LeftPanel
-                            resizeNotifier={this.props.resizeNotifier}
-                            collapsed={this.props.collapseLhs || false}
-                            disabled={this.props.leftDisabled}
-                        />
-                        <ResizeHandle />
-                        { pageElement }
-                    </div>
-                </DragDropContext>
-            </div>
+            <MatrixClientContext.Provider value={this._matrixClient}>
+                <div
+                    onPaste={this._onPaste}
+                    onKeyDown={this._onReactKeyDown}
+                    className='mx_MatrixChat_wrapper'
+                    aria-hidden={this.props.hideToSRUsers}
+                    onMouseDown={this._onMouseDown}
+                    onMouseUp={this._onMouseUp}
+                >
+                    { topBar }
+                    <ToastContainer />
+                    <DragDropContext onDragEnd={this._onDragEnd}>
+                        <div ref={this._setResizeContainerRef} className={bodyClasses}>
+                            <LeftPanel
+                                resizeNotifier={this.props.resizeNotifier}
+                                collapsed={this.props.collapseLhs || false}
+                                disabled={this.props.leftDisabled}
+                            />
+                            <ResizeHandle />
+                            { pageElement }
+                        </div>
+                    </DragDropContext>
+                </div>
+            </MatrixClientContext.Provider>
         );
     },
 });

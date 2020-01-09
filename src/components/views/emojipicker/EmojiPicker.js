@@ -16,54 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import * as recent from './recent';
-
-const EMOJIBASE_CATEGORY_IDS = [
-    "people", // smileys
-    "people", // actually people
-    "control", // modifiers and such, not displayed in picker
-    "nature",
-    "foods",
-    "places",
-    "activity",
-    "objects",
-    "symbols",
-    "flags",
-];
-
-const DATA_BY_CATEGORY = {
-    "people": [],
-    "nature": [],
-    "foods": [],
-    "places": [],
-    "activity": [],
-    "objects": [],
-    "symbols": [],
-    "flags": [],
-};
-const DATA_BY_EMOJI = {};
-
-const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
-EMOJIBASE.forEach(emoji => {
-    if (emoji.unicode.includes(VARIATION_SELECTOR)) {
-        // Clone data into variation-less version
-        emoji = Object.assign({}, emoji, {
-            unicode: emoji.unicode.replace(VARIATION_SELECTOR, ""),
-        });
-    }
-    DATA_BY_EMOJI[emoji.unicode] = emoji;
-    const categoryId = EMOJIBASE_CATEGORY_IDS[emoji.group];
-    if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
-        DATA_BY_CATEGORY[categoryId].push(emoji);
-    }
-    // This is used as the string to match the query against when filtering emojis.
-    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`.toLowerCase();
-});
+import {DATA_BY_CATEGORY, getEmojiFromUnicode} from "../../../emoji";
 
 export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
@@ -89,10 +47,8 @@ class EmojiPicker extends React.Component {
             viewportHeight: 280,
         };
 
-        // Convert recent emoji characters to emoji data, removing unknowns.
-        this.recentlyUsed = recent.get()
-            .map(unicode => DATA_BY_EMOJI[unicode])
-            .filter(data => !!data);
+        // Convert recent emoji characters to emoji data, removing unknowns and duplicates
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,

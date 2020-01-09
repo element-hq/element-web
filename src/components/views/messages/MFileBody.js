@@ -26,6 +26,7 @@ import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
 import Modal from '../../../Modal';
+import SdkConfig from "../../../SdkConfig";
 
 
 // A cached tinted copy of require("../../../../res/img/download.svg")
@@ -214,10 +215,6 @@ export default createReactClass({
         tileShape: PropTypes.string,
     },
 
-    contextTypes: {
-        appConfig: PropTypes.object,
-    },
-
     /**
      * Extracts a human readable label for the file attachment to use as
      * link text.
@@ -360,8 +357,9 @@ export default createReactClass({
 
             // If the attachment is encryped then put the link inside an iframe.
             let renderer_url = DEFAULT_CROSS_ORIGIN_RENDERER;
-            if (this.context.appConfig && this.context.appConfig.cross_origin_renderer_url) {
-                renderer_url = this.context.appConfig.cross_origin_renderer_url;
+            const appConfig = SdkConfig.get();
+            if (appConfig && appConfig.cross_origin_renderer_url) {
+                renderer_url = appConfig.cross_origin_renderer_url;
             }
             renderer_url += "?origin=" + encodeURIComponent(window.location.origin);
             return (

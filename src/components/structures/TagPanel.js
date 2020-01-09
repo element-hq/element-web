@@ -16,8 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -28,12 +26,13 @@ import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const TagPanel = createReactClass({
     displayName: 'TagPanel',
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -45,8 +44,8 @@ const TagPanel = createReactClass({
 
     componentWillMount: function() {
         this.unmounted = false;
-        this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.on("sync", this._onClientSync);
+        this.context.on("Group.myMembership", this._onGroupMyMembership);
+        this.context.on("sync", this._onClientSync);
 
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
@@ -58,13 +57,13 @@ const TagPanel = createReactClass({
             });
         });
         // This could be done by anything with a matrix client
-        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
     },
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.removeListener("sync", this._onClientSync);
+        this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
+        this.context.removeListener("sync", this._onClientSync);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
         }
@@ -72,7 +71,7 @@ const TagPanel = createReactClass({
 
     _onGroupMyMembership() {
         if (this.unmounted) return;
-        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
     },
 
     _onClientSync(syncState, prevState) {
@@ -81,7 +80,7 @@ const TagPanel = createReactClass({
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
         if (reconnected) {
             // Load joined groups
-            dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
+            dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
         }
     },
 
@@ -104,6 +103,7 @@ const TagPanel = createReactClass({
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const ActionButton = sdk.getComponent('elements.ActionButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
@@ -154,6 +154,13 @@ const TagPanel = createReactClass({
                                 ref={provided.innerRef}
                             >
                                 { tags }
+                                <div>
+                                    <ActionButton
+                                        tooltip
+                                        label={_t("Communities")}
+                                        action="toggle_my_groups"
+                                        className="mx_TagTile mx_TagTile_plus" />
+                                </div>
                                 { provided.placeholder }
                             </div>
                     ) }
