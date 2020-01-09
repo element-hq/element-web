@@ -512,20 +512,20 @@ export default class DMInviteDialog extends React.PureComponent {
         }
     };
 
-    _onUseDefaultIdentityServerClick(e) {
+    _onUseDefaultIdentityServerClick = (e) => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useDefaultIdentityServer();
         this.setState({canUseIdentityServer: true, tryingIdentityServer: false});
-    }
+    };
 
-    _onManageSettingsClick(e) {
+    _onManageSettingsClick = (e) => {
         e.preventDefault();
         dis.dispatch({ action: 'view_user_settings' });
         this._cancel();
-    }
+    };
 
     _renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
