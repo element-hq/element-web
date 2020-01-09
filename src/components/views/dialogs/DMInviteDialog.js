@@ -35,9 +35,7 @@ const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is c
 // awkward because it also matches the RoomMember class from the js-sdk with some extra support
 // for 3PIDs/email addresses.
 //
-// Dev note: In order to allow us to compile the app correctly, this needs to be a class
-// even though Flow supports interfaces. It just means that we "extend" rather than "implement"
-// in the classes, at least until TypeScript saves us.
+// XXX: We should use TypeScript interfaces instead of this weird "abstract" class.
 class Member {
     /**
      * The display name of this Member. For users this should be their profile's display
