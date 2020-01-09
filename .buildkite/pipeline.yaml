@@ -1,11 +1,38 @@
 steps:
-  - label: ":eslint: Lint"
+  - label: ":eslint: JS Lint"
     command:
       - "yarn install"
-      - "yarn lint"
+      - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
-          image: "node:10"
+          image: "node:12"
+
+# This layer doesn't have a TypeScript linter. This comment is to remind TravisR to fix that.
+#  - label: ":eslint: TS Lint"
+#    command:
+#      - "echo '--- Install js-sdk'"
+#      - "./scripts/ci/install-deps.sh"
+#      - "yarn lint:ts"
+#    plugins:
+#      - docker#v3.0.1:
+#          image: "node:12"
+
+  - label: ":eslint: Types Lint"
+    command:
+      - "yarn install"
+      - "yarn lint:types"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: "🛠 Build"
+    command:
+      # TODO: This probably needs to be more sophisticated than "just install stuff"
+      - "yarn install"
+      - "yarn build"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
 
   - label: ":karma: Tests"
     agents:
