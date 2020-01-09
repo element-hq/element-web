@@ -36,7 +36,7 @@ const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is c
 // for 3PIDs/email addresses.
 //
 // Dev note: In order to allow us to compile the app correctly, this needs to be a class
-// even though FlowJS supports interfaces. It just means that we "extend" rather than "implement"
+// even though Flow supports interfaces. It just means that we "extend" rather than "implement"
 // in the classes, at least until TypeScript saves us.
 class Member {
     /**
