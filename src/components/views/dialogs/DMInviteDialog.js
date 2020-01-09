@@ -25,6 +25,11 @@ import {RoomMember} from "matrix-js-sdk/lib/matrix";
 import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
 import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
+import * as Email from "../../../email";
+import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
+import {abbreviateUrl} from "../../../utils/UrlUtils";
+import dis from "../../../dispatcher";
+import IdentityAuthClient from "../../../IdentityAuthClient";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -84,6 +89,35 @@ class DirectoryMember extends Member {
     }
 }
 
+class ThreepidMember extends Member {
+    _id: string;
+
+    constructor(id: string) {
+        super();
+        this._id = id;
+    }
+
+    // This is a getter that would be falsey on all other implementations. Until we have
+    // better type support in the react-sdk we can use this trick to determine the kind
+    // of 3PID we're dealing with, if any.
+    get isEmail(): boolean {
+        return this._id.includes('@');
+    }
+
+    // These next class members are for the Member interface
+    get name(): string {
+        return this._id;
+    }
+
+    get userId(): string {
+        return this._id;
+    }
+
+    getMxcAvatarUrl(): string {
+        return null;
+    }
+}
+
 class DMUserTile extends React.PureComponent {
     static propTypes = {
         member: PropTypes.object.isRequired, // Should be a Member (see interface above)
@@ -105,7 +139,7 @@ class DMUserTile extends React.PureComponent {
         const avatarSize = 20;
         const avatar = this.props.member.isEmail
             ? <img
-                className='mx_DMInviteDialog_userTile_avatar'
+                className='mx_DMInviteDialog_userTile_avatar mx_DMInviteDialog_userTile_threepidAvatar'
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
@@ -259,6 +293,9 @@ export default class DMInviteDialog extends React.PureComponent {
             suggestions: this._buildSuggestions(),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
+            threepidResultsMixin: [], // { user: ThreepidMember, userId: string}[], like recents and suggestions
+            canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
+            tryingIdentityServer: false,
         };
 
         this._editorRef = createRef();
@@ -362,7 +399,7 @@ export default class DMInviteDialog extends React.PureComponent {
         if (this._debounceTimer) {
             clearTimeout(this._debounceTimer);
         }
-        this._debounceTimer = setTimeout(() => {
+        this._debounceTimer = setTimeout(async () => {
             MatrixClientPeg.get().searchUserDirectory({term}).then(r => {
                 if (term !== this.state.filterText) {
                     // Discard the results - we were probably too slow on the server-side to make
@@ -381,6 +418,62 @@ export default class DMInviteDialog extends React.PureComponent {
                 console.error(e);
                 this.setState({serverResultsMixin: []}); // clear results because it's moderately fatal
             });
+
+            // Whenever we search the directory, also try to search the identity server. It's
+            // all debounced the same anyways.
+            if (!this.state.canUseIdentityServer) {
+                // The user doesn't have an identity server set - warn them of that.
+                this.setState({tryingIdentityServer: true});
+                return;
+            }
+            if (term.indexOf('@') > 0 && Email.looksValid(term)) {
+                // Start off by suggesting the plain email while we try and resolve it
+                // to a real account.
+                this.setState({
+                    // per above: the userId is a lie here - it's just a regular identifier
+                    threepidResultsMixin: [{user: new ThreepidMember(term), userId: term}],
+                });
+                try {
+                    const authClient = new IdentityAuthClient();
+                    const token = await authClient.getAccessToken();
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    const lookup = await MatrixClientPeg.get().lookupThreePid(
+                        'email',
+                        term,
+                        undefined, // callback
+                        token,
+                    );
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    if (!lookup || !lookup.mxid) {
+                        // We weren't able to find anyone - we're already suggesting the plain email
+                        // as an alternative, so do nothing.
+                        return;
+                    }
+
+                    // We append the user suggestion to give the user an option to click
+                    // the email anyways, and so we don't cause things to jump around. In
+                    // theory, the user would see the user pop up and think "ah yes, that
+                    // person!"
+                    const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
+                    if (term !== this.state.filterText || !profile) return; // abandon hope
+                    this.setState({
+                        threepidResultsMixin: [...this.state.threepidResultsMixin, {
+                            user: new DirectoryMember({
+                                user_id: lookup.mxid,
+                                display_name: profile.displayname,
+                                avatar_url: profile.avatar_url,
+                            }),
+                            userId: lookup.mxid,
+                        }],
+                    });
+                } catch (e) {
+                    console.error("Error searching identity server:");
+                    console.error(e);
+                    this.setState({threepidResultsMixin: []}); // clear results because it's moderately fatal
+                }
+            }
         }, 150); // 150ms debounce (human reaction time + some)
     };
 
@@ -419,6 +512,21 @@ export default class DMInviteDialog extends React.PureComponent {
         }
     };
 
+    _onUseDefaultIdentityServerClick = (e) => {
+        e.preventDefault();
+
+        // Update the IS in account data. Actually using it may trigger terms.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useDefaultIdentityServer();
+        this.setState({canUseIdentityServer: true, tryingIdentityServer: false});
+    };
+
+    _onManageSettingsClick = (e) => {
+        e.preventDefault();
+        dis.dispatch({ action: 'view_user_settings' });
+        this._cancel();
+    };
+
     _renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
@@ -426,17 +534,27 @@ export default class DMInviteDialog extends React.PureComponent {
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
 
-        // Mix in the server results if we have any, but only if we're searching
-        if (this.state.filterText && this.state.serverResultsMixin && kind === 'suggestions') {
-            // only pick out the server results that aren't already covered though
-            const uniqueServerResults = this.state.serverResultsMixin
-                .filter(u => !sourceMembers.some(m => m.userId === u.userId));
+        // Mix in the server results if we have any, but only if we're searching. We track the additional
+        // members separately because we want to filter sourceMembers but trust the mixin arrays to have
+        // the right members in them.
+        let additionalMembers = [];
+        const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
+        if (this.state.filterText && hasMixins && kind === 'suggestions') {
+            // We don't want to duplicate members though, so just exclude anyone we've already seen.
+            const notAlreadyExists = (u: Member): boolean => {
+                return !sourceMembers.some(m => m.userId === u.userId)
+                    && !additionalMembers.some(m => m.userId === u.userId);
+            };
 
-            sourceMembers = sourceMembers.concat(uniqueServerResults);
+            const uniqueServerResults = this.state.serverResultsMixin.filter(notAlreadyExists);
+            additionalMembers = additionalMembers.concat(...uniqueServerResults);
+
+            const uniqueThreepidResults = this.state.threepidResultsMixin.filter(notAlreadyExists);
+            additionalMembers = additionalMembers.concat(...uniqueThreepidResults);
         }
 
         // Hide the section if there's nothing to filter by
-        if (!sourceMembers || sourceMembers.length === 0) return null;
+        if (sourceMembers.length === 0 && additionalMembers.length === 0) return null;
 
         // Do some simple filtering on the input before going much further. If we get no results, say so.
         if (this.state.filterText) {
@@ -444,7 +562,7 @@ export default class DMInviteDialog extends React.PureComponent {
             sourceMembers = sourceMembers
                 .filter(m => m.user.name.toLowerCase().includes(filterBy) || m.userId.toLowerCase().includes(filterBy));
 
-            if (sourceMembers.length === 0) {
+            if (sourceMembers.length === 0 && additionalMembers.length === 0) {
                 return (
                     <div className='mx_DMInviteDialog_section'>
                         <h3>{sectionName}</h3>
@@ -453,6 +571,10 @@ export default class DMInviteDialog extends React.PureComponent {
                 );
             }
         }
+
+        // Now we mix in the additional members. Again, we presume these have already been filtered. We
+        // also assume they are more relevant than our suggestions and prepend them to the list.
+        sourceMembers = [...additionalMembers, ...sourceMembers];
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
         // with the member's tile instead.
@@ -512,6 +634,40 @@ export default class DMInviteDialog extends React.PureComponent {
         );
     }
 
+    _renderIdentityServerWarning() {
+        if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer) {
+            return null;
+        }
+
+        const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
+        if (defaultIdentityServerUrl) {
+            return (
+                <div className="mx_AddressPickerDialog_identityServer">{_t(
+                    "Use an identity server to invite by email. " +
+                    "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
+                    "or manage in <settings>Settings</settings>.",
+                    {
+                        defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
+                    },
+                    {
+                        default: sub => <a href="#" onClick={this._onUseDefaultIdentityServerClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this._onManageSettingsClick}>{sub}</a>,
+                    },
+                )}</div>
+            );
+        } else {
+            return (
+                <div className="mx_AddressPickerDialog_identityServer">{_t(
+                    "Use an identity server to invite by email. " +
+                    "Manage in <settings>Settings</settings>.",
+                    {}, {
+                        settings: sub => <a href="#" onClick={this._onManageSettingsClick}>{sub}</a>,
+                    },
+                )}</div>
+            );
+        }
+    }
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -535,6 +691,7 @@ export default class DMInviteDialog extends React.PureComponent {
                     </p>
                     <div className='mx_DMInviteDialog_addressBar'>
                         {this._renderEditor()}
+                        {this._renderIdentityServerWarning()}
                         <AccessibleButton
                             kind="primary"
                             onClick={this._startDm}

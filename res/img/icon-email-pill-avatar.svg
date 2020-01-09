@@ -1,31 +1,131 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="69px" height="68px" viewBox="0 0 69 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        width="65.631203"
+        height="67.980705"
+        viewBox="0 0 65.631202 67.980705"
+        version="1.1"
+        id="svg32"
+        sodipodi:docname="icon-email-pill-avatar.svg"
+        inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+    <metadata
+            id="metadata36">
+        <rdf:RDF>
+            <cc:Work
+                    rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type
+                        rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                <dc:title>at-sign</dc:title>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <sodipodi:namedview
+            pagecolor="#ffffff"
+            bordercolor="#666666"
+            borderopacity="1"
+            objecttolerance="10"
+            gridtolerance="10"
+            guidetolerance="10"
+            inkscape:pageopacity="0"
+            inkscape:pageshadow="2"
+            inkscape:window-width="2560"
+            inkscape:window-height="1377"
+            id="namedview34"
+            showgrid="false"
+            fit-margin-top="0"
+            fit-margin-left="0"
+            fit-margin-right="0"
+            fit-margin-bottom="0"
+            inkscape:zoom="13.882353"
+            inkscape:cx="52.627789"
+            inkscape:cy="30.525891"
+            inkscape:window-x="1912"
+            inkscape:window-y="-8"
+            inkscape:window-maximized="1"
+            inkscape:current-layer="svg32"/>
     <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
-    <title>at-sign</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <filter x="-5.9%" y="-7.9%" width="111.8%" height="115.8%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="16" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0.473684211   0 0 0 0 1  0 0 0 0.241258741 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
+    <title
+            id="title2">at-sign
+    </title>
+    <desc
+            id="desc4">Created with Sketch.
+    </desc>
+    <defs
+            id="defs19">
+        <filter
+                x="-0.059"
+                y="-0.079000004"
+                width="1.118"
+                height="1.158"
+                filterUnits="objectBoundingBox"
+                id="filter-1">
+            <feOffset
+                    dx="0"
+                    dy="2"
+                    in="SourceAlpha"
+                    result="shadowOffsetOuter1"
+                    id="feOffset6"/>
+            <feGaussianBlur
+                    stdDeviation="16"
+                    in="shadowOffsetOuter1"
+                    result="shadowBlurOuter1"
+                    id="feGaussianBlur8"/>
+            <feColorMatrix
+                    values="0 0 0 0 0   0 0 0 0 0.473684211   0 0 0 0 1  0 0 0 0.241258741 0"
+                    type="matrix"
+                    in="shadowBlurOuter1"
+                    result="shadowMatrixOuter1"
+                    id="feColorMatrix10"/>
+            <feMerge
+                    id="feMerge16">
+                <feMergeNode
+                        in="shadowMatrixOuter1"
+                        id="feMergeNode12"/>
+                <feMergeNode
+                        in="SourceGraphic"
+                        id="feMergeNode14"/>
             </feMerge>
         </filter>
     </defs>
-    <g id="FTUE" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="FTUE---User-list-suggestions" transform="translate(-5161.000000, -1379.000000)" stroke="#368BD6">
-            <g id="Group-14-Copy-10" transform="translate(4748.000000, 1168.000000)">
-                <g id="Web-Copy-6" filter="url(#filter-1)">
-                    <g id="modal-copy" transform="translate(253.000000, 118.000000)">
-                        <g id="content" transform="translate(40.000000, 107.000000)">
-                            <g id="Group-43">
-                                <g id="Group-15-Copy-6" transform="translate(143.000000, 6.000000)">
-                                    <g id="at-sign" transform="translate(5.500000, 6.500000)">
-                                        <circle id="Oval" cx="6.28571429" cy="5.71428571" r="2.28571429"></circle>
-                                        <path d="M8.57142857,3.42857143 L8.57142857,6.28571429 C8.57142857,7.23248814 9.33894043,8 10.2857143,8 C11.2324881,8 12,7.23248814 12,6.28571429 L12,5.71428571 C11.9998328,3.05880261 10.1703625,0.75337961 7.58436487,0.149884297 C4.9983672,-0.453611015 2.33741804,0.803881013 1.16186053,3.18498476 C-0.0136969889,5.5660885 0.605971794,8.4432307 2.65750183,10.1292957 C4.70903186,11.8153606 7.65171364,11.8659623 9.76,10.2514286" id="Path"></path>
-                                    </g>
+    <g
+            style="fill:none;fill-rule:evenodd;stroke:#368bd6;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+            transform="matrix(3.4090685,0,0,3.4090685,-17679.973,-4776.9361)"
+            id="FTUE---User-list-suggestions">
+        <g
+                transform="translate(4748,1168)"
+                id="Group-14-Copy-10">
+            <g
+                    style="filter:url(#filter-1)"
+                    id="Web-Copy-6">
+                <g
+                        transform="translate(253,118)"
+                        id="modal-copy">
+                    <g
+                            transform="translate(40,107)"
+                            id="content">
+                        <g
+                                id="Group-43">
+                            <g
+                                    transform="translate(143,6)"
+                                    id="Group-15-Copy-6">
+                                <g
+                                        transform="translate(5.5,6.5)"
+                                        id="at-sign">
+                                    <circle
+                                            r="2.2857144"
+                                            cy="5.7142859"
+                                            cx="6.2857141"
+                                            id="Oval"/>
+                                    <path
+                                            inkscape:connector-curvature="0"
+                                            id="Path"
+                                            d="M 8.5714286,3.4285714 V 6.2857143 C 8.5714286,7.2324881 9.3389404,8 10.285714,8 11.232488,8 12,7.2324881 12,6.2857143 V 5.7142857 C 11.999833,3.0588026 10.170363,0.75337961 7.5843649,0.1498843 4.9983672,-0.45361102 2.337418,0.80388101 1.1618605,3.1849848 -0.01369699,5.5660885 0.60597179,8.4432307 2.6575018,10.129296 4.7090319,11.815361 7.6517136,11.865962 9.76,10.251429"/>
                                 </g>
                             </g>
                         </g>
