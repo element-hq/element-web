@@ -17,6 +17,7 @@ limitations under the License.
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
 import * as sdk from "./index";
+import {haveTileForEvent} from "./components/views/rooms/EventTile";
 
 /**
  * Returns true iff this event arriving in a room should affect the room's
@@ -38,8 +39,7 @@ export function eventTriggersUnreadCount(ev) {
     } else if (ev.getType() == 'm.room.server_acl') {
         return false;
     }
-    const EventTile = sdk.getComponent('rooms.EventTile');
-    return EventTile.haveTileForEvent(ev);
+    return haveTileForEvent(ev);
 }
 
 export function doesRoomHaveUnreadMessages(room) {

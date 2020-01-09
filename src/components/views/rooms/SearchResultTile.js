@@ -19,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
+import {haveTileForEvent} from "./EventTile";
 
 export default createReactClass({
     displayName: 'SearchResult',
@@ -54,7 +55,7 @@ export default createReactClass({
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
-            if (EventTile.haveTileForEvent(ev)) {
+            if (haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
                           permalinkCreator={this.props.permalinkCreator}
                           highlightLink={this.props.resultLink}

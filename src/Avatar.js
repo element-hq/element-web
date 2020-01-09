@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 'use strict';
-import {ContentRepo} from 'matrix-js-sdk';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 export function avatarUrlForMember(member, width, height, resizeMethod) {
     let url = member.getAvatarUrl(
@@ -38,7 +38,7 @@ export function avatarUrlForMember(member, width, height, resizeMethod) {
 }
 
 export function avatarUrlForUser(user, width, height, resizeMethod) {
-    const url = ContentRepo.getHttpUriForMxc(
+    const url = getHttpUriForMxc(
         MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
         Math.floor(width * window.devicePixelRatio),
         Math.floor(height * window.devicePixelRatio),

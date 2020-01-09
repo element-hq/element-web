@@ -38,7 +38,7 @@ export class Tab {
     }
 }
 
-export class TabbedView extends React.Component {
+export default class TabbedView extends React.Component {
     static propTypes = {
         // The tabs to show
         tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,

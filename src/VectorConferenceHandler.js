@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {createNewMatrixCall, Room} from "matrix-js-sdk";
+import {createNewMatrixCall as jsCreateNewMatrixCall, Room} from "matrix-js-sdk";
 import CallHandler from './CallHandler';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 
@@ -43,7 +43,7 @@ ConferenceCall.prototype.setup = function() {
         // return a call for *this* room to be placed. We also tack on
         // confUserId to speed up lookups (else we'd need to loop every room
         // looking for a 1:1 room with this conf user ID!)
-        const call = createNewMatrixCall(self.client, room.roomId);
+        const call = jsCreateNewMatrixCall(self.client, room.roomId);
         call.confUserId = self.confUserId;
         call.groupRoomId = self.groupRoomId;
         return call;
