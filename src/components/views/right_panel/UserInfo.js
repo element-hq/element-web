@@ -32,7 +32,7 @@ import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventTimeline} from "matrix-js-sdk";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import * as RoomViewStore from "../../../stores/RoomViewStore";
+import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import MatrixClientPeg from "../../../MatrixClientPeg";
@@ -1000,6 +1000,8 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     // Load room if we are given a room id and memoize it
     const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
+    // fetch latest room member if we have a room, so we don't show historical information, falling back to user
+    const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
 
     // only display the devices list if our client supports E2E
     const _enableDevices = cli.isCryptoEnabled();
@@ -1031,7 +1033,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         setPendingUpdateCount(pendingUpdateCount - 1);
     }, [pendingUpdateCount]);
 
-    const roomPermissions = useRoomPermissions(cli, room, user);
+    const roomPermissions = useRoomPermissions(cli, room, member);
 
     const onSynapseDeactivate = useCallback(async () => {
         const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
@@ -1064,7 +1066,6 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     }, [cli, user.userId]);
 
     const onMemberAvatarClick = useCallback(() => {
-        const member = user;
         const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
         if (!avatarUrl) return;
 
@@ -1076,7 +1077,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         };
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, user]);
+    }, [cli, member]);
 
     let synapseDeactivateButton;
     let spinner;
@@ -1093,11 +1094,11 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     }
 
     let adminToolsContainer;
-    if (room && user.roomId) {
+    if (room && member.roomId) {
         adminToolsContainer = (
             <RoomAdminToolsContainer
                 powerLevels={powerLevels}
-                member={user}
+                member={member}
                 room={room}
                 startUpdating={startUpdating}
                 stopUpdating={stopUpdating}>
@@ -1127,20 +1128,20 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
     }
 
-    const displayName = user.name || user.displayname;
+    const displayName = member.name || member.displayname;
 
     let presenceState;
     let presenceLastActiveAgo;
     let presenceCurrentlyActive;
     let statusMessage;
 
-    if (user instanceof RoomMember && user.user) {
-        presenceState = user.user.presence;
-        presenceLastActiveAgo = user.user.lastActiveAgo;
-        presenceCurrentlyActive = user.user.currentlyActive;
+    if (member instanceof RoomMember && member.user) {
+        presenceState = member.user.presence;
+        presenceLastActiveAgo = member.user.lastActiveAgo;
+        presenceCurrentlyActive = member.user.currentlyActive;
 
         if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            statusMessage = user.user._unstable_statusMessage;
+            statusMessage = member.user._unstable_statusMessage;
         }
     }
 
@@ -1170,13 +1171,13 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
             <div>
                 <div>
                     <MemberAvatar
-                        member={user}
+                        member={member}
                         width={2 * 0.3 * window.innerHeight} // 2x@30vh
                         height={2 * 0.3 * window.innerHeight} // 2x@30vh
                         resizeMethod="scale"
-                        fallbackUserId={user.userId}
+                        fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}
-                        urls={user.avatarUrl ? [user.avatarUrl] : undefined} />
+                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
                 </div>
             </div>
         </div>
@@ -1190,10 +1191,14 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
             title={_t('Close')} />;
     }
 
-    const memberDetails = <PowerLevelSection
-        powerLevels={powerLevels}
-        user={user} room={room} roomPermissions={roomPermissions}
-    />;
+    const memberDetails = (
+        <PowerLevelSection
+            powerLevels={powerLevels}
+            user={member}
+            room={room}
+            roomPermissions={roomPermissions}
+        />
+    );
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
     // undefined means yet to be loaded, null means failed to load, otherwise list of devices
@@ -1329,7 +1334,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                     devices={devices}
                     canInvite={roomPermissions.canInvite}
                     isIgnored={isIgnored}
-                    member={user} />
+                    member={member} />
 
                 { adminToolsContainer }
 

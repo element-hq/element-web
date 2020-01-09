@@ -246,3 +246,13 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
         }
     }
 }
+
+// diff highlight colors
+// intentionally swapped to avoid inversion
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
+}

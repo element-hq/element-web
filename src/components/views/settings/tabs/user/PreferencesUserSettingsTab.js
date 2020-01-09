@@ -26,7 +26,6 @@ import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
-        'useCiderComposer',
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',

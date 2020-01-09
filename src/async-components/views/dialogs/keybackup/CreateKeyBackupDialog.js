@@ -24,7 +24,7 @@ import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
-import SettingsStore from '../../../../../lib/settings/SettingsStore';
+import SettingsStore from '../../../../settings/SettingsStore';
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;

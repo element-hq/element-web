@@ -16,14 +16,12 @@ limitations under the License.
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 
-export const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
-
 // The unicode is stored without the variant selector
 const UNICODE_TO_EMOJI = new Map(); // not exported as gets for it are handled by getEmojiFromUnicode
 export const EMOTICON_TO_EMOJI = new Map();
 export const SHORTCODE_TO_EMOJI = new Map();
 
-export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(unicode.replace(VARIATION_SELECTOR, ""));
+export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
 const EMOJIBASE_GROUP_ID_TO_CATEGORY = [
     "people", // smileys
@@ -51,13 +49,6 @@ export const DATA_BY_CATEGORY = {
 
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
 EMOJIBASE.forEach(emoji => {
-    if (emoji.unicode.includes(VARIATION_SELECTOR)) {
-        // Clone data into variation-less version
-        emoji = Object.assign({}, emoji, {
-            unicode: emoji.unicode.replace(VARIATION_SELECTOR, ""),
-        });
-    }
-
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
         DATA_BY_CATEGORY[categoryId].push(emoji);
@@ -66,7 +57,13 @@ EMOJIBASE.forEach(emoji => {
     emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`.toLowerCase();
 
     // Add mapping from unicode to Emoji object
-    UNICODE_TO_EMOJI.set(emoji.unicode, emoji);
+    // The 'unicode' field that we use in emojibase has either
+    // VS15 or VS16 appended to any characters that can take
+    // variation selectors. Which one it appends depends
+    // on whether emojibase considers their type to be 'text' or
+    // 'emoji'. We therefore strip any variation chars from strings
+    // both when building the map and when looking up.
+    UNICODE_TO_EMOJI.set(stripVariation(emoji.unicode), emoji);
 
     if (emoji.emoticon) {
         // Add mapping from emoticon to Emoji object
@@ -80,3 +77,15 @@ EMOJIBASE.forEach(emoji => {
         });
     }
 });
+
+/**
+ * Strips variation selectors from a string
+ * NB. Skin tone modifers are not variation selectors:
+ * this function does not touch them. (Should it?)
+ *
+ * @param {string} str string to strip
+ * @returns {string} stripped string
+ */
+function stripVariation(str) {
+    return str.replace(/[\uFE00-\uFE0F]/, "");
+}

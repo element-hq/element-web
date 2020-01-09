@@ -33,7 +33,6 @@ src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
 src/components/views/rooms/SearchBar.js
 src/components/views/rooms/SearchResultTile.js
-src/components/views/rooms/SlateMessageComposer.js
 src/components/views/settings/ChangeAvatar.js
 src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js
@@ -58,7 +57,6 @@ src/utils/Receipt.js
 src/Velociraptor.js
 test/components/structures/MessagePanel-test.js
 test/components/views/dialogs/InteractiveAuthDialog-test.js
-test/components/views/rooms/MessageComposerInput-test.js
 test/mock-clock.js
 test/notifications/ContentRules-test.js
 test/notifications/PushRuleVectorState-test.js

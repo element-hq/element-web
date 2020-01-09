@@ -155,10 +155,11 @@ export const SETTINGS = {
         displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
         default: false,
     },
-    "useCiderComposer": {
-        displayName: _td("Use the new, faster, composer for writing messages"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: true,
+    "feature_bridge_state": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show info about bridges in room settings"),
+        default: false,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
