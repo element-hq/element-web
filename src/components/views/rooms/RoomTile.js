@@ -309,6 +309,8 @@ module.exports = createReactClass({
 
         const isMenuDisplayed = Boolean(this.state.contextMenuPosition);
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+
         const classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.state.selected,
@@ -320,7 +322,7 @@ module.exports = createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
-            'mx_RoomTile_isPrivate': this.state.join_rule == "invite",
+            'mx_RoomTile_isPrivate': this.state.join_rule == "invite" && !dmUserId,
         });
 
         const avatarClasses = classNames({
@@ -383,8 +385,6 @@ module.exports = createReactClass({
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         let ariaLabel = name;
-
-        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
 
         let dmIndicator;
         let dmOnline;
