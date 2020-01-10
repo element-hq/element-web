@@ -148,7 +148,6 @@
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.9.0",
-    "subtle": "^0.1.8",
     "tslint": "^5.20.1",
     "typescript": "^3.7.3",
     "walk": "^2.3.9",
