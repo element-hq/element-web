@@ -110,13 +110,9 @@ module.exports = createReactClass({
     },
 
     onJoinRule: function(ev) {
-        if (!ev || !ev.event ) return;
-        /* eslint-disable camelcase */
-        const { event: { type, room_id } } = ev;
-        if (type !== "m.room.join_rules") return;
-        if (room_id !== this.props.room.roomId) return;
-        /* eslint-enable camelcase */
-        const joinRule = event.getContent().join_rule;
+        if (ev.getType() !== "m.room.join_rules") return;
+        if (ev.getRoomId() !== this.props.room.roomId) return;
+        const joinRule = (ev.getContent() || {}).join_rule;
         this.setState({ joinRule });
     },
 
