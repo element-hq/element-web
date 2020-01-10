@@ -161,7 +161,11 @@
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
     "moduleNameMapper": {
-      "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js"
-    }
+      "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
+      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!matrix-js-sdk).+$"
+    ]
   }
 }
