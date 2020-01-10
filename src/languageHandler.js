@@ -419,9 +419,9 @@ export function pickBestLanguage(langs) {
 function getLangsJson() {
     return new Promise(async (resolve, reject) => {
         let url;
-        try {
+        if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
             url = webpackLangJsonUrl;
-        } catch (e) {
+        } else {
             url = i18nFolder + 'languages.json';
         }
         request(

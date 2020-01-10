@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import peg from '../../../src/MatrixClientPeg';
+import {MatrixClientPeg as peg} from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
     makeRoomPermalink,

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import jest from 'jest-mock';
 import * as testUtils from '../../../test-utils';
 import sdk from '../../../skinned-sdk';
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 
 
