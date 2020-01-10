@@ -1,14 +1,13 @@
 "use strict";
 
 import React from 'react';
-import peg from '../src/MatrixClientPeg';
+import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
-import jssdk from 'matrix-js-sdk';
 import {makeType} from "../src/utils/TypeUtils";
 import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';
 import MatrixClientContext from "../src/contexts/MatrixClientContext";
-const MatrixEvent = jssdk.MatrixEvent;
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 export function getRenderer() {
     // Old: ReactTestUtils.createRenderer();

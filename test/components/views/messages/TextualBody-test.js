@@ -21,7 +21,7 @@ import { configure, mount } from "enzyme";
 
 import sdk from "../../../skinned-sdk";
 import {mkEvent, mkStubRoom} from "../../../test-utils";
-import MatrixClientPeg from "../../../../src/MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
 
 const TextualBody = sdk.getComponent("views.messages.TextualBody");

@@ -1,6 +1,6 @@
 import RoomViewStore from '../../src/stores/RoomViewStore';
 
-import peg from '../../src/MatrixClientPeg';
+import {MatrixClientPeg as peg} from '../../src/MatrixClientPeg';
 
 import * as testUtils from '../test-utils';
 
