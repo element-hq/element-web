@@ -17,7 +17,7 @@ limitations under the License.
 
 const {openRoomDirectory} = require('./create-room');
 
-export default async function join(session, roomName) {
+module.exports = async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);
     await openRoomDirectory(session);
     const roomInput = await session.query('.mx_DirectorySearchBox input');

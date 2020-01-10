@@ -38,7 +38,7 @@ async function getSasCodes(session) {
     return sasLabels;
 }
 
-export async function startSasVerifcation(session, name) {
+module.exports.startSasVerifcation = async function(session, name) {
     await startVerification(session, name);
     // expect "Verify device" dialog and click "Begin Verification"
     await assertDialog(session, "Verify device");
@@ -51,9 +51,9 @@ export async function startSasVerifcation(session, name) {
     // click "Got it" when verification is done
     await acceptDialog(session);
     return sasCodes;
-}
+};
 
-export async function acceptSasVerification(session, name) {
+module.exports.acceptSasVerification = async function(session, name) {
     await assertDialog(session, "Incoming Verification Request");
     const opponentLabelElement = await session.query(".mx_IncomingSasDialog_opponentProfile h2");
     const opponentLabel = await session.innerText(opponentLabelElement);
@@ -67,4 +67,4 @@ export async function acceptSasVerification(session, name) {
     // click "Got it" when verification is done
     await acceptDialog(session);
     return sasCodes;
-}
+};

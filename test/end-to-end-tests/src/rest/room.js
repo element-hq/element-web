@@ -18,7 +18,7 @@ limitations under the License.
 const uuidv4 = require('uuid/v4');
 
 /* no pun intented */
-export default class RestRoom {
+module.exports = class RestRoom {
     constructor(session, roomId, log) {
         this.session = session;
         this._roomId = roomId;

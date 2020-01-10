@@ -22,7 +22,7 @@ const {receiveMessage} = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
 const changeRoomSettings = require('../usecases/room-settings');
 
-export default async function roomDirectoryScenarios(alice, bob) {
+module.exports = async function roomDirectoryScenarios(alice, bob) {
     console.log(" creating a public room and join through directory:");
     const room = 'test';
     await createRoom(alice, room);

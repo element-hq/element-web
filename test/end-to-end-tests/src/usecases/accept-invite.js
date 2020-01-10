@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default async function acceptInvite(session, name) {
+module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
     //TODO: brittle selector
     const invitesHandles = await session.queryAll('.mx_RoomTile_name.mx_RoomTile_invite');
@@ -24,7 +24,7 @@ export default async function acceptInvite(session, name) {
         return {inviteHandle, text};
     }));
     const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-    return text.trim() === name;
+        return text.trim() === name;
     }).inviteHandle;
 
     await inviteHandle.click();

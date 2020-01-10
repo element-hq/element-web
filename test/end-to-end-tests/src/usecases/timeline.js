@@ -17,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-export async function scrollToTimelineTop(session) {
+module.exports.scrollToTimelineTop = async function(session) {
     session.log.step(`scrolls to the top of the timeline`);
     await session.page.evaluate(() => {
         return Promise.resolve().then(async () => {
@@ -41,9 +41,9 @@ export async function scrollToTimelineTop(session) {
         });
     });
     session.log.done();
-}
+};
 
-export async function receiveMessage(session, expectedMessage) {
+module.exports.receiveMessage = async function(session, expectedMessage) {
     session.log.step(`receives message "${expectedMessage.body}" from ${expectedMessage.sender}`);
     // wait for a response to come in that contains the message
     // crude, but effective
@@ -67,10 +67,10 @@ export async function receiveMessage(session, expectedMessage) {
     });
     assertMessage(lastMessage, expectedMessage);
     session.log.done();
-}
+};
 
 
-export async function checkTimelineContains(session, expectedMessages, sendersDescription) {
+module.exports.checkTimelineContains = async function(session, expectedMessages, sendersDescription) {
     session.log.step(`checks timeline contains ${expectedMessages.length} ` +
         `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);
     const eventTiles = await getAllEventTiles(session);
@@ -91,7 +91,7 @@ export async function checkTimelineContains(session, expectedMessages, sendersDe
     expectedMessages.forEach((expectedMessage) => {
         const foundMessage = timelineMessages.find((message) => {
             return message.sender === expectedMessage.sender &&
-                   message.body === expectedMessage.body;
+                message.body === expectedMessage.body;
         });
         try {
             assertMessage(foundMessage, expectedMessage);
@@ -102,7 +102,7 @@ export async function checkTimelineContains(session, expectedMessages, sendersDe
     });
 
     session.log.done();
-}
+};
 
 function assertMessage(foundMessage, expectedMessage) {
     assert(foundMessage, `message ${JSON.stringify(expectedMessage)} not found in timeline`);

@@ -29,7 +29,7 @@ async function openSettings(session, section) {
     }
 }
 
-export async function enableLazyLoading(session) {
+module.exports.enableLazyLoading = async function(session) {
     session.log.step(`enables lazy loading of members in the lab settings`);
     const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
     await settingsButton.click();
@@ -39,9 +39,9 @@ export async function enableLazyLoading(session) {
     const closeButton = await session.query(".mx_RoomHeader_cancelButton");
     await closeButton.click();
     session.log.done();
-}
+};
 
-export async function getE2EDeviceFromSettings(session) {
+module.exports.getE2EDeviceFromSettings = async function(session) {
     session.log.step(`gets e2e device/key from settings`);
     await openSettings(session, "security");
     const deviceAndKey = await session.queryAll(".mx_SettingsTab_section .mx_SecurityUserSettingsTab_deviceInfo code");
@@ -52,4 +52,4 @@ export async function getE2EDeviceFromSettings(session) {
     await closeButton.click();
     session.log.done();
     return {id, key};
-}
+};

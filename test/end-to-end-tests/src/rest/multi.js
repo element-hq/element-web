@@ -17,7 +17,7 @@ limitations under the License.
 
 const Logger = require('../logger');
 
-export default class RestMultiSession {
+module.exports = class RestMultiSession {
     constructor(sessions, groupName) {
         this.log = new Logger(groupName);
         this.sessions = sessions;

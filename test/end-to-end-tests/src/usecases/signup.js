@@ -17,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-export default async function signup(session, username, password, homeserver) {
+module.exports = async function signup(session, username, password, homeserver) {
     session.log.step("signs up");
     await session.goto(session.url('/#/register'));
     // change the homeserver by clicking the advanced section

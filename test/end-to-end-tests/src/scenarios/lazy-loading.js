@@ -28,7 +28,7 @@ const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
 const assert = require('assert');
 
-export default async function lazyLoadingScenarios(alice, bob, charlies) {
+module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
     const charly1to5 = charlies.slice("charly-1..5", 0, 5);
     const charly6to10 = charlies.slice("charly-6..10", 5);

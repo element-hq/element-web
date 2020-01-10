@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default async function invite(session, userId) {
+module.exports = async function invite(session, userId) {
     session.log.step(`invites "${userId}" to room`);
     await session.delay(1000);
     const memberPanelButton = await session.query(".mx_RightPanel_membersButton");

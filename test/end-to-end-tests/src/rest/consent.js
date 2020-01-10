@@ -19,7 +19,7 @@ const request = require('request-promise-native');
 const cheerio = require('cheerio');
 const url = require("url");
 
-export async function approveConsent(consentUrl) {
+module.exports.approveConsent = async function(consentUrl) {
     const body = await request.get(consentUrl);
     const doc = cheerio.load(body);
     const v = doc("input[name=v]").val();
@@ -28,4 +28,4 @@ export async function approveConsent(consentUrl) {
     const formAction = doc("form").attr("action");
     const absAction = url.resolve(consentUrl, formAction);
     await request.post(absAction).form({v, u, h});
-}
+};

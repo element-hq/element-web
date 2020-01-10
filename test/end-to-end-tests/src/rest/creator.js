@@ -32,7 +32,7 @@ function execAsync(command, options) {
     });
 }
 
-export default class RestSessionCreator {
+module.exports = class RestSessionCreator {
     constructor(synapseSubdir, hsUrl, cwd) {
         this.synapseSubdir = synapseSubdir;
         this.hsUrl = hsUrl;
@@ -72,12 +72,12 @@ export default class RestSessionCreator {
 
     async _authenticate(username, password) {
         const requestBody = {
-          "type": "m.login.password",
-          "identifier": {
-            "type": "m.id.user",
-            "user": username,
-          },
-          "password": password,
+            "type": "m.login.password",
+            "identifier": {
+                "type": "m.id.user",
+                "user": username,
+            },
+            "password": password,
         };
         const url = `${this.hsUrl}/_matrix/client/r0/login`;
         const responseBody = await request.post({url, json: true, body: requestBody});

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default class Logger {
+module.exports = class Logger {
     constructor(username) {
         this.indent = 0;
         this.username = username;

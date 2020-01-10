@@ -30,7 +30,7 @@ async function setSettingsToggle(session, toggle, enabled) {
     }
 }
 
-export default async function changeRoomSettings(session, settings) {
+module.exports = async function changeRoomSettings(session, settings) {
     session.log.startGroup(`changes the room settings`);
     /// XXX delay is needed here, possibly because the header is being rerendered
     /// click doesn't do anything otherwise
