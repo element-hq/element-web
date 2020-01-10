@@ -115,10 +115,9 @@ module.exports = createReactClass({
         const { event: { type, room_id } } = ev;
         if (type !== "m.room.join_rules") return;
         if (room_id !== this.props.room.roomId) return;
-        if ( !event.content ) return;
-        const { event: { content: { join_rule } } } = ev;
-        this.setState({ joinRule: join_rule });
         /* eslint-enable camelcase */
+        const joinRule = event.getContent().join_rule;
+        this.setState({ joinRule });
     },
 
     onAccountData: function(accountDataEvent) {
