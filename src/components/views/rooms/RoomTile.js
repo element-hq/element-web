@@ -57,11 +57,11 @@ module.exports = createReactClass({
 
     getInitialState: function() {
          // eslint-disable-next-line camelcase
-        const { event: { content: { join_rule } } } =
-          this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRules = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRule = joinRules && joinRules.event && joinRules.event.content && joinRules.event.content.join_rule;
 
         return ({
-            join_rule,
+            joinRule,
             hover: false,
             badgeHover: false,
             contextMenuPosition: null, // DOM bounding box, null if non-shown
@@ -110,12 +110,14 @@ module.exports = createReactClass({
     },
 
     onJoinRule: function(ev) {
+        if (!ev || !ev.event ) return;
         /* eslint-disable camelcase */
         const { event: { type, room_id } } = ev;
         if (type !== "m.room.join_rules") return;
         if (room_id !== this.props.room.roomId) return;
+        if ( !event.content ) return;
         const { event: { content: { join_rule } } } = ev;
-        this.setState({ join_rule });
+        this.setState({ joinRule: join_rule });
         /* eslint-enable camelcase */
     },
 
@@ -322,7 +324,7 @@ module.exports = createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
-            'mx_RoomTile_isPrivate': this.state.join_rule == "invite" && !dmUserId,
+            'mx_RoomTile_isPrivate': this.state.joinRule == "invite" && !dmUserId,
         });
 
         const avatarClasses = classNames({
