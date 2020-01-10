@@ -58,7 +58,7 @@ module.exports = createReactClass({
     getInitialState: function() {
          // eslint-disable-next-line camelcase
         const joinRules = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
-        const joinRule = joinRules && joinRules.getContent() && joinRules.getContent().join_rule;
+        const joinRule = joinRules && joinRules.getContent().join_rule;
 
         return ({
             joinRule,
