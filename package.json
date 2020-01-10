@@ -121,6 +121,7 @@
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
+    "@peculiar/webcrypto": "^1.0.22",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "chokidar": "^2.1.2",
