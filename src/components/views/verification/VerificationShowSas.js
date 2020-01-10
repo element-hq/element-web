@@ -140,7 +140,7 @@ _td("Book");
 _td("Pencil");
 _td("Paperclip");
 _td("Scissors");
-_td("Padlock");
+_td("Lock");
 _td("Key");
 _td("Hammer");
 _td("Telephone");
