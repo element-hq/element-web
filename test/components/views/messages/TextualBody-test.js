@@ -33,7 +33,7 @@ describe("<TextualBody />", () => {
         MatrixClientPeg.matrixClient = null;
     });
 
-    describe("renders m.emote correctly", () => {
+    it("renders m.emote correctly", () => {
         MatrixClientPeg.matrixClient = {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
@@ -56,7 +56,7 @@ describe("<TextualBody />", () => {
         expect(content.html()).toBe('<span class="mx_EventTile_body" dir="auto">winks</span>');
     });
 
-    describe("renders m.notice correctly", () => {
+    it("renders m.notice correctly", () => {
         MatrixClientPeg.matrixClient = {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
@@ -80,12 +80,14 @@ describe("<TextualBody />", () => {
     });
 
     describe("renders plain-text m.text correctly", () => {
-        MatrixClientPeg.matrixClient = {
-            getRoom: () => mkStubRoom("room_id"),
-            getAccountData: () => undefined,
-        };
+        beforeEach(() => {
+            MatrixClientPeg.matrixClient = {
+                getRoom: () => mkStubRoom("room_id"),
+                getAccountData: () => undefined,
+            };
+        });
 
-        describe("simple message renders as expected", () => {
+        it("simple message renders as expected", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -104,7 +106,7 @@ describe("<TextualBody />", () => {
         });
 
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
-        describe("linkification get applied correctly into the DOM", () => {
+        it("linkification get applied correctly into the DOM", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -126,16 +128,18 @@ describe("<TextualBody />", () => {
     });
 
     describe("renders formatted m.text correctly", () => {
-        MatrixClientPeg.matrixClient = {
-            getRoom: () => mkStubRoom("room_id"),
-            getAccountData: () => undefined,
-            getUserId: () => "@me:my_server",
-            getHomeserverUrl: () => "https://my_server/",
-            on: () => undefined,
-            removeListener: () => undefined,
-        };
+        beforeEach(() => {
+            MatrixClientPeg.matrixClient = {
+                getRoom: () => mkStubRoom("room_id"),
+                getAccountData: () => undefined,
+                getUserId: () => "@me:my_server",
+                getHomeserverUrl: () => "https://my_server/",
+                on: () => undefined,
+                removeListener: () => undefined,
+            };
+        });
 
-        describe("italics, bold, underline and strikethrough render as expected", () => {
+        it("italics, bold, underline and strikethrough render as expected", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -156,7 +160,7 @@ describe("<TextualBody />", () => {
                 ev.getContent().formatted_body + '</span>');
         });
 
-        describe("spoilers get injected properly into the DOM", () => {
+        it("spoilers get injected properly into the DOM", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -182,7 +186,7 @@ describe("<TextualBody />", () => {
         });
 
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
-        describe("pills get injected correctly into the DOM", () => {
+        it("pills get injected correctly into the DOM", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -208,7 +212,7 @@ describe("<TextualBody />", () => {
         });
     });
 
-    describe("renders url previews correctly", () => {
+    it("renders url previews correctly", () => {
         languageHandler.setMissingEntryGenerator(key => key.split('|', 2)[1]);
 
         MatrixClientPeg.matrixClient = {
