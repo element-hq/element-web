@@ -303,7 +303,7 @@ module.exports = createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
-            'mx_RoomTile_isEncrypted': MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId),
+            'mx_RoomTile_isEncrypted': Boolean(this.props.room.currentState.getStateEvents("m.room.encryption", "")),
         });
 
         const avatarClasses = classNames({
