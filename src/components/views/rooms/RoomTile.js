@@ -56,7 +56,9 @@ module.exports = createReactClass({
     },
 
     getInitialState: function() {
-        const { event: { content: { join_rule } } } = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+         // eslint-disable-next-line camelcase
+        const { event: { content: { join_rule } } } =
+          this.props.room.currentState.getStateEvents("m.room.join_rules", "");
 
         return ({
             join_rule,
@@ -108,11 +110,13 @@ module.exports = createReactClass({
     },
 
     onJoinRule: function(ev) {
+        /* eslint-disable camelcase */
         const { event: { type, room_id } } = ev;
         if (type !== "m.room.join_rules") return;
         if (room_id !== this.props.room.roomId) return;
         const { event: { content: { join_rule } } } = ev;
         this.setState({ join_rule });
+        /* eslint-enable camelcase */
     },
 
     onAccountData: function(accountDataEvent) {
