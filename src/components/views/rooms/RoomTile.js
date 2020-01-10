@@ -56,7 +56,10 @@ module.exports = createReactClass({
     },
 
     getInitialState: function() {
+        const { event: { content: { join_rule } } } = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+
         return ({
+            join_rule,
             hover: false,
             badgeHover: false,
             contextMenuPosition: null, // DOM bounding box, null if non-shown
@@ -104,6 +107,14 @@ module.exports = createReactClass({
         });
     },
 
+    onJoinRule: function(ev) {
+        const { event: { type, room_id } } = ev;
+        if (type !== "m.room.join_rules") return;
+        if (room_id !== this.props.room.roomId) return;
+        const { event: { content: { join_rule } } } = ev;
+        this.setState({ join_rule });
+    },
+
     onAccountData: function(accountDataEvent) {
         if (accountDataEvent.getType() === 'm.push_rules') {
             this.setState({
@@ -143,6 +154,7 @@ module.exports = createReactClass({
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
         cli.on("Room.name", this.onRoomName);
+        cli.on("RoomState.events", this.onJoinRule);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
 
@@ -159,6 +171,7 @@ module.exports = createReactClass({
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            cli.removeListener("RoomState.events", this.onJoinRule);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
         dis.unregister(this.dispatcherRef);
@@ -303,7 +316,7 @@ module.exports = createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
-            'mx_RoomTile_isEncrypted': Boolean(this.props.room.currentState.getStateEvents("m.room.encryption", "")),
+            'mx_RoomTile_isPrivate': this.state.join_rule == "invite",
         });
 
         const avatarClasses = classNames({
@@ -429,7 +442,7 @@ module.exports = createReactClass({
                         { dmIndicator }
                     </div>
                 </div>
-                <div className="mx_RoomTile_E2EIcon" />
+                <div className="mx_RoomTile_PrivateIcon" />
                 <div className="mx_RoomTile_nameContainer">
                     <div className="mx_RoomTile_labelContainer">
                         { label }

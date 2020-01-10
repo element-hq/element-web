@@ -201,12 +201,12 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_RoomTile.mx_RoomTile.mx_RoomTile_isEncrypted .mx_RoomTile_name {
+.mx_RoomTile.mx_RoomTile.mx_RoomTile_isPrivate .mx_RoomTile_name {
     // Scoot the padding in a bit from 6px to make it look better
     padding-left: 3px;
 }
 
-.mx_RoomTile.mx_RoomTile_isEncrypted .mx_RoomTile_E2EIcon {
+.mx_RoomTile.mx_RoomTile_isPrivate .mx_RoomTile_PrivateIcon {
     width: 12px;
     height: 12px;
     position: relative;
