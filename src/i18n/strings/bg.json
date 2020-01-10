@@ -2030,5 +2030,7 @@
     "Show more": "Покажи повече",
     "Direct Messages": "Директни съобщения",
     "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Ако не можете да намерите някой, питайте за потребителското им име, или споделете своето (%(userId)s) или <a>връзка към профила</a>.",
-    "Go": "Давай"
+    "Go": "Давай",
+    "Failed to find the following users": "Неуспешно откриване на следните потребители",
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s"
 }
