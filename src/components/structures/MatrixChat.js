@@ -1008,6 +1008,11 @@ export default createReactClass({
                 // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
                 go_welcome_on_cancel: true,
+                screen_after: {screen: `user/${this.props.config.welcomeUserId}`,
+                               params: {
+                                   action: 'chat'
+                               }
+                              }
             });
             return;
         }

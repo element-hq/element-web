@@ -39,6 +39,8 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  *     If true, goes to the home page if the user cancels the action
  * @param {bool} options.go_welcome_on_cancel
  *     If true, goes to the welcome page if the user cancels the action
+ * @param {bool} options.screen_after
+ *     If present the screen to redict to after a successful login or register.
  */
 export async function startAnyRegistrationFlow(options) {
     if (options === undefined) options = {};
@@ -72,13 +74,15 @@ export async function startAnyRegistrationFlow(options) {
             button: _t("Register"),
             extraButtons: [
                 <button className="mx_Dialog_primary"
-                onClick={() => {modal.close(); dis.dispatch({action: 'start_login'});}}>
+                onClick={() => {modal.close(); dis.dispatch({action: 'start_login',
+                                                             screenAfterLogin: options.screen_after});}}>
                     { _t('Login') }
                 </button>,
             ],
             onFinished: (proceed) => {
                 if (proceed) {
-                    dis.dispatch({action: 'start_registration'});
+                    dis.dispatch({action: 'start_registration',
+                                  screenAfterLogin: options.screen_after});
                 } else if (options.go_home_on_cancel) {
                     dis.dispatch({action: 'view_home_page'});
                 } else if (options.go_welcome_on_cancel) {
