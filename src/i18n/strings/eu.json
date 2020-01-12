@@ -2033,5 +2033,7 @@
     "Direct Messages": "Mezu zuzenak",
     "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Ez baduzu baten bat aurkitzen, eska egiezu bere erabiltzaile-izena, edo eman egiezu zurea (%(userId)s) edo <a>profilera esteka</a>.",
     "Go": "Joan",
-    "Suggestions": "Proposamenak"
+    "Suggestions": "Proposamenak",
+    "Failed to find the following users": "Ezin izan dira honako erabiltzaile hauek aurkitu",
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Honako erabiltzaile hauek agian ez dira existitzen edo baliogabeak dira, eta ezin dira gonbidatu: %(csvNames)s"
 }
