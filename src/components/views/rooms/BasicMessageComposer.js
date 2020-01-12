@@ -200,17 +200,47 @@ export default class BasicMessageEditor extends React.Component {
         return !!(this._isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
     }
 
+    _onCutCopy = (event, type) => {
+        const selection = document.getSelection();
+        const text = selection.toString();
+        if (text) {
+            const {model} = this.props;
+            const range = getRangeForSelection(this._editorRef, model, selection);
+            const selectedParts = range.parts.map(p => p.serialize());
+            event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
+            if (type === "cut") {
+                selection.deleteFromDocument();
+                range.replace([]);
+            }
+            event.preventDefault();
+        }
+    }
+
+    _onCopy = (event) => {
+        this._onCutCopy(event, "copy");
+    }
+
+    _onCut = (event) => {
+        this._onCutCopy(event, "cut");
+    }
+
     _onPaste = (event) => {
         const {model} = this.props;
         const {partCreator} = model;
-        const text = event.clipboardData.getData("text/plain");
-        if (text) {
-            this._modifiedFlag = true;
-            const range = getRangeForSelection(this._editorRef, model, document.getSelection());
-            const parts = parsePlainTextMessage(text, partCreator);
-            replaceRangeAndMoveCaret(range, parts);
-            event.preventDefault();
+        const partsText = event.clipboardData.getData("application/x-riot-composer");
+        let parts;
+        if (partsText) {
+            const serializedTextParts = JSON.parse(partsText);
+            const deserializedParts = serializedTextParts.map(p => partCreator.deserializePart(p))
+            parts = deserializedParts;
+        } else {
+            const text = event.clipboardData.getData("text/plain");
+            parts = parsePlainTextMessage(text, partCreator);
         }
+        this._modifiedFlag = true;
+        const range = getRangeForSelection(this._editorRef, model, document.getSelection());
+        replaceRangeAndMoveCaret(range, parts);
+        event.preventDefault();
     }
 
     _onInput = (event) => {
@@ -557,6 +587,8 @@ export default class BasicMessageEditor extends React.Component {
                 tabIndex="0"
                 onBlur={this._onBlur}
                 onFocus={this._onFocus}
+                onCopy={this._onCopy}
+                onCut={this._onCut}
                 onPaste={this._onPaste}
                 onKeyDown={this._onKeyDown}
                 ref={ref => this._editorRef = ref}
