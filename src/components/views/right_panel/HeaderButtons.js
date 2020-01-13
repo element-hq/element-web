@@ -74,7 +74,7 @@ export default class HeaderButtons extends React.Component {
         const rps = RightPanelStore.getSharedInstance();
         if (this.state.headerKind === HEADER_KIND_ROOM) {
             this.setState({phase: rps.visibleRoomPanelPhase});
-        } else if (this.state.head === HEADER_KIND_GROUP) {
+        } else if (this.state.headerKind === HEADER_KIND_GROUP) {
             this.setState({phase: rps.visibleGroupPanelPhase});
         }
     }

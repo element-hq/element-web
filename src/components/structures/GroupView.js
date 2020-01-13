@@ -1299,7 +1299,7 @@ export default createReactClass({
                 );
             }
 
-            const rightPanel = !RightPanelStore.getSharedInstance().isOpenForGroup
+            const rightPanel = RightPanelStore.getSharedInstance().isOpenForGroup
                 ? <RightPanel groupId={this.props.groupId} />
                 : undefined;
 

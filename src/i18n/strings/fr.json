@@ -2033,5 +2033,8 @@
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Connecté à <channelIcon /> <channelName /> sur <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "Connecté via %(protocolName)s",
     "Bridge Info": "Informations de la passerelle",
-    "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon."
+    "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon.",
+    "Suggestions": "Suggestions",
+    "Failed to find the following users": "Impossible de trouver les utilisateurs suivants",
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Les utilisateurs suivant n’existent peut-être pas ou ne sont pas valides, et ne peuvent pas être invités : %(csvNames)s"
 }

@@ -56,7 +56,11 @@ export default createReactClass({
     },
 
     getInitialState: function() {
+        const joinRules = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRule = joinRules && joinRules.getContent().join_rule;
+
         return ({
+            joinRule,
             hover: false,
             badgeHover: false,
             contextMenuPosition: null, // DOM bounding box, null if non-shown
@@ -104,6 +108,12 @@ export default createReactClass({
         });
     },
 
+    onJoinRule: function(ev) {
+        if (ev.getType() !== "m.room.join_rules") return;
+        if (ev.getRoomId() !== this.props.room.roomId) return;
+        this.setState({ joinRule: ev.getContent().join_rule });
+    },
+
     onAccountData: function(accountDataEvent) {
         if (accountDataEvent.getType() === 'm.push_rules') {
             this.setState({
@@ -143,6 +153,7 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
         cli.on("Room.name", this.onRoomName);
+        cli.on("RoomState.events", this.onJoinRule);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
 
@@ -159,6 +170,7 @@ export default createReactClass({
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            cli.removeListener("RoomState.events", this.onJoinRule);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
         dis.unregister(this.dispatcherRef);
@@ -292,6 +304,8 @@ export default createReactClass({
 
         const isMenuDisplayed = Boolean(this.state.contextMenuPosition);
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+
         const classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.state.selected,
@@ -303,6 +317,7 @@ export default createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
+            'mx_RoomTile_isPrivate': this.state.joinRule == "invite" && !dmUserId,
         });
 
         const avatarClasses = classNames({
@@ -366,8 +381,6 @@ export default createReactClass({
 
         let ariaLabel = name;
 
-        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
-
         let dmIndicator;
         let dmOnline;
         if (dmUserId) {
@@ -381,7 +394,10 @@ export default createReactClass({
 
             const { room } = this.props;
             const member = room.getMember(dmUserId);
-            if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
+            if (
+                member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
+                SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
+            ) {
                 const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
                 dmOnline = <UserOnlineDot userId={dmUserId} />;
             }
@@ -428,6 +444,7 @@ export default createReactClass({
                         { dmIndicator }
                     </div>
                 </div>
+                <div className="mx_RoomTile_PrivateIcon" />
                 <div className="mx_RoomTile_nameContainer">
                     <div className="mx_RoomTile_labelContainer">
                         { label }

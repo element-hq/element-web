@@ -20,19 +20,21 @@ import DMRoomMap from './utils/DMRoomMap';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 export function avatarUrlForMember(member, width, height, resizeMethod) {
-    let url = member.getAvatarUrl(
-        MatrixClientPeg.get().getHomeserverUrl(),
-        Math.floor(width * window.devicePixelRatio),
-        Math.floor(height * window.devicePixelRatio),
-        resizeMethod,
-        false,
-        false,
-    );
+    if (member && member.getAvatarUrl) {
+        url = member.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
+            Math.floor(width * window.devicePixelRatio),
+            Math.floor(height * window.devicePixelRatio),
+            resizeMethod,
+            false,
+            false,
+        );
+    }
     if (!url) {
         // member can be null here currently since on invites, the JS SDK
         // does not have enough info to build a RoomMember object for
         // the inviter.
-        url = defaultAvatarUrlForString(member ? member.userId : '');
+        url = this.defaultAvatarUrlForString(member ? member.userId : '');
     }
     return url;
 }
