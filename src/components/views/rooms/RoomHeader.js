@@ -161,7 +161,8 @@ module.exports = createReactClass({
 
         const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
-        const joinRuleClass = "mx_RoomHeader_PrivateIcon" + (joinRule === "invite" ? " mx_RoomHeader_isPrivate" : "");
+        const joinRuleClass = classNames("mx_RoomHeader_PrivateIcon",
+                                         {"mx_RoomHeader_isPrivate": joinRule === "invite"});
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
