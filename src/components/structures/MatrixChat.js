@@ -1506,6 +1506,15 @@ export default createReactClass({
             );
             cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
         }
+
+        // With cross-signing enabled, we send to unknown devices
+        // without prompting. Any bad-device status the user should
+        // be aware of will be signalled through the room shield
+        // changing colour. More advanced behaviour will come once
+        // we implement more settings.
+        cli.setGlobalErrorOnUnknownDevices(
+            !SettingsStore.isFeatureEnabled("feature_cross_signing")
+        );
     },
 
     showScreen: function(screen, params) {
