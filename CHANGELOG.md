@@ -1,3 +1,10 @@
+Changes in [1.5.7](https://github.com/vector-im/riot-web/releases/tag/v1.5.7) (2020-01-13)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.7-rc.2...v1.5.7)
+
+ * Enable and document presence in room list feature flag
+   [\#11830](https://github.com/vector-im/riot-web/pull/11830)
+
 Changes in [1.5.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.7-rc.2) (2020-01-08)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.7-rc.1...v1.5.7-rc.2)
