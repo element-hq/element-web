@@ -17,7 +17,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-export async function openMemberInfo(session, name) {
+async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
     const matchingLabel = membersAndNames.filter((m) => {
         return m.displayName === name;
@@ -25,7 +25,9 @@ export async function openMemberInfo(session, name) {
     await matchingLabel.click();
 }
 
-export async function verifyDeviceForUser(session, name, expectedDevice) {
+module.exports.openMemberInfo = openMemberInfo;
+
+module.exports.verifyDeviceForUser = async function(session, name, expectedDevice) {
     session.log.step(`verifies e2e device for ${name}`);
     const membersAndNames = await getMembersInMemberlist(session);
     const matchingLabel = membersAndNames.filter((m) => {
@@ -58,9 +60,9 @@ export async function verifyDeviceForUser(session, name, expectedDevice) {
     const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
     await closeMemberInfo.click();
     session.log.done();
-}
+};
 
-export async function getMembersInMemberlist(session) {
+async function getMembersInMemberlist(session) {
     const memberPanelButton = await session.query(".mx_RightPanel_membersButton");
     try {
         await session.query(".mx_RightPanel_headerButton_highlight", 500);
@@ -77,3 +79,5 @@ export async function getMembersInMemberlist(session) {
         return {label: el, displayName: await session.innerText(el)};
     }));
 }
+
+module.exports.getMembersInMemberlist = getMembersInMemberlist;

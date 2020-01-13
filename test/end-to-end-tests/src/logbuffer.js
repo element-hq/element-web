@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default class LogBuffer {
+module.exports = class LogBuffer {
     constructor(page, eventName, eventMapper, reduceAsync=false, initialValue = "") {
         this.buffer = initialValue;
         page.on(eventName, (arg) => {

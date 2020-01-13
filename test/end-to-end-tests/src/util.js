@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function range(start, amount, step = 1) {
+module.exports.range = function(start, amount, step = 1) {
     const r = [];
     for (let i = 0; i < amount; ++i) {
         r.push(start + (i * step));
     }
     return r;
-}
+};
 
-export function delay(ms) {
+module.exports.delay = function(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};

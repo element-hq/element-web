@@ -22,7 +22,7 @@ const {delay} = require('./util');
 
 const DEFAULT_TIMEOUT = 20000;
 
-export default class RiotSession {
+module.exports = class RiotSession {
     constructor(browser, page, username, riotserver, hsUrl) {
         this.browser = browser;
         this.page = page;

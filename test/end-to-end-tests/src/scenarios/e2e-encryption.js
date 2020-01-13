@@ -24,7 +24,7 @@ const changeRoomSettings = require('../usecases/room-settings');
 const {startSasVerifcation, acceptSasVerification} = require('../usecases/verify');
 const assert = require('assert');
 
-export default async function e2eEncryptionScenarios(alice, bob) {
+module.exports = async function e2eEncryptionScenarios(alice, bob) {
     console.log(" creating an e2e encrypted room and join through invite:");
     const room = "secrets";
     await createRoom(bob, room);

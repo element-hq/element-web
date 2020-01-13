@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export async function openRoomDirectory(session) {
+async function openRoomDirectory(session) {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_explore .mx_AccessibleButton');
     await roomDirectoryButton.click();
 }
 
-export async function createRoom(session, roomName) {
+async function createRoom(session, roomName) {
     session.log.step(`creates room "${roomName}"`);
 
     const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
@@ -43,3 +43,5 @@ export async function createRoom(session, roomName) {
     await session.query('.mx_MessageComposer');
     session.log.done();
 }
+
+module.exports = {openRoomDirectory, createRoom};
