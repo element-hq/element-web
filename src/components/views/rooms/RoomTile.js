@@ -426,6 +426,11 @@ module.exports = createReactClass({
             );
         }
 
+        let privateIcon = null;
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            privateIcon = <div className="mx_RoomTile_PrivateIcon" />;
+        }
+
         return <React.Fragment>
             <AccessibleButton
                 tabIndex="0"
@@ -444,7 +449,7 @@ module.exports = createReactClass({
                         { dmIndicator }
                     </div>
                 </div>
-                <div className="mx_RoomTile_PrivateIcon" />
+                { privateIcon }
                 <div className="mx_RoomTile_nameContainer">
                     <div className="mx_RoomTile_labelContainer">
                         { label }
