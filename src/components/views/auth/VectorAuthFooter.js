@@ -22,7 +22,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 const VectorAuthFooter = () => {
     const brandingConfig = SdkConfig.get().branding;
     let links = [
-        {"text": "blog", "url": "https://medium.com/@RiotChat"},
+        {"text": "blog", "url": "https://blog.riot.im"},
         {"text": "twitter", "url": "https://twitter.com/@RiotChat"},
         {"text": "github", "url": "https://github.com/vector-im/riot-web"},
     ];

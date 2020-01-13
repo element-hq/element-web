@@ -12,7 +12,7 @@
     "Sign In": "Prisijungti",
     "Create Account": "Sukurti paskyrą",
     "Need help?": "Reikia pagalbos?",
-    "Explore rooms": "Peržiūrėti kambarius",
+    "Explore rooms": "Žvalgyti kambarius",
     "Room Directory": "Kambarių katalogas",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsų Riot konfigūracijoje yra klaidingas JSON. Prašome pataisyti problemą ir iš naujo užkrauti puslapį.",
     "The message from the parser is: %(message)s": "Analizatoriaus žinutė yra: %(message)s",
