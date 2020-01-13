@@ -1515,7 +1515,6 @@ export default createReactClass({
                 !SettingsStore.isFeatureEnabled("feature_cross_signing"),
             );
         }
-
     },
 
     showScreen: function(screen, params) {
