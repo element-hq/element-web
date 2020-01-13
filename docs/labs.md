@@ -95,3 +95,8 @@ Adds a "Bridge Info" tab to the Room Settings dialog, if a compatible bridge is
 present in the room. The Bridge info tab pulls information from the `m.bridge` state event ([MSC2346](https://github.com/matrix-org/matrix-doc/pull/2346)). Since the feature is based upon a MSC, most
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
+
+## Presence indicator in room list (`feature_presence_in_room_list`)
+
+This adds a presence indicator in the room list next to DM rooms where the other
+person is online.
