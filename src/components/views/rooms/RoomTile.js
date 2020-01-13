@@ -394,7 +394,10 @@ module.exports = createReactClass({
 
             const { room } = this.props;
             const member = room.getMember(dmUserId);
-            if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
+            if (
+                member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
+                SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
+            ) {
                 const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
                 dmOnline = <UserOnlineDot userId={dmUserId} />;
             }
