@@ -231,7 +231,7 @@ export default class BasicMessageEditor extends React.Component {
         let parts;
         if (partsText) {
             const serializedTextParts = JSON.parse(partsText);
-            const deserializedParts = serializedTextParts.map(p => partCreator.deserializePart(p))
+            const deserializedParts = serializedTextParts.map(p => partCreator.deserializePart(p));
             parts = deserializedParts;
         } else {
             const text = event.clipboardData.getData("text/plain");
