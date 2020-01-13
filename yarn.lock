@@ -5271,10 +5271,10 @@ mathml-tag-names@^2.0.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
-matrix-js-sdk@3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-3.0.0-rc.1.tgz#6ecdedab752933f6a0ccf6aa7d2786bd32f6d7f7"
-  integrity sha512-1eaECVqG64tj1pE0UBFTIGc1whryXLNaRpkrXrZ5+ZMDtuK2ZDlTOLYoK3t4z/hjn+4C6a294ytoEVe0UnIA8w==
+matrix-js-sdk@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-3.0.0.tgz#97908f9eda9eeb3ba0333b7e474c45f2b258e50c"
+  integrity sha512-lzUMwJAZHw7Dk0K+rubqe6kEpy4+pJ+qCp8n6lisfdKfMDJXdNCkjiiXRnakM1ZD4PFYK8ju89+NfxlyhAAd4A==
   dependencies:
     another-json "^0.2.0"
     browser-request "^0.3.3"
