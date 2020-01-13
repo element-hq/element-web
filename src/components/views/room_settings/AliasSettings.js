@@ -24,6 +24,7 @@ import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
+import Modal from "../../../Modal";
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {

@@ -21,29 +21,29 @@ import { EventStatus } from 'matrix-js-sdk';
 
 export default class Resend {
     static resendUnsentEvents(room) {
-        room.getPendingEvents().filter(function (ev) {
+        room.getPendingEvents().filter(function(ev) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function (event) {
+        }).forEach(function(event) {
             Resend.resend(event);
         });
     }
 
     static cancelUnsentEvents(room) {
-        room.getPendingEvents().filter(function (ev) {
+        room.getPendingEvents().filter(function(ev) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function (event) {
+        }).forEach(function(event) {
             Resend.removeFromQueue(event);
         });
     }
 
     static resend(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        MatrixClientPeg.get().resendEvent(event, room).then(function (res) {
+        MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event,
             });
-        }, function (err) {
+        }, function(err) {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/riot-web/issues/3148
             console.log('Resend got send failure: ' + err.name + '(' + err + ')');

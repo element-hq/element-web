@@ -17,4 +17,4 @@ export default function(opts) {
     }
 
     return createReactClass(opts);
-};
+}

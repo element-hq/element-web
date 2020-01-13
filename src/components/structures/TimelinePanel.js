@@ -1136,8 +1136,6 @@ const TimelinePanel = createReactClass({
         const messagePanel = this._messagePanel.current;
         if (messagePanel === undefined) return null;
 
-        const EventTile = sdk.getComponent('rooms.EventTile');
-
         const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
