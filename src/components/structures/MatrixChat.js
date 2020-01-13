@@ -1513,7 +1513,7 @@ export default createReactClass({
         // changing colour. More advanced behaviour will come once
         // we implement more settings.
         cli.setGlobalErrorOnUnknownDevices(
-            !SettingsStore.isFeatureEnabled("feature_cross_signing")
+            !SettingsStore.isFeatureEnabled("feature_cross_signing"),
         );
     },
 
