@@ -307,7 +307,7 @@ module.exports = createReactClass({
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
                     { e2eIcon }
-                    <div className={joinRuleClass}/>
+                    <div className={joinRuleClass} />
                     { name }
                     { topicElement }
                     { cancelButton }
