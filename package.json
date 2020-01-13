@@ -52,7 +52,7 @@
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "electron": "yarn build && yarn install:electron && electron .",
     "lint": "yarn lint:types && yarn lint:ts && yarn lint:js && yarn lint:style",
-    "lint:js": "eslint src test",
+    "lint:js": "eslint src",
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
     "lint:types": "tsc --noEmit",
     "lint:style": "stylelint 'res/css/**/*.scss'",
