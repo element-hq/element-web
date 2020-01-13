@@ -112,8 +112,7 @@ module.exports = createReactClass({
     onJoinRule: function(ev) {
         if (ev.getType() !== "m.room.join_rules") return;
         if (ev.getRoomId() !== this.props.room.roomId) return;
-        const joinRule = (ev.getContent() || {}).join_rule;
-        this.setState({ joinRule });
+        this.setState({ joinRule: ev.getContent().join_rule });
     },
 
     onAccountData: function(accountDataEvent) {
