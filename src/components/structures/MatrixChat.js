@@ -1010,9 +1010,9 @@ export default createReactClass({
                 go_welcome_on_cancel: true,
                 screen_after: {screen: `user/${this.props.config.welcomeUserId}`,
                                params: {
-                                   action: 'chat'
-                               }
-                              }
+                                   action: 'chat',
+                               },
+                              },
             });
             return;
         }

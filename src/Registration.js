@@ -73,9 +73,12 @@ export async function startAnyRegistrationFlow(options) {
             description: _t("You need to login or register to do this."),
             button: _t("Register"),
             extraButtons: [
-                <button className="mx_Dialog_primary"
-                onClick={() => {modal.close(); dis.dispatch({action: 'start_login',
-                                                             screenAfterLogin: options.screen_after});}}>
+                <button className="mx_Dialog_primary" key="start_login"
+                onClick={() => {
+                    modal.close(); dis.dispatch({action: 'start_login',
+                                                 screenAfterLogin: options.screen_after});
+                               }
+                        }>
                     { _t('Login') }
                 </button>,
             ],
