@@ -41,6 +41,11 @@
         window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
     </script>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+      }
+    </script>
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
