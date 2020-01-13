@@ -55,7 +55,7 @@ module.exports = createReactClass({
     },
 
     _getState: function(props) {
-        if (props.member) {
+        if (props.member && props.member.name) {
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
