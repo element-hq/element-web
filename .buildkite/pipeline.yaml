@@ -33,12 +33,13 @@ steps:
       queue: "medium"
     command:
       - "echo '--- Install js-sdk'"
-      # Run tests
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
       - "echo '--- Installing Dependencies'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
       - "echo '+++ Running Tests'"
       - "yarn test"
     plugins:
@@ -49,6 +50,7 @@ steps:
     command:
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '+++ Building Project'"
       - "yarn build"
     plugins:
       - docker#v3.0.1:
@@ -66,6 +68,9 @@ steps:
       - "chmod +x ./scripts/*"
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
+      - "echo '+++ Running Tests'"
       - "./scripts/ci/end-to-end-tests.sh"
     plugins:
       - docker#v3.0.1:
@@ -84,12 +89,13 @@ steps:
       - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
       - "apt-get update"
       - "apt-get install -y google-chrome-stable"
-      # Run tests
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
       - "echo '--- Installing Dependencies'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/riot-unit-tests.sh"
     env:
