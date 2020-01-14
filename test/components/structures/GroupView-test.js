@@ -302,7 +302,7 @@ describe('GroupView', function() {
 
     it('should show a RoomDetailList after a successful /summary & /rooms (no rooms returned)', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView, 5).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const roomDetailList = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_RoomDetailList');
             const roomDetailListElement = ReactDOM.findDOMNode(roomDetailList);
             expect(roomDetailListElement).toBeTruthy();
