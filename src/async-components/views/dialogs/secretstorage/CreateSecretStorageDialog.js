@@ -282,7 +282,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         return <div>
             <p>{_t(
                 "Key Backup is enabled on your account but has not been set " +
-                "up from this sign-in. To set up secret storage, " +
+                "up from this session. To set up secret storage, " +
                 "restore your key backup.",
             )}</p>
             <DialogButtons primaryButton={_t('Cancel')}
