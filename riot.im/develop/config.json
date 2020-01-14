@@ -21,7 +21,7 @@
         "feature_mjolnir": "labs",
         "feature_dm_verification": "labs",
         "feature_cross_signing": "labs",
-        "feature_event_indexing": "labs",
+        "feature_event_indexing": "disable",
         "feature_ftue_dms": "labs",
         "feature_bridge_state": "labs",
         "feature_presence_in_room_list": "labs"
