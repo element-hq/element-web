@@ -18,7 +18,8 @@ function pollForUpdates() {
     }
 }
 
-export function start(updateBaseUrl) {
+module.exports = {};
+module.exports.start = function startAutoUpdate(updateBaseUrl) {
     if (updateBaseUrl.slice(-1) !== '/') {
         updateBaseUrl = updateBaseUrl + '/';
     }
