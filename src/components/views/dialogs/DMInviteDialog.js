@@ -333,7 +333,7 @@ export default class DMInviteDialog extends React.PureComponent {
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
             // Filter out DMs (we'll handle these in the recents section)
-            if (!!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
                 return members; // Do nothing
             }
 
