@@ -22,7 +22,6 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/lib/matrix";
-import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
 import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
 import * as Email from "../../../email";
@@ -31,6 +30,7 @@ import {abbreviateUrl} from "../../../utils/UrlUtils";
 import dis from "../../../dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
+import {humanizeTime} from "../../../utils/humanize";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -226,9 +226,7 @@ class DMRoomTile extends React.PureComponent {
 
         let timestamp = null;
         if (this.props.lastActiveTs) {
-            // TODO: [TravisR] Figure out how to i18n this
-            // `humanize` wants seconds for a timestamp, so divide by 1000
-            const humanTs = humanize.relativeTime(this.props.lastActiveTs / 1000);
+            const humanTs = humanizeTime(this.props.lastActiveTs);
             timestamp = <span className='mx_DMInviteDialog_roomTile_time'>{humanTs}</span>;
         }
 

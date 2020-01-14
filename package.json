@@ -82,7 +82,6 @@
     "glob-to-regexp": "^0.4.1",
     "highlight.js": "^9.15.8",
     "html-entities": "^1.2.1",
-    "humanize": "^0.0.9",
     "is-ip": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
