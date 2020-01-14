@@ -2,7 +2,7 @@
 
 var path = require('path');
 var webpack = require('webpack');
-var webpack_config = require('./webpack.config');
+var wp_config = require('./webpack.config');
 
 /*
  * We use webpack to build our tests. It's a pain to have to wait for webpack
@@ -20,6 +20,8 @@ var testFile = process.env.KARMA_TEST_FILE || 'test/all-tests.js';
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 process.env.Q_DEBUG = 1;
 
+const webpack_config = wp_config({}, {mode: "development"});
+
 /* the webpack config is based on the real one, to (a) try to simulate the
  * deployed environment as closely as possible, and (b) to avoid a shedload of
  * cut-and-paste.
@@ -35,12 +37,6 @@ delete webpack_config['entry'];
 // make sure we're flagged as development to avoid wasting time optimising
 webpack_config.mode = 'development';
 
-// add ./test as a search path for js
-webpack_config.module.rules.unshift({
-    test: /\.js$/, use: "babel-loader",
-    include: [path.resolve('./src'), path.resolve('./test')],
-});
-
 // disable parsing for sinon, because it
 // tries to do voodoo with 'require' which upsets
 // webpack (https://github.com/webpack/webpack/issues/304)
@@ -54,8 +50,6 @@ webpack_config.resolve.modules = [
     "node_modules"
 ];
 
-webpack_config.devtool = 'inline-source-map';
-
 module.exports = function (config) {
     const myconfig = {
         // frameworks to use
@@ -64,7 +58,6 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'node_modules/babel-polyfill/browser.js',
             testFile,
 
             // make the images available via our httpd. They will be avaliable

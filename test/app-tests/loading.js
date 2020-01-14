@@ -18,23 +18,18 @@ limitations under the License.
 
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
-
-import 'skin-sdk';
-
+import '../skin-sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import expect from 'expect';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
-
-import jssdk from 'matrix-js-sdk';
-
-import sdk from 'matrix-react-sdk';
+import * as jssdk from 'matrix-js-sdk';
+import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher';
-
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';

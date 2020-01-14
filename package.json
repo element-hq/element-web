@@ -35,10 +35,11 @@
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
     "clean": "rimraf lib webapp electron_app/dist",
-    "build": "yarn clean && yarn build:res && yarn build:compile && yarn build:types && yarn build:bundle",
+    "build": "yarn clean && yarn build:genfiles && yarn build:compile && yarn build:types && yarn build:bundle",
     "build:res": "node scripts/copy-res.js",
+    "build:genfiles": "yarn reskindex && yarn build:res",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:compile": "yarn reskindex && babel -d lib --verbose --extensions \".ts,.js\" src",
+    "build:compile": "babel -d lib --verbose --extensions \".ts,.js\" src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:electron": "yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
     "build:electron:linux": "yarn build && electron-builder -l --x64",
@@ -56,8 +57,8 @@
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
     "lint:types": "tsc --noEmit",
     "lint:style": "stylelint 'res/css/**/*.scss'",
-    "test": "karma start --single-run=true --autoWatch=false --browsers VectorChromeHeadless",
-    "test:multi": "karma start"
+    "test": "yarn build:genfiles && karma start --single-run=true --autoWatch=false --browsers VectorChromeHeadless",
+    "test:multi": "yarn build:genfiles && karma start"
   },
   "dependencies": {
     "browser-request": "^0.3.3",

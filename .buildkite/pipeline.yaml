@@ -27,8 +27,10 @@ steps:
 
   - label: "🛠 Build"
     command:
-      # TODO: This probably needs to be more sophisticated than "just install stuff"
+      - "echo '--- Fetching Dependencies'"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
       - "yarn install"
+      - "echo '+++ Building Project'"
       - "yarn build"
     plugins:
       - docker#v3.0.1:
