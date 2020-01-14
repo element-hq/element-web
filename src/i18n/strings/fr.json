@@ -2036,5 +2036,7 @@
     "Below is a list of bridges connected to this room.": "Vous trouverez ci-dessous la liste des passerelles connectées à ce salon.",
     "Suggestions": "Suggestions",
     "Failed to find the following users": "Impossible de trouver les utilisateurs suivants",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Les utilisateurs suivant n’existent peut-être pas ou ne sont pas valides, et ne peuvent pas être invités : %(csvNames)s"
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Les utilisateurs suivant n’existent peut-être pas ou ne sont pas valides, et ne peuvent pas être invités : %(csvNames)s",
+    "Show a presence dot next to DMs in the room list": "Afficher une pastille de présence à côté des messages directs dans la liste des salons",
+    "Lock": "Cadenas"
 }
