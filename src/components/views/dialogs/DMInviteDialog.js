@@ -332,6 +332,11 @@ export default class DMInviteDialog extends React.PureComponent {
 
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
+            // Filter out DMs (we'll handle these in the recents section)
+            if (!!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                return members; // Do nothing
+            }
+
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
                 if (!members[member.userId]) {
@@ -377,6 +382,7 @@ export default class DMInviteDialog extends React.PureComponent {
             }
             return b.score - a.score;
         });
+
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
