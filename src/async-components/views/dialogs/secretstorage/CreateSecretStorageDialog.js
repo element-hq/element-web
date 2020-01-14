@@ -170,6 +170,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this.props.onFinished(true);
     }
 
+    _onRestoreKeyBackupClick = () => {
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            /* priority = */ false, /* static = */ true,
+        );
+    }
+
     _onOptOutClick = () => {
         this.setState({phase: PHASE_OPTOUT_CONFIRM});
     }
@@ -285,9 +293,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "up from this session. To set up secret storage, " +
                 "restore your key backup.",
             )}</p>
-            <DialogButtons primaryButton={_t('Cancel')}
-                onPrimaryButtonClick={this._onCancel}
-                hasCancel={false}
+            <DialogButtons primaryButton={_t('Restore')}
+                onPrimaryButtonClick={this._onRestoreKeyBackupClick}
+                onCancel={this._onCancel}
+                hasCancel={true}
             >
             </DialogButtons>
         </div>;

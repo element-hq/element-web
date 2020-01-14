@@ -1934,6 +1934,7 @@
     "File to import": "File to import",
     "Import": "Import",
     "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.": "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.",
+    "Restore": "Restore",
     "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup",
     "Great! This passphrase looks strong enough.": "Great! This passphrase looks strong enough.",
     "<b>Warning</b>: You should only set up secret storage from a trusted computer.": "<b>Warning</b>: You should only set up secret storage from a trusted computer.",
