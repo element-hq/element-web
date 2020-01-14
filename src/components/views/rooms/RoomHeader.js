@@ -163,6 +163,9 @@ module.exports = createReactClass({
         const joinRule = joinRules && joinRules.getContent().join_rule;
         const joinRuleClass = classNames("mx_RoomHeader_PrivateIcon",
                                          {"mx_RoomHeader_isPrivate": joinRule === "invite"});
+        const privateIcon = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+            <div className={joinRuleClass} /> :
+            undefined;
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
@@ -308,7 +311,7 @@ module.exports = createReactClass({
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
                     { e2eIcon }
-                    <div className={joinRuleClass} />
+                    { privateIcon }
                     { name }
                     { topicElement }
                     { cancelButton }
