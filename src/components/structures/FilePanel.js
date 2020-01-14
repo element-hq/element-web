@@ -40,42 +40,50 @@ const FilePanel = createReactClass({
         };
     },
 
-    componentDidMount: function() {
-        this.updateTimelineSet(this.props.roomId);
+    async componentDidMount() {
+        await this.updateTimelineSet(this.props.roomId);
     },
 
-    updateTimelineSet: function(roomId) {
+    async fetchFileEventsServer(room) {
+        const client = MatrixClientPeg.get();
+
+        const filter = new Matrix.Filter(client.credentials.userId);
+        filter.setDefinition(
+            {
+                "room": {
+                    "timeline": {
+                        "contains_url": true,
+                        "types": [
+                            "m.room.message",
+                        ],
+                    },
+                },
+            },
+        );
+
+        // FIXME: we shouldn't be doing this every time we change room - see comment above.
+        // TODO: Remove this stale comment? Which comment above?
+        const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter)
+        filter.filterId = filterId;
+        const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
+
+        return timelineSet;
+    },
+
+    async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
 
         this.noRoom = !room;
 
         if (room) {
-            const filter = new Matrix.Filter(client.credentials.userId);
-            filter.setDefinition(
-                {
-                    "room": {
-                        "timeline": {
-                            "contains_url": true,
-                            "types": [
-                                "m.room.message",
-                            ],
-                        },
-                    },
-                },
-            );
+            try {
+                let timelineSet = await this.fetchFileEventsServer(room)
+                this.setState({ timelineSet: timelineSet });
 
-            // FIXME: we shouldn't be doing this every time we change room - see comment above.
-            client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
-                (filterId)=>{
-                    filter.filterId = filterId;
-                    const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
-                    this.setState({ timelineSet: timelineSet });
-                },
-                (error)=>{
-                    console.error("Failed to get or create file panel filter", error);
-                },
-            );
+            } catch (error) {
+                console.error("Failed to get or create file panel filter", error);
+            }
         } else {
             console.error("Failed to add filtered timelineSet for FilePanel as no room!");
         }
