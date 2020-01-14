@@ -65,7 +65,7 @@ import { defer } from "../../utils/promise";
 import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 
 /** constants for MatrixChat.state.view */
-const VIEWS = {
+export const VIEWS = {
     // a special initial state which is only used at startup, while we are
     // trying to re-animate a matrix client or register as a guest.
     LOADING: 0,
