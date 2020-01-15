@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +28,6 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher';
 import * as test_utils from '../test-utils';
@@ -65,10 +65,6 @@ describe('loading:', function() {
 
         windowLocation = null;
         matrixChat = null;
-
-        languageHandler.setMissingEntryGenerator(function(key) {
-            return key.split('|', 2)[1];
-        });
     });
 
     afterEach(async function() {
