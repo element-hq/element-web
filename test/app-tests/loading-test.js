@@ -19,10 +19,10 @@ limitations under the License.
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
 import '../skin-sdk';
+import "../jest-mocks";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import expect from 'expect';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
@@ -36,20 +36,10 @@ import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
 import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
+import "fake-indexeddb/auto";
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
-
-expect.extend({
-    toStartWith(prefix) {
-        expect.assert(
-            this.actual.startsWith(prefix),
-            'expected %s to start with %s',
-            this.actual, prefix,
-        );
-        return this;
-    }
-});
 
 describe('loading:', function() {
     let parentDiv;
@@ -65,7 +55,6 @@ describe('loading:', function() {
     let tokenLoginCompletePromise;
 
     beforeEach(function() {
-        test_utils.beforeEach(this);
         httpBackend = new MockHttpBackend();
         jssdk.request(httpBackend.requestFn);
         parentDiv = document.createElement('div');
@@ -94,7 +83,7 @@ describe('loading:', function() {
         expect(MatrixClientPeg.get()).toBe(null);
 
         // chrome seems to take *ages* to delete the indexeddbs.
-        this.timeout(10000);
+        await sleep(10000);
 
         // clear the indexeddbs so we can start from a clean slate next time.
         await Promise.all([
