@@ -464,7 +464,7 @@ describe('loading:', function() {
                 assertAtLoadingSpinner(matrixChat);
 
                 httpBackend.when('POST', '/register').check(function(req) {
-                    expect(req.path).toStartWith(DEFAULT_HS_URL);
+                    expect(req.path.startsWith(DEFAULT_HS_URL)).toBe(true);
                     expect(req.queryParams.kind).toEqual('guest');
                 }).respond(200, {
                     user_id: "@guest:localhost",
@@ -477,7 +477,7 @@ describe('loading:', function() {
             }).then(() => {
                 return expectAndAwaitSync({isGuest: true});
             }).then((req) => {
-                expect(req.path).toStartWith(DEFAULT_HS_URL);
+                expect(req.path.startsWith(DEFAULT_HS_URL)).toBe(true);
 
                 // once the sync completes, we should have a welcome page
                 httpBackend.verifyNoOutstandingExpectation();
