@@ -407,12 +407,10 @@ export default class DMInviteDialog extends React.PureComponent {
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         let createRoomPromise = Promise.resolve();
         if (targetIds.length === 1) {
-            createRoomPromise = createRoom({dmUserId: targetIds[0]})
+            createRoomPromise = createRoom({dmUserId: targetIds[0]});
         } else {
             // Create a boring room and try to invite the targets manually.
-            let room;
             createRoomPromise = createRoom().then(roomId => {
-                room = MatrixClientPeg.get().getRoom(roomId);
                 return inviteMultipleToRoom(roomId, targetIds);
             }).then(result => {
                 const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
