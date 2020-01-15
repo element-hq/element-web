@@ -2037,5 +2037,7 @@
     "Below is a list of bridges connected to this room.": "Alább látható a lista a szobához kapcsolódó hidakról.",
     "Suggestions": "Javaslatok",
     "Failed to find the following users": "Az alábbi felhasználók nem találhatók",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Az alábbi felhasználók nem léteznek vagy hibásan vannak megadva és nem lehet őket meghívni: %(csvNames)s"
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Az alábbi felhasználók nem léteznek vagy hibásan vannak megadva és nem lehet őket meghívni: %(csvNames)s",
+    "Show a presence dot next to DMs in the room list": "Jelenlét pötty mutatása a Közvetlen beszélgetések mellett a szobák listájában",
+    "Lock": "Zár"
 }
