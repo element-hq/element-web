@@ -26,6 +26,7 @@ import classNames from 'classnames';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {RovingTabIndex, RovingTabIndexGroup} from "../../../contexts/RovingTabIndexContext";
 
 // XXX this class copies a lot from RoomTile.js
 export default createReactClass({
@@ -138,14 +139,16 @@ export default createReactClass({
 
         const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
         const badge = (
-            <ContextMenuButton
+            <RovingTabIndex
+                component={ContextMenuButton}
+                useInputRef
                 className={badgeClasses}
                 onClick={this.onContextMenuButtonClick}
                 label={_t("Options")}
                 isExpanded={isMenuDisplayed}
             >
                 { badgeContent }
-            </ContextMenuButton>
+            </RovingTabIndex>
         );
 
         let tooltip;
@@ -170,8 +173,10 @@ export default createReactClass({
             );
         }
 
-        return <React.Fragment>
-            <AccessibleButton
+        return <RovingTabIndexGroup>
+            <RovingTabIndex
+                component={AccessibleButton}
+                useInputRef
                 className={classes}
                 onClick={this.onClick}
                 onMouseEnter={this.onMouseEnter}
@@ -186,9 +191,9 @@ export default createReactClass({
                     { badge }
                 </div>
                 { tooltip }
-            </AccessibleButton>
+            </RovingTabIndex>
 
             { contextMenu }
-        </React.Fragment>;
+        </RovingTabIndexGroup>;
     },
 });

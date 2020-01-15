@@ -41,6 +41,7 @@ import ResizeHandle from '../elements/ResizeHandle';
 
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
+import {RovingTabIndexContextWrapper} from "../../../contexts/RovingTabIndexContext";
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 const HOVER_MOVE_TIMEOUT = 1000;
@@ -788,7 +789,9 @@ module.exports = createReactClass({
                 onMouseMove={this.onMouseMove}
                 onMouseLeave={this.onMouseLeave}
             >
-                { subListComponents }
+                <RovingTabIndexContextWrapper>
+                    { subListComponents }
+                </RovingTabIndexContextWrapper>
             </div>
         );
     },

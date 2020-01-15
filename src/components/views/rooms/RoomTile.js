@@ -32,6 +32,7 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
+import {RovingTabIndex} from "../../../contexts/RovingTabIndexContext";
 
 module.exports = createReactClass({
     displayName: 'RoomTile',
@@ -432,8 +433,9 @@ module.exports = createReactClass({
         }
 
         return <React.Fragment>
-            <AccessibleButton
-                tabIndex="0"
+            <RovingTabIndex
+                component={AccessibleButton}
+                useInputRef
                 className={classes}
                 onClick={this.onClick}
                 onMouseEnter={this.onMouseEnter}
@@ -461,7 +463,7 @@ module.exports = createReactClass({
                 </div>
                 { /* { incomingCallBox } */ }
                 { tooltip }
-            </AccessibleButton>
+            </RovingTabIndex>
 
             { contextMenu }
         </React.Fragment>;

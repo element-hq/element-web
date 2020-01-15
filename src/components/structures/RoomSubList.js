@@ -31,6 +31,7 @@ import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
+import {RovingTabIndex, RovingTabIndexGroup} from "../../contexts/RovingTabIndexContext";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -272,20 +273,32 @@ export default class RoomSubList extends React.PureComponent {
             // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
             if (subListNotifCount > 0) {
                 badge = (
-                    <AccessibleButton className={badgeClasses} onClick={this._onNotifBadgeClick} aria-label={_t("Jump to first unread room.")}>
+                    <RovingTabIndex
+                        component={AccessibleButton}
+                        useInputRef
+                        className={badgeClasses}
+                        onClick={this._onNotifBadgeClick}
+                        aria-label={_t("Jump to first unread room.")}
+                    >
                         <div>
                             { FormattingUtils.formatCount(subListNotifCount) }
                         </div>
-                    </AccessibleButton>
+                    </RovingTabIndex>
                 );
             } else if (this.props.isInvite && this.props.list.length) {
                 // no notifications but highlight anyway because this is an invite badge
                 badge = (
-                    <AccessibleButton className={badgeClasses} onClick={this._onInviteBadgeClick} aria-label={_t("Jump to first invite.")}>
+                    <RovingTabIndex
+                        component={AccessibleButton}
+                        useInputRef
+                        className={badgeClasses}
+                        onClick={this._onInviteBadgeClick}
+                        aria-label={_t("Jump to first invite.")}
+                    >
                         <div>
                             { this.props.list.length }
                         </div>
-                    </AccessibleButton>
+                    </RovingTabIndex>
                 );
             }
         }
@@ -308,7 +321,9 @@ export default class RoomSubList extends React.PureComponent {
         let addRoomButton;
         if (this.props.onAddRoom) {
             addRoomButton = (
-                <AccessibleTooltipButton
+                <RovingTabIndex
+                    component={AccessibleTooltipButton}
+                    useInputRef
                     onClick={this.onAddRoom}
                     className="mx_RoomSubList_addRoom"
                     title={this.props.addRoomLabel || _t("Add room")}
@@ -327,12 +342,13 @@ export default class RoomSubList extends React.PureComponent {
             chevron = (<div className={chevronClasses} />);
         }
 
-        return (
+        return <RovingTabIndexGroup>
             <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
-                <AccessibleButton
+                <RovingTabIndex
+                    component={AccessibleButton}
+                    useInputRef
                     onClick={this.onClick}
                     className="mx_RoomSubList_label"
-                    tabIndex={0}
                     aria-expanded={!isCollapsed}
                     inputRef={this._headerButton}
                     role="treeitem"
@@ -341,11 +357,11 @@ export default class RoomSubList extends React.PureComponent {
                     { chevron }
                     <span>{this.props.label}</span>
                     { incomingCall }
-                </AccessibleButton>
+                </RovingTabIndex>
                 { badge }
                 { addRoomButton }
             </div>
-        );
+        </RovingTabIndexGroup>;
     }
 
     checkOverflow = () => {
