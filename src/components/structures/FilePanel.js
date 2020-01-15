@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
+import {EventIndexPeg} from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 
 /*
@@ -73,12 +74,20 @@ const FilePanel = createReactClass({
     async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
+        const eventIndex = EventIndexPeg.get();
 
         this.noRoom = !room;
 
         if (room) {
+            let timelineSet;
+
             try {
-                let timelineSet = await this.fetchFileEventsServer(room)
+                timelineSet = await this.fetchFileEventsServer(room)
+
+                if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+                    await eventIndex.populateFileTimeline(room, timelineSet);
+                }
+
                 this.setState({ timelineSet: timelineSet });
 
             } catch (error) {
