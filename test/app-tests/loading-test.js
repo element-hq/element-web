@@ -38,6 +38,7 @@ import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUti
 import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
 import {cleanLocalstorage} from "../test-utils";
+import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -305,7 +306,7 @@ describe('loading:', function() {
             localStorage.setItem("mx_last_room_id", "!last_room:id");
 
             // Create a crypto store as well to satisfy storage consistency checks
-            const cryptoStore = new jssdk.IndexedDBCryptoStore(
+            const cryptoStore = new IndexedDBCryptoStore(
                 indexedDB,
                 "matrix-js-sdk:crypto",
             );
