@@ -17,13 +17,13 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/lib/matrix";
+import {RoomMember} from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../../../SdkConfig";
-import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";
@@ -330,6 +330,11 @@ export default class DMInviteDialog extends React.PureComponent {
 
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
+            // Filter out DMs (we'll handle these in the recents section)
+            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                return members; // Do nothing
+            }
+
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
                 if (!members[member.userId]) {
@@ -375,6 +380,7 @@ export default class DMInviteDialog extends React.PureComponent {
             }
             return b.score - a.score;
         });
+
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 

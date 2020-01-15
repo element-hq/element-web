@@ -28,21 +28,37 @@ class Skinner {
                 " b) A component has called getComponent at the root level",
             );
         }
-        let comp = this.components[name];
-        // XXX: Temporarily also try 'views.' as we're currently
-        // leaving the 'views.' off views.
+
+        const doLookup = (components) => {
+            if (!components) return null;
+            let comp = components[name];
+            // XXX: Temporarily also try 'views.' as we're currently
+            // leaving the 'views.' off views.
+            if (!comp) {
+                comp = components['views.' + name];
+            }
+            return comp;
+        };
+
+        // Check the skin first
+        let comp = doLookup(this.components);
+
+        // If that failed, check against our own components
         if (!comp) {
-            comp = this.components['views.'+name];
+            // Lazily load our own components because they might end up calling .getComponent()
+            comp = doLookup(require("./component-index").components);
         }
 
+        // Just return nothing instead of erroring - the consumer should be smart enough to
+        // handle this at this point.
         if (!comp) {
-            throw new Error("No such component: "+name);
+            return null;
         }
 
         // components have to be functions.
         const validType = typeof comp === 'function';
         if (!validType) {
-            throw new Error(`Not a valid component: ${name}.`);
+            throw new Error(`Not a valid component: ${name} (type = ${typeof(comp)}).`);
         }
         return comp;
     }
@@ -90,5 +106,5 @@ class Skinner {
 if (global.mxSkinner === undefined) {
     global.mxSkinner = new Skinner();
 }
-module.exports = global.mxSkinner;
+export default global.mxSkinner;
 

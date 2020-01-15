@@ -20,7 +20,7 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Matrix from "matrix-js-sdk";
+import * as Matrix from "matrix-js-sdk";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -29,7 +29,7 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import MatrixClientPeg from "../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
@@ -38,7 +38,7 @@ import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
-import sdk from '../../index';
+import * as sdk from '../../index';
 import { showStartChatInviteDialog, showRoomInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
@@ -65,7 +65,7 @@ import { defer } from "../../utils/promise";
 import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 
 /** constants for MatrixChat.state.view */
-const VIEWS = {
+export const VIEWS = {
     // a special initial state which is only used at startup, while we are
     // trying to re-animate a matrix client or register as a guest.
     LOADING: 0,
@@ -1505,6 +1505,15 @@ export default createReactClass({
                 "blacklistUnverifiedDevices",
             );
             cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+
+            // With cross-signing enabled, we send to unknown devices
+            // without prompting. Any bad-device status the user should
+            // be aware of will be signalled through the room shield
+            // changing colour. More advanced behaviour will come once
+            // we implement more settings.
+            cli.setGlobalErrorOnUnknownDevices(
+                !SettingsStore.isFeatureEnabled("feature_cross_signing"),
+            );
         }
     },
 

@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ module.exports = async function acceptInvite(session, name) {
         return {inviteHandle, text};
     }));
     const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-    return text.trim() === name;
+        return text.trim() === name;
     }).inviteHandle;
 
     await inviteHandle.click();

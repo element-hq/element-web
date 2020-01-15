@@ -19,10 +19,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from "../../../utils/WidgetUtils";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 export default class AppPermission extends React.Component {
     static propTypes = {

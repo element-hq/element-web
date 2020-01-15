@@ -16,7 +16,7 @@ limitations under the License.
 
 import zxcvbn from 'zxcvbn';
 
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import { _t, _td } from '../languageHandler';
 
 const ZXCVBN_USER_INPUTS = [

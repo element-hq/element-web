@@ -16,12 +16,12 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-const classNames = require('classnames');
-const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
+import AccessibleButton from "../elements/AccessibleButton";
+import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchBar',
 
     getInitialState: function() {

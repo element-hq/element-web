@@ -17,30 +17,29 @@ limitations under the License.
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Timer from "../../../utils/Timer";
-
 import React from "react";
 import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import utils from "matrix-js-sdk/lib/utils";
+import * as utils from "matrix-js-sdk/src/utils";
 import { _t } from '../../../languageHandler';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const CallHandler = require('../../../CallHandler');
-const dis = require("../../../dispatcher");
-const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import rate_limited_func from "../../../ratelimitedfunc";
 import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
-const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
 import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
-
+import CallHandler from "../../../CallHandler";
+import dis from "../../../dispatcher";
+import * as sdk from "../../../index";
+import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
+
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 const HOVER_MOVE_TIMEOUT = 1000;
@@ -50,7 +49,7 @@ function labelForTagName(tagName) {
     return tagName;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomList',
 
     propTypes: {
@@ -385,7 +384,7 @@ module.exports = createReactClass({
         this._delayedRefreshRoomList();
     },
 
-    _delayedRefreshRoomList: new rate_limited_func(function() {
+    _delayedRefreshRoomList: rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
 

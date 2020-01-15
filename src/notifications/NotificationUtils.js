@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +17,14 @@ limitations under the License.
 
 'use strict';
 
-module.exports = {
+export class NotificationUtils {
     // Encodes a dictionary of {
     //   "notify": true/false,
     //   "sound": string or undefined,
     //   "highlight: true/false,
     // }
     // to a list of push actions.
-    encodeActions: function(action) {
+    static encodeActions(action) {
         const notify = action.notify;
         const sound = action.sound;
         const highlight = action.highlight;
@@ -41,7 +42,7 @@ module.exports = {
         } else {
             return ["dont_notify"];
         }
-    },
+    }
 
     // Decode a list of actions to a dictionary of {
     //   "notify": true/false,
@@ -49,7 +50,7 @@ module.exports = {
     //   "highlight: true/false,
     // }
     // If the actions couldn't be decoded then returns null.
-    decodeActions: function(actions) {
+    static decodeActions(actions) {
         let notify = false;
         let sound = null;
         let highlight = false;
@@ -85,5 +86,5 @@ module.exports = {
             result.sound = sound;
         }
         return result;
-    },
-};
+    }
+}

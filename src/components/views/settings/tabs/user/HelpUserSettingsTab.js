@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";

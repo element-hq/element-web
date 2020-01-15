@@ -16,7 +16,7 @@ limitations under the License.
 
 import { SERVICE_TYPES } from 'matrix-js-sdk';
 import SdkConfig from '../SdkConfig';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 export function getDefaultIdentityServerUrl() {
     return SdkConfig.get()['validated_server_config']['isUrl'];

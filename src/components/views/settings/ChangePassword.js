@@ -16,21 +16,19 @@ limitations under the License.
 */
 
 import Field from "../elements/Field";
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const Modal = require("../../../Modal");
-const sdk = require("../../../index");
-
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
 
 import sessionStore from '../../../stores/SessionStore';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangePassword',
 
     propTypes: {

@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
 import AccessibleButton from '../views/elements/AccessibleButton';
