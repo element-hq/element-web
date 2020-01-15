@@ -126,6 +126,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _updateEditorState = (selection, inputType, diff) => {
+        this._modifiedFlag = true;
         renderModel(this._editorRef, this.props.model);
         if (selection) { // set the caret/selection
             try {
@@ -205,7 +206,6 @@ export default class BasicMessageEditor extends React.Component {
         const {partCreator} = model;
         const text = event.clipboardData.getData("text/plain");
         if (text) {
-            this._modifiedFlag = true;
             const range = getRangeForSelection(this._editorRef, model, document.getSelection());
             const parts = parsePlainTextMessage(text, partCreator);
             replaceRangeAndMoveCaret(range, parts);
@@ -218,7 +218,6 @@ export default class BasicMessageEditor extends React.Component {
         if (this._isIMEComposing) {
             return;
         }
-        this._modifiedFlag = true;
         const sel = document.getSelection();
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         this.props.model.update(text, event.inputType, caret);
@@ -230,7 +229,6 @@ export default class BasicMessageEditor extends React.Component {
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
         caret.offset += textToInsert.length;
         this.props.model.update(newText, inputType, caret);
-        this._modifiedFlag = true;
     }
 
     // this is used later to see if we need to recalculate the caret
