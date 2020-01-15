@@ -299,8 +299,8 @@ export default class DMInviteDialog extends React.PureComponent {
             tryingIdentityServer: false,
 
             // These two flags are used for the 'Go' button to communicate what is going on.
-            busy: true,
-            errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+            busy: false,
+            errorText: null,
         };
 
         this._editorRef = createRef();
