@@ -17,6 +17,12 @@ limitations under the License.
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 
+import Matrix from 'matrix-js-sdk';
+import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
+import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
+import MatrixEvent from 'matrix-js-sdk/lib/models/event';
+import RoomMember from 'matrix-js-sdk/lib/models/room-member';
+
 /*
  * Event indexing class that wraps the platform specific event indexing.
  */
@@ -410,5 +416,67 @@ export default class EventIndex {
     async search(searchArgs) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
+    }
+
+    async populateFileTimeline(room, timelineSet) {
+        const client = MatrixClientPeg.get();
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+
+        // Get our events from the event index.
+        const events = await indexManager.loadFileEvents(
+            {
+                roomId: room.roomId,
+                limit: 10
+            }
+        );
+
+        let eventMapper = client.getEventMapper();
+
+        // Turn the events into MatrixEvent objects.
+        const matrixEvents = events.map(e => {
+            const matrixEvent = eventMapper(e.event);
+
+            const member = new RoomMember(room.roomId, matrixEvent.getSender());
+
+            // We can't really reconstruct the whole room state from our
+            // EventIndex to calculate the correct display name. Use the
+            // disambiguated form always instead.
+            member.name = e.profile.displayname + " (" + matrixEvent.getSender() + ")";
+
+            // This is sets the avatar URL.
+            const memberEvent = eventMapper(
+                {
+                    content: {
+                        membership: "join",
+                        avatar_url: e.profile.avatar_url,
+                        displayname: e.profile.displayname,
+                    },
+                    type: "m.room.member",
+                    event_id: matrixEvent.getId() + ":eventIndex",
+                    room_id: matrixEvent.getRoomId(),
+                    sender: matrixEvent.getSender(),
+                    origin_server_ts: matrixEvent.getTs(),
+                    state_key: matrixEvent.getSender()
+                }
+            );
+
+            // We set this manually to avoid emitting RoomMember.membership and
+            // RoomMember.name events.
+            member.events.member = memberEvent;
+            matrixEvent.sender = member;
+
+            return matrixEvent;
+        });
+
+        // Add the events to the live timeline of the file panel.
+        matrixEvents.forEach(e => {
+            if (!timelineSet.eventIdToTimeline(e.getId())) {
+                const liveTimeline = timelineSet.getLiveTimeline();
+                timelineSet.addEventToTimeline(e, liveTimeline, true)
+            }
+        });
+
+        // Set the pagination token to the oldest event that we retrieved.
+        timelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);
     }
 }
