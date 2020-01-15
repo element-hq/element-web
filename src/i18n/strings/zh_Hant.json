@@ -2033,5 +2033,8 @@
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "連線到 <channelIcon /> <channelName /> 於 <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "透過 %(protocolName)s 連線",
     "Bridge Info": "橋接資訊",
-    "Below is a list of bridges connected to this room.": "以下是連線到此聊天室的橋接列表。"
+    "Below is a list of bridges connected to this room.": "以下是連線到此聊天室的橋接列表。",
+    "Suggestions": "建議",
+    "Failed to find the following users": "找不到以下使用者",
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "以下使用者可能不存在或無效，且無法被邀請：%(csvNames)s"
 }

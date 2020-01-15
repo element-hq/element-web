@@ -2034,5 +2034,8 @@
     "Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />": "Ide csatlakozva: <channelIcon /> <channelName /> itt: <networkIcon /> <networkName />",
     "Connected via %(protocolName)s": "Ezzel a protokollal csatlakozva: %(protocolName)s",
     "Bridge Info": "Híd információ",
-    "Below is a list of bridges connected to this room.": "Alább látható a lista a szobához kapcsolódó hidakról."
+    "Below is a list of bridges connected to this room.": "Alább látható a lista a szobához kapcsolódó hidakról.",
+    "Suggestions": "Javaslatok",
+    "Failed to find the following users": "Az alábbi felhasználók nem találhatók",
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Az alábbi felhasználók nem léteznek vagy hibásan vannak megadva és nem lehet őket meghívni: %(csvNames)s"
 }

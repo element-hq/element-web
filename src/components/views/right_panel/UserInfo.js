@@ -1000,8 +1000,8 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     // Load room if we are given a room id and memoize it
     const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
-    // fetch latest room member if we have a room, so we don't show historical information
-    const member = useMemo(() => room ? room.getMember(user.userId) : user, [room, user]);
+    // fetch latest room member if we have a room, so we don't show historical information, falling back to user
+    const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
 
     // only display the devices list if our client supports E2E
     const _enableDevices = cli.isCryptoEnabled();

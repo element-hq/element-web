@@ -21,14 +21,17 @@ import DMRoomMap from './utils/DMRoomMap';
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
-        let url = member.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            Math.floor(width * window.devicePixelRatio),
-            Math.floor(height * window.devicePixelRatio),
-            resizeMethod,
-            false,
-            false,
-        );
+        let url;
+        if (member && member.getAvatarUrl) {
+            url = member.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                Math.floor(width * window.devicePixelRatio),
+                Math.floor(height * window.devicePixelRatio),
+                resizeMethod,
+                false,
+                false,
+            );
+        }
         if (!url) {
             // member can be null here currently since on invites, the JS SDK
             // does not have enough info to build a RoomMember object for
