@@ -170,7 +170,12 @@ export default class EventIndex {
             return;
         }
 
-        const e = ev.toJSON().decrypted;
+        const jsonEvent = ev.toJSON();
+
+        let e;
+        if (ev.isEncrypted()) e = jsonEvent.decrypted;
+        else e = jsonEvent;
+
         const profile = {
             displayname: ev.sender.rawDisplayName,
             avatar_url: ev.sender.getMxcAvatarUrl(),
