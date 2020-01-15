@@ -122,7 +122,7 @@
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
-    "jest-environment-jsdom-thirteen": "^1.0.1",
+    "jest-environment-jsdom-fourteen": "^1.0.1",
     "json-loader": "^0.5.3",
     "loader-utils": "^1.2.3",
     "matrix-mock-request": "^1.2.3",
@@ -192,7 +192,7 @@
     "afterSign": "scripts/electron_afterSign.js"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom-thirteen",
+    "testEnvironment": "jest-environment-jsdom-fourteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
