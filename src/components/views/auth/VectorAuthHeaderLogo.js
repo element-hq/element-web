@@ -19,7 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthHeaderLogo extends React.PureComponent {
     static replaces = 'AuthHeaderLogo'

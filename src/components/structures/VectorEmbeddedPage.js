@@ -18,9 +18,9 @@ limitations under the License.
 
 'use strict';
 
-import EmbeddedPage from 'matrix-react-sdk/lib/components/structures/EmbeddedPage';
+import EmbeddedPage from 'matrix-react-sdk/src/components/structures/EmbeddedPage';
 import sanitizeHtml from 'sanitize-html';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 export default class VectorEmbeddedPage extends EmbeddedPage {
     static replaces = 'EmbeddedPage';
