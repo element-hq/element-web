@@ -2038,5 +2038,9 @@
     "Failed to find the following users": "找不到以下使用者",
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "以下使用者可能不存在或無效，且無法被邀請：%(csvNames)s",
     "Show a presence dot next to DMs in the room list": "在聊天室清單中的直接訊息旁顯示上線狀態點",
-    "Lock": "鎖定"
+    "Lock": "鎖定",
+    "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.": "您的帳號已啟用金鑰備份，但並在此工作階段中設定。要設定秘密儲存空間，請還原金鑰備份。",
+    "Restore": "還原",
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "秘密儲存空間將會使用您既有的金鑰備份詳細資訊設定。您的秘密儲存空間通關密語與復原金鑰會與您的金鑰備份相同",
+    "Restore your Key Backup": "復原您的金鑰備份"
 }
