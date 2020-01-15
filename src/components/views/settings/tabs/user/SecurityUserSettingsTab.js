@@ -18,12 +18,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
 
 export class IgnoredUser extends React.Component {

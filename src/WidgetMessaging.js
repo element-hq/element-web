@@ -23,7 +23,7 @@ limitations under the License.
 import FromWidgetPostMessageApi from './FromWidgetPostMessageApi';
 import ToWidgetPostMessageApi from './ToWidgetPostMessageApi';
 import Modal from "./Modal";
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetUtils from "./utils/WidgetUtils";

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventIndexPeg from "./indexing/EventIndexPeg";
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 
 function serverSideSearch(term, roomId = undefined) {
     let filter;

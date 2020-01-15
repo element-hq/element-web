@@ -18,10 +18,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from "../../../MatrixClientPeg";
-import sdk from '../../../index';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
 import dis from "../../../dispatcher";
-import ObjectUtils from '../../../ObjectUtils';
+import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
@@ -29,7 +29,7 @@ import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AuxPanel',
 
     propTypes: {

@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -90,7 +91,7 @@ module.exports.checkTimelineContains = async function(session, expectedMessages,
     expectedMessages.forEach((expectedMessage) => {
         const foundMessage = timelineMessages.find((message) => {
             return message.sender === expectedMessage.sender &&
-                   message.body === expectedMessage.body;
+                message.body === expectedMessage.body;
         });
         try {
             assertMessage(foundMessage, expectedMessage);

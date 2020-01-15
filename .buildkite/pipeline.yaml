@@ -1,13 +1,60 @@
 steps:
-  - label: ":eslint: Lint"
+  - label: ":eslint: JS Lint"
     command:
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
-      - "yarn lintwithexclusions"
-      - "yarn stylelint"
+      - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
-          image: "node:10"
+          image: "node:12"
+
+  - label: ":eslint: TS Lint"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "yarn lint:ts"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: ":eslint: Types Lint"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "yarn lint:types"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: ":jest: Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # webpack loves to gorge itself on resources.
+      queue: "medium"
+    command:
+      - "echo '--- Install js-sdk'"
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
+      - "echo '--- Installing Dependencies'"
+      - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
+      - "echo '+++ Running Tests'"
+      - "yarn test"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+
+  - label: "🛠 Build"
+    command:
+      - "echo '--- Install js-sdk'"
+      - "./scripts/ci/install-deps.sh"
+      - "echo '+++ Building Project'"
+      - "yarn build"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
 
   - label: ":chains: End-to-End Tests"
     agents:
@@ -21,37 +68,13 @@ steps:
       - "chmod +x ./scripts/*"
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
+      - "echo '+++ Running Tests'"
       - "./scripts/ci/end-to-end-tests.sh"
     plugins:
       - docker#v3.0.1:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
-          propagate-environment: true
-
-  - label: ":karma: Tests"
-    agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # webpack loves to gorge itself on resources.
-      queue: "medium"
-    command:
-      # Install chrome
-      - "echo '--- Installing Chrome'"
-      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
-      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
-      - "apt-get update"
-      - "apt-get install -y google-chrome-stable"
-      # Run tests
-      # TODO: Remove hacky chmod for BuildKite
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
-      - "echo '--- Installing Dependencies'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '+++ Running Tests'"
-      - "./scripts/ci/unit-tests.sh"
-    env:
-      CHROME_BIN: "/usr/bin/google-chrome-stable"
-    plugins:
-      - docker#v3.0.1:
-          image: "node:10"
           propagate-environment: true
 
   - label: "🔧 Riot Tests"
@@ -66,12 +89,13 @@ steps:
       - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
       - "apt-get update"
       - "apt-get install -y google-chrome-stable"
-      # Run tests
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
       - "echo '--- Installing Dependencies'"
       - "./scripts/ci/install-deps.sh"
+      - "echo '--- Running initial build steps'"
+      - "yarn build"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/riot-unit-tests.sh"
     env:

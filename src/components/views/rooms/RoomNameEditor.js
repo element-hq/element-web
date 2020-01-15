@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {

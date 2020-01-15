@@ -17,11 +17,11 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MessageEvent',
 
     propTypes: {

@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import sdk from "../../../../index";
+import * as sdk from "../../../../index";
 import dis from "../../../../dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";

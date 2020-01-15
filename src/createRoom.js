@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
@@ -35,7 +35,7 @@ import {getAddressType} from "./UserAddress";
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-function createRoom(opts) {
+export default function createRoom(opts) {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
 
@@ -139,5 +139,3 @@ function createRoom(opts) {
         return null;
     });
 }
-
-module.exports = createRoom;

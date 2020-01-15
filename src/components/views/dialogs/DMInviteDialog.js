@@ -17,14 +17,14 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/lib/matrix";
+import {RoomMember} from "matrix-js-sdk/src/matrix";
 import * as humanize from "humanize";
 import SdkConfig from "../../../SdkConfig";
-import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";

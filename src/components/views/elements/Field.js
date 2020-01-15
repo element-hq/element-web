@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { debounce } from 'lodash';
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
-import sdk from '../../index';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import * as sdk from '../../index';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher';
@@ -38,7 +39,7 @@ function getUnsentMessages(room) {
     });
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomStatusBar',
 
     propTypes: {

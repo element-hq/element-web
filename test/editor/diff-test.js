@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import {diffDeletion, diffAtCaret} from "../../src/editor/diff";
 
 describe('editor/diff', function() {

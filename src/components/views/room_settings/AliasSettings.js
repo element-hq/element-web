@@ -16,16 +16,15 @@ limitations under the License.
 */
 
 import EditableItemList from "../elements/EditableItemList";
-
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const sdk = require("../../../index");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
-const Modal = require("../../../Modal");
+import Modal from "../../../Modal";
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {

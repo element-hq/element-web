@@ -17,10 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import FileSaver from 'file-saver';
+import * as sdk from '../../../../index';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-
-import sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';

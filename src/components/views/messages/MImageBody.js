@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";

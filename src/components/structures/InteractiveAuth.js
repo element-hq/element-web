@@ -15,16 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
-const InteractiveAuth = Matrix.InteractiveAuth;
-
+import {InteractiveAuth} from "matrix-js-sdk";
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
 
-import sdk from '../../index';
+import * as sdk from '../../index';
 
 export default createReactClass({
     displayName: 'InteractiveAuth',
