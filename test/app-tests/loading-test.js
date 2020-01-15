@@ -37,6 +37,7 @@ import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
 import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
+import {cleanLocalstorage} from "../test-utils";
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -86,6 +87,7 @@ describe('loading:', function() {
             test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),
             test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
         ]);
+        cleanLocalstorage();
         console.log(`${Date.now()}: loading: afterEach complete`);
     });
 
