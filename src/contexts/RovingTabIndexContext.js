@@ -25,11 +25,9 @@ import React, {
     useRef,
     useReducer,
 } from "react";
-import PropTypes from "prop-types";
 import {Key} from "../Keyboard";
 
 const DOCUMENT_POSITION_PRECEDING = 2;
-const ANY = Symbol();
 
 const RovingTabIndexContext = createContext({
     state: {
@@ -119,14 +117,41 @@ export const RovingTabIndexContextWrapper = ({children}) => {
 
     const context = useMemo(() => ({state, dispatch}), [state]);
 
-    return <RovingTabIndexContext.Provider value={context}>
-        {children}
-    </RovingTabIndexContext.Provider>;
+    const onKeyDown = useCallback((ev) => {
+        if (state.refs.length <= 0) return;
+
+        let handled = true;
+        switch (ev.key) {
+            case Key.HOME:
+                setImmediate(() => state.refs[0].current.focus());
+                break;
+            case Key.END:
+                state.refs[state.refs.length - 1].current.focus();
+                break;
+            default:
+                handled = false;
+        }
+
+        if (handled) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+    }, [state]);
+
+    return <div onKeyDown={onKeyDown}>
+        <RovingTabIndexContext.Provider value={context}>
+            {children}
+        </RovingTabIndexContext.Provider>
+    </div>;
 };
 
-export const useRovingTabIndex = () => {
-    const ref = useRef(null);
+export const useRovingTabIndex = (inputRef) => {
+    let ref = useRef(null);
     const context = useContext(RovingTabIndexContext);
+
+    if (inputRef) {
+        ref = inputRef;
+    }
 
     // setup/teardown
     // add ref to the context
@@ -149,45 +174,13 @@ export const useRovingTabIndex = () => {
             payload: {ref},
         });
     }, [ref, context]);
-    const isActive = context.state.activeRef === ref || context.state.activeRef === ANY;
+
+    const isActive = context.state.activeRef === ref;
     return [onFocus, isActive, ref];
 };
 
-export const RovingTabIndexGroup = ({children}) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex();
-
-    // fake reducer dispatch to catch SET_FOCUS calls and pass them to parent as a focus of the group
-    const dispatch = useCallback(({type}) => {
-        if (type === types.SET_FOCUS) {
-            onFocus();
-        }
-    }, [onFocus]);
-
-    const context = useMemo(() => ({
-        state: {activeRef: isActive ? ANY : undefined},
-        dispatch,
-    }), [isActive, dispatch]);
-
-    return <div ref={ref}>
-        <RovingTabIndexContext.Provider value={context}>
-            {children}
-        </RovingTabIndexContext.Provider>
-    </div>;
-};
-
-// Wraps a given element to attach it to the roving context, props onFocus and tabIndex overridden
-export const RovingTabIndex = ({component: E, useInputRef, ...props}) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex();
-    const refProps = {};
-    if (useInputRef) {
-        refProps.inputRef = ref;
-    } else {
-        refProps.ref = ref;
-    }
-    return <E {...props} {...refProps} onFocus={onFocus} tabIndex={isActive ? 0 : -1} />;
-};
-RovingTabIndex.propTypes = {
-    component: PropTypes.elementType.isRequired,
-    useInputRef: PropTypes.bool, // whether to pass inputRef instead of ref like for AccessibleButton
+export const RovingTabIndexWrapper = ({children, inputRef}) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
+    return children({onFocus, isActive, ref});
 };
 

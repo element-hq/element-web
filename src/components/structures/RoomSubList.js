@@ -31,7 +31,7 @@ import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
-import {RovingTabIndex, RovingTabIndexGroup} from "../../contexts/RovingTabIndexContext";
+import {RovingTabIndexWrapper} from "../../contexts/RovingTabIndexContext";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -264,45 +264,6 @@ export default class RoomSubList extends React.PureComponent {
         const subListNotifCount = subListNotifications.count;
         const subListNotifHighlight = subListNotifications.highlight;
 
-        let badge;
-        if (!this.props.collapsed) {
-            const badgeClasses = classNames({
-                'mx_RoomSubList_badge': true,
-                'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
-            });
-            // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
-            if (subListNotifCount > 0) {
-                badge = (
-                    <RovingTabIndex
-                        component={AccessibleButton}
-                        useInputRef
-                        className={badgeClasses}
-                        onClick={this._onNotifBadgeClick}
-                        aria-label={_t("Jump to first unread room.")}
-                    >
-                        <div>
-                            { FormattingUtils.formatCount(subListNotifCount) }
-                        </div>
-                    </RovingTabIndex>
-                );
-            } else if (this.props.isInvite && this.props.list.length) {
-                // no notifications but highlight anyway because this is an invite badge
-                badge = (
-                    <RovingTabIndex
-                        component={AccessibleButton}
-                        useInputRef
-                        className={badgeClasses}
-                        onClick={this._onInviteBadgeClick}
-                        aria-label={_t("Jump to first invite.")}
-                    >
-                        <div>
-                            { this.props.list.length }
-                        </div>
-                    </RovingTabIndex>
-                );
-            }
-        }
-
         // When collapsed, allow a long hover on the header to show user
         // the full tag name and room count
         let title;
@@ -318,19 +279,6 @@ export default class RoomSubList extends React.PureComponent {
                 <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
         }
 
-        let addRoomButton;
-        if (this.props.onAddRoom) {
-            addRoomButton = (
-                <RovingTabIndex
-                    component={AccessibleTooltipButton}
-                    useInputRef
-                    onClick={this.onAddRoom}
-                    className="mx_RoomSubList_addRoom"
-                    title={this.props.addRoomLabel || _t("Add room")}
-                />
-            );
-        }
-
         const len = this.props.list.length + this.props.extraTiles.length;
         let chevron;
         if (len) {
@@ -342,26 +290,81 @@ export default class RoomSubList extends React.PureComponent {
             chevron = (<div className={chevronClasses} />);
         }
 
-        return <RovingTabIndexGroup>
-            <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
-                <RovingTabIndex
-                    component={AccessibleButton}
-                    useInputRef
-                    onClick={this.onClick}
-                    className="mx_RoomSubList_label"
-                    aria-expanded={!isCollapsed}
-                    inputRef={this._headerButton}
-                    role="treeitem"
-                    aria-level="1"
-                >
-                    { chevron }
-                    <span>{this.props.label}</span>
-                    { incomingCall }
-                </RovingTabIndex>
-                { badge }
-                { addRoomButton }
-            </div>
-        </RovingTabIndexGroup>;
+        return <RovingTabIndexWrapper inputRef={this._headerButton}>
+            {({onFocus, isActive, ref}) => {
+                const tabIndex = isActive ? 0 : -1;
+
+                let badge;
+                if (!this.props.collapsed) {
+                    const badgeClasses = classNames({
+                        'mx_RoomSubList_badge': true,
+                        'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
+                    });
+                    // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
+                    if (subListNotifCount > 0) {
+                        badge = (
+                            <AccessibleButton
+                                tabIndex={tabIndex}
+                                className={badgeClasses}
+                                onClick={this._onNotifBadgeClick}
+                                aria-label={_t("Jump to first unread room.")}
+                            >
+                                <div>
+                                    { FormattingUtils.formatCount(subListNotifCount) }
+                                </div>
+                            </AccessibleButton>
+                        );
+                    } else if (this.props.isInvite && this.props.list.length) {
+                        // no notifications but highlight anyway because this is an invite badge
+                        badge = (
+                            <AccessibleButton
+                                tabIndex={tabIndex}
+                                className={badgeClasses}
+                                onClick={this._onInviteBadgeClick}
+                                aria-label={_t("Jump to first invite.")}
+                            >
+                                <div>
+                                    { this.props.list.length }
+                                </div>
+                            </AccessibleButton>
+                        );
+                    }
+                }
+
+                let addRoomButton;
+                if (this.props.onAddRoom) {
+                    addRoomButton = (
+                        <AccessibleTooltipButton
+                            tabIndex={tabIndex}
+                            onClick={this.onAddRoom}
+                            className="mx_RoomSubList_addRoom"
+                            title={this.props.addRoomLabel || _t("Add room")}
+                        />
+                    );
+                }
+
+                return (
+                    <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
+                        <AccessibleButton
+                            onFocus={onFocus}
+                            tabIndex={tabIndex}
+                            inputRef={ref}
+                            onClick={this.onClick}
+                            className="mx_RoomSubList_label"
+                            aria-expanded={!isCollapsed}
+                            role="treeitem"
+                            aria-level="1"
+                        >
+                            { chevron }
+                            <span>{this.props.label}</span>
+                            { incomingCall }
+                        </AccessibleButton>
+                        { badge }
+                        { addRoomButton }
+                    </div>
+                );
+            } }
+        </RovingTabIndexWrapper>;
     }
 
     checkOverflow = () => {
