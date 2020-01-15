@@ -45,6 +45,7 @@ steps:
       - "echo '--- Fetching Dependencies'"
       - "./scripts/fetch-develop.deps.sh --depth 1"
       - "yarn install"
+      - "yarn build:genfiles"  # We have to build the app to make sure the autogenned files are present
       - "echo '+++ Running Tests'"
       - "yarn test"
     plugins:
