@@ -2035,5 +2035,11 @@
     "Go": "Joan",
     "Suggestions": "Proposamenak",
     "Failed to find the following users": "Ezin izan dira honako erabiltzaile hauek aurkitu",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Honako erabiltzaile hauek agian ez dira existitzen edo baliogabeak dira, eta ezin dira gonbidatu: %(csvNames)s"
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Honako erabiltzaile hauek agian ez dira existitzen edo baliogabeak dira, eta ezin dira gonbidatu: %(csvNames)s",
+    "Show a presence dot next to DMs in the room list": "Erakutsi presentzia puntua mezu zuzenen ondoan gelen zerrendan",
+    "Lock": "Blokeatu",
+    "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.": "Gakoen babes-kopia gaituta dago zure kontuan baina ez da saio honetarako ezarri. Biltegi sekretua ezartzeko, berrezarri zure gakoen babes-kopia.",
+    "Restore": "Berrezarri",
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Biltegi sekretua ezarriko da zure oraingo gakoen babes-kopiaren xehetasunak erabiliz. Zure biltegi sekretuaren pasa-esaldia eta berreskuratze gakoa lehen gakoen babes-kopiarako ziren berberak izango dira",
+    "Restore your Key Backup": "Berrezarri zure gakoen babes-kopia"
 }
