@@ -172,6 +172,7 @@ module.exports = createReactClass({
         MatrixClientPeg.get().on("accountData", this.onAccountData);
         MatrixClientPeg.get().on("crypto.keyBackupStatus", this.onKeyBackupStatus);
         MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        MatrixClientPeg.get().on("userTrustStatusChanged", this.onUserVerificationChanged);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
@@ -491,6 +492,7 @@ module.exports = createReactClass({
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
             MatrixClientPeg.get().removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+            MatrixClientPeg.get().removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -761,6 +763,14 @@ module.exports = createReactClass({
         this._updateE2EStatus(room);
     },
 
+    onUserVerificationChanged: function(userId, _trustStatus) {
+        const room = this.state.room;
+        if (!room.currentState.getMember(userId)) {
+            return;
+        }
+        this._updateE2EStatus(room);
+    },
+
     _updateE2EStatus: async function(room) {
         const cli = MatrixClientPeg.get();
         if (!cli.isRoomEncrypted(room.roomId)) {
@@ -784,29 +794,57 @@ module.exports = createReactClass({
             return;
         }
         const e2eMembers = await room.getEncryptionTargetMembers();
+
+        /*
+        Ensure we trust our own signing key, ie, nobody's used our credentials to
+        replace it and sign all our devices
+        */
+        if (!cli.checkUserTrust(cli.getUserId())) {
+            this.setState({
+                e2eStatus: "warning",
+            });
+            debuglog("e2e status set to warning due to not trusting our own signing key");
+            return;
+        }
+
+        /*
+        Gather verification state of every user in the room.
+        If _any_ user is verified then _every_ user must be verified, or we'll bail.
+        Note we don't count our own user so that the all/any check behaves properly.
+        */
+        const verificationState = e2eMembers.map(({userId}) => userId)
+            .filter((userId) => userId !== cli.getUserId())
+            .map((userId) => cli.checkUserTrust(userId).isCrossSigningVerified());
+        if (verificationState.includes(true) && verificationState.includes(false)) {
+            this.setState({
+                e2eStatus: "warning",
+            });
+            debuglog("e2e status set to warning as some, but not all, users are verified");
+            return;
+        }
+
+        /*
+        Whether we verify or not, a user having an untrusted device requires warnings.
+        Check every user's devices, including ourselves.
+        */
         for (const member of e2eMembers) {
             const { userId } = member;
-            const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-            if (!userVerified) {
-                this.setState({
-                    e2eStatus: "warning",
-                });
-                return;
-            }
             const devices = await cli.getStoredDevicesForUser(userId);
-            const allDevicesVerified = devices.every(device => {
-                const { deviceId } = device;
+            const allDevicesVerified = devices.every(({deviceId}) => {
                 return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
             });
             if (!allDevicesVerified) {
                 this.setState({
                     e2eStatus: "warning",
                 });
+                debuglog("e2e status set to warning as not all users trust all of their devices." +
+                         " Aborted on user", userId);
                 return;
             }
         }
+
         this.setState({
-            e2eStatus: "verified",
+            e2eStatus: verificationState.includes(true) ? "verified" : "normal",
         });
     },
 
