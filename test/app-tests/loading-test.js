@@ -80,9 +80,6 @@ describe('loading:', function() {
         // unmounting should have cleared the MatrixClientPeg
         expect(MatrixClientPeg.get()).toBe(null);
 
-        // chrome seems to take *ages* to delete the indexeddbs.
-        await sleep(10000);
-
         // clear the indexeddbs so we can start from a clean slate next time.
         await Promise.all([
             test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),

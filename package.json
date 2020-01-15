@@ -209,7 +209,6 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
       "/node_modules/(?!matrix-react-sdk).+$"
-    ],
-    "testTimeout": 30000
+    ]
   }
 }
