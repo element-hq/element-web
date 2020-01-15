@@ -1,4 +1,4 @@
-{
+module.exports = {
   "sourceMaps": true,
   "presets": [
     ["@babel/preset-env", {
@@ -22,4 +22,4 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-transform-runtime"
   ]
-}
+};
