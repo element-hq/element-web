@@ -198,7 +198,8 @@
     ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
-      "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json"
+      "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
+      "^browser-request$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/browser-request.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
