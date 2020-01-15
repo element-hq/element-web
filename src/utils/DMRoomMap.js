@@ -124,6 +124,27 @@ export default class DMRoomMap {
         return this._getUserToRooms()[userId] || [];
     }
 
+    /**
+     * Gets the DM room which the given IDs share, if any.
+     * @param {string[]} ids The identifiers (user IDs and email addresses) to look for.
+     * @returns {Room} The DM room which all IDs given share, or falsey if no common room.
+     */
+    getDMRoomForIdentifiers(ids) {
+        // TODO: [Canonical DMs] Handle lookups for email addresses.
+        // For now we'll pretend we only get user IDs and end up returning nothing for email addresses
+
+        let commonRooms = this.getDMRoomsForUserId(ids[0]);
+        for (let i = 1; i < ids.length; i++) {
+            const userRooms = this.getDMRoomsForUserId(ids[i]);
+            commonRooms = commonRooms.filter(r => userRooms.includes(r));
+        }
+
+        const joinedRooms = commonRooms.map(r => MatrixClientPeg.get().getRoom(r))
+            .filter(r => r && r.getMyMembership() === 'join');
+
+        return joinedRooms[0];
+    }
+
     getUserIdForRoomId(roomId) {
         if (this.roomToUser == null) {
             // we lazily populate roomToUser so you can use

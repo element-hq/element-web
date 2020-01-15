@@ -36,21 +36,19 @@ import SettingsStore from "./settings/SettingsStore";
  * @param {string[]} addrs Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @returns {Promise} Promise
  */
-function inviteMultipleToRoom(roomId, addrs) {
+export function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
     return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
 export function showStartChatInviteDialog() {
     if (SettingsStore.isFeatureEnabled("feature_ftue_dms")) {
+        // This new dialog handles the room creation internally - we don't need to worry about it.
         const DMInviteDialog = sdk.getComponent("dialogs.DMInviteDialog");
-        Modal.createTrackedDialog('Start DM', '', DMInviteDialog, {
-            onFinished: (inviteIds) => {
-                // TODO: Replace _onStartDmFinished with less hacks
-                if (inviteIds.length > 0) _onStartDmFinished(true, inviteIds.map(i => ({address: i})));
-                // else ignore and just do nothing
-            },
-        }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+        Modal.createTrackedDialog(
+            'Start DM', '', DMInviteDialog, {},
+            /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+        );
         return;
     }
 
