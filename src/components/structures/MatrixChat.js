@@ -1566,7 +1566,7 @@ export default createReactClass({
             dis.dispatch({
                 action: 'view_my_groups',
             });
-        } else if (screen == 'complete_security') {
+        } else if (screen === 'complete_security') {
             dis.dispatch({
                 action: 'start_complete_security',
             });
