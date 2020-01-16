@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../../../SdkConfig";
@@ -34,7 +34,8 @@ import {humanizeTime} from "../../../utils/humanize";
 import createRoom from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 
-// TODO: [TravisR] Make this generic for all kinds of invites
+export const KIND_DM = "dm";
+export const KIND_INVITE = "invite";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
@@ -276,13 +277,28 @@ export default class InviteDialog extends React.PureComponent {
     static propTypes = {
         // Takes an array of user IDs/emails to invite.
         onFinished: PropTypes.func.isRequired,
+
+        // The kind of invite being performed. Assumed to be KIND_DM if
+        // not provided.
+        kind: PropTypes.string,
+
+        // The room ID this dialog is for. Only required for KIND_INVITE.
+        roomId: PropTypes.string,
+    };
+
+    static defaultProps = {
+        kind: KIND_DM,
     };
 
     _debounceTimer: number = null;
     _editorRef: any = null;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        if (props.kind === KIND_INVITE && !props.roomId) {
+            throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
+        }
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
@@ -390,6 +406,21 @@ export default class InviteDialog extends React.PureComponent {
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
+    _shouldAbortAfterInviteError(result): boolean {
+        const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
+        if (failedUsers.length > 0) {
+            console.log("Failed to invite users: ", result);
+            this.setState({
+                busy: false,
+                errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
+                    csvUsers: failedUsers.join(", "),
+                }),
+            });
+            return true; // abort
+        }
+        return false;
+    }
+
     _startDm = () => {
         this.setState({busy: true});
         const targetIds = this.state.targets.map(t => t.userId);
@@ -417,15 +448,7 @@ export default class InviteDialog extends React.PureComponent {
             createRoomPromise = createRoom().then(roomId => {
                 return inviteMultipleToRoom(roomId, targetIds);
             }).then(result => {
-                const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
-                if (failedUsers.length > 0) {
-                    console.log("Failed to invite users: ", result);
-                    this.setState({
-                        busy: false,
-                        errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
-                            csvUsers: failedUsers.join(", "),
-                        }),
-                    });
+                if (this._shouldAbortAfterInviteError(result)) {
                     return true; // abort
                 }
             });
@@ -440,6 +463,33 @@ export default class InviteDialog extends React.PureComponent {
             this.setState({
                 busy: false,
                 errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+            });
+        });
+    };
+
+    _inviteUsers = () => {
+        this.setState({busy: true});
+        const targetIds = this.state.targets.map(t => t.userId);
+
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) {
+            console.error("Failed to find the room to invite users to");
+            this.setState({
+                busy: false,
+                errorText: _t("Something went wrong trying to invite the users."),
+            });
+            return;
+        }
+
+        inviteMultipleToRoom(this.props.roomId, targetIds).then(result => {
+            if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
+                this.props.onFinished();
+            }
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                busy: false,
+                errorText: _t("We couldn't invite those users. Please check the users you want to invite and try again."),
             });
         });
     };
@@ -658,7 +708,11 @@ export default class InviteDialog extends React.PureComponent {
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
-        const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+        let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+
+        if (this.props.kind === KIND_INVITE) {
+            sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
+        }
 
         // Mix in the server results if we have any, but only if we're searching. We track the additional
         // members separately because we want to filter sourceMembers but trust the mixin arrays to have
@@ -805,33 +859,54 @@ export default class InviteDialog extends React.PureComponent {
             spinner = <Spinner w={20} h={20} />;
         }
 
-        const userId = MatrixClientPeg.get().getUserId();
+
+        let title;
+        let helpText;
+        let buttonText;
+        let goButtonFn;
+
+        if (this.props.kind === KIND_DM) {
+            const userId = MatrixClientPeg.get().getUserId();
+
+            title = _t("Direct Messages");
+            helpText = _t(
+                "If you can't find someone, ask them for their username, or share your " +
+                "username (%(userId)s) or <a>profile link</a>.",
+                {userId},
+                {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
+            );
+            buttonText = _t("Go");
+            goButtonFn = this._startDm;
+        } else { // KIND_INVITE
+            title = _t("Invite to this room");
+            helpText = _t(
+                "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
+                "<a>share this room</a>.", {},
+                {a: (sub) => <a href={makeRoomPermalink(this.props.roomId)} rel="noopener" target="_blank">{sub}</a>},
+            );
+            buttonText = _t("Invite");
+            goButtonFn = this._inviteUsers;
+        }
+
         return (
             <BaseDialog
                 className='mx_InviteDialog'
                 hasCancel={true}
                 onFinished={this._cancel}
-                title={_t("Direct Messages")}
+                title={title}
             >
                 <div className='mx_InviteDialog_content'>
-                    <p>
-                        {_t(
-                            "If you can't find someone, ask them for their username, or share your " +
-                            "username (%(userId)s) or <a>profile link</a>.",
-                            {userId},
-                            {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
-                        )}
-                    </p>
+                    <p>{helpText}</p>
                     <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
                         <div className='mx_InviteDialog_buttonAndSpinner'>
                             <AccessibleButton
                                 kind="primary"
-                                onClick={this._startDm}
+                                onClick={goButtonFn}
                                 className='mx_InviteDialog_goButton'
                                 disabled={this.state.busy}
                             >
-                                {_t("Go")}
+                                {buttonText}
                             </AccessibleButton>
                             {spinner}
                         </div>

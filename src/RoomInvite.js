@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import { _t } from './languageHandler';
 import SettingsStore from "./settings/SettingsStore";
+import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 
 /**
  * Invites multiple addresses to a room
@@ -46,7 +48,7 @@ export function showStartChatInviteDialog() {
         // This new dialog handles the room creation internally - we don't need to worry about it.
         const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
         Modal.createTrackedDialog(
-            'Start DM', '', InviteDialog, {},
+            'Start DM', '', InviteDialog, {kind: KIND_DM},
             /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
         );
         return;
@@ -72,6 +74,16 @@ export function showStartChatInviteDialog() {
 }
 
 export function showRoomInviteDialog(roomId) {
+    if (SettingsStore.isFeatureEnabled("feature_ftue_dms")) {
+        // This new dialog handles the room creation internally - we don't need to worry about it.
+        const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
+        Modal.createTrackedDialog(
+            'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+            /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+        );
+        return;
+    }
+
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
 
     Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
