@@ -18,7 +18,7 @@ import dis from '../dispatcher';
 import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 const INITIAL_STATE = {
     orderedTags: null,

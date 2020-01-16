@@ -17,20 +17,20 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/lib/matrix";
-import * as humanize from "humanize";
+import {RoomMember} from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../../../SdkConfig";
-import {getHttpUriForMxc} from "matrix-js-sdk/lib/content-repo";
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";
 import dis from "../../../dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
+import {humanizeTime} from "../../../utils/humanize";
 import createRoom from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 
@@ -228,9 +228,7 @@ class DMRoomTile extends React.PureComponent {
 
         let timestamp = null;
         if (this.props.lastActiveTs) {
-            // TODO: [TravisR] Figure out how to i18n this
-            // `humanize` wants seconds for a timestamp, so divide by 1000
-            const humanTs = humanize.relativeTime(this.props.lastActiveTs / 1000);
+            const humanTs = humanizeTime(this.props.lastActiveTs);
             timestamp = <span className='mx_DMInviteDialog_roomTile_time'>{humanTs}</span>;
         }
 
@@ -338,6 +336,11 @@ export default class DMInviteDialog extends React.PureComponent {
 
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
+            // Filter out DMs (we'll handle these in the recents section)
+            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                return members; // Do nothing
+            }
+
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
                 if (!members[member.userId]) {
@@ -383,6 +386,7 @@ export default class DMInviteDialog extends React.PureComponent {
             }
             return b.score - a.score;
         });
+
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 

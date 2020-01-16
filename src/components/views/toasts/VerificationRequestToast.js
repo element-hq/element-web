@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Modal from "../../../Modal";
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import KeyVerificationStateObserver, {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";
+import ToastStore from "../../../stores/ToastStore";
 
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
@@ -63,12 +64,12 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         if (!this.props.requestObserver.pending) {
-            this.props.dismiss();
+            ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     }
 
     cancel = () => {
-        this.props.dismiss();
+        ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         try {
             this.props.request.cancel();
         } catch (err) {
@@ -77,7 +78,7 @@ export default class VerificationRequestToast extends React.PureComponent {
     }
 
     accept = () => {
-        this.props.dismiss();
+        ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {event} = this.props.request;
         // no room id for to_device requests
         if (event.getRoomId()) {
@@ -119,7 +120,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 }
 
 VerificationRequestToast.propTypes = {
-    dismiss: PropTypes.func.isRequired,
     request: PropTypes.object.isRequired,
     requestObserver: PropTypes.instanceOf(KeyVerificationStateObserver),
+    toastKey: PropTypes.string.isRequired,
 };

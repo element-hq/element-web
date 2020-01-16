@@ -20,7 +20,7 @@ import encrypt from 'browser-encrypt-attachment';
 // Pull in a fetch polyfill so we can download encrypted attachments.
 import 'isomorphic-fetch';
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 // WARNING: We have to be very careful about what mime-types we allow into blobs,
 // as for performance reasons these are now rendered via URL.createObjectURL()

@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
 import lolex from 'lolex';
 
-import * as TestUtils from 'test-utils';
+import * as TestUtils from '../../../test-utils';
 
-import sdk from '../../../../src/index';
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import sdk from '../../../skinned-sdk';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher';
@@ -31,7 +30,6 @@ describe('RoomList', () => {
     }
 
     let parentDiv = null;
-    let sandbox = null;
     let client = null;
     let root = null;
     const myUserId = '@me:domain';
@@ -45,8 +43,7 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
-        sandbox = TestUtils.stubClient(sandbox);
+        TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
@@ -112,7 +109,6 @@ describe('RoomList', () => {
             parentDiv.remove();
             parentDiv = null;
         }
-        sandbox.restore();
 
         clock.uninstall();
 
@@ -181,7 +177,7 @@ describe('RoomList', () => {
 
     function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
         // TODO: Re-enable dragging tests when we support dragging again.
-        xdescribe('does correct optimistic update when dragging from', () => {
+        describe.skip('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
                 expectCorrectMove(undefined, 'im.vector.fake.direct');
             });

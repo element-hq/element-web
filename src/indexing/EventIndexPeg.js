@@ -110,4 +110,4 @@ class EventIndexPeg {
 if (!global.mxEventIndexPeg) {
     global.mxEventIndexPeg = new EventIndexPeg();
 }
-module.exports = global.mxEventIndexPeg;
+export default global.mxEventIndexPeg;

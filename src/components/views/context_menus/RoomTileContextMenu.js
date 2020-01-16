@@ -21,9 +21,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import * as Rooms from '../../../Rooms';
@@ -63,7 +63,7 @@ const NotifOption = ({active, onClick, src, label}) => {
     );
 };
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {

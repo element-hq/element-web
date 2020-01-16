@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import Pill from "../../../elements/Pill";
 import {makeUserPermalink} from "../../../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../../../avatars/BaseAvatar";
-import { ContentRepo } from "matrix-js-sdk";
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -83,7 +83,7 @@ export default class BridgeSettingsTab extends React.Component {
 
         let networkIcon = null;
         if (networkName && network.avatar) {
-            const avatarUrl = ContentRepo.getHttpUriForMxc(
+            const avatarUrl = getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 network.avatar, 32, 32, "crop",
             );
@@ -99,7 +99,7 @@ export default class BridgeSettingsTab extends React.Component {
 
         let channelIcon = null;
         if (channel.avatar) {
-            const avatarUrl = ContentRepo.getHttpUriForMxc(
+            const avatarUrl = getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 channel.avatar, 32, 32, "crop",
             );

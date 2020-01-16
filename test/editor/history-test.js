@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import HistoryManager, {MAX_STEP_LENGTH} from "../../src/editor/history";
 
 describe('editor/history', function() {

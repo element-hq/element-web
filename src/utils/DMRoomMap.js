@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import _uniq from 'lodash/uniq';
-import {Room} from "matrix-js-sdk/lib/matrix";
+import {Room} from "matrix-js-sdk/src/matrix";
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map

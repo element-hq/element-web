@@ -84,7 +84,7 @@ if (DEBUG_SCROLL) {
  * offset as normal.
  */
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ScrollPanel',
 
     propTypes: {

@@ -22,8 +22,8 @@ import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {pillifyLinks} from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
 

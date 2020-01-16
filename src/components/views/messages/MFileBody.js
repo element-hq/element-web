@@ -19,8 +19,8 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import filesize from 'filesize';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
@@ -195,7 +195,7 @@ function computedStyle(element) {
     return cssText;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MFileBody',
 
     getInitialState: function() {
