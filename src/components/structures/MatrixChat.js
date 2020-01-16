@@ -1820,12 +1820,9 @@ export default createReactClass({
     },
 
     async onUserCompletedLoginFlow(credentials) {
-        // Create and start the client in the background
-        Lifecycle.setLoggedIn(credentials);
-
         // Wait for the client to be logged in (but not started)
         // which is enough to ask the server about account data.
-        await new Promise(resolve => {
+        const loggedIn = new Promise(resolve => {
             const actionHandlerRef = dis.register(payload => {
                 if (payload.action !== "on_logged_in") {
                     return;
@@ -1834,6 +1831,10 @@ export default createReactClass({
                 resolve();
             });
         });
+
+        // Create and start the client in the background
+        Lifecycle.setLoggedIn(credentials);
+        await loggedIn;
 
         const cli = MatrixClientPeg.get();
         // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
