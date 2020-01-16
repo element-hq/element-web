@@ -509,7 +509,9 @@ export default class InviteDialog extends React.PureComponent {
             console.error(err);
             this.setState({
                 busy: false,
-                errorText: _t("We couldn't invite those users. Please check the users you want to invite and try again."),
+                errorText: _t(
+                    "We couldn't invite those users. Please check the users you want to invite and try again.",
+                ),
             });
         });
     };
