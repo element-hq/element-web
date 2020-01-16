@@ -128,7 +128,7 @@ const reducer = (state, action) => {
     }
 };
 
-export const RovingTabIndexContextProvider = ({children}) => {
+export const RovingTabIndexProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, {
         activeRef: null,
         refs: [],

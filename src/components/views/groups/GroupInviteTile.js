@@ -26,7 +26,7 @@ import classNames from 'classnames';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RovingTabIndexWrapper} from "../../../contexts/RovingTabIndexContext";
+import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 
 // XXX this class copies a lot from RoomTile.js
 export default createReactClass({

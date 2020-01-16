@@ -32,7 +32,7 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
-import {RovingTabIndexWrapper} from "../../../contexts/RovingTabIndexContext";
+import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 
 export default createReactClass({
     displayName: 'RoomTile',

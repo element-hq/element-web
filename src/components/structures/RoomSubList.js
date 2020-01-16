@@ -31,7 +31,7 @@ import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
-import {RovingTabIndexWrapper} from "../../contexts/RovingTabIndexContext";
+import {RovingTabIndexWrapper} from "../../accessibility/RovingTabIndex";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
