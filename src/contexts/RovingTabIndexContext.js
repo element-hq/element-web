@@ -1,20 +1,18 @@
 /*
- *
- * Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * /
- */
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 
 import React, {
     createContext,
@@ -27,12 +25,25 @@ import React, {
 } from "react";
 import {Key} from "../Keyboard";
 
+/**
+ * Module to simplify implementing the Roving TabIndex accessibility technique
+ *
+ * Wrap the Widget in an RovingTabIndexContextProvider
+ * and then for all buttons make use of useRovingTabIndex or RovingTabIndexWrapper.
+ * The code will keep track of which tabIndex was most recently focused and expose that information as `isActive` which
+ * can then be used to only set the tabIndex to 0 as expected by the roving tabindex technique.
+ * When the active button gets unmounted the closest button will be chosen as expected.
+ * Initially the first button to mount will be given active state.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#Technique_1_Roving_tabindex
+ */
+
 const DOCUMENT_POSITION_PRECEDING = 2;
 
 const RovingTabIndexContext = createContext({
     state: {
         activeRef: null,
-        refs: [],
+        refs: [], // list of refs in DOM order
     },
     dispatch: () => {},
 });
@@ -49,6 +60,7 @@ const reducer = (state, action) => {
     switch (action.type) {
         case types.REGISTER: {
             if (state.refs.length === 0) {
+                // Our list of refs was empty, set activeRef to this first item
                 return {
                     ...state,
                     activeRef: action.payload.ref,
@@ -60,6 +72,7 @@ const reducer = (state, action) => {
                 return state; // already in refs, this should not happen
             }
 
+            // find the index of the first ref which is not preceding this one in DOM order
             let newIndex = state.refs.findIndex(ref => {
                 return ref.current.compareDocumentPosition(action.payload.ref.current) & DOCUMENT_POSITION_PRECEDING;
             });
@@ -68,6 +81,7 @@ const reducer = (state, action) => {
                 newIndex = state.refs.length; // append to the end
             }
 
+            // update the refs list
             return {
                 ...state,
                 refs: [
@@ -78,13 +92,16 @@ const reducer = (state, action) => {
             };
         }
         case types.UNREGISTER: {
-            const refs = state.refs.filter(r => r !== action.payload.ref); // keep all other refs
+            // filter out the ref which we are removing
+            const refs = state.refs.filter(r => r !== action.payload.ref);
 
             if (refs.length === state.refs.length) {
                 return state; // already removed, this should not happen
             }
 
-            if (state.activeRef === action.payload.ref) { // we just removed the active ref, need to replace it
+            if (state.activeRef === action.payload.ref) {
+                // we just removed the active ref, need to replace it
+                // pick the ref which is now in the index the old ref was in
                 const oldIndex = state.refs.findIndex(r => r === action.payload.ref);
                 return {
                     ...state,
@@ -93,12 +110,14 @@ const reducer = (state, action) => {
                 };
             }
 
+            // update the refs list
             return {
                 ...state,
                 refs,
             };
         }
         case types.SET_FOCUS: {
+            // update active ref
             return {
                 ...state,
                 activeRef: action.payload.ref,
@@ -115,17 +134,18 @@ export const RovingTabIndexContextProvider = ({children}) => {
         refs: [],
     });
 
-    const context = useMemo(() => ({state, dispatch}), [state]);
-
     const onKeyDown = useCallback((ev) => {
+        // check if we actually have any items
         if (state.refs.length <= 0) return;
 
         let handled = true;
         switch (ev.key) {
             case Key.HOME:
+                // move focus to first item
                 setImmediate(() => state.refs[0].current.focus());
                 break;
             case Key.END:
+                // move focus to last item
                 state.refs[state.refs.length - 1].current.focus();
                 break;
             default:
@@ -138,6 +158,9 @@ export const RovingTabIndexContextProvider = ({children}) => {
         }
     }, [state]);
 
+    const context = useMemo(() => ({state, dispatch}), [state]);
+
+    // wrap in a div with key-down handling for HOME/END keys
     return <div onKeyDown={onKeyDown}>
         <RovingTabIndexContext.Provider value={context}>
             {children}
@@ -145,21 +168,27 @@ export const RovingTabIndexContextProvider = ({children}) => {
     </div>;
 };
 
+// Hook to register a roving tab index
+// inputRef parameter specifies the ref to use
+// onFocus should be called when the index gained focus in any manner
+// isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`
+// ref should be passed to a DOM node which will be used for DOM compareDocumentPosition
 export const useRovingTabIndex = (inputRef) => {
-    let ref = useRef(null);
     const context = useContext(RovingTabIndexContext);
+    let ref = useRef(null);
 
     if (inputRef) {
+        // if we are given a ref, use it instead of ours
         ref = inputRef;
     }
 
-    // setup/teardown
-    // add ref to the context
+    // setup (after refs)
     useLayoutEffect(() => {
         context.dispatch({
             type: types.REGISTER,
             payload: {ref},
         });
+        // teardown
         return () => {
             context.dispatch({
                 type: types.UNREGISTER,
@@ -179,6 +208,7 @@ export const useRovingTabIndex = (inputRef) => {
     return [onFocus, isActive, ref];
 };
 
+// Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
 export const RovingTabIndexWrapper = ({children, inputRef}) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
     return children({onFocus, isActive, ref});
