@@ -2057,5 +2057,14 @@
     "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.": "A Kulcs Mentés a fiókhoz igen de ehhez a munkamenethez nincs beállítva. A Biztonsági tároló beállításához állítsd vissza a kulcs mentést.",
     "Restore": "Visszaállít",
     "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "A Biztonsági Tároló a meglévő kulcs mentés adatai alapján lesz beállítva. A biztonsági tárolóhoz tartozó jelmondat és a visszaállítási kulcs azonos lesz  ahogy azok a kulcs mentéshez voltak",
-    "Restore your Key Backup": "Kulcs Mentés visszaállítása"
+    "Restore your Key Backup": "Kulcs Mentés visszaállítása",
+    "Complete security": "Biztonság beállítása",
+    "Verify this session to grant it access to encrypted messages.": "A titkosított üzenetekhez való hozzáféréshez hitelesítsd ezt a munkamenetet.",
+    "Start": "Indít",
+    "Session verified": "Munkamenet hitelesítve",
+    "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Ez a munkameneted hitelesítve van. A titkosított üzenetekhez hozzáférése van és más felhasználók megbízhatónak látják.",
+    "Done": "Kész",
+    "Without completing security on this device, it won’t have access to encrypted messages.": "Az eszköz biztonságának beállítása nélkül nem férhet hozzá a titkosított üzenetekhez.",
+    "Go Back": "Vissza",
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "A Biztonsági Tároló a kulcs mentés adatainak felhasználásával lesz beállítva. A biztonsági tároló jelmondata és a visszaállítási kulcs ugyanaz lesz mint a kulcs mentéshez használt."
 }
