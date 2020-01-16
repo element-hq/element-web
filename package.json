@@ -48,7 +48,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "install:electron": "electron-builder install-app-deps",
     "dist": "scripts/package.sh",
-    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\", \"yarn reskindex:watch-react\", \"yarn start:res\" \"yarn start:js\"",
+    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "electron": "yarn build && yarn install:electron && electron .",
