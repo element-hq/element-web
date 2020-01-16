@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import { _t } from '../languageHandler';
 
 const SUB_EVENT_TYPES_OF_INTEREST = ["start", "cancel", "done"];

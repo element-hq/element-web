@@ -18,8 +18,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 
 // Controlled Toggle Switch element, written with Accessibility in mind
 const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {

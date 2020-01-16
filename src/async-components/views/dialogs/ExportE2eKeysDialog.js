@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;

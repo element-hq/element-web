@@ -18,7 +18,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'UnknownBody',
 
     render: function() {

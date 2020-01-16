@@ -20,7 +20,7 @@ import URL from 'url';
 import dis from './dispatcher';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";

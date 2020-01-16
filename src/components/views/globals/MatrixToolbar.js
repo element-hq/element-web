@@ -20,7 +20,7 @@ import { _t } from '../../../languageHandler';
 import Notifier from '../../../Notifier';
 import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MatrixToolbar',
 
     hideToolbar: function() {

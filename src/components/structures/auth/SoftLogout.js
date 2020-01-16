@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import url from 'url';
+import AuthPage from "../../views/auth/AuthPage";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -65,7 +66,7 @@ export default class SoftLogout extends React.Component {
     componentDidMount(): void {
         // We've ended up here when we don't need to - navigate to login
         if (!Lifecycle.isSoftLogout()) {
-            dis.dispatch({action: "on_logged_in"});
+            dis.dispatch({action: "start_login"});
             return;
         }
 
@@ -284,7 +285,6 @@ export default class SoftLogout extends React.Component {
     }
 
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');

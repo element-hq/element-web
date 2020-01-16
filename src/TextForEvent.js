@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -620,10 +620,8 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-module.exports = {
-    textForEvent: function(ev) {
-        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-        if (handler) return handler(ev);
-        return '';
-    },
-};
+export function textForEvent(ev) {
+    const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
+    if (handler) return handler(ev);
+    return '';
+}

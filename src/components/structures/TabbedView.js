@@ -19,7 +19,7 @@ limitations under the License.
 import * as React from "react";
 import {_t} from '../../languageHandler';
 import PropTypes from "prop-types";
-import sdk from "../../index";
+import * as sdk from "../../index";
 
 /**
  * Represents a tab for the TabbedView.
@@ -38,7 +38,7 @@ export class Tab {
     }
 }
 
-export class TabbedView extends React.Component {
+export default class TabbedView extends React.Component {
     static propTypes = {
         // The tabs to show
         tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,

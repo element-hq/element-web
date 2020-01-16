@@ -22,8 +22,8 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import { _t, _td } from '../../../languageHandler';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
@@ -44,7 +44,7 @@ const addressTypeName = {
 };
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: "AddressPickerDialog",
 
     propTypes: {

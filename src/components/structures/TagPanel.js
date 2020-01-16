@@ -20,7 +20,7 @@ import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
 
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import { _t } from '../../languageHandler';
 

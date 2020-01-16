@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
-const packageJson = require('../../../../../../package.json');
-const Modal = require("../../../../../Modal");
-const sdk = require("../../../../..");
-const PlatformPeg = require("../../../../../PlatformPeg");
+import packageJson from "../../../../../../package.json";
+import Modal from "../../../../../Modal";
+import * as sdk from "../../../../../";
+import PlatformPeg from "../../../../../PlatformPeg";
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha. Prepend version with v, to look like riot-web version

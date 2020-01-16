@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
-import TextForEvent from './TextForEvent';
+import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
-import Avatar from './Avatar';
+import * as Avatar from './Avatar';
 import dis from './dispatcher';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
@@ -364,4 +364,4 @@ if (!global.mxNotifier) {
     global.mxNotifier = Notifier;
 }
 
-module.exports = global.mxNotifier;
+export default global.mxNotifier;

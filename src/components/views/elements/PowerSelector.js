@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PowerSelector',
 
     propTypes: {
