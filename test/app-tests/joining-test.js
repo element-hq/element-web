@@ -21,15 +21,16 @@ import WebPlatform from '../../src/vector/platform/WebPlatform';
 import * as sdk from "matrix-react-sdk";
 import * as jssdk from "matrix-js-sdk";
 import "../skin-sdk";
+import "../jest-mocks";
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils from "react-dom/test-utils";
-import expect from "expect";
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
 import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
 import * as test_utils from "../test-utils";
 import MockHttpBackend from "matrix-mock-request";
+import "fake-indexeddb/auto";
 
 
 const MatrixChat = sdk.getComponent('structures.MatrixChat');
