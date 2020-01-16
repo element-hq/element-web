@@ -42,6 +42,10 @@ module.exports = (env, argv) => {
                 },
             },
 
+            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
+            // See https://github.com/webpack/webpack/issues/7128 for more info.
+            namedModules: false,
+
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: argv.mode === 'production',
@@ -297,10 +301,9 @@ module.exports = (env, argv) => {
             chunkFilename: "bundles/[hash]/[name].js",
         },
 
-        // DO NOT enable this option. It makes the source maps all wonky. Instead,
-        // we end up including the sourcemaps through the loaders which makes them
-        // more accurate.
-        //devtool: "source-map",
+        // This makes the sourcemaps human readable for developers. We use eval-source-map
+        // because the plain source-map devtool ruins the alignment.
+        devtool: "eval-source-map",
 
         // configuration for the webpack-dev-server
         devServer: {
