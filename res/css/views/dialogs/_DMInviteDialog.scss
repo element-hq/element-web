@@ -67,6 +67,17 @@ limitations under the License.
         height: 25px;
         line-height: 25px;
     }
+
+    .mx_DMInviteDialog_buttonAndSpinner {
+        .mx_Spinner {
+            // Width and height are required to trick the layout engine.
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 }
 
 .mx_DMInviteDialog_section {

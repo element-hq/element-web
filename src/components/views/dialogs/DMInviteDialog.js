@@ -31,6 +31,8 @@ import dis from "../../../dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
+import createRoom from "../../../createRoom";
+import {inviteMultipleToRoom} from "../../../RoomInvite";
 
 // TODO: [TravisR] Make this generic for all kinds of invites
 
@@ -293,6 +295,10 @@ export default class DMInviteDialog extends React.PureComponent {
             threepidResultsMixin: [], // { user: ThreepidMember, userId: string}[], like recents and suggestions
             canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
             tryingIdentityServer: false,
+
+            // These two flags are used for the 'Go' button to communicate what is going on.
+            busy: false,
+            errorText: null,
         };
 
         this._editorRef = createRef();
@@ -385,11 +391,64 @@ export default class DMInviteDialog extends React.PureComponent {
     }
 
     _startDm = () => {
-        this.props.onFinished(this.state.targets.map(t => t.userId));
+        this.setState({busy: true});
+        const targetIds = this.state.targets.map(t => t.userId);
+
+        // Check if there is already a DM with these people and reuse it if possible.
+        const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        if (existingRoom) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: existingRoom.roomId,
+                should_peek: false,
+                joining: false,
+            });
+            this.props.onFinished();
+            return;
+        }
+
+        // Check if it's a traditional DM and create the room if required.
+        // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
+        let createRoomPromise = Promise.resolve();
+        if (targetIds.length === 1) {
+            createRoomPromise = createRoom({dmUserId: targetIds[0]});
+        } else {
+            // Create a boring room and try to invite the targets manually.
+            createRoomPromise = createRoom().then(roomId => {
+                return inviteMultipleToRoom(roomId, targetIds);
+            }).then(result => {
+                const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
+                if (failedUsers.length > 0) {
+                    console.log("Failed to invite users: ", result);
+                    this.setState({
+                        busy: false,
+                        errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
+                            csvUsers: failedUsers.join(", "),
+                        }),
+                    });
+                    return true; // abort
+                }
+            });
+        }
+
+        // the createRoom call will show the room for us, so we don't need to worry about that.
+        createRoomPromise.then(abort => {
+            if (abort === true) return; // only abort on true booleans, not roomIds or something
+            this.props.onFinished();
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                busy: false,
+                errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+            });
+        });
     };
 
     _cancel = () => {
-        this.props.onFinished([]);
+        // We do not want the user to close the dialog while an action is in progress
+        if (this.state.busy) return;
+
+        this.props.onFinished();
     };
 
     _updateFilter = (e) => {
@@ -739,6 +798,12 @@ export default class DMInviteDialog extends React.PureComponent {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        const Spinner = sdk.getComponent("elements.Spinner");
+
+        let spinner = null;
+        if (this.state.busy) {
+            spinner = <Spinner w={20} h={20} />;
+        }
 
         const userId = MatrixClientPeg.get().getUserId();
         return (
@@ -759,15 +824,20 @@ export default class DMInviteDialog extends React.PureComponent {
                     </p>
                     <div className='mx_DMInviteDialog_addressBar'>
                         {this._renderEditor()}
-                        {this._renderIdentityServerWarning()}
-                        <AccessibleButton
-                            kind="primary"
-                            onClick={this._startDm}
-                            className='mx_DMInviteDialog_goButton'
-                        >
-                            {_t("Go")}
-                        </AccessibleButton>
+                        <div className='mx_DMInviteDialog_buttonAndSpinner'>
+                            <AccessibleButton
+                                kind="primary"
+                                onClick={this._startDm}
+                                className='mx_DMInviteDialog_goButton'
+                                disabled={this.state.busy}
+                            >
+                                {_t("Go")}
+                            </AccessibleButton>
+                            {spinner}
+                        </div>
                     </div>
+                    {this._renderIdentityServerWarning()}
+                    <div className='error'>{this.state.errorText}</div>
                     {this._renderSection('recents')}
                     {this._renderSection('suggestions')}
                 </div>
