@@ -16,10 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
+import * as sdk from '../../../../index';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
-
-import sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
 import {Key} from "../../../../Keyboard";

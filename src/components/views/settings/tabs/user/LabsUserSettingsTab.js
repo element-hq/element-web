@@ -19,7 +19,7 @@ import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-const sdk = require("../../../../..");
+import * as sdk from "../../../../../index";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {

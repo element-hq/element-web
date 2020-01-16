@@ -18,12 +18,11 @@ limitations under the License.
 import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
-const request = require('browser-request');
-
-const SdkConfig = require('./SdkConfig');
-const MatrixClientPeg = require('./MatrixClientPeg');
+import {MatrixClientPeg} from "./MatrixClientPeg";
+import request from "browser-request";
 
 import * as Matrix from 'matrix-js-sdk';
+import SdkConfig from "./SdkConfig";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";

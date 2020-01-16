@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tab, TabbedView} from "../../structures/TabbedView";
+import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
@@ -25,8 +25,8 @@ import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 

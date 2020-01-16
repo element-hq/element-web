@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import {getAddressType} from '../UserAddress';
 import GroupStore from '../stores/GroupStore';
 import {_t} from "../languageHandler";
-import sdk from "../index";
+import * as sdk from "../index";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import {defer} from "./promise";

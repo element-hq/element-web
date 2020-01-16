@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 /**
  * A component which wraps an EditableText, with a spinner while updates take

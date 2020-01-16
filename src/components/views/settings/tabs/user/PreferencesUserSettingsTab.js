@@ -21,7 +21,7 @@ import {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {

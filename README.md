@@ -67,6 +67,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
 
   * After creating a new component you must run `yarn reskindex` to regenerate
     the `component-index.js` for the SDK (used in future for skinning)
+    <!-- TODO: Remove this once this approach to skinning is replaced -->
 
   * The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
     CSS for matrix-react-sdk currently resides in

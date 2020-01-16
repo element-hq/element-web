@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +17,9 @@ limitations under the License.
 
 'use strict';
 
-const PushRuleVectorState = require('./PushRuleVectorState');
+import {PushRuleVectorState} from "./PushRuleVectorState";
 
-module.exports = {
+export class ContentRules {
     /**
      * Extract the keyword rules from a list of rules, and parse them
      * into a form which is useful for Vector's UI.
@@ -30,7 +31,7 @@ module.exports = {
      *   externalRules: a list of other keyword rules, with states other than
      *      vectorState
      */
-    parseContentRules: function(rulesets) {
+    static parseContentRules(rulesets) {
         // first categorise the keyword rules in terms of their actions
         const contentRules = this._categoriseContentRules(rulesets);
 
@@ -79,9 +80,9 @@ module.exports = {
                 externalRules: contentRules.other,
             };
         }
-    },
+    }
 
-    _categoriseContentRules: function(rulesets) {
+    static _categoriseContentRules(rulesets) {
         const contentRules = {on: [], on_but_disabled: [], loud: [], loud_but_disabled: [], other: []};
         for (const kind in rulesets.global) {
             for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -116,5 +117,5 @@ module.exports = {
             }
         }
         return contentRules;
-    },
-};
+    }
+}
