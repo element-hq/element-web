@@ -153,7 +153,7 @@ export const RovingTabIndexHomeEndHelper = ({children}) => {
         switch (ev.key) {
             case Key.HOME:
                 // move focus to first item
-                setImmediate(() => context.state.refs[0].current.focus());
+                context.state.refs[0].current.focus();
                 break;
             case Key.END:
                 // move focus to last item
