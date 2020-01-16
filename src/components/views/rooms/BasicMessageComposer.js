@@ -210,8 +210,8 @@ export default class BasicMessageEditor extends React.Component {
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
             if (type === "cut") {
-                selection.deleteFromDocument();
-                range.replace([]);
+                // Remove the text, updating the model as appropriate
+                replaceRangeAndMoveCaret(range, []);
             }
             event.preventDefault();
         }
