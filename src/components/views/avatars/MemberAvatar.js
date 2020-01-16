@@ -83,7 +83,7 @@ export default createReactClass({
 
         if (viewUserOnClick) {
             onClick = () => {
-                dispatcher.dispatch({
+                dis.dispatch({
                     action: 'view_user',
                     member: this.props.member,
                 });
