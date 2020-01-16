@@ -44,9 +44,9 @@ export function inviteMultipleToRoom(roomId, addrs) {
 export function showStartChatInviteDialog() {
     if (SettingsStore.isFeatureEnabled("feature_ftue_dms")) {
         // This new dialog handles the room creation internally - we don't need to worry about it.
-        const DMInviteDialog = sdk.getComponent("dialogs.DMInviteDialog");
+        const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
         Modal.createTrackedDialog(
-            'Start DM', '', DMInviteDialog, {},
+            'Start DM', '', InviteDialog, {},
             /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
         );
         return;

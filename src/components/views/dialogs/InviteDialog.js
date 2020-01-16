@@ -140,11 +140,11 @@ class DMUserTile extends React.PureComponent {
         const avatarSize = 20;
         const avatar = this.props.member.isEmail
             ? <img
-                className='mx_DMInviteDialog_userTile_avatar mx_DMInviteDialog_userTile_threepidAvatar'
+                className='mx_InviteDialog_userTile_avatar mx_InviteDialog_userTile_threepidAvatar'
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
-                className='mx_DMInviteDialog_userTile_avatar'
+                className='mx_InviteDialog_userTile_avatar'
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
@@ -154,13 +154,13 @@ class DMUserTile extends React.PureComponent {
                 height={avatarSize} />;
 
         return (
-            <span className='mx_DMInviteDialog_userTile'>
-                <span className='mx_DMInviteDialog_userTile_pill'>
+            <span className='mx_InviteDialog_userTile'>
+                <span className='mx_InviteDialog_userTile_pill'>
                     {avatar}
-                    <span className='mx_DMInviteDialog_userTile_name'>{this.props.member.name}</span>
+                    <span className='mx_InviteDialog_userTile_name'>{this.props.member.name}</span>
                 </span>
                 <AccessibleButton
-                    className='mx_DMInviteDialog_userTile_remove'
+                    className='mx_InviteDialog_userTile_remove'
                     onClick={this._onRemove}
                 >
                     <img src={require("../../../../res/img/icon-pill-remove.svg")} alt={_t('Remove')} width={8} height={8} />
@@ -211,7 +211,7 @@ class DMRoomTile extends React.PureComponent {
 
             // Highlight the word the user entered
             const substr = str.substring(i, filterStr.length + i);
-            result.push(<span className='mx_DMInviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
+            result.push(<span className='mx_InviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
             i += substr.length;
         }
 
@@ -229,7 +229,7 @@ class DMRoomTile extends React.PureComponent {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
-            timestamp = <span className='mx_DMInviteDialog_roomTile_time'>{humanTs}</span>;
+            timestamp = <span className='mx_InviteDialog_roomTile_time'>{humanTs}</span>;
         }
 
         const avatarSize = 36;
@@ -249,30 +249,30 @@ class DMRoomTile extends React.PureComponent {
         let checkmark = null;
         if (this.props.isSelected) {
             // To reduce flickering we put the 'selected' room tile above the real avatar
-            checkmark = <div className='mx_DMInviteDialog_roomTile_selected' />;
+            checkmark = <div className='mx_InviteDialog_roomTile_selected' />;
         }
 
         // To reduce flickering we put the checkmark on top of the actual avatar (prevents
         // the browser from reloading the image source when the avatar remounts).
         const stackedAvatar = (
-            <span className='mx_DMInviteDialog_roomTile_avatarStack'>
+            <span className='mx_InviteDialog_roomTile_avatarStack'>
                 {avatar}
                 {checkmark}
             </span>
         );
 
         return (
-            <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
+            <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
-                <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
-                <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
+                <span className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
+                <span className='mx_InviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
             </div>
         );
     }
 }
 
-export default class DMInviteDialog extends React.PureComponent {
+export default class InviteDialog extends React.PureComponent {
     static propTypes = {
         // Takes an array of user IDs/emails to invite.
         onFinished: PropTypes.func.isRequired,
@@ -690,7 +690,7 @@ export default class DMInviteDialog extends React.PureComponent {
 
             if (sourceMembers.length === 0 && additionalMembers.length === 0) {
                 return (
-                    <div className='mx_DMInviteDialog_section'>
+                    <div className='mx_InviteDialog_section'>
                         <h3>{sectionName}</h3>
                         <p>{_t("No results")}</p>
                     </div>
@@ -731,7 +731,7 @@ export default class DMInviteDialog extends React.PureComponent {
             />
         ));
         return (
-            <div className='mx_DMInviteDialog_section'>
+            <div className='mx_InviteDialog_section'>
                 <h3>{sectionName}</h3>
                 {tiles}
                 {showMore}
@@ -754,7 +754,7 @@ export default class DMInviteDialog extends React.PureComponent {
             />
         );
         return (
-            <div className='mx_DMInviteDialog_editor' onClick={this._onClickInputArea}>
+            <div className='mx_InviteDialog_editor' onClick={this._onClickInputArea}>
                 {targets}
                 {input}
             </div>
@@ -808,12 +808,12 @@ export default class DMInviteDialog extends React.PureComponent {
         const userId = MatrixClientPeg.get().getUserId();
         return (
             <BaseDialog
-                className='mx_DMInviteDialog'
+                className='mx_InviteDialog'
                 hasCancel={true}
                 onFinished={this._cancel}
                 title={_t("Direct Messages")}
             >
-                <div className='mx_DMInviteDialog_content'>
+                <div className='mx_InviteDialog_content'>
                     <p>
                         {_t(
                             "If you can't find someone, ask them for their username, or share your " +
@@ -822,13 +822,13 @@ export default class DMInviteDialog extends React.PureComponent {
                             {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
                         )}
                     </p>
-                    <div className='mx_DMInviteDialog_addressBar'>
+                    <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
-                        <div className='mx_DMInviteDialog_buttonAndSpinner'>
+                        <div className='mx_InviteDialog_buttonAndSpinner'>
                             <AccessibleButton
                                 kind="primary"
                                 onClick={this._startDm}
-                                className='mx_DMInviteDialog_goButton'
+                                className='mx_InviteDialog_goButton'
                                 disabled={this.state.busy}
                             >
                                 {_t("Go")}
