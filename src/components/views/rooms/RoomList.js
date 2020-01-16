@@ -39,7 +39,7 @@ import * as sdk from "../../../index";
 import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
-import {RovingTabIndexContextProvider} from "../../../contexts/RovingTabIndexContext";
+import {RovingTabIndexContextProvider, RovingTabIndexHomeEndHelper} from "../../../contexts/RovingTabIndexContext";
 
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -789,7 +789,9 @@ export default createReactClass({
                 onMouseLeave={this.onMouseLeave}
             >
                 <RovingTabIndexContextProvider>
-                    { subListComponents }
+                    <RovingTabIndexHomeEndHelper>
+                        { subListComponents }
+                    </RovingTabIndexHomeEndHelper>
                 </RovingTabIndexContextProvider>
             </div>
         );

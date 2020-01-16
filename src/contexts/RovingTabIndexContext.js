@@ -134,19 +134,30 @@ export const RovingTabIndexContextProvider = ({children}) => {
         refs: [],
     });
 
+    const context = useMemo(() => ({state, dispatch}), [state]);
+
+    return <RovingTabIndexContext.Provider value={context}>
+        {children}
+    </RovingTabIndexContext.Provider>;
+};
+
+// Helper to handle Home/End to jump to first/last roving-tab-index for widgets such as treeview
+export const RovingTabIndexHomeEndHelper = ({children}) => {
+    const context = useContext(RovingTabIndexContext);
+
     const onKeyDown = useCallback((ev) => {
         // check if we actually have any items
-        if (state.refs.length <= 0) return;
+        if (context.state.refs.length <= 0) return;
 
         let handled = true;
         switch (ev.key) {
             case Key.HOME:
                 // move focus to first item
-                setImmediate(() => state.refs[0].current.focus());
+                setImmediate(() => context.state.refs[0].current.focus());
                 break;
             case Key.END:
                 // move focus to last item
-                state.refs[state.refs.length - 1].current.focus();
+                context.state.refs[context.state.refs.length - 1].current.focus();
                 break;
             default:
                 handled = false;
@@ -156,15 +167,10 @@ export const RovingTabIndexContextProvider = ({children}) => {
             ev.preventDefault();
             ev.stopPropagation();
         }
-    }, [state]);
+    }, [context.state]);
 
-    const context = useMemo(() => ({state, dispatch}), [state]);
-
-    // wrap in a div with key-down handling for HOME/END keys
     return <div onKeyDown={onKeyDown}>
-        <RovingTabIndexContext.Provider value={context}>
-            {children}
-        </RovingTabIndexContext.Provider>
+        { children }
     </div>;
 };
 
