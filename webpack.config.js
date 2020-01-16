@@ -14,17 +14,26 @@ module.exports = (env, argv) => {
         argv.mode = "development";
     }
 
+    const development = {};
+    if (argv.mode !== "production") {
+        // This makes the sourcemaps human readable for developers. We use eval-source-map
+        // because the plain source-map devtool ruins the alignment.
+        development['devtool'] = 'eval-source-map';
+    }
+
     return {
+        ...development,
+
         entry: {
             "bundle": "./src/vector/index.js",
-                "indexeddb-worker": "./src/vector/indexeddb-worker.js",
-                "mobileguide": "./src/vector/mobile_guide/index.js",
+            "indexeddb-worker": "./src/vector/indexeddb-worker.js",
+            "mobileguide": "./src/vector/mobile_guide/index.js",
 
-                // CSS themes
-                "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
-                "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-                "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
-                "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            // CSS themes
+            "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
+            "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+            "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
+            "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
         },
 
         optimization: {
@@ -35,17 +44,21 @@ module.exports = (env, argv) => {
                 cacheGroups: {
                     styles: {
                         name: 'styles',
-                            test: /\.css$/,
-                            enforce: true,
+                        test: /\.css$/,
+                        enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
                 },
             },
 
+            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
+            // See https://github.com/webpack/webpack/issues/7128 for more info.
+            namedModules: false,
+
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: argv.mode === 'production',
-                minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
         },
 
         resolve: {
@@ -59,22 +72,22 @@ module.exports = (env, argv) => {
             // layer to have our custom alternate fields to load things in the right order. These are
             // the defaults of webpack prepended with `matrix_src_`.
             mainFields: ['matrix_src_browser', 'matrix_src_main', 'browser', 'main'],
-                aliasFields: ['matrix_src_browser', 'browser'],
+            aliasFields: ['matrix_src_browser', 'browser'],
 
-                // We need to specify that TS can be resolved without an extension
-                extensions: ['.js', '.json', '.ts'],
-                alias: {
+            // We need to specify that TS can be resolved without an extension
+            extensions: ['.js', '.json', '.ts'],
+            alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
                 // using `npm link` / `yarn link`.
                 "react": path.resolve(__dirname, 'node_modules/react'),
-                    "react-dom": path.resolve(__dirname, 'node_modules/react-dom'),
+                "react-dom": path.resolve(__dirname, 'node_modules/react-dom'),
 
-                    // same goes for js-sdk - we don't need two copies.
-                    "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
+                // same goes for js-sdk - we don't need two copies.
+                "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
 
-                    // Define a variable so the i18n stuff can load
-                    "$webapp": path.resolve(__dirname, 'webapp'),
+                // Define a variable so the i18n stuff can load
+                "$webapp": path.resolve(__dirname, 'webapp'),
             },
         },
 
@@ -99,7 +112,7 @@ module.exports = (env, argv) => {
                     exclude: /node_modules/,
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true,
+                        cacheDirectory: true
                     }
                 },
                 {
@@ -283,8 +296,8 @@ module.exports = (env, argv) => {
             }),
         ],
 
-            output: {
-        path: path.join(__dirname, "webapp"),
+        output: {
+            path: path.join(__dirname, "webapp"),
 
             // The generated JS (and CSS, from the extraction plugin) are put in a
             // unique subdirectory for the build. There will only be one such
@@ -295,19 +308,14 @@ module.exports = (env, argv) => {
             // chunks even after the app is redeployed.
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
-    },
-
-        // DO NOT enable this option. It makes the source maps all wonky. Instead,
-        // we end up including the sourcemaps through the loaders which makes them
-        // more accurate.
-        //devtool: "source-map",
+        },
 
         // configuration for the webpack-dev-server
         devServer: {
             // serve unwebpacked assets from webapp.
             contentBase: './webapp',
 
-                stats: {
+            stats: {
                 // don't fill the console up with a mahoosive list of modules
                 chunks: false,
             },
@@ -316,7 +324,7 @@ module.exports = (env, argv) => {
             // so webpack-dev-server reloads the page on every update which is quite
             // tedious in Riot since that can take a while.
             hot: false,
-                inline: false,
+            inline: false,
         },
     };
 };
