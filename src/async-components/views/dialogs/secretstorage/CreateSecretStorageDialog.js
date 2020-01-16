@@ -313,7 +313,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <p>{_t(
                 "Secret Storage will be set up using your existing key backup details. " +
                 "Your secret storage passphrase and recovery key will be the same as " +
-                " they were for your key backup",
+                "they were for your key backup.",
             )}</p>
             <DialogButtons primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onMigrateNextClick}

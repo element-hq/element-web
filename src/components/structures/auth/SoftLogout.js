@@ -66,7 +66,7 @@ export default class SoftLogout extends React.Component {
     componentDidMount(): void {
         // We've ended up here when we don't need to - navigate to login
         if (!Lifecycle.isSoftLogout()) {
-            dis.dispatch({action: "on_logged_in"});
+            dis.dispatch({action: "start_login"});
             return;
         }
 
