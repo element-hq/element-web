@@ -1438,6 +1438,8 @@
     "View Servers in Room": "View Servers in Room",
     "Toolbox": "Toolbox",
     "Developer Tools": "Developer Tools",
+    "Failed to invite the following users to chat: %(csvUsers)s": "Failed to invite the following users to chat: %(csvUsers)s",
+    "We couldn't create your DM. Please check the users you want to invite and try again.": "We couldn't create your DM. Please check the users you want to invite and try again.",
     "Failed to find the following users": "Failed to find the following users",
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
     "Recent Conversations": "Recent Conversations",
