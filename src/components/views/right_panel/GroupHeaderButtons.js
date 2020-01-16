@@ -23,7 +23,6 @@ import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HEADER_KIND_GROUP} from './HeaderButtons';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
-import RightPanelStore from "../../../stores/RightPanelStore";
 
 const GROUP_PHASES = [
     RIGHT_PANEL_PHASES.GroupMemberInfo,
@@ -69,7 +68,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
     _onMembersClicked() {
         if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
             // send the active phase to trigger a toggle
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo, RightPanelStore.getSharedInstance().roomPanelPhaseParams);
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo);
         } else {
             // This toggles for us, if needed
             this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
