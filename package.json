@@ -123,7 +123,7 @@
     "@peculiar/webcrypto": "^1.0.22",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "chokidar": "^2.1.2",
+    "chokidar": "^3.3.1",
     "concurrently": "^4.0.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
