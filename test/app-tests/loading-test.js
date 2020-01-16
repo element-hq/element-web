@@ -662,10 +662,6 @@ describe('loading:', function() {
             // Wait for another trip around the event loop for the UI to update
             return sleep(1);
         }).then(() => {
-            // we expect a spinner
-            ReactTestUtils.findRenderedComponentWithType(
-                matrixChat, sdk.getComponent('elements.Spinner'));
-
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             return expectAndAwaitSync().catch((e) => {
