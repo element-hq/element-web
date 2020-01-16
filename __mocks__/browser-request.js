@@ -12,6 +12,6 @@ module.exports = jest.fn((opts, cb) => {
     } else if (url && url.endsWith("en_EN.json")) {
         cb(undefined, {status: 200}, JSON.stringify(en));
     } else {
-        cb(undefined, {status: 404}, "");
+        cb(true, {status: 404}, "");
     }
 });
