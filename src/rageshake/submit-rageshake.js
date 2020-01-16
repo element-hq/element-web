@@ -21,6 +21,7 @@ import pako from 'pako';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';
 import { _t } from '../languageHandler';
+import Tar from "tar-js";
 
 import * as rageshake from './rageshake';
 
@@ -33,26 +34,7 @@ if (!TextEncoder) {
     TextEncoder = TextEncodingUtf8.TextEncoder;
 }
 
-/**
- * Send a bug report.
- *
- * @param {string} bugReportEndpoint HTTP url to send the report to
- *
- * @param {object} opts optional dictionary of options
- *
- * @param {string} opts.userText Any additional user input.
- *
- * @param {boolean} opts.sendLogs True to send logs
- *
- * @param {function(string)} opts.progressCallback Callback to call with progress updates
- *
- * @return {Promise} Resolved when the bug report is sent.
- */
-export default async function sendBugReport(bugReportEndpoint, opts) {
-    if (!bugReportEndpoint) {
-        throw new Error("No bug report endpoint has been set.");
-    }
-
+async function collectBugReport(opts) {
     opts = opts || {};
     const progressCallback = opts.progressCallback || (() => {});
 
@@ -106,8 +88,94 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         }
     }
 
+    return body;
+}
+
+/**
+ * Send a bug report.
+ *
+ * @param {string} bugReportEndpoint HTTP url to send the report to
+ *
+ * @param {object} opts optional dictionary of options
+ *
+ * @param {string} opts.userText Any additional user input.
+ *
+ * @param {boolean} opts.sendLogs True to send logs
+ *
+ * @param {function(string)} opts.progressCallback Callback to call with progress updates
+ *
+ * @return {Promise} Resolved when the bug report is sent.
+ */
+export default async function sendBugReport(bugReportEndpoint, opts) {
+    if (!bugReportEndpoint) {
+        throw new Error("No bug report endpoint has been set.");
+    }
+
+    opts = opts || {};
+    const progressCallback = opts.progressCallback || (() => {});
+    const body = await collectBugReport(opts);
+
     progressCallback(_t("Uploading report"));
     await _submitReport(bugReportEndpoint, body, progressCallback);
+}
+
+/**
+ * Downloads the files from a bug report. This is the same as sendBugReport,
+ * but instead causes the browser to download the files locally.
+ *
+ * @param {object} opts optional dictionary of options
+ *
+ * @param {string} opts.userText Any additional user input.
+ *
+ * @param {boolean} opts.sendLogs True to send logs
+ *
+ * @param {function(string)} opts.progressCallback Callback to call with progress updates
+ *
+ * @return {Promise} Resolved when the bug report is downloaded (or started).
+ */
+export async function downloadBugReport(opts) {
+    opts = opts || {};
+    const progressCallback = opts.progressCallback || (() => {});
+    const body = await collectBugReport(opts);
+
+    progressCallback(_t("Downloading report"));
+    let metadata = "";
+    const tape = new Tar();
+    let i = 0;
+    for (const e of body.entries()) {
+        if (e[0] === 'compressed-log') {
+            await new Promise((resolve => {
+                const reader = new FileReader();
+                reader.addEventListener('loadend', ev => {
+                    tape.append(`log-${i++}.log`, pako.ungzip(ev.target.result));
+                    resolve();
+                });
+                reader.readAsArrayBuffer(e[1]);
+            }))
+        } else {
+            metadata += `${e[0]} = ${e[1]}\n`;
+        }
+    }
+    tape.append('issue.txt', metadata);
+
+    // We have to create a new anchor to download if we want a filename. Otherwise we could
+    // just use window.open.
+    const dl = document.createElement('a');
+    dl.href = `data:application/octet-stream;base64,${btoa(uint8ToString(tape.out))}`;
+    dl.download = 'rageshake.tar';
+    document.body.appendChild(dl);
+    dl.click();
+    document.body.removeChild(dl);
+}
+
+// Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
+function uint8ToString(buf) {
+    let i, length, out = '';
+    for (i = 0, length = buf.length; i < length; i += 1) {
+        out += String.fromCharCode(buf[i]);
+    }
+
+    return out;
 }
 
 function _submitReport(endpoint, body, progressCallback) {

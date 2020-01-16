@@ -97,6 +97,7 @@
     "react-gemini-scrollbar": "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594",
     "resize-observer-polyfill": "^1.5.0",
     "sanitize-html": "^1.18.4",
+    "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-animate": "^1.5.2",
