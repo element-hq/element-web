@@ -2042,5 +2042,19 @@
     "Key Backup is enabled on your account but has not been set up from this session. To set up secret storage, restore your key backup.": "La sauvegarde de clés est activée pour votre compte mais n’a pas été configurée pour cette session. Pour configurer le coffre secret, restaurez votre sauvegarde de clés.",
     "Restore": "Restaurer",
     "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as  they were for your key backup": "Le coffre secret sera configuré en utilisant les paramètres existants de la sauvegarde de clés. Votre phrase de passe et votre clé de récupération seront les mêmes que celles de votre sauvegarde de clés",
-    "Restore your Key Backup": "Restaurer votre sauvegarde de clés"
+    "Restore your Key Backup": "Restaurer votre sauvegarde de clés",
+    "a few seconds ago": "il y a quelques secondes",
+    "about a minute ago": "il y a environ une minute",
+    "%(num)s minutes ago": "il y a %(num)s minutes",
+    "about an hour ago": "il y a environ une heure",
+    "%(num)s hours ago": "il y a %(num)s heures",
+    "about a day ago": "il y a environ un jour",
+    "%(num)s days ago": "il y a %(num)s jours",
+    "a few seconds from now": "dans quelques secondes",
+    "about a minute from now": "dans une minute environ",
+    "%(num)s minutes from now": "dans %(num)s minutes",
+    "about an hour from now": "dans une heure environ",
+    "%(num)s hours from now": "dans %(num)s heures",
+    "about a day from now": "dans un jour environ",
+    "%(num)s days from now": "dans %(num)s jours"
 }
