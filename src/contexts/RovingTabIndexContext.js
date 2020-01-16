@@ -109,7 +109,7 @@ const reducer = (state, action) => {
     }
 };
 
-export const RovingTabIndexContextWrapper = ({children}) => {
+export const RovingTabIndexContextProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, {
         activeRef: null,
         refs: [],
