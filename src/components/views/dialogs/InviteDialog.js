@@ -300,12 +300,24 @@ export default class InviteDialog extends React.PureComponent {
             throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
         }
 
+        let alreadyInvited = [];
+        if (props.roomId) {
+            const room = MatrixClientPeg.get().getRoom(props.roomId);
+            if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
+            alreadyInvited = [
+                ...room.getMembersWithMembership('invite'),
+                ...room.getMembersWithMembership('join'),
+                ...room.getMembersWithMembership('ban'), // so we don't try to invite them
+            ].map(m => m.userId);
+        }
+
+
         this.state = {
             targets: [], // array of Member objects (see interface above)
             filterText: "",
-            recents: this._buildRecents(),
+            recents: this._buildRecents(alreadyInvited),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
-            suggestions: this._buildSuggestions(),
+            suggestions: this._buildSuggestions(alreadyInvited),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
             threepidResultsMixin: [], // { user: ThreepidMember, userId: string}[], like recents and suggestions
@@ -320,10 +332,13 @@ export default class InviteDialog extends React.PureComponent {
         this._editorRef = createRef();
     }
 
-    _buildRecents(): {userId: string, user: RoomMember, lastActive: number} {
+    _buildRecents(excludedTargetIds: string[]): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals();
         const recents = [];
         for (const userId in rooms) {
+            // Filter out user IDs that are already in the room / should be excluded
+            if (excludedTargetIds.includes(userId)) continue;
+
             const room = rooms[userId];
             const member = room.getMember(userId);
             if (!member) continue; // just skip people who don't have memberships for some reason
@@ -342,7 +357,7 @@ export default class InviteDialog extends React.PureComponent {
         return recents;
     }
 
-    _buildSuggestions(): {userId: string, user: RoomMember} {
+    _buildSuggestions(excludedTargetIds: string[]): {userId: string, user: RoomMember} {
         const maxConsideredMembers = 200;
         const client = MatrixClientPeg.get();
         const excludedUserIds = [client.getUserId(), SdkConfig.get()['welcomeUserId']];
@@ -359,6 +374,11 @@ export default class InviteDialog extends React.PureComponent {
 
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
+                // Filter out user IDs that are already in the room / should be excluded
+                if (excludedTargetIds.includes(member.userId)) {
+                    continue;
+                }
+
                 if (!members[member.userId]) {
                     members[member.userId] = {
                         member: member,
