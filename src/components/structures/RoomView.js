@@ -792,31 +792,25 @@ export default createReactClass({
                     e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
                 });
             });
+            debuglog("e2e check is warning/verified only as cross-signing is off");
             return;
         }
+
+        /* At this point, the user has encryption on and cross-signing on */
         const e2eMembers = await room.getEncryptionTargetMembers();
-
-        /*
-        Ensure we trust our own signing key, ie, nobody's used our credentials to
-        replace it and sign all our devices
-        */
-        if (!cli.checkUserTrust(cli.getUserId())) {
-            this.setState({
-                e2eStatus: "warning",
-            });
-            debuglog("e2e status set to warning due to not trusting our own signing key");
-            return;
-        }
-
-        /*
-        Gather verification state of every user in the room.
-        If _any_ user is verified then _every_ user must be verified, or we'll bail.
-        Note we don't count our own user so that the all/any check behaves properly.
-        */
-        const verificationState = e2eMembers.map(({userId}) => userId)
+        const verified = [];
+        const unverified = [];
+        e2eMembers.map(({userId}) => userId)
             .filter((userId) => userId !== cli.getUserId())
-            .map((userId) => cli.checkUserTrust(userId).isCrossSigningVerified());
-        if (verificationState.includes(true) && verificationState.includes(false)) {
+            .forEach((userId) => {
+                (cli.checkUserTrust(userId).isCrossSigningVerified() ?
+                verified : unverified).push(userId)
+            });
+
+        debuglog("e2e verified", verified, "unverified", unverified);
+
+        /* If we verify any users in this room, expect to verify every user in the room */
+        if (verified.length > 0 && unverified.length > 0) {
             this.setState({
                 e2eStatus: "warning",
             });
@@ -824,12 +818,9 @@ export default createReactClass({
             return;
         }
 
-        /*
-        Whether we verify or not, a user having an untrusted device requires warnings.
-        Check every user's devices, including ourselves.
-        */
-        for (const member of e2eMembers) {
-            const { userId } = member;
+        /* At this point, either `verified` or `unverified` is empty, or both */
+        /* Check all verified user devices. We don't care if everyone's unverified anyway. */
+        for (const userId of [...verified, cli.getUserId()]) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const allDevicesVerified = devices.every(({deviceId}) => {
                 return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
@@ -845,7 +836,7 @@ export default createReactClass({
         }
 
         this.setState({
-            e2eStatus: verificationState.includes(true) ? "verified" : "normal",
+            e2eStatus: unverified.length === 0 ? "verified" : "normal",
         });
     },
 
