@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-import LocalStorageCryptoStore from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
+import {LocalStorageCryptoStore} from 'matrix-js-sdk/src/crypto/store/localStorage-crypto-store';
 import Analytics from '../Analytics';
 
 const localStorage = window.localStorage;

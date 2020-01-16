@@ -20,7 +20,7 @@ import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';

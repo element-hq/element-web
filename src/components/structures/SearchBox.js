@@ -24,7 +24,7 @@ import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchBox',
 
     propTypes: {

@@ -19,9 +19,9 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import classNames from 'classnames';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
-import Unread from '../../Unread';
+import * as Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import IndicatorScrollbar from './IndicatorScrollbar';

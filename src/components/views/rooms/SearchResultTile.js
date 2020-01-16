@@ -1,5 +1,6 @@
 /*
 Copyright 2015 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
+import {haveTileForEvent} from "./EventTile";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchResult',
 
     propTypes: {
@@ -53,7 +55,7 @@ module.exports = createReactClass({
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
-            if (EventTile.haveTileForEvent(ev)) {
+            if (haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
                           permalinkCreator={this.props.permalinkCreator}
                           highlightLink={this.props.resultLink}

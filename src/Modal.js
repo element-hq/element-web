@@ -20,7 +20,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import Analytics from './Analytics';
-import sdk from './index';
+import * as sdk from './index';
 import dis from './dispatcher';
 import { _t } from './languageHandler';
 import {defer} from "./utils/promise";

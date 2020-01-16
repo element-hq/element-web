@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from './index';
+import * as sdk from './index';
 
 function isMatch(query, name, uid) {
     query = query.toLowerCase();
@@ -105,36 +105,33 @@ class UserEntity extends Entity {
     }
 }
 
+export function newEntity(jsx, matchFn) {
+    const entity = new Entity();
+    entity.getJsx = function() {
+        return jsx;
+    };
+    entity.matches = matchFn;
+    return entity;
+}
 
-module.exports = {
-    newEntity: function(jsx, matchFn) {
-        const entity = new Entity();
-        entity.getJsx = function() {
-            return jsx;
-        };
-        entity.matches = matchFn;
-        return entity;
-    },
+/**
+ * @param {RoomMember[]} members
+ * @return {Entity[]}
+ */
+export function fromRoomMembers(members) {
+    return members.map(function(m) {
+        return new MemberEntity(m);
+    });
+}
 
-    /**
-     * @param {RoomMember[]} members
-     * @return {Entity[]}
-     */
-    fromRoomMembers: function(members) {
-        return members.map(function(m) {
-            return new MemberEntity(m);
-        });
-    },
-
-    /**
-     * @param {User[]} users
-     * @param {boolean} showInviteButton
-     * @param {Function} inviteFn Called with the user ID.
-     * @return {Entity[]}
-     */
-    fromUsers: function(users, showInviteButton, inviteFn) {
-        return users.map(function(u) {
-            return new UserEntity(u, showInviteButton, inviteFn);
-        });
-    },
-};
+/**
+ * @param {User[]} users
+ * @param {boolean} showInviteButton
+ * @param {Function} inviteFn Called with the user ID.
+ * @return {Entity[]}
+ */
+export function fromUsers(users, showInviteButton, inviteFn) {
+    return users.map(function(u) {
+        return new UserEntity(u, showInviteButton, inviteFn);
+    });
+}

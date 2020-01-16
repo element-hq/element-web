@@ -23,10 +23,10 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
-const CallHandler = require("../../../CallHandler");
+import rate_limited_func from "../../../ratelimitedfunc";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import CallHandler from "../../../CallHandler";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -36,7 +36,7 @@ const SHOW_MORE_INCREMENT = 100;
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
@@ -191,7 +191,7 @@ module.exports = createReactClass({
         }
     },
 
-    _updateList: new rate_limited_func(function() {
+    _updateList: rate_limited_func(function() {
         this._updateListNow();
     }, 500),
 

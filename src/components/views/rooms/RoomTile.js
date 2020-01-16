@@ -22,9 +22,9 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {ContextMenu, ContextMenuButton, toRightOf} from '../../structures/ContextMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
@@ -34,7 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
 import {RovingTabIndexWrapper} from "../../../contexts/RovingTabIndexContext";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTile',
 
     propTypes: {

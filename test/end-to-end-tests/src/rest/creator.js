@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,12 +72,12 @@ module.exports = class RestSessionCreator {
 
     async _authenticate(username, password) {
         const requestBody = {
-          "type": "m.login.password",
-          "identifier": {
-            "type": "m.id.user",
-            "user": username,
-          },
-          "password": password,
+            "type": "m.login.password",
+            "identifier": {
+                "type": "m.id.user",
+                "user": username,
+            },
+            "password": password,
         };
         const url = `${this.hsUrl}/_matrix/client/r0/login`;
         const responseBody = await request.post({url, json: true, body: requestBody});

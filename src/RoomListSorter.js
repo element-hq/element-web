@@ -24,12 +24,8 @@ function tsOfNewestEvent(room) {
     }
 }
 
-function mostRecentActivityFirst(roomList) {
+export function mostRecentActivityFirst(roomList) {
     return roomList.sort(function(a, b) {
         return tsOfNewestEvent(b) - tsOfNewestEvent(a);
     });
 }
-
-module.exports = {
-    mostRecentActivityFirst,
-};

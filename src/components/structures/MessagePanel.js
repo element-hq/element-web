@@ -22,11 +22,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
-import sdk from '../../index';
+import * as sdk from '../../index';
 
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
+import {haveTileForEvent} from "../views/rooms/EventTile";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -318,8 +319,7 @@ export default class MessagePanel extends React.Component {
             return true;
         }
 
-        const EventTile = sdk.getComponent('rooms.EventTile');
-        if (!EventTile.haveTileForEvent(mxEv)) {
+        if (!haveTileForEvent(mxEv)) {
             return false; // no tile = no show
         }
 

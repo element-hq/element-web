@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React, {PureComponent} from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import PropTypes from "prop-types";
 import {MatrixEvent} from "matrix-js-sdk";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 /*
  * A dialog for reporting an event.
