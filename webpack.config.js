@@ -14,7 +14,16 @@ module.exports = (env, argv) => {
         argv.mode = "development";
     }
 
+    const development = {};
+    if (argv.mode !== "production") {
+        // This makes the sourcemaps human readable for developers. We use eval-source-map
+        // because the plain source-map devtool ruins the alignment.
+        development['devtool'] = 'eval-source-map';
+    }
+
     return {
+        ...development,
+
         entry: {
             "bundle": "./src/vector/index.js",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
@@ -300,10 +309,6 @@ module.exports = (env, argv) => {
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
         },
-
-        // This makes the sourcemaps human readable for developers. We use eval-source-map
-        // because the plain source-map devtool ruins the alignment.
-        devtool: "eval-source-map",
 
         // configuration for the webpack-dev-server
         devServer: {
