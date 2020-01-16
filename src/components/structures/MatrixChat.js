@@ -64,6 +64,7 @@ import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
+import ToastStore from "../../stores/ToastStore";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -1458,15 +1459,12 @@ export default createReactClass({
                 }
 
                 if (!requestObserver || requestObserver.pending) {
-                    dis.dispatch({
-                        action: "show_toast",
-                        toast: {
-                            key: request.event.getId(),
-                            title: _t("Verification Request"),
-                            icon: "verification",
-                            props: {request, requestObserver},
-                            component: sdk.getComponent("toasts.VerificationRequestToast"),
-                        },
+                    ToastStore.sharedInstance().addOrReplaceToast({
+                        key: 'verifreq_' + request.event.getId(),
+                        title: _t("Verification Request"),
+                        icon: "verification",
+                        props: {request, requestObserver},
+                        component: sdk.getComponent("toasts.VerificationRequestToast"),
                     });
                 }
             });
