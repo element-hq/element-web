@@ -18,25 +18,21 @@ limitations under the License.
 */
 
 import ReplyThread from "../elements/ReplyThread";
-
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const classNames = require("classnames");
+import classNames from "classnames";
 import { _t, _td } from '../../../languageHandler';
-
-const sdk = require('../../../index');
-const TextForEvent = require('../../../TextForEvent');
-
+import * as TextForEvent from "../../../TextForEvent";
+import * as sdk from "../../../index";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
+import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-
-const ObjectUtils = require('../../../ObjectUtils');
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -75,7 +71,7 @@ for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
 }
 
-function getHandlerTile(ev) {
+export function getHandlerTile(ev) {
     const type = ev.getType();
 
     // don't show verification requests we're not involved in,
@@ -118,7 +114,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EventTile',
 
     propTypes: {
@@ -869,7 +865,7 @@ function isMessageEvent(ev) {
     return (messageTypes.includes(ev.getType()));
 }
 
-module.exports.haveTileForEvent = function(e) {
+export function haveTileForEvent(e) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
@@ -885,7 +881,7 @@ module.exports.haveTileForEvent = function(e) {
     } else {
         return true;
     }
-};
+}
 
 function E2ePadlockUndecryptable(props) {
     return (
@@ -949,5 +945,3 @@ class E2ePadlock extends React.Component {
         );
     }
 }
-
-module.exports.getHandlerTile = getHandlerTile;

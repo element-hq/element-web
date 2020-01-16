@@ -16,13 +16,13 @@ limitations under the License.
 import React from "react";
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import {ContentRepo} from "matrix-js-sdk";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
-import sdk from "../../../index";
-import Avatar from '../../../Avatar';
+import * as sdk from "../../../index";
+import * as Avatar from '../../../Avatar';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomAvatar',
 
     // Room may be left unset here, but if it is,
@@ -82,7 +82,7 @@ module.exports = createReactClass({
 
     getImageUrls: function(props) {
         return [
-            ContentRepo.getHttpUriForMxc(
+            getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.oobData.avatarUrl,
                 Math.floor(props.width * window.devicePixelRatio),

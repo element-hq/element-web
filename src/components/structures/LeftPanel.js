@@ -20,9 +20,9 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Key } from '../../Keyboard';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
-import VectorConferenceHandler from '../../VectorConferenceHandler';
+import * as VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
@@ -301,4 +301,4 @@ const LeftPanel = createReactClass({
     },
 });
 
-module.exports = LeftPanel;
+export default LeftPanel;

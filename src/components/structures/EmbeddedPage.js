@@ -23,9 +23,9 @@ import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 

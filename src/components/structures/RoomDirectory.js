@@ -18,19 +18,16 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-
-const MatrixClientPeg = require('../../MatrixClientPeg');
-const ContentRepo = require("matrix-js-sdk").ContentRepo;
-const Modal = require('../../Modal');
-const sdk = require('../../index');
-const dis = require('../../dispatcher');
-
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
+import dis from "../../dispatcher";
+import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import MatrixClientContext from "../../contexts/MatrixClientContext";
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -39,7 +36,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
@@ -457,7 +454,7 @@ module.exports = createReactClass({
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
         topic = linkifyAndSanitizeHtml(topic);
-        const avatarUrl = ContentRepo.getHttpUriForMxc(
+        const avatarUrl = getHttpUriForMxc(
                                 MatrixClientPeg.get().getHomeserverUrl(),
                                 room.avatar_url, 32, 32, "crop",
                             );

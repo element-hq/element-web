@@ -37,7 +37,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false) {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];

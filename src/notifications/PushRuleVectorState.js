@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,42 +17,44 @@ limitations under the License.
 
 'use strict';
 
-const StandardActions = require('./StandardActions');
-const NotificationUtils = require('./NotificationUtils');
+import {StandardActions} from "./StandardActions";
+import {NotificationUtils} from "./NotificationUtils";
 
-const states = {
-    /** The push rule is disabled */
-    OFF: "off",
+export class PushRuleVectorState {
+    // Backwards compatibility (things should probably be using .states instead)
+    static OFF = "off";
+    static ON = "on";
+    static LOUD = "loud";
 
-    /** The user will receive push notification for this rule */
-    ON: "on",
-
-    /** The user will receive push notification for this rule with sound and
-        highlight if this is legitimate */
-    LOUD: "loud",
-};
-
-
-module.exports = {
     /**
      * Enum for state of a push rule as defined by the Vector UI.
      * @readonly
      * @enum {string}
      */
-    states: states,
+    static states = {
+        /** The push rule is disabled */
+        OFF: PushRuleVectorState.OFF,
+
+        /** The user will receive push notification for this rule */
+        ON: PushRuleVectorState.ON,
+
+        /** The user will receive push notification for this rule with sound and
+         highlight if this is legitimate */
+        LOUD: PushRuleVectorState.LOUD,
+    };
 
     /**
      * Convert a PushRuleVectorState to a list of actions
      *
      * @return [object] list of push-rule actions
      */
-    actionsFor: function(pushRuleVectorState) {
-        if (pushRuleVectorState === this.ON) {
+    static actionsFor(pushRuleVectorState) {
+        if (pushRuleVectorState === PushRuleVectorState.ON) {
             return StandardActions.ACTION_NOTIFY;
-        } else if (pushRuleVectorState === this.LOUD) {
+        } else if (pushRuleVectorState === PushRuleVectorState.LOUD) {
             return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
-    },
+    }
 
     /**
      * Convert a pushrule's actions to a PushRuleVectorState.
@@ -60,7 +63,7 @@ module.exports = {
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
      * state. Returns null if it does not match these categories.
      */
-    contentRuleVectorStateKind: function(rule) {
+    static contentRuleVectorStateKind(rule) {
         const decoded = NotificationUtils.decodeActions(rule.actions);
 
         if (!decoded) {
@@ -78,16 +81,12 @@ module.exports = {
         let stateKind = null;
         switch (tweaks) {
             case 0:
-                stateKind = this.ON;
+                stateKind = PushRuleVectorState.ON;
                 break;
             case 2:
-                stateKind = this.LOUD;
+                stateKind = PushRuleVectorState.LOUD;
                 break;
         }
         return stateKind;
-    },
-};
-
-for (const k in states) {
-    module.exports[k] = states[k];
+    }
 }

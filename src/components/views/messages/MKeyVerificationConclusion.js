@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import KeyVerificationStateObserver, {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';

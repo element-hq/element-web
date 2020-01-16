@@ -20,12 +20,13 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import {_t, _td} from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
+import AuthPage from "../../views/auth/AuthPage";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -53,7 +54,7 @@ _td("General failure");
 /**
  * A wire component which glues together login UI components and Login logic
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Login',
 
     propTypes: {
@@ -608,7 +609,6 @@ module.exports = createReactClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() ? <div className="mx_Login_loader"><Loader /></div> : null;

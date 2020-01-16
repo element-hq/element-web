@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ import { _t } from '../../../languageHandler';
 import React from 'react';
 import createReactClass from 'create-react-class';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AuthFooter',
 
     render: function() {

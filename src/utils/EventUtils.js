@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventStatus } from 'matrix-js-sdk';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
