@@ -143,10 +143,14 @@ class Tinter {
      * over time then the best bet is to register a single callback for the
      * entire set.
      *
+     * To ensure the tintable work happens at least once, it is also called as
+     * part of registration.
+     *
      * @param {Function} tintable Function to call when the tint changes.
      */
     registerTintable(tintable) {
         this.tintables.push(tintable);
+        tintable();
     }
 
     getKeyRgb() {

@@ -17,16 +17,18 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tab, TabbedView} from "../../structures/TabbedView";
+import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -52,6 +54,9 @@ export default class RoomSettingsDialog extends React.Component {
 
     _getTabs() {
         const tabs = [];
+        const featureFlag = SettingsStore.isFeatureEnabled("feature_bridge_state");
+        const shouldShowBridgeIcon = featureFlag &&
+            BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
 
         tabs.push(new Tab(
             _td("General"),
@@ -73,6 +78,15 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_rolesIcon",
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
+
+        if (shouldShowBridgeIcon) {
+            tabs.push(new Tab(
+                _td("Bridge Info"),
+                "mx_RoomSettingsDialog_bridgesIcon",
+                <BridgeSettingsTab roomId={this.props.roomId} />,
+            ));
+        }
+
         tabs.push(new Tab(
             _td("Advanced"),
             "mx_RoomSettingsDialog_warningIcon",

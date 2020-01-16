@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import Modal from './Modal';
-import sdk from './';
+import * as sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
 import {allSettled} from "./utils/promise";
 

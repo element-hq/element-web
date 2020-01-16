@@ -18,26 +18,24 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
-
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-
-const Matrix = require("matrix-js-sdk");
-const EventTimeline = Matrix.EventTimeline;
-
-const sdk = require('../../index');
+import {EventTimeline} from "matrix-js-sdk";
+import * as Matrix from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
-const MatrixClientPeg = require("../../MatrixClientPeg");
-const dis = require("../../dispatcher");
-const ObjectUtils = require('../../ObjectUtils');
-const Modal = require("../../Modal");
-const UserActivity = require("../../UserActivity");
-import {Key} from '../../Keyboard';
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as ObjectUtils from "../../ObjectUtils";
+import UserActivity from "../../UserActivity";
+import Modal from "../../Modal";
+import dis from "../../dispatcher";
+import * as sdk from "../../index";
+import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
+import {haveTileForEvent} from "../views/rooms/EventTile";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1138,8 +1136,6 @@ const TimelinePanel = createReactClass({
         const messagePanel = this._messagePanel.current;
         if (!messagePanel) return null;
 
-        const EventTile = sdk.getComponent('rooms.EventTile');
-
         const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
@@ -1181,7 +1177,7 @@ const TimelinePanel = createReactClass({
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !EventTile.haveTileForEvent(ev) || shouldHideEvent(ev);
+            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1346,4 +1342,4 @@ const TimelinePanel = createReactClass({
     },
 });
 
-module.exports = TimelinePanel;
+export default TimelinePanel;

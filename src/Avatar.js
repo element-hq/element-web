@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 'use strict';
-import {ContentRepo} from 'matrix-js-sdk';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
-module.exports = {
-    avatarUrlForMember: function(member, width, height, resizeMethod) {
-        let url = member.getAvatarUrl(
+export function avatarUrlForMember(member, width, height, resizeMethod) {
+    let url;
+    if (member && member.getAvatarUrl) {
+        url = member.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             Math.floor(width * window.devicePixelRatio),
             Math.floor(height * window.devicePixelRatio),
@@ -29,106 +30,106 @@ module.exports = {
             false,
             false,
         );
-        if (!url) {
-            // member can be null here currently since on invites, the JS SDK
-            // does not have enough info to build a RoomMember object for
-            // the inviter.
-            url = this.defaultAvatarUrlForString(member ? member.userId : '');
+    }
+    if (!url) {
+        // member can be null here currently since on invites, the JS SDK
+        // does not have enough info to build a RoomMember object for
+        // the inviter.
+        url = defaultAvatarUrlForString(member ? member.userId : '');
+    }
+    return url;
+}
+
+export function avatarUrlForUser(user, width, height, resizeMethod) {
+    const url = getHttpUriForMxc(
+        MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
+        Math.floor(width * window.devicePixelRatio),
+        Math.floor(height * window.devicePixelRatio),
+        resizeMethod,
+    );
+    if (!url || url.length === 0) {
+        return null;
+    }
+    return url;
+}
+
+export function defaultAvatarUrlForString(s) {
+    const images = ['03b381', '368bd6', 'ac3ba8'];
+    let total = 0;
+    for (let i = 0; i < s.length; ++i) {
+        total += s.charCodeAt(i);
+    }
+    return require('../res/img/' + images[total % images.length] + '.png');
+}
+
+/**
+ * returns the first (non-sigil) character of 'name',
+ * converted to uppercase
+ * @param {string} name
+ * @return {string} the first letter
+ */
+export function getInitialLetter(name) {
+    if (!name) {
+        // XXX: We should find out what causes the name to sometimes be falsy.
+        console.trace("`name` argument to `getInitialLetter` not supplied");
+        return undefined;
+    }
+    if (name.length < 1) {
+        return undefined;
+    }
+
+    let idx = 0;
+    const initial = name[0];
+    if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
+        idx++;
+    }
+
+    // string.codePointAt(0) would do this, but that isn't supported by
+    // some browsers (notably PhantomJS).
+    let chars = 1;
+    const first = name.charCodeAt(idx);
+
+    // check if it’s the start of a surrogate pair
+    if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
+        const second = name.charCodeAt(idx+1);
+        if (second >= 0xDC00 && second <= 0xDFFF) {
+            chars++;
         }
-        return url;
-    },
+    }
 
-    avatarUrlForUser: function(user, width, height, resizeMethod) {
-        const url = ContentRepo.getHttpUriForMxc(
-            MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
-            Math.floor(width * window.devicePixelRatio),
-            Math.floor(height * window.devicePixelRatio),
-            resizeMethod,
-        );
-        if (!url || url.length === 0) {
-            return null;
-        }
-        return url;
-    },
+    const firstChar = name.substring(idx, idx+chars);
+    return firstChar.toUpperCase();
+}
 
-    defaultAvatarUrlForString: function(s) {
-        const images = ['03b381', '368bd6', 'ac3ba8'];
-        let total = 0;
-        for (let i = 0; i < s.length; ++i) {
-            total += s.charCodeAt(i);
-        }
-        return require('../res/img/' + images[total % images.length] + '.png');
-    },
+export function avatarUrlForRoom(room, width, height, resizeMethod) {
+    const explicitRoomAvatar = room.getAvatarUrl(
+        MatrixClientPeg.get().getHomeserverUrl(),
+        width,
+        height,
+        resizeMethod,
+        false,
+    );
+    if (explicitRoomAvatar) {
+        return explicitRoomAvatar;
+    }
 
-    /**
-     * returns the first (non-sigil) character of 'name',
-     * converted to uppercase
-     * @param {string} name
-     * @return {string} the first letter
-     */
-    getInitialLetter(name) {
-        if (!name) {
-            // XXX: We should find out what causes the name to sometimes be falsy.
-            console.trace("`name` argument to `getInitialLetter` not supplied");
-            return undefined;
-        }
-        if (name.length < 1) {
-            return undefined;
-        }
-
-        let idx = 0;
-        const initial = name[0];
-        if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
-            idx++;
-        }
-
-        // string.codePointAt(0) would do this, but that isn't supported by
-        // some browsers (notably PhantomJS).
-        let chars = 1;
-        const first = name.charCodeAt(idx);
-
-        // check if it’s the start of a surrogate pair
-        if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
-            const second = name.charCodeAt(idx+1);
-            if (second >= 0xDC00 && second <= 0xDFFF) {
-                chars++;
-            }
-        }
-
-        const firstChar = name.substring(idx, idx+chars);
-        return firstChar.toUpperCase();
-    },
-
-    avatarUrlForRoom(room, width, height, resizeMethod) {
-        const explicitRoomAvatar = room.getAvatarUrl(
+    let otherMember = null;
+    const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+    if (otherUserId) {
+        otherMember = room.getMember(otherUserId);
+    } else {
+        // if the room is not marked as a 1:1, but only has max 2 members
+        // then still try to show any avatar (pref. other member)
+        otherMember = room.getAvatarFallbackMember();
+    }
+    if (otherMember) {
+        return otherMember.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             width,
             height,
             resizeMethod,
             false,
         );
-        if (explicitRoomAvatar) {
-            return explicitRoomAvatar;
-        }
-
-        let otherMember = null;
-        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-        if (otherUserId) {
-            otherMember = room.getMember(otherUserId);
-        } else {
-            // if the room is not marked as a 1:1, but only has max 2 members
-            // then still try to show any avatar (pref. other member)
-            otherMember = room.getAvatarFallbackMember();
-        }
-        if (otherMember) {
-            return otherMember.getAvatarUrl(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                width,
-                height,
-                resizeMethod,
-                false,
-            );
-        }
-        return null;
-    },
-};
+    }
+    return null;
+}

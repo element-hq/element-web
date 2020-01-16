@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import sdk from "../../../../index";
+import * as sdk from "../../../../index";
 import dis from "../../../../dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
@@ -35,6 +36,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
         this.props.onFinished();
         Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
             import("./CreateKeyBackupDialog"),
+            null, null, /* priority = */ false, /* static = */ true,
         );
     }
 

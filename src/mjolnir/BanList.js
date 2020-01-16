@@ -17,7 +17,7 @@ limitations under the License.
 // Inspiration largely taken from Mjolnir itself
 
 import {ListRule, RECOMMENDATION_BAN, recommendationToStable} from "./ListRule";
-import MatrixClientPeg from "../MatrixClientPeg";
+import {MatrixClientPeg} from "../MatrixClientPeg";
 
 export const RULE_USER = "m.room.rule.user";
 export const RULE_ROOM = "m.room.rule.room";

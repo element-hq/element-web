@@ -16,34 +16,52 @@ limitations under the License.
 */
 
 import EditableItemList from "../elements/EditableItemList";
-
-const React = require('react');
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const sdk = require("../../../index");
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
-const Modal = require("../../../Modal");
+import Modal from "../../../Modal";
 
 class EditableAliasesList extends EditableItemList {
+    constructor(props) {
+        super(props);
+
+        this._aliasField = createRef();
+    }
+
+    _onAliasAdded = async () => {
+        await this._aliasField.current.validate({ allowEmpty: false });
+
+        if (this._aliasField.current.isValid) {
+            if (this.props.onItemAdded) this.props.onItemAdded(this.props.newItem);
+            return;
+        }
+
+        this._aliasField.current.focus();
+        this._aliasField.current.validate({ allowEmpty: false, focused: true });
+    };
+
     _renderNewItemField() {
         const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
         const onChange = (alias) => this._onNewItemChanged({target: {value: alias}});
         return (
             <form
-                onSubmit={this._onItemAdded}
+                onSubmit={this._onAliasAdded}
                 autoComplete="off"
                 noValidate={true}
                 className="mx_EditableItemList_newItem"
             >
                 <RoomAliasField
                     id={`mx_EditableItemList_new_${this.props.id}`}
+                    ref={this._aliasField}
                     onChange={onChange}
                     value={this.props.newItem || ""}
                     domain={this.props.domain} />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary">
+                <AccessibleButton onClick={this._onAliasAdded} kind="primary">
                     { _t("Add") }
                 </AccessibleButton>
             </form>
@@ -99,11 +117,6 @@ export default class AliasSettings extends React.Component {
         return dict;
     }
 
-    isAliasValid(alias) {
-        // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
-        return (alias.match(/^#([^/:,]+?):(.+)$/) && encodeURI(alias) === alias);
-    }
-
     changeCanonicalAlias(alias) {
         if (!this.props.canSetCanonicalAlias) return;
 
@@ -139,38 +152,31 @@ export default class AliasSettings extends React.Component {
 
         const localDomain = MatrixClientPeg.get().getDomain();
         if (!alias.includes(':')) alias += ':' + localDomain;
-        if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
-            MatrixClientPeg.get().createAlias(alias, this.props.roomId).then(() => {
-                const localAliases = this.state.domainToAliases[localDomain] || [];
-                const domainAliases = Object.assign({}, this.state.domainToAliases);
-                domainAliases[localDomain] = [...localAliases, alias];
 
-                this.setState({
-                    domainToAliases: domainAliases,
-                    // Reset the add field
-                    newAlias: "",
-                });
+        MatrixClientPeg.get().createAlias(alias, this.props.roomId).then(() => {
+            const localAliases = this.state.domainToAliases[localDomain] || [];
+            const domainAliases = Object.assign({}, this.state.domainToAliases);
+            domainAliases[localDomain] = [...localAliases, alias];
 
-                if (!this.state.canonicalAlias) {
-                    this.changeCanonicalAlias(alias);
-                }
-            }).catch((err) => {
-                console.error(err);
-                Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
-                    title: _t("Error creating alias"),
-                    description: _t(
-                        "There was an error creating that alias. It may not be allowed by the server " +
-                        "or a temporary failure occurred.",
-                    ),
-                });
+            this.setState({
+                domainToAliases: domainAliases,
+                // Reset the add field
+                newAlias: "",
             });
-        } else {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Invalid alias format', '', ErrorDialog, {
-                title: _t('Invalid alias format'),
-                description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
+
+            if (!this.state.canonicalAlias) {
+                this.changeCanonicalAlias(alias);
+            }
+        }).catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
+                title: _t("Error creating alias"),
+                description: _t(
+                    "There was an error creating that alias. It may not be allowed by the server " +
+                    "or a temporary failure occurred.",
+                ),
             });
-        }
+        });
     };
 
     onLocalAliasDeleted = (index) => {

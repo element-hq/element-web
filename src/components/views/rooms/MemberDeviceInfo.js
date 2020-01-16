@@ -16,13 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 
 export default class MemberDeviceInfo extends React.Component {
     render() {
         const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+        // XXX: These checks are not cross-signing aware but this component is only used
+        // from the old, pre-cross-signing memberinfopanel
         const iconClasses = classNames({
             mx_MemberDeviceInfo_icon: true,
             mx_MemberDeviceInfo_icon_blacklisted: this.props.device.isBlocked(),

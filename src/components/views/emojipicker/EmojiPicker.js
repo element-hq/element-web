@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import * as recent from './recent';
@@ -47,10 +47,8 @@ class EmojiPicker extends React.Component {
             viewportHeight: 280,
         };
 
-        // Convert recent emoji characters to emoji data, removing unknowns.
-        this.recentlyUsed = recent.get()
-            .map(unicode => getEmojiFromUnicode(unicode))
-            .filter(data => !!data);
+        // Convert recent emoji characters to emoji data, removing unknowns and duplicates
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,

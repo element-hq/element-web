@@ -17,12 +17,12 @@ limitations under the License.
 */
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
@@ -261,7 +261,7 @@ const Pill = createReactClass({
         }
 
         const classes = classNames("mx_Pill", pillClass, {
-            "mx_UserPill_me": userId === MatrixClientPeg.get().credentials.userId,
+            "mx_UserPill_me": userId === MatrixClientPeg.get().getUserId(),
             "mx_UserPill_selected": this.props.isSelected,
         });
 

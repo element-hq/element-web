@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import Modal from './Modal';
-import sdk from './index';
-import MatrixClientPeg from './MatrixClientPeg';
-import { deriveKey } from 'matrix-js-sdk/lib/crypto/key_passphrase';
-import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto/recoverykey';
+import * as sdk from './index';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
+import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -97,7 +97,7 @@ export const crossSigningCallbacks = {
  *
  * Additionally, the secret storage keys are cached during the scope of this function
  * to ensure the user is prompted only once for their secret storage
- * passphrase. The cache is then
+ * passphrase. The cache is then cleared once the provided function completes.
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.

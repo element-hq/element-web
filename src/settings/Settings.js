@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -128,6 +128,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_ftue_dms": {
+        isFeature: true,
+        displayName: _td("New DM invite dialog (under development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_presence_in_room_list": {
+        isFeature: true,
+        displayName: _td("Show a presence dot next to DMs in the room list"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
@@ -141,7 +153,6 @@ export const SETTINGS = {
         displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ReloadOnChangeController(),
     },
     "feature_event_indexing": {
         isFeature: true,
@@ -149,10 +160,11 @@ export const SETTINGS = {
         displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
         default: false,
     },
-    "useCiderComposer": {
-        displayName: _td("Use the new, faster, composer for writing messages"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: true,
+    "feature_bridge_state": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show info about bridges in room settings"),
+        default: false,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

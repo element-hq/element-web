@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const DEFAULTS = {
+export interface ConfigOptions {
+    [key: string]: any;
+}
+
+export const DEFAULTS: ConfigOptions = {
     // URL to a page we show in an iframe to configure integrations
     integrations_ui_url: "https://scalar.vector.im/",
     // Base URL to the REST interface of the integrations server
@@ -23,30 +28,37 @@ export const DEFAULTS = {
     bug_report_endpoint_url: null,
 };
 
-class SdkConfig {
-    static get() {
-        return global.mxReactSdkConfig || {};
+export default class SdkConfig {
+    private static instance: ConfigOptions;
+
+    private static setInstance(i: ConfigOptions) {
+        SdkConfig.instance = i;
+
+        // For debugging purposes
+        (<any>window).mxReactSdkConfig = i;
     }
 
-    static put(cfg) {
+    static get() {
+        return SdkConfig.instance || {};
+    }
+
+    static put(cfg: ConfigOptions) {
         const defaultKeys = Object.keys(DEFAULTS);
         for (let i = 0; i < defaultKeys.length; ++i) {
             if (cfg[defaultKeys[i]] === undefined) {
                 cfg[defaultKeys[i]] = DEFAULTS[defaultKeys[i]];
             }
         }
-        global.mxReactSdkConfig = cfg;
+        SdkConfig.setInstance(cfg);
     }
 
     static unset() {
-        global.mxReactSdkConfig = undefined;
+        SdkConfig.setInstance({});
     }
 
-    static add(cfg) {
+    static add(cfg: ConfigOptions) {
         const liveConfig = SdkConfig.get();
         const newConfig = Object.assign({}, liveConfig, cfg);
         SdkConfig.put(newConfig);
     }
 }
-
-module.exports = SdkConfig;

@@ -30,15 +30,15 @@ import classNames from 'classnames';
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import CallHandler from '../../CallHandler';
 import dis from '../../dispatcher';
 import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
-import ObjectUtils from '../../ObjectUtils';
+import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
@@ -53,6 +53,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
+import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
 
 const DEBUG = false;
@@ -65,7 +66,7 @@ if (DEBUG) {
     debuglog = console.log.bind(console);
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: PropTypes.any,
@@ -157,8 +158,6 @@ module.exports = createReactClass({
 
             canReact: false,
             canReply: false,
-
-            useCider: false,
         };
     },
 
@@ -180,16 +179,8 @@ module.exports = createReactClass({
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
 
-        this._onCiderUpdated();
-        this._ciderWatcherRef = SettingsStore.watchSetting(
-            "useCiderComposer", null, this._onCiderUpdated);
-
         this._roomView = createRef();
         this._searchResultsPanel = createRef();
-    },
-
-    _onCiderUpdated: function() {
-        this.setState({useCider: SettingsStore.getValue("useCiderComposer")});
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -495,6 +486,7 @@ module.exports = createReactClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -894,7 +886,7 @@ module.exports = createReactClass({
 
     // rate limited because a power level change will emit an event for every
     // member in the room.
-    _updateRoomMembers: new rate_limited_func(function(dueToMember) {
+    _updateRoomMembers: rate_limited_func(function(dueToMember) {
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
@@ -1252,7 +1244,7 @@ module.exports = createReactClass({
             const roomId = mxEv.getRoomId();
             const room = cli.getRoom(roomId);
 
-            if (!EventTile.haveTileForEvent(mxEv)) {
+            if (!haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;
@@ -1806,29 +1798,16 @@ module.exports = createReactClass({
             myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
-            if (this.state.useCider) {
-                const MessageComposer = sdk.getComponent('rooms.MessageComposer');
-                messageComposer =
-                    <MessageComposer
-                        room={this.state.room}
-                        callState={this.state.callState}
-                        disabled={this.props.disabled}
-                        showApps={this.state.showApps}
-                        e2eStatus={this.state.e2eStatus}
-                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
-                    />;
-            } else {
-                const SlateMessageComposer = sdk.getComponent('rooms.SlateMessageComposer');
-                messageComposer =
-                    <SlateMessageComposer
-                        room={this.state.room}
-                        callState={this.state.callState}
-                        disabled={this.props.disabled}
-                        showApps={this.state.showApps}
-                        e2eStatus={this.state.e2eStatus}
-                        permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
-                    />;
-            }
+            const MessageComposer = sdk.getComponent('rooms.MessageComposer');
+            messageComposer =
+                <MessageComposer
+                    room={this.state.room}
+                    callState={this.state.callState}
+                    disabled={this.props.disabled}
+                    showApps={this.state.showApps}
+                    e2eStatus={this.state.e2eStatus}
+                    permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
+                />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -2013,5 +1992,3 @@ module.exports = createReactClass({
         );
     },
 });
-
-module.exports.RoomContext = RoomContext;

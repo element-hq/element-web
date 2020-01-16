@@ -17,9 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TooltipButton',
 
     getInitialState: function() {

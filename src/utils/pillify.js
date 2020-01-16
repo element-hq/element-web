@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import ReactDOM from 'react-dom';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
-import sdk from '../index';
+import {PushProcessor} from 'matrix-js-sdk/src/pushprocessor';
+import * as sdk from '../index';
 
 export function pillifyLinks(nodes, mxEvent) {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());

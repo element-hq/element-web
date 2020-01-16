@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import SdkConfig from '../SdkConfig';
-import sdk from "../index";
+import * as sdk from "../index";
 import Modal from '../Modal';
 import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} from "./IntegrationManagerInstance";
 import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
-import MatrixClientPeg from "../MatrixClientPeg";
+import {MatrixClientPeg} from "../MatrixClientPeg";
 import {AutoDiscovery} from "matrix-js-sdk";
 import SettingsStore from "../settings/SettingsStore";
 

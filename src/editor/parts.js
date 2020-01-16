@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import AutocompleteWrapperModel from "./autocomplete";
-import Avatar from "../Avatar";
+import * as Avatar from "../Avatar";
 
 class BasePart {
     constructor(text = "") {

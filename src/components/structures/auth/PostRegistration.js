@@ -17,11 +17,12 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
+import AuthPage from "../../views/auth/AuthPage";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PostRegistration',
 
     propTypes: {
@@ -59,7 +60,6 @@ module.exports = createReactClass({
     render: function() {
         const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        const AuthPage = sdk.getComponent('auth.AuthPage');
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
         return (

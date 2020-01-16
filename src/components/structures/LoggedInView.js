@@ -26,10 +26,10 @@ import { Key, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
 import { getHomePageUrl } from '../../utils/pages';
@@ -390,13 +390,6 @@ const LoggedInView = createReactClass({
 
             // Do not capture the context menu key to improve keyboard accessibility
             if (ev.key === Key.CONTEXT_MENU) {
-                return;
-            }
-
-            // XXX: Remove after CIDER replaces Slate completely: https://github.com/vector-im/riot-web/issues/11036
-            // If using Slate, consume the Backspace without first focusing as it causes an implosion
-            if (ev.key === Key.BACKSPACE && !SettingsStore.getValue("useCiderComposer")) {
-                ev.stopPropagation();
                 return;
             }
 

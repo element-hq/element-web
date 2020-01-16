@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 
 function capFirst(s) {
@@ -140,7 +140,7 @@ _td("Book");
 _td("Pencil");
 _td("Paperclip");
 _td("Scissors");
-_td("Padlock");
+_td("Lock");
 _td("Key");
 _td("Hammer");
 _td("Telephone");

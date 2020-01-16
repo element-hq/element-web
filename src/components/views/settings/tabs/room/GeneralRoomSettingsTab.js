@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";

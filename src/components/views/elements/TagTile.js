@@ -20,7 +20,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
@@ -55,6 +55,8 @@ export default createReactClass({
             hover: false,
             // The profile data of the group if this.props.tag is a group ID
             profile: null,
+            // Whether or not the context menu is open
+            menuDisplayed: false,
         };
     },
 

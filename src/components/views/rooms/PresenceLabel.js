@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PresenceLabel',
 
     propTypes: {

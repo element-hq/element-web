@@ -66,8 +66,13 @@ export default class GroupHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+        if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
+            // send the active phase to trigger a toggle
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+        }
     }
 
     _onRoomsClicked() {

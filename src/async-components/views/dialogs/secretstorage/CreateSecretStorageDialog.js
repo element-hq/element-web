@@ -16,22 +16,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
+import * as sdk from '../../../../index';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
 import FileSaver from 'file-saver';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 
 const PHASE_LOADING = 0;
-const PHASE_MIGRATE = 1;
-const PHASE_PASSPHRASE = 2;
-const PHASE_PASSPHRASE_CONFIRM = 3;
-const PHASE_SHOWKEY = 4;
-const PHASE_KEEPITSAFE = 5;
-const PHASE_STORING = 6;
-const PHASE_DONE = 7;
-const PHASE_OPTOUT_CONFIRM = 8;
+const PHASE_RESTORE_KEY_BACKUP = 1;
+const PHASE_MIGRATE = 2;
+const PHASE_PASSPHRASE = 3;
+const PHASE_PASSPHRASE_CONFIRM = 4;
+const PHASE_SHOWKEY = 5;
+const PHASE_KEEPITSAFE = 6;
+const PHASE_STORING = 7;
+const PHASE_DONE = 8;
+const PHASE_OPTOUT_CONFIRM = 9;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
@@ -67,6 +68,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             downloaded: false,
             zxcvbnResult: null,
             setPassPhrase: false,
+            backupInfo: null,
+            backupSigStatus: null,
         };
 
         this._fetchBackupInfo();
@@ -80,10 +83,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     async _fetchBackupInfo() {
         const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+        const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+
+        const phase = backupInfo ?
+            (backupSigStatus.usable ? PHASE_MIGRATE : PHASE_RESTORE_KEY_BACKUP) :
+            PHASE_PASSPHRASE;
 
         this.setState({
-            phase: backupInfo ? PHASE_MIGRATE: PHASE_PASSPHRASE,
+            phase,
             backupInfo,
+            backupSigStatus,
         });
     }
 
@@ -159,6 +168,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _onDone = () => {
         this.props.onFinished(true);
+    }
+
+    _onRestoreKeyBackupClick = () => {
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            /* priority = */ false, /* static = */ true,
+        );
     }
 
     _onOptOutClick = () => {
@@ -268,6 +285,23 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
     }
 
+    _renderPhaseRestoreKeyBackup() {
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        return <div>
+            <p>{_t(
+                "Key Backup is enabled on your account but has not been set " +
+                "up from this session. To set up secret storage, " +
+                "restore your key backup.",
+            )}</p>
+            <DialogButtons primaryButton={_t('Restore')}
+                onPrimaryButtonClick={this._onRestoreKeyBackupClick}
+                onCancel={this._onCancel}
+                hasCancel={true}
+            >
+            </DialogButtons>
+        </div>;
+    }
+
     _renderPhaseMigrate() {
         // TODO: This is a temporary screen so people who have the labs flag turned on and
         // click the button are aware they're making a change to their account.
@@ -277,9 +311,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Secret Storage will be set up using your existing key backup details." +
+                "Secret Storage will be set up using your existing key backup details. " +
                 "Your secret storage passphrase and recovery key will be the same as " +
-                " they were for your key backup",
+                "they were for your key backup.",
             )}</p>
             <DialogButtons primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onMigrateNextClick}
@@ -527,6 +561,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _titleForPhase(phase) {
         switch (phase) {
+            case PHASE_RESTORE_KEY_BACKUP:
+                return _t('Restore your Key Backup');
             case PHASE_MIGRATE:
                 return _t('Migrate from Key Backup');
             case PHASE_PASSPHRASE:
@@ -568,6 +604,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             switch (this.state.phase) {
                 case PHASE_LOADING:
                     content = this._renderBusyPhase();
+                    break;
+                case PHASE_RESTORE_KEY_BACKUP:
+                    content = this._renderPhaseRestoreKeyBackup();
                     break;
                 case PHASE_MIGRATE:
                     content = this._renderPhaseMigrate();

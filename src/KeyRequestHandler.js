@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from './index';
+import * as sdk from './index';
 import Modal from './Modal';
 
 export default class KeyRequestHandler {
@@ -110,6 +110,12 @@ export default class KeyRequestHandler {
         const finished = (r) => {
             this._currentUser = null;
             this._currentDevice = null;
+
+            if (!this._pendingKeyRequests[userId] || !this._pendingKeyRequests[userId][deviceId]) {
+                // request was removed in the time the dialog was displayed
+                this._processNextRequest();
+                return;
+            }
 
             if (r) {
                 for (const req of this._pendingKeyRequests[userId][deviceId]) {

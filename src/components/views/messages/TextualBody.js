@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
@@ -35,7 +35,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TextualBody',
 
     propTypes: {
@@ -98,12 +98,12 @@ module.exports = createReactClass({
     },
 
     _applyFormatting() {
-        this.activateSpoilers(this._content.current.children);
+        this.activateSpoilers([this._content.current]);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks(this._content.current.children, this.props.mxEvent);
+        pillifyLinks([this._content.current], this.props.mxEvent);
         HtmlUtils.linkifyElement(this._content.current);
         this.calculateUrlPreview();
 
@@ -167,7 +167,8 @@ module.exports = createReactClass({
         //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
-            let links = this.findLinks(this._content.current.children);
+            // pass only the first child which is the event tile otherwise this recurses on edited events
+            let links = this.findLinks([this._content.current]);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -329,10 +330,6 @@ module.exports = createReactClass({
                     global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
                 }
             },
-
-            getInnerText: () => {
-                return this._content.current.innerText;
-            },
         };
     },
 
@@ -433,6 +430,7 @@ module.exports = createReactClass({
             disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
+            ref: this._content,
         });
         if (this.props.replacingEventId) {
             body = [body, this._renderEditedMarker()];
@@ -459,15 +457,14 @@ module.exports = createReactClass({
 
         switch (content.msgtype) {
             case "m.emote":
-                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
-                    <span ref={this._content} className="mx_MEmoteBody mx_EventTile_content">
+                    <span className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
-                            { name }
+                            { mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender() }
                         </span>
                         &nbsp;
                         { body }
@@ -476,14 +473,14 @@ module.exports = createReactClass({
                 );
             case "m.notice":
                 return (
-                    <span ref={this._content} className="mx_MNoticeBody mx_EventTile_content">
+                    <span className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>
                 );
             default: // including "m.text"
                 return (
-                    <span ref={this._content} className="mx_MTextBody mx_EventTile_content">
+                    <span className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>

@@ -19,15 +19,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
-const filesize = require('filesize');
-const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
-const Modal = require('../../../Modal');
-const sdk = require('../../../index');
 import { _t } from '../../../languageHandler';
+import filesize from "filesize";
+import AccessibleButton from "./AccessibleButton";
+import Modal from "../../../Modal";
+import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
 
 export default class ImageView extends React.Component {

@@ -1,6 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@ limitations under the License.
 
 import React from 'react';
 import FileSaver from 'file-saver';
-
-import sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
+import * as sdk from '../../../../index';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import PropTypes from 'prop-types';
 import { scorePassword } from '../../../../utils/PasswordScorer';
 import { _t } from '../../../../languageHandler';
+import { accessSecretStorage } from '../../../../CrossSigningManager';
+import SettingsStore from '../../../../settings/SettingsStore';
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -49,10 +51,20 @@ function selectText(target) {
  * on the server.
  */
 export default class CreateKeyBackupDialog extends React.PureComponent {
+    static propTypes = {
+        secureSecretStorage: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
+    }
+
     constructor(props) {
         super(props);
 
+        this._recoveryKeyNode = null;
+        this._keyBackupInfo = null;
+        this._setZxcvbnResultTimeout = null;
+
         this.state = {
+            secureSecretStorage: props.secureSecretStorage,
             phase: PHASE_PASSPHRASE,
             passPhrase: '',
             passPhraseConfirm: '',
@@ -61,12 +73,25 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             zxcvbnResult: null,
             setPassPhrase: false,
         };
+
+        if (this.state.secureSecretStorage === undefined) {
+            this.state.secureSecretStorage =
+                SettingsStore.isFeatureEnabled("feature_cross_signing");
+        }
+
+        // If we're using secret storage, skip ahead to the backing up step, as
+        // `accessSecretStorage` will handle passphrases as needed.
+        if (this.state.secureSecretStorage) {
+            this.state.phase = PHASE_BACKINGUP;
+        }
     }
 
-    componentWillMount() {
-        this._recoveryKeyNode = null;
-        this._keyBackupInfo = null;
-        this._setZxcvbnResultTimeout = null;
+    componentDidMount() {
+        // If we're using secret storage, skip ahead to the backing up step, as
+        // `accessSecretStorage` will handle passphrases as needed.
+        if (this.state.secureSecretStorage) {
+            this._createBackup();
+        }
     }
 
     componentWillUnmount() {
@@ -103,15 +128,26 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     }
 
     _createBackup = async () => {
+        const { secureSecretStorage } = this.state;
         this.setState({
             phase: PHASE_BACKINGUP,
             error: null,
         });
         let info;
         try {
-            info = await MatrixClientPeg.get().createKeyBackupVersion(
-                this._keyBackupInfo,
-            );
+            if (secureSecretStorage) {
+                await accessSecretStorage(async () => {
+                    info = await MatrixClientPeg.get().prepareKeyBackupVersion(
+                        null /* random key */,
+                        { secureSecretStorage: true },
+                    );
+                    info = await MatrixClientPeg.get().createKeyBackupVersion(info);
+                });
+            } else {
+                info = await MatrixClientPeg.get().createKeyBackupVersion(
+                    this._keyBackupInfo,
+                );
+            }
             await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
             this.setState({
                 phase: PHASE_DONE,
