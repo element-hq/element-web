@@ -94,15 +94,6 @@ module.exports = (env, argv) => ({
                 loader: 'babel-loader',
                 options: {
                     cacheDirectory: true,
-
-                    // These two options are needed to load the babelrc file and
-                    // apply it to node_modules (ie: react-sdk and js-sdk). We
-                    // could put the babel config in this block instead, but we
-                    // publish riot-web to npm for some reason and that seems to
-                    // ship a lib directory. Therefore, we need the babel config
-                    // in a place where babel and babel-loader can reach it.
-                    babelrc: true,
-                    configFile: path.resolve(__dirname, ".babelrc"),
                 }
             },
             {
