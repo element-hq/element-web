@@ -40,12 +40,16 @@ export default class CompleteSecurity extends React.Component {
 
     onStartClick = async () => {
         const cli = MatrixClientPeg.get();
-        await accessSecretStorage(async () => {
-            await cli.checkOwnCrossSigningTrust();
-        });
-        this.setState({
-            phase: PHASE_DONE,
-        });
+        try {
+            await accessSecretStorage(async () => {
+                await cli.checkOwnCrossSigningTrust();
+            });
+            this.setState({
+                phase: PHASE_DONE,
+            });
+        } catch (e) {
+            // this will throw if the user hits cancel, so ignore
+        }
     }
 
     onSkipClick = () => {
