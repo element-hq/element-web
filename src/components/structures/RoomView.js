@@ -809,15 +809,6 @@ export default createReactClass({
 
         debuglog("e2e verified", verified, "unverified", unverified);
 
-        /* If we've not verified anyone, set state to "normal" */
-        if (verified.length == 0) {
-            this.setState({
-                e2eStatus: "normal",
-            });
-            debuglog("e2e state set to normal as we have no verified users to worry about");
-            return;
-        }
-
         /* Check all verified user devices. */
         for (const userId of verified) {
             const devices = await cli.getStoredDevicesForUser(userId);
@@ -835,7 +826,7 @@ export default createReactClass({
         }
 
         this.setState({
-            e2eStatus: "verified",
+            e2eStatus: unverified.length === 0 ? "verified" : "normal",
         });
     },
 
