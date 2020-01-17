@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as sdk from './index';
 import Modal from './Modal';
+import SettingsStore from './settings/SettingsStore';
 
 // TODO: We can remove this once cross-signing is the only way.
 // https://github.com/vector-im/riot-web/issues/11908
