@@ -144,6 +144,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
     }
 
+    async loadFileEvents(args): Promise<[EventAndProfile]> {
+        return this._ipcCall('loadFileEvents', args);
+    }
+
     async loadCheckpoints(): Promise<[CrawlerCheckpoint]> {
         return this._ipcCall('loadCheckpoints');
     }
