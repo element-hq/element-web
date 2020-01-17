@@ -2066,5 +2066,6 @@
     "Done": "Kész",
     "Without completing security on this device, it won’t have access to encrypted messages.": "Az eszköz biztonságának beállítása nélkül nem férhet hozzá a titkosított üzenetekhez.",
     "Go Back": "Vissza",
-    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "A Biztonsági Tároló a kulcs mentés adatainak felhasználásával lesz beállítva. A biztonsági tároló jelmondata és a visszaállítási kulcs ugyanaz lesz mint a kulcs mentéshez használt."
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "A Biztonsági Tároló a kulcs mentés adatainak felhasználásával lesz beállítva. A biztonsági tároló jelmondata és a visszaállítási kulcs ugyanaz lesz mint a kulcs mentéshez használt.",
+    "New invite dialog": "Új meghívó párbeszédablak"
 }
