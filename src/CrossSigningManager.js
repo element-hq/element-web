@@ -107,7 +107,7 @@ export async function accessSecretStorage(func = async () => { }) {
     cachingAllowed = true;
 
     try {
-        if (!cli.hasSecretStorageKey()) {
+        if (!await cli.hasSecretStorageKey()) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
