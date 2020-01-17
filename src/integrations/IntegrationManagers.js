@@ -83,6 +83,7 @@ export class IntegrationManagers {
     }
 
     async _setupHomeserverManagers() {
+        if (!MatrixClientPeg.get()) return;
         try {
             console.log("Updating homeserver-configured integration managers...");
             const homeserverDomain = MatrixClientPeg.getHomeserverName();
