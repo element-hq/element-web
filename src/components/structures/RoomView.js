@@ -813,7 +813,7 @@ export default createReactClass({
         for (const userId of verified) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const allDevicesVerified = devices.every(({deviceId}) => {
-                return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+                return cli.checkDeviceTrust(userId, deviceId).isVerified();
             });
             if (!allDevicesVerified) {
                 this.setState({
