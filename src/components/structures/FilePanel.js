@@ -64,7 +64,8 @@ const FilePanel = createReactClass({
 
         // FIXME: we shouldn't be doing this every time we change room - see comment above.
         // TODO: Remove this stale comment? Which comment above?
-        const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter)
+        const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId,
+                                                        filter);
         filter.filterId = filterId;
         const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
 
@@ -96,7 +97,7 @@ const FilePanel = createReactClass({
             let timelineSet;
 
             try {
-                timelineSet = await this.fetchFileEventsServer(room)
+                timelineSet = await this.fetchFileEventsServer(room);
 
                 if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
                     const timeline = timelineSet.getLiveTimeline();
@@ -104,7 +105,6 @@ const FilePanel = createReactClass({
                 }
 
                 this.setState({ timelineSet: timelineSet });
-
             } catch (error) {
                 console.error("Failed to get or create file panel filter", error);
             }

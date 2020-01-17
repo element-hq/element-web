@@ -18,7 +18,6 @@ import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 
 import * as Matrix from 'matrix-js-sdk';
-import {EventTimelineSet} from 'matrix-js-sdk';
 import {EventTimeline} from 'matrix-js-sdk';
 
 /*
@@ -420,27 +419,27 @@ export default class EventIndex {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        let loadArgs = {
+        const loadArgs = {
             roomId: room.roomId,
-            limit: limit
-        }
+            limit: limit,
+        };
 
         if (fromEvent) {
             loadArgs.fromEvent = fromEvent;
             loadArgs.direction = direction;
         }
 
-        let events
+        let events;
 
         // Get our events from the event index.
         try {
             events = await indexManager.loadFileEvents(loadArgs);
         } catch (e) {
             console.log("EventIndex: Error getting file events", e);
-            return []
+            return [];
         }
 
-        let eventMapper = client.getEventMapper();
+        const eventMapper = client.getEventMapper();
 
         // Turn the events into MatrixEvent objects.
         const matrixEvents = events.map(e => {
@@ -466,8 +465,8 @@ export default class EventIndex {
                     room_id: matrixEvent.getRoomId(),
                     sender: matrixEvent.getSender(),
                     origin_server_ts: matrixEvent.getTs(),
-                    state_key: matrixEvent.getSender()
-                }
+                    state_key: matrixEvent.getSender(),
+                },
             );
 
             // We set this manually to avoid emitting RoomMember.membership and
@@ -483,13 +482,13 @@ export default class EventIndex {
 
     async populateFileTimeline(timelineSet, timeline, room, limit = 10,
                                fromEvent = null, direction = EventTimeline.BACKWARDS) {
-        let matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
+        const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 
         // Add the events to the live timeline of the file panel.
         matrixEvents.forEach(e => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
                 timelineSet.addEventToTimeline(e, timeline,
-                                               direction == EventTimeline.BACKWARDS)
+                                               direction == EventTimeline.BACKWARDS);
             }
         });
 
@@ -510,12 +509,12 @@ export default class EventIndex {
         // TODO this is from the js-sdk, this should probably be exposed to
         // us through the js-sdk.
         const moveWindowCap = (titmelineWindow, timeline, direction, limit) => {
-            var count = (direction == EventTimeline.BACKWARDS) ?
+            const count = (direction == EventTimeline.BACKWARDS) ?
             timeline.retreat(limit) : timeline.advance(limit);
 
             if (count) {
                 timelineWindow._eventCount += count;
-                var excess = timelineWindow._eventCount - timelineWindow._windowLimit;
+                const excess = timelineWindow._eventCount - timelineWindow._windowLimit;
 
                 if (excess > 0) {
                     timelineWindow.unpaginate(3, direction != EventTimeline.BACKWARDS);
@@ -544,7 +543,7 @@ export default class EventIndex {
             const ret = await this.populateFileTimeline(timelineSet, timeline.timeline,
                                                         room, limit, token, direction);
 
-            moveWindowCap(timelineWindow, timeline, direction, limit)
+            moveWindowCap(timelineWindow, timeline, direction, limit);
             timeline.pendingPaginate = null;
 
             return ret;
