@@ -41,7 +41,10 @@ export default class VerificationPanel extends React.PureComponent {
         if (request.requested) {
             return (<p>Waiting for {request.otherUserId} to accept ... <Spinner /></p>);
         } else if (request.ready) {
-            return (<p>{request.otherUserId} is ready, start <AccessibleButton kind="primary" onClick={this._startSAS}>Verify by emoji</AccessibleButton></p>);
+            const verifyButton = <AccessibleButton kind="primary" onClick={this._startSAS}>
+                Verify by emoji
+            </AccessibleButton>;
+            return (<p>{request.otherUserId} is ready, start {verifyButton}</p>);
         } else if (request.started) {
             if (this.state.sasWaitingForOtherParty) {
                 return <p>Waiting for {request.otherUserId} to confirm ...</p>;

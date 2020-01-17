@@ -1455,7 +1455,6 @@ export default createReactClass({
             cli.on("crypto.verification.request", request => {
                 console.log(`MatrixChat got a .request ${request.channel.transactionId}`, request.event.getRoomId());
                 if (request.pending) {
-                    console.log(`emitting toast for verification request with txnid ${request.channel.transactionId}`, request.event && request.event.getId());
                     ToastStore.sharedInstance().addOrReplaceToast({
                         key: 'verifreq_' + request.channel.transactionId,
                         title: _t("Verification Request"),
