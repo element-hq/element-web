@@ -215,11 +215,14 @@ export default class BaseEventIndexManager {
      * should be loaded.
      * @param  {number} args.limit The maximum number of events to return.
      * @param  {string} args.fromEvent An event id of a previous event returned
-     * by this method. If set events that are older than the event with the
-     * given event ID will be returned.
+     * by this method. Passing this means that we are going to continue loading
+     * events from this point in the history.
+     * @param  {string} args.direction The direction to which we should continue
+     * loading events from. This is used only if fromEvent is used as well.
      *
-     * @return {Promise<[EventAndProfile]>} A promise that will resolve to an array
-     * of Matrix events that contain mxc URLs.
+     * @return {Promise<[EventAndProfile]>} A promise that will resolve to an
+     * array of Matrix events that contain mxc URLs accompanied with the
+     * historic profile of the sender.
      */
     async loadFileEvents(args: LoadArgs): Promise<[EventAndProfile]> {
         throw new Error("Unimplemented");
