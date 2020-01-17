@@ -63,6 +63,7 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
+import ToastStore from "../../stores/ToastStore";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -1381,6 +1382,8 @@ export default createReactClass({
         cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e, err) => dft.eventDecrypted(e, err));
 
+        // TODO: We can remove this once cross-signing is the only way.
+        // https://github.com/vector-im/riot-web/issues/11908
         const krh = new KeyRequestHandler(cli);
         cli.on("crypto.roomKeyRequest", (req) => {
             krh.handleKeyRequest(req);
@@ -1453,15 +1456,12 @@ export default createReactClass({
                 console.log(`MatrixChat got a .request ${request.channel.transactionId}`, request.event.getRoomId());
                 if (request.pending) {
                     console.log(`emitting toast for verification request with txnid ${request.channel.transactionId}`, request.event && request.event.getId());
-                    dis.dispatch({
-                        action: "show_toast",
-                        toast: {
-                            key: request.channel.transactionId,
-                            title: _t("Verification Request"),
-                            icon: "verification",
-                            props: {request},
-                            component: sdk.getComponent("toasts.VerificationRequestToast"),
-                        },
+                    ToastStore.sharedInstance().addOrReplaceToast({
+                        key: 'verifreq_' + request.channel.transactionId,
+                        title: _t("Verification Request"),
+                        icon: "verification",
+                        props: {request},
+                        component: sdk.getComponent("toasts.VerificationRequestToast"),
                     });
                 }
             });

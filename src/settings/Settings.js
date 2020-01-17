@@ -130,7 +130,7 @@ export const SETTINGS = {
     },
     "feature_ftue_dms": {
         isFeature: true,
-        displayName: _td("New DM invite dialog (under development)"),
+        displayName: _td("New invite dialog"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

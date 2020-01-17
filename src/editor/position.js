@@ -117,7 +117,7 @@ export default class DocumentPosition {
         }
         offset += this.offset;
         const lastPart = model.parts[this.index];
-        const atEnd = offset >= lastPart.text.length;
+        const atEnd = !lastPart || offset >= lastPart.text.length; // if no last part, we're at the end
         return new DocumentOffset(offset, atEnd);
     }
 

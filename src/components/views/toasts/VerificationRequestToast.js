@@ -22,6 +22,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";
+import ToastStore from "../../../stores/ToastStore";
 
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
@@ -48,12 +49,12 @@ export default class VerificationRequestToast extends React.PureComponent {
     _checkRequestIsPending = () => {
         const {request} = this.props;
         if (request.ready || request.started || request.done || request.cancelled || request.observeOnly) {
-            this.props.dismiss();
+            ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
 
     cancel = () => {
-        this.props.dismiss();
+        ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         try {
             this.props.request.cancel();
         } catch (err) {
@@ -62,7 +63,7 @@ export default class VerificationRequestToast extends React.PureComponent {
     }
 
     accept = async () => {
-        this.props.dismiss();
+        ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
         const {event} = request;
         // no room id for to_device requests
@@ -111,6 +112,6 @@ export default class VerificationRequestToast extends React.PureComponent {
 }
 
 VerificationRequestToast.propTypes = {
-    dismiss: PropTypes.func.isRequired,
     request: PropTypes.object.isRequired,
+    toastKey: PropTypes.string.isRequired,
 };
