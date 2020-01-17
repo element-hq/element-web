@@ -809,17 +809,16 @@ export default createReactClass({
 
         debuglog("e2e verified", verified, "unverified", unverified);
 
-        /* If we verify any users in this room, expect to verify every user in the room */
-        if (verified.length > 0 && unverified.length > 0) {
+        /* If we've not verified anyone, set state to "normal" */
+        if (verified.length == 0) {
             this.setState({
-                e2eStatus: "warning",
+                e2eStatus: "normal",
             });
-            debuglog("e2e status set to warning as some, but not all, users are verified");
+            debuglog("e2e state set to normal as we have no verified users to worry about");
             return;
         }
 
-        /* At this point, either `verified` or `unverified` is empty, or both */
-        /* Check all verified user devices. We don't care if everyone's unverified anyway. */
+        /* Check all verified user devices. */
         for (const userId of verified) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const allDevicesVerified = devices.every(({deviceId}) => {
@@ -836,7 +835,7 @@ export default createReactClass({
         }
 
         this.setState({
-            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+            e2eStatus: "verified",
         });
     },
 
