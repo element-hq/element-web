@@ -71,6 +71,20 @@ const FilePanel = createReactClass({
         return timelineSet;
     },
 
+    onPaginationRequest(timelineWindow, direction, limit) {
+        const client = MatrixClientPeg.get();
+        const eventIndex = EventIndexPeg.get();
+        const roomId = this.props.roomId;
+
+        const room = client.getRoom(roomId);
+
+        if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+            return eventIndex.paginateTimelineWindow(room, timelineWindow, direction, limit);
+        } else {
+            return timelineWindow.paginate(direction, limit);
+        }
+    },
+
     async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
@@ -85,7 +99,8 @@ const FilePanel = createReactClass({
                 timelineSet = await this.fetchFileEventsServer(room)
 
                 if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
-                    await eventIndex.populateFileTimeline(room, timelineSet);
+                    const timeline = timelineSet.getLiveTimeline();
+                    await eventIndex.populateFileTimeline(timelineSet, timeline, room, 1);
                 }
 
                 this.setState({ timelineSet: timelineSet });
@@ -128,6 +143,7 @@ const FilePanel = createReactClass({
                         manageReadMarkers={false}
                         timelineSet={this.state.timelineSet}
                         showUrlPreview = {false}
+                        onPaginationRequest={this.onPaginationRequest}
                         tileShape="file_grid"
                         resizeNotifier={this.props.resizeNotifier}
                         empty={_t('There are no visible files in this room')}

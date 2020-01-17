@@ -418,17 +418,29 @@ export default class EventIndex {
         return indexManager.searchEventIndex(searchArgs);
     }
 
-    async populateFileTimeline(room, timelineSet) {
+    async loadFileEvents(room, limit = 10, fromEvent = null, direction = EventTimeline.BACKWARDS) {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
+        let loadArgs = {
+            roomId: room.roomId,
+            limit: limit
+        }
+
+        if (fromEvent) {
+            loadArgs.fromEvent = fromEvent;
+            loadArgs.direction = direction;
+        }
+
+        let events
+
         // Get our events from the event index.
-        const events = await indexManager.loadFileEvents(
-            {
-                roomId: room.roomId,
-                limit: 10
-            }
-        );
+        try {
+            events = await indexManager.loadFileEvents(loadArgs);
+        } catch (e) {
+            console.log("EventIndex: Error getting file events", e);
+            return []
+        }
 
         let eventMapper = client.getEventMapper();
 
@@ -468,15 +480,82 @@ export default class EventIndex {
             return matrixEvent;
         });
 
+        return matrixEvents;
+    }
+
+    async populateFileTimeline(timelineSet, timeline, room, limit = 10,
+                               fromEvent = null, direction = EventTimeline.BACKWARDS) {
+        let matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
+
         // Add the events to the live timeline of the file panel.
         matrixEvents.forEach(e => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
-                const liveTimeline = timelineSet.getLiveTimeline();
-                timelineSet.addEventToTimeline(e, liveTimeline, true)
+                timelineSet.addEventToTimeline(e, timeline,
+                                               direction == EventTimeline.BACKWARDS)
             }
         });
 
         // Set the pagination token to the oldest event that we retrieved.
-        timelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);
+        if (matrixEvents.length > 0) {
+            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(),
+                                        EventTimeline.BACKWARDS);
+            return true;
+        } else {
+            timeline.setPaginationToken("", EventTimeline.BACKWARDS);
+            return false;
+        }
+    }
+
+    paginateTimelineWindow(room, timelineWindow, direction, limit) {
+        let tl;
+
+        // TODO this is from the js-sdk, this should probably be exposed to
+        // us through the js-sdk.
+        const moveWindowCap = (titmelineWindow, timeline, direction, limit) => {
+            var count = (direction == EventTimeline.BACKWARDS) ?
+            timeline.retreat(limit) : timeline.advance(limit);
+
+            if (count) {
+                timelineWindow._eventCount += count;
+                var excess = timelineWindow._eventCount - timelineWindow._windowLimit;
+
+                if (excess > 0) {
+                    timelineWindow.unpaginate(3, direction != EventTimeline.BACKWARDS);
+                }
+                return true;
+            }
+
+            return false;
+        };
+
+        // TODO these private fields should be somehow exposed in the js-sdk.
+        if (direction == EventTimeline.BACKWARDS) tl = timelineWindow._start;
+        else if (direction == EventTimeline.FORWARDS) tl = timelineWindow._end;
+
+        if (!tl) return Promise.resolve(false);
+        if (tl.pendingPaginate) return tl.pendingPaginate;
+
+        if (moveWindowCap(timelineWindow, tl, direction, limit)) {
+            return Promise.resolve(true);
+        }
+
+        const paginationMethod = async (timelineWindow, timeline, room, direction, limit) => {
+            const timelineSet = timelineWindow._timelineSet;
+            const token = timeline.timeline.getPaginationToken(direction);
+
+            const ret = await this.populateFileTimeline(timelineSet, timeline.timeline,
+                                                        room, limit, token, direction);
+
+            moveWindowCap(timelineWindow, timeline, direction, limit)
+            timeline.pendingPaginate = null;
+
+            return ret;
+        };
+
+        const paginationPromise = paginationMethod(timelineWindow, tl, room,
+                                                   direction, limit);
+        tl.pendingPaginate = paginationPromise;
+
+        return paginationPromise;
     }
 }
