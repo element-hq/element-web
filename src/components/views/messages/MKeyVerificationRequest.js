@@ -45,7 +45,6 @@ export default class MKeyVerificationRequest extends React.Component {
 
     _openRequest = () => {
         const {verificationRequest} = this.props.mxEvent;
-        dis.dispatch({action: "show_right_panel"});
         dis.dispatch({
             action: "set_right_panel_phase",
             phase: RIGHT_PANEL_PHASES.EncryptionPanel,

@@ -76,7 +76,6 @@ export default class VerificationRequestToast extends React.PureComponent {
         }
         try {
             await request.accept();
-            dis.dispatch({action: "show_right_panel"});
             dis.dispatch({
                 action: "set_right_panel_phase",
                 phase: RIGHT_PANEL_PHASES.EncryptionPanel,
