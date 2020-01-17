@@ -56,17 +56,16 @@ export default class DeviceListener {
 
     _onDevicesUpdated = (users) => {
         if (!users.includes(MatrixClientPeg.get().getUserId())) return;
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) return;
         this.recheck();
     }
 
     _onDeviceVerificationChanged = (users) => {
         if (!users.includes(MatrixClientPeg.get().getUserId())) return;
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) return;
         this.recheck();
     }
 
     async recheck() {
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) return;
         const cli = MatrixClientPeg.get();
 
         if (!cli.isCryptoEnabled()) return false;
