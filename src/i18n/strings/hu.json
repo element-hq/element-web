@@ -2067,5 +2067,14 @@
     "Without completing security on this device, it won’t have access to encrypted messages.": "Az eszköz biztonságának beállítása nélkül nem férhet hozzá a titkosított üzenetekhez.",
     "Go Back": "Vissza",
     "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "A Biztonsági Tároló a kulcs mentés adatainak felhasználásával lesz beállítva. A biztonsági tároló jelmondata és a visszaállítási kulcs ugyanaz lesz mint a kulcs mentéshez használt.",
-    "New invite dialog": "Új meghívó párbeszédablak"
+    "New invite dialog": "Új meghívó párbeszédablak",
+    "New Session": "Új Munkamenet",
+    "Other users may not trust it": "Más felhasználók lehet, hogy nem bíznak benne",
+    "Later": "Később",
+    "Failed to invite the following users to chat: %(csvUsers)s": "Az alábbi felhasználókat nem sikerült meghívni a beszélgetésbe: %(csvUsers)s",
+    "We couldn't create your DM. Please check the users you want to invite and try again.": "A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.",
+    "Something went wrong trying to invite the users.": "Valami nem sikerült a felhasználók meghívásával.",
+    "We couldn't invite those users. Please check the users you want to invite and try again.": "Ezeket a felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.",
+    "Recently Direct Messaged": "Nemrég küldött Közvetlen Üzenetek",
+    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "Ha nem találsz valakit, akkor kérdezd meg a felhasználói nevét (pl.: @felhasználó:szerver.com) vagy <a>oszd meg ezt a szobát</a>."
 }
