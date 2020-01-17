@@ -69,6 +69,8 @@ export default class DeviceListener {
     async recheck() {
         const cli = MatrixClientPeg.get();
 
+        if (!cli.isCryptoEnabled()) return false;
+
         const devices = await cli.getStoredDevicesForUser(cli.getUserId());
         for (const device of devices) {
             if (device.deviceId == cli.deviceId) continue;
