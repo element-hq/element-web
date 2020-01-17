@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from "../../..";
+import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 
 export default class VerificationPanel extends React.PureComponent {

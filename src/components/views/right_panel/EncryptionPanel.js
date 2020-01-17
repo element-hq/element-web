@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
 
 export default class EncryptionPanel extends React.PureComponent {
