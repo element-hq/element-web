@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
-import {EventIndexPeg} from "../../indexing/EventIndexPeg";
+import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 
 /*

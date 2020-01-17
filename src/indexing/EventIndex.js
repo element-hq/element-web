@@ -17,11 +17,9 @@ limitations under the License.
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 
-import Matrix from 'matrix-js-sdk';
-import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
-import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
-import MatrixEvent from 'matrix-js-sdk/lib/models/event';
-import RoomMember from 'matrix-js-sdk/lib/models/room-member';
+import * as Matrix from 'matrix-js-sdk';
+import {EventTimelineSet} from 'matrix-js-sdk';
+import {EventTimeline} from 'matrix-js-sdk';
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
@@ -448,7 +446,7 @@ export default class EventIndex {
         const matrixEvents = events.map(e => {
             const matrixEvent = eventMapper(e.event);
 
-            const member = new RoomMember(room.roomId, matrixEvent.getSender());
+            const member = new Matrix.RoomMember(room.roomId, matrixEvent.getSender());
 
             // We can't really reconstruct the whole room state from our
             // EventIndex to calculate the correct display name. Use the
