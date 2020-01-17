@@ -137,7 +137,7 @@ export default class BridgeSettingsTab extends React.Component {
         const client = MatrixClientPeg.get();
         const roomState = (client.getRoom(roomId)).currentState;
 
-        const bridgeEvents = Array.concat(...BRIDGE_EVENT_TYPES.map((typeName) =>
+        const bridgeEvents = [].concat(...BRIDGE_EVENT_TYPES.map((typeName) =>
             Object.values(roomState.events[typeName] || {}),
         ));
 
