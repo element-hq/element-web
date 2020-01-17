@@ -424,7 +424,8 @@ export default class InviteDialog extends React.PureComponent {
         const lastSpokeMembers = {}; // userId: room member
         for (const room of trueJoinedRooms) {
             // Skip low priority rooms and DMs
-            if (Object.keys(room.tags).includes("m.lowpriority") || DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+            const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            if (Object.keys(room.tags).includes("m.lowpriority") || isDm) {
                 continue;
             }
 
