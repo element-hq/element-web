@@ -820,7 +820,7 @@ export default createReactClass({
 
         /* At this point, either `verified` or `unverified` is empty, or both */
         /* Check all verified user devices. We don't care if everyone's unverified anyway. */
-        for (const userId of [...verified, cli.getUserId()]) {
+        for (const userId of verified) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const allDevicesVerified = devices.every(({deviceId}) => {
                 return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
