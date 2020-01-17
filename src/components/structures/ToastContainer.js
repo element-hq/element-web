@@ -22,7 +22,7 @@ import classNames from "classnames";
 export default class ToastContainer extends React.Component {
     constructor() {
         super();
-        this.state = {toasts: []};
+        this.state = {toasts: ToastStore.sharedInstance().getToasts()};
     }
 
     componentDidMount() {

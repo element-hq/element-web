@@ -31,6 +31,10 @@ export default class ToastStore extends EventEmitter {
         this._toasts = [];
     }
 
+    reset() {
+        this._toasts = [];
+    }
+
     addOrReplaceToast(newToast) {
         const oldIndex = this._toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
