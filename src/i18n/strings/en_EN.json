@@ -738,7 +738,7 @@
     "Encrypted search": "Encrypted search",
     "To enable search in encrypted rooms, Riot needs to run a background process to download historical messages from those rooms to your computer.": "To enable search in encrypted rooms, Riot needs to run a background process to download historical messages from those rooms to your computer.",
     "Message disk usage:": "Message disk usage:",
-    "Enable message downloading": "Enable message downloading",
+    "Download and index encrypted messages": "Download and index encrypted messages",
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
     "Preferences": "Preferences",
     "Composer": "Composer",

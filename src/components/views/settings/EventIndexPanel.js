@@ -114,7 +114,7 @@ export default class EventIndexPanel extends React.Component {
                     <LabelledToggleSwitch
                         value={this.state.eventIndexingEnabled}
                         onChange={this._onEventIndexingEnabledChange}
-                        label={_t('Enable message downloading')} />
+                        label={_t('Download and index encrypted messages')} />
 
                     <Field
                         id={"crawlerSleepTimeMs"}
