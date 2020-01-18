@@ -78,9 +78,7 @@
     "is-ip": "^2.0.0",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.17.14",
-    "lolex": "4.2",
     "matrix-js-sdk": "3.0.0",
-    "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "png-chunks-extract": "^1.0.0",
     "prop-types": "^15.5.8",
@@ -135,6 +133,7 @@
     "flow-parser": "^0.57.3",
     "glob": "^5.0.14",
     "jest": "^24.9.0",
+    "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "react-test-renderer": "^16.9.0",
@@ -153,7 +152,9 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.js"
+    ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"
