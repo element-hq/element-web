@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import url from 'url';
-import qs from 'querystring';
+import qs from 'qs';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
