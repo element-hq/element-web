@@ -2067,5 +2067,13 @@
     "Done": "完成",
     "Without completing security on this device, it won’t have access to encrypted messages.": "此裝置上沒有完全安全性，其對已加密訊息沒有存取權。",
     "Go Back": "返回",
-    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "秘密儲存空間將會使用您既有的金鑰備份詳細資訊設定。您的秘密儲存空間通關密語與復原金鑰將會與您的金鑰備份相同。"
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "秘密儲存空間將會使用您既有的金鑰備份詳細資訊設定。您的秘密儲存空間通關密語與復原金鑰將會與您的金鑰備份相同。",
+    "New Session": "新工作階段",
+    "New invite dialog": "新邀請對話框",
+    "Other users may not trust it": "其他使用者可能不會信任它",
+    "Later": "稍後",
+    "Something went wrong trying to invite the users.": "在嘗試邀請使用者時發生錯誤。",
+    "We couldn't invite those users. Please check the users you want to invite and try again.": "我們無法邀請那些使用者。請檢查您想要邀請的使用者並再試一次。",
+    "Recently Direct Messaged": "最近傳送過直接訊息",
+    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "如果您找不到某人，請詢問他們的使用者名稱（範例：@user:server.com）或<a>分享此聊天室</a>。"
 }
