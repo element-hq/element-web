@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-import expect from 'expect';
 import Adapter from "enzyme-adapter-react-16";
 import { configure, mount } from "enzyme";
 
