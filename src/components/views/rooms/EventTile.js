@@ -299,7 +299,7 @@ export default createReactClass({
         const verified = await this.context.isEventSenderVerified(mxEvent);
         if (verified) {
             this.setState({
-                verified: "verified"
+                verified: "verified",
             }, () => {
                 // Decryption may have caused a change in size
                 this.props.onHeightChanged();
