@@ -76,6 +76,7 @@ steps:
       - docker#v3.0.1:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
 
   - label: "🔧 Riot Tests"
     agents:
