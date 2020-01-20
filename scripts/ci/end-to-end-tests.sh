@@ -25,7 +25,7 @@ trap 'handle_error' ERR
 echo "--- Building Riot"
 scripts/ci/layered-riot-web.sh
 cd ../riot-web
-yarn build
+CI_PACKAGE=true yarn build
 cd ../matrix-react-sdk
 # run end to end tests
 pushd test/end-to-end-tests
