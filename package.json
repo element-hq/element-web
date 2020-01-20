@@ -205,7 +205,9 @@
       "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
       "^browser-request$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/browser-request.js",
       "^react$": "<rootDir>/node_modules/react",
-      "^react-dom$": "<rootDir>/node_modules/react-dom"
+      "^react-dom$": "<rootDir>/node_modules/react-dom",
+      "^matrix-js-sdk$": "<rootDir>/node_modules/matrix-js-sdk/src",
+      "^matrix-react-sdk$": "<rootDir>/node_modules/matrix-react-sdk/src"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
