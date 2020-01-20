@@ -62,8 +62,6 @@ const FilePanel = createReactClass({
             },
         );
 
-        // FIXME: we shouldn't be doing this every time we change room - see comment above.
-        // TODO: Remove this stale comment? Which comment above?
         const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId,
                                                         filter);
         filter.filterId = filterId;
