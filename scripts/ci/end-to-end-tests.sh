@@ -29,7 +29,7 @@ CI_PACKAGE=true yarn build
 cd ../matrix-react-sdk
 # run end to end tests
 pushd test/end-to-end-tests
-ln -s ../riot-web riot/riot-web
+ln -s ../../../riot-web riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 echo "--- Install synapse & other dependencies"
