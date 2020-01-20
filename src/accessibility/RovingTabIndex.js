@@ -23,6 +23,7 @@ import React, {
     useRef,
     useReducer,
 } from "react";
+import PropTypes from "prop-types";
 import {Key} from "../Keyboard";
 
 /**
@@ -128,7 +129,7 @@ const reducer = (state, action) => {
     }
 };
 
-export const RovingTabIndexProvider = ({children}) => {
+export const RovingTabIndexProvider = ({children, handleHomeEnd}) => {
     const [state, dispatch] = useReducer(reducer, {
         activeRef: null,
         refs: [],
@@ -136,13 +137,24 @@ export const RovingTabIndexProvider = ({children}) => {
 
     const context = useMemo(() => ({state, dispatch}), [state]);
 
+    if (handleHomeEnd) {
+        return <RovingTabIndexContext.Provider value={context}>
+            <HomeEndHelper>
+                { children }
+            </HomeEndHelper>
+        </RovingTabIndexContext.Provider>
+    }
+
     return <RovingTabIndexContext.Provider value={context}>
-        {children}
+        { children }
     </RovingTabIndexContext.Provider>;
+};
+RovingTabIndexProvider.propTypes = {
+    handleHomeEnd: PropTypes.bool,
 };
 
 // Helper to handle Home/End to jump to first/last roving-tab-index for widgets such as treeview
-export const RovingTabIndexHomeEndHelper = ({children}) => {
+export const HomeEndHelper = ({children}) => {
     const context = useContext(RovingTabIndexContext);
 
     const onKeyDown = useCallback((ev) => {
