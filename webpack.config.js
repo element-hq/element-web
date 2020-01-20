@@ -112,8 +112,8 @@ module.exports = (env, argv) => {
                     include: (f) => {
                         // we use the original source files of react-sdk and js-sdk, so we need to
                         // run them through babel.
-                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-js-sdk'))) return true;
-                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-react-sdk'))) return true;
+                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-js-sdk', 'src'))) return true;
+                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-react-sdk', 'src'))) return true;
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
                         // polyfills: probably fixable but babeling all our dependencies is probably
