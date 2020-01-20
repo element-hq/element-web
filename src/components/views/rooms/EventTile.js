@@ -309,10 +309,8 @@ export default createReactClass({
 
         const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
         if (!eventSenderTrust) {
-            // We cannot find the device.  Instead, we have to verify the user.
-            const userTrust = await this.context.checkUserTrust(mxEvent.getSender());
             this.setState({
-                verified: userTrust.isVerified() ? "user-verified": "warning",
+                verified: "unknown",
             }, this.props.onHeightChanged); // Decryption may have cause a change in size
             return;
         }
@@ -501,8 +499,8 @@ export default createReactClass({
         if (ev.isEncrypted()) {
             if (this.state.verified === "verified") {
                 return; // no icon for verified
-            } else if (this.state.verified === "user-verified") {
-                return (<E2ePadlockUserVerified />);
+            } else if (this.state.verified === "unknown") {
+                return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
             }
@@ -634,7 +632,7 @@ export default createReactClass({
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
             mx_EventTile_verified: !isBubbleMessage && this.state.verified === "verified",
             mx_EventTile_unverified: !isBubbleMessage && this.state.verified === "warning",
-            mx_EventTile_userVerified: !isBubbleMessage && this.state.verified === "user-verified",
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === "unknown",
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
@@ -930,9 +928,9 @@ function E2ePadlockUnencrypted(props) {
     );
 }
 
-function E2ePadlockUserVerified(props) {
+function E2ePadlockUnknown(props) {
     return (
-        <E2ePadlock title={_t("Encrypted by a deleted device")} icon="userVerified" {...props} />
+        <E2ePadlock title={_t("Encrypted by a deleted device")} icon="unknown" {...props} />
     );
 }
 
