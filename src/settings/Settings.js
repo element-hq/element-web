@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ export const SETTINGS = {
     },
     "feature_ftue_dms": {
         isFeature: true,
-        displayName: _td("New DM invite dialog (under development)"),
+        displayName: _td("New invite dialog"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -153,7 +153,6 @@ export const SETTINGS = {
         displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ReloadOnChangeController(),
     },
     "feature_event_indexing": {
         isFeature: true,

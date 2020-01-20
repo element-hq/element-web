@@ -209,8 +209,9 @@ export default class BasicMessageEditor extends React.Component {
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
             if (type === "cut") {
-                selection.deleteFromDocument();
-                range.replace([]);
+                // Remove the text, updating the model as appropriate
+                this._modifiedFlag = true;
+                replaceRangeAndMoveCaret(range, []);
             }
             event.preventDefault();
         }
@@ -259,8 +260,8 @@ export default class BasicMessageEditor extends React.Component {
         const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
         caret.offset += textToInsert.length;
-        this.props.model.update(newText, inputType, caret);
         this._modifiedFlag = true;
+        this.props.model.update(newText, inputType, caret);
     }
 
     // this is used later to see if we need to recalculate the caret

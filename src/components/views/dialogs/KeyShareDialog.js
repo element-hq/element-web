@@ -22,6 +22,9 @@ import * as sdk from '../../../index';
 
 import { _t, _td } from '../../../languageHandler';
 
+// TODO: We can remove this once cross-signing is the only way.
+// https://github.com/vector-im/riot-web/issues/11908
+
 /**
  * Dialog which asks the user whether they want to share their keys with
  * an unverified device.

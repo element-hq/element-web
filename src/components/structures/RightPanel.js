@@ -160,6 +160,7 @@ export default class RightPanel extends React.Component {
                 groupId: payload.groupId,
                 member: payload.member,
                 event: payload.event,
+                verificationRequest: payload.verificationRequest,
             });
         }
     }
@@ -168,6 +169,7 @@ export default class RightPanel extends React.Component {
         const MemberList = sdk.getComponent('rooms.MemberList');
         const MemberInfo = sdk.getComponent('rooms.MemberInfo');
         const UserInfo = sdk.getComponent('right_panel.UserInfo');
+        const EncryptionPanel = sdk.getComponent('right_panel.EncryptionPanel');
         const ThirdPartyMemberInfo = sdk.getComponent('rooms.ThirdPartyMemberInfo');
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
@@ -235,6 +237,8 @@ export default class RightPanel extends React.Component {
             panel = <NotificationPanel />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel) {
+            panel = <EncryptionPanel member={this.state.member} verificationRequest={this.state.verificationRequest} />;
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {

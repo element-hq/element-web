@@ -23,10 +23,12 @@ import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HEADER_KIND_ROOM} from './HeaderButtons';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import RightPanelStore from "../../../stores/RightPanelStore";
 
 const MEMBER_PHASES = [
     RIGHT_PANEL_PHASES.RoomMemberList,
     RIGHT_PANEL_PHASES.RoomMemberInfo,
+    RIGHT_PANEL_PHASES.EncryptionPanel,
     RIGHT_PANEL_PHASES.Room3pidMemberInfo,
 ];
 
@@ -56,8 +58,13 @@ export default class RoomHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+            // send the active phase to trigger a toggle
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, RightPanelStore.getSharedInstance().roomPanelPhaseParams);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        }
     }
 
     _onFilesClicked() {

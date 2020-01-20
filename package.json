@@ -31,6 +31,7 @@
   "typings": "./lib/index.d.ts",
   "matrix_src_main": "./src/index.js",
   "scripts": {
+    "prepublish": "yarn build",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
@@ -72,23 +73,18 @@
     "fuse.js": "^2.2.0",
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.1",
-    "glob": "^5.0.14",
     "glob-to-regexp": "^0.4.1",
     "highlight.js": "^9.15.8",
     "html-entities": "^1.2.1",
     "is-ip": "^2.0.0",
-    "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.17.14",
-    "lolex": "4.2",
     "matrix-js-sdk": "3.0.0",
-    "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "png-chunks-extract": "^1.0.0",
     "prop-types": "^15.5.8",
     "qrcode-react": "^0.1.16",
     "qs": "^6.6.0",
-    "querystring": "^0.2.0",
     "react": "^16.9.0",
     "react-addons-css-transition-group": "15.6.2",
     "react-beautiful-dnd": "^4.0.1",
@@ -101,7 +97,6 @@
     "url": "^0.11.0",
     "velocity-animate": "^1.5.2",
     "what-input": "^5.2.6",
-    "whatwg-fetch": "^1.1.1",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
@@ -123,7 +118,7 @@
     "@peculiar/webcrypto": "^1.0.22",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "chokidar": "^2.1.2",
+    "chokidar": "^3.3.1",
     "concurrently": "^4.0.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
@@ -137,11 +132,12 @@
     "estree-walker": "^0.5.0",
     "file-loader": "^3.0.1",
     "flow-parser": "^0.57.3",
+    "glob": "^5.0.14",
     "jest": "^24.9.0",
+    "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "react-test-renderer": "^16.9.0",
-    "require-json": "0.0.1",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.2.3",
     "stylelint": "^9.10.1",
@@ -157,7 +153,9 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.js"
+    ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"

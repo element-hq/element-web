@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,10 @@ limitations under the License.
 
 import * as sdk from './index';
 import Modal from './Modal';
+import SettingsStore from './settings/SettingsStore';
 
+// TODO: We can remove this once cross-signing is the only way.
+// https://github.com/vector-im/riot-web/issues/11908
 export default class KeyRequestHandler {
     constructor(matrixClient) {
         this._matrixClient = matrixClient;
@@ -30,6 +34,11 @@ export default class KeyRequestHandler {
     }
 
     handleKeyRequest(keyRequest) {
+        // Ignore own device key requests if cross-signing lab enabled
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            return;
+        }
+
         const userId = keyRequest.userId;
         const deviceId = keyRequest.deviceId;
         const requestId = keyRequest.requestId;
@@ -60,6 +69,11 @@ export default class KeyRequestHandler {
     }
 
     handleKeyRequestCancellation(cancellation) {
+        // Ignore own device key requests if cross-signing lab enabled
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            return;
+        }
+
         // see if we can find the request in the queue
         const userId = cancellation.userId;
         const deviceId = cancellation.deviceId;

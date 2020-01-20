@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,8 +36,10 @@ import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
+import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
+import DeviceListener from "./DeviceListener";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -575,6 +578,7 @@ async function startMatrixClient(startSyncing=true) {
     Notifier.start();
     UserActivity.sharedInstance().start();
     TypingStore.sharedInstance().reset(); // just in case
+    ToastStore.sharedInstance().reset();
     if (!SettingsStore.getValue("lowBandwidth")) {
         Presence.start();
     }
@@ -594,6 +598,9 @@ async function startMatrixClient(startSyncing=true) {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
     }
+
+    // This needs to be started after crypto is set up
+    DeviceListener.sharedInstance().start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
@@ -651,6 +658,7 @@ export function stopMatrixClient(unsetClient=true) {
     ActiveWidgetStore.stop();
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
+    DeviceListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

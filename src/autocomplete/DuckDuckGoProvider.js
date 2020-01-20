@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import 'whatwg-fetch';
 
 import {TextualCompletion} from './Components';
 import type {SelectionRange} from "./Autocompleter";

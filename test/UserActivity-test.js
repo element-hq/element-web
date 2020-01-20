@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import lolex from 'lolex';
-import jest from 'jest-mock';
 import EventEmitter from 'events';
 import UserActivity from '../src/UserActivity';
 
@@ -36,8 +35,8 @@ describe('UserActivity', function() {
     let clock;
 
     beforeEach(function() {
-        fakeWindow = new FakeDomEventEmitter(),
-        fakeDocument = new FakeDomEventEmitter(),
+        fakeWindow = new FakeDomEventEmitter();
+        fakeDocument = new FakeDomEventEmitter();
         userActivity = new UserActivity(fakeWindow, fakeDocument);
         userActivity.start();
         clock = lolex.install();

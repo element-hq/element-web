@@ -123,7 +123,11 @@ export default class RightPanelStore extends Store {
 
         if (payload.action === 'view_room' || payload.action === 'view_group') {
             // Reset to the member list if we're viewing member info
-            const memberInfoPhases = [RIGHT_PANEL_PHASES.RoomMemberInfo, RIGHT_PANEL_PHASES.Room3pidMemberInfo];
+            const memberInfoPhases = [
+                RIGHT_PANEL_PHASES.RoomMemberInfo,
+                RIGHT_PANEL_PHASES.Room3pidMemberInfo,
+                RIGHT_PANEL_PHASES.EncryptionPanel,
+            ];
             if (memberInfoPhases.includes(this._state.lastRoomPhase)) {
                 this._setState({lastRoomPhase: RIGHT_PANEL_PHASES.RoomMemberList, lastRoomPhaseParams: {}});
             }

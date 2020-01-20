@@ -1134,9 +1134,11 @@ const TimelinePanel = createReactClass({
         const allowPartial = opts.allowPartial || false;
 
         const messagePanel = this._messagePanel.current;
-        if (messagePanel === undefined) return null;
+        if (!messagePanel) return null;
 
-        const wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
+        const messagePanelNode = ReactDOM.findDOMNode(messagePanel);
+        if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
+        const wrapperRect = messagePanelNode.getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         const isNodeInView = (node) => {

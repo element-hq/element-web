@@ -40,6 +40,7 @@ import E2EIcon from "../rooms/E2EIcon";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -115,6 +116,14 @@ function verifyDevice(userId, device) {
         userId: userId,
         device: device,
     }, null, /* priority = */ false, /* static = */ true);
+}
+
+function verifyUser(user) {
+    dis.dispatch({
+        action: "set_right_panel_phase",
+        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+        refireParams: {member: user},
+    });
 }
 
 function DeviceItem({userId, device}) {
@@ -1225,15 +1234,13 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                 setDevices(null);
             }
         }
-        if (isRoomEncrypted) {
-            _downloadDeviceList();
-        }
+        _downloadDeviceList();
 
         // Handle being unmounted
         return () => {
             cancelled = true;
         };
-    }, [cli, user.userId, isRoomEncrypted]);
+    }, [cli, user.userId]);
 
     // Listen to changes
     useEffect(() => {
@@ -1249,18 +1256,13 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                 });
             }
         };
-
-        if (isRoomEncrypted) {
-            cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
-        }
+        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
         // Handle being unmounted
         return () => {
             cancel = true;
-            if (isRoomEncrypted) {
-                cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
-            }
+            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
         };
-    }, [cli, user.userId, isRoomEncrypted]);
+    }, [cli, user.userId]);
 
     let text;
     if (!isRoomEncrypted) {
@@ -1275,22 +1277,24 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
-    const devicesSection = isRoomEncrypted ?
-        (<DevicesSection loading={devices === undefined} devices={devices} userId={user.userId} />) : null;
-
     const userVerified = cli.checkUserTrust(user.userId).isVerified();
+    const isMe = user.userId === cli.getUserId();
     let verifyButton;
-    if (!userVerified) {
-        verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyDevice(user.userId, null)}>
+    if (!userVerified && !isMe) {
+        verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
             {_t("Verify")}
         </AccessibleButton>;
     }
+
+    const devicesSection = <DevicesSection
+        loading={devices === undefined}
+        devices={devices} userId={user.userId} />;
 
     const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
-            {verifyButton}
+            { verifyButton }
             { devicesSection }
         </div>
     );
@@ -1308,7 +1312,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
             <div className="mx_UserInfo_container">
                 <div className="mx_UserInfo_profile">
-                    <div >
+                    <div>
                         <h2 aria-label={displayName}>
                             { e2eIcon }
                             { displayName }

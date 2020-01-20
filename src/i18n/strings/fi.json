@@ -2025,5 +2025,6 @@
     "Recent Conversations": "Viimeaikaiset keskustelut",
     "Direct Messages": "Yksityisviestit",
     "If you can't find someone, ask them for their username, or share your username (%(userId)s) or <a>profile link</a>.": "Jos et löydä jotakuta, kysy hänen käyttäjätunnusta, tai anna oma käyttäjätunnuksesi (%(userId)s) tai <a>linkin profiiliisi</a> hänelle.",
-    "Go": "Mene"
+    "Go": "Mene",
+    "Lock": "Lukko"
 }

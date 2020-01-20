@@ -51,7 +51,7 @@ limitations under the License.
         &.mx_Toast_hasIcon {
             &::after {
                 content: "";
-                width: 20px;
+                width: 21px;
                 height: 20px;
                 grid-column: 1;
                 grid-row: 1;
@@ -62,6 +62,10 @@ limitations under the License.
             &.mx_Toast_icon_verification::after {
                 mask-image: url("$(res)/img/e2e/normal.svg");
                 background-color: $primary-fg-color;
+            }
+
+            &.mx_Toast_icon_verification_warning::after {
+                background-image: url("$(res)/img/e2e/warning.svg");
             }
 
             h2, .mx_Toast_body {

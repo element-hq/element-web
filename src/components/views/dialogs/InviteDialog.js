@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../../../SdkConfig";
@@ -31,8 +31,11 @@ import dis from "../../../dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
+import createRoom from "../../../createRoom";
+import {inviteMultipleToRoom} from "../../../RoomInvite";
 
-// TODO: [TravisR] Make this generic for all kinds of invites
+export const KIND_DM = "dm";
+export const KIND_INVITE = "invite";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
@@ -138,11 +141,11 @@ class DMUserTile extends React.PureComponent {
         const avatarSize = 20;
         const avatar = this.props.member.isEmail
             ? <img
-                className='mx_DMInviteDialog_userTile_avatar mx_DMInviteDialog_userTile_threepidAvatar'
+                className='mx_InviteDialog_userTile_avatar mx_InviteDialog_userTile_threepidAvatar'
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
-                className='mx_DMInviteDialog_userTile_avatar'
+                className='mx_InviteDialog_userTile_avatar'
                 url={getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
                     avatarSize, avatarSize, "crop")}
@@ -152,13 +155,13 @@ class DMUserTile extends React.PureComponent {
                 height={avatarSize} />;
 
         return (
-            <span className='mx_DMInviteDialog_userTile'>
-                <span className='mx_DMInviteDialog_userTile_pill'>
+            <span className='mx_InviteDialog_userTile'>
+                <span className='mx_InviteDialog_userTile_pill'>
                     {avatar}
-                    <span className='mx_DMInviteDialog_userTile_name'>{this.props.member.name}</span>
+                    <span className='mx_InviteDialog_userTile_name'>{this.props.member.name}</span>
                 </span>
                 <AccessibleButton
-                    className='mx_DMInviteDialog_userTile_remove'
+                    className='mx_InviteDialog_userTile_remove'
                     onClick={this._onRemove}
                 >
                     <img src={require("../../../../res/img/icon-pill-remove.svg")} alt={_t('Remove')} width={8} height={8} />
@@ -209,7 +212,7 @@ class DMRoomTile extends React.PureComponent {
 
             // Highlight the word the user entered
             const substr = str.substring(i, filterStr.length + i);
-            result.push(<span className='mx_DMInviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
+            result.push(<span className='mx_InviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
             i += substr.length;
         }
 
@@ -227,7 +230,7 @@ class DMRoomTile extends React.PureComponent {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
-            timestamp = <span className='mx_DMInviteDialog_roomTile_time'>{humanTs}</span>;
+            timestamp = <span className='mx_InviteDialog_roomTile_time'>{humanTs}</span>;
         }
 
         const avatarSize = 36;
@@ -247,61 +250,95 @@ class DMRoomTile extends React.PureComponent {
         let checkmark = null;
         if (this.props.isSelected) {
             // To reduce flickering we put the 'selected' room tile above the real avatar
-            checkmark = <div className='mx_DMInviteDialog_roomTile_selected' />;
+            checkmark = <div className='mx_InviteDialog_roomTile_selected' />;
         }
 
         // To reduce flickering we put the checkmark on top of the actual avatar (prevents
         // the browser from reloading the image source when the avatar remounts).
         const stackedAvatar = (
-            <span className='mx_DMInviteDialog_roomTile_avatarStack'>
+            <span className='mx_InviteDialog_roomTile_avatarStack'>
                 {avatar}
                 {checkmark}
             </span>
         );
 
         return (
-            <div className='mx_DMInviteDialog_roomTile' onClick={this._onClick}>
+            <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
-                <span className='mx_DMInviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
-                <span className='mx_DMInviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
+                <span className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
+                <span className='mx_InviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
                 {timestamp}
             </div>
         );
     }
 }
 
-export default class DMInviteDialog extends React.PureComponent {
+export default class InviteDialog extends React.PureComponent {
     static propTypes = {
         // Takes an array of user IDs/emails to invite.
         onFinished: PropTypes.func.isRequired,
+
+        // The kind of invite being performed. Assumed to be KIND_DM if
+        // not provided.
+        kind: PropTypes.string,
+
+        // The room ID this dialog is for. Only required for KIND_INVITE.
+        roomId: PropTypes.string,
+    };
+
+    static defaultProps = {
+        kind: KIND_DM,
     };
 
     _debounceTimer: number = null;
     _editorRef: any = null;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        if (props.kind === KIND_INVITE && !props.roomId) {
+            throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
+        }
+
+        let alreadyInvited = [];
+        if (props.roomId) {
+            const room = MatrixClientPeg.get().getRoom(props.roomId);
+            if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
+            alreadyInvited = [
+                ...room.getMembersWithMembership('invite'),
+                ...room.getMembersWithMembership('join'),
+                ...room.getMembersWithMembership('ban'), // so we don't try to invite them
+            ].map(m => m.userId);
+        }
+
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
             filterText: "",
-            recents: this._buildRecents(),
+            recents: this._buildRecents(alreadyInvited),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
-            suggestions: this._buildSuggestions(),
+            suggestions: this._buildSuggestions(alreadyInvited),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
             threepidResultsMixin: [], // { user: ThreepidMember, userId: string}[], like recents and suggestions
             canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
             tryingIdentityServer: false,
+
+            // These two flags are used for the 'Go' button to communicate what is going on.
+            busy: false,
+            errorText: null,
         };
 
         this._editorRef = createRef();
     }
 
-    _buildRecents(): {userId: string, user: RoomMember, lastActive: number} {
+    _buildRecents(excludedTargetIds: string[]): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals();
         const recents = [];
         for (const userId in rooms) {
+            // Filter out user IDs that are already in the room / should be excluded
+            if (excludedTargetIds.includes(userId)) continue;
+
             const room = rooms[userId];
             const member = room.getMember(userId);
             if (!member) continue; // just skip people who don't have memberships for some reason
@@ -320,7 +357,7 @@ export default class DMInviteDialog extends React.PureComponent {
         return recents;
     }
 
-    _buildSuggestions(): {userId: string, user: RoomMember} {
+    _buildSuggestions(excludedTargetIds: string[]): {userId: string, user: RoomMember} {
         const maxConsideredMembers = 200;
         const client = MatrixClientPeg.get();
         const excludedUserIds = [client.getUserId(), SdkConfig.get()['welcomeUserId']];
@@ -337,6 +374,11 @@ export default class DMInviteDialog extends React.PureComponent {
 
             const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
             for (const member of joinedMembers) {
+                // Filter out user IDs that are already in the room / should be excluded
+                if (excludedTargetIds.includes(member.userId)) {
+                    continue;
+                }
+
                 if (!members[member.userId]) {
                     members[member.userId] = {
                         member: member,
@@ -369,6 +411,58 @@ export default class DMInviteDialog extends React.PureComponent {
             return scores;
         }, {});
 
+        // Now that we have scores for being in rooms, boost those people who have sent messages
+        // recently, as a way to improve the quality of suggestions. We do this by checking every
+        // room to see who has sent a message in the last few hours, and giving them a score
+        // which correlates to the freshness of their message. In theory, this results in suggestions
+        // which are closer to "continue this conversation" rather than "this person exists".
+        const trueJoinedRooms = client.getRooms().filter(r => r.getMyMembership() === 'join');
+        const now = (new Date()).getTime();
+        const earliestAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
+        const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
+        const lastSpoke = {}; // userId: timestamp
+        const lastSpokeMembers = {}; // userId: room member
+        for (const room of trueJoinedRooms) {
+            // Skip low priority rooms and DMs
+            const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            if (Object.keys(room.tags).includes("m.lowpriority") || isDm) {
+                continue;
+            }
+
+            const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+            for (let i = events.length - 1; i >= Math.max(0, events.length - maxMessagesConsidered); i--) {
+                const ev = events[i];
+                if (excludedUserIds.includes(ev.getSender())) {
+                    continue;
+                }
+                if (ev.getTs() <= earliestAgeConsidered) {
+                    break; // give up: all events from here on out are too old
+                }
+
+                if (!lastSpoke[ev.getSender()] || lastSpoke[ev.getSender()] < ev.getTs()) {
+                    lastSpoke[ev.getSender()] = ev.getTs();
+                    lastSpokeMembers[ev.getSender()] = room.getMember(ev.getSender());
+                }
+            }
+        }
+        for (const userId in lastSpoke) {
+            const ts = lastSpoke[userId];
+            const member = lastSpokeMembers[userId];
+            if (!member) continue; // skip people we somehow don't have profiles for
+
+            // Scores from being in a room give a 'good' score of about 1.0-1.5, so for our
+            // boost we'll try and award at least +1.0 for making the list, with +4.0 being
+            // an approximate maximum for being selected.
+            const distanceFromNow = Math.abs(now - ts); // abs to account for slight future messages
+            const inverseTime = (now - earliestAgeConsidered) - distanceFromNow;
+            const scoreBoost = Math.max(1, inverseTime / (15 * 60 * 1000)); // 15min segments to keep scores sane
+
+            let record = memberScores[userId];
+            if (!record) record = memberScores[userId] = {score: 0};
+            record.member = member;
+            record.score += scoreBoost;
+        }
+
         const members = Object.values(memberScores);
         members.sort((a, b) => {
             if (a.score === b.score) {
@@ -384,12 +478,101 @@ export default class DMInviteDialog extends React.PureComponent {
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
+    _shouldAbortAfterInviteError(result): boolean {
+        const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
+        if (failedUsers.length > 0) {
+            console.log("Failed to invite users: ", result);
+            this.setState({
+                busy: false,
+                errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
+                    csvUsers: failedUsers.join(", "),
+                }),
+            });
+            return true; // abort
+        }
+        return false;
+    }
+
     _startDm = () => {
-        this.props.onFinished(this.state.targets.map(t => t.userId));
+        this.setState({busy: true});
+        const targetIds = this.state.targets.map(t => t.userId);
+
+        // Check if there is already a DM with these people and reuse it if possible.
+        const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        if (existingRoom) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: existingRoom.roomId,
+                should_peek: false,
+                joining: false,
+            });
+            this.props.onFinished();
+            return;
+        }
+
+        // Check if it's a traditional DM and create the room if required.
+        // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
+        let createRoomPromise = Promise.resolve();
+        if (targetIds.length === 1) {
+            createRoomPromise = createRoom({dmUserId: targetIds[0]});
+        } else {
+            // Create a boring room and try to invite the targets manually.
+            createRoomPromise = createRoom().then(roomId => {
+                return inviteMultipleToRoom(roomId, targetIds);
+            }).then(result => {
+                if (this._shouldAbortAfterInviteError(result)) {
+                    return true; // abort
+                }
+            });
+        }
+
+        // the createRoom call will show the room for us, so we don't need to worry about that.
+        createRoomPromise.then(abort => {
+            if (abort === true) return; // only abort on true booleans, not roomIds or something
+            this.props.onFinished();
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                busy: false,
+                errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+            });
+        });
+    };
+
+    _inviteUsers = () => {
+        this.setState({busy: true});
+        const targetIds = this.state.targets.map(t => t.userId);
+
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) {
+            console.error("Failed to find the room to invite users to");
+            this.setState({
+                busy: false,
+                errorText: _t("Something went wrong trying to invite the users."),
+            });
+            return;
+        }
+
+        inviteMultipleToRoom(this.props.roomId, targetIds).then(result => {
+            if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
+                this.props.onFinished();
+            }
+        }).catch(err => {
+            console.error(err);
+            this.setState({
+                busy: false,
+                errorText: _t(
+                    "We couldn't invite those users. Please check the users you want to invite and try again.",
+                ),
+            });
+        });
     };
 
     _cancel = () => {
-        this.props.onFinished([]);
+        // We do not want the user to close the dialog while an action is in progress
+        if (this.state.busy) return;
+
+        this.props.onFinished();
     };
 
     _updateFilter = (e) => {
@@ -599,7 +782,11 @@ export default class DMInviteDialog extends React.PureComponent {
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
-        const sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+        let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+
+        if (this.props.kind === KIND_INVITE) {
+            sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
+        }
 
         // Mix in the server results if we have any, but only if we're searching. We track the additional
         // members separately because we want to filter sourceMembers but trust the mixin arrays to have
@@ -631,7 +818,7 @@ export default class DMInviteDialog extends React.PureComponent {
 
             if (sourceMembers.length === 0 && additionalMembers.length === 0) {
                 return (
-                    <div className='mx_DMInviteDialog_section'>
+                    <div className='mx_InviteDialog_section'>
                         <h3>{sectionName}</h3>
                         <p>{_t("No results")}</p>
                     </div>
@@ -672,7 +859,7 @@ export default class DMInviteDialog extends React.PureComponent {
             />
         ));
         return (
-            <div className='mx_DMInviteDialog_section'>
+            <div className='mx_InviteDialog_section'>
                 <h3>{sectionName}</h3>
                 {tiles}
                 {showMore}
@@ -695,7 +882,7 @@ export default class DMInviteDialog extends React.PureComponent {
             />
         );
         return (
-            <div className='mx_DMInviteDialog_editor' onClick={this._onClickInputArea}>
+            <div className='mx_InviteDialog_editor' onClick={this._onClickInputArea}>
                 {targets}
                 {input}
             </div>
@@ -739,35 +926,67 @@ export default class DMInviteDialog extends React.PureComponent {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        const Spinner = sdk.getComponent("elements.Spinner");
 
-        const userId = MatrixClientPeg.get().getUserId();
+        let spinner = null;
+        if (this.state.busy) {
+            spinner = <Spinner w={20} h={20} />;
+        }
+
+
+        let title;
+        let helpText;
+        let buttonText;
+        let goButtonFn;
+
+        if (this.props.kind === KIND_DM) {
+            const userId = MatrixClientPeg.get().getUserId();
+
+            title = _t("Direct Messages");
+            helpText = _t(
+                "If you can't find someone, ask them for their username, or share your " +
+                "username (%(userId)s) or <a>profile link</a>.",
+                {userId},
+                {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
+            );
+            buttonText = _t("Go");
+            goButtonFn = this._startDm;
+        } else { // KIND_INVITE
+            title = _t("Invite to this room");
+            helpText = _t(
+                "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
+                "<a>share this room</a>.", {},
+                {a: (sub) => <a href={makeRoomPermalink(this.props.roomId)} rel="noopener" target="_blank">{sub}</a>},
+            );
+            buttonText = _t("Invite");
+            goButtonFn = this._inviteUsers;
+        }
+
         return (
             <BaseDialog
-                className='mx_DMInviteDialog'
+                className='mx_InviteDialog'
                 hasCancel={true}
                 onFinished={this._cancel}
-                title={_t("Direct Messages")}
+                title={title}
             >
-                <div className='mx_DMInviteDialog_content'>
-                    <p>
-                        {_t(
-                            "If you can't find someone, ask them for their username, or share your " +
-                            "username (%(userId)s) or <a>profile link</a>.",
-                            {userId},
-                            {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
-                        )}
-                    </p>
-                    <div className='mx_DMInviteDialog_addressBar'>
+                <div className='mx_InviteDialog_content'>
+                    <p>{helpText}</p>
+                    <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
-                        {this._renderIdentityServerWarning()}
-                        <AccessibleButton
-                            kind="primary"
-                            onClick={this._startDm}
-                            className='mx_DMInviteDialog_goButton'
-                        >
-                            {_t("Go")}
-                        </AccessibleButton>
+                        <div className='mx_InviteDialog_buttonAndSpinner'>
+                            <AccessibleButton
+                                kind="primary"
+                                onClick={goButtonFn}
+                                className='mx_InviteDialog_goButton'
+                                disabled={this.state.busy}
+                            >
+                                {buttonText}
+                            </AccessibleButton>
+                            {spinner}
+                        </div>
                     </div>
+                    {this._renderIdentityServerWarning()}
+                    <div className='error'>{this.state.errorText}</div>
                     {this._renderSection('recents')}
                     {this._renderSection('suggestions')}
                 </div>

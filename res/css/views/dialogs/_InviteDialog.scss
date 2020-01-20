@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_DMInviteDialog_addressBar {
+.mx_InviteDialog_addressBar {
     display: flex;
     flex-direction: row;
 
-    .mx_DMInviteDialog_editor {
+    .mx_InviteDialog_editor {
         flex: 1;
         width: 100%; // Needed to make the Field inside grow
         background-color: $user-tile-hover-bg-color;
@@ -28,7 +28,7 @@ limitations under the License.
         overflow-x: hidden;
         overflow-y: auto;
 
-        .mx_DMInviteDialog_userTile {
+        .mx_InviteDialog_userTile {
             display: inline-block;
             float: left;
             position: relative;
@@ -61,15 +61,26 @@ limitations under the License.
         }
     }
 
-    .mx_DMInviteDialog_goButton {
+    .mx_InviteDialog_goButton {
         width: 48px;
         margin-left: 10px;
         height: 25px;
         line-height: 25px;
     }
+
+    .mx_InviteDialog_buttonAndSpinner {
+        .mx_Spinner {
+            // Width and height are required to trick the layout engine.
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 }
 
-.mx_DMInviteDialog_section {
+.mx_InviteDialog_section {
     padding-bottom: 10px;
 
     h3 {
@@ -80,7 +91,7 @@ limitations under the License.
     }
 }
 
-.mx_DMInviteDialog_roomTile {
+.mx_InviteDialog_roomTile {
     cursor: pointer;
     padding: 5px 10px;
 
@@ -93,7 +104,7 @@ limitations under the License.
         vertical-align: middle;
     }
 
-    .mx_DMInviteDialog_roomTile_avatarStack {
+    .mx_InviteDialog_roomTile_avatarStack {
         display: inline-block;
         position: relative;
         width: 36px;
@@ -106,7 +117,7 @@ limitations under the License.
         }
     }
 
-    .mx_DMInviteDialog_roomTile_selected {
+    .mx_InviteDialog_roomTile_selected {
         width: 36px;
         height: 36px;
         border-radius: 36px;
@@ -130,20 +141,20 @@ limitations under the License.
         }
     }
 
-    .mx_DMInviteDialog_roomTile_name {
+    .mx_InviteDialog_roomTile_name {
         font-weight: 600;
         font-size: 14px;
         color: $primary-fg-color;
         margin-left: 7px;
     }
 
-    .mx_DMInviteDialog_roomTile_userId {
+    .mx_InviteDialog_roomTile_userId {
         font-size: 12px;
         color: $muted-fg-color;
         margin-left: 7px;
     }
 
-    .mx_DMInviteDialog_roomTile_time {
+    .mx_InviteDialog_roomTile_time {
         text-align: right;
         font-size: 12px;
         color: $muted-fg-color;
@@ -151,16 +162,16 @@ limitations under the License.
         line-height: 36px; // Height of the avatar to keep the time vertically aligned
     }
 
-    .mx_DMInviteDialog_roomTile_highlight {
+    .mx_InviteDialog_roomTile_highlight {
         font-weight: 900;
     }
 }
 
 // Many of these styles are stolen from mx_UserPill, but adjusted for the invite dialog.
-.mx_DMInviteDialog_userTile {
+.mx_InviteDialog_userTile {
     margin-right: 8px;
 
-    .mx_DMInviteDialog_userTile_pill {
+    .mx_InviteDialog_userTile_pill {
         background-color: $username-variant1-color;
         border-radius: 12px;
         display: inline-block;
@@ -170,28 +181,33 @@ limitations under the License.
         padding-right: 8px;
         color: #ffffff; // this is fine without a var because it's for both themes
 
-        .mx_DMInviteDialog_userTile_avatar {
+        .mx_InviteDialog_userTile_avatar {
             border-radius: 20px;
             position: relative;
             left: -5px;
             top: 2px;
         }
 
-        img.mx_DMInviteDialog_userTile_avatar {
+        img.mx_InviteDialog_userTile_avatar {
             vertical-align: top;
         }
 
-        .mx_DMInviteDialog_userTile_name {
+        .mx_InviteDialog_userTile_name {
             vertical-align: top;
         }
 
-        .mx_DMInviteDialog_userTile_threepidAvatar {
+        .mx_InviteDialog_userTile_threepidAvatar {
             background-color: #ffffff; // this is fine without a var because it's for both themes
         }
     }
 
-    .mx_DMInviteDialog_userTile_remove {
+    .mx_InviteDialog_userTile_remove {
         display: inline-block;
         margin-left: 4px;
     }
+}
+
+.mx_InviteDialog {
+    // Prevent the dialog from jumping around randomly when elements change.
+    height: 590px;
 }

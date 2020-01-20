@@ -63,7 +63,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     }
 
-    componentWillUmount() {
+    componentWillUnmount() {
         const { user } = this.props.member;
         if (!user) {
             return;
