@@ -368,8 +368,8 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 }
 
 .mx_EventTile_e2eIcon_unknown {
-    background-image: url('$(res)/img/e2e/normal.svg');
-    opacity: 0.5;
+    background-image: url('$(res)/img/e2e/warning.svg');
+    opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_unencrypted {
