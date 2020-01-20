@@ -359,8 +359,8 @@ export default class InviteDialog extends React.PureComponent {
 
     _buildSuggestions(excludedTargetIds: string[]): {userId: string, user: RoomMember} {
         const maxConsideredMembers = 200;
-        const client = MatrixClientPeg.get();
-        const excludedUserIds = [client.getUserId(), SdkConfig.get()['welcomeUserId']];
+        const myUserId = MatrixClientPeg.get().getUserId();
+        const excludedUserIds = [myUserId, SdkConfig.get()['welcomeUserId']];
         const joinedRooms = client.getRooms()
             .filter(r => r.getMyMembership() === 'join')
             .filter(r => r.getJoinedMemberCount() <= maxConsideredMembers);
@@ -418,7 +418,7 @@ export default class InviteDialog extends React.PureComponent {
         // which are closer to "continue this conversation" rather than "this person exists".
         const trueJoinedRooms = client.getRooms().filter(r => r.getMyMembership() === 'join');
         const now = (new Date()).getTime();
-        const maxAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
+        const earliestAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
         const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
         const lastSpoke = {}; // userId: timestamp
         const lastSpokeMembers = {}; // userId: room member
@@ -432,10 +432,10 @@ export default class InviteDialog extends React.PureComponent {
             const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
             for (let i = events.length - 1; i >= Math.max(0, events.length - maxMessagesConsidered); i--) {
                 const ev = events[i];
-                if (ev.getSender() === MatrixClientPeg.get().getUserId() || excludedUserIds.includes(ev.getSender())) {
+                if (ev.getSender() === myUserId || excludedUserIds.includes(ev.getSender())) {
                     continue;
                 }
-                if (ev.getTs() <= maxAgeConsidered) {
+                if (ev.getTs() <= earliestAgeConsidered) {
                     break; // give up: all events from here on out are too old
                 }
 
@@ -454,7 +454,7 @@ export default class InviteDialog extends React.PureComponent {
             // boost we'll try and award at least +1.0 for making the list, with +4.0 being
             // an approximate maximum for being selected.
             const distanceFromNow = Math.abs(now - ts); // abs to account for slight future messages
-            const inverseTime = (now - maxAgeConsidered) - distanceFromNow;
+            const inverseTime = (now - earliestAgeConsidered) - distanceFromNow;
             const scoreBoost = Math.max(1, inverseTime / (15 * 60 * 1000)); // 15min segments to keep scores sane
 
             let record = memberScores[userId];
