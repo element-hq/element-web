@@ -19,6 +19,7 @@ import {MatrixClientPeg} from "../MatrixClientPeg";
 import SettingsStore from '../settings/SettingsStore';
 import {SettingLevel} from "../settings/SettingsStore";
 import {sleep} from "../utils/promise";
+import {EventEmitter} from "events";
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
@@ -35,6 +36,7 @@ export default class EventIndex {
         this._crawler = null;
         this._currentCheckpoint = null;
         this.liveEventsForIndex = new Set();
+        this._eventEmitter = new EventEmitter();
     }
 
     async init() {
@@ -185,6 +187,10 @@ export default class EventIndex {
         indexManager.addEventToIndex(e, profile);
     }
 
+    emitNewCheckpoint() {
+        this._eventEmitter.emit("changedCheckpoint", this.currentRoom());
+    }
+
     async crawlerFunc() {
         let cancelled = false;
 
@@ -214,7 +220,10 @@ export default class EventIndex {
                 sleepTime = this._crawlerIdleTime;
             }
 
-            this._currentCheckpoint = null;
+            if (this._currentCheckpoint !== null) {
+                this._currentCheckpoint = null;
+                this.emitNewCheckpoint();
+            }
 
             await sleep(sleepTime);
 
@@ -234,6 +243,7 @@ export default class EventIndex {
             }
 
             this._currentCheckpoint = checkpoint;
+            this.emitNewCheckpoint();
 
             idle = false;
 
@@ -465,18 +475,23 @@ export default class EventIndex {
      */
     currentRoom() {
         if (this._currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {
-            console.log("EventIndex: No current nor any checkpoint");
             return null;
         }
 
         const client = MatrixClientPeg.get();
 
         if (this._currentCheckpoint !== null) {
-            console.log("EventIndex: Current checkpoint available");
             return client.getRoom(this._currentCheckpoint.roomId);
         } else {
-            console.log("EventIndex: No current but have checkpoint available");
             return client.getRoom(this.crawlerCheckpoints[0].roomId);
         }
+    }
+
+    on(eventName, callback) {
+        this._eventEmitter.on(eventName, callback);
+    }
+
+    removeListener(eventName, callback) {
+        this._eventEmitter.removeListener(eventName, callback);
     }
 }
