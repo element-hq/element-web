@@ -235,6 +235,7 @@ export default createReactClass({
         this._suppressReadReceiptAnimation = false;
         const client = this.context;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        client.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
@@ -260,6 +261,7 @@ export default createReactClass({
     componentWillUnmount: function() {
         const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        client.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
@@ -282,18 +284,42 @@ export default createReactClass({
         }
     },
 
+    onUserVerificationChanged: function(userId, _trustStatus) {
+        if (userId === this.props.mxEvent.getSender()) {
+            this._verifyEvent(this.props.mxEvent);
+        }
+    },
+
     _verifyEvent: async function(mxEvent) {
         if (!mxEvent.isEncrypted()) {
             return;
         }
 
+        // If we directly trust the device, short-circuit here
         const verified = await this.context.isEventSenderVerified(mxEvent);
+        if (verified) {
+            this.setState({
+                verified: "verified"
+            }, () => {
+                // Decryption may have caused a change in size
+                this.props.onHeightChanged();
+            });
+            return;
+        }
+
+        const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
+        if (!eventSenderTrust) {
+            // We cannot find the device.  Instead, we have to verify the user.
+            const userTrust = await this.context.checkUserTrust(mxEvent.getSender());
+            this.setState({
+                verified: userTrust.isVerified() ? "user-verified": "warning",
+            }, this.props.onHeightChanged); // Decryption may have cause a change in size
+            return;
+        }
+
         this.setState({
-            verified: verified,
-        }, () => {
-            // Decryption may have caused a change in size
-            this.props.onHeightChanged();
-        });
+            verified: eventSenderTrust.isVerified() ? "verified" : "warning",
+        }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
     _propsEqual: function(objA, objB) {
@@ -473,8 +499,10 @@ export default createReactClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified) {
+            if (this.state.verified === "verified") {
                 return; // no icon for verified
+            } else if (this.state.verified === "user-verified") {
+                return (<E2ePadlockUserVerified />);
             } else {
                 return (<E2ePadlockUnverified />);
             }
@@ -604,8 +632,9 @@ export default createReactClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === true,
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === false,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === "verified",
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === "warning",
+            mx_EventTile_userVerified: !isBubbleMessage && this.state.verified === "user-verified",
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
@@ -898,6 +927,12 @@ function E2ePadlockUnverified(props) {
 function E2ePadlockUnencrypted(props) {
     return (
         <E2ePadlock title={_t("Unencrypted")} icon="unencrypted" {...props} />
+    );
+}
+
+function E2ePadlockUserVerified(props) {
+    return (
+        <E2ePadlock title={_t("Encrypted by a deleted device")} icon="userVerified" {...props} />
     );
 }
 
