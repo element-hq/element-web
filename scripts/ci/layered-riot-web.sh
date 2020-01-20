@@ -12,7 +12,6 @@ matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk
 pushd matrix-js-sdk
 yarn link
 yarn install
-#yarn build
 popd
 
 # Now set up the react-sdk
@@ -20,7 +19,6 @@ pushd matrix-react-sdk
 yarn link matrix-js-sdk
 yarn link
 yarn install
-#yarn build
 popd
 
 # Finally, set up riot-web
