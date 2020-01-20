@@ -411,6 +411,58 @@ export default class InviteDialog extends React.PureComponent {
             return scores;
         }, {});
 
+        // Now that we have scores for being in rooms, boost those people who have sent messages
+        // recently, as a way to improve the quality of suggestions. We do this by checking every
+        // room to see who has sent a message in the last few hours, and giving them a score
+        // which correlates to the freshness of their message. In theory, this results in suggestions
+        // which are closer to "continue this conversation" rather than "this person exists".
+        const trueJoinedRooms = client.getRooms().filter(r => r.getMyMembership() === 'join');
+        const now = (new Date()).getTime();
+        const earliestAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
+        const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
+        const lastSpoke = {}; // userId: timestamp
+        const lastSpokeMembers = {}; // userId: room member
+        for (const room of trueJoinedRooms) {
+            // Skip low priority rooms and DMs
+            const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            if (Object.keys(room.tags).includes("m.lowpriority") || isDm) {
+                continue;
+            }
+
+            const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+            for (let i = events.length - 1; i >= Math.max(0, events.length - maxMessagesConsidered); i--) {
+                const ev = events[i];
+                if (excludedUserIds.includes(ev.getSender())) {
+                    continue;
+                }
+                if (ev.getTs() <= earliestAgeConsidered) {
+                    break; // give up: all events from here on out are too old
+                }
+
+                if (!lastSpoke[ev.getSender()] || lastSpoke[ev.getSender()] < ev.getTs()) {
+                    lastSpoke[ev.getSender()] = ev.getTs();
+                    lastSpokeMembers[ev.getSender()] = room.getMember(ev.getSender());
+                }
+            }
+        }
+        for (const userId in lastSpoke) {
+            const ts = lastSpoke[userId];
+            const member = lastSpokeMembers[userId];
+            if (!member) continue; // skip people we somehow don't have profiles for
+
+            // Scores from being in a room give a 'good' score of about 1.0-1.5, so for our
+            // boost we'll try and award at least +1.0 for making the list, with +4.0 being
+            // an approximate maximum for being selected.
+            const distanceFromNow = Math.abs(now - ts); // abs to account for slight future messages
+            const inverseTime = (now - earliestAgeConsidered) - distanceFromNow;
+            const scoreBoost = Math.max(1, inverseTime / (15 * 60 * 1000)); // 15min segments to keep scores sane
+
+            let record = memberScores[userId];
+            if (!record) record = memberScores[userId] = {score: 0};
+            record.member = member;
+            record.score += scoreBoost;
+        }
+
         const members = Object.values(memberScores);
         members.sort((a, b) => {
             if (a.score === b.score) {
