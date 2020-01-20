@@ -432,7 +432,7 @@ export default class InviteDialog extends React.PureComponent {
             const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
             for (let i = events.length - 1; i >= Math.max(0, events.length - maxMessagesConsidered); i--) {
                 const ev = events[i];
-                if (ev.getSender() === myUserId || excludedUserIds.includes(ev.getSender())) {
+                if (excludedUserIds.includes(ev.getSender())) {
                     continue;
                 }
                 if (ev.getTs() <= earliestAgeConsidered) {
