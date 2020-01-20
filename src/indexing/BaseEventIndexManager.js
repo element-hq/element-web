@@ -67,6 +67,12 @@ export interface HistoricEvent {
     profile: MatrixProfile;
 }
 
+export interface IndexStats {
+    size: number;
+    event_count: number;
+    room_count: number;
+}
+
 /**
  * Base class for classes that provide platform-specific event indexing.
  *
@@ -118,9 +124,12 @@ export default class BaseEventIndexManager {
     }
 
     /**
-     * Get the disk usage of the index
+     * Get statistical information of the index.
+     *
+     * @return {Promise<IndexStats>} A promise that will resolve to the index
+     * statistics.
      */
-    async indexSize(): Promise<number> {
+    async getStats(): Promise<IndexStats> {
         throw new Error("Unimplemented");
     }
 

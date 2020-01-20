@@ -35,6 +35,9 @@ export default class EventIndexPanel extends React.Component {
             eventIndexSize: 0,
             crawlingRooms: 0,
             totalCrawlingRooms: 0,
+            eventCount: 0,
+            roomCount: 0,
+            currentRoom: null,
             eventIndexingEnabled:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling'),
             crawlerSleepTime:
@@ -44,22 +47,35 @@ export default class EventIndexPanel extends React.Component {
 
     async componentWillMount(): void {
         let eventIndexSize = 0;
+        let roomCount = 0;
+        let eventCount = 0;
         let crawlingRooms = 0;
         let totalCrawlingRooms = 0;
+        let currentRoom = null;
 
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
-            eventIndexSize = await eventIndex.indexSize();
+            const stats = await eventIndex.getStats();
+            eventIndexSize = stats.size;
+            roomCount = stats.roomCount;
+            eventCount = stats.eventCount;
+
             const crawledRooms = eventIndex.currentlyCrawledRooms();
             crawlingRooms = crawledRooms.crawlingRooms.size;
             totalCrawlingRooms = crawledRooms.totalRooms.size;
+
+            const room = eventIndex.currentRoom();
+            if (room) currentRoom = room.name;
         }
 
         this.setState({
             eventIndexSize,
             crawlingRooms,
             totalCrawlingRooms,
+            eventCount,
+            roomCount,
+            currentRoom,
         });
     }
 
@@ -82,16 +98,15 @@ export default class EventIndexPanel extends React.Component {
         let crawlerState;
 
         if (!this.state.eventIndexingEnabled) {
-            crawlerState = <div>{_t("Message downloader is stopped.")}</div>;
-        } else if (this.state.crawlingRooms === 0) {
-            crawlerState = <div>{_t("Message downloader is currently idle.")}</div>;
+            crawlerState = <div>{_t("Message search for encrypted rooms is disabled.")}</div>;
+        } else if (this.state.currentRoom === null) {
+            crawlerState = <div>{_t("Not currently downloading messages for any room.")}</div>;
         } else {
             crawlerState = (
                 <div>{_t(
-                    "Currently downloading mesages in %(crawlingRooms)s of %(totalRooms)s rooms.",
-                    { crawlingRooms: this.state.crawlingRooms,
-                      totalRooms: this.state.totalCrawlingRooms,
-                    })}
+                    "Downloading mesages for %(currentRoom)s.",
+                    { currentRoom: this.state.currentRoom }
+                )}
                 </div>
             );
         }
@@ -101,13 +116,14 @@ export default class EventIndexPanel extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Encrypted search")}</span>
                     {
-                        _t( "To enable search in encrypted rooms, Riot needs to run " +
-                            "a background process to download historical messages " +
-                            "from those rooms to your computer.",
+                        _t( "Riot is securely caching encrypted messages locally for them" +
+                            "to appear in search results:"
                         )
                     }
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Message disk usage:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
+                        {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
+                        {_t("Indexed messages:")} {this.state.eventCount}<br />
+                        {_t("Number of rooms:")} {this.state.roomCount}<br />
                         {crawlerState}<br />
                     </div>
 

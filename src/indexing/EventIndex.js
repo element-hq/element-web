@@ -425,9 +425,9 @@ export default class EventIndex {
         return indexManager.searchEventIndex(searchArgs);
     }
 
-    async indexSize() {
+    async getStats() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        return indexManager.indexSize();
+        return indexManager.getStats();
     }
 
     currentlyCrawledRooms() {
@@ -455,5 +455,28 @@ export default class EventIndex {
         });
 
         return {crawlingRooms, totalRooms};
+    }
+
+    /**
+     * Get the room that we are currently crawling.
+     *
+     * @returns A MatrixRoom that is being currently crawled, null if no room is
+     * currently being crawled.
+     */
+    currentRoom() {
+        if (this._currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {
+            console.log("EventIndex: No current nor any checkpoint");
+            return null;
+        }
+
+        const client = MatrixClientPeg.get();
+
+        if (this._currentCheckpoint !== null) {
+            console.log("EventIndex: Current checkpoint available");
+            return client.getRoom(this._currentCheckpoint.roomId);
+        } else {
+            console.log("EventIndex: No current but have checkpoint available");
+            return client.getRoom(this.crawlerCheckpoints[0].roomId);
+        }
     }
 }
