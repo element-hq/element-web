@@ -109,7 +109,23 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.(ts|js)x?$/,
-                    exclude: /node_modules/,
+                    include: (f) => {
+                        // we use the original source files of react-sdk and js-sdk, so we need to
+                        // run them through babel.
+                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-js-sdk'))) return true;
+                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-react-sdk'))) return true;
+                        // but we can't run all of our dependencies through babel (many of them still
+                        // use module.exports which breaks if babel injects an 'include' for its
+                        // polyfills: probably fixable but babeling all our dependencies is probably
+                        // not necessary anyway).
+                        if (f.startsWith(path.resolve(__dirname, 'node_modules'))) return false;
+                        // anything else gets babeled (our own source files, and also modules that
+                        // are yarn linked from somewhere else because this tests the absolute,
+                        // resolved path, so react-sdk and js-sdk fall under this case in a standard
+                        // dev setup. This will presumably start running any other module through
+                        // babel if yarn linked... caveat emptor.
+                        return true;
+                    },
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true
