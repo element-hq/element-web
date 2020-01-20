@@ -24,8 +24,7 @@ import * as sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
-import DMRoomMap from '../../../utils/DMRoomMap';
-import createRoom from "../../../createRoom";
+import {ensureDMExists} from "../../../createRoom";
 import dis from "../../../dispatcher";
 import SettingsStore from '../../../settings/SettingsStore';
 
@@ -100,9 +99,15 @@ export default class DeviceVerifyDialog extends React.Component {
             if (!verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
                 const roomId = await ensureDMExistsAndOpen(this.props.userId);
                 // throws upon cancellation before having started
-                this._verifier = await client.requestVerificationDM(
+                const request = await client.requestVerificationDM(
                     this.props.userId, roomId, [verificationMethods.SAS],
                 );
+                await request.waitFor(r => r.ready || r.started);
+                if (request.ready) {
+                    this._verifier = request.beginKeyVerification(verificationMethods.SAS);
+                } else {
+                    this._verifier = request.verifier;
+                }
             } else {
                 this._verifier = client.beginKeyVerification(
                     verificationMethods.SAS, this.props.userId, this.props.device.deviceId,
@@ -316,23 +321,7 @@ export default class DeviceVerifyDialog extends React.Component {
 }
 
 async function ensureDMExistsAndOpen(userId) {
-    const client = MatrixClientPeg.get();
-    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        if (r && r.getMyMembership() === "join") {
-            const member = r.getMember(userId);
-            return member && (member.membership === "invite" || member.membership === "join");
-        }
-        return false;
-    });
-    let roomId;
-    if (suitableDMRooms.length) {
-        const room = suitableDMRooms[0];
-        roomId = room.roomId;
-    } else {
-        roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
-    }
+    const roomId = ensureDMExists(MatrixClientPeg.get(), userId);
     // don't use andView and spinner in createRoom, together, they cause this dialog to close and reopen,
     // we causes us to loose the verifier and restart, and we end up having two verification requests
     dis.dispatch({

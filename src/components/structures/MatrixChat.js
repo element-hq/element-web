@@ -63,7 +63,6 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
-import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
 import ToastStore from "../../stores/ToastStore";
 
 /** constants for MatrixChat.state.view */
@@ -1454,18 +1453,13 @@ export default createReactClass({
 
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             cli.on("crypto.verification.request", request => {
-                let requestObserver;
-                if (request.event.getRoomId()) {
-                    requestObserver = new KeyVerificationStateObserver(
-                        request.event, MatrixClientPeg.get());
-                }
-
-                if (!requestObserver || requestObserver.pending) {
+                console.log(`MatrixChat got a .request ${request.channel.transactionId}`, request.event.getRoomId());
+                if (request.pending) {
                     ToastStore.sharedInstance().addOrReplaceToast({
-                        key: 'verifreq_' + request.event.getId(),
+                        key: 'verifreq_' + request.channel.transactionId,
                         title: _t("Verification Request"),
                         icon: "verification",
-                        props: {request, requestObserver},
+                        props: {request},
                         component: sdk.getComponent("toasts.VerificationRequestToast"),
                     });
                 }
