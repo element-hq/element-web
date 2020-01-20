@@ -210,8 +210,8 @@ export default class BasicMessageEditor extends React.Component {
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
             if (type === "cut") {
                 // Remove the text, updating the model as appropriate
-                replaceRangeAndMoveCaret(range, []);
                 this._modifiedFlag = true;
+                replaceRangeAndMoveCaret(range, []);
             }
             event.preventDefault();
         }
