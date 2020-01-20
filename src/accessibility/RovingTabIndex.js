@@ -142,7 +142,7 @@ export const RovingTabIndexProvider = ({children, handleHomeEnd}) => {
             <HomeEndHelper>
                 { children }
             </HomeEndHelper>
-        </RovingTabIndexContext.Provider>
+        </RovingTabIndexContext.Provider>;
     }
 
     return <RovingTabIndexContext.Provider value={context}>
