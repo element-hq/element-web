@@ -86,16 +86,13 @@ steps:
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
-      - "echo '--- Installing Dependencies'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '--- Running initial build steps'"
-      - "yarn build"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/riot-unit-tests.sh"
     plugins:
       - docker#v3.0.1:
           image: "node:10"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
 
   - label: "🌐 i18n"
     command:
