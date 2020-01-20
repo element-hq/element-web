@@ -206,3 +206,8 @@ limitations under the License.
         margin-left: 4px;
     }
 }
+
+.mx_InviteDialog {
+    // Prevent the dialog from jumping around randomly when elements change.
+    height: 590px;
+}
