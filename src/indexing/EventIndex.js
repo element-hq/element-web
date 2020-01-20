@@ -479,15 +479,13 @@ export default class EventIndex {
         // Add the events to the live timeline of the file panel.
         matrixEvents.forEach(e => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
-                timelineSet.addEventToTimeline(e, timeline,
-                                               direction == EventTimeline.BACKWARDS);
+                timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
             }
         });
 
         // Set the pagination token to the oldest event that we retrieved.
         if (matrixEvents.length > 0) {
-            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(),
-                                        EventTimeline.BACKWARDS);
+            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(), EventTimeline.BACKWARDS);
             return true;
         } else {
             timeline.setPaginationToken("", EventTimeline.BACKWARDS);
@@ -501,7 +499,7 @@ export default class EventIndex {
         // TODO this is from the js-sdk, this should probably be exposed to
         // us through the js-sdk.
         const moveWindowCap = (titmelineWindow, timeline, direction, limit) => {
-            const count = (direction == EventTimeline.BACKWARDS) ?
+            const count = (direction === EventTimeline.BACKWARDS) ?
             timeline.retreat(limit) : timeline.advance(limit);
 
             if (count) {
@@ -509,7 +507,7 @@ export default class EventIndex {
                 const excess = timelineWindow._eventCount - timelineWindow._windowLimit;
 
                 if (excess > 0) {
-                    timelineWindow.unpaginate(3, direction != EventTimeline.BACKWARDS);
+                    timelineWindow.unpaginate(3, direction !== EventTimeline.BACKWARDS);
                 }
                 return true;
             }
@@ -532,8 +530,7 @@ export default class EventIndex {
             const timelineSet = timelineWindow._timelineSet;
             const token = timeline.timeline.getPaginationToken(direction);
 
-            const ret = await this.populateFileTimeline(timelineSet, timeline.timeline,
-                                                        room, limit, token, direction);
+            const ret = await this.populateFileTimeline(timelineSet, timeline.timeline, room, limit, token, direction);
 
             moveWindowCap(timelineWindow, timeline, direction, limit);
             timeline.pendingPaginate = null;
@@ -541,8 +538,7 @@ export default class EventIndex {
             return ret;
         };
 
-        const paginationPromise = paginationMethod(timelineWindow, tl, room,
-                                                   direction, limit);
+        const paginationPromise = paginationMethod(timelineWindow, tl, room, direction, limit);
         tl.pendingPaginate = paginationPromise;
 
         return paginationPromise;
