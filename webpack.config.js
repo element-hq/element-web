@@ -54,6 +54,30 @@ module.exports = (env, argv) => {
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
+                    vendor: {
+                        test: (mod) => {
+                            const nodeModules = path.join(__dirname, "node_modules");
+                            const reactSdk = path.join(nodeModules, "matrix-react-sdk");
+                            const jsSdk = path.join(nodeModules, "matrix-js-sdk");
+                            return mod && mod.resource && (
+                                // Required from the sdks (primarly for `develop`)
+                                mod.resource.includes(path.join(reactSdk, "node_modules")) ||
+                                mod.resource.includes(path.join(jsSdk, "node_modules")) ||
+                                // Directly required vendor libs
+                                (mod.resource.includes(nodeModules) && (
+                                    !mod.resource.includes(reactSdk) &&
+                                    !mod.resource.includes(jsSdk)
+                                ))
+                            );
+                        },
+                        name: 'vendor',
+                        enforce: true,
+                        chunks: (chunk) => {
+                            // exclude `indexeddb-worker` because it runs in a different context
+                            // and thus cannot know about vendor libs
+                            return chunk.name !== 'indexeddb-worker';
+                        },
+                    },
                 },
             },
 

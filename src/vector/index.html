@@ -40,6 +40,7 @@
     <script>
         window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
     </script>
+    <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
     <script>
       if ('serviceWorker' in navigator) {
