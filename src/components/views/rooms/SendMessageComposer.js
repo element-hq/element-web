@@ -43,9 +43,6 @@ import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-const SEND_ANYWAY = Symbol("send-anyway");
-const UNKNOWN_CMD = Symbol("unknown-cmd");
-
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
     Object.assign(content, replyContent);
@@ -256,14 +253,26 @@ export default class SendMessageComposer extends React.Component {
                 shouldSend = false;
                 this._runSlashCommand(cmd);
             } else {
-                // ask the user if their unknown command should be sent as a message instead
+                // ask the user if their unknown command should be sent as a message
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                // unknown command, ask the user if they meant to send it as a message
                 const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
                     title: _t("Unknown Command"),
-                    description: _t("Unrecognised command: ") + commandText,
+                    description: <div>
+                        <p>
+                            { _t("Unrecognised command: %(commandText)s", {commandText}) }
+                        </p>
+                        <p>
+                            { _t("You can use <code>/help</code> to list available commands. Did you mean to send this as a message?", {}, {
+                                code: t => <code>{ t }</code>,
+                            }) }
+                        </p>
+                        <p>
+                            { _t("Protip: Begin your message with <code>//</code> to start it with a slash.", {}, {
+                                code: t => <code>{ t }</code>,
+                            }) }
+                        </p>
+                    </div>,
                     button: _t('Send as message'),
-                    danger: true,
                 });
                 const [sendAnyway] = await finished;
                 // if !sendAnyway bail to let the user edit the composer and try again
