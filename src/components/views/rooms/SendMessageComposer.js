@@ -262,7 +262,8 @@ export default class SendMessageComposer extends React.Component {
                             { _t("Unrecognised command: %(commandText)s", {commandText}) }
                         </p>
                         <p>
-                            { _t("You can use <code>/help</code> to list available commands. Did you mean to send this as a message?", {}, {
+                            { _t("You can use <code>/help</code> to list available commands. " +
+                                "Did you mean to send this as a message?", {}, {
                                 code: t => <code>{ t }</code>,
                             }) }
                         </p>
