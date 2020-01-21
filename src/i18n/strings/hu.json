@@ -2080,5 +2080,6 @@
     "Verify User": "Felhasználó ellenőrzése",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "A biztonság fokozásáért ellenőrizd ezt a felhasználót egy egyszeri kód egyeztetésével mindkettőtök készülékén.",
     "For maximum security, do this in person.": "A legnagyobb biztonság érdekében ezt személyesen tedd meg.",
-    "Start Verification": "Ellenőrzés elindítása"
+    "Start Verification": "Ellenőrzés elindítása",
+    "Encrypted by a deleted device": "Egy már törölt eszköz titkosította"
 }
