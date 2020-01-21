@@ -144,8 +144,6 @@ export default class PreferencesUserSettingsTab extends React.Component {
     }
 
     render() {
-        const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
-
         let autoLaunchOption = null;
         if (this.state.autoLaunchSupported) {
             autoLaunchOption = <LabelledToggleSwitch
@@ -173,8 +171,6 @@ export default class PreferencesUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
-
-                <EventIndexPanel />
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>

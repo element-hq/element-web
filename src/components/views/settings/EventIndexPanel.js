@@ -138,8 +138,7 @@ export default class EventIndexPanel extends React.Component {
 
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Encrypted search")}</span>
+                <div>
                     {
                         _t( "Riot is securely caching encrypted messages locally for them" +
                             "to appear in search results:"
@@ -163,6 +162,17 @@ export default class EventIndexPanel extends React.Component {
                         type='number'
                         value={this.state.crawlerSleepTime}
                         onChange={this._onCrawlerSleepTimeChange} />
+                </div>
+            );
+        } else {
+            eventIndexingSettings = (
+                <div>
+                    {
+                        _t( "Riot can't securely cache encrypted messages locally" +
+                            "while running in a web browser. Use Riot Desktop for" +
+                            "encrypted messages to appear in search results."
+                        )
+                    }
                 </div>
             );
         }
