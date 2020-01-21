@@ -21,6 +21,12 @@ module.exports = (env, argv) => {
         development['devtool'] = 'eval-source-map';
     }
 
+    // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
+    // don't have to call them over and over. We also resolve to the package.json instead of the src
+    // directory so we don't have to rely on a index.js or similar file existing.
+    const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
+    const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
+
     return {
         ...development,
 
@@ -117,8 +123,8 @@ module.exports = (env, argv) => {
                         // run them through babel. Because the path tested is the resolved, absolute
                         // path, these could be anywhere thanks to yarn link. We must also not
                         // include node modules inside these modules, so we add 'src'.
-                        if (f.includes(path.join('matrix-js-sdk', 'src'))) return true;
-                        if (f.includes(path.join('matrix-react-sdk', 'src'))) return true;
+                        if (f.startsWith(reactSdkSrcDir)) return true;
+                        if (f.startsWith(jsSdkSrcDir)) return true;
 
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
