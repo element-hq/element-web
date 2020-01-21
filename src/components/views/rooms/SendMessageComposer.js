@@ -267,7 +267,7 @@ export default class SendMessageComposer extends React.Component {
                             }) }
                         </p>
                         <p>
-                            { _t("Protip: Begin your message with <code>//</code> to start it with a slash.", {}, {
+                            { _t("Hint: Begin your message with <code>//</code> to start it with a slash.", {}, {
                                 code: t => <code>{ t }</code>,
                             }) }
                         </p>
