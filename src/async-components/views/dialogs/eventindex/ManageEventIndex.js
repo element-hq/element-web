@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
@@ -52,7 +51,6 @@ export default class ManageEventIndex extends React.Component {
             crawlerSleepTime:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
         };
-
     }
 
     async updateCurrentRoom(room) {
@@ -146,10 +144,8 @@ export default class ManageEventIndex extends React.Component {
             crawlerState = <div>{_t("Not downloading messages for any room.")}</div>;
         } else {
             crawlerState = (
-                <div>{_t(
-                    "Downloading mesages for %(currentRoom)s.",
-                    { currentRoom: this.state.currentRoom }
-                )}
+                <div>
+                    {_t("Downloading mesages for %(currentRoom)s.", { currentRoom: this.state.currentRoom })}
                 </div>
             );
         }
@@ -159,7 +155,7 @@ export default class ManageEventIndex extends React.Component {
                 <div>
                     {
                         _t( "Riot is securely caching encrypted messages locally for them " +
-                            "to appear in search results:"
+                            "to appear in search results:",
                         )
                     }
                     <div className='mx_SettingsTab_subsectionText'>
@@ -188,7 +184,7 @@ export default class ManageEventIndex extends React.Component {
                     {
                         _t( "Riot can't securely cache encrypted messages locally" +
                             "while running in a web browser. Use Riot Desktop for" +
-                            "encrypted messages to appear in search results."
+                            "encrypted messages to appear in search results.",
                         )
                     }
                 </div>
@@ -196,9 +192,7 @@ export default class ManageEventIndex extends React.Component {
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        let buttons;
-
-        buttons = <div>
+        const buttons = <div>
             <div className="mx_Dialog_buttons">
                 <AccessibleButton kind="secondary" onClick={this._onDisable}>
                     {_t("Disable")}
