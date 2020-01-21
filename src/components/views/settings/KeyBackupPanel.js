@@ -127,19 +127,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
-                secureSecretStorage: false,
-                onFinished: () => {
-                    this._loadBackupStatus();
-                },
-            }, null, /* priority = */ false, /* static = */ true,
-        );
-    }
-
-    _startNewBackupWithSecureSecretStorage = async () => {
-        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
-            {
-                secureSecretStorage: true,
+                secureSecretStorage: SettingsStore.isFeatureEnabled("feature_cross_signing"),
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
@@ -361,22 +349,6 @@ export default class KeyBackupPanel extends React.PureComponent {
                 {buttonRow}
             </div>;
         } else {
-            // This is a temporary button for testing the new path which stores
-            // the key backup key in SSSS. Initialising SSSS depends on
-            // cross-signing and is part of the same project, so we only show
-            // this mode when the cross-signing feature is enabled.
-            // TODO: Clean this up when removing the feature flag.
-            let secureSecretStorageKeyBackup;
-            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-                secureSecretStorageKeyBackup = (
-                    <div className="mx_KeyBackupPanel_buttonRow">
-                        <AccessibleButton kind="primary" onClick={this._startNewBackupWithSecureSecretStorage}>
-                            {_t("Start using Key Backup with Secure Secret Storage")}
-                        </AccessibleButton>
-                    </div>
-                );
-            }
-
             return <div>
                 <div>
                     <p>{_t(
@@ -391,7 +363,6 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {_t("Start using Key Backup")}
                     </AccessibleButton>
                 </div>
-                {secureSecretStorageKeyBackup}
             </div>;
         }
     }

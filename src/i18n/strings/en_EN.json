@@ -588,7 +588,6 @@
     "Backup version: ": "Backup version: ",
     "Algorithm: ": "Algorithm: ",
     "Backup key stored: ": "Backup key stored: ",
-    "Start using Key Backup with Secure Secret Storage": "Start using Key Backup with Secure Secret Storage",
     "Your keys are <b>not being backed up from this device</b>.": "Your keys are <b>not being backed up from this device</b>.",
     "Back up your keys before signing out to avoid losing them.": "Back up your keys before signing out to avoid losing them.",
     "Start using Key Backup": "Start using Key Backup",
