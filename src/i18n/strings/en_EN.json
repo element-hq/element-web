@@ -905,6 +905,7 @@
     "This message cannot be decrypted": "This message cannot be decrypted",
     "Encrypted by an unverified device": "Encrypted by an unverified device",
     "Unencrypted": "Unencrypted",
+    "Encrypted by a deleted device": "Encrypted by a deleted device",
     "Please select the destination room for this message": "Please select the destination room for this message",
     "Scroll to bottom of page": "Scroll to bottom of page",
     "Close preview": "Close preview",
