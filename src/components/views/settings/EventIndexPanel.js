@@ -125,7 +125,7 @@ export default class EventIndexPanel extends React.Component {
         if (!this.state.eventIndexingEnabled) {
             crawlerState = <div>{_t("Message search for encrypted rooms is disabled.")}</div>;
         } else if (this.state.currentRoom === null) {
-            crawlerState = <div>{_t("Not currently downloading messages for any room.")}</div>;
+            crawlerState = <div>{_t("Not downloading messages for any room.")}</div>;
         } else {
             crawlerState = (
                 <div>{_t(
