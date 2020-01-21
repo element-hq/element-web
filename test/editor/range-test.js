@@ -15,17 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import {createPartCreator} from "./mock";
-
-function createRenderer() {
-    const render = (c) => {
-        render.caret = c;
-        render.count += 1;
-    };
-    render.count = 0;
-    render.caret = null;
-    return render;
-}
+import {createPartCreator, createRenderer} from "./mock";
 
 const pillChannel = "#riot-dev:matrix.org";
 
