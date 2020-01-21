@@ -470,8 +470,8 @@ export default class EventIndex {
     /**
      * Get the room that we are currently crawling.
      *
-     * @returns A MatrixRoom that is being currently crawled, null if no room is
-     * currently being crawled.
+     * @returns {Room} A MatrixRoom that is being currently crawled, null
+     * if no room is currently being crawled.
      */
     currentRoom() {
         if (this._currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {

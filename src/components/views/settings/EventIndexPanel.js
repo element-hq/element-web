@@ -15,16 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import Field from "../elements/Field";
 import {formatBytes} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 
@@ -83,7 +77,6 @@ export default class EventIndexPanel extends React.Component {
                 onFinished: () => {},
             }, null, /* priority = */ false, /* static = */ true,
         );
-
     }
 
     render() {
@@ -111,7 +104,7 @@ export default class EventIndexPanel extends React.Component {
                     {
                         _t( "Riot can't securely cache encrypted messages locally" +
                             "while running in a web browser. Use Riot Desktop for" +
-                            "encrypted messages to appear in search results."
+                            "encrypted messages to appear in search results.",
                         )
                     }
                 </div>
