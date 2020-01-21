@@ -33,6 +33,21 @@ export default class BridgeSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
+    constructor() {
+        super();
+
+        this.state = {
+            showMoreCard: null,
+        };
+    }
+
+
+    _showMoreDetails(eventId) {
+        this.setState({
+            showMoreCard: eventId,
+        });
+    }
+
     _renderBridgeCard(event, room) {
         const content = event.getContent();
         if (!content || !content.channel || !content.protocol) {
@@ -45,90 +60,59 @@ export default class BridgeSettingsTab extends React.Component {
 
         let creator = null;
         if (content.creator) {
-            creator = <p> { _t("This bridge was provisioned by <user />", {}, {
+            creator = _t("This bridge was provisioned by <user />.", {}, {
                     user: <Pill
                         type={Pill.TYPE_USER_MENTION}
                         room={room}
                         url={makeUserPermalink(content.creator)}
                         shouldShowPillAvatar={true}
                     />,
-                })}</p>;
+            });
         }
 
-        const bot = (<p> {_t("This bridge is managed by <user />.", {}, {
+        const bot = _t("This bridge is managed by <user />.", {}, {
             user: <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={room}
                 url={makeUserPermalink(event.getSender())}
                 shouldShowPillAvatar={true}
                 />,
-        })} </p>);
-        let channelLink = channelName;
-        if (channel.external_url) {
-            channelLink = <a target="_blank" href={channel.external_url} rel="noopener">{channelName}</a>;
-        }
-
-        let networkLink = networkName;
-        if (network && network.external_url) {
-            networkLink = <a target="_blank" href={network.external_url} rel="noopener">{networkName}</a>;
-        }
-
-        const chanAndNetworkInfo = (
-            _t("Bridged into <channelLink /> <networkLink />, on <protocolName />", {}, {
-                channelLink,
-                networkLink,
-                protocolName,
-            })
-        );
-
-        let networkIcon = null;
-        if (networkName && network.avatar) {
-            const avatarUrl = getHttpUriForMxc(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                network.avatar, 32, 32, "crop",
-            );
-            networkIcon = <BaseAvatar
-                width={32}
-                height={32}
-                resizeMethod='crop'
-                name={ networkName }
-                idName={ networkName }
-                url={ avatarUrl }
-            />;
-        }
-
-        let channelIcon = null;
-        if (channel.avatar) {
-            const avatarUrl = getHttpUriForMxc(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                channel.avatar, 32, 32, "crop",
-            );
-            channelIcon = <BaseAvatar
-                width={32}
-                height={32}
-                resizeMethod='crop'
-                name={ networkName }
-                idName={ networkName }
-                url={ avatarUrl }
-            />;
-        }
-
-        const heading = _t("Connected to <channelIcon /> <channelName /> on <networkIcon /> <networkName />", { }, {
-            channelIcon,
-            channelName,
-            networkName,
-            networkIcon,
         });
 
-        return (<li key={event.stateKey}>
-            <div>
-                <h3>{heading}</h3>
-                <p>{_t("Connected via %(protocolName)s", { protocolName })}</p>
-                <details>
-                    {creator}
-                    {bot}
-                    <p>{chanAndNetworkInfo}</p>
-                </details>
+        const avatarUrl = network.avatar ? getHttpUriForMxc(
+            MatrixClientPeg.get().getHomeserverUrl(),
+            network.avatar, 32, 32, "crop",
+        ) : null;
+
+        const networkIcon = <BaseAvatar className="protocol-icon"
+            width={48}
+            height={48}
+            resizeMethod='crop'
+            name={ protocolName }
+            idName={ protocolName }
+            url={ avatarUrl }
+        />;
+
+        const workspaceChannelDetails = _t("Workspace: %(networkName)s      Channel: %(channelName)s", {
+            networkName,
+            channelName,
+        });
+        const id = event.getId();
+        const isVisible = this.state.showMoreCard === id;
+        const metadataClassname = "metadata " + (isVisible ? "visible" : "");
+        return (<li key={id}>
+            <div className="column-icon">
+                {networkIcon}
+            </div>
+            <div className="column-data">
+                <h3>{protocolName}</h3>
+                <p className="workspace-channel-details">
+                    {workspaceChannelDetails}
+                </p>
+                <p className={metadataClassname}>
+                    {creator} {bot}
+                </p>
+                <a href="#" onClick={() => this._showMoreDetails(isVisible ? null : id)}>Show { isVisible ? "less" : "more" } </a>
             </div>
         </li>);
     }
@@ -151,14 +135,40 @@ export default class BridgeSettingsTab extends React.Component {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
 
+        let content = null;
+
+        if (bridgeEvents.length > 0) {
+            content = <div>
+                <p>{_t(
+                    "This room is bridging messages to the following platforms. " +
+                    "<a>Learn more.</a>", {},
+                    {
+                        // TODO: We don't have this link yet: this will prevent the translators
+                        // having to re-translate the string when we do.
+                        a: sub => '',
+                    },
+                )}</p>
+                <ul className="mx_RoomSettingsDialog_BridgeList">
+                    { bridgeEvents.map((event) => this._renderBridgeCard(event, room)) }
+                </ul>
+            </div>
+        } else  {
+            content = <p>{_t(
+                "This room isn’t bridging messages to any platforms. " +
+                "<a>Learn more.</a>", {},
+                {
+                    // TODO: We don't have this link yet: this will prevent the translators
+                    // having to re-translate the string when we do.
+                    a: sub => '',
+                },
+            )}</p>
+        }
+
         return (
             <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Bridge Info")}</div>
+                <div className="mx_SettingsTab_heading">{_t("Bridges")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <p>{ _t("Below is a list of bridges connected to this room.") }</p>
-                    <ul className="mx_RoomSettingsDialog_BridgeList">
-                        { bridgeEvents.map((event) => this._renderBridgeCard(event, room)) }
-                    </ul>
+                    {content}
                 </div>
             </div>
         );
