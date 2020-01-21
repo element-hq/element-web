@@ -25,11 +25,12 @@ trap 'handle_error' ERR
 echo "--- Building Riot"
 scripts/ci/layered-riot-web.sh
 cd ../riot-web
+riot_web_dir=`pwd`
 CI_PACKAGE=true yarn build
 cd ../matrix-react-sdk
 # run end to end tests
 pushd test/end-to-end-tests
-ln -s ../../../riot-web riot/riot-web
+ln -s $riot_web_dir riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 echo "--- Install synapse & other dependencies"
