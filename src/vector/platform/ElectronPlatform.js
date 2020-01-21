@@ -152,12 +152,12 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('closeEventIndex');
     }
 
-    async deleteEventIndex(): Promise<> {
-        return this._ipcCall('deleteEventIndex');
+    async getStats(): Promise<> {
+        return this._ipcCall('getStats');
     }
 
-    async indexSize(): Promise<> {
-        return this._ipcCall('indexSize');
+    async deleteEventIndex(): Promise<> {
+        return this._ipcCall('deleteEventIndex');
     }
 }
 
