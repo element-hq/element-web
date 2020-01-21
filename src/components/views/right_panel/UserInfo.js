@@ -1308,15 +1308,18 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         userTrust.isVerified();
     const isMe = user.userId === cli.getUserId();
     let verifyButton;
-    if (!userVerified && !isMe) {
+    if (isRoomEncrypted && !userVerified && !isMe) {
         verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
             {_t("Verify")}
         </AccessibleButton>;
     }
 
-    const devicesSection = <DevicesSection
-        loading={devices === undefined}
-        devices={devices} userId={user.userId} />;
+    let devicesSection;
+    if (isRoomEncrypted) {
+        devicesSection = <DevicesSection
+            loading={devices === undefined}
+            devices={devices} userId={user.userId} />;
+    }
 
     const securitySection = (
         <div className="mx_UserInfo_container">
