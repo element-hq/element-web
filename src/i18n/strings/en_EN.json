@@ -754,7 +754,7 @@
     "Accept all %(invitedRooms)s invites": "Accept all %(invitedRooms)s invites",
     "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
     "Key backup": "Key backup",
-    "Encrypted search": "Encrypted search",
+    "Message search": "Message search",
     "Cross-signing": "Cross-signing",
     "Security & Privacy": "Security & Privacy",
     "Devices": "Devices",
@@ -2044,9 +2044,7 @@
     "Number of rooms:": "Number of rooms:",
     "Download and index encrypted messages": "Download and index encrypted messages",
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
-    "Disable or enable": "Disable or enable",
     "Disable": "Disable",
-    "Message search": "Message search",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
