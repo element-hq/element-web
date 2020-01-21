@@ -66,7 +66,7 @@ const stateEventTileTypes = {
     'm.room.related_groups': 'messages.TextualEvent',
 };
 
-const E2ESTATE = {
+const E2E_STATE = {
     VERIFIED: "verified",
     WARNING: "warning",
     UNKNOWN: "unknown",
@@ -305,7 +305,7 @@ export default createReactClass({
         const verified = await this.context.isEventSenderVerified(mxEvent);
         if (verified) {
             this.setState({
-                verified: E2ESTATE.VERIFIED,
+                verified: E2E_STATE.VERIFIED,
             }, () => {
                 // Decryption may have caused a change in size
                 this.props.onHeightChanged();
@@ -316,13 +316,13 @@ export default createReactClass({
         const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
         if (!eventSenderTrust) {
             this.setState({
-                verified: E2ESTATE.UNKNOWN,
+                verified: E2E_STATE.UNKNOWN,
             }, this.props.onHeightChanged); // Decryption may have cause a change in size
             return;
         }
 
         this.setState({
-            verified: eventSenderTrust.isVerified() ? E2ESTATE.VERIFIED : E2ESTATE.WARNING,
+            verified: eventSenderTrust.isVerified() ? E2E_STATE.VERIFIED : E2E_STATE.WARNING,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
@@ -503,9 +503,9 @@ export default createReactClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified === E2ESTATE.VERIFIED) {
+            if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
-            } else if (this.state.verified === E2ESTATE.UNKNOWN) {
+            } else if (this.state.verified === E2E_STATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
@@ -636,9 +636,9 @@ export default createReactClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2ESTATE.VERIFIED,
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2ESTATE.WARNING,
-            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2ESTATE.UNKNOWN,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2E_STATE.WARNING,
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
