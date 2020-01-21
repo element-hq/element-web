@@ -907,14 +907,14 @@ const aliases = {
 
 
 /**
- * Process the given text for /commands and perform them.
+ * Process the given text for /commands and return a bound method to perform them.
  * @param {string} roomId The room in which the command was performed.
  * @param {string} input The raw text input by the user.
- * @return {Object|null} An object with the property 'error' if there was an error
+ * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function processCommandInput(roomId, input) {
+export function getCommand(roomId, input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -934,8 +934,6 @@ export function processCommandInput(roomId, input) {
         cmd = aliases[cmd];
     }
     if (CommandMap[cmd]) {
-        return CommandMap[cmd].run(roomId, args);
+        return () => CommandMap[cmd].run(roomId, args);
     }
-    return null;
-    // return reject(_t('Unrecognised command:') + ' ' + input);
 }

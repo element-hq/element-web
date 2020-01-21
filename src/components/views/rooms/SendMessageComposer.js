@@ -35,7 +35,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {processCommandInput} from '../../../SlashCommands';
+import {getCommand} from '../../../SlashCommands';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
@@ -197,12 +197,7 @@ export default class SendMessageComposer extends React.Component {
         return false;
     }
 
-    /**
-     * Parses and executes current input as a Slash Command
-     * @returns {Promise<Symbol|void>} UNKNOWN_CMD if the command is not known,
-     *  SEND_ANYWAY if the input should be sent as message instead
-     */
-    async _tryRunSlashCommand() {
+    _getSlashCommand() {
         const commandText = this.model.parts.reduce((text, part) => {
             // use mxid to textify user pills in a command
             if (part.type === "user-pill") {
@@ -210,51 +205,41 @@ export default class SendMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        const cmd = processCommandInput(this.props.room.roomId, commandText);
+        return [getCommand(this.props.room.roomId, commandText), commandText];
+    }
 
-        if (cmd) {
-            let error = cmd.error;
-            if (cmd.promise) {
-                try {
-                    await cmd.promise;
-                } catch (err) {
-                    error = err;
-                }
+    async _runSlashCommand(fn) {
+        const cmd = fn();
+        let error = cmd.error;
+        if (cmd.promise) {
+            try {
+                await cmd.promise;
+            } catch (err) {
+                error = err;
             }
-            if (error) {
-                console.error("Command failure: %s", error);
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                // assume the error is a server error when the command is async
-                const isServerError = !!cmd.promise;
-                const title = isServerError ? _td("Server error") : _td("Command error");
+        }
+        if (error) {
+            console.error("Command failure: %s", error);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            // assume the error is a server error when the command is async
+            const isServerError = !!cmd.promise;
+            const title = isServerError ? _td("Server error") : _td("Command error");
 
-                let errText;
-                if (typeof error === 'string') {
-                    errText = error;
-                } else if (error.message) {
-                    errText = error.message;
-                } else {
-                    errText = _t("Server unavailable, overloaded, or something else went wrong.");
-                }
-
-                Modal.createTrackedDialog(title, '', ErrorDialog, {
-                    title: _t(title),
-                    description: errText,
-                });
+            let errText;
+            if (typeof error === 'string') {
+                errText = error;
+            } else if (error.message) {
+                errText = error.message;
             } else {
-                console.log("Command success.");
+                errText = _t("Server unavailable, overloaded, or something else went wrong.");
             }
-        } else {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            // unknown command, ask the user if they meant to send it as a message
-            const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
-                title: _t("Unknown Command"),
-                description: _t("Unrecognised command: ") + commandText,
-                button: _t('Send as message'),
-                danger: true,
+
+            Modal.createTrackedDialog(title, '', ErrorDialog, {
+                title: _t(title),
+                description: errText,
             });
-            const [sendAnyway] = await finished;
-            return sendAnyway ? SEND_ANYWAY : UNKNOWN_CMD;
+        } else {
+            console.log("Command success.");
         }
     }
 
@@ -266,13 +251,24 @@ export default class SendMessageComposer extends React.Component {
         let shouldSend = true;
 
         if (!containsEmote(this.model) && this._isSlashCommand()) {
-            const resp = await this._tryRunSlashCommand();
-            if (resp === UNKNOWN_CMD) {
-                // unknown command, bail to let the user modify it
-                return;
+            const [cmd, commandText] = this._getSlashCommand();
+            if (cmd) {
+                shouldSend = false;
+                this._runSlashCommand(cmd);
+            } else {
+                // ask the user if their unknown command should be sent as a message instead
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                // unknown command, ask the user if they meant to send it as a message
+                const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                    title: _t("Unknown Command"),
+                    description: _t("Unrecognised command: ") + commandText,
+                    button: _t('Send as message'),
+                    danger: true,
+                });
+                const [sendAnyway] = await finished;
+                // if !sendAnyway bail to let the user edit the composer and try again
+                if (!sendAnyway) return;
             }
-
-            shouldSend = resp === SEND_ANYWAY;
         }
 
         if (shouldSend) {
