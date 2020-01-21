@@ -45,17 +45,15 @@ export default class VerificationPanel extends React.PureComponent {
         if (request.requested) {
             return (<p>Waiting for {request.otherUserId} to accept ... <Spinner /></p>);
         } else if (request.ready) {
+            const keyId = `ed25519:${MatrixClientPeg.get().getCrossSigningId()}`;
             const qrCodeKeys = [
                 [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-                [MatrixClientPeg.get().getCrossSigningId(), MatrixClientPeg.get().getCrossSigningKey("master")],
+                [keyId, MatrixClientPeg.get().getCrossSigningId()],
             ];
-            // TODO: Await a bunch of this
-            const otherCrossSigning = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
-            const otherUserKey = otherCrossSigning ? otherCrossSigning.getCrossSigningKey("master") : null;
             const qrCode = <VerificationQRCode
                 keyholderUserId={MatrixClientPeg.get().getUserId()}
                 requestEventId={request.event.eventId}
-                otherUserKey={otherUserKey}
+                otherUserKey={"todo"}
                 secret={request.encodedSharedSecret}
                 keys={qrCodeKeys}
             />;
