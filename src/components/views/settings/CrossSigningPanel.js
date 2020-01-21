@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         this.state = {
             error: null,
-            ...this._getUpdatedStatus(),
+            crossSigningPublicKeysOnDevice: false,
+            crossSigningPrivateKeysInStorage: false,
+            secretStorageKeyInAccount: false,
         };
     }
 
@@ -38,6 +40,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         cli.on("accountData", this.onAccountData);
         cli.on("userTrustStatusChanged", this.onStatusChanged);
         cli.on("crossSigning.keysChanged", this.onStatusChanged);
+        this._getUpdatedStatus();
     }
 
     componentWillUnmount() {
@@ -52,12 +55,12 @@ export default class CrossSigningPanel extends React.PureComponent {
     onAccountData = (event) => {
         const type = event.getType();
         if (type.startsWith("m.cross_signing") || type.startsWith("m.secret_storage")) {
-            this.setState(this._getUpdatedStatus());
+            this._getUpdatedStatus();
         }
     };
 
     onStatusChanged = () => {
-        this.setState(this._getUpdatedStatus());
+        this._getUpdatedStatus();
     };
 
     async _getUpdatedStatus() {
@@ -69,11 +72,11 @@ export default class CrossSigningPanel extends React.PureComponent {
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const secretStorageKeyInAccount = await secretStorage.hasKey();
 
-        return {
+        this.setState({
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
-        };
+        });
     }
 
     /**
@@ -93,7 +96,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             console.error("Error bootstrapping secret storage", e);
         }
         if (this._unmounted) return;
-        this.setState(this._getUpdatedStatus());
+        this._getUpdatedStatus();
     }
 
     render() {
