@@ -2075,5 +2075,9 @@
     "Something went wrong trying to invite the users.": "在嘗試邀請使用者時發生錯誤。",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "我們無法邀請那些使用者。請檢查您想要邀請的使用者並再試一次。",
     "Recently Direct Messaged": "最近傳送過直接訊息",
-    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "如果您找不到某人，請詢問他們的使用者名稱（範例：@user:server.com）或<a>分享此聊天室</a>。"
+    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "如果您找不到某人，請詢問他們的使用者名稱（範例：@user:server.com）或<a>分享此聊天室</a>。",
+    "Verify User": "驗證使用者",
+    "For extra security, verify this user by checking a one-time code on both of your devices.": "為了提高安全性，請透過檢查您兩個裝置上的一次性代碼來驗證此使用者。",
+    "For maximum security, do this in person.": "為了取得最強的安全性，請親自進行。",
+    "Start Verification": "開始驗證"
 }
