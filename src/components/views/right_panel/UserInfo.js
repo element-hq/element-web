@@ -129,18 +129,21 @@ function verifyUser(user) {
 function DeviceItem({userId, device}) {
     const cli = useContext(MatrixClientContext);
     const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
+    const isVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+        deviceTrust.isCrossSigningVerified() :
+        deviceTrust.isVerified();
 
     const classes = classNames("mx_UserInfo_device", {
-        mx_UserInfo_device_verified: deviceTrust.isVerified(),
-        mx_UserInfo_device_unverified: !deviceTrust.isVerified(),
+        mx_UserInfo_device_verified: isVerified,
+        mx_UserInfo_device_unverified: !isVerified,
     });
     const iconClasses = classNames("mx_E2EIcon", {
-        mx_E2EIcon_verified: deviceTrust.isVerified(),
-        mx_E2EIcon_warning: !deviceTrust.isVerified(),
+        mx_E2EIcon_verified: isVerified,
+        mx_E2EIcon_warning: !isVerified,
     });
 
     const onDeviceClick = () => {
-        if (!deviceTrust.isVerified()) {
+        if (!isVerified) {
             verifyDevice(userId, device);
         }
     };
@@ -148,7 +151,7 @@ function DeviceItem({userId, device}) {
     const deviceName = device.ambiguous ?
             (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
             device.getDisplayName();
-    const trustedLabel = deviceTrust.isVerified() ? _t("Trusted") : _t("Not trusted");
+    const trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
     return (<AccessibleButton className={classes} onClick={onDeviceClick}>
         <div className={iconClasses} />
         <div className="mx_UserInfo_device_name">{deviceName}</div>
@@ -177,8 +180,11 @@ function DevicesSection({devices, userId, loading}) {
     for (let i = 0; i < devices.length; ++i) {
         const device = devices[i];
         const deviceTrust = deviceTrusts[i];
+        const isVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+            deviceTrust.isCrossSigningVerified() :
+            deviceTrust.isVerified();
 
-        if (deviceTrust.isVerified()) {
+        if (isVerified) {
             verifiedDevices.push(device);
         } else {
             unverifiedDevices.push(device);
@@ -1277,7 +1283,10 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
-    const userVerified = cli.checkUserTrust(user.userId).isVerified();
+    const userTrust = cli.checkUserTrust(user.userId);
+    const userVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+        userTrust.isCrossSigningVerified() :
+        userTrust.isVerified();
     const isMe = user.userId === cli.getUserId();
     let verifyButton;
     if (!userVerified && !isMe) {
