@@ -21,6 +21,7 @@ import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import Field from "../elements/Field";
@@ -33,30 +34,17 @@ export default class EventIndexPanel extends React.Component {
 
         this.state = {
             eventIndexSize: 0,
-            crawlingRooms: 0,
-            totalCrawlingRooms: 0,
-            eventCount: 0,
             roomCount: 0,
-            currentRoom: null,
-            eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling'),
-            crawlerSleepTime:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
         };
     }
 
     async updateCurrentRoom(room) {
         const eventIndex = EventIndexPeg.get();
         const stats = await eventIndex.getStats();
-        let currentRoom = null;
-
-        if (room) currentRoom = room.name;
 
         this.setState({
             eventIndexSize: stats.size,
             roomCount: stats.roomCount,
-            eventCount: stats.eventCount,
-            currentRoom: currentRoom,
         });
     }
 
@@ -71,10 +59,6 @@ export default class EventIndexPanel extends React.Component {
     async componentWillMount(): void {
         let eventIndexSize = 0;
         let roomCount = 0;
-        let eventCount = 0;
-        let crawlingRooms = 0;
-        let totalCrawlingRooms = 0;
-        let currentRoom = null;
 
         const eventIndex = EventIndexPeg.get();
 
@@ -84,84 +68,41 @@ export default class EventIndexPanel extends React.Component {
             const stats = await eventIndex.getStats();
             eventIndexSize = stats.size;
             roomCount = stats.roomCount;
-            eventCount = stats.eventCount;
-
-            const crawledRooms = eventIndex.currentlyCrawledRooms();
-            crawlingRooms = crawledRooms.crawlingRooms.size;
-            totalCrawlingRooms = crawledRooms.totalRooms.size;
-
-            const room = eventIndex.currentRoom();
-            if (room) currentRoom = room.name;
         }
 
         this.setState({
             eventIndexSize,
-            crawlingRooms,
-            totalCrawlingRooms,
-            eventCount,
             roomCount,
-            currentRoom,
         });
     }
 
-    _onEventIndexingEnabledChange = (checked) => {
-        SettingsStore.setValue("enableCrawling", null, SettingLevel.DEVICE, checked);
+    _onManage = async () => {
+        Modal.createTrackedDialogAsync('Message search', 'Message search',
+            import('../../../async-components/views/dialogs/eventindex/ManageEventIndex'),
+            {
+                onFinished: () => {},
+            }, null, /* priority = */ false, /* static = */ true,
+        );
 
-        if (checked) EventIndexPeg.start();
-        else EventIndexPeg.stop();
-
-        this.setState({eventIndexingEnabled: checked});
-    }
-
-    _onCrawlerSleepTimeChange = (e) => {
-        this.setState({crawlerSleepTime: e.target.value});
-        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     }
 
     render() {
         let eventIndexingSettings = null;
-        let crawlerState;
-
-        if (!this.state.eventIndexingEnabled) {
-            crawlerState = <div>{_t("Message search for encrypted rooms is disabled.")}</div>;
-        } else if (this.state.currentRoom === null) {
-            crawlerState = <div>{_t("Not downloading messages for any room.")}</div>;
-        } else {
-            crawlerState = (
-                <div>{_t(
-                    "Downloading mesages for %(currentRoom)s.",
-                    { currentRoom: this.state.currentRoom }
-                )}
-                </div>
-            );
-        }
 
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
                 <div>
-                    {
-                        _t( "Riot is securely caching encrypted messages locally for them" +
-                            "to appear in search results:"
-                        )
-                    }
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
-                        {_t("Indexed messages:")} {this.state.eventCount}<br />
-                        {_t("Number of rooms:")} {this.state.roomCount}<br />
-                        {crawlerState}<br />
+                        {_t( "Securely cache encrypted messages locally for them " +
+                             "to appear in search results, using ")
+                        } {formatBytes(this.state.eventIndexSize, 0)}
+                        {_t( " to store messages from ")} {this.state.roomCount} {_t("rooms.")}
                     </div>
-
-                    <LabelledToggleSwitch
-                        value={this.state.eventIndexingEnabled}
-                        onChange={this._onEventIndexingEnabledChange}
-                        label={_t('Download and index encrypted messages')} />
-
-                    <Field
-                        id={"crawlerSleepTimeMs"}
-                        label={_t('Message downloading sleep time(ms)')}
-                        type='number'
-                        value={this.state.crawlerSleepTime}
-                        onChange={this._onCrawlerSleepTimeChange} />
+                    <div>
+                        <AccessibleButton kind="primary" onClick={this._onManage}>
+                            {_t("Manage")}
+                        </AccessibleButton>
+                    </div>
                 </div>
             );
         } else {
