@@ -33,6 +33,8 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
 import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import E2EIcon from './E2EIcon';
+import rate_limited_func from '../../../ratelimitedfunc';
 
 export default createReactClass({
     displayName: 'RoomTile',
@@ -70,6 +72,7 @@ export default createReactClass({
             notificationCount: this.props.room.getUnreadNotificationCount(),
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
             statusMessage: this._getStatusMessage(),
+            e2eStatus: null,
         });
     },
 
@@ -100,6 +103,85 @@ export default createReactClass({
             return "";
         }
         return statusUser._unstable_statusMessage;
+    },
+
+    onRoomStateMember: function(ev, state, member) {
+        // we only care about leaving users
+        // because trust state will change if someone joins a megolm session anyway
+        if (member.membership !== "leave") {
+            return;
+        }
+        // ignore members in other rooms
+        if (member.roomId !== this.props.room.roomId) {
+            return;
+        }
+
+        this._updateE2eStatus();
+    },
+
+    onUserVerificationChanged: function(userId, _trustStatus) {
+        if (!this.props.room.getMember(userId)) {
+            // Not in this room
+            return;
+        }
+        this._updateE2eStatus();
+    },
+
+    onRoomTimeline: function(ev, room) {
+        if (!room) return;
+        if (room.roomId != this.props.room.roomId) return;
+        console.warn("e2e onRoomTimeline");
+        if (ev.getType() !== "m.room.encryption") return;
+        console.warn("e2e onRoomTimeline ENCRYPTION");
+        MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+        this.onFindingRoomToBeEncrypted();
+    },
+
+    onFindingRoomToBeEncrypted: function () {
+        const cli = MatrixClientPeg.get();
+        cli.on("RoomState.members", this.onRoomStateMember);
+        cli.on("userTrustStatusChanged", this.onUserVerificationChanged);
+
+        this._updateE2eStatus();
+    },
+
+    _updateE2eStatus: async function() {
+        const cli = MatrixClientPeg.get();
+        if (!cli.isRoomEncrypted(this.props.room.roomId)) {
+            return;
+        }
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            return;
+        }
+
+        // Duplication between here and _updateE2eStatus in RoomView
+        const e2eMembers = await this.props.room.getEncryptionTargetMembers();
+        const verified = [];
+        const unverified = [];
+        e2eMembers.map(({userId}) => userId)
+            .filter((userId) => userId !== cli.getUserId())
+            .forEach((userId) => {
+                (cli.checkUserTrust(userId).isCrossSigningVerified() ?
+                verified : unverified).push(userId)
+            });
+
+        /* Check all verified user devices. */
+        for (const userId of verified) {
+            const devices = await cli.getStoredDevicesForUser(userId);
+            const allDevicesVerified = devices.every(({deviceId}) => {
+                return cli.checkDeviceTrust(userId, deviceId).isVerified();
+            });
+            if (!allDevicesVerified) {
+                this.setState({
+                    e2eStatus: "warning",
+                });
+                return;
+            }
+        }
+
+        this.setState({
+            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+        });
     },
 
     onRoomName: function(room) {
@@ -151,10 +233,19 @@ export default createReactClass({
     },
 
     componentDidMount: function() {
+        /* We bind here rather than in the definition because otherwise we wind up with the
+           method only being callable once every 500ms across all instances, which would be wrong */
+        this._updateE2eStatus = rate_limited_func(this._updateE2eStatus, 500);
+
         const cli = MatrixClientPeg.get();
         cli.on("accountData", this.onAccountData);
         cli.on("Room.name", this.onRoomName);
         cli.on("RoomState.events", this.onJoinRule);
+        if (cli.isRoomEncrypted(this.props.room.roomId)) {
+            this.onFindingRoomToBeEncrypted();
+        } else {
+            cli.on("Room.timeline", this.onRoomTimeline);
+        }
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
 
@@ -172,6 +263,9 @@ export default createReactClass({
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             cli.removeListener("RoomState.events", this.onJoinRule);
+            cli.removeListener("RoomState.members", this.onRoomStateMember);
+            cli.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+            cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
         dis.unregister(this.dispatcherRef);
@@ -433,6 +527,12 @@ export default createReactClass({
             privateIcon = <div className="mx_RoomTile_PrivateIcon" />;
         }
 
+        let e2eIcon = null;
+        // For now, skip the icon for DMs.  Possibly we want to move the DM icon elsewhere?
+        if (!dmUserId && this.state.e2eStatus) {
+            e2eIcon = <E2EIcon status={this.state.e2eStatus} className="mx_RoomTile_e2eIcon"/>
+        }
+
         return <React.Fragment>
             <RovingTabIndexWrapper>
                 {({onFocus, isActive, ref}) =>
@@ -453,6 +553,7 @@ export default createReactClass({
                             <div className="mx_RoomTile_avatar_container">
                                 <RoomAvatar room={this.props.room} width={24} height={24} />
                                 { dmIndicator }
+                                { e2eIcon }
                             </div>
                         </div>
                         { privateIcon }
