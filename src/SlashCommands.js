@@ -81,6 +81,8 @@ class Command {
     }
 
     run(roomId, args) {
+        // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
+        if (!this.runFn) return;
         return this.runFn.bind(this)(roomId, args);
     }
 
@@ -918,12 +920,12 @@ export function processCommandInput(roomId, input) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return null; // not a command
 
-    const bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
-        args = bits[3];
+        args = bits[2];
     } else {
         cmd = input;
     }
@@ -932,11 +934,8 @@ export function processCommandInput(roomId, input) {
         cmd = aliases[cmd];
     }
     if (CommandMap[cmd]) {
-        // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!CommandMap[cmd].runFn) return null;
-
         return CommandMap[cmd].run(roomId, args);
-    } else {
-        return reject(_t('Unrecognised command:') + ' ' + input);
     }
+    return null;
+    // return reject(_t('Unrecognised command:') + ' ' + input);
 }

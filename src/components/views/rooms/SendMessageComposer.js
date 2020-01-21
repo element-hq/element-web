@@ -43,6 +43,9 @@ import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
+const SEND_ANYWAY = Symbol("send-anyway");
+const UNKNOWN_CMD = Symbol("unknown-cmd");
+
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
     Object.assign(content, replyContent);
@@ -194,7 +197,12 @@ export default class SendMessageComposer extends React.Component {
         return false;
     }
 
-    async _runSlashCommand() {
+    /**
+     * Parses and executes current input as a Slash Command
+     * @returns {Promise<Symbol|void>} UNKNOWN_CMD if the command is not known,
+     *  SEND_ANYWAY if the input should be sent as message instead
+     */
+    async _tryRunSlashCommand() {
         const commandText = this.model.parts.reduce((text, part) => {
             // use mxid to textify user pills in a command
             if (part.type === "user-pill") {
@@ -236,16 +244,38 @@ export default class SendMessageComposer extends React.Component {
             } else {
                 console.log("Command success.");
             }
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            // unknown command, ask the user if they meant to send it as a message
+            const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                title: _t("Unknown Command"),
+                description: _t("Unrecognised command: ") + commandText,
+                button: _t('Send as message'),
+                danger: true,
+            });
+            const [sendAnyway] = await finished;
+            return sendAnyway ? SEND_ANYWAY : UNKNOWN_CMD;
         }
     }
 
-    _sendMessage() {
+    async _sendMessage() {
         if (this.model.isEmpty) {
             return;
         }
+
+        let shouldSend = true;
+
         if (!containsEmote(this.model) && this._isSlashCommand()) {
-            this._runSlashCommand();
-        } else {
+            const resp = await this._tryRunSlashCommand();
+            if (resp === UNKNOWN_CMD) {
+                // unknown command, bail to let the user modify it
+                return;
+            }
+
+            shouldSend = resp === SEND_ANYWAY;
+        }
+
+        if (shouldSend) {
             const isReply = !!RoomViewStore.getQuotingEvent();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator);
@@ -259,6 +289,7 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
         }
+
         this.sendHistoryManager.save(this.model);
         // clear composer
         this.model.reset([]);
