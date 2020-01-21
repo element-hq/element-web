@@ -64,10 +64,17 @@ const _getE2EStatus = (cli, userId, devices) => {
         const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
         return hasUnverifiedDevice ? "warning" : "verified";
     }
+    const isMe = userId === cli.getUserId();
     const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
     const allDevicesVerified = devices.every(device => {
         const { deviceId } = device;
-        return cli.checkDeviceTrust(userId, deviceId).isCrossSigningVerified();
+        // For your own devices, we use the stricter check of cross-signing
+        // verification to encourage everyone to trust their own devices via
+        // cross-signing so that other users can then safely trust you.
+        // For other people's devices, the more general verified check that
+        // includes locally verified devices can be used.
+        const deviceTrust = cli.checkDeviceTrust(userId, deviceId);
+        return isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
     });
     if (allDevicesVerified) {
         return userVerified ? "verified" : "normal";
@@ -128,8 +135,14 @@ function verifyUser(user) {
 
 function DeviceItem({userId, device}) {
     const cli = useContext(MatrixClientContext);
+    const isMe = userId === cli.getUserId();
     const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
-    const isVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+    // For your own devices, we use the stricter check of cross-signing
+    // verification to encourage everyone to trust their own devices via
+    // cross-signing so that other users can then safely trust you.
+    // For other people's devices, the more general verified check that
+    // includes locally verified devices can be used.
+    const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
         deviceTrust.isCrossSigningVerified() :
         deviceTrust.isVerified();
 
@@ -172,6 +185,7 @@ function DevicesSection({devices, userId, loading}) {
     if (devices === null) {
         return _t("Unable to load device list");
     }
+    const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
 
     const unverifiedDevices = [];
@@ -180,7 +194,12 @@ function DevicesSection({devices, userId, loading}) {
     for (let i = 0; i < devices.length; ++i) {
         const device = devices[i];
         const deviceTrust = deviceTrusts[i];
-        const isVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+        // For your own devices, we use the stricter check of cross-signing
+        // verification to encourage everyone to trust their own devices via
+        // cross-signing so that other users can then safely trust you.
+        // For other people's devices, the more general verified check that
+        // includes locally verified devices can be used.
+        const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
             deviceTrust.isCrossSigningVerified() :
             deviceTrust.isVerified();
 
