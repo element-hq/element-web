@@ -107,8 +107,9 @@ export default class BasicMessageEditor extends React.Component {
         });
         const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(range.text);
         if (emoticonMatch) {
-            const query = emoticonMatch[1].toLowerCase().replace("-", "");
-            const data = EMOTICON_TO_EMOJI.get(query);
+            const query = emoticonMatch[1].replace("-", "");
+            // try both exact match and lower-case, this means that xd won't match xD but :P will match :p
+            const data = EMOTICON_TO_EMOJI.get(query) || EMOTICON_TO_EMOJI.get(query.toLowerCase());
 
             if (data) {
                 const {partCreator} = model;
