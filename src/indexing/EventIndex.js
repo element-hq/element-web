@@ -494,35 +494,12 @@ export default class EventIndex {
     }
 
     paginateTimelineWindow(room, timelineWindow, direction, limit) {
-        let tl;
-
-        // TODO this is from the js-sdk, this should probably be exposed to
-        // us through the js-sdk.
-        const moveWindowCap = (titmelineWindow, timeline, direction, limit) => {
-            const count = (direction === EventTimeline.BACKWARDS) ?
-            timeline.retreat(limit) : timeline.advance(limit);
-
-            if (count) {
-                timelineWindow._eventCount += count;
-                const excess = timelineWindow._eventCount - timelineWindow._windowLimit;
-
-                if (excess > 0) {
-                    timelineWindow.unpaginate(3, direction !== EventTimeline.BACKWARDS);
-                }
-                return true;
-            }
-
-            return false;
-        };
-
-        // TODO these private fields should be somehow exposed in the js-sdk.
-        if (direction == EventTimeline.BACKWARDS) tl = timelineWindow._start;
-        else if (direction == EventTimeline.FORWARDS) tl = timelineWindow._end;
+        const tl = timelineWindow.getTimelineIndex(direction);
 
         if (!tl) return Promise.resolve(false);
         if (tl.pendingPaginate) return tl.pendingPaginate;
 
-        if (moveWindowCap(timelineWindow, tl, direction, limit)) {
+        if (timelineWindow.extend(direction, limit)) {
             return Promise.resolve(true);
         }
 
@@ -532,8 +509,8 @@ export default class EventIndex {
 
             const ret = await this.populateFileTimeline(timelineSet, timeline.timeline, room, limit, token, direction);
 
-            moveWindowCap(timelineWindow, timeline, direction, limit);
             timeline.pendingPaginate = null;
+            timelineWindow.extend(direction, limit);
 
             return ret;
         };
