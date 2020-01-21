@@ -24,8 +24,8 @@ module.exports = (env, argv) => {
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
     // don't have to call them over and over. We also resolve to the package.json instead of the src
     // directory so we don't have to rely on a index.js or similar file existing.
-    const reactSdkSrcDir = path.resolve(path.join(require.resolve("matrix-react-sdk/package.json"), '..', 'src'));
-    const jsSdkSrcDir = path.resolve(path.join(require.resolve("matrix-js-sdk/package.json"), '..', 'src'));
+    const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
+    const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
     return {
         ...development,
