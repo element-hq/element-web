@@ -24,6 +24,8 @@ import {
     containsEmote,
     stripEmoteCommand,
     unescapeMessage,
+    startsWith,
+    stripPrefix,
 } from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
@@ -60,6 +62,9 @@ function createMessageContent(model, permalinkCreator) {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
+    }
+    if (startsWith(model, "//")) {
+        model = stripPrefix(model, "/");
     }
     model = unescapeMessage(model);
     const repliedToEvent = RoomViewStore.getQuotingEvent();
@@ -175,13 +180,13 @@ export default class SendMessageComposer extends React.Component {
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command") {
+            if (firstPart.type === "command" && !firstPart.text.startsWith("//")) {
                 return true;
             }
             // be extra resilient when somehow the AutocompleteWrapperModel or
             // CommandPartCreator fails to insert a command part, so we don't send
             // a command as a message
-            if (firstPart.text.startsWith("/") && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+            if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//") && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
                 return true;
             }
         }
