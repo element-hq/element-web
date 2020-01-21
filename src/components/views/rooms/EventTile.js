@@ -820,9 +820,6 @@ export default createReactClass({
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     <div className={classes} tabIndex={-1}>
-                        <div className="mx_EventTile_msgOption">
-                            { readAvatars }
-                        </div>
                         { sender }
                         <div className="mx_EventTile_line">
                             <a
@@ -845,6 +842,9 @@ export default createReactClass({
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }
+                        </div>
+                        <div className="mx_EventTile_msgOption">
+                            { readAvatars }
                         </div>
                         {
                             // The avatar goes after the event tile as it's absolutely positioned to be over the
