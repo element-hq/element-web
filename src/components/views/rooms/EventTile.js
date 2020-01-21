@@ -66,6 +66,12 @@ const stateEventTileTypes = {
     'm.room.related_groups': 'messages.TextualEvent',
 };
 
+const E2ESTATE = {
+    VERIFIED: "verified",
+    WARNING: "warning",
+    UNKNOWN: "unknown",
+};
+
 // Add all the Mjolnir stuff to the renderer
 for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
@@ -299,7 +305,7 @@ export default createReactClass({
         const verified = await this.context.isEventSenderVerified(mxEvent);
         if (verified) {
             this.setState({
-                verified: "verified",
+                verified: E2ESTATE.VERIFIED,
             }, () => {
                 // Decryption may have caused a change in size
                 this.props.onHeightChanged();
@@ -310,13 +316,13 @@ export default createReactClass({
         const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
         if (!eventSenderTrust) {
             this.setState({
-                verified: "unknown",
+                verified: E2ESTATE.UNKNOWN,
             }, this.props.onHeightChanged); // Decryption may have cause a change in size
             return;
         }
 
         this.setState({
-            verified: eventSenderTrust.isVerified() ? "verified" : "warning",
+            verified: eventSenderTrust.isVerified() ? E2ESTATE.VERIFIED : E2ESTATE.WARNING,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
@@ -497,9 +503,9 @@ export default createReactClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified === "verified") {
+            if (this.state.verified === E2ESTATE.VERIFIED) {
                 return; // no icon for verified
-            } else if (this.state.verified === "unknown") {
+            } else if (this.state.verified === E2ESTATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
@@ -630,9 +636,9 @@ export default createReactClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === "verified",
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === "warning",
-            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === "unknown",
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2ESTATE.VERIFIED,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2ESTATE.WARNING,
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2ESTATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
