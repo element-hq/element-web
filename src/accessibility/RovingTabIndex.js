@@ -165,7 +165,7 @@ export const RovingTabIndexProvider = ({children, handleHomeEnd, onKeyDown}) => 
         } else if (onKeyDown) {
             return onKeyDown(ev);
         }
-    }, [context.state]);
+    }, [context.state, onKeyDown, handleHomeEnd]);
 
     return <RovingTabIndexContext.Provider value={context}>
         { children({onKeyDownHandler}) }
