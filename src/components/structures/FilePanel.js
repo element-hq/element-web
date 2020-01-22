@@ -30,6 +30,7 @@ import { _t } from '../../languageHandler';
  */
 const FilePanel = createReactClass({
     displayName: 'FilePanel',
+    decryptingEvents: new Set(),
 
     propTypes: {
         roomId: PropTypes.string.isRequired,
@@ -41,8 +42,64 @@ const FilePanel = createReactClass({
         };
     },
 
+    onRoomTimeline (ev, room, toStartOfTimeline, removed, data) {
+        if (room.roomId !== this.props.roomId) return;
+        if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
+
+        if (ev.isBeingDecrypted()) {
+            this.decryptingEvents.add(ev.getId());
+        } else {
+            this.addEncryptedLiveEvent(ev);
+        }
+    },
+
+    onEventDecrypted (ev, err) {
+        if (ev.getRoomId() !== this.props.roomId) return;
+        const eventId = ev.getId();
+
+        if (!this.decryptingEvents.delete(eventId)) return;
+        if (err) return;
+
+        this.addEncryptedLiveEvent(ev);
+    },
+
+    addEncryptedLiveEvent(ev, toStartOfTimeline) {
+        if (!this.state.timelineSet) return;
+
+        const timeline = this.state.timelineSet.getLiveTimeline();
+        if (ev.getType() !== "m.room.message") return;
+        if (["m.file", "m.image", "m.video", "m.audio"].indexOf(ev.getContent().msgtype) == -1) {
+            return;
+        }
+
+        if (!this.state.timelineSet.eventIdToTimeline(ev.getId())) {
+            this.state.timelineSet.addEventToTimeline(ev, timeline, false);
+        }
+    },
+
     async componentDidMount() {
+        const client = MatrixClientPeg.get();
+
         await this.updateTimelineSet(this.props.roomId);
+
+        if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
+
+        if (EventIndexPeg.get() !== null) {
+            client.on('Room.timeline', this.onRoomTimeline.bind(this));
+            client.on('Event.decrypted', this.onEventDecrypted.bind(this));
+        }
+    },
+
+    componentWillUnmount() {
+        const client = MatrixClientPeg.get();
+        if (client === null) return;
+
+        if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
+
+        if (EventIndexPeg.get() !== null) {
+            client.removeListener('Room.timeline', this.onRoomTimeline.bind(this));
+            client.removeListener('Event.decrypted', this.onEventDecrypted.bind(this));
+        }
     },
 
     async fetchFileEventsServer(room) {
