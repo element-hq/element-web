@@ -67,3 +67,13 @@ export function createPartCreator(completions = []) {
     };
     return new PartCreator(new MockRoom(), new MockClient(), autoCompleteCreator);
 }
+
+export function createRenderer() {
+    const render = (c) => {
+        render.caret = c;
+        render.count += 1;
+    };
+    render.count = 0;
+    render.caret = null;
+    return render;
+}

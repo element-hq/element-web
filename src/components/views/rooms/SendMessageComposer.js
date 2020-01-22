@@ -58,7 +58,8 @@ function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     }
 }
 
-function createMessageContent(model, permalinkCreator) {
+// exported for tests
+export function createMessageContent(model, permalinkCreator) {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
