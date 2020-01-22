@@ -31,7 +31,7 @@
   "typings": "./lib/index.d.ts",
   "matrix_src_main": "./src/index.js",
   "scripts": {
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
