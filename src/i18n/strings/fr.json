@@ -2079,5 +2079,6 @@
     "Verify User": "Vérifier l’utilisateur",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Pour une meilleure sécurité, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils.",
     "For maximum security, do this in person.": "Pour une sécurité maximale, faites-le en personne.",
-    "Start Verification": "Commencer la vérification"
+    "Start Verification": "Commencer la vérification",
+    "Encrypted by a deleted device": "Chiffré par un appareil supprimé"
 }
