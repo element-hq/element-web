@@ -98,7 +98,7 @@ const FilePanel = createReactClass({
 
                 if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
                     const timeline = timelineSet.getLiveTimeline();
-                    await eventIndex.populateFileTimeline(timelineSet, timeline, room, 1);
+                    await eventIndex.populateFileTimeline(timelineSet, timeline, room, 10);
                 }
 
                 this.setState({ timelineSet: timelineSet });

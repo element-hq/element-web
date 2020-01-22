@@ -476,6 +476,16 @@ export default class EventIndex {
                                fromEvent = null, direction = EventTimeline.BACKWARDS) {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 
+        // If this is a normal fill request, not a pagination request, we need
+        // to get our events in the BACKWARDS direction but populate them in the
+        // forwards direction.
+        // This needs to happen because a fill request might come with an
+        // exisitng timeline e.g. if you close and re-open the FilePanel.
+        if (fromEvent === null) {
+            matrixEvents.reverse();
+            direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS: EventTimeline.BACKWARDS;
+        }
+
         // Add the events to the live timeline of the file panel.
         matrixEvents.forEach(e => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
