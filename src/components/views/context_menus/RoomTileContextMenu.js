@@ -306,7 +306,7 @@ export default createReactClass({
         return (
             <div>
                 <MenuItem className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings}>
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" alt="" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/feather-customised/settings.svg")} width="15" height="15" alt="" />
                     { _t('Settings') }
                 </MenuItem>
             </div>
