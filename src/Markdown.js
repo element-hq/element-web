@@ -91,7 +91,7 @@ export default class Markdown {
         return true;
     }
 
-    toHTML() {
+    toHTML({ externalLinks = false } = {}) {
         const renderer = new commonmark.HtmlRenderer({
             safe: false,
 
@@ -125,6 +125,24 @@ export default class Markdown {
             }
         };
 
+        renderer.link = function(node, entering) {
+            const attrs = this.attrs(node);
+            if (entering) {
+                attrs.push(['href', this.esc(node.destination)]);
+                if (node.title) {
+                    attrs.push(['title', this.esc(node.title)]);
+                }
+                // Modified link behaviour to treat them all as external and
+                // thus opening in a new tab.
+                if (externalLinks) {
+                    attrs.push(['target', '_blank']);
+                    attrs.push(['rel', 'noopener']);
+                }
+                this.tag('a', attrs);
+            } else {
+                this.tag('/a');
+            }
+        };
 
         renderer.html_inline = html_if_tag_allowed;
 
