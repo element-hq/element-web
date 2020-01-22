@@ -436,7 +436,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             )}</p>
             <p>{_t(
                 "Secure your encryption keys with a passphrase. For maximum security " +
-                "this should be different to your account password:"
+                "this should be different to your account password:",
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
