@@ -187,7 +187,7 @@ export default class SendMessageComposer extends React.Component {
             // be extra resilient when somehow the AutocompleteWrapperModel or
             // CommandPartCreator fails to insert a command part, so we don't send
             // a command as a message
-            if (firstPart.text.startsWith("/") && firstPart.text.startsWith("//") && !firstPart.text.startsWith("//")
+            if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
                 && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
                 return true;
             }
