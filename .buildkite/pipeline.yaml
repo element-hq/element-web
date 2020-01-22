@@ -52,19 +52,6 @@ steps:
       - docker#v3.0.1:
           image: "node:10"
 
-  - label: ":hammer: Package"
-    command:
-      - "echo '--- Fetching Dependencies'"
-      - "./scripts/fetch-develop.deps.sh --depth 1"
-      - "yarn install"
-      - "echo '+++ Packaging'"
-      - "./scripts/ci_package.sh"
-    branches: "develop"
-    artifact_paths: "dist/riot-*.tar.gz"
-    plugins:
-      - docker#v3.0.1:
-          image: "node:10"
-
   - label: "🌐 i18n"
     command:
       - "echo '--- Fetching Dependencies'"
@@ -75,3 +62,19 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:10"
+
+  - wait: ~ # this wait is to perform deploy to /develop only if all other steps passed
+    continue_on_failure: false
+
+  - label: ":hammer: Package"
+    command:
+        - "echo '--- Fetching Dependencies'"
+        - "./scripts/fetch-develop.deps.sh --depth 1"
+        - "yarn install"
+        - "echo '+++ Packaging'"
+        - "./scripts/ci_package.sh"
+    branches: "develop"
+    artifact_paths: "dist/riot-*.tar.gz"
+    plugins:
+        - docker#v3.0.1:
+              image: "node:10"
