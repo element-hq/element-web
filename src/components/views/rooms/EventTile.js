@@ -70,6 +70,7 @@ const E2E_STATE = {
     VERIFIED: "verified",
     WARNING: "warning",
     UNKNOWN: "unknown",
+    NORMAL: "normal",
 };
 
 // Add all the Mjolnir stuff to the renderer
@@ -313,6 +314,22 @@ export default createReactClass({
             return;
         }
 
+        // If cross-signing is off, the old behaviour is to scream at the user
+        // as if they've done something wrong, which they haven't
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            this.setState({
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged);
+            return;
+        }
+
+        if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
+            this.setState({
+                verified: E2E_STATE.NORMAL,
+            }, this.props.onHeightChanged);
+            return;
+        }
+
         const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
         if (!eventSenderTrust) {
             this.setState({
@@ -503,7 +520,9 @@ export default createReactClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified === E2E_STATE.VERIFIED) {
+            if (this.state.verified === E2E_STATE.NORMAL) {
+                return; // no icon if we've not even cross-signed the user
+            } else if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
             } else if (this.state.verified === E2E_STATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
