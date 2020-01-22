@@ -77,6 +77,10 @@ steps:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
           propagate-environment: true
           workdir: "/workdir/matrix-react-sdk"
+    retry:
+      automatic:
+        - exit_status: 1 # retry end-to-end tests once as Puppeteer sometimes fails
+        - limit: 1
 
   - label: "🔧 Riot Tests"
     agents:
