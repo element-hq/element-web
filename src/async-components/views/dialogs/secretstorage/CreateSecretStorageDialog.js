@@ -155,7 +155,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _doBootstrapUIAuth = async (makeRequest) => {
-        if (this.state.canUploadKeysWithPasswordOnly) {
+        if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
                 type: 'm.login.password',
                 identifier: {
@@ -664,7 +664,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_DONE:
                 return _t('Encryption upgraded');
             default:
-                return null;
+                return '';
         }
     }
 
@@ -719,10 +719,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             }
         }
 
+        let headerImage;
+        if (this._titleForPhase(this.state.phase)) {
+            headerImage = require("../../../../../res/img/e2e/normal.svg");
+        }
+
         return (
             <BaseDialog className='mx_CreateSecretStorageDialog'
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
+                headerImage={headerImage}
                 hasCancel={[PHASE_PASSPHRASE].includes(this.state.phase)}
             >
             <div>
