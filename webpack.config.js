@@ -21,6 +21,12 @@ module.exports = (env, argv) => {
         development['devtool'] = 'eval-source-map';
     }
 
+    // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
+    // don't have to call them over and over. We also resolve to the package.json instead of the src
+    // directory so we don't have to rely on a index.js or similar file existing.
+    const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
+    const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
+
     return {
         ...development,
 
@@ -110,21 +116,21 @@ module.exports = (env, argv) => {
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
+                        // our own source needs babel-ing
+                        if (f.startsWith(path.resolve(__dirname, 'src'))) return true;
+
                         // we use the original source files of react-sdk and js-sdk, so we need to
-                        // run them through babel.
-                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-js-sdk'))) return true;
-                        if (f.startsWith(path.resolve(__dirname, 'node_modules', 'matrix-react-sdk'))) return true;
+                        // run them through babel. Because the path tested is the resolved, absolute
+                        // path, these could be anywhere thanks to yarn link. We must also not
+                        // include node modules inside these modules, so we add 'src'.
+                        if (f.startsWith(reactSdkSrcDir)) return true;
+                        if (f.startsWith(jsSdkSrcDir)) return true;
+
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
                         // polyfills: probably fixable but babeling all our dependencies is probably
-                        // not necessary anyway).
-                        if (f.startsWith(path.resolve(__dirname, 'node_modules'))) return false;
-                        // anything else gets babeled (our own source files, and also modules that
-                        // are yarn linked from somewhere else because this tests the absolute,
-                        // resolved path, so react-sdk and js-sdk fall under this case in a standard
-                        // dev setup. This will presumably start running any other module through
-                        // babel if yarn linked... caveat emptor.
-                        return true;
+                        // not necessary anyway). So, for anything else, don't babel.
+                        return false;
                     },
                     loader: 'babel-loader',
                     options: {
