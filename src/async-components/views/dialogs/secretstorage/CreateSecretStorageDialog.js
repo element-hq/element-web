@@ -1,6 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,9 +70,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             setPassPhrase: false,
             backupInfo: null,
             backupSigStatus: null,
+            // does the server offer a UI auth flow with just m.login.password
+            // for /keys/device_signing/upload?
+            canUploadKeysWithPasswordOnly: null,
+            accountPassword: '',
+            accountPasswordCorrect: null,
         };
 
         this._fetchBackupInfo();
+        this._queryKeyUploadAuth();
     }
 
     componentWillUnmount() {
@@ -96,11 +102,32 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    async _queryKeyUploadAuth() {
+        try {
+            await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {});
+            // We should never get here: the server should always require
+            // UI auth to upload device signing keys. If we do, we upload
+            // no keys which would be a no-op.
+            console.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
+        } catch (error) {
+            if (!error.data.flows) {
+                console.log("uploadDeviceSigningKeys advertised no flows!");
+            }
+            const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {
+                return f.stages.length === 1 && f.stages[0] === 'm.login.password';
+            });
+            this.setState({
+                canUploadKeysWithPasswordOnly,
+            });
+        }
+    }
+
     _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
     }
 
-    _onMigrateNextClick = () => {
+    _onMigrateFormSubmit = (e) => {
+        e.preventDefault();
         this._bootstrapSecretStorage();
     }
 
@@ -127,29 +154,46 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _doBootstrapUIAuth = async (makeRequest) => {
+        if (this.state.canUploadKeysWithPasswordOnly) {
+            await makeRequest({
+                type: 'm.login.password',
+                identifier: {
+                    type: 'm.id.user',
+                    user: MatrixClientPeg.get().getUserId(),
+                },
+                // https://github.com/matrix-org/synapse/issues/5665
+                user: MatrixClientPeg.get().getUserId(),
+                password: this.state.accountPassword,
+            });
+        } else {
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+            const { finished } = Modal.createTrackedDialog(
+                'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                {
+                    title: _t("Send cross-signing keys to homeserver"),
+                    matrixClient: MatrixClientPeg.get(),
+                    makeRequest,
+                },
+            );
+            const [confirmed] = await finished;
+            if (!confirmed) {
+                throw new Error("Cross-signing key upload auth canceled");
+            }
+        }
+    }
+
     _bootstrapSecretStorage = async () => {
         this.setState({
             phase: PHASE_STORING,
             error: null,
         });
+
         const cli = MatrixClientPeg.get();
+
         try {
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapSecretStorage({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Send cross-signing keys to homeserver"),
-                            matrixClient: MatrixClientPeg.get(),
-                            makeRequest,
-                        },
-                    );
-                    const [confirmed] = await finished;
-                    if (!confirmed) {
-                        throw new Error("Cross-signing key upload auth canceled");
-                    }
-                },
+                authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 createSecretStorageKey: async () => this._keyInfo,
                 keyBackupInfo: this.state.backupInfo,
             });
@@ -157,7 +201,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 phase: PHASE_DONE,
             });
         } catch (e) {
-            this.setState({ error: e });
+            if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
+                this.setState({
+                    accountPasswordCorrect: false,
+                    phase: PHASE_MIGRATE,
+                });
+            } else {
+                this.setState({ error: e });
+            }
             console.error("Error bootstrapping secret storage", e);
         }
     }
@@ -285,6 +336,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
     }
 
+    _onAccountPasswordChange = (e) => {
+        this.setState({
+            accountPassword: e.target.value,
+        });
+    }
+
     _renderPhaseRestoreKeyBackup() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
@@ -309,18 +366,41 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // it automatically.
         // https://github.com/vector-im/riot-web/issues/11696
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <div>
+        const Field = sdk.getComponent('views.elements.Field');
+
+        let authPrompt;
+        if (this.state.canUploadKeysWithPasswordOnly) {
+            authPrompt = <div>
+                <div>{_t("Enter your account password to confirm the upgrade:")}</div>
+                <div><Field type="password"
+                    id="mx_CreateSecretStorage_accountPassword"
+                    label={_t("Password")}
+                    value={this.state.accountPassword}
+                    onChange={this._onAccountPasswordChange}
+                    flagInvalid={this.state.accountPasswordCorrect === false}
+                    autoFocus={true}
+                /></div>
+            </div>;
+        } else {
+            authPrompt = <p>
+                {_t("You'll need to authenticate with the server to confirm the upgrade.")}
+            </p>;
+        }
+
+        return <form onSubmit={this._onMigrateFormSubmit}>
             <p>{_t(
-                "Secret Storage will be set up using your existing key backup details. " +
-                "Your secret storage passphrase and recovery key will be the same as " +
-                "they were for your key backup.",
+                "Upgrade this device to allow it to verify other devices, " +
+                "granting them access to encrypted messages and marking them " +
+                "as trusted for other users.",
             )}</p>
+            <div>{authPrompt}</div>
             <DialogButtons primaryButton={_t('Next')}
-                onPrimaryButtonClick={this._onMigrateNextClick}
+                primaryIsSubmit={true}
                 hasCancel={true}
                 onCancel={this._onCancel}
+                primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             />
-        </div>;
+        </form>;
     }
 
     _renderPhasePassPhrase() {
@@ -564,7 +644,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_RESTORE_KEY_BACKUP:
                 return _t('Restore your Key Backup');
             case PHASE_MIGRATE:
-                return _t('Migrate from Key Backup');
+                return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
                 return _t('Secure your encrypted messages with a passphrase');
             case PHASE_PASSPHRASE_CONFIRM:
