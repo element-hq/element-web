@@ -129,7 +129,7 @@ const reducer = (state, action) => {
     }
 };
 
-export const RovingTabIndexProvider = ({children, handleHomeEnd}) => {
+export const RovingTabIndexProvider = ({children, handleHomeEnd, onKeyDown}) => {
     const [state, dispatch] = useReducer(reducer, {
         activeRef: null,
         refs: [],
@@ -137,53 +137,43 @@ export const RovingTabIndexProvider = ({children, handleHomeEnd}) => {
 
     const context = useMemo(() => ({state, dispatch}), [state]);
 
-    if (handleHomeEnd) {
-        return <RovingTabIndexContext.Provider value={context}>
-            <HomeEndHelper>
-                { children }
-            </HomeEndHelper>
-        </RovingTabIndexContext.Provider>;
-    }
-
-    return <RovingTabIndexContext.Provider value={context}>
-        { children }
-    </RovingTabIndexContext.Provider>;
-};
-RovingTabIndexProvider.propTypes = {
-    handleHomeEnd: PropTypes.bool,
-};
-
-// Helper to handle Home/End to jump to first/last roving-tab-index for widgets such as treeview
-export const HomeEndHelper = ({children}) => {
-    const context = useContext(RovingTabIndexContext);
-
-    const onKeyDown = useCallback((ev) => {
-        // check if we actually have any items
-        if (context.state.refs.length <= 0) return;
-
-        let handled = true;
-        switch (ev.key) {
-            case Key.HOME:
-                // move focus to first item
-                context.state.refs[0].current.focus();
-                break;
-            case Key.END:
-                // move focus to last item
-                context.state.refs[context.state.refs.length - 1].current.focus();
-                break;
-            default:
-                handled = false;
+    const onKeyDownHandler = useCallback((ev) => {
+        let handled = false;
+        if (handleHomeEnd) {
+            // check if we actually have any items
+            switch (ev.key) {
+                case Key.HOME:
+                    handled = true;
+                    // move focus to first item
+                    if (context.state.refs.length > 0) {
+                        context.state.refs[0].current.focus();
+                    }
+                    break;
+                case Key.END:
+                    handled = true;
+                    // move focus to last item
+                    if (context.state.refs.length > 0) {
+                        context.state.refs[context.state.refs.length - 1].current.focus();
+                    }
+                    break;
+            }
         }
 
         if (handled) {
             ev.preventDefault();
             ev.stopPropagation();
+        } else if (onKeyDown) {
+            return onKeyDown(ev);
         }
-    }, [context.state]);
+    }, [context.state, onKeyDown, handleHomeEnd]);
 
-    return <div onKeyDown={onKeyDown}>
-        { children }
-    </div>;
+    return <RovingTabIndexContext.Provider value={context}>
+        { children({onKeyDownHandler}) }
+    </RovingTabIndexContext.Provider>;
+};
+RovingTabIndexProvider.propTypes = {
+    handleHomeEnd: PropTypes.bool,
+    onKeyDown: PropTypes.func,
 };
 
 // Hook to register a roving tab index

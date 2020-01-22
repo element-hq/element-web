@@ -128,7 +128,8 @@ export default createReactClass({
             'mx_RoomTile_badgeShown': this.state.badgeHover || isMenuDisplayed,
         });
 
-        const label = <div title={this.props.group.groupId} className={nameClasses} dir="auto">
+        // XXX: this is a workaround for Firefox giving this div a tabstop :( [tabIndex]
+        const label = <div title={this.props.group.groupId} className={nameClasses} tabIndex={-1} dir="auto">
             { groupName }
         </div>;
 
