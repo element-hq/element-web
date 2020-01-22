@@ -14,22 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import SettingsStore from '../../../settings/SettingsStore';
 
+export const E2E_STATE = {
+    VERIFIED: "verified",
+    WARNING: "warning",
+    UNKNOWN: "unknown",
+    NORMAL: "normal",
+};
+
 export default function(props) {
-    const { isUser } = props;
-    const isNormal = props.status === "normal";
-    const isWarning = props.status === "warning";
-    const isVerified = props.status === "verified";
+    const { isUser, status, className } = props;
+    const isNormal = status === E2E_STATE.NORMAL;
+    const isWarning = status === E2E_STATE.WARNING;
+    const isVerified = status === E2E_STATE.VERIFIED;
     const e2eIconClasses = classNames({
         mx_E2EIcon: true,
         mx_E2EIcon_warning: isWarning,
         mx_E2EIcon_normal: isNormal,
         mx_E2EIcon_verified: isVerified,
-    }, props.className);
+    }, className);
     let e2eTitle;
 
     const crossSigning = SettingsStore.isFeatureEnabled("feature_cross_signing");

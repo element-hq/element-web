@@ -33,6 +33,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {E2E_STATE} from "./E2EIcon";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -64,13 +65,6 @@ const stateEventTileTypes = {
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
     'm.room.related_groups': 'messages.TextualEvent',
-};
-
-const E2E_STATE = {
-    VERIFIED: "verified",
-    WARNING: "warning",
-    UNKNOWN: "unknown",
-    NORMAL: "normal",
 };
 
 // Add all the Mjolnir stuff to the renderer
