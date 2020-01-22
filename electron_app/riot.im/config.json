@@ -22,7 +22,7 @@
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
-        "policyUrl": "https://matrix.org/docs/guides/riot_im_cookie_policy"
+        "policyUrl": "https://matrix.org/legal/riot-im-cookie-policy"
     },
     "phasedRollOut": {
         "feature_lazyloading": {
