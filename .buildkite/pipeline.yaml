@@ -80,7 +80,7 @@ steps:
     retry:
       automatic:
         - exit_status: 1 # retry end-to-end tests once as Puppeteer sometimes fails
-        - limit: 1
+          limit: 1
 
   - label: "🔧 Riot Tests"
     agents:
