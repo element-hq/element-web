@@ -353,7 +353,8 @@ export default createReactClass({
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
-            label = <div title={name} className={nameClasses} dir="auto">{ name }</div>;
+            // XXX: this is a workaround for Firefox giving this div a tabstop :( [tabIndex]
+            label = <div title={name} className={nameClasses} tabIndex={-1} dir="auto">{ name }</div>;
         } else if (this.state.hover) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;

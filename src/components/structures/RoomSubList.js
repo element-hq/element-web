@@ -142,10 +142,6 @@ export default class RoomSubList extends React.PureComponent {
 
     onHeaderKeyDown = (ev) => {
         switch (ev.key) {
-            case Key.TAB:
-                // Prevent LeftPanel handling Tab if focus is on the sublist header itself
-                ev.stopPropagation();
-                break;
             case Key.ARROW_LEFT:
                 // On ARROW_LEFT collapse the room sublist
                 if (!this.state.hidden && !this.props.forceExpand) {

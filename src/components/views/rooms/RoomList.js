@@ -777,21 +777,22 @@ export default createReactClass({
 
         const subListComponents = this._mapSubListProps(subLists);
 
-        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, ...props} = this.props; // eslint-disable-line
+        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, onKeyDown, ...props} = this.props; // eslint-disable-line
         return (
-            <div
-                {...props}
-                ref={this._collectResizeContainer}
-                className="mx_RoomList"
-                role="tree"
-                aria-label={_t("Rooms")}
-                onMouseMove={this.onMouseMove}
-                onMouseLeave={this.onMouseLeave}
-            >
-                <RovingTabIndexProvider handleHomeEnd={true}>
+            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+                {({onKeyDownHandler}) => <div
+                    {...props}
+                    onKeyDown={onKeyDownHandler}
+                    ref={this._collectResizeContainer}
+                    className="mx_RoomList"
+                    role="tree"
+                    aria-label={_t("Rooms")}
+                    onMouseMove={this.onMouseMove}
+                    onMouseLeave={this.onMouseLeave}
+                >
                     { subListComponents }
-                </RovingTabIndexProvider>
-            </div>
+                </div> }
+            </RovingTabIndexProvider>
         );
     },
 });
