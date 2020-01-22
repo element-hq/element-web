@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y git dos2unix
 WORKDIR /src
 
 COPY . /src
-RUN dos2unix /src/scripts/docker-link-repos.sh && sh /src/scripts/docker-link-repos.sh
+RUN dos2unix /src/scripts/docker-link-repos.sh && bash /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=100000 install
 RUN yarn build
 
@@ -22,7 +22,7 @@ RUN yarn build
 RUN cp /src/config.sample.json /src/webapp/config.json
 
 # Ensure we populate the version file
-RUN dos2unix /src/scripts/docker-write-version.sh && sh /src/scripts/docker-write-version.sh
+RUN dos2unix /src/scripts/docker-write-version.sh && bash /src/scripts/docker-write-version.sh
 
 
 # App
