@@ -19,7 +19,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-import Matrix from 'matrix-js-sdk';
+import {Filter} from 'matrix-js-sdk';
 import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -105,7 +105,7 @@ const FilePanel = createReactClass({
     async fetchFileEventsServer(room) {
         const client = MatrixClientPeg.get();
 
-        const filter = new Matrix.Filter(client.credentials.userId);
+        const filter = new Filter(client.credentials.userId);
         filter.setDefinition(
             {
                 "room": {
