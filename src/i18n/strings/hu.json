@@ -1156,7 +1156,7 @@
     "Show avatars in user and room mentions": "Profilkép mutatása a felhasználó és szoba említéseknél",
     "Enable big emoji in chat": "Nagy Emojik engedélyezése a csevegésekben",
     "Send typing notifications": "Gépelés visszajelzés küldése",
-    "Enable Community Filter Panel": "Közösségi szűrő panel engedélyezése",
+    "Enable Community Filter Panel": "Közösségi szűrő panel bekapcsolása",
     "Messages containing my username": "Üzenetek amik a nevemet tartalmazzák",
     "The other party cancelled the verification.": "A másik fél törölte az ellenőrzést.",
     "Verified!": "Ellenőrizve!",
@@ -2076,5 +2076,10 @@
     "Something went wrong trying to invite the users.": "Valami nem sikerült a felhasználók meghívásával.",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Ezeket a felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.",
     "Recently Direct Messaged": "Nemrég küldött Közvetlen Üzenetek",
-    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "Ha nem találsz valakit, akkor kérdezd meg a felhasználói nevét (pl.: @felhasználó:szerver.com) vagy <a>oszd meg ezt a szobát</a>."
+    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "Ha nem találsz valakit, akkor kérdezd meg a felhasználói nevét (pl.: @felhasználó:szerver.com) vagy <a>oszd meg ezt a szobát</a>.",
+    "Verify User": "Felhasználó ellenőrzése",
+    "For extra security, verify this user by checking a one-time code on both of your devices.": "A biztonság fokozásáért ellenőrizd ezt a felhasználót egy egyszeri kód egyeztetésével mindkettőtök készülékén.",
+    "For maximum security, do this in person.": "A legnagyobb biztonság érdekében ezt személyesen tedd meg.",
+    "Start Verification": "Ellenőrzés elindítása",
+    "Encrypted by a deleted device": "Egy már törölt eszköz titkosította"
 }
