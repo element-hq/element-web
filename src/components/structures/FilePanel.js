@@ -42,7 +42,7 @@ const FilePanel = createReactClass({
         };
     },
 
-    onRoomTimeline (ev, room, toStartOfTimeline, removed, data) {
+    onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
         if (room.roomId !== this.props.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
@@ -53,7 +53,7 @@ const FilePanel = createReactClass({
         }
     },
 
-    onEventDecrypted (ev, err) {
+    onEventDecrypted(ev, err) {
         if (ev.getRoomId() !== this.props.roomId) return;
         const eventId = ev.getId();
 
