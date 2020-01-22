@@ -613,7 +613,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Your access to encrypted messages is now protected.",
+                "This device can now verify other devices, granting them access " +
+                "to encrypted messages and marking them as trusted for other users.",
+            )}</p>
+            <p>{_t(
+                "Verify other users in their profile.",
             )}</p>
             <DialogButtons primaryButton={_t('OK')}
                 onPrimaryButtonClick={this._onDone}
@@ -658,7 +662,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_STORING:
                 return _t('Storing secrets...');
             case PHASE_DONE:
-                return _t('Success!');
+                return _t('Encryption upgraded');
             default:
                 return null;
         }
@@ -719,7 +723,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <BaseDialog className='mx_CreateSecretStorageDialog'
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
-                hasCancel={[PHASE_PASSPHRASE, PHASE_DONE].includes(this.state.phase)}
+                hasCancel={[PHASE_PASSPHRASE].includes(this.state.phase)}
             >
             <div>
                 {content}
