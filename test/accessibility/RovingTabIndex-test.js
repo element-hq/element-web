@@ -47,7 +47,7 @@ const button4 = <Button key={4}>d</Button>;
 describe("RovingTabIndex", () => {
     it("RovingTabIndexProvider renders children as expected", () => {
         const wrapper = mount(<RovingTabIndexProvider>
-            {() => <div><span>Test</span></div> }
+            {() => <div><span>Test</span></div>}
         </RovingTabIndexProvider>);
         expect(wrapper.text()).toBe("Test");
         expect(wrapper.html()).toBe('<div><span>Test</span></div>');
@@ -82,14 +82,14 @@ describe("RovingTabIndex", () => {
 
         // update the children, it should remain on the same button
         wrapper.setProps({
-            children: [button1, button4, button2, button3],
+            children: () => [button1, button4, button2, button3],
         });
         wrapper.update();
         checkTabIndexes(wrapper.find("button"), [-1, -1, 0, -1]);
 
         // update the children, remove the active button, it should move to the next one
         wrapper.setProps({
-            children: [button1, button4, button3],
+            children: () => [button1, button4, button3],
         });
         wrapper.update();
         checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
