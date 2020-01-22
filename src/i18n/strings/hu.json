@@ -2081,5 +2081,10 @@
     "For extra security, verify this user by checking a one-time code on both of your devices.": "A biztonság fokozásáért ellenőrizd ezt a felhasználót egy egyszeri kód egyeztetésével mindkettőtök készülékén.",
     "For maximum security, do this in person.": "A legnagyobb biztonság érdekében ezt személyesen tedd meg.",
     "Start Verification": "Ellenőrzés elindítása",
-    "Encrypted by a deleted device": "Egy már törölt eszköz titkosította"
+    "Encrypted by a deleted device": "Egy már törölt eszköz titkosította",
+    "Unknown Command": "Ismeretlen Parancs",
+    "Unrecognised command: %(commandText)s": "Ismeretlen parancs: %(commandText)s",
+    "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Használhatod a <code>/help</code>-et az elérhető parancsok kilistázásához. Ezt üzenetként akartad küldeni?",
+    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Tipp: Ez üzenetedet kezd ezzel: <code>//</code>, ha perjellel szeretnéd kezdeni.",
+    "Send as message": "Üzenet küldése"
 }
