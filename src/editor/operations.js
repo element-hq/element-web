@@ -100,6 +100,10 @@ export function formatRangeAsCode(range) {
     replaceRangeAndExpandSelection(range, parts);
 }
 
+// parts helper methods
+const isBlank = part => !part.text || !/\S/.test(part.text);
+const isNL = part => part.type === "newline";
+
 export function toggleInlineFormat(range, prefix, suffix = prefix) {
     const {model, parts} = range;
     const {partCreator} = model;
@@ -113,14 +117,12 @@ export function toggleInlineFormat(range, prefix, suffix = prefix) {
         // - 2 newline parts in sequence
         // - newline part, plain(<empty or just spaces>), newline part
 
-        const isBlank = part => !part.text || !/\S/.test(part.text);
-        const isNL = part => part.type === "newline";
-
         // bump startIndex onto the first non-blank after the paragraph ending
         if (isBlank(parts[i - 2]) && isNL(parts[i - 1]) && !isNL(parts[i]) && !isBlank(parts[i])) {
             startIndex = i;
         }
 
+        // if at a paragraph break, store the indexes of the paragraph
         if (isNL(parts[i - 1]) && isNL(parts[i])) {
             paragraphIndexes.push([startIndex, i - 1]);
             startIndex = i + 1;
@@ -129,9 +131,11 @@ export function toggleInlineFormat(range, prefix, suffix = prefix) {
             startIndex = i + 1;
         }
     }
-    if (startIndex < parts.length) {
-        // TODO don't use parts.length here to clean up any trailing cruft
-        paragraphIndexes.push([startIndex, parts.length]);
+
+    const lastNonEmptyPart = parts.map(isBlank).lastIndexOf(false);
+    // If we have not yet included the final paragraph then add it now
+    if (startIndex <= lastNonEmptyPart) {
+        paragraphIndexes.push([startIndex, lastNonEmptyPart + 1]);
     }
 
     // keep track of how many things we have inserted as an offset:=0
