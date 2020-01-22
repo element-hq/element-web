@@ -2074,5 +2074,10 @@
     "Done": "Fatto",
     "Without completing security on this device, it won’t have access to encrypted messages.": "Se non completi la sicurezza su questo dispositivo, esso non avrà accesso ai messaggi cifrati.",
     "Go Back": "Torna",
-    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "L'archivio segreto verrà impostato usando i dettagli del backup chiavi esistente. La password dell'archivio segreto e la chiave di ripristino saranno le stesse del backup chiavi."
+    "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "L'archivio segreto verrà impostato usando i dettagli del backup chiavi esistente. La password dell'archivio segreto e la chiave di ripristino saranno le stesse del backup chiavi.",
+    "Encrypted by a deleted device": "Cifrato da un dispositivo eliminato",
+    "Verify User": "Verifica utente",
+    "For extra security, verify this user by checking a one-time code on both of your devices.": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi.",
+    "For maximum security, do this in person.": "Per massima sicurezza, fatelo di persona.",
+    "Start Verification": "Inizia la verifica"
 }
