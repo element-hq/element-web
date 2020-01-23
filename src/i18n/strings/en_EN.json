@@ -2008,6 +2008,7 @@
     "Keep it safe": "Keep it safe",
     "Storing secrets...": "Storing secrets...",
     "Encryption upgraded": "Encryption upgraded",
+    "Encryption setup complete": "Encryption setup complete",
     "Unable to set up secret storage": "Unable to set up secret storage",
     "Retry": "Retry",
     "We'll store an encrypted copy of your keys on our server. Protect your backup with a passphrase to keep it secure.": "We'll store an encrypted copy of your keys on our server. Protect your backup with a passphrase to keep it secure.",

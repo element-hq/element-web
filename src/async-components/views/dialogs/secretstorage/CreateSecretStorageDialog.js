@@ -75,6 +75,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: '',
             accountPasswordCorrect: null,
+            // set if we are 'upgrading' encryption (making an SSSS store from
+            // an existing key backup secret).
+            doingUpgrade: null,
         };
 
         this._fetchBackupInfo();
@@ -99,6 +102,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             phase,
             backupInfo,
             backupSigStatus,
+            // remember this after this phase so we can use appropriate copy
+            doingUpgrade: phase === PHASE_MIGRATE,
         });
     }
 
@@ -668,7 +673,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_STORING:
                 return _t('Storing secrets...');
             case PHASE_DONE:
-                return _t('Encryption upgraded');
+                return this.state.doingUpgrade ? _t('Encryption upgraded') : _t('Encryption setup complete');
             default:
                 return '';
         }
