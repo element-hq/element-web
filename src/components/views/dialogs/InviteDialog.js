@@ -33,6 +33,7 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
+import SettingsStore from '../../../settings/SettingsStore';
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -493,7 +494,7 @@ export default class InviteDialog extends React.PureComponent {
         return false;
     }
 
-    _startDm = () => {
+    _startDm = async () => {
         this.setState({busy: true});
         const targetIds = this.state.targets.map(t => t.userId);
 
@@ -510,14 +511,31 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
+        const createRoomOptions = {};
+
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            // Check whether all users have uploaded device keys before.
+            // If so, enable encryption in the new room.
+            const client = MatrixClientPeg.get();
+            const usersToDevicesMap = await client.downloadKeys(targetIds);
+            const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+                // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+                return Object.keys(devices).length > 0;
+            });
+            if (allHaveDeviceKeys) {
+                createRoomOptions.encryption = true;
+            }
+        }
+
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         let createRoomPromise = Promise.resolve();
         if (targetIds.length === 1) {
-            createRoomPromise = createRoom({dmUserId: targetIds[0]});
+            createRoomOptions.dmUserId = targetIds[0];
+            createRoomPromise = createRoom(createRoomOptions);
         } else {
             // Create a boring room and try to invite the targets manually.
-            createRoomPromise = createRoom().then(roomId => {
+            createRoomPromise = createRoom(createRoomOptions).then(roomId => {
                 return inviteMultipleToRoom(roomId, targetIds);
             }).then(result => {
                 if (this._shouldAbortAfterInviteError(result)) {

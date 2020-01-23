@@ -82,7 +82,7 @@ const _getE2EStatus = (cli, userId, devices) => {
     return "warning";
 };
 
-function openDMForUser(matrixClient, userId) {
+async function openDMForUser(matrixClient, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
         const room = matrixClient.getRoom(roomId);
@@ -100,9 +100,27 @@ function openDMForUser(matrixClient, userId) {
             action: 'view_room',
             room_id: lastActiveRoom.roomId,
         });
-    } else {
-        createRoom({dmUserId: userId});
+        return;
     }
+
+    const createRoomOptions = {
+        dmUserId: userId,
+    };
+
+    if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
+        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+            return Object.keys(devices).length > 0;
+        });
+        if (allHaveDeviceKeys) {
+            createRoomOptions.encryption = true;
+        }
+    }
+
+    createRoom(createRoomOptions);
 }
 
 function useIsEncrypted(cli, room) {
