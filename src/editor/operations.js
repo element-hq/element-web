@@ -111,7 +111,7 @@ export function toggleInlineFormat(range, prefix, suffix = prefix) {
     // compute paragraph [start, end] indexes
     const paragraphIndexes = [];
     let startIndex = 0;
-    // let seenNewlines = 0;
+    // start at i=2 because we look at i and up to two parts behind to detect paragraph breaks at their end
     for (let i = 2; i < parts.length; i++) {
         // paragraph breaks can be denoted in a multitude of ways,
         // - 2 newline parts in sequence
