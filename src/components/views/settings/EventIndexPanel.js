@@ -18,6 +18,7 @@ import React from 'react';
 
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
@@ -29,6 +30,8 @@ export default class EventIndexPanel extends React.Component {
         this.state = {
             eventIndexSize: 0,
             roomCount: 0,
+            eventIndexingEnabled:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
         };
     }
 
@@ -51,10 +54,15 @@ export default class EventIndexPanel extends React.Component {
     }
 
     async componentWillMount(): void {
+        this.updateState();
+    }
+
+    async updateState() {
         let eventIndexSize = 0;
         let roomCount = 0;
 
         const eventIndex = EventIndexPeg.get();
+        const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing');
 
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom.bind(this));
@@ -67,6 +75,7 @@ export default class EventIndexPanel extends React.Component {
         this.setState({
             eventIndexSize,
             roomCount,
+            eventIndexingEnabled,
         });
     }
 
@@ -77,6 +86,14 @@ export default class EventIndexPanel extends React.Component {
                 onFinished: () => {},
             }, null, /* priority = */ false, /* static = */ true,
         );
+    }
+
+    _onEnable = async () => {
+        await EventIndexPeg.initEventIndex();
+        await EventIndexPeg.get().addInitialCheckpoints();
+        await EventIndexPeg.get().startCrawler();
+        await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
+        await this.updateState();
     }
 
     render() {
@@ -98,12 +115,25 @@ export default class EventIndexPanel extends React.Component {
                     </div>
                 </div>
             );
+        } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
+            eventIndexingSettings = (
+                <div>
+                    <div className='mx_SettingsTab_subsectionText'>
+                        {_t( "Securely cache encrypted messages locally for them to appear in search results.")}
+                    </div>
+                    <div>
+                        <AccessibleButton kind="primary" onClick={this._onEnable}>
+                            {_t("Enable")}
+                        </AccessibleButton>
+                    </div>
+                </div>
+            );
         } else {
             eventIndexingSettings = (
                 <div>
                     {
-                        _t( "Riot can't securely cache encrypted messages locally" +
-                            "while running in a web browser. Use Riot Desktop for" +
+                        _t( "Riot can't securely cache encrypted messages locally " +
+                            "while running in a web browser. Use Riot Desktop for " +
                             "encrypted messages to appear in search results.",
                         )
                     }
