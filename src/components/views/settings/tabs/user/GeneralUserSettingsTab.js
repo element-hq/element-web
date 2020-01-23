@@ -73,7 +73,11 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         const capabilities = await cli.getCapabilities(); // this is cached
         const changePasswordCap = capabilities['m.change_password'];
-        const canChangePassword = changePasswordCap && changePasswordCap['enabled'] === false;
+
+        // You can change your password so long as the capability isn't explicitly disabled. The implicit
+        // behaviour is you can change your password when the capability is missing or has not-false as
+        // the enabled flag value.
+        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
 
         this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
 
