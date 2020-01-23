@@ -961,9 +961,9 @@ export default createReactClass({
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
 
-        const [shouldCreate, createOpts] = await modal.finished;
+        const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            createRoom({createOpts});
+            createRoom(opts);
         }
     },
 
