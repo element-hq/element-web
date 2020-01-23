@@ -2075,5 +2075,15 @@
     "Secret Storage will be set up using your existing key backup details. Your secret storage passphrase and recovery key will be the same as they were for your key backup.": "Le coffre secret sera configuré en utilisant les détails existants de votre sauvegarde de clés. Votre phrase de passe et votre clé de récupération seront les mêmes que celles de votre sauvegarde de clés.",
     "New Session": "Nouvelle session",
     "Other users may not trust it": "D’autres utilisateurs pourraient ne pas lui faire confiance",
-    "Later": "Plus tard"
+    "Later": "Plus tard",
+    "Verify User": "Vérifier l’utilisateur",
+    "For extra security, verify this user by checking a one-time code on both of your devices.": "Pour une meilleure sécurité, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils.",
+    "For maximum security, do this in person.": "Pour une sécurité maximale, faites-le en personne.",
+    "Start Verification": "Commencer la vérification",
+    "Encrypted by a deleted device": "Chiffré par un appareil supprimé",
+    "Unknown Command": "Commande inconnue",
+    "Unrecognised command: %(commandText)s": "Commande non reconnue : %(commandText)s",
+    "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Vous pouvez utiliser <code>/help</code> pour obtenir la liste des commandes disponibles. Vouliez-vous envoyer un message ?",
+    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Astuce : Votre message doit démarrer par <code>//</code> pour commencer par une barre oblique.",
+    "Send as message": "Envoyer comme message"
 }
