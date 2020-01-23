@@ -1453,7 +1453,6 @@ export default createReactClass({
 
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             cli.on("crypto.verification.request", request => {
-                console.log(`MatrixChat got a .request ${request.channel.transactionId}`, request.event.getRoomId());
                 if (request.pending) {
                     ToastStore.sharedInstance().addOrReplaceToast({
                         key: 'verifreq_' + request.channel.transactionId,
