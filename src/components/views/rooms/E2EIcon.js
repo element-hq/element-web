@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import classNames from 'classnames';
 
 import {_t, _td} from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
-import SettingsStore from '../../../settings/SettingsStore';
+import {useFeatureEnabled} from "../../../hooks/useSettings";
 
 export const E2E_STATE = {
     VERIFIED: "verified",
@@ -35,11 +36,11 @@ const crossSigningUserTitles = {
     [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their devices."),
 };
 const crossSigningRoomTitles = {
-    [E2E_STATE.WARNING]: _td("Some users in this encrypted room are not verified by you or they have not verified " +
-        "their own devices."),
-    [E2E_STATE.VERIFIED]: _td("All users in this encrypted room are verified by you and they have verified their " +
-        "own devices."),
+    [E2E_STATE.WARNING]: _td("Someone is using an unknown device"),
+    [E2E_STATE.NORMAL]: _td("This room is end-to-end encrypted"),
+    [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
+
 const legacyUserTitles = {
     [E2E_STATE.WARNING]: _td("Some devices for this user are not trusted"),
     [E2E_STATE.VERIFIED]: _td("All devices for this user are trusted"),
@@ -58,7 +59,7 @@ const E2EIcon = ({isUser, status, className, size, onClick}) => {
     }, className);
 
     let e2eTitle;
-    const crossSigning = SettingsStore.isFeatureEnabled("feature_cross_signing");
+    const crossSigning = useFeatureEnabled("feature_cross_signing");
     if (crossSigning && isUser) {
         e2eTitle = crossSigningUserTitles[status];
     } else if (crossSigning && !isUser) {
