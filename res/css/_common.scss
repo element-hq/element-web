@@ -338,6 +338,14 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
+.mx_Dialog_titleImage {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    margin-left: -2px;
+    margin-right: 4px;
+}
+
 .mx_Dialog_title {
     font-size: 22px;
     line-height: 36px;
