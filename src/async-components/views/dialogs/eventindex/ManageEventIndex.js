@@ -46,8 +46,6 @@ export default class ManageEventIndex extends React.Component {
             currentRoom: null,
             eventIndexingEnabled:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
-            crawlerSleepTime:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
         };
     }
 
@@ -100,20 +98,6 @@ export default class ManageEventIndex extends React.Component {
             roomCount,
             currentRoom,
         });
-    }
-
-    _onEventIndexingEnabledChange = (checked) => {
-        SettingsStore.setValue("enableCrawling", null, SettingLevel.DEVICE, checked);
-
-        if (checked) EventIndexPeg.start();
-        else EventIndexPeg.stop();
-
-        this.setState({eventIndexingEnabled: checked});
-    }
-
-    _onCrawlerSleepTimeChange = (e) => {
-        this.setState({crawlerSleepTime: e.target.value});
-        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     }
 
     _onDisable = async () => {

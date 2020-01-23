@@ -486,11 +486,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: RIGHT_PANEL_PHASES.GroupMemberList,
     },
-    "crawlerSleepTime": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("How long should the crawler wait between requests"),
-        default: 3000,
-    },
     "enableEventIndexing": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Enable message search in encrypted rooms"),
