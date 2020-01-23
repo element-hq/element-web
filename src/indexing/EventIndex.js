@@ -440,33 +440,6 @@ export default class EventIndex {
         return indexManager.getStats();
     }
 
-    currentlyCrawledRooms() {
-        const crawlingRooms = new Set();
-        const totalRooms = new Set();
-
-        this.crawlerCheckpoints.forEach((checkpoint, index) => {
-            crawlingRooms.add(checkpoint.roomId);
-        });
-
-        if (this._currentCheckpoint !== null) {
-            crawlingRooms.add(this._currentCheckpoint.roomId);
-        }
-
-        const client = MatrixClientPeg.get();
-        const rooms = client.getRooms();
-
-        const isRoomEncrypted = (room) => {
-            return client.isRoomEncrypted(room.roomId);
-        };
-
-        const encryptedRooms = rooms.filter(isRoomEncrypted);
-        encryptedRooms.forEach((room, index) => {
-            totalRooms.add(room.roomId);
-        });
-
-        return {crawlingRooms, totalRooms};
-    }
-
     /**
      * Get the room that we are currently crawling.
      *

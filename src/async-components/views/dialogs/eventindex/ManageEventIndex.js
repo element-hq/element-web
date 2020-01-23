@@ -41,8 +41,6 @@ export default class ManageEventIndex extends React.Component {
 
         this.state = {
             eventIndexSize: 0,
-            crawlingRooms: 0,
-            totalCrawlingRooms: 0,
             eventCount: 0,
             roomCount: 0,
             currentRoom: null,
@@ -80,8 +78,6 @@ export default class ManageEventIndex extends React.Component {
         let eventIndexSize = 0;
         let roomCount = 0;
         let eventCount = 0;
-        let crawlingRooms = 0;
-        let totalCrawlingRooms = 0;
         let currentRoom = null;
 
         const eventIndex = EventIndexPeg.get();
@@ -94,18 +90,12 @@ export default class ManageEventIndex extends React.Component {
             roomCount = stats.roomCount;
             eventCount = stats.eventCount;
 
-            const crawledRooms = eventIndex.currentlyCrawledRooms();
-            crawlingRooms = crawledRooms.crawlingRooms.size;
-            totalCrawlingRooms = crawledRooms.totalRooms.size;
-
             const room = eventIndex.currentRoom();
             if (room) currentRoom = room.name;
         }
 
         this.setState({
             eventIndexSize,
-            crawlingRooms,
-            totalCrawlingRooms,
             eventCount,
             roomCount,
             currentRoom,
