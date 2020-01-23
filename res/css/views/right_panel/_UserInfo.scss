@@ -23,15 +23,23 @@ limitations under the License.
     font-size: 12px;
 
     .mx_UserInfo_cancel {
-        height: 16px;
-        width: 16px;
-        padding: 10px 0 10px 10px;
         cursor: pointer;
-        mask-image: url('$(res)/img/minimise.svg');
-        mask-repeat: no-repeat;
-        mask-position: 16px center;
-        background-color: $rightpanel-button-color;
         position: absolute;
+        top: 0;
+        border-radius: 4px;
+        background-color: $dark-panel-bg-color;
+        margin: 9px;
+        z-index: 1; // render on top of the right panel
+
+        div {
+            height: 16px;
+            width: 16px;
+            padding: 4px;
+            mask-image: url('$(res)/img/minimise.svg');
+            mask-repeat: no-repeat;
+            mask-position: 7px center;
+            background-color: $rightpanel-button-color;
+        }
     }
 
     h2 {

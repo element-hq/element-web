@@ -1219,10 +1219,9 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     let closeButton;
     if (onClose) {
-        closeButton = <AccessibleButton
-            className="mx_UserInfo_cancel"
-            onClick={onClose}
-            title={_t('Close')} />;
+        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
+            <div />
+        </AccessibleButton>;
     }
 
     const memberDetails = (
@@ -1338,32 +1337,32 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     return (
         <div className="mx_UserInfo" role="tabpanel">
-            { closeButton }
-            { avatarElement }
-
-            <div className="mx_UserInfo_container">
-                <div className="mx_UserInfo_profile">
-                    <div>
-                        <h2 aria-label={displayName}>
-                            { e2eIcon }
-                            { displayName }
-                        </h2>
-                    </div>
-                    <div>{ user.userId }</div>
-                    <div className="mx_UserInfo_profileStatus">
-                        {presenceLabel}
-                        {statusLabel}
-                    </div>
-                </div>
-            </div>
-
-            { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
-                <div className="mx_UserInfo_memberDetails">
-                    { memberDetails }
-                </div>
-            </div> }
-
             <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
+                { closeButton }
+                { avatarElement }
+
+                <div className="mx_UserInfo_container">
+                    <div className="mx_UserInfo_profile">
+                        <div>
+                            <h2 aria-label={displayName}>
+                                { e2eIcon }
+                                { displayName }
+                            </h2>
+                        </div>
+                        <div>{ user.userId }</div>
+                        <div className="mx_UserInfo_profileStatus">
+                            {presenceLabel}
+                            {statusLabel}
+                        </div>
+                    </div>
+                </div>
+
+                { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
+                    <div className="mx_UserInfo_memberDetails">
+                        { memberDetails }
+                    </div>
+                </div> }
+
                 { securitySection }
                 <UserOptionsSection
                     devices={devices}
