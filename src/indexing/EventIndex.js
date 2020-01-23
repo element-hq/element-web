@@ -70,62 +70,62 @@ export default class EventIndex {
         client.removeListener('Room.timelineReset', this.onTimelineReset);
     }
 
+    /** Get crawler checkpoints for the encrypted rooms and store them in the index.
+     */
+    async addInitialCheckpoints() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        const client = MatrixClientPeg.get();
+        const rooms = client.getRooms();
+
+        const isRoomEncrypted = (room) => {
+            return client.isRoomEncrypted(room.roomId);
+        };
+
+        // We only care to crawl the encrypted rooms, non-encrypted.
+        // rooms can use the search provided by the homeserver.
+        const encryptedRooms = rooms.filter(isRoomEncrypted);
+
+        console.log("EventIndex: Adding initial crawler checkpoints");
+
+        // Gather the prev_batch tokens and create checkpoints for
+        // our message crawler.
+        await Promise.all(encryptedRooms.map(async (room) => {
+            const timeline = room.getLiveTimeline();
+            const token = timeline.getPaginationToken("b");
+
+            console.log("EventIndex: Got token for indexer",
+                        room.roomId, token);
+
+            const backCheckpoint = {
+                roomId: room.roomId,
+                token: token,
+                direction: "b",
+            };
+
+            const forwardCheckpoint = {
+                roomId: room.roomId,
+                token: token,
+                direction: "f",
+            };
+
+            await indexManager.addCrawlerCheckpoint(backCheckpoint);
+            await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+            this.crawlerCheckpoints.push(backCheckpoint);
+            this.crawlerCheckpoints.push(forwardCheckpoint);
+        }));
+    }
+
     onSync = async (state, prevState, data) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === "PREPARED" && state === "SYNCING") {
-            const addInitialCheckpoints = async () => {
-                const client = MatrixClientPeg.get();
-                const rooms = client.getRooms();
-
-                const isRoomEncrypted = (room) => {
-                    return client.isRoomEncrypted(room.roomId);
-                };
-
-                // We only care to crawl the encrypted rooms, non-encrypted.
-                // rooms can use the search provided by the homeserver.
-                const encryptedRooms = rooms.filter(isRoomEncrypted);
-
-                console.log("EventIndex: Adding initial crawler checkpoints");
-
-                // Gather the prev_batch tokens and create checkpoints for
-                // our message crawler.
-                await Promise.all(encryptedRooms.map(async (room) => {
-                    const timeline = room.getLiveTimeline();
-                    const token = timeline.getPaginationToken("b");
-
-                    console.log("EventIndex: Got token for indexer",
-                                room.roomId, token);
-
-                    const backCheckpoint = {
-                        roomId: room.roomId,
-                        token: token,
-                        direction: "b",
-                    };
-
-                    const forwardCheckpoint = {
-                        roomId: room.roomId,
-                        token: token,
-                        direction: "f",
-                    };
-
-                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
-                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                    this.crawlerCheckpoints.push(backCheckpoint);
-                    this.crawlerCheckpoints.push(forwardCheckpoint);
-                }));
-            };
-
             // If our indexer is empty we're most likely running Riot the
             // first time with indexing support or running it with an
             // initial sync. Add checkpoints to crawl our encrypted rooms.
             const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();
-            if (eventIndexWasEmpty) await addInitialCheckpoints();
+            if (eventIndexWasEmpty) await this.addInitialCheckpoints();
 
-            // Start our crawler.
-            if (SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling')) {
-                this.startCrawler();
-            }
+            this.startCrawler();
             return;
         }
 
