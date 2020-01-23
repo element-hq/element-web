@@ -19,6 +19,7 @@ import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
+import Modal from '../../../../Modal';
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../../components/views/elements/LabelledToggleSwitch";
 import Field from "../../../../components/views/elements/Field";
@@ -101,7 +102,10 @@ export default class ManageEventIndex extends React.Component {
     }
 
     _onDisable = async () => {
-        this.props.onFinished(false);
+        Modal.createTrackedDialogAsync("Disable message search", "Disable message search",
+            import("./DisableEventIndex"),
+            null, null, /* priority = */ false, /* static = */ true,
+        );
     }
 
     _onEnable = async () => {
