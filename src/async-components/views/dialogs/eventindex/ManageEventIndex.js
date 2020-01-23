@@ -45,8 +45,6 @@ export default class ManageEventIndex extends React.Component {
             eventCount: 0,
             roomCount: 0,
             currentRoom: null,
-            eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
         };
     }
 
@@ -108,22 +106,14 @@ export default class ManageEventIndex extends React.Component {
         );
     }
 
-    _onEnable = async () => {
-        this.props.onFinished(false);
-    }
-
     _onDone = () => {
         this.props.onFinished(true);
     }
 
     render() {
-        let eventIndexingSettings = null;
-        let buttons;
         let crawlerState;
 
-        if (!this.state.eventIndexingEnabled) {
-            crawlerState = _t("Message search for encrypted rooms is disabled.");
-        } else if (this.state.currentRoom === null) {
+        if (this.state.currentRoom === null) {
             crawlerState = _t("Not downloading messages for any room.");
         } else {
             crawlerState = (
@@ -131,58 +121,32 @@ export default class ManageEventIndex extends React.Component {
             );
         }
 
-        if (EventIndexPeg.get() !== null) {
-            eventIndexingSettings = (
-                <div>
-                    {
-                        _t( "Riot is securely caching encrypted messages locally for them " +
-                            "to appear in search results:",
-                        )
-                    }
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
-                        {_t("Indexed messages:")} {this.state.eventCount}<br />
-                        {_t("Number of rooms:")} {this.state.roomCount}<br />
-                        {crawlerState}<br />
-                    </div>
+        const eventIndexingSettings = (
+            <div>
+                {
+                    _t( "Riot is securely caching encrypted messages locally for them " +
+                        "to appear in search results:",
+                    )
+                }
+                <div className='mx_SettingsTab_subsectionText'>
+                    {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
+                    {_t("Indexed messages:")} {this.state.eventCount}<br />
+                    {_t("Number of rooms:")} {this.state.roomCount}<br />
+                    {crawlerState}<br />
                 </div>
-            );
+            </div>
+        );
 
-            buttons = (
-                <div className="mx_Dialog_buttons">
-                    <AccessibleButton kind="secondary" onClick={this._onDisable}>
-                        {_t("Disable")}
-                    </AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this._onDone}>
-                        {_t("Done")}
-                    </AccessibleButton>
-                </div>
-            );
-        } else if (!this.state.eventIndexingEnabled && this.state.eventIndexingInstalled) {
-            eventIndexingSettings = (
-                <div>
-                    {_t( "Securely cache encrypted messages locally for them to appear in search results.")}
-                </div>
-            );
-            buttons = (
-                <div className="mx_Dialog_buttons">
-                    <AccessibleButton kind="primary" onClick={this._onEnable}>
-                        {_t("Enable")}
-                    </AccessibleButton>
-                </div>
-            );
-        } else {
-            eventIndexingSettings = (
-                <div>
-                    {
-                        _t( "Riot can't securely cache encrypted messages locally" +
-                            "while running in a web browser. Use Riot Desktop for" +
-                            "encrypted messages to appear in search results.",
-                        )
-                    }
-                </div>
-            );
-        }
+        const buttons = (
+            <div className="mx_Dialog_buttons">
+                <AccessibleButton kind="secondary" onClick={this._onDisable}>
+                    {_t("Disable")}
+                </AccessibleButton>
+                <AccessibleButton kind="primary" onClick={this._onDone}>
+                    {_t("Done")}
+                </AccessibleButton>
+            </div>
+        );
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
