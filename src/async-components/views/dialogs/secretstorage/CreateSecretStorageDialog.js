@@ -75,6 +75,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: '',
             accountPasswordCorrect: null,
+            // set if we are 'upgrading' encryption (making an SSSS store from
+            // an existing key backup secret).
+            doingUpgrade: null,
         };
 
         this._fetchBackupInfo();
@@ -99,6 +102,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             phase,
             backupInfo,
             backupSigStatus,
+            // remember this after this phase so we can use appropriate copy
+            doingUpgrade: phase === PHASE_MIGRATE,
         });
     }
 
@@ -405,6 +410,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhasePassPhrase() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const Field = sdk.getComponent('views.elements.Field');
 
         let strengthMeter;
         let helpText;
@@ -430,39 +436,39 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <div>
             <p>{_t(
-                "<b>Warning</b>: You should only set up secret storage from a trusted computer.", {},
-                { b: sub => <b>{sub}</b> },
+                "Set up encryption on this device to allow it to verify other devices, " +
+                "granting them access to encrypted messages and marking them as trusted for other users.",
             )}</p>
             <p>{_t(
-                "We'll use secret storage to optionally store an encrypted copy of " +
-                "your cross-signing identity for verifying other devices and message " +
-                "keys on our server. Protect your access to encrypted messages with a " +
-                "passphrase to keep it secure.",
+                "Secure your encryption keys with a passphrase. For maximum security " +
+                "this should be different to your account password:",
             )}</p>
-            <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
-                <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                    <input type="password"
-                        onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
-                        value={this.state.passPhrase}
-                        className="mx_CreateSecretStorageDialog_passPhraseInput"
-                        placeholder={_t("Enter a passphrase...")}
-                        autoFocus={true}
-                    />
-                    <div className="mx_CreateSecretStorageDialog_passPhraseHelp">
-                        {strengthMeter}
-                        {helpText}
-                    </div>
+            <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
+                <Field type="password"
+                    className="mx_CreateSecretStorageDialog_passPhraseField"
+                    onChange={this._onPassPhraseChange}
+                    onKeyPress={this._onPassPhraseKeyPress}
+                    value={this.state.passPhrase}
+                    label={_t("Enter a passphrase")}
+                    autoFocus={true}
+                />
+                <div className="mx_CreateSecretStorageDialog_passPhraseHelp">
+                    {strengthMeter}
+                    {helpText}
                 </div>
             </div>
 
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
                 disabled={!this._passPhraseIsValid()}
-            />
+            >
+                <button type="button"
+                    onClick={this._onCancel}
+                    className="danger"
+                >{_t("Skip")}</button>
+            </DialogButtons>
 
             <details>
                 <summary>{_t("Advanced")}</summary>
@@ -475,6 +481,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhasePassPhraseConfirm() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const Field = sdk.getComponent('views.elements.Field');
 
         let matchText;
         if (this.state.passPhraseConfirm === this.state.passPhrase) {
@@ -492,7 +499,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         let passPhraseMatch = null;
         if (matchText) {
-            passPhraseMatch = <div className="mx_CreateSecretStorageDialog_passPhraseMatch">
+            passPhraseMatch = <div>
                 <div>{matchText}</div>
                 <div>
                     <AccessibleButton element="span" className="mx_linkButton" onClick={this._onSetAgainClick}>
@@ -504,28 +511,32 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Please enter your passphrase a second time to confirm.",
+                "Enter your passphrase a second time to confirm it.",
             )}</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
-                <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                    <div>
-                        <input type="password"
-                            onChange={this._onPassPhraseConfirmChange}
-                            onKeyPress={this._onPassPhraseConfirmKeyPress}
-                            value={this.state.passPhraseConfirm}
-                            className="mx_CreateSecretStorageDialog_passPhraseInput"
-                            placeholder={_t("Repeat your passphrase...")}
-                            autoFocus={true}
-                        />
-                    </div>
+            <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
+                <Field type="password"
+                    id="mx_CreateSecretStorageDialog_passPhraseField"
+                    onChange={this._onPassPhraseConfirmChange}
+                    onKeyPress={this._onPassPhraseConfirmKeyPress}
+                    value={this.state.passPhraseConfirm}
+                    className="mx_CreateSecretStorageDialog_passPhraseField"
+                    label={_t("Confirm your passphrase")}
+                    autoFocus={true}
+                />
+                <div className="mx_CreateSecretStorageDialog_passPhraseMatch">
                     {passPhraseMatch}
                 </div>
             </div>
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseConfirmNextClick}
                 hasCancel={false}
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
-            />
+            >
+                <button type="button"
+                    onClick={this._onCancel}
+                    className="danger"
+                >{_t("Skip")}</button>
+            </DialogButtons>
         </div>;
     }
 
@@ -650,9 +661,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_MIGRATE:
                 return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
-                return _t('Secure your encrypted messages with a passphrase');
+                return _t('Set up encryption');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm your passphrase');
+                return _t('Confirm passphrase');
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
@@ -662,7 +673,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_STORING:
                 return _t('Storing secrets...');
             case PHASE_DONE:
-                return _t('Encryption upgraded');
+                return this.state.doingUpgrade ? _t('Encryption upgraded') : _t('Encryption setup complete');
             default:
                 return '';
         }
