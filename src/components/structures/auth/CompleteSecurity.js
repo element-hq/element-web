@@ -161,8 +161,7 @@ export default class CompleteSecurity extends React.Component {
 
         return (
             <AuthPage>
-                <AuthHeader />
-                <AuthBody>
+                <AuthBody header={false}>
                     <h2 className="mx_CompleteSecurity_header">
                         {icon}
                         {title}
