@@ -34,6 +34,8 @@ import {getAddressType} from "./UserAddress";
  *     Default: True
  * @param {bool=} opts.guestAccess Whether to enable guest access.
  *     Default: True
+ * @param {bool=} opts.encryption Whether to enable encryption.
+ *     Default: False
  *
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
@@ -42,6 +44,7 @@ export default function createRoom(opts) {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
+    if (opts.encryption === undefined) opts.encryption = false;
 
     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
     const Loader = sdk.getComponent("elements.Spinner");
@@ -80,17 +83,28 @@ export default function createRoom(opts) {
         opts.andView = true;
     }
 
+    createOpts.initial_state = createOpts.initial_state || [];
+
     // Allow guests by default since the room is private and they'd
     // need an invite. This means clicking on a 3pid invite email can
     // actually drop you right in to a chat.
-    createOpts.initial_state = createOpts.initial_state || [];
     if (opts.guestAccess) {
         createOpts.initial_state.push({
+            type: 'm.room.guest_access',
+            state_key: '',
             content: {
                 guest_access: 'can_join',
             },
-            type: 'm.room.guest_access',
+        });
+    }
+
+    if (opts.encryption) {
+        createOpts.initial_state.push({
+            type: 'm.room.encryption',
             state_key: '',
+            content: {
+                algorithm: 'm.megolm.v1.aes-sha2',
+            },
         });
     }
 
