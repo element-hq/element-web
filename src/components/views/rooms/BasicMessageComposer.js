@@ -209,6 +209,7 @@ export default class BasicMessageEditor extends React.Component {
             const range = getRangeForSelection(this._editorRef, model, selection);
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
+            event.clipboardData.setData("text/plain", text); // so plain copy/paste works
             if (type === "cut") {
                 // Remove the text, updating the model as appropriate
                 this._modifiedFlag = true;
