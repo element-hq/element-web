@@ -45,7 +45,7 @@ export default class ManageEventIndex extends React.Component {
             roomCount: 0,
             currentRoom: null,
             eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableCrawling'),
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
             crawlerSleepTime:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
         };

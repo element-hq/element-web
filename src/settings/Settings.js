@@ -491,9 +491,9 @@ export const SETTINGS = {
         displayName: _td("How long should the crawler wait between requests"),
         default: 3000,
     },
-    "enableCrawling": {
+    "enableEventIndexing": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("How long should the crawler wait between requests"),
+        displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
 };
