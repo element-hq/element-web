@@ -2080,5 +2080,10 @@
     "For extra security, verify this user by checking a one-time code on both of your devices.": "為了提高安全性，請透過檢查您兩個裝置上的一次性代碼來驗證此使用者。",
     "For maximum security, do this in person.": "為了取得最強的安全性，請親自進行。",
     "Start Verification": "開始驗證",
-    "Encrypted by a deleted device": "被已刪除的裝置加密"
+    "Encrypted by a deleted device": "被已刪除的裝置加密",
+    "Unknown Command": "未知的指令",
+    "Unrecognised command: %(commandText)s": "無法識別的指令：%(commandText)s",
+    "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "您可以使用 <code>/help</code> 來列出可用的指令。您是要傳送此訊息嗎？",
+    "Hint: Begin your message with <code>//</code> to start it with a slash.": "提示：以 <code>//</code> 開頭讓您的訊息傳送時可以用斜線開頭。",
+    "Send as message": "以訊息傳送"
 }
