@@ -1496,5 +1496,19 @@
     "Create a public room": "Halka açık bir oda oluşturun",
     "Make this room public": "Bu odayı halka açık yap",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Sohbet tarihçesini kaybetmemek için, çıkmadan önce odanızın anahtarlarını dışarıya aktarın. Bunu yapabilmek için Riotun daha yeni sürümü gerekli.  Ulaşmak için geri gitmeye ihtiyacınız var",
-    "Continue With Encryption Disabled": "Şifreleme Kapalı Şekilde Devam Et"
+    "Continue With Encryption Disabled": "Şifreleme Kapalı Şekilde Devam Et",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "%(fileName)s dosyası anasunucunun yükleme boyutu limitini aşıyor",
+    "Double check that your server supports the room version chosen and try again.": "Seçtiğiniz oda sürümünün sunucunuz tarafından desteklenip desteklenmediğini iki kez kontrol edin ve yeniden deneyin.",
+    "Changes your avatar in this current room only": "Sadece bu odadaki resminizi değiştirin",
+    "Please supply a https:// or http:// widget URL": "Lütfen bir https:// ya da http:// olarak bir görsel bileşen URL i belirtin",
+    "Sends the given emote coloured as a rainbow": "Verilen ifadeyi bir gökkuşağı gibi renklendirilmiş olarak gönderin",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ekran adını %(displayName)s olarak değiştirdi.",
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s odayı adresi bilen herkesin girebileceği şekilde halka açık hale getirdi.",
+    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s katılma kuralını %(rule)s şeklinde değiştirdi",
+    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s misafir erişim kuralını %(rule)s şeklinde değiştirdi",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s bu odanın ana adresini %(address)s olarak ayarladı.",
+    "%(senderName)s placed a voice call.": "%(senderName)s bir çağrı yaptı.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s bir çağrı başlattı. (Bu tarayıcı tarafından desteklenmiyor)",
+    "%(senderName)s placed a video call.": "%(senderName)s bir görüntülü çağrı yaptı.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s bir görüntülü çağrı yaptı. (bu tarayıcı tarafından desteklenmiyor)"
 }
