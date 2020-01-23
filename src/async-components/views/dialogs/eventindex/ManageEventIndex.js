@@ -116,7 +116,11 @@ export default class ManageEventIndex extends React.Component {
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     }
 
-    _onDisable = () => {
+    _onDisable = async () => {
+        this.props.onFinished(false);
+    }
+
+    _onEnable = async () => {
         this.props.onFinished(false);
     }
 
@@ -126,17 +130,16 @@ export default class ManageEventIndex extends React.Component {
 
     render() {
         let eventIndexingSettings = null;
+        let buttons;
         let crawlerState;
 
         if (!this.state.eventIndexingEnabled) {
-            crawlerState = <div>{_t("Message search for encrypted rooms is disabled.")}</div>;
+            crawlerState = _t("Message search for encrypted rooms is disabled.");
         } else if (this.state.currentRoom === null) {
-            crawlerState = <div>{_t("Not downloading messages for any room.")}</div>;
+            crawlerState = _t("Not downloading messages for any room.");
         } else {
             crawlerState = (
-                <div>
-                    {_t("Downloading mesages for %(currentRoom)s.", { currentRoom: this.state.currentRoom })}
-                </div>
+                    _t("Downloading mesages for %(currentRoom)s.", { currentRoom: this.state.currentRoom })
             );
         }
 
@@ -154,18 +157,30 @@ export default class ManageEventIndex extends React.Component {
                         {_t("Number of rooms:")} {this.state.roomCount}<br />
                         {crawlerState}<br />
                     </div>
+                </div>
+            );
 
-                    <LabelledToggleSwitch
-                        value={this.state.eventIndexingEnabled}
-                        onChange={this._onEventIndexingEnabledChange}
-                        label={_t('Download and index encrypted messages')} />
-
-                    <Field
-                        id={"crawlerSleepTimeMs"}
-                        label={_t('Message downloading sleep time(ms)')}
-                        type='number'
-                        value={this.state.crawlerSleepTime}
-                        onChange={this._onCrawlerSleepTimeChange} />
+            buttons = (
+                <div className="mx_Dialog_buttons">
+                    <AccessibleButton kind="secondary" onClick={this._onDisable}>
+                        {_t("Disable")}
+                    </AccessibleButton>
+                    <AccessibleButton kind="primary" onClick={this._onDone}>
+                        {_t("Done")}
+                    </AccessibleButton>
+                </div>
+            );
+        } else if (!this.state.eventIndexingEnabled && this.state.eventIndexingInstalled) {
+            eventIndexingSettings = (
+                <div>
+                    {_t( "Securely cache encrypted messages locally for them to appear in search results.")}
+                </div>
+            );
+            buttons = (
+                <div className="mx_Dialog_buttons">
+                    <AccessibleButton kind="primary" onClick={this._onEnable}>
+                        {_t("Enable")}
+                    </AccessibleButton>
                 </div>
             );
         } else {
@@ -182,28 +197,14 @@ export default class ManageEventIndex extends React.Component {
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const buttons = <div>
-            <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="secondary" onClick={this._onDisable}>
-                    {_t("Disable")}
-                </AccessibleButton>
-                <AccessibleButton kind="primary" onClick={this._onDone}>
-                    {_t("Done")}
-                </AccessibleButton>
-            </div>
-        </div>;
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'
-                onFinished={() => {}}
+                onFinished={this.props.onFinished}
                 title={_t("Message search")}
             >
-            <div>
-                {eventIndexingSettings}
-            </div>
-            <div>
-                {buttons}
-            </div>
+            {eventIndexingSettings}
+            {buttons}
             </BaseDialog>
         );
     }
