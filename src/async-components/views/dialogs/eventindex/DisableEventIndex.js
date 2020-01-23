@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
+import dis from "../../../../dispatcher";
 import { _t } from '../../../../languageHandler';
 
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
@@ -49,7 +50,8 @@ export default class ManageEventIndex extends React.Component {
         const eventIndex = EventIndexPeg.get();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
         await EventIndexPeg.deleteEventIndex();
-        this.props.onFinished(true);
+        this.props.onFinished();
+        dis.dispatch({ action: 'view_user_settings' });
     }
 
     render() {
