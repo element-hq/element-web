@@ -66,6 +66,13 @@ const stateEventTileTypes = {
     'm.room.related_groups': 'messages.TextualEvent',
 };
 
+const E2E_STATE = {
+    VERIFIED: "verified",
+    WARNING: "warning",
+    UNKNOWN: "unknown",
+    NORMAL: "normal",
+};
+
 // Add all the Mjolnir stuff to the renderer
 for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
@@ -235,6 +242,7 @@ export default createReactClass({
         this._suppressReadReceiptAnimation = false;
         const client = this.context;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        client.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
@@ -260,6 +268,7 @@ export default createReactClass({
     componentWillUnmount: function() {
         const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        client.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
@@ -282,18 +291,56 @@ export default createReactClass({
         }
     },
 
+    onUserVerificationChanged: function(userId, _trustStatus) {
+        if (userId === this.props.mxEvent.getSender()) {
+            this._verifyEvent(this.props.mxEvent);
+        }
+    },
+
     _verifyEvent: async function(mxEvent) {
         if (!mxEvent.isEncrypted()) {
             return;
         }
 
+        // If we directly trust the device, short-circuit here
         const verified = await this.context.isEventSenderVerified(mxEvent);
+        if (verified) {
+            this.setState({
+                verified: E2E_STATE.VERIFIED,
+            }, () => {
+                // Decryption may have caused a change in size
+                this.props.onHeightChanged();
+            });
+            return;
+        }
+
+        // If cross-signing is off, the old behaviour is to scream at the user
+        // as if they've done something wrong, which they haven't
+        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            this.setState({
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged);
+            return;
+        }
+
+        if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
+            this.setState({
+                verified: E2E_STATE.NORMAL,
+            }, this.props.onHeightChanged);
+            return;
+        }
+
+        const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
+        if (!eventSenderTrust) {
+            this.setState({
+                verified: E2E_STATE.UNKNOWN,
+            }, this.props.onHeightChanged); // Decryption may have cause a change in size
+            return;
+        }
+
         this.setState({
-            verified: verified,
-        }, () => {
-            // Decryption may have caused a change in size
-            this.props.onHeightChanged();
-        });
+            verified: eventSenderTrust.isVerified() ? E2E_STATE.VERIFIED : E2E_STATE.WARNING,
+        }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
     _propsEqual: function(objA, objB) {
@@ -473,8 +520,12 @@ export default createReactClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified) {
+            if (this.state.verified === E2E_STATE.NORMAL) {
+                return; // no icon if we've not even cross-signed the user
+            } else if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
+            } else if (this.state.verified === E2E_STATE.UNKNOWN) {
+                return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
             }
@@ -604,8 +655,9 @@ export default createReactClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === true,
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === false,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2E_STATE.WARNING,
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
@@ -898,6 +950,12 @@ function E2ePadlockUnverified(props) {
 function E2ePadlockUnencrypted(props) {
     return (
         <E2ePadlock title={_t("Unencrypted")} icon="unencrypted" {...props} />
+    );
+}
+
+function E2ePadlockUnknown(props) {
+    return (
+        <E2ePadlock title={_t("Encrypted by a deleted device")} icon="unknown" {...props} />
     );
 }
 

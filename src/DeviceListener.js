@@ -75,7 +75,7 @@ export default class DeviceListener {
             if (device.deviceId == cli.deviceId) continue;
 
             const deviceTrust = await cli.checkDeviceTrust(cli.getUserId(), device.deviceId);
-            if (deviceTrust.isVerified() || this._dismissed.has(device.deviceId)) {
+            if (deviceTrust.isCrossSigningVerified() || this._dismissed.has(device.deviceId)) {
                 ToastStore.sharedInstance().dismissToast(toastKey(device));
             } else {
                 ToastStore.sharedInstance().addOrReplaceToast({

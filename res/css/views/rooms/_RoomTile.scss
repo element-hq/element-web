@@ -142,10 +142,11 @@ limitations under the License.
     }
 }
 
-// toggle menuButton and badge on hover/menu displayed
+// toggle menuButton and badge on menu displayed
 .mx_RoomTile_menuDisplayed,
 // or on keyboard focus of room tile
-.mx_RoomTile.focus-visible:focus-within,
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:focus-within,
+// or on pointer hover
 .mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
     .mx_RoomTile_menuButton {
         display: block;

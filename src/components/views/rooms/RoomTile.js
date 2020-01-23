@@ -32,6 +32,7 @@ import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
+import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 
 export default createReactClass({
     displayName: 'RoomTile',
@@ -352,7 +353,8 @@ export default createReactClass({
             });
 
             subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
-            label = <div title={name} className={nameClasses} dir="auto">{ name }</div>;
+            // XXX: this is a workaround for Firefox giving this div a tabstop :( [tabIndex]
+            label = <div title={name} className={nameClasses} tabIndex={-1} dir="auto">{ name }</div>;
         } else if (this.state.hover) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
@@ -432,36 +434,42 @@ export default createReactClass({
         }
 
         return <React.Fragment>
-            <AccessibleButton
-                tabIndex="0"
-                className={classes}
-                onClick={this.onClick}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-                onContextMenu={this.onContextMenu}
-                aria-label={ariaLabel}
-                aria-selected={this.state.selected}
-                role="treeitem"
-            >
-                <div className={avatarClasses}>
-                    <div className="mx_RoomTile_avatar_container">
-                        <RoomAvatar room={this.props.room} width={24} height={24} />
-                        { dmIndicator }
-                    </div>
-                </div>
-                { privateIcon }
-                <div className="mx_RoomTile_nameContainer">
-                    <div className="mx_RoomTile_labelContainer">
-                        { label }
-                        { subtextLabel }
-                    </div>
-                    { dmOnline }
-                    { contextMenuButton }
-                    { badge }
-                </div>
-                { /* { incomingCallBox } */ }
-                { tooltip }
-            </AccessibleButton>
+            <RovingTabIndexWrapper>
+                {({onFocus, isActive, ref}) =>
+                    <AccessibleButton
+                        onFocus={onFocus}
+                        tabIndex={isActive ? 0 : -1}
+                        inputRef={ref}
+                        className={classes}
+                        onClick={this.onClick}
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        onContextMenu={this.onContextMenu}
+                        aria-label={ariaLabel}
+                        aria-selected={this.state.selected}
+                        role="treeitem"
+                    >
+                        <div className={avatarClasses}>
+                            <div className="mx_RoomTile_avatar_container">
+                                <RoomAvatar room={this.props.room} width={24} height={24} />
+                                { dmIndicator }
+                            </div>
+                        </div>
+                        { privateIcon }
+                        <div className="mx_RoomTile_nameContainer">
+                            <div className="mx_RoomTile_labelContainer">
+                                { label }
+                                { subtextLabel }
+                            </div>
+                            { dmOnline }
+                            { contextMenuButton }
+                            { badge }
+                        </div>
+                        { /* { incomingCallBox } */ }
+                        { tooltip }
+                    </AccessibleButton>
+                }
+            </RovingTabIndexWrapper>
 
             { contextMenu }
         </React.Fragment>;

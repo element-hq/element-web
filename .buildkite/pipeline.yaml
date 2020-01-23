@@ -76,6 +76,11 @@ steps:
       - docker#v3.0.1:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
+    retry:
+      automatic:
+        - exit_status: 1 # retry end-to-end tests once as Puppeteer sometimes fails
+          limit: 1
 
   - label: "🔧 Riot Tests"
     agents:
@@ -83,27 +88,16 @@ steps:
       # webpack loves to gorge itself on resources.
       queue: "medium"
     command:
-      # Install chrome
-      - "echo '--- Installing Chrome'"
-      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
-      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
-      - "apt-get update"
-      - "apt-get install -y google-chrome-stable"
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
-      - "echo '--- Installing Dependencies'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '--- Running initial build steps'"
-      - "yarn build"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/riot-unit-tests.sh"
-    env:
-      CHROME_BIN: "/usr/bin/google-chrome-stable"
     plugins:
       - docker#v3.0.1:
           image: "node:10"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
 
   - label: "🌐 i18n"
     command:
