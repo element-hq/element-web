@@ -139,7 +139,7 @@ export default class ManageEventIndex extends React.Component {
 
         const buttons = (
             <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="secondary" onClick={this._onDisable}>
+                <AccessibleButton kind="danger" onClick={this._onDisable}>
                     {_t("Disable")}
                 </AccessibleButton>
                 <AccessibleButton kind="primary" onClick={this._onDone}>
