@@ -34,6 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
 import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 import E2EIcon from './E2EIcon';
+// eslint-disable-next-line camelcase
 import rate_limited_func from '../../../ratelimitedfunc';
 
 export default createReactClass({
@@ -137,7 +138,7 @@ export default createReactClass({
         this.onFindingRoomToBeEncrypted();
     },
 
-    onFindingRoomToBeEncrypted: function () {
+    onFindingRoomToBeEncrypted: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("userTrustStatusChanged", this.onUserVerificationChanged);
@@ -162,7 +163,7 @@ export default createReactClass({
             .filter((userId) => userId !== cli.getUserId())
             .forEach((userId) => {
                 (cli.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId)
+                verified : unverified).push(userId);
             });
 
         /* Check all verified user devices. */
@@ -530,7 +531,7 @@ export default createReactClass({
         let e2eIcon = null;
         // For now, skip the icon for DMs.  Possibly we want to move the DM icon elsewhere?
         if (!dmUserId && this.state.e2eStatus) {
-            e2eIcon = <E2EIcon status={this.state.e2eStatus} className="mx_RoomTile_e2eIcon"/>
+            e2eIcon = <E2EIcon status={this.state.e2eStatus} className="mx_RoomTile_e2eIcon" />;
         }
 
         return <React.Fragment>
