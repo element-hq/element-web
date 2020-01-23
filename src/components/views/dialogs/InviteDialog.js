@@ -586,13 +586,36 @@ export default class InviteDialog extends React.PureComponent {
             clearTimeout(this._debounceTimer);
         }
         this._debounceTimer = setTimeout(async () => {
-            MatrixClientPeg.get().searchUserDirectory({term}).then(r => {
+            MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
                 if (term !== this.state.filterText) {
                     // Discard the results - we were probably too slow on the server-side to make
                     // these results useful. This is a race we want to avoid because we could overwrite
                     // more accurate results.
                     return;
                 }
+
+                if (!r.results) r.results = [];
+
+                // While we're here, try and autocomplete a search result for the mxid itself
+                // if there's no matches (and the input looks like a mxid).
+                if (term[0] === '@' && term.indexOf(':') > 1 && r.results.length === 0) {
+                    try {
+                        const profile = await MatrixClientPeg.get().getProfileInfo(term);
+                        if (profile) {
+                            // If we have a profile, we have enough information to assume that
+                            // the mxid can be invited - add it to the list
+                            r.results.push({
+                                user_id: term,
+                                display_name: profile['displayname'],
+                                avatar_url: profile['avatar_url'],
+                            });
+                        }
+                    } catch (e) {
+                        console.warn("Non-fatal error trying to make an invite for a user ID");
+                        console.warn(e);
+                    }
+                }
+
                 this.setState({
                     serverResultsMixin: r.results.map(u => ({
                         userId: u.user_id,
