@@ -127,7 +127,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
-                secureSecretStorage: SettingsStore.isFeatureEnabled("feature_cross_signing"),
+                secureSecretStorage: false,
                 onFinished: () => {
                     this._loadBackupStatus();
                 },

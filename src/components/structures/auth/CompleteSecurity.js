@@ -74,7 +74,6 @@ export default class CompleteSecurity extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
