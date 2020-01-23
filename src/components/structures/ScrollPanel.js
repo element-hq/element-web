@@ -877,11 +877,14 @@ export default createReactClass({
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
+
+        // give the <ol> an explicit role=list because Safari+VoiceOver seems to think an ordered-list with
+        // list-style-type: none; is no longer a list
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
-                        <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite">
+                        <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
                             { this.props.children }
                         </ol>
                     </div>
