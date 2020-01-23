@@ -1046,6 +1046,7 @@
     "Do you want to join %(roomName)s?": "Do you want to join %(roomName)s?",
     "<userName/> invited you": "<userName/> invited you",
     "Reject": "Reject",
+    "Reject & Ignore user": "Reject & Ignore user",
     "You're previewing %(roomName)s. Want to join it?": "You're previewing %(roomName)s. Want to join it?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s can't be previewed. Do you want to join it?",
     "%(roomName)s does not exist.": "%(roomName)s does not exist.",

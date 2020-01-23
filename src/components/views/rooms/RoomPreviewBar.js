@@ -49,6 +49,7 @@ export default createReactClass({
     propTypes: {
         onJoinClick: PropTypes.func,
         onRejectClick: PropTypes.func,
+        onRejectAndIgnoreClick: PropTypes.func,
         onForgetClick: PropTypes.func,
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
@@ -282,6 +283,7 @@ export default createReactClass({
 
     render: function() {
         const Spinner = sdk.getComponent('elements.Spinner');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let showSpinner = false;
         let darkStyle = false;
@@ -292,6 +294,7 @@ export default createReactClass({
         let secondaryActionHandler;
         let secondaryActionLabel;
         let footer;
+        const extraComponents = [];
 
         const messageCase = this._getMessageCase();
         switch (messageCase) {
@@ -469,6 +472,14 @@ export default createReactClass({
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
                 secondaryActionHandler = this.props.onRejectClick;
+
+                if (this.props.onRejectAndIgnoreClick) {
+                    extraComponents.push(
+                        <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
+                            { _t("Reject & Ignore user") }
+                        </AccessibleButton>,
+                    );
+                }
                 break;
             }
             case MessageCase.ViewingRoom: {
@@ -504,8 +515,6 @@ export default createReactClass({
                 break;
             }
         }
-
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let subTitleElements;
         if (subTitle) {
@@ -554,6 +563,7 @@ export default createReactClass({
                 </div>
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
+                    { extraComponents }
                     { primaryButton }
                 </div>
                 <div className="mx_RoomPreviewBar_footer">
