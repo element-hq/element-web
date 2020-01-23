@@ -210,4 +210,19 @@ limitations under the License.
 .mx_InviteDialog {
     // Prevent the dialog from jumping around randomly when elements change.
     height: 590px;
+    padding-left: 20px; // the design wants some padding on the left
+}
+
+.mx_InviteDialog_userSections {
+    margin-top: 10px;
+    overflow-y: auto;
+    padding-right: 45px;
+    height: 455px; // mx_InviteDialog's height minus some for the upper elements
+}
+
+// Right margin for the design. We could apply this to the whole dialog, but then the scrollbar
+// for the user section gets weird.
+.mx_InviteDialog_helpText,
+.mx_InviteDialog_addressBar {
+    margin-right: 45px;
 }

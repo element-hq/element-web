@@ -970,7 +970,7 @@ export default class InviteDialog extends React.PureComponent {
                 title={title}
             >
                 <div className='mx_InviteDialog_content'>
-                    <p>{helpText}</p>
+                    <p className='mx_InviteDialog_helpText'>{helpText}</p>
                     <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
                         <div className='mx_InviteDialog_buttonAndSpinner'>
@@ -987,8 +987,10 @@ export default class InviteDialog extends React.PureComponent {
                     </div>
                     {this._renderIdentityServerWarning()}
                     <div className='error'>{this.state.errorText}</div>
-                    {this._renderSection('recents')}
-                    {this._renderSection('suggestions')}
+                    <div className='mx_InviteDialog_userSections'>
+                        {this._renderSection('recents')}
+                        {this._renderSection('suggestions')}
+                    </div>
                 </div>
             </BaseDialog>
         );
