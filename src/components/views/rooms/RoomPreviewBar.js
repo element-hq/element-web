@@ -477,7 +477,7 @@ export default createReactClass({
                     extraComponents.push(
                         <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
                             { _t("Reject & Ignore user") }
-                        </AccessibleButton>
+                        </AccessibleButton>,
                     );
                 }
                 break;
