@@ -44,9 +44,12 @@ export default class CompleteSecurity extends React.Component {
             await accessSecretStorage(async () => {
                 await cli.checkOwnCrossSigningTrust();
             });
-            this.setState({
-                phase: PHASE_DONE,
-            });
+
+            if (cli.getCrossSigningId()) {
+                this.setState({
+                    phase: PHASE_DONE,
+                });
+            }
         } catch (e) {
             // this will throw if the user hits cancel, so ignore
         }
