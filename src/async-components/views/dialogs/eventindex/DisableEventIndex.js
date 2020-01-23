@@ -21,9 +21,6 @@ import dis from "../../../../dispatcher";
 import { _t } from '../../../../languageHandler';
 
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
-import LabelledToggleSwitch from "../../../../components/views/elements/LabelledToggleSwitch";
-import Field from "../../../../components/views/elements/Field";
-import {formatBytes} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
@@ -50,7 +47,6 @@ export default class ManageEventIndex extends React.Component {
             disabling: true,
         });
 
-        const eventIndex = EventIndexPeg.get();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
         await EventIndexPeg.deleteEventIndex();
         this.props.onFinished();
@@ -59,7 +55,7 @@ export default class ManageEventIndex extends React.Component {
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'

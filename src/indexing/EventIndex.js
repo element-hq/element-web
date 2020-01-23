@@ -16,8 +16,6 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
-import SettingsStore from '../settings/SettingsStore';
-import {SettingLevel} from "../settings/SettingsStore";
 import {sleep} from "../utils/promise";
 import {EventEmitter} from "events";
 

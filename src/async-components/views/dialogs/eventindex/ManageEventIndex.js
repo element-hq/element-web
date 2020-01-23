@@ -20,9 +20,6 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
 import Modal from '../../../../Modal';
-import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
-import LabelledToggleSwitch from "../../../../components/views/elements/LabelledToggleSwitch";
-import Field from "../../../../components/views/elements/Field";
 import {formatBytes} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
