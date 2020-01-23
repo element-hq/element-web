@@ -131,9 +131,7 @@ export default createReactClass({
     onRoomTimeline: function(ev, room) {
         if (!room) return;
         if (room.roomId != this.props.room.roomId) return;
-        console.warn("e2e onRoomTimeline");
         if (ev.getType() !== "m.room.encryption") return;
-        console.warn("e2e onRoomTimeline ENCRYPTION");
         MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
         this.onFindingRoomToBeEncrypted();
     },
