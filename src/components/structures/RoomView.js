@@ -1378,9 +1378,9 @@ export default createReactClass({
             const inviteEvent = myMember.events.member;
             const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
             ignoredUsers.push(inviteEvent.getSender()); // de-duped internally in the js-sdk
-            cli.setIgnoredUsers(ignoredUsers);
+            await cli.setIgnoredUsers(ignoredUsers);
 
-            cli.leave(this.state.roomId);
+            await cli.leave(this.state.roomId);
             dis.dispatch({ action: 'view_next_room' });
             this.setState({
                 rejecting: false,
