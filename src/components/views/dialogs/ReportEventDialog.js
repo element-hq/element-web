@@ -102,7 +102,7 @@ export default class ReportEventDialog extends PureComponent {
             SdkConfig.get().reportEvent.adminMessageMD;
         let adminMessage;
         if (adminMessageMD) {
-            const html = new Markdown(adminMessageMD).toHTML();
+            const html = new Markdown(adminMessageMD).toHTML({ externalLinks: true });
             adminMessage = <p dangerouslySetInnerHTML={{ __html: html }} />;
         }
 
