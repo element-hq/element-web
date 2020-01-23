@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -28,6 +29,7 @@ export default class EventIndexPanel extends React.Component {
         super();
 
         this.state = {
+            enabling: false,
             eventIndexSize: 0,
             roomCount: 0,
             eventIndexingEnabled:
@@ -58,11 +60,12 @@ export default class EventIndexPanel extends React.Component {
     }
 
     async updateState() {
-        let eventIndexSize = 0;
-        let roomCount = 0;
-
         const eventIndex = EventIndexPeg.get();
         const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing');
+        const enabling = false;
+
+        let eventIndexSize = 0;
+        let roomCount = 0;
 
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom.bind(this));
@@ -73,6 +76,7 @@ export default class EventIndexPanel extends React.Component {
         }
 
         this.setState({
+            enabling,
             eventIndexSize,
             roomCount,
             eventIndexingEnabled,
@@ -89,6 +93,10 @@ export default class EventIndexPanel extends React.Component {
     }
 
     _onEnable = async () => {
+        this.setState({
+            enabling: true,
+        });
+
         await EventIndexPeg.initEventIndex();
         await EventIndexPeg.get().addInitialCheckpoints();
         await EventIndexPeg.get().startCrawler();
@@ -98,6 +106,7 @@ export default class EventIndexPanel extends React.Component {
 
     render() {
         let eventIndexingSettings = null;
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
 
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
@@ -119,12 +128,15 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t( "Securely cache encrypted messages locally for them to appear in search results.")}
+                        {_t( "Securely cache encrypted messages locally for them to " +
+                             "appear in search results.")}
                     </div>
                     <div>
-                        <AccessibleButton kind="primary" onClick={this._onEnable}>
+                        <AccessibleButton kind="primary" disabled={this.state.enabling}
+                            onClick={this._onEnable}>
                             {_t("Enable")}
                         </AccessibleButton>
+                        {this.state.enabling ? <InlineSpinner /> : <div />}
                     </div>
                 </div>
             );
