@@ -41,12 +41,15 @@ export default class ManageEventIndex extends React.Component {
         super(props);
 
         this.state = {
-            eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
+            disabling: false,
         };
     }
 
     _onDisable = async () => {
+        this.setState({
+            disabling: true,
+        });
+
         const eventIndex = EventIndexPeg.get();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
         await EventIndexPeg.deleteEventIndex();
@@ -64,12 +67,15 @@ export default class ManageEventIndex extends React.Component {
                 title={_t("Are you sure?")}
             >
             {_t("If disabled, messages form encrypted rooms won't appear in search results")}
-            <DialogButtons
-                primaryButton={_t("Disable")}
-                onPrimaryButtonClick={this._onDisable}
-                cancelButton={_t("Cancel")}
-                onCancel={this.props.onFinished}
-            />
+            <div className="mx_Dialog_buttons">
+                <AccessibleButton kind="secondary" onClick={this.props.onFinished}>
+                    {_t("Cancel")}
+                </AccessibleButton>
+                <AccessibleButton kind="danger" disabled={this.state.disabling} onClick={this._onDisable}>
+                    {_t("Disable")}
+                </AccessibleButton>
+                {this.state.enabling ? <InlineSpinner /> : <div />}
+            </div>
             </BaseDialog>
         );
     }
