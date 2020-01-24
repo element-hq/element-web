@@ -22,8 +22,9 @@ import {EventEmitter} from "events";
 /*
  * Event indexing class that wraps the platform specific event indexing.
  */
-export default class EventIndex {
+export default class EventIndex extends EventEmitter {
     constructor() {
+        super();
         this.crawlerCheckpoints = [];
         // The time in ms that the crawler will wait loop iterations if there
         // have not been any checkpoints to consume in the last iteration.
@@ -35,7 +36,6 @@ export default class EventIndex {
         this._crawler = null;
         this._currentCheckpoint = null;
         this.liveEventsForIndex = new Set();
-        this._eventEmitter = new EventEmitter();
     }
 
     async init() {
@@ -188,7 +188,7 @@ export default class EventIndex {
     }
 
     emitNewCheckpoint() {
-        this._eventEmitter.emit("changedCheckpoint", this.currentRoom());
+        this.emit("changedCheckpoint", this.currentRoom());
     }
 
     async crawlerFunc() {
@@ -458,13 +458,5 @@ export default class EventIndex {
         } else {
             return client.getRoom(this.crawlerCheckpoints[0].roomId);
         }
-    }
-
-    on(eventName, callback) {
-        this._eventEmitter.on(eventName, callback);
-    }
-
-    removeListener(eventName, callback) {
-        this._eventEmitter.removeListener(eventName, callback);
     }
 }
