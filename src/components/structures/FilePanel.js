@@ -30,6 +30,8 @@ import { _t } from '../../languageHandler';
  */
 const FilePanel = createReactClass({
     displayName: 'FilePanel',
+    // This is used to track if a decrypted event was a live event and should be
+    // added to the timeline.
     decryptingEvents: new Set(),
 
     propTypes: {
@@ -84,6 +86,14 @@ const FilePanel = createReactClass({
 
         if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
 
+        // The timelineSets filter makes sure that encrypted events that contain
+        // URLs never get added to the timeline, even if they are live events.
+        // These methods are here to manually listen for such events and add
+        // them despite the filter's best efforts.
+        //
+        // We do this only for encrypted rooms and if an event index exists,
+        // this could be made more general in the future or the filter logic
+        // could be fixed.
         if (EventIndexPeg.get() !== null) {
             client.on('Room.timeline', this.onRoomTimeline.bind(this));
             client.on('Event.decrypted', this.onEventDecrypted.bind(this));
@@ -133,6 +143,10 @@ const FilePanel = createReactClass({
 
         const room = client.getRoom(roomId);
 
+        // We override the pagination request for encrypted rooms so that we ask
+        // the event index to fulfill the pagination request. Asking the server
+        // to paginate won't ever work since the server can't correctly filter
+        // out events containing URLs
         if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
             return eventIndex.paginateTimelineWindow(room, timelineWindow, direction, limit);
         } else {
@@ -153,6 +167,15 @@ const FilePanel = createReactClass({
             try {
                 timelineSet = await this.fetchFileEventsServer(room);
 
+                // If this room is encrypted the file panel won't be populated
+                // correctly since the defined filter doesn't support encrypted
+                // events and the server can't check if encrypted events contain
+                // URLs.
+                //
+                // This is where our event index comes into place, we ask the
+                // event index to populate the timelineSet for us. This call
+                // will add 10 events to the live timeline of the set. More can
+                // be requested using pagination.
                 if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
                     const timeline = timelineSet.getLiveTimeline();
                     await eventIndex.populateFileTimeline(timelineSet, timeline, room, 10);
