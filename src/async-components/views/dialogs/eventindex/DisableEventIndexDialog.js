@@ -60,7 +60,7 @@ export default class DisableEventIndexDialog extends React.Component {
                 onFinished={this.props.onFinished}
                 title={_t("Are you sure?")}
             >
-            {_t("If disabled, messages form encrypted rooms won't appear in search results")}
+            {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
             <div className="mx_Dialog_buttons">
                 <AccessibleButton kind="secondary" onClick={this.props.onFinished}>
                     {_t("Cancel")}
