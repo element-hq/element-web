@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import createReactClass from 'create-react-class';
-import Analytics from './Analytics';
 import * as sdk from './index';
 import PropTypes from 'prop-types';
 import { _t } from './languageHandler';
