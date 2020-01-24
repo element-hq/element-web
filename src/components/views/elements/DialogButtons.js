@@ -40,6 +40,10 @@ export default createReactClass({
         // should there be a cancel button? default: true
         hasCancel: PropTypes.bool,
 
+        // The class of the cancel button, only used if a cancel button is
+        // enabled
+        cancelButtonClass: PropTypes.node,
+
         // onClick handler for the cancel button.
         onCancel: PropTypes.func,
 
@@ -69,8 +73,10 @@ export default createReactClass({
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
         let cancelButton;
+
         if (this.props.cancelButton || this.props.hasCancel) {
-            cancelButton = <button onClick={this._onCancelClick} disabled={this.props.disabled}>
+            cancelButton = <button className={this.props.cancelButtonClass}
+                            onClick={this._onCancelClick} disabled={this.props.disabled}>
                 { this.props.cancelButton || _t("Cancel") }
             </button>;
         }
