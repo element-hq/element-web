@@ -132,18 +132,8 @@ export default class ManageEventIndexDialog extends React.Component {
             </div>
         );
 
-        const buttons = (
-            <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="danger" onClick={this._onDisable}>
-                    {_t("Disable")}
-                </AccessibleButton>
-                <AccessibleButton kind="primary" onClick={this._onDone}>
-                    {_t("Done")}
-                </AccessibleButton>
-            </div>
-        );
-
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'
@@ -151,7 +141,14 @@ export default class ManageEventIndexDialog extends React.Component {
                 title={_t("Message search")}
             >
                 {eventIndexingSettings}
-                {buttons}
+                <DialogButtons
+                    primaryButton={_t("Done")}
+                    onPrimaryButtonClick={this.props.onFinished}
+                    primaryButtonClass="primary"
+                    cancelButton={_t("Disable")}
+                    onCancel={this._onDisable}
+                    cancelButtonClass="danger"
+                />
             </BaseDialog>
         );
     }
