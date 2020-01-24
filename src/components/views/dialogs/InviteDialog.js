@@ -985,7 +985,7 @@ export default class InviteDialog extends React.PureComponent {
 
             title = _t("Direct Messages");
             helpText = _t(
-                "If you can't find someone, ask them for their username, or share your " +
+                "If you can't find someone, ask them for their username, share your " +
                 "username (%(userId)s) or <a>profile link</a>.",
                 {userId},
                 {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
