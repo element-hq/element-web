@@ -25,6 +25,14 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:12"
+  - label: ":stylelint: Style Lint"
+    command:
+      - "echo '--- Install'"
+      - "yarn install --ignore-scripts"
+      - "yarn lint:style"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
 
   - label: ":jest: Tests"
     agents:
