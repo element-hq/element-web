@@ -478,7 +478,8 @@ export default createReactClass({
 
         let dmIndicator;
         let dmOnline;
-        if (dmUserId) {
+        // If we can place a shield, do that instead
+        if (dmUserId && !this.state.e2eStatus) {
             dmIndicator = <img
                 src={require("../../../../res/img/icon_person.svg")}
                 className="mx_RoomTile_dm"
@@ -529,8 +530,7 @@ export default createReactClass({
         }
 
         let e2eIcon = null;
-        // For now, skip the icon for DMs.  Possibly we want to move the DM icon elsewhere?
-        if (!dmUserId && this.state.e2eStatus) {
+        if (this.state.e2eStatus) {
             e2eIcon = <E2EIcon status={this.state.e2eStatus} className="mx_RoomTile_e2eIcon" />;
         }
 
