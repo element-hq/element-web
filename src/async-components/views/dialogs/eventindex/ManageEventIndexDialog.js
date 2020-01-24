@@ -22,7 +22,6 @@ import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
 /*
  * Allows the user to introspect the event index state and disable it.
