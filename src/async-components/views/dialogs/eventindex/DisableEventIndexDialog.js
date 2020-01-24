@@ -56,10 +56,7 @@ export default class DisableEventIndexDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_ManageEventIndexDialog'
-                onFinished={this.props.onFinished}
-                title={_t("Are you sure?")}
-            >
+            <BaseDialog onFinished={this.props.onFinished} title={_t("Are you sure?")}>
                 {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
                 {this.state.disabling ? <Spinner /> : <div />}
                 <DialogButtons
