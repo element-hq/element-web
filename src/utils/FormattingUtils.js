@@ -31,6 +31,15 @@ export function formatCount(count) {
 }
 
 /**
+ * Format a count showing the whole number but making it a bit more readable.
+ * e.g: 1000 => 1,000
+ */
+export function formatCountLong(count) {
+    const formatter = new Intl.NumberFormat();
+    return formatter.format(count)
+}
+
+/**
  * format a size in bytes into a human readable form
  * e.g: 1024 -> 1.00 KB
  */
