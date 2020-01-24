@@ -796,7 +796,7 @@ export default createReactClass({
             return;
         }
 
-        // Duplication betwen here and _updateE2eStatus in RoomTile
+        // Duplication between here and _updateE2eStatus in RoomTile
         /* At this point, the user has encryption on and cross-signing on */
         const e2eMembers = await room.getEncryptionTargetMembers();
         const verified = [];
