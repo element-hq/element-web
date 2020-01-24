@@ -62,7 +62,7 @@ export default class DisableEventIndexDialog extends React.Component {
                 title={_t("Are you sure?")}
             >
                 {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
-                {this.state.disabling ? <InlineSpinner /> : <div />}
+                {this.state.disabling ? <Spinner /> : <div />}
                 <DialogButtons
                     primaryButton={_t('Disable')}
                     onPrimaryButtonClick={this._onDisable}
