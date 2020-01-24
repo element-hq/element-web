@@ -150,8 +150,8 @@ export default class ManageEventIndexDialog extends React.Component {
                 onFinished={this.props.onFinished}
                 title={_t("Message search")}
             >
-            {eventIndexingSettings}
-            {buttons}
+                {eventIndexingSettings}
+                {buttons}
             </BaseDialog>
         );
     }
