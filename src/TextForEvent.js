@@ -444,10 +444,19 @@ function textForHistoryVisibilityEvent(event) {
 
 function textForEncryptionEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {
-        senderName,
-        algorithm: event.getContent().algorithm,
-    });
+    if (event.getContent().algorithm === "m.megolm.v1.aes-sha2") {
+        return _t('%(senderName)s turned on end-to-end encryption.', {
+            senderName,
+        });
+    }
+    return _t(
+        '%(senderName)s turned on end-to-end encryption ' +
+        '(unrecognised algorithm %(algorithm)s).',
+        {
+            senderName,
+            algorithm: event.getContent().algorithm,
+        },
+    );
 }
 
 // Currently will only display a change if a user's power level is changed
