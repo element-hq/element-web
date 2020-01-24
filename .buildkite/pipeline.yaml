@@ -11,7 +11,7 @@ steps:
 
   - label: ":eslint: TS Lint"
     command:
-      - "echo '--- Install"
+      - "echo '--- Install'"
       - "yarn install --ignore-scripts"
       - "echo '+++ Lint'"
       - "yarn lint:ts"
