@@ -85,7 +85,7 @@ export default class EventIndexPanel extends React.Component {
 
     _onManage = async () => {
         Modal.createTrackedDialogAsync('Message search', 'Message search',
-            import('../../../async-components/views/dialogs/eventindex/ManageEventIndex'),
+            import('../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog'),
             {
                 onFinished: () => {},
             }, null, /* priority = */ false, /* static = */ true,
