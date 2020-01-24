@@ -45,22 +45,28 @@ export default class VerificationPanel extends React.PureComponent {
         if (request.requested) {
             return (<p>Waiting for {request.otherUserId} to accept ... <Spinner /></p>);
         } else if (request.ready) {
-            const keyId = `ed25519:${MatrixClientPeg.get().getCrossSigningId()}`;
-            const qrCodeKeys = [
-                [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-                [keyId, MatrixClientPeg.get().getCrossSigningId()],
-            ];
-            const qrCode = <VerificationQRCode
-                keyholderUserId={MatrixClientPeg.get().getUserId()}
-                requestEventId={request.event.eventId}
-                otherUserKey={"todo"}
-                secret={request.encodedSharedSecret}
-                keys={qrCodeKeys}
-            />;
             const verifyButton = <AccessibleButton kind="primary" onClick={this._startSAS}>
                 Verify by emoji
             </AccessibleButton>;
-            return (<p>{request.otherUserId} is ready, start {verifyButton} or have them scan: {qrCode}</p>);
+
+            if (request.requestEvent && request.requestEvent.getId()) {
+                const keyId = `ed25519:${MatrixClientPeg.get().getCrossSigningId()}`;
+                const qrCodeKeys = [
+                    [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
+                    [keyId, MatrixClientPeg.get().getCrossSigningId()],
+                ];
+                const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
+                const qrCode = <VerificationQRCode
+                    keyholderUserId={MatrixClientPeg.get().getUserId()}
+                    requestEventId={request.requestEvent.getId()}
+                    otherUserKey={crossSigningInfo.getId("master")}
+                    secret={request.encodedSharedSecret}
+                    keys={qrCodeKeys}
+                />;
+                return (<p>{request.otherUserId} is ready, start {verifyButton} or have them scan: {qrCode}</p>);
+            }
+
+            return (<p>{request.otherUserId} is ready, start {verifyButton}</p>);
         } else if (request.started) {
             if (this.state.sasWaitingForOtherParty) {
                 return <p>Waiting for {request.otherUserId} to confirm ...</p>;

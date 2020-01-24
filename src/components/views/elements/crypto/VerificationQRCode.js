@@ -24,15 +24,13 @@ import QRCode from "qrcode-react";
 export default class VerificationQRCode extends React.PureComponent {
     static propTypes = {
         // Common for all kinds of QR codes
-        keys: PropTypes.array.isRequired, // array of [Key ID, Key] pairs
+        keys: PropTypes.array.isRequired, // array of [Key ID, Base64 Key] pairs
         action: PropTypes.string.isRequired,
         keyholderUserId: PropTypes.string.isRequired,
 
         // User verification use case only
         secret: PropTypes.string,
-        otherUserKey: PropTypes.string,
-        verificationKey: PropTypes.string,
-        verificationAlgorithms: PropTypes.array,
+        otherUserKey: PropTypes.string, // Base64 key being verified
         requestEventId: PropTypes.string,
     };
 
@@ -44,8 +42,6 @@ export default class VerificationQRCode extends React.PureComponent {
         const query = {
             request: this.props.requestEventId,
             action: this.props.action,
-            verification_algorithms: this.props.verificationAlgorithms,
-            verification_key: this.props.verificationKey,
             other_user_key: this.props.otherUserKey,
         };
         for (const key of this.props.keys) {
