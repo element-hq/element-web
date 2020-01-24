@@ -337,10 +337,9 @@ module.exports = (env, argv) => {
             // serve unwebpacked assets from webapp.
             contentBase: './webapp',
 
-            stats: {
-                // don't fill the console up with a mahoosive list of modules
-                chunks: false,
-            },
+            // Only output errors, warnings, or new compilations.
+            // This hides the massive list of modules.
+            stats: 'minimal',
 
             // hot module replacement doesn't work (I think we'd need react-hot-reload?)
             // so webpack-dev-server reloads the page on every update which is quite
