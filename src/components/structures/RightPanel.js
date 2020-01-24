@@ -238,7 +238,18 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel) {
-            panel = <EncryptionPanel member={this.state.member} verificationRequest={this.state.verificationRequest} />;
+            const onClose = () => {
+                dis.dispatch({
+                    action: "view_user",
+                    member: this.state.member,
+                });
+            };
+            panel = (
+                <EncryptionPanel
+                    member={this.state.member}
+                    verificationRequest={this.state.verificationRequest}
+                    onClose={onClose} />
+            );
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {

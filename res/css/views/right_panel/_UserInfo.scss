@@ -49,12 +49,17 @@ limitations under the License.
     }
 
     .mx_UserInfo_container {
-        padding: 0 16px 16px 16px;
+        padding: 8px 16px;
+    }
+
+    .mx_UserInfo_separator {
         border-bottom: 1px solid lightgray;
     }
 
     .mx_UserInfo_memberDetailsContainer {
+        padding-top: 0;
         padding-bottom: 0;
+        margin-bottom: 8px;
     }
 
     .mx_RoomTile_nameContainer {
@@ -204,10 +209,9 @@ limitations under the License.
         padding-bottom: 16px;
     }
 
-    .mx_UserInfo_scrollContainer .mx_UserInfo_container {
+    .mx_UserInfo_scrollContainer:not(.mx_UserInfo_separator) {
         padding-top: 16px;
         padding-bottom: 0;
-        border-bottom: none;
 
         > :not(h3) {
             margin-left: 8px;
@@ -262,5 +266,12 @@ limitations under the License.
         padding: 7px 1.5em;
         text-align: center;
         margin: 16px 0;
+    }
+}
+
+.mx_UserInfo.mx_UserInfo_smallAvatar {
+    .mx_UserInfo_avatar > div {
+        max-width: 72px;
+        margin: 0 auto;
     }
 }

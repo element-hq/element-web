@@ -59,7 +59,7 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const _getE2EStatus = (cli, userId, devices) => {
+export const getE2EStatus = (cli, userId, devices) => {
     if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
         const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
         return hasUnverifiedDevice ? "warning" : "verified";
@@ -1047,6 +1047,117 @@ const PowerLevelEditor = ({user, room, roomPermissions, onFinished}) => {
     );
 };
 
+export const UserInfoPane = ({children, className, onClose, e2eStatus, member}) => {
+    const cli = useContext(MatrixClientContext);
+
+    let closeButton;
+    if (onClose) {
+        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
+            <div />
+        </AccessibleButton>;
+    }
+
+    let presenceState;
+    let presenceLastActiveAgo;
+    let presenceCurrentlyActive;
+    let statusMessage;
+
+    if (member instanceof RoomMember && member.user) {
+        presenceState = member.user.presence;
+        presenceLastActiveAgo = member.user.lastActiveAgo;
+        presenceCurrentlyActive = member.user.currentlyActive;
+
+        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            statusMessage = member.user._unstable_statusMessage;
+        }
+    }
+
+    const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+    let showPresence = true;
+    if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
+        showPresence = enablePresenceByHsUrl[cli.baseUrl];
+    }
+
+    let presenceLabel = null;
+    if (showPresence) {
+        const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
+        presenceLabel = <PresenceLabel activeAgo={presenceLastActiveAgo}
+                                       currentlyActive={presenceCurrentlyActive}
+                                       presenceState={presenceState} />;
+    }
+
+    let statusLabel = null;
+    if (statusMessage) {
+        statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
+    }
+
+    const onMemberAvatarClick = useCallback(() => {
+        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
+        if (!avatarUrl) return;
+
+        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
+        const ImageView = sdk.getComponent("elements.ImageView");
+        const params = {
+            src: httpUrl,
+            name: member.name,
+        };
+
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+    }, [cli, member]);
+
+    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+    const avatarElement = (
+        <div className="mx_UserInfo_avatar">
+            <div>
+                <div>
+                    <MemberAvatar
+                        member={member}
+                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        resizeMethod="scale"
+                        fallbackUserId={member.userId}
+                        onClick={onMemberAvatarClick}
+                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
+                </div>
+            </div>
+        </div>
+    );
+
+    let e2eIcon;
+    if (e2eStatus) {
+        e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
+    }
+
+    const displayName = member.name || member.displayname;
+
+    return (
+        <div className={classNames("mx_UserInfo", className)} role="tabpanel">
+            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
+                { closeButton }
+                { avatarElement }
+
+                <div className="mx_UserInfo_container mx_UserInfo_separator">
+                    <div className="mx_UserInfo_profile">
+                        <div>
+                            <h2 aria-label={displayName}>
+                                { e2eIcon }
+                                { displayName }
+                            </h2>
+                        </div>
+                        <div>{ member.userId }</div>
+                        <div className="mx_UserInfo_profileStatus">
+                            {presenceLabel}
+                            {statusLabel}
+                        </div>
+                    </div>
+                </div>
+
+                { children }
+            </AutoHideScrollbar>
+        </div>
+    );
+};
+
 const UserInfo = ({user, groupId, roomId, onClose}) => {
     const cli = useContext(MatrixClientContext);
 
@@ -1117,20 +1228,6 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         }
     }, [cli, user.userId]);
 
-    const onMemberAvatarClick = useCallback(() => {
-        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
-        if (!avatarUrl) return;
-
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
-        const ImageView = sdk.getComponent("elements.ImageView");
-        const params = {
-            src: httpUrl,
-            name: member.name,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, member]);
-
     let synapseDeactivateButton;
     let spinner;
 
@@ -1178,68 +1275,6 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     if (pendingUpdateCount > 0) {
         const Loader = sdk.getComponent("elements.Spinner");
         spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
-    }
-
-    const displayName = member.name || member.displayname;
-
-    let presenceState;
-    let presenceLastActiveAgo;
-    let presenceCurrentlyActive;
-    let statusMessage;
-
-    if (member instanceof RoomMember && member.user) {
-        presenceState = member.user.presence;
-        presenceLastActiveAgo = member.user.lastActiveAgo;
-        presenceCurrentlyActive = member.user.currentlyActive;
-
-        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            statusMessage = member.user._unstable_statusMessage;
-        }
-    }
-
-    const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
-    let showPresence = true;
-    if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
-        showPresence = enablePresenceByHsUrl[cli.baseUrl];
-    }
-
-    let presenceLabel = null;
-    if (showPresence) {
-        const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
-        presenceLabel = <PresenceLabel activeAgo={presenceLastActiveAgo}
-                                       currentlyActive={presenceCurrentlyActive}
-                                       presenceState={presenceState} />;
-    }
-
-    let statusLabel = null;
-    if (statusMessage) {
-        statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
-    }
-
-    // const avatarUrl = user.getMxcAvatarUrl ? user.getMxcAvatarUrl() : user.avatarUrl;
-    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-    const avatarElement = (
-        <div className="mx_UserInfo_avatar">
-            <div>
-                <div>
-                    <MemberAvatar
-                        member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        resizeMethod="scale"
-                        fallbackUserId={member.userId}
-                        onClick={onMemberAvatarClick}
-                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
-                </div>
-            </div>
-        </div>
-    );
-
-    let closeButton;
-    if (onClose) {
-        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
-            <div />
-        </AccessibleButton>;
     }
 
     const memberDetails = (
@@ -1347,53 +1382,30 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         </div>
     );
 
-    let e2eIcon;
+    let e2eStatus;
     if (isRoomEncrypted && devices) {
-        const e2eStatus = _getE2EStatus(cli, user.userId, devices);
-        e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
+        e2eStatus = getE2EStatus(cli, user.userId, devices);
     }
 
-    return (
-        <div className="mx_UserInfo" role="tabpanel">
-            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
-                { closeButton }
-                { avatarElement }
+    return <UserInfoPane onClose={onClose} e2eStatus={e2eStatus} member={member}>
+        { memberDetails &&
+        <div className="mx_UserInfo_container mx_UserInfo_separator mx_UserInfo_memberDetailsContainer">
+            <div className="mx_UserInfo_memberDetails">
+                { memberDetails }
+            </div>
+        </div> }
 
-                <div className="mx_UserInfo_container">
-                    <div className="mx_UserInfo_profile">
-                        <div>
-                            <h2 aria-label={displayName}>
-                                { e2eIcon }
-                                { displayName }
-                            </h2>
-                        </div>
-                        <div>{ user.userId }</div>
-                        <div className="mx_UserInfo_profileStatus">
-                            {presenceLabel}
-                            {statusLabel}
-                        </div>
-                    </div>
-                </div>
+        { securitySection }
+        <UserOptionsSection
+            devices={devices}
+            canInvite={roomPermissions.canInvite}
+            isIgnored={isIgnored}
+            member={member} />
 
-                { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
-                    <div className="mx_UserInfo_memberDetails">
-                        { memberDetails }
-                    </div>
-                </div> }
+        { adminToolsContainer }
 
-                { securitySection }
-                <UserOptionsSection
-                    devices={devices}
-                    canInvite={roomPermissions.canInvite}
-                    isIgnored={isIgnored}
-                    member={member} />
-
-                { adminToolsContainer }
-
-                { spinner }
-            </AutoHideScrollbar>
-        </div>
-    );
+        { spinner }
+    </UserInfoPane>;
 };
 
 UserInfo.propTypes = {
