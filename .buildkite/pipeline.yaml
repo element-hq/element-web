@@ -1,6 +1,7 @@
 steps:
   - label: ":eslint: JS Lint"
     command:
+      # We fetch the develop js-sdk to get our latest eslint rules
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh --ignore-scripts"
       - "echo '+++ Lint'"
