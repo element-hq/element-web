@@ -128,8 +128,9 @@ export default class MKeyVerificationRequest extends React.Component {
         }
 
         if (!request.initiatedByMe) {
+            const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             title = (<div className="mx_KeyVerification_title">{
-                _t("%(name)s wants to verify", {name: getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId())})}</div>);
+                _t("%(name)s wants to verify", {name})}</div>);
             subtitle = (<div className="mx_KeyVerification_subtitle">{
                 userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
             if (request.requested && !request.observeOnly) {
