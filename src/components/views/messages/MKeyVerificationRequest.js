@@ -45,10 +45,11 @@ export default class MKeyVerificationRequest extends React.Component {
 
     _openRequest = () => {
         const {verificationRequest} = this.props.mxEvent;
+        const member = MatrixClientPeg.get().getUser(verificationRequest.otherUserId);
         dis.dispatch({
             action: "set_right_panel_phase",
             phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-            refireParams: {verificationRequest},
+            refireParams: {verificationRequest, member},
         });
     };
 

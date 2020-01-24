@@ -14,52 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
-import {UserInfoPane} from "./UserInfo";
-import {_t} from "../../../languageHandler";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
 
-export default class EncryptionPanel extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {};
+const EncryptionPanel = ({verificationRequest, member}) => {
+    const [request, setRequest] = useState(verificationRequest);
+    useEffect(() => {
+        setRequest(verificationRequest);
+    }, [verificationRequest]);
+
+    const [pending, setPending] = useState(false);
+    const changeHandler = useCallback(() => {
+        setPending(request && request.requested);
+    }, [request]);
+    useEventEmitter(request, "change", changeHandler);
+    useEffect(changeHandler, [changeHandler]);
+
+    const onStartVerification = useCallback(async () => {
+        const cli = MatrixClientPeg.get();
+        const roomId = await ensureDMExists(cli, member.userId);
+        const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
+        setRequest(verificationRequest);
+    }, [member.userId]);
+
+    if (!request || pending) {
+        return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={pending} />;
+    } else {
+        return <VerificationPanel member={member} request={request} key={request.channel.transactionId} />;
     }
+};
+EncryptionPanel.propTypes = {
 
-    render() {
-        let content;
-        const request = this.props.verificationRequest || this.state.verificationRequest;
-        const {member} = this.props;
-        if (request) {
-            content = <VerificationPanel request={request} key={request.channel.transactionId} />;
-        } else if (member) {
-            content = <EncryptionInfo onStartVerification={this._onStartVerification} member={member} />;
-        } else {
-            content = <p>Not a member nor request, not sure what to render</p>;
-        }
+};
 
-        return (
-            <UserInfoPane className="mx_UserInfo_smallAvatar" member={member} onClose={this.props.onClose} e2eStatus="">
-                <div className="mx_UserInfo_container">
-                    <h3>{_t("Encryption")}</h3>
-                    <div>
-                        <p>{_t("Messages in this room are end-to-end encrypted.")}</p>
-                        <p>{_t("Your messages are secured and only you and the recipient have the unique keys to unlock them.")}</p>
-                    </div>
-                </div>
-
-                { content }
-            </UserInfoPane>
-        );
-    }
-
-    _onStartVerification = async () => {
-        const client = MatrixClientPeg.get();
-        const {member} = this.props;
-        const roomId = await ensureDMExists(client, member.userId);
-        const verificationRequest = await client.requestVerificationDM(member.userId, roomId);
-        this.setState({verificationRequest});
-    };
-}
+export default EncryptionPanel;

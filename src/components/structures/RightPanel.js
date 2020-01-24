@@ -169,7 +169,6 @@ export default class RightPanel extends React.Component {
         const MemberList = sdk.getComponent('rooms.MemberList');
         const MemberInfo = sdk.getComponent('rooms.MemberInfo');
         const UserInfo = sdk.getComponent('right_panel.UserInfo');
-        const EncryptionPanel = sdk.getComponent('right_panel.EncryptionPanel');
         const ThirdPartyMemberInfo = sdk.getComponent('rooms.ThirdPartyMemberInfo');
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
@@ -187,19 +186,22 @@ export default class RightPanel extends React.Component {
             panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo ||
+            this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel) {
             if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 const onClose = () => {
                     dis.dispatch({
                         action: "view_user",
-                        member: null,
+                        member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
                     });
                 };
                 panel = <UserInfo
-                    user={this.state.member}
+                    userId={this.state.member}
                     roomId={this.props.roomId}
                     key={this.props.roomId || this.state.member.userId}
                     onClose={onClose}
+                    phase={this.state.phase}
+                    verificationRequest={this.state.verificationRequest}
                 />;
             } else {
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
@@ -215,7 +217,7 @@ export default class RightPanel extends React.Component {
                     });
                 };
                 panel = <UserInfo
-                    user={this.state.member}
+                    userId={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.userId}
                     onClose={onClose} />;
@@ -237,19 +239,6 @@ export default class RightPanel extends React.Component {
             panel = <NotificationPanel />;
         } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel) {
-            const onClose = () => {
-                dis.dispatch({
-                    action: "view_user",
-                    member: this.state.member,
-                });
-            };
-            panel = (
-                <EncryptionPanel
-                    member={this.state.member}
-                    verificationRequest={this.state.verificationRequest}
-                    onClose={onClose} />
-            );
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {

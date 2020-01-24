@@ -41,6 +41,7 @@ import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import EncryptionPanel from "./EncryptionPanel";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -1047,7 +1048,256 @@ const PowerLevelEditor = ({user, room, roomPermissions, onFinished}) => {
     );
 };
 
-export const UserInfoPane = ({children, className, onClose, e2eStatus, member}) => {
+export const useDevices = (userId) => {
+    const cli = useContext(MatrixClientContext);
+
+    // undefined means yet to be loaded, null means failed to load, otherwise list of devices
+    const [devices, setDevices] = useState(undefined);
+    // Download device lists
+    useEffect(() => {
+        setDevices(undefined);
+
+        let cancelled = false;
+
+        async function _downloadDeviceList() {
+            try {
+                await cli.downloadKeys([userId], true);
+                const devices = await cli.getStoredDevicesForUser(userId);
+
+                if (cancelled) {
+                    // we got cancelled - presumably a different user now
+                    return;
+                }
+
+                _disambiguateDevices(devices);
+                setDevices(devices);
+            } catch (err) {
+                setDevices(null);
+            }
+        }
+        _downloadDeviceList();
+
+        // Handle being unmounted
+        return () => {
+            cancelled = true;
+        };
+    }, [cli, userId]);
+
+    // Listen to changes
+    useEffect(() => {
+        let cancel = false;
+        const onDeviceVerificationChanged = (_userId, device) => {
+            if (_userId === userId) {
+                // no need to re-download the whole thing; just update our copy of the list.
+
+                // Promise.resolve to handle transition from static result to promise; can be removed in future
+                Promise.resolve(cli.getStoredDevicesForUser(userId)).then((devices) => {
+                    if (cancel) return;
+                    console.log("setDevices 2", devices);
+                    setDevices(devices);
+                });
+            }
+        };
+        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
+        // Handle being unmounted
+        return () => {
+            cancel = true;
+            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
+        };
+    }, [cli, userId]);
+
+    return devices;
+};
+
+const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
+    const cli = useContext(MatrixClientContext);
+
+    const powerLevels = useRoomPowerLevels(cli, room);
+    // Load whether or not we are a Synapse Admin
+    const isSynapseAdmin = useIsSynapseAdmin(cli);
+
+    // Check whether the user is ignored
+    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(member.userId));
+    // Recheck if the user or client changes
+    useEffect(() => {
+        setIsIgnored(cli.isUserIgnored(member.userId));
+    }, [cli, member.userId]);
+    // Recheck also if we receive new accountData m.ignored_user_list
+    const accountDataHandler = useCallback((ev) => {
+        if (ev.getType() === "m.ignored_user_list") {
+            setIsIgnored(cli.isUserIgnored(member.userId));
+        }
+    }, [cli, member.userId]);
+    useEventEmitter(cli, "accountData", accountDataHandler);
+
+    // Count of how many operations are currently in progress, if > 0 then show a Spinner
+    const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
+    const startUpdating = useCallback(() => {
+        setPendingUpdateCount(pendingUpdateCount + 1);
+    }, [pendingUpdateCount]);
+    const stopUpdating = useCallback(() => {
+        setPendingUpdateCount(pendingUpdateCount - 1);
+    }, [pendingUpdateCount]);
+
+    const roomPermissions = useRoomPermissions(cli, room, member);
+
+    const onSynapseDeactivate = useCallback(async () => {
+        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        const {finished} = Modal.createTrackedDialog('Synapse User Deactivation', '', QuestionDialog, {
+            title: _t("Deactivate user?"),
+            description:
+                <div>{ _t(
+                    "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
+                    "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you " +
+                    "want to deactivate this user?",
+                ) }</div>,
+            button: _t("Deactivate user"),
+            danger: true,
+        });
+
+        const [accepted] = await finished;
+        if (!accepted) return;
+        try {
+            await cli.deactivateSynapseUser(member.userId);
+        } catch (err) {
+            console.error("Failed to deactivate user");
+            console.error(err);
+
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+            Modal.createTrackedDialog('Failed to deactivate Synapse user', '', ErrorDialog, {
+                title: _t('Failed to deactivate user'),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        }
+    }, [cli, member.userId]);
+
+    let synapseDeactivateButton;
+    let spinner;
+
+    // We don't need a perfect check here, just something to pass as "probably not our homeserver". If
+    // someone does figure out how to bypass this check the worst that happens is an error.
+    // FIXME this should be using cli instead of MatrixClientPeg.matrixClient
+    if (isSynapseAdmin && member.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
+        synapseDeactivateButton = (
+            <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field mx_UserInfo_destructive">
+                {_t("Deactivate user")}
+            </AccessibleButton>
+        );
+    }
+
+    let adminToolsContainer;
+    if (room && member.roomId) {
+        adminToolsContainer = (
+            <RoomAdminToolsContainer
+                powerLevels={powerLevels}
+                member={member}
+                room={room}
+                startUpdating={startUpdating}
+                stopUpdating={stopUpdating}>
+                { synapseDeactivateButton }
+            </RoomAdminToolsContainer>
+        );
+    } else if (groupId) {
+        adminToolsContainer = (
+            <GroupAdminToolsSection
+                groupId={groupId}
+                groupMember={member}
+                startUpdating={startUpdating}
+                stopUpdating={stopUpdating}>
+                { synapseDeactivateButton }
+            </GroupAdminToolsSection>
+        );
+    } else if (synapseDeactivateButton) {
+        adminToolsContainer = (
+            <GenericAdminToolsContainer>
+                { synapseDeactivateButton }
+            </GenericAdminToolsContainer>
+        );
+    }
+
+    if (pendingUpdateCount > 0) {
+        const Loader = sdk.getComponent("elements.Spinner");
+        spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
+    }
+
+    const memberDetails = (
+        <PowerLevelSection
+            powerLevels={powerLevels}
+            user={member}
+            room={room}
+            roomPermissions={roomPermissions}
+        />
+    );
+
+    // only display the devices list if our client supports E2E
+    const _enableDevices = cli.isCryptoEnabled();
+
+    let text;
+    if (!isRoomEncrypted) {
+        if (!_enableDevices) {
+            text = _t("This client does not support end-to-end encryption.");
+        } else if (room) {
+            text = _t("Messages in this room are not end-to-end encrypted.");
+        } else {
+            // TODO what to render for GroupMember
+        }
+    } else {
+        text = _t("Messages in this room are end-to-end encrypted.");
+    }
+
+    const userTrust = cli.checkUserTrust(member.userId);
+    const userVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
+        userTrust.isCrossSigningVerified() :
+        userTrust.isVerified();
+    const isMe = member.userId === cli.getUserId();
+    let verifyButton;
+    if (isRoomEncrypted && !userVerified && !isMe) {
+        verifyButton = (
+            <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={() => verifyUser(member)}>
+                {_t("Verify")}
+            </AccessibleButton>
+        );
+    }
+
+    let devicesSection;
+    if (isRoomEncrypted) {
+        devicesSection = <DevicesSection
+            loading={devices === undefined}
+            devices={devices}
+            userId={member.userId} />;
+    }
+
+    const securitySection = (
+        <div className="mx_UserInfo_container">
+            <h3>{ _t("Security") }</h3>
+            <p>{ text }</p>
+            { verifyButton }
+            { devicesSection }
+        </div>
+    );
+
+    return <React.Fragment>
+        { memberDetails &&
+        <div className="mx_UserInfo_container mx_UserInfo_separator mx_UserInfo_memberDetailsContainer">
+            <div className="mx_UserInfo_memberDetails">
+                { memberDetails }
+            </div>
+        </div> }
+
+        { securitySection }
+        <UserOptionsSection
+            devices={devices}
+            canInvite={roomPermissions.canInvite}
+            isIgnored={isIgnored}
+            member={member} />
+
+        { adminToolsContainer }
+
+        { spinner }
+    </React.Fragment>;
+};
+
+const UserInfoHeader = ({onClose, member, e2eStatus}) => {
     const cli = useContext(MatrixClientContext);
 
     let closeButton;
@@ -1056,6 +1306,38 @@ export const UserInfoPane = ({children, className, onClose, e2eStatus, member}) 
             <div />
         </AccessibleButton>;
     }
+
+    const onMemberAvatarClick = useCallback(() => {
+        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
+        if (!avatarUrl) return;
+
+        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
+        const ImageView = sdk.getComponent("elements.ImageView");
+        const params = {
+            src: httpUrl,
+            name: member.name,
+        };
+
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+    }, [cli, member]);
+
+    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+    const avatarElement = (
+        <div className="mx_UserInfo_avatar">
+            <div>
+                <div>
+                    <MemberAvatar
+                        member={member}
+                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        resizeMethod="scale"
+                        fallbackUserId={member.userId}
+                        onClick={onMemberAvatarClick}
+                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
+                </div>
+            </div>
+        </div>
+    );
 
     let presenceState;
     let presenceLastActiveAgo;
@@ -1091,74 +1373,35 @@ export const UserInfoPane = ({children, className, onClose, e2eStatus, member}) 
         statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
     }
 
-    const onMemberAvatarClick = useCallback(() => {
-        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
-        if (!avatarUrl) return;
-
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
-        const ImageView = sdk.getComponent("elements.ImageView");
-        const params = {
-            src: httpUrl,
-            name: member.name,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, member]);
-
-    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-    const avatarElement = (
-        <div className="mx_UserInfo_avatar">
-            <div>
-                <div>
-                    <MemberAvatar
-                        member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        resizeMethod="scale"
-                        fallbackUserId={member.userId}
-                        onClick={onMemberAvatarClick}
-                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
-                </div>
-            </div>
-        </div>
-    );
-
     let e2eIcon;
     if (e2eStatus) {
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
     const displayName = member.name || member.displayname;
+    return <React.Fragment>
+        { closeButton }
+        { avatarElement }
 
-    return (
-        <div className={classNames("mx_UserInfo", className)} role="tabpanel">
-            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
-                { closeButton }
-                { avatarElement }
-
-                <div className="mx_UserInfo_container mx_UserInfo_separator">
-                    <div className="mx_UserInfo_profile">
-                        <div>
-                            <h2 aria-label={displayName}>
-                                { e2eIcon }
-                                { displayName }
-                            </h2>
-                        </div>
-                        <div>{ member.userId }</div>
-                        <div className="mx_UserInfo_profileStatus">
-                            {presenceLabel}
-                            {statusLabel}
-                        </div>
-                    </div>
+        <div className="mx_UserInfo_container mx_UserInfo_separator">
+            <div className="mx_UserInfo_profile">
+                <div>
+                    <h2 aria-label={displayName}>
+                        { e2eIcon }
+                        { displayName }
+                    </h2>
                 </div>
-
-                { children }
-            </AutoHideScrollbar>
+                <div>{ member.userId }</div>
+                <div className="mx_UserInfo_profileStatus">
+                    {presenceLabel}
+                    {statusLabel}
+                </div>
+            </div>
         </div>
-    );
+    </React.Fragment>;
 };
 
-const UserInfo = ({user, groupId, roomId, onClose}) => {
+const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.RoomMemberInfo, ...props}) => {
     const cli = useContext(MatrixClientContext);
 
     // Load room if we are given a room id and memoize it
@@ -1166,246 +1409,46 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
 
-    // only display the devices list if our client supports E2E
-    const _enableDevices = cli.isCryptoEnabled();
-
-    const powerLevels = useRoomPowerLevels(cli, room);
-    // Load whether or not we are a Synapse Admin
-    const isSynapseAdmin = useIsSynapseAdmin(cli);
-
-    // Check whether the user is ignored
-    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(user.userId));
-    // Recheck if the user or client changes
-    useEffect(() => {
-        setIsIgnored(cli.isUserIgnored(user.userId));
-    }, [cli, user.userId]);
-    // Recheck also if we receive new accountData m.ignored_user_list
-    const accountDataHandler = useCallback((ev) => {
-        if (ev.getType() === "m.ignored_user_list") {
-            setIsIgnored(cli.isUserIgnored(user.userId));
-        }
-    }, [cli, user.userId]);
-    useEventEmitter(cli, "accountData", accountDataHandler);
-
-    // Count of how many operations are currently in progress, if > 0 then show a Spinner
-    const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
-    const startUpdating = useCallback(() => {
-        setPendingUpdateCount(pendingUpdateCount + 1);
-    }, [pendingUpdateCount]);
-    const stopUpdating = useCallback(() => {
-        setPendingUpdateCount(pendingUpdateCount - 1);
-    }, [pendingUpdateCount]);
-
-    const roomPermissions = useRoomPermissions(cli, room, member);
-
-    const onSynapseDeactivate = useCallback(async () => {
-        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
-        const {finished} = Modal.createTrackedDialog('Synapse User Deactivation', '', QuestionDialog, {
-            title: _t("Deactivate user?"),
-            description:
-                <div>{ _t(
-                    "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
-                    "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you " +
-                    "want to deactivate this user?",
-                ) }</div>,
-            button: _t("Deactivate user"),
-            danger: true,
-        });
-
-        const [accepted] = await finished;
-        if (!accepted) return;
-        try {
-            await cli.deactivateSynapseUser(user.userId);
-        } catch (err) {
-            console.error("Failed to deactivate user");
-            console.error(err);
-
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-            Modal.createTrackedDialog('Failed to deactivate Synapse user', '', ErrorDialog, {
-                title: _t('Failed to deactivate user'),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
-            });
-        }
-    }, [cli, user.userId]);
-
-    let synapseDeactivateButton;
-    let spinner;
-
-    // We don't need a perfect check here, just something to pass as "probably not our homeserver". If
-    // someone does figure out how to bypass this check the worst that happens is an error.
-    // FIXME this should be using cli instead of MatrixClientPeg.matrixClient
-    if (isSynapseAdmin && user.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
-        synapseDeactivateButton = (
-            <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field mx_UserInfo_destructive">
-                {_t("Deactivate user")}
-            </AccessibleButton>
-        );
-    }
-
-    let adminToolsContainer;
-    if (room && member.roomId) {
-        adminToolsContainer = (
-            <RoomAdminToolsContainer
-                powerLevels={powerLevels}
-                member={member}
-                room={room}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}>
-                { synapseDeactivateButton }
-            </RoomAdminToolsContainer>
-        );
-    } else if (groupId) {
-        adminToolsContainer = (
-            <GroupAdminToolsSection
-                groupId={groupId}
-                groupMember={user}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}>
-                { synapseDeactivateButton }
-            </GroupAdminToolsSection>
-        );
-    } else if (synapseDeactivateButton) {
-        adminToolsContainer = (
-            <GenericAdminToolsContainer>
-                { synapseDeactivateButton }
-            </GenericAdminToolsContainer>
-        );
-    }
-
-    if (pendingUpdateCount > 0) {
-        const Loader = sdk.getComponent("elements.Spinner");
-        spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
-    }
-
-    const memberDetails = (
-        <PowerLevelSection
-            powerLevels={powerLevels}
-            user={member}
-            room={room}
-            roomPermissions={roomPermissions}
-        />
-    );
-
     const isRoomEncrypted = useIsEncrypted(cli, room);
-    // undefined means yet to be loaded, null means failed to load, otherwise list of devices
-    const [devices, setDevices] = useState(undefined);
-    // Download device lists
-    useEffect(() => {
-        setDevices(undefined);
-
-        let cancelled = false;
-
-        async function _downloadDeviceList() {
-            try {
-                await cli.downloadKeys([user.userId], true);
-                const devices = await cli.getStoredDevicesForUser(user.userId);
-
-                if (cancelled) {
-                    // we got cancelled - presumably a different user now
-                    return;
-                }
-
-                _disambiguateDevices(devices);
-                setDevices(devices);
-            } catch (err) {
-                setDevices(null);
-            }
-        }
-        _downloadDeviceList();
-
-        // Handle being unmounted
-        return () => {
-            cancelled = true;
-        };
-    }, [cli, user.userId]);
-
-    // Listen to changes
-    useEffect(() => {
-        let cancel = false;
-        const onDeviceVerificationChanged = (_userId, device) => {
-            if (_userId === user.userId) {
-                // no need to re-download the whole thing; just update our copy of the list.
-
-                // Promise.resolve to handle transition from static result to promise; can be removed in future
-                Promise.resolve(cli.getStoredDevicesForUser(user.userId)).then((devices) => {
-                    if (cancel) return;
-                    setDevices(devices);
-                });
-            }
-        };
-        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
-        // Handle being unmounted
-        return () => {
-            cancel = true;
-            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
-        };
-    }, [cli, user.userId]);
-
-    let text;
-    if (!isRoomEncrypted) {
-        if (!_enableDevices) {
-            text = _t("This client does not support end-to-end encryption.");
-        } else if (room) {
-            text = _t("Messages in this room are not end-to-end encrypted.");
-        } else {
-            // TODO what to render for GroupMember
-        }
-    } else {
-        text = _t("Messages in this room are end-to-end encrypted.");
-    }
-
-    const userTrust = cli.checkUserTrust(user.userId);
-    const userVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
-        userTrust.isCrossSigningVerified() :
-        userTrust.isVerified();
-    const isMe = user.userId === cli.getUserId();
-    let verifyButton;
-    if (isRoomEncrypted && !userVerified && !isMe) {
-        verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
-            {_t("Verify")}
-        </AccessibleButton>;
-    }
-
-    let devicesSection;
-    if (isRoomEncrypted) {
-        devicesSection = <DevicesSection
-            loading={devices === undefined}
-            devices={devices} userId={user.userId} />;
-    }
-
-    const securitySection = (
-        <div className="mx_UserInfo_container">
-            <h3>{ _t("Security") }</h3>
-            <p>{ text }</p>
-            { verifyButton }
-            { devicesSection }
-        </div>
-    );
+    const devices = useDevices(user.userId);
 
     let e2eStatus;
     if (isRoomEncrypted && devices) {
         e2eStatus = getE2EStatus(cli, user.userId, devices);
     }
 
-    return <UserInfoPane onClose={onClose} e2eStatus={e2eStatus} member={member}>
-        { memberDetails &&
-        <div className="mx_UserInfo_container mx_UserInfo_separator mx_UserInfo_memberDetailsContainer">
-            <div className="mx_UserInfo_memberDetails">
-                { memberDetails }
-            </div>
-        </div> }
+    const classes = ["mx_UserInfo"];
 
-        { securitySection }
-        <UserOptionsSection
-            devices={devices}
-            canInvite={roomPermissions.canInvite}
-            isIgnored={isIgnored}
-            member={member} />
+    let content;
+    switch (phase) {
+        case RIGHT_PANEL_PHASES.RoomMemberInfo:
+        case RIGHT_PANEL_PHASES.GroupMemberInfo:
+            content = (
+                <BasicUserInfo
+                    room={room}
+                    member={member}
+                    groupId={groupId}
+                    devices={devices}
+                    isRoomEncrypted={isRoomEncrypted} />
+            );
+            break;
+        case RIGHT_PANEL_PHASES.EncryptionPanel:
+            classes.push("mx_UserInfo_smallAvatar");
+            content = (
+                <EncryptionPanel {...props} member={member} onClose={onClose} />
+            );
+            break;
+    }
 
-        { adminToolsContainer }
+    return (
+        <div className={classes.join(" ")} role="tabpanel">
+            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
+                <UserInfoHeader member={member} e2eStatus={e2eStatus} onClose={onClose} />
 
-        { spinner }
-    </UserInfoPane>;
+                { content }
+            </AutoHideScrollbar>
+        </div>
+    );
 };
 
 UserInfo.propTypes = {

@@ -81,6 +81,7 @@ limitations under the License.
     .mx_UserInfo_avatar > div {
         max-width: 30vh;
         margin: 0 auto;
+        transition: 1s;
     }
 
     .mx_UserInfo_avatar > div > div {
@@ -260,11 +261,6 @@ limitations under the License.
 
     .mx_UserInfo_verify {
         display: block;
-        background-color: $accent-color;
-        color: $accent-fg-color;
-        border-radius: 4px;
-        padding: 7px 1.5em;
-        text-align: center;
         margin: 16px 0;
     }
 }
