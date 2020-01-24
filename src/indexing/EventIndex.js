@@ -172,7 +172,7 @@ export default class EventIndex {
         }
 
         const jsonEvent = ev.toJSON();
-        const e = ev.isEncrypted() ? jsonEvent.decrypted: jsonEvent;
+        const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
 
         const profile = {
             displayname: ev.sender.rawDisplayName,
@@ -308,7 +308,7 @@ export default class EventIndex {
             // consume.
             const events = filteredEvents.map((ev) => {
                 const jsonEvent = ev.toJSON();
-                const e = ev.isEncrypted() ? jsonEvent.decrypted: jsonEvent;
+                const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
 
                 let profile = {};
                 if (e.sender in profiles) profile = profiles[e.sender];
