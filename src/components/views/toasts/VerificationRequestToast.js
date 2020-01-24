@@ -23,6 +23,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";
 import ToastStore from "../../../stores/ToastStore";
+import Modal from "../../../Modal";
 
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
@@ -79,6 +80,12 @@ export default class VerificationRequestToast extends React.PureComponent {
                     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
                     refireParams: {verificationRequest: request},
                 });
+            } else if (request.channel.deviceId && request.verifier) {
+                // show to_device verifications in dialog still
+                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                    verifier: request.verifier,
+                }, null, /* priority = */ false, /* static = */ true);
             }
         } catch (err) {
             console.error(err.message);
