@@ -49,12 +49,13 @@ export default class VerificationPanel extends React.PureComponent {
                 Verify by emoji
             </AccessibleButton>;
 
-            if (request.requestEvent && request.requestEvent.getId()) {
+            const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
+            const myKeyId = MatrixClientPeg.get().getCrossSigningId();
+            if (request.requestEvent && request.requestEvent.getId() && crossSigningInfo) {
                 const qrCodeKeys = [
                     [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-                    [MatrixClientPeg.get().getCrossSigningId(), MatrixClientPeg.get().getCrossSigningId()],
+                    [myKeyId, myKeyId],
                 ];
-                const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
                 const qrCode = <VerificationQRCode
                     keyholderUserId={MatrixClientPeg.get().getUserId()}
                     requestEventId={request.requestEvent.getId()}
