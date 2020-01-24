@@ -19,7 +19,6 @@ import React from 'react';
 import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
-import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {_t} from "../../../languageHandler";
 import E2EIcon from "../rooms/E2EIcon";
@@ -32,9 +31,26 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     renderQRPhase() {
-        const {member} = this.props;
+        const {member, request} = this.props; // type req: VerificationRequest
         // TODO change the button into a spinner when on click
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        if (!request.requestEvent || !request.requestEvent.getId()) {
+            // TODO handle this error case
+            return <p>request.requestEvent.getId()</p>;
+        }
+
+        const qrCodeKeys = [
+            [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
+            [MatrixClientPeg.get().getCrossSigningId(), MatrixClientPeg.get().getCrossSigningId()],
+        ];
+        const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
+
+        if (!crossSigningInfo) {
+            // TODO handle this error case
+            return <p>crossSigningInfo</p>;
+        }
+
         return <React.Fragment>
             <div className="mx_UserInfo_container">
                 <h3>Verify by scanning</h3>
@@ -43,12 +59,20 @@ export default class VerificationPanel extends React.PureComponent {
                 }, {
                     a: t => <a>{ t }</a>,
                 })}</p>
-                <div>QR Code</div>
+
+                <VerificationQRCode
+                    keyholderUserId={MatrixClientPeg.get().getUserId()}
+                    requestEventId={request.requestEvent.getId()}
+                    otherUserKey={crossSigningInfo.getId("master")}
+                    secret={request.encodedSharedSecret}
+                    keys={qrCodeKeys}
+                />
             </div>
 
             <div className="mx_UserInfo_container">
                 <h3>Verify by emoji</h3>
                 <p>{_t("If you can't scan the code above, verify by comparing unique emoji.")}</p>
+
                 <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
                     {_t("Verify by emoji")}
                 </AccessibleButton>

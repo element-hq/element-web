@@ -196,7 +196,7 @@ export default class RightPanel extends React.Component {
                     });
                 };
                 panel = <UserInfo
-                    userId={this.state.member}
+                    user={this.state.member}
                     roomId={this.props.roomId}
                     key={this.props.roomId || this.state.member.userId}
                     onClose={onClose}
@@ -217,7 +217,7 @@ export default class RightPanel extends React.Component {
                     });
                 };
                 panel = <UserInfo
-                    userId={this.state.member}
+                    user={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.userId}
                     onClose={onClose} />;
