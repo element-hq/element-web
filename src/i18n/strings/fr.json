@@ -2085,5 +2085,22 @@
     "Unrecognised command: %(commandText)s": "Commande non reconnue : %(commandText)s",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Vous pouvez utiliser <code>/help</code> pour obtenir la liste des commandes disponibles. Vouliez-vous envoyer un message ?",
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Astuce : Votre message doit démarrer par <code>//</code> pour commencer par une barre oblique.",
-    "Send as message": "Envoyer comme message"
+    "Send as message": "Envoyer comme message",
+    "%(senderName)s added %(addedAddresses)s and %(count)s other addresses to this room|other": "%(senderName)s a ajouté %(addedAddresses)s et %(count)s autres adresses à ce salon",
+    "%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room|other": "%(senderName)s a supprimé %(removedAddresses)s et %(count)s autres adresses de ce salon",
+    "%(senderName)s removed %(countRemoved)s and added %(countAdded)s addresses to this room": "%(senderName)s a supprimé %(countRemoved)s et ajouté %(countAdded)s adresses à ce salon",
+    "Reject & Ignore user": "Rejeter et ignorer l’utilisateur",
+    "Enter your account password to confirm the upgrade:": "Saisissez le mot de passe de votre compte pour confirmer la mise à niveau :",
+    "You'll need to authenticate with the server to confirm the upgrade.": "Vous devrez vous identifier avec le serveur pour confirmer la mise à niveau.",
+    "Upgrade this device to allow it to verify other devices, granting them access to encrypted messages and marking them as trusted for other users.": "Mettez à niveau cet appareil pour lui permettre de vérifier d’autres appareils, qui pourront alors accéder aux messages chiffrés et seront vus comme fiables par les autres utilisateurs.",
+    "Set up encryption on this device to allow it to verify other devices, granting them access to encrypted messages and marking them as trusted for other users.": "Configurez le chiffrement sur cet appareil pour lui permettre de vérifier d’autres appareils, qui pourront alors accéder aux messages chiffrés et seront vus comme fiables par les autres utilisateurs.",
+    "Secure your encryption keys with a passphrase. For maximum security this should be different to your account password:": "Sécurisez vos clés de chiffrement avec une phrase de passe. Pour une sécurité maximale, elle devrait être différente du mot de passe de votre compte :",
+    "Enter a passphrase": "Saisissez une phrase de passe",
+    "Enter your passphrase a second time to confirm it.": "Saisissez votre phrase de passe une seconde fois pour la confirmer.",
+    "This device can now verify other devices, granting them access to encrypted messages and marking them as trusted for other users.": "Cet appareil peut à présent vérifier d’autres appareils, qui pourront alors accéder aux messages chiffrés et seront vus comme fiables par les autres utilisateurs.",
+    "Verify other users in their profile.": "Vérifiez d’autres utilisateurs dans leur profil.",
+    "Upgrade your encryption": "Mettre à niveau votre chiffrement",
+    "Set up encryption": "Configurer le chiffrement",
+    "Encryption upgraded": "Chiffrement mis à niveau",
+    "Encryption setup complete": "Configuration du chiffrement terminé"
 }
