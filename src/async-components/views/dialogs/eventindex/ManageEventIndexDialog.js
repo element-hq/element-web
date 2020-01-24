@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
 import Modal from '../../../../Modal';
-import {formatBytes, formatCount} from "../../../../utils/FormattingUtils";
+import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
@@ -125,8 +125,8 @@ export default class ManageEventIndexDialog extends React.Component {
                 }
                 <div className='mx_SettingsTab_subsectionText'>
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
-                    {_t("Indexed messages:")} {formatCount(this.state.eventCount)}<br />
-                    {_t("Number of rooms:")} {formatCount(this.state.roomCount)}<br />
+                    {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
+                    {_t("Number of rooms:")} {formatCountLong(this.state.roomCount)}<br />
                     {crawlerState}<br />
                 </div>
             </div>
