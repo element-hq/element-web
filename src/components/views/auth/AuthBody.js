@@ -17,10 +17,25 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 export default class AuthBody extends React.PureComponent {
+    static PropTypes = {
+        header: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        header: true,
+    };
+
     render() {
-        return <div className="mx_AuthBody">
+        const classes = {
+            'mx_AuthBody': true,
+            'mx_AuthBody_noHeader': !this.props.header,
+        };
+
+        return <div className={classnames(classes)}>
             { this.props.children }
         </div>;
     }
