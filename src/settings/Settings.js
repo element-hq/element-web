@@ -128,12 +128,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_ftue_dms": {
-        isFeature: true,
-        displayName: _td("New invite dialog"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_presence_in_room_list": {
         isFeature: true,
         displayName: _td("Show a presence dot next to DMs in the room list"),
