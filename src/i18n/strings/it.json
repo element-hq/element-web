@@ -2081,5 +2081,6 @@
     "For maximum security, do this in person.": "Per massima sicurezza, fatelo di persona.",
     "Start Verification": "Inizia la verifica",
     "%(senderName)s added %(addedAddresses)s and %(count)s other addresses to this room|other": "%(senderName)s ha aggiunto %(addedAddresses)s e %(count)s altri indirizzi a questa stanza",
-    "%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room|other": "%(senderName)s ha rimosso %(removedAddresses)s e %(count)s altri indirizzi da questa stanza"
+    "%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room|other": "%(senderName)s ha rimosso %(removedAddresses)s e %(count)s altri indirizzi da questa stanza",
+    "%(senderName)s removed %(countRemoved)s and added %(countAdded)s addresses to this room": "%(senderName)s ha rimosso %(countRemoved)s e aggiunto %(countAdded)s indirizzi a questa stanza"
 }
