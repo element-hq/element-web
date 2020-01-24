@@ -65,22 +65,21 @@ export default class VerificationRequestToast extends React.PureComponent {
     accept = async () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
-        const {event} = request;
         // no room id for to_device requests
-        if (event.getRoomId()) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: event.getRoomId(),
-                should_peek: false,
-            });
-        }
         try {
-            await request.accept();
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {verificationRequest: request},
-            });
+            if (request.channel.roomId) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: request.channel.roomId,
+                    should_peek: false,
+                });
+                await request.accept();
+                dis.dispatch({
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {verificationRequest: request},
+                });
+            }
         } catch (err) {
             console.error(err.message);
         }
@@ -89,13 +88,13 @@ export default class VerificationRequestToast extends React.PureComponent {
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
         const {request} = this.props;
-        const {event} = request;
         const userId = request.otherUserId;
-        let nameLabel = event.getRoomId() ? userLabelForEventRoom(userId, event) : userId;
+        const roomId = request.channel.roomId;
+        let nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
         // for legacy to_device verification requests
         if (nameLabel === userId) {
             const client = MatrixClientPeg.get();
-            const user = client.getUser(event.getSender());
+            const user = client.getUser(userId);
             if (user && user.displayName) {
                 nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
             }
