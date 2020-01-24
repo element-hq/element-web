@@ -338,19 +338,31 @@ export default class InviteDialog extends React.PureComponent {
         const recents = [];
         for (const userId in rooms) {
             // Filter out user IDs that are already in the room / should be excluded
-            if (excludedTargetIds.includes(userId)) continue;
+            if (excludedTargetIds.includes(userId)) {
+                console.warn(`[Invite:Recents] Excluding ${userId} from recents`);
+                continue;
+            }
 
             const room = rooms[userId];
             const member = room.getMember(userId);
-            if (!member) continue; // just skip people who don't have memberships for some reason
+            if (!member) {
+                // just skip people who don't have memberships for some reason
+                console.warn(`[Invite:Recents] ${userId} is missing a member object in their own DM (${room.roomId})`);
+                continue;
+            }
 
             const lastEventTs = room.timeline && room.timeline.length
                 ? room.timeline[room.timeline.length - 1].getTs()
                 : 0;
-            if (!lastEventTs) continue; // something weird is going on with this room
+            if (!lastEventTs) {
+                // something weird is going on with this room
+                console.warn(`[Invite:Recents] ${userId} (${room.roomId}) has a weird last timestamp: ${lastEventTs}`);
+                continue;
+            }
 
             recents.push({userId, user: member, lastActive: lastEventTs});
         }
+        if (!recents) console.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);
