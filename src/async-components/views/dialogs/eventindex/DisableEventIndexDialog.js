@@ -22,7 +22,6 @@ import { _t } from '../../../../languageHandler';
 
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
 /*
  * Allows the user to disable the Event Index.
