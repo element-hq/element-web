@@ -370,6 +370,18 @@ ipcMain.on('seshat', async function(ev, payload) {
             }
             break;
 
+        case 'loadFileEvents':
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadFileEvents(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
         case 'loadCheckpoints':
             if (eventIndex === null) ret = [];
             else {
