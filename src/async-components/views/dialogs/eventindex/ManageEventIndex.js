@@ -96,7 +96,7 @@ export default class ManageEventIndexDialog extends React.Component {
 
     _onDisable = async () => {
         Modal.createTrackedDialogAsync("Disable message search", "Disable message search",
-            import("./DisableEventIndex"),
+            import("./DisableEventIndexDialog"),
             null, null, /* priority = */ false, /* static = */ true,
         );
     }
