@@ -62,7 +62,8 @@ class EventIndexPeg {
         return this.initEventIndex();
     }
 
-    /* Initialize the event index.
+    /**
+     * Initialize the event index.
      *
      * @returns {boolean} True if the event index was succesfully initialized,
      * false otherwise.
