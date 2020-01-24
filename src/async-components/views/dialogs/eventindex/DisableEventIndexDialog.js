@@ -53,7 +53,8 @@ export default class DisableEventIndexDialog extends React.Component {
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+        const Spinner = sdk.getComponent('elements.Spinner');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'
@@ -61,15 +62,15 @@ export default class DisableEventIndexDialog extends React.Component {
                 title={_t("Are you sure?")}
             >
                 {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
-                <div className="mx_Dialog_buttons">
-                    <AccessibleButton kind="secondary" onClick={this.props.onFinished}>
-                        {_t("Cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton kind="danger" disabled={this.state.disabling} onClick={this._onDisable}>
-                        {_t("Disable")}
-                    </AccessibleButton>
-                    {this.state.enabling ? <InlineSpinner /> : <div />}
-                </div>
+                {this.state.disabling ? <InlineSpinner /> : <div />}
+                <DialogButtons
+                    primaryButton={_t('Disable')}
+                    onPrimaryButtonClick={this._onDisable}
+                    primaryButtonClass="danger"
+                    onCancel={this.props.onFinished}
+                    disabled={this.state.disabling}
+                >
+                </DialogButtons>
             </BaseDialog>
         );
     }
