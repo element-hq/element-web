@@ -27,7 +27,7 @@ import AccessibleButton from "../../../../components/views/elements/AccessibleBu
 /*
  * Allows the user to disable the Event Index.
  */
-export default class ManageEventIndex extends React.Component {
+export default class DisableEventIndexDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
     }
