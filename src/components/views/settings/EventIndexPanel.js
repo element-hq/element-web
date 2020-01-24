@@ -140,6 +140,22 @@ export default class EventIndexPanel extends React.Component {
                     </div>
                 </div>
             );
+        } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
+            eventIndexingSettings = (
+                <div>
+                    {
+                        _t( "Riot is missing some components required for securely " +
+                            "caching encrypted messages locally. If you'd like to " +
+                            "experiment with this feature, build a custom Riot Desktop " +
+                            "with <nativeLink>search components added</nativeLink>.",
+                            {},
+                            {
+                                'nativeLink': (sub) => <a href="https://github.com/vector-im/riot-web/blob/develop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms">{sub}</a>,
+                            },
+                        )
+                    }
+                </div>
+            );
         } else {
             eventIndexingSettings = (
                 <div>
