@@ -24,10 +24,8 @@ import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
-
 /*
- * Walks the user through the process of creating an e2e key backup
- * on the server.
+ * Allows the user to disable the Event Index.
  */
 export default class ManageEventIndex extends React.Component {
     static propTypes = {
