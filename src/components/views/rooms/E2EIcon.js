@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import {_t, _td} from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
 import {useFeatureEnabled} from "../../../hooks/useSettings";
+import AccessibleButton from "../elements/AccessibleButton";
+import Tooltip from "../elements/Tooltip";
 
 export const E2E_STATE = {
     VERIFIED: "verified",
@@ -51,7 +52,9 @@ const legacyRoomTitles = {
 };
 
 const E2EIcon = ({isUser, status, className, size, onClick}) => {
-    const e2eIconClasses = classNames({
+    const [hover, setHover] = useState(false);
+
+    const classes = classNames({
         mx_E2EIcon: true,
         mx_E2EIcon_warning: status === E2E_STATE.WARNING,
         mx_E2EIcon_normal: status === E2E_STATE.NORMAL,
@@ -70,17 +73,36 @@ const E2EIcon = ({isUser, status, className, size, onClick}) => {
         e2eTitle = legacyRoomTitles[status];
     }
 
-    let style = null;
+    let style;
     if (size) {
         style = {width: `${size}px`, height: `${size}px`};
     }
 
-    const icon = (<div className={e2eIconClasses} style={style} title={e2eTitle ? _t(e2eTitle) : undefined} />);
-    if (onClick) {
-        return (<AccessibleButton onClick={onClick}>{ icon }</AccessibleButton>);
-    } else {
-        return icon;
+    const onMouseOver = () => setHover(true);
+    const onMouseOut = () => setHover(false);
+
+    let tip;
+    if (hover) {
+        tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} />;
     }
+
+    if (onClick) {
+        return (
+            <AccessibleButton
+                onClick={onClick}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+                className={classes}
+                style={style}
+            >
+                { tip }
+            </AccessibleButton>
+        );
+    }
+
+    return <div onMouseOver={onMouseOver} onMouseOut={onMouseOut} className={classes} style={style}>
+        { tip }
+    </div>;
 };
 
 E2EIcon.propTypes = {
