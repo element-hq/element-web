@@ -2079,5 +2079,7 @@
     "Verify User": "Verifica utente",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi.",
     "For maximum security, do this in person.": "Per massima sicurezza, fatelo di persona.",
-    "Start Verification": "Inizia la verifica"
+    "Start Verification": "Inizia la verifica",
+    "%(senderName)s added %(addedAddresses)s and %(count)s other addresses to this room|other": "%(senderName)s ha aggiunto %(addedAddresses)s e %(count)s altri indirizzi a questa stanza",
+    "%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room|other": "%(senderName)s ha rimosso %(removedAddresses)s e %(count)s altri indirizzi da questa stanza"
 }
