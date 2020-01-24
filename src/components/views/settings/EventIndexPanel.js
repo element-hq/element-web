@@ -145,8 +145,12 @@ export default class EventIndexPanel extends React.Component {
                 <div>
                     {
                         _t( "Riot can't securely cache encrypted messages locally " +
-                            "while running in a web browser. Use Riot Desktop for " +
-                            "encrypted messages to appear in search results.",
+                            "while running in a web browser. Use <riotLink>Riot Desktop</riotLink> " +
+                            "for encrypted messages to appear in search results.",
+                            {},
+                            {
+                                'riotLink': (sub) => <a href="https://riot.im/download/desktop">{sub}</a>,
+                            }
                         )
                     }
                 </div>
