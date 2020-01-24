@@ -50,10 +50,9 @@ export default class VerificationPanel extends React.PureComponent {
             </AccessibleButton>;
 
             if (request.requestEvent && request.requestEvent.getId()) {
-                const keyId = `ed25519:${MatrixClientPeg.get().getCrossSigningId()}`;
                 const qrCodeKeys = [
                     [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-                    [keyId, MatrixClientPeg.get().getCrossSigningId()],
+                    [MatrixClientPeg.get().getCrossSigningId(), MatrixClientPeg.get().getCrossSigningId()],
                 ];
                 const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
                 const qrCode = <VerificationQRCode
