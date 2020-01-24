@@ -43,6 +43,7 @@ export default class VerificationQRCode extends React.PureComponent {
             request: this.props.requestEventId,
             action: this.props.action,
             other_user_key: this.props.otherUserKey,
+            secret: this.props.secret,
         };
         for (const key of this.props.keys) {
             query[`key_${key[0]}`] = key[1];
