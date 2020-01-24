@@ -346,6 +346,18 @@ ipcMain.on('seshat', async function(ev, payload) {
             }
             break;
 
+        case 'getStats':
+            if (eventIndex === null) ret = 0;
+            else {
+                try {
+                    ret = await eventIndex.getStats();
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
         case 'removeCrawlerCheckpoint':
             if (eventIndex === null) ret = false;
             else {
