@@ -407,6 +407,27 @@ export default class EventIndex {
         return indexManager.searchEventIndex(searchArgs);
     }
 
+    /**
+     * Load events that contain URLs from the event index.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {number} limit The maximum number of events to fetch.
+     *
+     * @param {string} fromEvent From which event should we continue fetching
+     * events from the index. This is only needed if we're continuing to fill
+     * the timeline, e.g. if we're paginating. This needs to be set to a event
+     * id of an event that was previously fetched with this function.
+     *
+     * @param {string} direction The direction in which we will continue
+     * fetching events. EventTimeline.BACKWARDS to continue fetching events that
+     * are older than the event given in fromEvent, EventTimeline.FORWARDS to
+     * fetch newer events.
+     *
+     * @returns {Promise<MatrixEvent[]>} Resolves to an array of events that
+     * contain URLs.
+     */
     async loadFileEvents(room, limit = 10, fromEvent = null, direction = EventTimeline.BACKWARDS) {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -472,6 +493,33 @@ export default class EventIndex {
         return matrixEvents;
     }
 
+    /**
+     * Fill a timeline with events that contain URLs.
+     *
+     * @param {TimelineSet} timelineSet The TimelineSet the Timeline belongs to,
+     * used to check if we're adding duplicate events.
+     *
+     * @param {Timeline} timeline The Timeline which should be filed with
+     * events.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {number} limit The maximum number of events to fetch.
+     *
+     * @param {string} fromEvent From which event should we continue fetching
+     * events from the index. This is only needed if we're continuing to fill
+     * the timeline, e.g. if we're paginating. This needs to be set to a event
+     * id of an event that was previously fetched with this function.
+     *
+     * @param {string} direction The direction in which we will continue
+     * fetching events. EventTimeline.BACKWARDS to continue fetching events that
+     * are older than the event given in fromEvent, EventTimeline.FORWARDS to
+     * fetch newer events.
+     *
+     * @returns {Promise<boolean>} Resolves to true if events were added to the
+     * timeline, false otherwise.
+     */
     async populateFileTimeline(timelineSet, timeline, room, limit = 10,
                                fromEvent = null, direction = EventTimeline.BACKWARDS) {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
@@ -486,7 +534,7 @@ export default class EventIndex {
             direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS: EventTimeline.BACKWARDS;
         }
 
-        // Add the events to the live timeline of the file panel.
+        // Add the events to the timeline of the file panel.
         matrixEvents.forEach(e => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
                 timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
@@ -503,6 +551,28 @@ export default class EventIndex {
         }
     }
 
+    /**
+     * Emulate a TimelineWindow pagination() request with the event index as the event source
+     *
+     * Might not fetch events from the index if the timeline already contains
+     * events that the window isn't showing.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {TimelineWindow} timelineWindow The timeline window that should be
+     * populated with new events.
+     *
+     * @param {string} direction The direction in which we should paginate.
+     * EventTimeline.BACKWARDS to paginate back, EventTimeline.FORWARDS to
+     * paginate forwards.
+     *
+     * @param {number} limit The maximum number of events to fetch while
+     * paginating.
+     *
+     * @returns {Promise<boolean>} Resolves to a boolean which is true if more
+     * events were successfully retrieved.
+     */
     paginateTimelineWindow(room, timelineWindow, direction, limit) {
         const tl = timelineWindow.getTimelineIndex(direction);
 
