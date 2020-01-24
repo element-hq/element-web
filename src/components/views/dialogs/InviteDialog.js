@@ -713,11 +713,16 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _toggleMember = (member: Member) => {
+        let filterText = this.state.filterText;
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
-        if (idx >= 0) targets.splice(idx, 1);
-        else targets.push(member);
-        this.setState({targets});
+        if (idx >= 0) {
+            targets.splice(idx, 1);
+        } else {
+            targets.push(member);
+            filterText = ""; // clear the filter when the user accepts a suggestion
+        }
+        this.setState({targets, filterText});
     };
 
     _removeMember = (member: Member) => {
@@ -917,7 +922,7 @@ export default class InviteDialog extends React.PureComponent {
                 key={"input"}
                 rows={1}
                 onChange={this._updateFilter}
-                defaultValue={this.state.filterText}
+                value={this.state.filterText}
                 ref={this._editorRef}
                 onPaste={this._onPaste}
             />
