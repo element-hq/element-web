@@ -48,6 +48,7 @@ steps:
       # to save transpiling the files. We run the transpile step explicitly in
       # the 'build' job.
       - "./scripts/ci/install-deps.sh --ignore-scripts"
+      - "yarn run reskindex"
       - "echo '+++ Running Tests'"
       - "yarn test"
     plugins:
