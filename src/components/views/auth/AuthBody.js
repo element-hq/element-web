@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import classnames from 'classnames';
 
 export default class AuthBody extends React.PureComponent {
