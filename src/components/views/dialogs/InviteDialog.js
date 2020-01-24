@@ -338,19 +338,31 @@ export default class InviteDialog extends React.PureComponent {
         const recents = [];
         for (const userId in rooms) {
             // Filter out user IDs that are already in the room / should be excluded
-            if (excludedTargetIds.includes(userId)) continue;
+            if (excludedTargetIds.includes(userId)) {
+                console.warn(`[Invite:Recents] Excluding ${userId} from recents`);
+                continue;
+            }
 
             const room = rooms[userId];
             const member = room.getMember(userId);
-            if (!member) continue; // just skip people who don't have memberships for some reason
+            if (!member) {
+                // just skip people who don't have memberships for some reason
+                console.warn(`[Invite:Recents] ${userId} is missing a member object in their own DM (${room.roomId})`);
+                continue;
+            }
 
             const lastEventTs = room.timeline && room.timeline.length
                 ? room.timeline[room.timeline.length - 1].getTs()
                 : 0;
-            if (!lastEventTs) continue; // something weird is going on with this room
+            if (!lastEventTs) {
+                // something weird is going on with this room
+                console.warn(`[Invite:Recents] ${userId} (${room.roomId}) has a weird last timestamp: ${lastEventTs}`);
+                continue;
+            }
 
             recents.push({userId, user: member, lastActive: lastEventTs});
         }
+        if (!recents) console.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);
@@ -713,11 +725,16 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _toggleMember = (member: Member) => {
+        let filterText = this.state.filterText;
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
-        if (idx >= 0) targets.splice(idx, 1);
-        else targets.push(member);
-        this.setState({targets});
+        if (idx >= 0) {
+            targets.splice(idx, 1);
+        } else {
+            targets.push(member);
+            filterText = ""; // clear the filter when the user accepts a suggestion
+        }
+        this.setState({targets, filterText});
     };
 
     _removeMember = (member: Member) => {
@@ -917,7 +934,7 @@ export default class InviteDialog extends React.PureComponent {
                 key={"input"}
                 rows={1}
                 onChange={this._updateFilter}
-                defaultValue={this.state.filterText}
+                value={this.state.filterText}
                 ref={this._editorRef}
                 onPaste={this._onPaste}
             />
@@ -985,7 +1002,7 @@ export default class InviteDialog extends React.PureComponent {
 
             title = _t("Direct Messages");
             helpText = _t(
-                "If you can't find someone, ask them for their username, or share your " +
+                "If you can't find someone, ask them for their username, share your " +
                 "username (%(userId)s) or <a>profile link</a>.",
                 {userId},
                 {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},

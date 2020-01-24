@@ -62,9 +62,16 @@ export interface SearchArgs {
     room_id: ?string;
 }
 
-export interface HistoricEvent {
+export interface EventAndProfile {
     event: MatrixEvent;
     profile: MatrixProfile;
+}
+
+export interface LoadArgs {
+    roomId: string;
+    limit: number;
+    fromEvent: string;
+    direction: string;
 }
 
 /**
@@ -145,7 +152,7 @@ export default class BaseEventIndexManager {
      *
      * This is used to add a batch of events to the index.
      *
-     * @param {[HistoricEvent]} events The list of events and profiles that
+     * @param {[EventAndProfile]} events The list of events and profiles that
      * should be added to the event index.
      * @param {[CrawlerCheckpoint]} checkpoint A new crawler checkpoint that
      * should be stored in the index which should be used to continue crawling
@@ -158,7 +165,7 @@ export default class BaseEventIndexManager {
      * were already added to the index, false otherwise.
      */
     async addHistoricEvents(
-        events: [HistoricEvent],
+        events: [EventAndProfile],
         checkpoint: CrawlerCheckpoint | null,
         oldCheckpoint: CrawlerCheckpoint | null,
     ): Promise<bool> {
@@ -198,6 +205,26 @@ export default class BaseEventIndexManager {
      * array of crawler checkpoints once they have been loaded from the index.
      */
     async loadCheckpoints(): Promise<[CrawlerCheckpoint]> {
+        throw new Error("Unimplemented");
+    }
+
+    /** Load events that contain an mxc URL to a file from the index.
+     *
+     * @param  {object} args Arguments object for the method.
+     * @param  {string} args.roomId The ID of the room for which the events
+     * should be loaded.
+     * @param  {number} args.limit The maximum number of events to return.
+     * @param  {string} args.fromEvent An event id of a previous event returned
+     * by this method. Passing this means that we are going to continue loading
+     * events from this point in the history.
+     * @param  {string} args.direction The direction to which we should continue
+     * loading events from. This is used only if fromEvent is used as well.
+     *
+     * @return {Promise<[EventAndProfile]>} A promise that will resolve to an
+     * array of Matrix events that contain mxc URLs accompanied with the
+     * historic profile of the sender.
+     */
+    async loadFileEvents(args: LoadArgs): Promise<[EventAndProfile]> {
         throw new Error("Unimplemented");
     }
 

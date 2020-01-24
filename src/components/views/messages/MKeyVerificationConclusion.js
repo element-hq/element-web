@@ -93,7 +93,7 @@ export default class MKeyVerificationConclusion extends React.Component {
         }
 
         if (title) {
-            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent);
+            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId());
             const classes = classNames("mx_EventTile_bubble", "mx_KeyVerification", "mx_KeyVerification_icon", {
                 mx_KeyVerification_icon_verified: request.done,
             });

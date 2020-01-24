@@ -18,6 +18,9 @@ import React from 'react';
 
 import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
+import VerificationQRCode from "../elements/crypto/VerificationQRCode";
+import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {_t} from "../../../languageHandler";
 import E2EIcon from "../rooms/E2EIcon";
 

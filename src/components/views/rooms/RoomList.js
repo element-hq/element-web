@@ -719,7 +719,7 @@ export default createReactClass({
             },
             {
                 list: this.state.lists['im.vector.fake.direct'],
-                label: _t('People'),
+                label: _t('Direct Messages'),
                 tagName: "im.vector.fake.direct",
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
