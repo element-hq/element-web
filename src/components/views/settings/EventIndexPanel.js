@@ -142,6 +142,12 @@ export default class EventIndexPanel extends React.Component {
                 </div>
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
+            const nativeLink = (
+                "https://github.com/vector-im/riot-web/blob/develop/" +
+                "docs/native-node-modules.md#" +
+                "adding-seshat-for-search-in-e2e-encrypted-rooms"
+            );
+
             eventIndexingSettings = (
                 <div>
                     {
@@ -151,7 +157,7 @@ export default class EventIndexPanel extends React.Component {
                             "with <nativeLink>search components added</nativeLink>.",
                             {},
                             {
-                                'nativeLink': (sub) => <a href="https://github.com/vector-im/riot-web/blob/develop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms">{sub}</a>,
+                                'nativeLink': (sub) => <a href={nativeLink}>{sub}</a>,
                             },
                         )
                     }
