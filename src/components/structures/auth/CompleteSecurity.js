@@ -44,9 +44,12 @@ export default class CompleteSecurity extends React.Component {
             await accessSecretStorage(async () => {
                 await cli.checkOwnCrossSigningTrust();
             });
-            this.setState({
-                phase: PHASE_DONE,
-            });
+
+            if (cli.getCrossSigningId()) {
+                this.setState({
+                    phase: PHASE_DONE,
+                });
+            }
         } catch (e) {
             // this will throw if the user hits cancel, so ignore
         }
@@ -74,7 +77,6 @@ export default class CompleteSecurity extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
@@ -161,8 +163,7 @@ export default class CompleteSecurity extends React.Component {
 
         return (
             <AuthPage>
-                <AuthHeader />
-                <AuthBody>
+                <AuthBody header={false}>
                     <h2 className="mx_CompleteSecurity_header">
                         {icon}
                         {title}

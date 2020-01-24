@@ -796,6 +796,7 @@ export default createReactClass({
             return;
         }
 
+        // Duplication between here and _updateE2eStatus in RoomTile
         /* At this point, the user has encryption on and cross-signing on */
         const e2eMembers = await room.getEncryptionTargetMembers();
         const verified = [];
@@ -812,10 +813,10 @@ export default createReactClass({
         /* Check all verified user devices. */
         for (const userId of verified) {
             const devices = await cli.getStoredDevicesForUser(userId);
-            const allDevicesVerified = devices.every(({deviceId}) => {
-                return cli.checkDeviceTrust(userId, deviceId).isVerified();
+            const anyDeviceNotVerified = devices.some(({deviceId}) => {
+                return !cli.checkDeviceTrust(userId, deviceId).isVerified();
             });
-            if (!allDevicesVerified) {
+            if (anyDeviceNotVerified) {
                 this.setState({
                     e2eStatus: "warning",
                 });

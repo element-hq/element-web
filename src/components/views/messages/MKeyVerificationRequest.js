@@ -85,7 +85,7 @@ export default class MKeyVerificationRequest extends React.Component {
         if (userId === myUserId) {
             return _t("You accepted");
         } else {
-            return _t("%(name)s accepted", {name: getNameForEventRoom(userId, this.props.mxEvent)});
+            return _t("%(name)s accepted", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
         }
     }
 
@@ -95,7 +95,7 @@ export default class MKeyVerificationRequest extends React.Component {
         if (userId === myUserId) {
             return _t("You cancelled");
         } else {
-            return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent)});
+            return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
         }
     }
 
@@ -128,10 +128,11 @@ export default class MKeyVerificationRequest extends React.Component {
         }
 
         if (!request.initiatedByMe) {
+            const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             title = (<div className="mx_KeyVerification_title">{
-                _t("%(name)s wants to verify", {name: getNameForEventRoom(request.requestingUserId, mxEvent)})}</div>);
+                _t("%(name)s wants to verify", {name})}</div>);
             subtitle = (<div className="mx_KeyVerification_subtitle">{
-                userLabelForEventRoom(request.requestingUserId, mxEvent)}</div>);
+                userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
             if (request.requested && !request.observeOnly) {
                 stateNode = (<div className="mx_KeyVerification_buttons">
                     <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
@@ -142,7 +143,7 @@ export default class MKeyVerificationRequest extends React.Component {
             title = (<div className="mx_KeyVerification_title">{
                 _t("You sent a verification request")}</div>);
             subtitle = (<div className="mx_KeyVerification_subtitle">{
-                userLabelForEventRoom(request.receivingUserId, mxEvent)}</div>);
+                userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId())}</div>);
         }
 
         if (title) {
