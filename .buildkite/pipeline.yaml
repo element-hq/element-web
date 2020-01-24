@@ -3,7 +3,7 @@ steps:
     command:
       - "echo '--- Install js-sdk'"
       - "./scripts/ci/install-deps.sh --ignore-scripts"
-      - "echo '+++ Lint"
+      - "echo '+++ Lint'"
       - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
@@ -13,7 +13,7 @@ steps:
     command:
       - "echo '--- Install"
       - "yarn install --ignore-scripts"
-      - "echo '+++ Lint"
+      - "echo '+++ Lint'"
       - "yarn lint:ts"
     plugins:
       - docker#v3.0.1:
@@ -21,9 +21,9 @@ steps:
 
   - label: ":eslint: Types Lint"
     command:
-      - "echo '--- Install"
+      - "echo '--- Install'"
       - "yarn install --ignore-scripts"
-      - "echo '+++ Lint"
+      - "echo '+++ Lint'"
       - "yarn lint:types"
     plugins:
       - docker#v3.0.1:
