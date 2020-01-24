@@ -150,7 +150,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'riotLink': (sub) => <a href="https://riot.im/download/desktop">{sub}</a>,
-                            }
+                            },
                         )
                     }
                 </div>
