@@ -266,6 +266,11 @@ export default class EventIndex extends EventEmitter {
                 continue;
             }
 
+            if (cancelled) {
+                this.crawlerCheckpoints.push(checkpoint);
+                break;
+            }
+
             if (res.chunk.length === 0) {
                 console.log("EventIndex: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
