@@ -27,7 +27,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
 import * as sdk from "../../../index";
 
-export class TopLeftMenu extends React.Component {
+export default class TopLeftMenu extends React.Component {
     static propTypes = {
         displayName: PropTypes.string.isRequired,
         userId: PropTypes.string.isRequired,
