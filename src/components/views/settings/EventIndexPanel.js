@@ -21,7 +21,7 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
-import {formatBytes} from "../../../utils/FormattingUtils";
+import {formatBytes, formatCount} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 
 export default class EventIndexPanel extends React.Component {
@@ -115,7 +115,7 @@ export default class EventIndexPanel extends React.Component {
                         {_t( "Securely cache encrypted messages locally for them " +
                              "to appear in search results, using ")
                         } {formatBytes(this.state.eventIndexSize, 0)}
-                        {_t( " to store messages from ")} {this.state.roomCount} {_t("rooms.")}
+                        {_t( " to store messages from ")} {formatCount(this.state.roomCount)} {_t("rooms.")}
                     </div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this._onManage}>
