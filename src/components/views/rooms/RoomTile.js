@@ -34,6 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {_t} from "../../../languageHandler";
 import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 import E2EIcon from './E2EIcon';
+import InviteOnlyIcon from './InviteOnlyIcon';
 // eslint-disable-next-line camelcase
 import rate_limited_func from '../../../ratelimitedfunc';
 
@@ -411,7 +412,6 @@ export default createReactClass({
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
             'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
-            'mx_RoomTile_isPrivate': this.state.joinRule == "invite" && !dmUserId,
         });
 
         const avatarClasses = classNames({
@@ -523,7 +523,9 @@ export default createReactClass({
 
         let privateIcon = null;
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            privateIcon = <div className="mx_RoomTile_PrivateIcon" />;
+            if (this.state.joinRule == "invite" && !dmUserId) {
+                privateIcon = <InviteOnlyIcon />;
+            }
         }
 
         let e2eIcon = null;

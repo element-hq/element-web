@@ -32,6 +32,7 @@ import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
+import InviteOnlyIcon from './InviteOnlyIcon';
 
 export default createReactClass({
     displayName: 'RoomHeader',
@@ -162,11 +163,12 @@ export default createReactClass({
 
         const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
-        const joinRuleClass = classNames("mx_RoomHeader_PrivateIcon",
-                                         {"mx_RoomHeader_isPrivate": joinRule === "invite"});
-        const privateIcon = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
-            <div className={joinRuleClass} /> :
-            undefined;
+        let privateIcon;
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            if (joinRule == "invite") {
+                privateIcon = <InviteOnlyIcon />;
+            }
+        }
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
