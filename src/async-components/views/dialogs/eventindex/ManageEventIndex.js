@@ -24,12 +24,10 @@ import {formatBytes} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
-
 /*
- * Walks the user through the process of creating an e2e key backup
- * on the server.
+ * Allows the user to introspect the event index state and disable it.
  */
-export default class ManageEventIndex extends React.Component {
+export default class ManageEventIndexDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
     }
