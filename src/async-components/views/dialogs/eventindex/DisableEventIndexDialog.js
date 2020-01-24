@@ -65,8 +65,7 @@ export default class DisableEventIndexDialog extends React.Component {
                     primaryButtonClass="danger"
                     onCancel={this.props.onFinished}
                     disabled={this.state.disabling}
-                >
-                </DialogButtons>
+                />
             </BaseDialog>
         );
     }
