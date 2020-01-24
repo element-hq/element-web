@@ -69,7 +69,8 @@ export default class EventIndex {
         client.removeListener('Room.timelineReset', this.onTimelineReset);
     }
 
-    /** Get crawler checkpoints for the encrypted rooms and store them in the index.
+    /**
+     * Get crawler checkpoints for the encrypted rooms and store them in the index.
      */
     async addInitialCheckpoints() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -80,7 +81,7 @@ export default class EventIndex {
             return client.isRoomEncrypted(room.roomId);
         };
 
-        // We only care to crawl the encrypted rooms, non-encrypted.
+        // We only care to crawl the encrypted rooms, non-encrypted
         // rooms can use the search provided by the homeserver.
         const encryptedRooms = rooms.filter(isRoomEncrypted);
 
