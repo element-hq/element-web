@@ -20,7 +20,7 @@ import { _t } from '../languageHandler';
 export function getNameForEventRoom(userId, roomId) {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
-    const member = room.getMember(userId);
+    const member = room && room.getMember(userId);
     return member ? member.name : userId;
 }
 
