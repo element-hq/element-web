@@ -592,8 +592,11 @@ async function startMatrixClient(startSyncing=true) {
     Mjolnir.sharedInstance().start();
 
     if (startSyncing) {
-        await MatrixClientPeg.start();
+        // The client might want to populate some views with events from the
+        // index (e.g. the FilePanel), therefore initialize the event index
+        // before the client.
         await EventIndexPeg.init();
+        await MatrixClientPeg.start();
     } else {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
