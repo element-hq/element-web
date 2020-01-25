@@ -24,6 +24,10 @@ export default class ToastContainer extends React.Component {
         super();
         this.state = {toasts: ToastStore.sharedInstance().getToasts()};
 
+        // Start listening here rather than in componentDidMount because
+        // toasts may dismiss themselves in their didMount if they find
+        // they're already irrelevant by the time they're mounted, and
+        // our own componentDidMount is too late.
         ToastStore.sharedInstance().on('update', this._onToastStoreUpdate);
     }
 
