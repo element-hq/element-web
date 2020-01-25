@@ -2102,5 +2102,14 @@
     "Upgrade your encryption": "Mettre à niveau votre chiffrement",
     "Set up encryption": "Configurer le chiffrement",
     "Encryption upgraded": "Chiffrement mis à niveau",
-    "Encryption setup complete": "Configuration du chiffrement terminé"
+    "Encryption setup complete": "Configuration du chiffrement terminé",
+    "%(senderName)s turned on end-to-end encryption.": "%(senderName)s a activé le chiffrement de bout en bout.",
+    "%(senderName)s turned on end-to-end encryption (unrecognised algorithm %(algorithm)s).": "%(senderName)s a activé le chiffrement de bout en bout (algorithme %(algorithm)s non reconnu).",
+    "Someone is using an unknown device": "Quelqu'un utilise un appareil inconnu",
+    "This room is end-to-end encrypted": "Ce salon est chiffré de bout en bout",
+    "Everyone in this room is verified": "Tout le monde dans ce salon est vérifié",
+    "Invite only": "Uniquement sur invitation",
+    "Send a reply…": "Envoyer une réponse…",
+    "Send a message…": "Envoyer un message…",
+    "If you can't find someone, ask them for their username, share your username (%(userId)s) or <a>profile link</a>.": "Si vous n’arrivez pas à trouver quelqu’un, demandez-lui son nom d’utilisateur, partagez votre nom d’utilisateur (%(userId)s) ou votre <a>lien de profil</a>."
 }
