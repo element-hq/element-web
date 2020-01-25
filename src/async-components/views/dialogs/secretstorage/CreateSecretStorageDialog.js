@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
@@ -52,6 +53,14 @@ function selectText(target) {
  * Secret Storage in account data.
  */
 export default class CreateSecretStorageDialog extends React.PureComponent {
+    static propTypes = {
+        hasCancel: PropTypes.bool,
+    };
+
+    defaultProps = {
+        hasCancel: true,
+    };
+
     constructor(props) {
         super(props);
 
@@ -82,9 +91,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         this._fetchBackupInfo();
         this._queryKeyUploadAuth();
+
+        MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
     }
 
     componentWillUnmount() {
+        MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
         if (this._setZxcvbnResultTimeout !== null) {
             clearTimeout(this._setZxcvbnResultTimeout);
         }
@@ -92,7 +104,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     async _fetchBackupInfo() {
         const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-        const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+        const backupSigStatus = (
+            // we may not have started crypto yet, in which case we definitely don't trust the backup
+            MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
+        );
 
         const phase = backupInfo ?
             (backupSigStatus.usable ? PHASE_MIGRATE : PHASE_RESTORE_KEY_BACKUP) :
@@ -125,6 +140,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 canUploadKeysWithPasswordOnly,
             });
         }
+    }
+
+    _onKeyBackupStatusChange = () => {
+        this._fetchBackupInfo();
     }
 
     _collectRecoveryKeyNode = (n) => {
@@ -229,7 +248,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _onRestoreKeyBackupClick = () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
             /* priority = */ false, /* static = */ true,
         );
     }
@@ -411,6 +430,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _renderPhasePassPhrase() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let strengthMeter;
         let helpText;
@@ -472,9 +492,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><button onClick={this._onSkipPassPhraseClick} >
+                <p><AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
                     {_t("Set up with a recovery key")}
-                </button></p>
+                </AccessibleButton></p>
             </details>
         </div>;
     }
@@ -554,6 +574,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             );
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div>
             <p>{_t(
                 "Your recovery key is a safety net - you can use it to restore " +
@@ -572,12 +593,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                         <code ref={this._collectRecoveryKeyNode}>{this._encodedRecoveryKey}</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
-                        <button className="mx_Dialog_primary" onClick={this._onCopyClick}>
+                        <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>
                             {_t("Copy to clipboard")}
-                        </button>
-                        <button className="mx_Dialog_primary" onClick={this._onDownloadClick}>
+                        </AccessibleButton>
+                        <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onDownloadClick}>
                             {_t("Download")}
-                        </button>
+                        </AccessibleButton>
                     </div>
                 </div>
             </div>
@@ -740,7 +761,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
                 headerImage={headerImage}
-                hasCancel={[PHASE_PASSPHRASE].includes(this.state.phase)}
+                hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
             >
             <div>
                 {content}
