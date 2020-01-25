@@ -23,9 +23,7 @@ export default class ToastContainer extends React.Component {
     constructor() {
         super();
         this.state = {toasts: ToastStore.sharedInstance().getToasts()};
-    }
 
-    componentDidMount() {
         ToastStore.sharedInstance().on('update', this._onToastStoreUpdate);
     }
 
