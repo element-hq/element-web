@@ -256,6 +256,9 @@ export default createReactClass({
             // logout page.
             Lifecycle.loadSession({});
         }
+
+        this._accountPassword = null;
+        this._accountPasswordTimer = null;
     },
 
     componentDidMount: function() {
@@ -352,6 +355,8 @@ export default createReactClass({
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
+
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
     },
 
     componentWillUpdate: function(props, state) {
@@ -1729,9 +1734,8 @@ export default createReactClass({
         this.showScreen("forgot_password");
     },
 
-    onRegisterFlowComplete: function(credentials) {
-        this.onUserCompletedLoginFlow();
-        return this.onRegistered(credentials);
+    onRegisterFlowComplete: function(credentials, password) {
+        return this.onUserCompletedLoginFlow(credentials, password);
     },
 
     // returns a promise which resolves to the new MatrixClient
@@ -1822,7 +1826,14 @@ export default createReactClass({
         this._loggedInView = ref;
     },
 
-    async onUserCompletedLoginFlow(credentials) {
+    async onUserCompletedLoginFlow(credentials, password) {
+        this._accountPassword = password;
+        // self-destruct the password after 5mins
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
+        this._accountPasswordTimer = setTimeout(() => {
+            this._accountPassword = null;
+            this._accountPasswordTimer = null;
+        }, 60 * 5 * 1000);
         // Wait for the client to be logged in (but not started)
         // which is enough to ask the server about account data.
         const loggedIn = new Promise(resolve => {
@@ -1836,7 +1847,7 @@ export default createReactClass({
         });
 
         // Create and start the client in the background
-        Lifecycle.setLoggedIn(credentials);
+        const setLoggedInPromise = Lifecycle.setLoggedIn(credentials);
         await loggedIn;
 
         const cli = MatrixClientPeg.get();
@@ -1865,6 +1876,8 @@ export default createReactClass({
         } else {
             this._onLoggedIn();
         }
+
+        return setLoggedInPromise;
     },
 
     // complete security / e2e setup has finished
@@ -1896,6 +1909,7 @@ export default createReactClass({
             view = (
                 <E2eSetup
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
+                    accountPassword={this._accountPassword}
                 />
             );
         } else if (this.state.view === VIEWS.POST_REGISTRATION) {
