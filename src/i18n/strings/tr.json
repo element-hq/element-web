@@ -1532,5 +1532,11 @@
     "Show display name changes": "Ekran isim değişikliklerini göster",
     "Enable URL previews for this room (only affects you)": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
     "Enable URL previews by default for participants in this room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
-    "Enable widget screenshots on supported widgets": "Desteklenen görsel bileşenlerde anlık görüntüleri aç"
+    "Enable widget screenshots on supported widgets": "Desteklenen görsel bileşenlerde anlık görüntüleri aç",
+    "Show recently visited rooms above the room list": "En son ziyaret edilen odaları oda listesinin en üstünde göster",
+    "Show hidden events in timeline": "Zaman çizelgesinde gizli olayları göster",
+    "Encrypted messages in one-to-one chats": "Birebir sohbetlerdeki şifrelenmiş mesajlar",
+    "Encrypted messages in group chats": "Grup sohbetlerdeki şifrelenmiş mesajlar",
+    "This is your list of users/servers you have blocked - don't leave the room!": "Bu sizin engellediğiniz kullanıcılar/sunucular listeniz - odadan ayrılmayın!",
+    "Got It": "Anlaşıldı"
 }
