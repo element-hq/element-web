@@ -1,6 +1,8 @@
 steps:
   - label: ":eslint: JS Lint"
     command:
+      - "echo '--- Fetching Dependencies'"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
       - "yarn install"
       - "yarn lint:js"
     plugins:
