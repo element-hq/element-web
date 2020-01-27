@@ -63,6 +63,7 @@ export default class DisableEventIndexDialog extends React.Component {
                     primaryButton={_t('Disable')}
                     onPrimaryButtonClick={this._onDisable}
                     primaryButtonClass="danger"
+                    cancelButtonClass="warning"
                     onCancel={this.props.onFinished}
                     disabled={this.state.disabling}
                 />
