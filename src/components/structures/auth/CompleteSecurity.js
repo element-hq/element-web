@@ -35,6 +35,9 @@ export default class CompleteSecurity extends React.Component {
 
         this.state = {
             phase: PHASE_INTRO,
+            // this serves dual purpose as the object for the request logic and
+            // the presence of it insidicating that we're in 'verify mode'.
+            // Because of the latter, it lives in the state.
             verificationRequest: null,
         };
         MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
