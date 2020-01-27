@@ -20,8 +20,8 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import ToastStore from './stores/ToastStore';
 
-function toastKey(device) {
-    return 'newsession_' + device.deviceId;
+function toastKey(deviceId) {
+    return 'newsession_' + deviceId;
 }
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
@@ -34,6 +34,8 @@ export default class DeviceListener {
     }
 
     constructor() {
+        // set of device IDs we're currently showing toasts for
+        this._activeNagToasts = new Set();
         // device IDs for which the user has dismissed the verify toast ('Later')
         this._dismissed = new Set();
         // has the user dismissed any of the various nag toasts to setup encryption on this device?
@@ -145,22 +147,32 @@ export default class DeviceListener {
             ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
         }
 
+        const newActiveToasts = new Set();
+
         const devices = await cli.getStoredDevicesForUser(cli.getUserId());
         for (const device of devices) {
             if (device.deviceId == cli.deviceId) continue;
 
             const deviceTrust = await cli.checkDeviceTrust(cli.getUserId(), device.deviceId);
             if (deviceTrust.isCrossSigningVerified() || this._dismissed.has(device.deviceId)) {
-                ToastStore.sharedInstance().dismissToast(toastKey(device));
+                ToastStore.sharedInstance().dismissToast(toastKey(device.deviceId));
             } else {
+                this._activeNagToasts.add(device.deviceId);
                 ToastStore.sharedInstance().addOrReplaceToast({
-                    key: toastKey(device),
+                    key: toastKey(device.deviceId),
                     title: _t("New Session"),
                     icon: "verification_warning",
                     props: {deviceId: device.deviceId},
                     component: sdk.getComponent("toasts.NewSessionToast"),
                 });
+                newActiveToasts.add(device.deviceId);
             }
         }
+
+        // clear any other outstanding toasts (eg. logged out devices)
+        for (const deviceId of this._activeNagToasts) {
+            if (!newActiveToasts.has(deviceId)) ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
+        }
+        this._activeNagToasts = newActiveToasts;
     }
 }
