@@ -66,16 +66,16 @@ limitations under the License.
     margin-bottom: 8px;
     border-width: 1px 1px;
     border-color: $primary-hairline-color;
+    border-style: solid;
     border-radius: 5px;
 
     .protocol-icon {
         float: left;
-        margin-right: 30px;
+        margin-right: 5px;
         img {
             border-radius: 5px;
             border-width: 1px 1px;
             border-color: $primary-hairline-color;
-            border-style: solid;
         }
         span {
             /* Correct letter placement */
