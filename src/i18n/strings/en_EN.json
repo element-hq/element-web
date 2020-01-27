@@ -88,7 +88,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Verify this Session": "Verify this Session",
+    "Verify this session": "Verify this session",
     "Encryption upgrade available": "Encryption upgrade available",
     "Set up encryption": "Set up encryption",
     "New Session": "New Session",
