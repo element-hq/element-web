@@ -18,10 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import Pill from "../../../elements/Pill";
-import {makeUserPermalink} from "../../../../../utils/permalinks/Permalinks";
-import BaseAvatar from "../../../avatars/BaseAvatar";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import BridgeTile from "../../BridgeTile";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -35,17 +32,6 @@ export default class BridgeSettingsTab extends React.Component {
 
     constructor() {
         super();
-
-        this.state = {
-            showMoreCard: null,
-        };
-    }
-
-
-    _showMoreDetails(eventId) {
-        this.setState({
-            showMoreCard: eventId,
-        });
     }
 
     _renderBridgeCard(event, room) {
@@ -53,68 +39,7 @@ export default class BridgeSettingsTab extends React.Component {
         if (!content || !content.channel || !content.protocol) {
             return null;
         }
-        const { channel, network } = content;
-        const protocolName = content.protocol.displayname || content.protocol.id;
-        const channelName = channel.displayname || channel.id;
-        const networkName = network ? network.displayname || network.id : protocolName;
-
-        let creator = null;
-        if (content.creator) {
-            creator = _t("This bridge was provisioned by <user />.", {}, {
-                    user: <Pill
-                        type={Pill.TYPE_USER_MENTION}
-                        room={room}
-                        url={makeUserPermalink(content.creator)}
-                        shouldShowPillAvatar={true}
-                    />,
-            });
-        }
-
-        const bot = _t("This bridge is managed by <user />.", {}, {
-            user: <Pill
-                type={Pill.TYPE_USER_MENTION}
-                room={room}
-                url={makeUserPermalink(event.getSender())}
-                shouldShowPillAvatar={true}
-                />,
-        });
-
-        const avatarUrl = network.avatar ? getHttpUriForMxc(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            network.avatar, 32, 32, "crop",
-        ) : null;
-
-        const networkIcon = <BaseAvatar className="protocol-icon"
-            width={48}
-            height={48}
-            resizeMethod='crop'
-            name={ protocolName }
-            idName={ protocolName }
-            url={ avatarUrl }
-        />;
-
-        const workspaceChannelDetails = _t("Workspace: %(networkName)s      Channel: %(channelName)s", {
-            networkName,
-            channelName,
-        });
-        const id = event.getId();
-        const isVisible = this.state.showMoreCard === id;
-        const metadataClassname = "metadata " + (isVisible ? "visible" : "");
-        return (<li key={id}>
-            <div className="column-icon">
-                {networkIcon}
-            </div>
-            <div className="column-data">
-                <h3>{protocolName}</h3>
-                <p className="workspace-channel-details">
-                    {workspaceChannelDetails}
-                </p>
-                <p className={metadataClassname}>
-                    {creator} {bot}
-                </p>
-                <a href="#" onClick={() => this._showMoreDetails(isVisible ? null : id)}>Show { isVisible ? "less" : "more" } </a>
-            </div>
-        </li>);
+        return <BridgeTile room={room} ev={event}></BridgeTile>
     }
 
     static getBridgeStateEvents(roomId) {
