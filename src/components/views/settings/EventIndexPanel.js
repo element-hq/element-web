@@ -157,7 +157,8 @@ export default class EventIndexPanel extends React.Component {
                             "with <nativeLink>search components added</nativeLink>.",
                             {},
                             {
-                                'nativeLink': (sub) => <a href={nativeLink}>{sub}</a>,
+                                'nativeLink': (sub) => <a href={nativeLink} target="_blank"
+                                    rel="noopener">{sub}</a>,
                             },
                         )
                     }
@@ -172,7 +173,8 @@ export default class EventIndexPanel extends React.Component {
                             "for encrypted messages to appear in search results.",
                             {},
                             {
-                                'riotLink': (sub) => <a href="https://riot.im/download/desktop">{sub}</a>,
+                                'riotLink': (sub) => <a href="https://riot.im/download/desktop"
+                                    target="_blank" rel="noopener">{sub}</a>,
                             },
                         )
                     }
