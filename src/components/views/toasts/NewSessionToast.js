@@ -34,11 +34,12 @@ export default class VerifySessionToast extends React.PureComponent {
 
     _onReviewClick = async () => {
         const cli = MatrixClientPeg.get();
-        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
+        const NewSessionReviewDialog =
+            sdk.getComponent('views.dialogs.NewSessionReviewDialog');
 
         const device = await cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
 
-        Modal.createTrackedDialog('New Session Verify', 'Starting dialog', DeviceVerifyDialog, {
+        Modal.createTrackedDialog('New Session Review', 'Starting dialog', NewSessionReviewDialog, {
             userId: MatrixClientPeg.get().getUserId(),
             device,
         }, null, /* priority = */ false, /* static = */ true);
