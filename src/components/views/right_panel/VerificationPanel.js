@@ -35,21 +35,18 @@ export default class VerificationPanel extends React.PureComponent {
         // TODO change the button into a spinner when on click
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
-        if (!request.requestEvent || !request.requestEvent.getId()) {
+        const cli = MatrixClientPeg.get();
+        const crossSigningInfo = cli.getStoredCrossSigningForUser(request.otherUserId);
+        if (!crossSigningInfo || !request.requestEvent || !request.requestEvent.getId()) {
             // TODO handle this error case
             return <p>request.requestEvent.getId()</p>;
         }
 
+        const myKeyId = cli.getCrossSigningId();
         const qrCodeKeys = [
-            [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-            [MatrixClientPeg.get().getCrossSigningId(), MatrixClientPeg.get().getCrossSigningId()],
+            [cli.getDeviceId(), cli.getDeviceEd25519Key()],
+            [myKeyId, myKeyId],
         ];
-        const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
-
-        if (!crossSigningInfo) {
-            // TODO handle this error case
-            return <p>crossSigningInfo</p>;
-        }
 
         return <React.Fragment>
             <div className="mx_UserInfo_container">
