@@ -55,6 +55,7 @@ function selectText(target) {
 export default class CreateSecretStorageDialog extends React.PureComponent {
     static propTypes = {
         hasCancel: PropTypes.bool,
+        accountPassword: PropTypes.string,
     };
 
     defaultProps = {
@@ -82,7 +83,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             canUploadKeysWithPasswordOnly: null,
-            accountPassword: '',
+            accountPassword: props.accountPassword,
             accountPasswordCorrect: null,
             // set if we are 'upgrading' encryption (making an SSSS store from
             // an existing key backup secret).

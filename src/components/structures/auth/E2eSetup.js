@@ -22,6 +22,7 @@ import * as sdk from '../../../index';
 export default class E2eSetup extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
+        accountPassword: PropTypes.string,
     };
 
     constructor() {
@@ -40,6 +41,7 @@ export default class E2eSetup extends React.Component {
                     <AsyncWrapper prom={this._createStorageDialogPromise}
                         hasCancel={false}
                         onFinished={this.props.onFinished}
+                        accountPassword={this.props.accountPassword}
                     />
                 </AuthBody>
             </AuthPage>
