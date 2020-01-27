@@ -31,6 +31,7 @@ import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
+import DMRoomMap from '../../../utils/DMRoomMap';
 import E2EIcon from './E2EIcon';
 import InviteOnlyIcon from './InviteOnlyIcon';
 
@@ -161,10 +162,12 @@ export default createReactClass({
             <E2EIcon status={this.props.e2eStatus} /> :
             undefined;
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
         const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
         let privateIcon;
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        // Don't show an invite-only icon for DMs. Users know they're invite-only.
+        if (!dmUserId && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             if (joinRule == "invite") {
                 privateIcon = <InviteOnlyIcon />;
             }
