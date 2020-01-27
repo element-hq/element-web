@@ -1,3 +1,76 @@
+Changes in [1.5.8](https://github.com/vector-im/riot-web/releases/tag/v1.5.8) (2020-01-27)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.8-rc.2...v1.5.8)
+
+ * Fixes for alias display and copy / paste on composer
+
+Changes in [1.5.8-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.5.8-rc.2) (2020-01-22)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.8-rc.1...v1.5.8-rc.2)
+
+ * Fix incorrect version of react-sdk
+
+Changes in [1.5.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.8-rc.1) (2020-01-22)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.7...v1.5.8-rc.1)
+
+This version contains an upgrade to the cryptography database
+version. Once users run this version, their session's indexeddb
+store will be upgraded and older version of Riot will no longer
+be able to read it. Users will have to log out and log in if
+the version of Riot is downgraded back to a previous version.
+
+ * Fix webpack config (by stealing Dave's config)
+   [\#11994](https://github.com/vector-im/riot-web/pull/11994)
+ * Fix webpack to babel js-sdk & react-sdk but no other deps
+   [\#11947](https://github.com/vector-im/riot-web/pull/11947)
+ * Update from Weblate
+   [\#11934](https://github.com/vector-im/riot-web/pull/11934)
+ * Fix rageshake post-sourcemaps
+   [\#11926](https://github.com/vector-im/riot-web/pull/11926)
+ * Fix yarn start concurrent commands
+   [\#11895](https://github.com/vector-im/riot-web/pull/11895)
+ * Run the react-sdk reskindexer for developers
+   [\#11894](https://github.com/vector-im/riot-web/pull/11894)
+ * Update labs documentation for feature_ftue_dms given new scope
+   [\#11893](https://github.com/vector-im/riot-web/pull/11893)
+ * Fix indentation on webpack config and make sourcemapped files legible
+   [\#11892](https://github.com/vector-im/riot-web/pull/11892)
+ * Remove spinner check
+   [\#11891](https://github.com/vector-im/riot-web/pull/11891)
+ * Don't minifiy builds of develop through CI packaging
+   [\#11867](https://github.com/vector-im/riot-web/pull/11867)
+ * Use Jest for tests
+   [\#11869](https://github.com/vector-im/riot-web/pull/11869)
+ * Support application/wasm in Docker image
+   [\#11858](https://github.com/vector-im/riot-web/pull/11858)
+ * Fix sourcemaps by refactoring the build system
+   [\#11843](https://github.com/vector-im/riot-web/pull/11843)
+ * Disable event indexing on develop
+   [\#11850](https://github.com/vector-im/riot-web/pull/11850)
+ * Updated blog url
+   [\#11792](https://github.com/vector-im/riot-web/pull/11792)
+ * Enable and document presence in room list feature flag
+   [\#11829](https://github.com/vector-im/riot-web/pull/11829)
+ * Add stub service worker so users can install on desktop with Chrome
+   [\#11774](https://github.com/vector-im/riot-web/pull/11774)
+ * Update from Weblate
+   [\#11826](https://github.com/vector-im/riot-web/pull/11826)
+ * Sourcemaps: develop -> feature branch
+   [\#11802](https://github.com/vector-im/riot-web/pull/11802)
+ * Update build scripts for new process
+   [\#11801](https://github.com/vector-im/riot-web/pull/11801)
+ * Make the webpack config work for us
+   [\#11712](https://github.com/vector-im/riot-web/pull/11712)
+ * Updates URL for Electron Command Line Switches
+   [\#11810](https://github.com/vector-im/riot-web/pull/11810)
+ * Import from src/ for the react-sdk and js-sdk
+   [\#11714](https://github.com/vector-im/riot-web/pull/11714)
+ * Convert components to ES6 exports
+   [\#11713](https://github.com/vector-im/riot-web/pull/11713)
+ * Remove now-retired package.json property
+   [\#11660](https://github.com/vector-im/riot-web/pull/11660)
+
 Changes in [1.5.7](https://github.com/vector-im/riot-web/releases/tag/v1.5.7) (2020-01-13)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.7-rc.2...v1.5.7)
