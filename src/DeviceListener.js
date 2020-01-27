@@ -34,7 +34,7 @@ export default class DeviceListener {
     }
 
     constructor() {
-        // set of device ID's we're currently showing toasts for
+        // set of device IDs we're currently showing toasts for
         this._activeNagToasts = new Set();
         // device IDs for which the user has dismissed the verify toast ('Later')
         this._dismissed = new Set();
