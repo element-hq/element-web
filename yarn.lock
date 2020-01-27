@@ -1010,6 +1010,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.8.3":
+  version "7.8.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.3.tgz#0811944f73a6c926bb2ad35e918dcc1bfab279f1"
+  integrity sha512-fVHx1rzEmwB130VTkLnxR+HmxcTjGzH12LYQcFFoBwakMd3aOMD4OsRN7tGG/UOYE2ektgFrS8uACAoRk1CY0w==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.4.0", "@babel/template@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.8.3.tgz#e02ad04fe262a657809327f578056ca15fd4d1b8"
@@ -7535,11 +7542,12 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
-matrix-js-sdk@4.0.0-rc.1:
-  version "4.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-4.0.0-rc.1.tgz#160d445364aa8ff36ae4fffb0ebc944f680afa4e"
-  integrity sha512-1tP9fUCU5I4bXQQHuVlKHbpySh71aM6sugVC6L8ikG1ebZuKkAc2tXf1tiHizp3hZadHoTZ1PGH19ZFlKDZ8Qw==
+matrix-js-sdk@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-4.0.0.tgz#c81bdc905af2ab1634527e5f542f2f15977d31cf"
+  integrity sha512-Xbe36xL443qtEBH4xk0k39JabolqZfloK7fwYGMb/PgWO26VOzvw94XWahnIr5w83oxBAF9nFmP+7EnPG6IHnA==
   dependencies:
+    "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
     browser-request "^0.3.3"
     bs58 "^4.0.1"
@@ -7557,11 +7565,12 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@2.0.0-rc.2:
-  version "2.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.0.0-rc.2.tgz#e6d547221374b94f0e47b5f4736cac3877cc1eff"
-  integrity sha512-5rVoaO4bsaUoYavWS6TnUrXYMv9FV0n4534zEFtFOK/du9zjqGt101oNZaiWMJUGmEv5HRzT8tvlQMREjpRLfg==
+matrix-react-sdk@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.0.0.tgz#43f90a2b5346bcf288867f40ee83de9e1fa67b6d"
+  integrity sha512-/ucs950t+Q2O+/QTej7aXA36hi8lVBM12T8NciSmMFYIuKn8+1yL/tQjomZGTxmsVq2U8188X6CGCuwPrZzmGg==
   dependencies:
+    "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
     browser-encrypt-attachment "^0.3.0"
     browser-request "^0.3.3"
@@ -7587,7 +7596,7 @@ matrix-react-sdk@2.0.0-rc.2:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "4.0.0-rc.1"
+    matrix-js-sdk "4.0.0"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
     prop-types "^15.5.8"
