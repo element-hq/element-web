@@ -428,6 +428,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: $accent-fg-color;
 }
 
+.mx_Dialog button.warning, .mx_Dialog input[type="submit"].warning {
+    border: solid 1px $warning-color;
+    color: $warning-color;
+}
+
 .mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled, .mx_Dialog_buttons button:disabled, .mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;

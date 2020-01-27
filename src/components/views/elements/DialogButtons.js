@@ -43,6 +43,10 @@ export default createReactClass({
         // should there be a cancel button? default: true
         hasCancel: PropTypes.bool,
 
+        // The class of the cancel button, only used if a cancel button is
+        // enabled
+        cancelButtonClass: PropTypes.node,
+
         // onClick handler for the cancel button.
         onCancel: PropTypes.func,
 
@@ -72,12 +76,14 @@ export default createReactClass({
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
         let cancelButton;
+
         if (this.props.cancelButton || this.props.hasCancel) {
             cancelButton = <button
                 // important: the default type is 'submit' and this button comes before the
                 // primary in the DOM so will get form submissions unless we make it not a submit.
                 type="button"
                 onClick={this._onCancelClick}
+		className={this.props.cancelButtonClass}
                 disabled={this.props.disabled}
             >
                 { this.props.cancelButton || _t("Cancel") }

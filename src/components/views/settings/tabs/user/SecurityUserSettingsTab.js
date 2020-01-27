@@ -242,6 +242,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     render() {
         const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
+        const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
 
         const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
         const keyBackup = (
@@ -252,6 +253,16 @@ export default class SecurityUserSettingsTab extends React.Component {
                 </div>
             </div>
         );
+
+        let eventIndex;
+        if (SettingsStore.isFeatureEnabled("feature_event_indexing")) {
+            eventIndex = (
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
+                    <EventIndexPanel />
+                </div>
+            );
+        }
 
         // XXX: There's no such panel in the current cross-signing designs, but
         // it's useful to have for testing the feature. If there's no interest
@@ -281,6 +292,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </div>
                 </div>
                 {keyBackup}
+                {eventIndex}
                 {crossSigning}
                 {this._renderCurrentDeviceInfo()}
                 <div className='mx_SettingsTab_section'>

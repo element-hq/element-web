@@ -74,6 +74,12 @@ export interface LoadArgs {
     direction: string;
 }
 
+export interface IndexStats {
+    size: number;
+    event_count: number;
+    room_count: number;
+}
+
 /**
  * Base class for classes that provide platform-specific event indexing.
  *
@@ -121,6 +127,16 @@ export default class BaseEventIndexManager {
      * Check if our event index is empty.
      */
     indexIsEmpty(): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Get statistical information of the index.
+     *
+     * @return {Promise<IndexStats>} A promise that will resolve to the index
+     * statistics.
+     */
+    async getStats(): Promise<IndexStats> {
         throw new Error("Unimplemented");
     }
 
