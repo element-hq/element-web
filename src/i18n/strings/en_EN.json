@@ -2040,7 +2040,7 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "If disabled, messages from encrypted rooms won't appear in search results.": "If disabled, messages from encrypted rooms won't appear in search results.",
     "Disable": "Disable",
-    "Not downloading messages for any room.": "Not downloading messages for any room.",
+    "Not currently downloading messages for any room.": "Not currently downloading messages for any room.",
     "Downloading mesages for %(currentRoom)s.": "Downloading mesages for %(currentRoom)s.",
     "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot is securely caching encrypted messages locally for them to appear in search results:",
     "Space used:": "Space used:",

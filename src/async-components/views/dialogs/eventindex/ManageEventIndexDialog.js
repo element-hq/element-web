@@ -108,7 +108,7 @@ export default class ManageEventIndexDialog extends React.Component {
         let crawlerState;
 
         if (this.state.currentRoom === null) {
-            crawlerState = _t("Not downloading messages for any room.");
+            crawlerState = _t("Not currently downloading messages for any room.");
         } else {
             crawlerState = (
                     _t("Downloading mesages for %(currentRoom)s.", { currentRoom: this.state.currentRoom })
