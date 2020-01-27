@@ -478,8 +478,9 @@ export default createReactClass({
 
         let dmIndicator;
         let dmOnline;
-        // If we can place a shield, do that instead
-        if (dmUserId && !this.state.e2eStatus) {
+        /* Post-cross-signing we don't show DM indicators at all, instead relying on user
+           context to let them know when that is. */
+        if (dmUserId && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             dmIndicator = <img
                 src={require("../../../../res/img/icon_person.svg")}
                 className="mx_RoomTile_dm"
