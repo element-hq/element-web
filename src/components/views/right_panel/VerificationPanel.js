@@ -31,15 +31,22 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     renderQRPhase() {
-        const {member, request} = this.props; // type req: VerificationRequest
+        const {member, request} = this.props;
         // TODO change the button into a spinner when on click
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const cli = MatrixClientPeg.get();
         const crossSigningInfo = cli.getStoredCrossSigningForUser(request.otherUserId);
         if (!crossSigningInfo || !request.requestEvent || !request.requestEvent.getId()) {
-            // TODO handle this error case
-            return <p>request.requestEvent.getId()</p>;
+            // for whatever reason we can't generate a QR code, offer only SAS Verification
+            return <div className="mx_UserInfo_container">
+                <h3>Verify by emoji</h3>
+                <p>{_t("Verify by comparing unique emoji.")}</p>
+
+                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
+                    {_t("Verify by emoji")}
+                </AccessibleButton>
+            </div>;
         }
 
         const myKeyId = cli.getCrossSigningId();
