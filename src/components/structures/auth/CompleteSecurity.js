@@ -35,7 +35,21 @@ export default class CompleteSecurity extends React.Component {
 
         this.state = {
             phase: PHASE_INTRO,
+            // this serves dual purpose as the object for the request logic and
+            // the presence of it insidicating that we're in 'verify mode'.
+            // Because of the latter, it lives in the state.
+            verificationRequest: null,
         };
+        MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
+    }
+
+    componentWillUnmount() {
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("crypto.verification.request", this.onVerificationRequest);
+        }
     }
 
     onStartClick = async () => {
@@ -52,6 +66,27 @@ export default class CompleteSecurity extends React.Component {
             }
         } catch (e) {
             // this will throw if the user hits cancel, so ignore
+        }
+    }
+
+    onVerificationRequest = (request) => {
+        if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
+
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        request.on("change", this.onVerificationRequestChange);
+        this.setState({
+            verificationRequest: request,
+        });
+    }
+
+    onVerificationRequestChange = () => {
+        if (this.state.verificationRequest.cancelled) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.setState({
+                verificationRequest: null,
+            });
         }
     }
 
@@ -87,7 +122,13 @@ export default class CompleteSecurity extends React.Component {
         let icon;
         let title;
         let body;
-        if (phase === PHASE_INTRO) {
+
+        if (this.state.verificationRequest) {
+            const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+            body = <IncomingSasDialog verifier={this.state.verificationRequest.verifier}
+                onFinished={this.props.onFinished}
+            />;
+        } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
             title = _t("Complete security");
             body = (
