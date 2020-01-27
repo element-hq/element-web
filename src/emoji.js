@@ -79,13 +79,13 @@ EMOJIBASE.forEach(emoji => {
 });
 
 /**
- * Strips variation selectors from a string
- * NB. Skin tone modifers are not variation selectors:
+ * Strips variation selectors from the end of given string
+ * NB. Skin tone modifiers are not variation selectors:
  * this function does not touch them. (Should it?)
  *
  * @param {string} str string to strip
  * @returns {string} stripped string
  */
 function stripVariation(str) {
-    return str.replace(/[\uFE00-\uFE0F]/, "");
+    return str.replace(/[\uFE00-\uFE0F]$/, "");
 }
