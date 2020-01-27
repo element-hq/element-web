@@ -2099,5 +2099,10 @@
     "Upgrade your encryption": "Përmirësoni fshehtëzimin tuaj",
     "Set up encryption": "Ujdisni fshehtëzim",
     "Encryption upgraded": "U përmirësua fshehtëzimi",
-    "Encryption setup complete": "Ujdisje fshehtëzimit e plotësuar"
+    "Encryption setup complete": "Ujdisje fshehtëzimit e plotësuar",
+    "Verify this session": "Verifikoni këtë sesion",
+    "Encryption upgrade available": "Ka të gatshëm përmirësim fshehtëzimi",
+    "Review & verify your new session": "Shqyrtoni & verifikoni sesionin tuaj të ri",
+    "Review": "Shqyrtojeni",
+    "Verify your other devices easier": "Verifikoni më lehtë pajisjet tuaja të tjera"
 }
