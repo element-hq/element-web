@@ -108,7 +108,7 @@ export default class DeviceListener {
             }
 
             // cross signing isn't enabled - nag to enable it
-            // There 3 different toasts for:
+            // There are 3 different toasts for:
             if (cli.getStoredCrossSigningForUser(cli.getUserId())) {
                 // Cross-signing on account but this device doesn't trust the master key (verify this session)
                 ToastStore.sharedInstance().addOrReplaceToast({
