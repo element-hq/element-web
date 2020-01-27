@@ -29,9 +29,9 @@ export default class BridgeTile extends React.PureComponent {
         ev: PropTypes.object.isRequired,
         room: PropTypes.object.isRequired,
     }
-    
+
     state = {
-        visible: false
+        visible: false,
     }
 
     _toggleVisible() {

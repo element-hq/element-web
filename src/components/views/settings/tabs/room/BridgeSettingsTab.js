@@ -39,7 +39,7 @@ export default class BridgeSettingsTab extends React.Component {
         if (!content || !content.channel || !content.protocol) {
             return null;
         }
-        return <BridgeTile room={room} ev={event}></BridgeTile>
+        return <BridgeTile room={room} ev={event}></BridgeTile>;
     }
 
     static getBridgeStateEvents(roomId) {
@@ -76,8 +76,8 @@ export default class BridgeSettingsTab extends React.Component {
                 <ul className="mx_RoomSettingsDialog_BridgeList">
                     { bridgeEvents.map((event) => this._renderBridgeCard(event, room)) }
                 </ul>
-            </div>
-        } else  {
+            </div>;
+        } else {
             content = <p>{_t(
                 "This room isn’t bridging messages to any platforms. " +
                 "<a>Learn more.</a>", {},
@@ -86,7 +86,7 @@ export default class BridgeSettingsTab extends React.Component {
                     // having to re-translate the string when we do.
                     a: sub => '',
                 },
-            )}</p>
+            )}</p>;
         }
 
         return (
