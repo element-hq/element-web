@@ -18,4 +18,20 @@ limitations under the License.
     .mx_VerificationPanel_verified_section .mx_E2EIcon {
         margin: 0 auto;
     }
+
+    .mx_VerificationPanel_qrCode {
+        padding: 4px 4px 0 4px;
+        background: white;
+        border-radius: 4px;
+        width: max-content;
+        max-width: 100%;
+        margin: 0 auto;
+
+        canvas {
+            // override height and width which are set on the element directly
+            height: auto !important;
+            width: 100% !important;
+            max-width: 240px;
+        }
+    }
 }

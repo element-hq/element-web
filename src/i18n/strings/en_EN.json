@@ -1156,7 +1156,7 @@
     "This client does not support end-to-end encryption.": "This client does not support end-to-end encryption.",
     "Messages in this room are not end-to-end encrypted.": "Messages in this room are not end-to-end encrypted.",
     "Security": "Security",
-    "Ask %(displayName)s to scan your code, or <a>open your camera</a> to scan theirs:": "Ask %(displayName)s to scan your code, or <a>open your camera</a> to scan theirs:",
+    "Ask %(displayName)s to scan your code:": "Ask %(displayName)s to scan your code:",
     "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
     "Verify by emoji": "Verify by emoji",
     "You've successfully verified %(displayName)s!": "You've successfully verified %(displayName)s!",

@@ -111,6 +111,7 @@ limitations under the License.
         // override the calculated sizes so that the letter isn't HUGE
         font-size: 56px !important;
         width: 100% !important;
+        transition: font-size 1s;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
@@ -269,5 +270,9 @@ limitations under the License.
     .mx_UserInfo_avatar > div {
         max-width: 72px;
         margin: 0 auto;
+    }
+
+    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
+        font-size: 40px !important; // override the other override because here the avatar is smaller
     }
 }

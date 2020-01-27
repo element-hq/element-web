@@ -48,22 +48,23 @@ export default class VerificationPanel extends React.PureComponent {
             [myKeyId, myKeyId],
         ];
 
+        // TODO: add way to open camera to scan a QR code
         return <React.Fragment>
             <div className="mx_UserInfo_container">
                 <h3>Verify by scanning</h3>
-                <p>{_t("Ask %(displayName)s to scan your code, or <a>open your camera</a> to scan theirs:", {
+                <p>{_t("Ask %(displayName)s to scan your code:", {
                     displayName: member.displayName || member.name || member.userId,
-                }, {
-                    a: t => <a>{ t }</a>,
                 })}</p>
 
-                <VerificationQRCode
-                    keyholderUserId={MatrixClientPeg.get().getUserId()}
-                    requestEventId={request.requestEvent.getId()}
-                    otherUserKey={crossSigningInfo.getId("master")}
-                    secret={request.encodedSharedSecret}
-                    keys={qrCodeKeys}
-                />
+                <div className="mx_VerificationPanel_qrCode">
+                    <VerificationQRCode
+                        keyholderUserId={MatrixClientPeg.get().getUserId()}
+                        requestEventId={request.requestEvent.getId()}
+                        otherUserKey={crossSigningInfo.getId("master")}
+                        secret={request.encodedSharedSecret}
+                        keys={qrCodeKeys}
+                    />
+                </div>
             </div>
 
             <div className="mx_UserInfo_container">
