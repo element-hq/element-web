@@ -113,7 +113,7 @@ export default class DeviceListener {
                 // Cross-signing on account but this device doesn't trust the master key (verify this session)
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: THIS_DEVICE_TOAST_KEY,
-                    title: _t("Verify this Session"),
+                    title: _t("Verify this session"),
                     icon: "verification_warning",
                     props: {kind: 'verify_this_session'},
                     component: sdk.getComponent("toasts.SetupEncryptionToast"),
