@@ -62,7 +62,7 @@ export default createReactClass({
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
             let protocol = global.location.protocol;
-            if (protocol === "vector:") {
+            if (protocol !== "http:") {
                 protocol = "https:";
             }
             const scriptTag = document.createElement('script');
