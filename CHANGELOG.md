@@ -1,3 +1,14 @@
+Changes in [2.0.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0) (2020-01-27)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.2...v2.0.0)
+
+ * Ensure a plaintext version of the composer ends up on the clipboard
+   [\#3923](https://github.com/matrix-org/matrix-react-sdk/pull/3923)
+ * Move & upgrade babel runtime into dependencies (like it wants)
+   [\#3921](https://github.com/matrix-org/matrix-react-sdk/pull/3921)
+ * Don't list every single alias when there's many
+   [\#3919](https://github.com/matrix-org/matrix-react-sdk/pull/3919)
+
 Changes in [2.0.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0-rc.2) (2020-01-20)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.1...v2.0.0-rc.2)
