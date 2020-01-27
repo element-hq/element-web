@@ -33,6 +33,10 @@ export default class AuthBody extends React.PureComponent {
         const classes = {
             'mx_AuthBody': true,
             'mx_AuthBody_noHeader': !this.props.header,
+            // XXX The login pages all use a smaller fonts size but we don't want this
+            // for subsequent auth screens like the e2e setup. Doing this a terrible way
+            // for now.
+            'mx_AuthBody_loginRegister': this.props.header,
         };
 
         return <div className={classnames(classes)}>

@@ -766,7 +766,7 @@ export default createReactClass({
 
     onUserVerificationChanged: function(userId, _trustStatus) {
         const room = this.state.room;
-        if (!room.currentState.getMember(userId)) {
+        if (!room || !room.currentState.getMember(userId)) {
             return;
         }
         this._updateE2EStatus(room);

@@ -1,3 +1,177 @@
+Changes in [2.0.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0) (2020-01-27)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.2...v2.0.0)
+
+ * Ensure a plaintext version of the composer ends up on the clipboard
+   [\#3923](https://github.com/matrix-org/matrix-react-sdk/pull/3923)
+ * Move & upgrade babel runtime into dependencies (like it wants)
+   [\#3921](https://github.com/matrix-org/matrix-react-sdk/pull/3921)
+ * Don't list every single alias when there's many
+   [\#3919](https://github.com/matrix-org/matrix-react-sdk/pull/3919)
+
+Changes in [2.0.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0-rc.2) (2020-01-20)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.1...v2.0.0-rc.2)
+
+ * Add prepublish script
+   [\#3877](https://github.com/matrix-org/matrix-react-sdk/pull/3877)
+
+Changes in [2.0.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0-rc.1) (2020-01-20)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.6...v2.0.0-rc.1)
+
+BREAKING CHANGES
+================
+ * The react-sdk node module now exports ES6 rather than ES5. If you
+   wish to supports target that aren't compatible with ES6, you
+   will need to transpile the react-sdk to a suitable dialect.
+
+All Changes
+===========
+ * Fix arrows keys moving through edit history
+   [\#3874](https://github.com/matrix-org/matrix-react-sdk/pull/3874)
+ * Fix error about MessagePanel not being available for read markers
+   [\#3867](https://github.com/matrix-org/matrix-react-sdk/pull/3867)
+ * Adjust secret storage to work before sync
+   [\#3864](https://github.com/matrix-org/matrix-react-sdk/pull/3864)
+ * Update from Weblate
+   [\#3872](https://github.com/matrix-org/matrix-react-sdk/pull/3872)
+ * Remove unused deps and dev-deps
+   [\#3870](https://github.com/matrix-org/matrix-react-sdk/pull/3870)
+ * Tidy Jest test stuff and dependencies
+   [\#3869](https://github.com/matrix-org/matrix-react-sdk/pull/3869)
+ * Move feature flag check for new session toast
+   [\#3865](https://github.com/matrix-org/matrix-react-sdk/pull/3865)
+ * Catch exception in checkTerms if no ID server
+   [\#3863](https://github.com/matrix-org/matrix-react-sdk/pull/3863)
+ * Catch exception if passphrase dialog cancelled
+   [\#3862](https://github.com/matrix-org/matrix-react-sdk/pull/3862)
+ * Disable key request dialogs with cross-signing
+   [\#3860](https://github.com/matrix-org/matrix-react-sdk/pull/3860)
+ * Toasts for new, unverified sessions
+   [\#3859](https://github.com/matrix-org/matrix-react-sdk/pull/3859)
+ * Check for a matrixclient before trying to use it
+   [\#3861](https://github.com/matrix-org/matrix-react-sdk/pull/3861)
+ * Room header & message box shields now reflect cross-signing state
+   [\#3850](https://github.com/matrix-org/matrix-react-sdk/pull/3850)
+ * Fix Array.concat undefined
+   [\#3857](https://github.com/matrix-org/matrix-react-sdk/pull/3857)
+ * Update chokidar to fix reskindex not working
+   [\#3856](https://github.com/matrix-org/matrix-react-sdk/pull/3856)
+ * Make the new DM invite dialog work for regular invites too
+   [\#3854](https://github.com/matrix-org/matrix-react-sdk/pull/3854)
+ * Fix event handler leak in MemberStatusMessageAvatar
+   [\#3855](https://github.com/matrix-org/matrix-react-sdk/pull/3855)
+ * Move DM creation logic into DMInviteDialog
+   [\#3843](https://github.com/matrix-org/matrix-react-sdk/pull/3843)
+ * Remove all text when cutting in the composer
+   [\#3848](https://github.com/matrix-org/matrix-react-sdk/pull/3848)
+ * Add a ToastStore
+   [\#3853](https://github.com/matrix-org/matrix-react-sdk/pull/3853)
+ * 'Members' button always toggle the right panel
+   [\#3804](https://github.com/matrix-org/matrix-react-sdk/pull/3804)
+ * Fix timing of when Composer considers itself to be modified
+   [\#3842](https://github.com/matrix-org/matrix-react-sdk/pull/3842)
+ * Compute download file icon immediately
+   [\#3851](https://github.com/matrix-org/matrix-react-sdk/pull/3851)
+ * Fix not being able to open profiles from the timeline
+   [\#3852](https://github.com/matrix-org/matrix-react-sdk/pull/3852)
+ * Add post-login complete security flow
+   [\#3847](https://github.com/matrix-org/matrix-react-sdk/pull/3847)
+ * Added cut/copy and pasting user pills from editor.
+   [\#3828](https://github.com/matrix-org/matrix-react-sdk/pull/3828)
+ * Fix imports for help & support tab
+   [\#3846](https://github.com/matrix-org/matrix-react-sdk/pull/3846)
+ * Humanize the recent DM rooms ourselves for translations
+   [\#3841](https://github.com/matrix-org/matrix-react-sdk/pull/3841)
+ * Improve the quality of invite suggestions by filtering out DMs
+   [\#3840](https://github.com/matrix-org/matrix-react-sdk/pull/3840)
+ * Fix linter and tests on develop
+   [\#3845](https://github.com/matrix-org/matrix-react-sdk/pull/3845)
+ * Fix sourcemaps by refactoring the build system
+   [\#3839](https://github.com/matrix-org/matrix-react-sdk/pull/3839)
+ * Don't error on unverified/unknown devices.
+   [\#3837](https://github.com/matrix-org/matrix-react-sdk/pull/3837)
+ * Padlock icons in room header
+   [\#3835](https://github.com/matrix-org/matrix-react-sdk/pull/3835)
+ * Don't allow upgrade from untrusted key backup.
+   [\#3822](https://github.com/matrix-org/matrix-react-sdk/pull/3822)
+ * Emoji verification: Change name of 🔒 to lock
+   [\#3825](https://github.com/matrix-org/matrix-react-sdk/pull/3825)
+ * Room padlock decorations only if cross-signing is enabled
+   [\#3838](https://github.com/matrix-org/matrix-react-sdk/pull/3838)
+ * Enable end-to-end tests for sourcemaps (+Windows instructions)
+   [\#3827](https://github.com/matrix-org/matrix-react-sdk/pull/3827)
+ * Repair community member info panel
+   [\#3832](https://github.com/matrix-org/matrix-react-sdk/pull/3832)
+ * Add feature flag around the presence indicator in room list
+   [\#3831](https://github.com/matrix-org/matrix-react-sdk/pull/3831)
+ * Display a padlock icon beside invite-only rooms in the room list
+   [\#3821](https://github.com/matrix-org/matrix-react-sdk/pull/3821)
+ * Update from Weblate
+   [\#3830](https://github.com/matrix-org/matrix-react-sdk/pull/3830)
+ * Fix listener leak on RoomView
+   [\#3826](https://github.com/matrix-org/matrix-react-sdk/pull/3826)
+ * Regenerate i18n for sourcemaps branch
+   [\#3824](https://github.com/matrix-org/matrix-react-sdk/pull/3824)
+ * Fix tests for sourcemaps branch
+   [\#3823](https://github.com/matrix-org/matrix-react-sdk/pull/3823)
+ * Jest
+   [\#3724](https://github.com/matrix-org/matrix-react-sdk/pull/3724)
+ * Sourcemaps: develop -> feature branch
+   [\#3817](https://github.com/matrix-org/matrix-react-sdk/pull/3817)
+ * Support pasting a bunch of identifiers into the invite dialog
+   [\#3820](https://github.com/matrix-org/matrix-react-sdk/pull/3820)
+ * Support 3PIDs (email addresses) in the invite dialog
+   [\#3819](https://github.com/matrix-org/matrix-react-sdk/pull/3819)
+ * Placeholder PR for cleaner diffs: ES6
+   [\#3765](https://github.com/matrix-org/matrix-react-sdk/pull/3765)
+ * Misc fixes for ES6 imports/exports
+   [\#3766](https://github.com/matrix-org/matrix-react-sdk/pull/3766)
+ * Wire up the invite targets dialog to a real composer and show selections
+   [\#3815](https://github.com/matrix-org/matrix-react-sdk/pull/3815)
+ * Change ref handling in TextualBody to prevent it parsing generated nodes
+   [\#3711](https://github.com/matrix-org/matrix-react-sdk/pull/3711)
+ * Render encoded html entities in og:description
+   [\#3789](https://github.com/matrix-org/matrix-react-sdk/pull/3789)
+ * Update package.json for new build process + cosmetics
+   [\#3767](https://github.com/matrix-org/matrix-react-sdk/pull/3767)
+ * Convert CommonJS exports to ES6 exports
+   [\#3761](https://github.com/matrix-org/matrix-react-sdk/pull/3761)
+ * Round 2 of CommonJS to ES6 imports
+   [\#3764](https://github.com/matrix-org/matrix-react-sdk/pull/3764)
+ * Strip all variation selectors on emoji
+   [\#3814](https://github.com/matrix-org/matrix-react-sdk/pull/3814)
+ * Use the new js-sdk imports and import from src
+   [\#3763](https://github.com/matrix-org/matrix-react-sdk/pull/3763)
+ * Convert many imports to handle ES6 exports
+   [\#3762](https://github.com/matrix-org/matrix-react-sdk/pull/3762)
+ * Fix userinfo for users not in the room
+   [\#3812](https://github.com/matrix-org/matrix-react-sdk/pull/3812)
+ * Attempt to fix e2e tests
+   [\#3811](https://github.com/matrix-org/matrix-react-sdk/pull/3811)
+ * Add bunch of null-guards and similar to fix React Errors/complaints
+   [\#3752](https://github.com/matrix-org/matrix-react-sdk/pull/3752)
+ * Delegate all room alias validation to the RoomAliasField validator
+   [\#3807](https://github.com/matrix-org/matrix-react-sdk/pull/3807)
+ * Support filtering and searching for users to invite in DMs
+   [\#3802](https://github.com/matrix-org/matrix-react-sdk/pull/3802)
+ * Add suggestions for which users to invite to chat
+   [\#3801](https://github.com/matrix-org/matrix-react-sdk/pull/3801)
+ * Use `flex-start` instead of `start` for postcss
+   [\#3760](https://github.com/matrix-org/matrix-react-sdk/pull/3760)
+ * Define getLanguageFromBrowser() for LanguageDropdown
+   [\#3769](https://github.com/matrix-org/matrix-react-sdk/pull/3769)
+ * Introduce babel's export-default-from plugin to fix build errors
+   [\#3768](https://github.com/matrix-org/matrix-react-sdk/pull/3768)
+ * Add a bit of debugging to incorrect components in the Skinner
+   [\#3770](https://github.com/matrix-org/matrix-react-sdk/pull/3770)
+ * [BREAKING] Refactor the entire build process for babel@7 and TypeScript
+   (chunk 1 of many)
+   [\#3722](https://github.com/matrix-org/matrix-react-sdk/pull/3722)
+ * Implementation of new potential skinning mechanism
+   [\#3723](https://github.com/matrix-org/matrix-react-sdk/pull/3723)
+
 Changes in [1.7.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.6) (2020-01-13)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.6-rc.2...v1.7.6)

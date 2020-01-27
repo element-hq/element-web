@@ -58,6 +58,11 @@ export default createReactClass({
     displayName: 'Login',
 
     propTypes: {
+        // Called when the user has logged in. Params:
+        // - The object returned by the login API
+        // - The user's password, if applicable, (may be cached in memory for a
+        //   short time so the user is not required to re-enter their password
+        //   for operations like uploading cross-signing keys).
         onLoggedIn: PropTypes.func.isRequired,
 
         // If true, the component will consider itself busy.
@@ -181,7 +186,7 @@ export default createReactClass({
             username, phoneCountry, phoneNumber, password,
         ).then((data) => {
             this.setState({serverIsAlive: true}); // it must be, we logged in.
-            this.props.onLoggedIn(data);
+            this.props.onLoggedIn(data, password);
         }, (error) => {
             if (this._unmounted) {
                 return;

@@ -641,7 +641,7 @@ const AuthEntryComponents = [
     TermsAuthEntry,
 ];
 
-export function getEntryComponentForLoginType(loginType) {
+export default function getEntryComponentForLoginType(loginType) {
     for (const c of AuthEntryComponents) {
         if (c.LOGIN_TYPE == loginType) {
             return c;

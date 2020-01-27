@@ -45,7 +45,13 @@ export default createReactClass({
     displayName: 'Registration',
 
     propTypes: {
+        // Called when the user has logged in. Params:
+        // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
+        // - The user's password, if available and applicable (may be cached in memory
+        //   for a short time so the user is not required to re-enter their password
+        //   for operations like uploading cross-signing keys).
         onLoggedIn: PropTypes.func.isRequired,
+
         clientSecret: PropTypes.string,
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
@@ -348,7 +354,7 @@ export default createReactClass({
                 homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
                 identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
                 accessToken: response.access_token,
-            });
+            }, this.state.formVals.password);
 
             this._setupPushers(cli);
             // we're still busy until we get unmounted: don't show the registration form again

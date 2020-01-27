@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
@@ -32,6 +33,16 @@ const RESTORE_TYPE_SECRET_STORAGE = 2;
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
 export default class RestoreKeyBackupDialog extends React.PureComponent {
+    static propTypes = {
+        // if false, will close the dialog as soon as the restore completes succesfully
+        // default: true
+        showSummary: PropTypes.bool,
+    };
+
+    defaultProps = {
+        showSummary: true,
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -96,6 +107,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
                 this.state.passPhrase, undefined, undefined, this.state.backupInfo,
             );
+            if (!this.props.showSummary) {
+                this.props.onFinished(true);
+                return;
+            }
             this.setState({
                 loading: false,
                 recoverInfo,
@@ -119,6 +134,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
             );
+            if (!this.props.showSummary) {
+                this.props.onFinished(true);
+                return;
+            }
             this.setState({
                 loading: false,
                 recoverInfo,
@@ -253,6 +272,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             title = _t("Error");
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             title = _t("Backup Restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
@@ -264,6 +284,11 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             content = <div>
                 <p>{_t("Restored %(sessionCount)s session keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
+                <DialogButtons primaryButton={_t('OK')}
+                    onPrimaryButtonClick={this._onDone}
+                    hasCancel={false}
+                    focus={true}
+                />
             </div>;
         } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
