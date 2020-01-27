@@ -1,4 +1,5 @@
 /*
+Copyright 2019 New Vector Ltd
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,38 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CompleteSecurity_header {
-    display: flex;
-    align-items: center;
-}
+.mx_CompleteSecurityBody {
+    width: 600px;
+    color: $authpage-primary-color;
+    background-color: $authpage-body-bg-color;
+    border-radius: 4px;
+    padding: 20px;
+    box-sizing: border-box;
 
-.mx_CompleteSecurity_headerIcon {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
-    position: relative;
-}
+    h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 0;
+    }
 
-.mx_CompleteSecurity_heroIcon {
-    width: 128px;
-    height: 128px;
-    position: relative;
-    margin: 0 auto;
-}
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+    }
 
-.mx_CompleteSecurity_body {
-    font-size: 15px;
-}
-
-.mx_CompleteSecurity_actionRow {
-    display: flex;
-    justify-content: flex-end;
-
-    .mx_AccessibleButton {
-        margin-inline-start: 18px;
-
-        &.warning {
-            color: $warning-color;
-        }
+    a:link,
+    a:hover,
+    a:visited {
+        @mixin mx_Dialog_link;
     }
 }

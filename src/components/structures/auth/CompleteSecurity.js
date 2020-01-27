@@ -112,7 +112,7 @@ export default class CompleteSecurity extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
+        const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         const {
@@ -204,7 +204,7 @@ export default class CompleteSecurity extends React.Component {
 
         return (
             <AuthPage>
-                <AuthBody header={false}>
+                <CompleteSecurityBody>
                     <h2 className="mx_CompleteSecurity_header">
                         {icon}
                         {title}
@@ -212,7 +212,7 @@ export default class CompleteSecurity extends React.Component {
                     <div className="mx_CompleteSecurity_body">
                         {body}
                     </div>
-                </AuthBody>
+                </CompleteSecurityBody>
             </AuthPage>
         );
     }
