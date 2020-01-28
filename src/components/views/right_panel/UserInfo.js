@@ -1093,7 +1093,6 @@ export const useDevices = (userId) => {
                 // Promise.resolve to handle transition from static result to promise; can be removed in future
                 Promise.resolve(cli.getStoredDevicesForUser(userId)).then((devices) => {
                     if (cancel) return;
-                    console.log("setDevices 2", devices);
                     setDevices(devices);
                 });
             }

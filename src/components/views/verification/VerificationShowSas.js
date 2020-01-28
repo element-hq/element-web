@@ -91,7 +91,7 @@ export default class VerificationShowSas extends React.Component {
             const text = _t("Waiting for %(displayName)s to verify…", {displayName});
             confirm = <PendingActionSpinner text={text} />;
         } else {
-            // FIXME: stop using DialogButtons here once it this component is only used in the right panel verification
+            // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
                 onPrimaryButtonClick={this.onMatchClick}
