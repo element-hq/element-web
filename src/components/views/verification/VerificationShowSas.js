@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";

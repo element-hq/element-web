@@ -22,6 +22,13 @@ import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {_t} from "../../../languageHandler";
 import E2EIcon from "../rooms/E2EIcon";
+import {
+    PHASE_READY,
+    PHASE_DONE,
+    PHASE_STARTED,
+    PHASE_CANCELLED,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import Spinner from "../elements/Spinner";
 
 export default class VerificationPanel extends React.PureComponent {
     constructor(props) {
@@ -30,10 +37,21 @@ export default class VerificationPanel extends React.PureComponent {
         this._hasVerifier = !!props.request.verifier;
     }
 
-    renderQRPhase() {
+    renderQRPhase(pending) {
         const {member, request} = this.props;
         // TODO change the button into a spinner when on click
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        let button;
+        if (pending) {
+            button = <Spinner />;
+        } else {
+            button = (
+                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
+                    {_t("Verify by emoji")}
+                </AccessibleButton>
+            );
+        }
 
         const cli = MatrixClientPeg.get();
         const crossSigningInfo = cli.getStoredCrossSigningForUser(request.otherUserId);
@@ -43,9 +61,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <h3>Verify by emoji</h3>
                 <p>{_t("Verify by comparing unique emoji.")}</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
-                    {_t("Verify by emoji")}
-                </AccessibleButton>
+                { button }
             </div>;
         }
 
@@ -78,9 +94,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <h3>Verify by emoji</h3>
                 <p>{_t("If you can't scan the code above, verify by comparing unique emoji.")}</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
-                    {_t("Verify by emoji")}
-                </AccessibleButton>
+                { button }
             </div>
         </React.Fragment>;
     }
@@ -97,7 +111,36 @@ export default class VerificationPanel extends React.PureComponent {
                 })}</p>
                 <E2EIcon isUser={true} status="verified" size={128} />
                 <p>Verify all users in a room to ensure it's secure.</p>
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
+
+                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
+                    {_t("Got it")}
+                </AccessibleButton>
+            </div>
+        );
+    }
+
+    renderCancelledPhase() {
+        const {member, request} = this.props;
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        let text;
+        if (request.cancellationCode === "m.timeout") {
+            text = _t("Verification timed out. Start verification again from their profile.");
+        } else if (request.cancellingUserId === request.otherUserId) {
+            text = _t("%(displayName)s cancelled verification. Start verification again from their profile.", {
+                displayName: member.displayName || member.name || member.userId,
+            });
+        } else {
+            text = _t("You cancelled verification. Start verification again from their profile.");
+        }
+
+        return (
+            <div className="mx_UserInfo_container">
+                <h3>Verification cancelled</h3>
+                <p>{ text }</p>
+
+                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
             </div>
@@ -105,34 +148,32 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     render() {
-        const {member, request} = this.props;
+        const {member} = this.props;
 
         const displayName = member.displayName || member.name || member.userId;
 
-        if (request.ready) {
-            return this.renderQRPhase();
-        } else if (request.started) {
-            if (this.state.sasEvent) {
-                const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
-                // TODO implement "mismatch" vs "cancelled"
-                return <div className="mx_UserInfo_container">
-                    <h3>Compare emoji</h3>
-                    <VerificationShowSas
-                        displayName={displayName}
-                        sas={this.state.sasEvent.sas}
-                        onCancel={this._onSasMismatchesClick}
-                        onDone={this._onSasMatchesClick}
-                    />
-                </div>;
-            } else {
-                return (<p>Setting up SAS verification...</p>);
-            }
-        } else if (request.done) {
-            return this.renderVerifiedPhase();
-        } else if (request.cancelled) {
-            // TODO check if this matches target
-            // TODO should this be a MODAL?
-            return <p>cancelled by {request.cancellingUserId}!</p>;
+        switch (this.props.phase) {
+            case PHASE_READY:
+                return this.renderQRPhase();
+            case PHASE_STARTED:
+                if (this.state.sasEvent) {
+                    const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+                    return <div className="mx_UserInfo_container">
+                        <h3>Compare emoji</h3>
+                        <VerificationShowSas
+                            displayName={displayName}
+                            sas={this.state.sasEvent.sas}
+                            onCancel={this._onSasMismatchesClick}
+                            onDone={this._onSasMatchesClick}
+                        />
+                    </div>;
+                } else {
+                    return this.renderQRPhase(true); // keep showing same phase but with a spinner
+                }
+            case PHASE_DONE:
+                return this.renderVerifiedPhase();
+            case PHASE_CANCELLED:
+                return this.renderCancelledPhase();
         }
         return null;
     }
@@ -143,8 +184,6 @@ export default class VerificationPanel extends React.PureComponent {
             await verifier.verify();
         } catch (err) {
             console.error(err);
-        } finally {
-            this.setState({sasEvent: null});
         }
     };
 
@@ -153,7 +192,7 @@ export default class VerificationPanel extends React.PureComponent {
     };
 
     _onSasMismatchesClick = () => {
-        this.state.sasEvent.cancel();
+        this.state.sasEvent.mismatch();
     };
 
     _onVerifierShowSas = (sasEvent) => {
@@ -175,7 +214,6 @@ export default class VerificationPanel extends React.PureComponent {
             request.verifier.removeListener('show_sas', this._onVerifierShowSas);
         }
         this._hasVerifier = !!request.verifier;
-        this.forceUpdate(); // TODO fix this
     };
 
     componentDidMount() {
