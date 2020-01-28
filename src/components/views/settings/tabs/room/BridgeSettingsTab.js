@@ -25,6 +25,8 @@ const BRIDGE_EVENT_TYPES = [
     // m.bridge
 ];
 
+const BRIDGES_LINK = "https://matrix.org/bridges/";
+
 export default class BridgeSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -66,7 +68,7 @@ export default class BridgeSettingsTab extends React.Component {
                     {
                         // TODO: We don't have this link yet: this will prevent the translators
                         // having to re-translate the string when we do.
-                        a: sub => sub,
+                        a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noopener">{sub}</a>,
                     },
                 )}</p>
                 <ul className="mx_RoomSettingsDialog_BridgeList">
@@ -80,7 +82,7 @@ export default class BridgeSettingsTab extends React.Component {
                 {
                     // TODO: We don't have this link yet: this will prevent the translators
                     // having to re-translate the string when we do.
-                    a: sub => sub,
+                    a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noopener">{sub}</a>,
                 },
             )}</p>;
         }

@@ -33,64 +33,80 @@ limitations under the License.
     border-style: solid;
     border-radius: 5px;
 
-    .protocol-icon {
-        float: left;
-        margin-right: 5px;
-        img {
-            border-radius: 5px;
-            border-width: 1px 1px;
-            border-color: $primary-hairline-color;
-        }
-        span {
-            /* Correct letter placement */
-            left: auto;
-        }
-    }
-
-    h3 {
-        margin-top: 0;
-        margin-bottom: 4px;
-        font-size: 16pt;
-        color: $primary-fg-color;
-    }
-
     .column-icon {
         float: left;
         padding-right: 10px;
 
+        * {
+            border-radius: 5px;
+            border: 1px solid $input-darker-bg-color;
+        }
+
         .noProtocolIcon {
             width: 48px;
             height: 48px;
-            background: $settings-profile-placeholder-bg-color;
+            background: $input-darker-bg-color;
             border-radius: 5px;
+        }
+
+        .protocol-icon {
+            float: left;
+            margin-right: 5px;
+            img {
+                border-radius: 5px;
+                border-width: 1px 1px;
+                border-color: $primary-hairline-color;
+            }
+            span {
+                /* Correct letter placement */
+                left: auto;
+            }
         }
     }
 
     .column-data {
         display: inline-block;
         width: 85%;
-    }
 
-    .workspace-channel-details {
-        margin-top: 0;
-        color: $primary-fg-color;
-
-        .channel {
-            margin-left: 15px;
+        > h3 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            font-size: 16pt;
+            color: $primary-fg-color;
         }
-    }
 
-    .metadata {
-        color: $muted-fg-color;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-bottom: 0;
-    }
+        > * {
+            margin-top: 4px;
+            margin-bottom: 0;
+        }
 
-    .metadata.visible {
-        overflow-y: visible;
-        text-overflow: ellipsis;
-        white-space: normal;
+        .workspace-channel-details {
+            color: $primary-fg-color;
+            font-weight: 600;
+
+            .channel {
+                margin-left: 5px;
+            }
+        }
+
+        .showMore {
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .metadata {
+            color: $muted-fg-color;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 0;
+        }
+
+        .metadata.visible {
+            overflow-y: visible;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
     }
 }
