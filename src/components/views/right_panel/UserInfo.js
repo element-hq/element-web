@@ -183,11 +183,16 @@ function DeviceItem({userId, device}) {
             (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
             device.getDisplayName();
     const trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
-    return (<AccessibleButton className={classes} onClick={onDeviceClick}>
-        <div className={iconClasses} />
-        <div className="mx_UserInfo_device_name">{deviceName}</div>
-        <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-    </AccessibleButton>);
+    return (
+        <AccessibleButton
+            className={classes} onClick={onDeviceClick}
+            title={device.deviceId}
+        >
+            <div className={iconClasses} />
+            <div className="mx_UserInfo_device_name">{deviceName}</div>
+            <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+        </AccessibleButton>
+    );
 }
 
 function DevicesSection({devices, userId, loading}) {
