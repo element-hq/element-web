@@ -2106,5 +2106,9 @@
     "Upgrade your encryption": "Titkosításod fejlesztése",
     "Set up encryption": "Titkosítás beállítása",
     "Encryption upgraded": "Titkosítás fejlesztve",
-    "Encryption setup complete": "Titkosítás beállítása kész"
+    "Encryption setup complete": "Titkosítás beállítása kész",
+    "Verify this session": "Munkamenet ellenőrzése",
+    "Encryption upgrade available": "A titkosítás fejlesztése elérhető",
+    "%(senderName)s turned on end-to-end encryption.": "%(senderName)s bekapcsolta a végpontok közötti titkosítást.",
+    "%(senderName)s turned on end-to-end encryption (unrecognised algorithm %(algorithm)s).": "%(senderName)s bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus: %(algorithm)s)."
 }
