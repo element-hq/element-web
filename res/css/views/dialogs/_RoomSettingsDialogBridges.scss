@@ -1,5 +1,5 @@
 /*
-Copyright 2020 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ limitations under the License.
         display: inline;
         margin: 0;
         padding: 0;
-        float: left;
     }
 }
 
@@ -75,6 +74,10 @@ limitations under the License.
     .workspace-channel-details {
         margin-top: 0;
         color: $primary-fg-color;
+
+        .channel {
+            margin-left: 15px;
+        }
     }
 
     .metadata {

@@ -30,10 +30,6 @@ export default class BridgeSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
-    constructor() {
-        super();
-    }
-
     _renderBridgeCard(event, room) {
         const content = event.getContent();
         if (!content || !content.channel || !content.protocol) {
@@ -70,7 +66,7 @@ export default class BridgeSettingsTab extends React.Component {
                     {
                         // TODO: We don't have this link yet: this will prevent the translators
                         // having to re-translate the string when we do.
-                        a: sub => '',
+                        a: sub => sub,
                     },
                 )}</p>
                 <ul className="mx_RoomSettingsDialog_BridgeList">
@@ -84,7 +80,7 @@ export default class BridgeSettingsTab extends React.Component {
                 {
                     // TODO: We don't have this link yet: this will prevent the translators
                     // having to re-translate the string when we do.
-                    a: sub => '',
+                    a: sub => sub,
                 },
             )}</p>;
         }

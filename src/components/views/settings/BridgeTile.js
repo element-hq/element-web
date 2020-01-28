@@ -1,5 +1,5 @@
 /*
-Copyright 2020 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@ import Pill from "../elements/Pill";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
-
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+@replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent {
     static propTypes = {
         ev: PropTypes.object.isRequired,
@@ -88,11 +89,6 @@ export default class BridgeTile extends React.PureComponent {
             networkIcon = <div class="noProtocolIcon"></div>;
         }
 
-
-        const workspaceChannelDetails = _t("Workspace: %(networkName)s      Channel: %(channelName)s", {
-            networkName,
-            channelName,
-        });
         const id = this.props.ev.getId();
         const metadataClassname = "metadata" + (this.state.visible ? " visible" : "");
         return (<li key={id}>
@@ -102,7 +98,8 @@ export default class BridgeTile extends React.PureComponent {
             <div className="column-data">
                 <h3>{protocolName}</h3>
                 <p className="workspace-channel-details">
-                    {workspaceChannelDetails}
+                    <span>{_t("Workspace: %(networkName)s", {networkName})}</span>
+                    <span className="channel">{_t("Channel: %(channelName)s", {channelName})}</span>
                 </p>
                 <p className={metadataClassname}>
                     {creator} {bot}
