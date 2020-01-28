@@ -217,7 +217,7 @@ class _MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
-            verificationMethods: [verificationMethods.SAS, verificationMethods.QR_CODE_SHOW],
+            verificationMethods: [verificationMethods.SAS, verificationMethods.QR_CODE_SHOW, verificationMethods.RECIPROCATE_QR_CODE],
             unstableClientRelationAggregation: true,
             identityServer: new IdentityAuthClient(),
         };
