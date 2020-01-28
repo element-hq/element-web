@@ -1834,6 +1834,7 @@ export default createReactClass({
             this._accountPassword = null;
             this._accountPasswordTimer = null;
         }, 60 * 5 * 1000);
+
         // Wait for the client to be logged in (but not started)
         // which is enough to ask the server about account data.
         const loggedIn = new Promise(resolve => {
@@ -1867,6 +1868,9 @@ export default createReactClass({
         }
 
         if (masterKeyInStorage) {
+            // Auto-enable cross-signing for the new session when key found in
+            // secret storage.
+            SettingsStore.setFeatureEnabled("feature_cross_signing", true);
             this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
         } else if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             // This will only work if the feature is set to 'enable' in the config,

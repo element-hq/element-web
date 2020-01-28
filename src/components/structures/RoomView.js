@@ -811,7 +811,7 @@ export default createReactClass({
         debuglog("e2e verified", verified, "unverified", unverified);
 
         /* Check all verified user devices. */
-        for (const userId of verified) {
+        for (const userId of [...verified, cli.getUserId()]) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const anyDeviceNotVerified = devices.some(({deviceId}) => {
                 return !cli.checkDeviceTrust(userId, deviceId).isVerified();
