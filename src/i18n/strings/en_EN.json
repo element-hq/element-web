@@ -2005,6 +2005,7 @@
     "Set up encryption on this device to allow it to verify other devices, granting them access to encrypted messages and marking them as trusted for other users.": "Set up encryption on this device to allow it to verify other devices, granting them access to encrypted messages and marking them as trusted for other users.",
     "Secure your encryption keys with a passphrase. For maximum security this should be different to your account password:": "Secure your encryption keys with a passphrase. For maximum security this should be different to your account password:",
     "Enter a passphrase": "Enter a passphrase",
+    "Back up my encryption keys, securing them with the same passphrase": "Back up my encryption keys, securing them with the same passphrase",
     "Set up with a recovery key": "Set up with a recovery key",
     "That matches!": "That matches!",
     "That doesn't match.": "That doesn't match.",
