@@ -185,8 +185,9 @@ function DeviceItem({userId, device}) {
     const trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
     return (
         <AccessibleButton
-            className={classes} onClick={onDeviceClick}
+            className={classes}
             title={device.deviceId}
+            onClick={onDeviceClick}
         >
             <div className={iconClasses} />
             <div className="mx_UserInfo_device_name">{deviceName}</div>
