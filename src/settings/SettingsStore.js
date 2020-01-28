@@ -145,7 +145,7 @@ export default class SettingsStore {
             callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
         };
 
-        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'}`);
+        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'} as ID ${watcherId}`);
         SettingsStore._watchers[watcherId] = localizedCallback;
         defaultWatchManager.watchSetting(settingName, roomId, localizedCallback);
 
@@ -159,8 +159,12 @@ export default class SettingsStore {
      * to cancel.
      */
     static unwatchSetting(watcherReference) {
-        if (!SettingsStore._watchers[watcherReference]) return;
+        if (!SettingsStore._watchers[watcherReference]) {
+            console.warn(`Ending non-existent watcher ID ${watcherReference}`);
+            return;
+        }
 
+        console.log(`Ending watcher ID ${watcherReference}`);
         defaultWatchManager.unwatchSetting(SettingsStore._watchers[watcherReference]);
         delete SettingsStore._watchers[watcherReference];
     }

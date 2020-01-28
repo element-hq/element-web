@@ -36,6 +36,7 @@
 @import "./views/auth/_AuthHeader.scss";
 @import "./views/auth/_AuthHeaderLogo.scss";
 @import "./views/auth/_AuthPage.scss";
+@import "./views/auth/_CompleteSecurityBody.scss";
 @import "./views/auth/_CountryDropdown.scss";
 @import "./views/auth/_InteractiveAuthEntryComponents.scss";
 @import "./views/auth/_LanguageSelector.scss";
@@ -65,7 +66,9 @@
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
+@import "./views/dialogs/_NewSessionReviewDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
+@import "./views/dialogs/_RoomSettingsDialogBridges.scss";
 @import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_RoomUpgradeWarningDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
@@ -150,10 +153,10 @@
 @import "./views/rooms/_AuxPanel.scss";
 @import "./views/rooms/_BasicMessageComposer.scss";
 @import "./views/rooms/_E2EIcon.scss";
-@import "./views/rooms/_InviteOnlyIcon.scss";
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_InviteOnlyIcon.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
 @import "./views/rooms/_MemberDeviceInfo.scss";

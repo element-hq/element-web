@@ -14,38 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CompleteSecurity_header {
-    display: flex;
-    align-items: center;
-}
+'use strict';
 
-.mx_CompleteSecurity_headerIcon {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
-    position: relative;
-}
+import React from 'react';
 
-.mx_CompleteSecurity_heroIcon {
-    width: 128px;
-    height: 128px;
-    position: relative;
-    margin: 0 auto;
-}
-
-.mx_CompleteSecurity_body {
-    font-size: 15px;
-}
-
-.mx_CompleteSecurity_actionRow {
-    display: flex;
-    justify-content: flex-end;
-
-    .mx_AccessibleButton {
-        margin-inline-start: 18px;
-
-        &.warning {
-            color: $warning-color;
-        }
+export default class CompleteSecurityBody extends React.PureComponent {
+    render() {
+        return <div className="mx_CompleteSecurityBody">
+            { this.props.children }
+        </div>;
     }
 }

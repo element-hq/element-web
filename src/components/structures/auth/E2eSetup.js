@@ -34,16 +34,16 @@ export default class E2eSetup extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
+        const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         return (
             <AuthPage>
-                <AuthBody header={false}>
+                <CompleteSecurityBody>
                     <AsyncWrapper prom={this._createStorageDialogPromise}
                         hasCancel={false}
                         onFinished={this.props.onFinished}
                         accountPassword={this.props.accountPassword}
                     />
-                </AuthBody>
+                </CompleteSecurityBody>
             </AuthPage>
         );
     }
