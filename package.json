@@ -193,6 +193,7 @@
     "afterSign": "scripts/electron_afterSign.js"
   },
   "jest": {
+    "modulePathIgnorePatterns": ["<rootDir>/electron_app"],
     "testEnvironment": "jest-environment-jsdom-fourteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
