@@ -3,7 +3,7 @@ Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HEADER_KIND_ROOM} from './HeaderButtons';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
-import RightPanelStore from "../../../stores/RightPanelStore";
 
 const MEMBER_PHASES = [
     RIGHT_PANEL_PHASES.RoomMemberList,
@@ -60,7 +59,8 @@ export default class RoomHeaderButtons extends HeaderButtons {
     _onMembersClicked() {
         if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
             // send the active phase to trigger a toggle
-            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, RightPanelStore.getSharedInstance().roomPanelPhaseParams);
+            // XXX: we should pass refireParams here but then it won't collapse as we desire it to
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo);
         } else {
             // This toggles for us, if needed
             this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
