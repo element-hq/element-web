@@ -33,6 +33,7 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
+import SettingsStore from '../../../settings/SettingsStore';
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -337,19 +338,31 @@ export default class InviteDialog extends React.PureComponent {
         const recents = [];
         for (const userId in rooms) {
             // Filter out user IDs that are already in the room / should be excluded
-            if (excludedTargetIds.includes(userId)) continue;
+            if (excludedTargetIds.includes(userId)) {
+                console.warn(`[Invite:Recents] Excluding ${userId} from recents`);
+                continue;
+            }
 
             const room = rooms[userId];
             const member = room.getMember(userId);
-            if (!member) continue; // just skip people who don't have memberships for some reason
+            if (!member) {
+                // just skip people who don't have memberships for some reason
+                console.warn(`[Invite:Recents] ${userId} is missing a member object in their own DM (${room.roomId})`);
+                continue;
+            }
 
             const lastEventTs = room.timeline && room.timeline.length
                 ? room.timeline[room.timeline.length - 1].getTs()
                 : 0;
-            if (!lastEventTs) continue; // something weird is going on with this room
+            if (!lastEventTs) {
+                // something weird is going on with this room
+                console.warn(`[Invite:Recents] ${userId} (${room.roomId}) has a weird last timestamp: ${lastEventTs}`);
+                continue;
+            }
 
             recents.push({userId, user: member, lastActive: lastEventTs});
         }
+        if (!recents) console.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);
@@ -493,7 +506,7 @@ export default class InviteDialog extends React.PureComponent {
         return false;
     }
 
-    _startDm = () => {
+    _startDm = async () => {
         this.setState({busy: true});
         const targetIds = this.state.targets.map(t => t.userId);
 
@@ -510,14 +523,31 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
+        const createRoomOptions = {};
+
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            // Check whether all users have uploaded device keys before.
+            // If so, enable encryption in the new room.
+            const client = MatrixClientPeg.get();
+            const usersToDevicesMap = await client.downloadKeys(targetIds);
+            const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+                // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+                return Object.keys(devices).length > 0;
+            });
+            if (allHaveDeviceKeys) {
+                createRoomOptions.encryption = true;
+            }
+        }
+
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         let createRoomPromise = Promise.resolve();
         if (targetIds.length === 1) {
-            createRoomPromise = createRoom({dmUserId: targetIds[0]});
+            createRoomOptions.dmUserId = targetIds[0];
+            createRoomPromise = createRoom(createRoomOptions);
         } else {
             // Create a boring room and try to invite the targets manually.
-            createRoomPromise = createRoom().then(roomId => {
+            createRoomPromise = createRoom(createRoomOptions).then(roomId => {
                 return inviteMultipleToRoom(roomId, targetIds);
             }).then(result => {
                 if (this._shouldAbortAfterInviteError(result)) {
@@ -586,13 +616,36 @@ export default class InviteDialog extends React.PureComponent {
             clearTimeout(this._debounceTimer);
         }
         this._debounceTimer = setTimeout(async () => {
-            MatrixClientPeg.get().searchUserDirectory({term}).then(r => {
+            MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
                 if (term !== this.state.filterText) {
                     // Discard the results - we were probably too slow on the server-side to make
                     // these results useful. This is a race we want to avoid because we could overwrite
                     // more accurate results.
                     return;
                 }
+
+                if (!r.results) r.results = [];
+
+                // While we're here, try and autocomplete a search result for the mxid itself
+                // if there's no matches (and the input looks like a mxid).
+                if (term[0] === '@' && term.indexOf(':') > 1 && r.results.length === 0) {
+                    try {
+                        const profile = await MatrixClientPeg.get().getProfileInfo(term);
+                        if (profile) {
+                            // If we have a profile, we have enough information to assume that
+                            // the mxid can be invited - add it to the list
+                            r.results.push({
+                                user_id: term,
+                                display_name: profile['displayname'],
+                                avatar_url: profile['avatar_url'],
+                            });
+                        }
+                    } catch (e) {
+                        console.warn("Non-fatal error trying to make an invite for a user ID");
+                        console.warn(e);
+                    }
+                }
+
                 this.setState({
                     serverResultsMixin: r.results.map(u => ({
                         userId: u.user_id,
@@ -672,11 +725,16 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _toggleMember = (member: Member) => {
+        let filterText = this.state.filterText;
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
-        if (idx >= 0) targets.splice(idx, 1);
-        else targets.push(member);
-        this.setState({targets});
+        if (idx >= 0) {
+            targets.splice(idx, 1);
+        } else {
+            targets.push(member);
+            filterText = ""; // clear the filter when the user accepts a suggestion
+        }
+        this.setState({targets, filterText});
     };
 
     _removeMember = (member: Member) => {
@@ -876,7 +934,7 @@ export default class InviteDialog extends React.PureComponent {
                 key={"input"}
                 rows={1}
                 onChange={this._updateFilter}
-                defaultValue={this.state.filterText}
+                value={this.state.filterText}
                 ref={this._editorRef}
                 onPaste={this._onPaste}
             />
@@ -944,7 +1002,7 @@ export default class InviteDialog extends React.PureComponent {
 
             title = _t("Direct Messages");
             helpText = _t(
-                "If you can't find someone, ask them for their username, or share your " +
+                "If you can't find someone, ask them for their username, share your " +
                 "username (%(userId)s) or <a>profile link</a>.",
                 {userId},
                 {a: (sub) => <a href={makeUserPermalink(userId)} rel="noopener" target="_blank">{sub}</a>},
@@ -970,7 +1028,7 @@ export default class InviteDialog extends React.PureComponent {
                 title={title}
             >
                 <div className='mx_InviteDialog_content'>
-                    <p>{helpText}</p>
+                    <p className='mx_InviteDialog_helpText'>{helpText}</p>
                     <div className='mx_InviteDialog_addressBar'>
                         {this._renderEditor()}
                         <div className='mx_InviteDialog_buttonAndSpinner'>
@@ -987,8 +1045,10 @@ export default class InviteDialog extends React.PureComponent {
                     </div>
                     {this._renderIdentityServerWarning()}
                     <div className='error'>{this.state.errorText}</div>
-                    {this._renderSection('recents')}
-                    {this._renderSection('suggestions')}
+                    <div className='mx_InviteDialog_userSections'>
+                        {this._renderSection('recents')}
+                        {this._renderSection('suggestions')}
+                    </div>
                 </div>
             </BaseDialog>
         );

@@ -26,6 +26,7 @@ import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -168,7 +169,6 @@ export default class MessageComposer extends React.Component {
     constructor(props) {
         super(props);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
-        this.onEvent = this.onEvent.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
@@ -182,11 +182,6 @@ export default class MessageComposer extends React.Component {
     }
 
     componentDidMount() {
-        // N.B. using 'event' rather than 'RoomEvents' otherwise the crypto handler
-        // for 'event' fires *after* 'RoomEvent', and our room won't have yet been
-        // marked as encrypted.
-        // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
-        MatrixClientPeg.get().on("event", this.onEvent);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
@@ -210,19 +205,11 @@ export default class MessageComposer extends React.Component {
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("event", this.onEvent);
             MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
-    }
-
-    onEvent(event) {
-        if (event.getType() !== 'm.room.encryption') return;
-        if (event.getRoomId() !== this.props.room.roomId) return;
-        // TODO: put (encryption state??) in state
-        this.forceUpdate();
     }
 
     _onRoomStateEvents(ev, state) {
@@ -282,18 +269,33 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-        if (this.state.isQuoting) {
-            if (roomIsEncrypted) {
-                return _t('Send an encrypted reply…');
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            if (this.state.isQuoting) {
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted reply…');
+                } else {
+                    return _t('Send a reply…');
+                }
             } else {
-                return _t('Send a reply (unencrypted)…');
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted message…');
+                } else {
+                    return _t('Send a message…');
+                }
             }
         } else {
-            if (roomIsEncrypted) {
-                return _t('Send an encrypted message…');
+            if (this.state.isQuoting) {
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted reply…');
+                } else {
+                    return _t('Send a reply (unencrypted)…');
+                }
             } else {
-                return _t('Send a message (unencrypted)…');
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted message…');
+                } else {
+                    return _t('Send a message (unencrypted)…');
+                }
             }
         }
     }

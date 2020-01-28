@@ -21,14 +21,9 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
-import packageJson from "../../../../../../package.json";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
-
-// if this looks like a release, use the 'version' from package.json; else use
-// the git sha. Prepend version with v, to look like riot-web version
-const REACT_SDK_VERSION = 'dist' in packageJson ? packageJson.version : packageJson.gitHead || '<local>';
 
 // Simple method to help prettify GH Release Tags and Commit Hashes.
 const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
@@ -188,9 +183,6 @@ export default class HelpUserSettingsTab extends React.Component {
             );
         }
 
-        const reactSdkVersion = REACT_SDK_VERSION !== '<local>'
-            ? ghVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
-            : REACT_SDK_VERSION;
         const vectorVersion = this.state.vectorVersion
             ? ghVersionLabel('vector-im/riot-web', this.state.vectorVersion)
             : 'unknown';
@@ -243,7 +235,6 @@ export default class HelpUserSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("matrix-react-sdk version:")} {reactSdkVersion}<br />
                         {_t("riot-web version:")} {vectorVersion}<br />
                         {_t("olm version:")} {olmVersion}<br />
                         {updateButton}

@@ -275,6 +275,8 @@ function textForRoomAliasesEvent(ev) {
     // This feels a bit overkill though, and it's not clear the i18n really needs it
     // so instead it's landing as a simple textual event.
 
+    const maxShown = 3;
+
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAliases = ev.getPrevContent().aliases || [];
     const newAliases = ev.getContent().aliases || [];
@@ -287,18 +289,40 @@ function textForRoomAliasesEvent(ev) {
     }
 
     if (addedAliases.length && !removedAliases.length) {
+        if (addedAliases.length > maxShown) {
+            return _t("%(senderName)s added %(addedAddresses)s and %(count)s other addresses to this room", {
+                senderName: senderName,
+                count: addedAliases.length - maxShown,
+                addedAddresses: addedAliases.slice(0, maxShown).join(', '),
+            });
+        }
         return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: addedAliases.length,
             addedAddresses: addedAliases.join(', '),
         });
     } else if (!addedAliases.length && removedAliases.length) {
+        if (removedAliases.length > maxShown) {
+            return _t("%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room", {
+                senderName: senderName,
+                count: removedAliases.length - maxShown,
+                removedAddresses: removedAliases.slice(0, maxShown).join(', '),
+            });
+        }
         return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: removedAliases.length,
             removedAddresses: removedAliases.join(', '),
         });
     } else {
+        const combined = addedAliases.length + removedAliases.length;
+        if (combined > maxShown) {
+            return _t("%(senderName)s removed %(countRemoved)s and added %(countAdded)s addresses to this room", {
+                senderName: senderName,
+                countAdded: addedAliases.length,
+                countRemoved: removedAliases.length,
+            });
+        }
         return _t(
             '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
                 senderName: senderName,
@@ -420,10 +444,19 @@ function textForHistoryVisibilityEvent(event) {
 
 function textForEncryptionEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {
-        senderName,
-        algorithm: event.getContent().algorithm,
-    });
+    if (event.getContent().algorithm === "m.megolm.v1.aes-sha2") {
+        return _t('%(senderName)s turned on end-to-end encryption.', {
+            senderName,
+        });
+    }
+    return _t(
+        '%(senderName)s turned on end-to-end encryption ' +
+        '(unrecognised algorithm %(algorithm)s).',
+        {
+            senderName,
+            algorithm: event.getContent().algorithm,
+        },
+    );
 }
 
 // Currently will only display a change if a user's power level is changed

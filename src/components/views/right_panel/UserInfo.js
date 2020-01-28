@@ -82,7 +82,7 @@ const _getE2EStatus = (cli, userId, devices) => {
     return "warning";
 };
 
-function openDMForUser(matrixClient, userId) {
+async function openDMForUser(matrixClient, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
         const room = matrixClient.getRoom(roomId);
@@ -100,9 +100,27 @@ function openDMForUser(matrixClient, userId) {
             action: 'view_room',
             room_id: lastActiveRoom.roomId,
         });
-    } else {
-        createRoom({dmUserId: userId});
+        return;
     }
+
+    const createRoomOptions = {
+        dmUserId: userId,
+    };
+
+    if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
+        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+            return Object.keys(devices).length > 0;
+        });
+        if (allHaveDeviceKeys) {
+            createRoomOptions.encryption = true;
+        }
+    }
+
+    createRoom(createRoomOptions);
 }
 
 function useIsEncrypted(cli, room) {
@@ -1219,10 +1237,9 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     let closeButton;
     if (onClose) {
-        closeButton = <AccessibleButton
-            className="mx_UserInfo_cancel"
-            onClick={onClose}
-            title={_t('Close')} />;
+        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
+            <div />
+        </AccessibleButton>;
     }
 
     const memberDetails = (
@@ -1308,15 +1325,18 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         userTrust.isVerified();
     const isMe = user.userId === cli.getUserId();
     let verifyButton;
-    if (!userVerified && !isMe) {
+    if (isRoomEncrypted && !userVerified && !isMe) {
         verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
             {_t("Verify")}
         </AccessibleButton>;
     }
 
-    const devicesSection = <DevicesSection
-        loading={devices === undefined}
-        devices={devices} userId={user.userId} />;
+    let devicesSection;
+    if (isRoomEncrypted) {
+        devicesSection = <DevicesSection
+            loading={devices === undefined}
+            devices={devices} userId={user.userId} />;
+    }
 
     const securitySection = (
         <div className="mx_UserInfo_container">
@@ -1335,32 +1355,32 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
 
     return (
         <div className="mx_UserInfo" role="tabpanel">
-            { closeButton }
-            { avatarElement }
-
-            <div className="mx_UserInfo_container">
-                <div className="mx_UserInfo_profile">
-                    <div>
-                        <h2 aria-label={displayName}>
-                            { e2eIcon }
-                            { displayName }
-                        </h2>
-                    </div>
-                    <div>{ user.userId }</div>
-                    <div className="mx_UserInfo_profileStatus">
-                        {presenceLabel}
-                        {statusLabel}
-                    </div>
-                </div>
-            </div>
-
-            { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
-                <div className="mx_UserInfo_memberDetails">
-                    { memberDetails }
-                </div>
-            </div> }
-
             <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
+                { closeButton }
+                { avatarElement }
+
+                <div className="mx_UserInfo_container">
+                    <div className="mx_UserInfo_profile">
+                        <div>
+                            <h2 aria-label={displayName}>
+                                { e2eIcon }
+                                { displayName }
+                            </h2>
+                        </div>
+                        <div>{ user.userId }</div>
+                        <div className="mx_UserInfo_profileStatus">
+                            {presenceLabel}
+                            {statusLabel}
+                        </div>
+                    </div>
+                </div>
+
+                { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
+                    <div className="mx_UserInfo_memberDetails">
+                        { memberDetails }
+                    </div>
+                </div> }
+
                 { securitySection }
                 <UserOptionsSection
                     devices={devices}

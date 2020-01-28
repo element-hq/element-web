@@ -17,86 +17,13 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import Analytics from './Analytics';
-import * as sdk from './index';
 import dis from './dispatcher';
-import { _t } from './languageHandler';
-import {defer} from "./utils/promise";
+import {defer} from './utils/promise';
+import AsyncWrapper from './AsyncWrapper';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
-
-/**
- * Wrap an asynchronous loader function with a react component which shows a
- * spinner until the real component loads.
- */
-const AsyncWrapper = createReactClass({
-    propTypes: {
-        /** A promise which resolves with the real component
-         */
-        prom: PropTypes.object.isRequired,
-    },
-
-    getInitialState: function() {
-        return {
-            component: null,
-            error: null,
-        };
-    },
-
-    componentWillMount: function() {
-        this._unmounted = false;
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('Starting load of AsyncWrapper for modal');
-        this.props.prom.then((result) => {
-            if (this._unmounted) {
-                return;
-            }
-            // Take the 'default' member if it's there, then we support
-            // passing in just an import()ed module, since ES6 async import
-            // always returns a module *namespace*.
-            const component = result.default ? result.default : result;
-            this.setState({component});
-        }).catch((e) => {
-            console.warn('AsyncWrapper promise failed', e);
-            this.setState({error: e});
-        });
-    },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
-    },
-
-    _onWrapperCancelClick: function() {
-        this.props.onFinished(false);
-    },
-
-    render: function() {
-        if (this.state.component) {
-            const Component = this.state.component;
-            return <Component {...this.props} />;
-        } else if (this.state.error) {
-            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            return <BaseDialog onFinished={this.props.onFinished}
-                title={_t("Error")}
-            >
-                {_t("Unable to load! Check your network connectivity and try again.")}
-                <DialogButtons primaryButton={_t("Dismiss")}
-                    onPrimaryButtonClick={this._onWrapperCancelClick}
-                    hasCancel={false}
-                />
-            </BaseDialog>;
-        } else {
-            // show a spinner until the component is loaded.
-            const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
-        }
-    },
-});
 
 class ModalManager {
     constructor() {

@@ -20,7 +20,7 @@ import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
+import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
 import * as sdk from '../../index';
 

@@ -35,7 +35,21 @@ export default class CompleteSecurity extends React.Component {
 
         this.state = {
             phase: PHASE_INTRO,
+            // this serves dual purpose as the object for the request logic and
+            // the presence of it insidicating that we're in 'verify mode'.
+            // Because of the latter, it lives in the state.
+            verificationRequest: null,
         };
+        MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
+    }
+
+    componentWillUnmount() {
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("crypto.verification.request", this.onVerificationRequest);
+        }
     }
 
     onStartClick = async () => {
@@ -44,11 +58,35 @@ export default class CompleteSecurity extends React.Component {
             await accessSecretStorage(async () => {
                 await cli.checkOwnCrossSigningTrust();
             });
-            this.setState({
-                phase: PHASE_DONE,
-            });
+
+            if (cli.getCrossSigningId()) {
+                this.setState({
+                    phase: PHASE_DONE,
+                });
+            }
         } catch (e) {
             // this will throw if the user hits cancel, so ignore
+        }
+    }
+
+    onVerificationRequest = (request) => {
+        if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
+
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        request.on("change", this.onVerificationRequestChange);
+        this.setState({
+            verificationRequest: request,
+        });
+    }
+
+    onVerificationRequestChange = () => {
+        if (this.state.verificationRequest.cancelled) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.setState({
+                verificationRequest: null,
+            });
         }
     }
 
@@ -74,8 +112,7 @@ export default class CompleteSecurity extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
+        const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         const {
@@ -85,7 +122,13 @@ export default class CompleteSecurity extends React.Component {
         let icon;
         let title;
         let body;
-        if (phase === PHASE_INTRO) {
+
+        if (this.state.verificationRequest) {
+            const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+            body = <IncomingSasDialog verifier={this.state.verificationRequest.verifier}
+                onFinished={this.props.onFinished}
+            />;
+        } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
             title = _t("Complete security");
             body = (
@@ -161,8 +204,7 @@ export default class CompleteSecurity extends React.Component {
 
         return (
             <AuthPage>
-                <AuthHeader />
-                <AuthBody>
+                <CompleteSecurityBody>
                     <h2 className="mx_CompleteSecurity_header">
                         {icon}
                         {title}
@@ -170,7 +212,7 @@ export default class CompleteSecurity extends React.Component {
                     <div className="mx_CompleteSecurity_body">
                         {body}
                     </div>
-                </AuthBody>
+                </CompleteSecurityBody>
             </AuthPage>
         );
     }

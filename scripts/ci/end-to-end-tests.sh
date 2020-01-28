@@ -21,15 +21,16 @@ handle_error() {
 
 trap 'handle_error' ERR
 
-RIOT_WEB_DIR=riot-web
-REACT_SDK_DIR=`pwd`
-
 
 echo "--- Building Riot"
-scripts/ci/build.sh
+scripts/ci/layered-riot-web.sh
+cd ../riot-web
+riot_web_dir=`pwd`
+CI_PACKAGE=true yarn build
+cd ../matrix-react-sdk
 # run end to end tests
 pushd test/end-to-end-tests
-ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
+ln -s $riot_web_dir riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 echo "--- Install synapse & other dependencies"

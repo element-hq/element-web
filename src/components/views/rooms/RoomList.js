@@ -39,6 +39,7 @@ import * as sdk from "../../../index";
 import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
+import {RovingTabIndexProvider} from "../../../accessibility/RovingTabIndex";
 
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -718,7 +719,7 @@ export default createReactClass({
             },
             {
                 list: this.state.lists['im.vector.fake.direct'],
-                label: _t('People'),
+                label: _t('Direct Messages'),
                 tagName: "im.vector.fake.direct",
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
@@ -776,19 +777,22 @@ export default createReactClass({
 
         const subListComponents = this._mapSubListProps(subLists);
 
-        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, ...props} = this.props; // eslint-disable-line
+        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, onKeyDown, ...props} = this.props; // eslint-disable-line
         return (
-            <div
-                {...props}
-                ref={this._collectResizeContainer}
-                className="mx_RoomList"
-                role="tree"
-                aria-label={_t("Rooms")}
-                onMouseMove={this.onMouseMove}
-                onMouseLeave={this.onMouseLeave}
-            >
-                { subListComponents }
-            </div>
+            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+                {({onKeyDownHandler}) => <div
+                    {...props}
+                    onKeyDown={onKeyDownHandler}
+                    ref={this._collectResizeContainer}
+                    className="mx_RoomList"
+                    role="tree"
+                    aria-label={_t("Rooms")}
+                    onMouseMove={this.onMouseMove}
+                    onMouseLeave={this.onMouseLeave}
+                >
+                    { subListComponents }
+                </div> }
+            </RovingTabIndexProvider>
         );
     },
 });

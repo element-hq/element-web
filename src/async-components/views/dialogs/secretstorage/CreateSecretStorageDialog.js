@@ -1,6 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { scorePassword } from '../../../../utils/PasswordScorer';
@@ -52,6 +53,15 @@ function selectText(target) {
  * Secret Storage in account data.
  */
 export default class CreateSecretStorageDialog extends React.PureComponent {
+    static propTypes = {
+        hasCancel: PropTypes.bool,
+        accountPassword: PropTypes.string,
+    };
+
+    defaultProps = {
+        hasCancel: true,
+    };
+
     constructor(props) {
         super(props);
 
@@ -70,12 +80,24 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             setPassPhrase: false,
             backupInfo: null,
             backupSigStatus: null,
+            // does the server offer a UI auth flow with just m.login.password
+            // for /keys/device_signing/upload?
+            canUploadKeysWithPasswordOnly: null,
+            accountPassword: props.accountPassword,
+            accountPasswordCorrect: null,
+            // set if we are 'upgrading' encryption (making an SSSS store from
+            // an existing key backup secret).
+            doingUpgrade: null,
         };
 
         this._fetchBackupInfo();
+        this._queryKeyUploadAuth();
+
+        MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
     }
 
     componentWillUnmount() {
+        MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
         if (this._setZxcvbnResultTimeout !== null) {
             clearTimeout(this._setZxcvbnResultTimeout);
         }
@@ -83,7 +105,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     async _fetchBackupInfo() {
         const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-        const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+        const backupSigStatus = (
+            // we may not have started crypto yet, in which case we definitely don't trust the backup
+            MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
+        );
 
         const phase = backupInfo ?
             (backupSigStatus.usable ? PHASE_MIGRATE : PHASE_RESTORE_KEY_BACKUP) :
@@ -93,14 +118,41 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             phase,
             backupInfo,
             backupSigStatus,
+            // remember this after this phase so we can use appropriate copy
+            doingUpgrade: phase === PHASE_MIGRATE,
         });
+    }
+
+    async _queryKeyUploadAuth() {
+        try {
+            await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {});
+            // We should never get here: the server should always require
+            // UI auth to upload device signing keys. If we do, we upload
+            // no keys which would be a no-op.
+            console.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
+        } catch (error) {
+            if (!error.data.flows) {
+                console.log("uploadDeviceSigningKeys advertised no flows!");
+            }
+            const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {
+                return f.stages.length === 1 && f.stages[0] === 'm.login.password';
+            });
+            this.setState({
+                canUploadKeysWithPasswordOnly,
+            });
+        }
+    }
+
+    _onKeyBackupStatusChange = () => {
+        this._fetchBackupInfo();
     }
 
     _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
     }
 
-    _onMigrateNextClick = () => {
+    _onMigrateFormSubmit = (e) => {
+        e.preventDefault();
         this._bootstrapSecretStorage();
     }
 
@@ -127,29 +179,46 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _doBootstrapUIAuth = async (makeRequest) => {
+        if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
+            await makeRequest({
+                type: 'm.login.password',
+                identifier: {
+                    type: 'm.id.user',
+                    user: MatrixClientPeg.get().getUserId(),
+                },
+                // https://github.com/matrix-org/synapse/issues/5665
+                user: MatrixClientPeg.get().getUserId(),
+                password: this.state.accountPassword,
+            });
+        } else {
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+            const { finished } = Modal.createTrackedDialog(
+                'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                {
+                    title: _t("Send cross-signing keys to homeserver"),
+                    matrixClient: MatrixClientPeg.get(),
+                    makeRequest,
+                },
+            );
+            const [confirmed] = await finished;
+            if (!confirmed) {
+                throw new Error("Cross-signing key upload auth canceled");
+            }
+        }
+    }
+
     _bootstrapSecretStorage = async () => {
         this.setState({
             phase: PHASE_STORING,
             error: null,
         });
+
         const cli = MatrixClientPeg.get();
+
         try {
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapSecretStorage({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Send cross-signing keys to homeserver"),
-                            matrixClient: MatrixClientPeg.get(),
-                            makeRequest,
-                        },
-                    );
-                    const [confirmed] = await finished;
-                    if (!confirmed) {
-                        throw new Error("Cross-signing key upload auth canceled");
-                    }
-                },
+                authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 createSecretStorageKey: async () => this._keyInfo,
                 keyBackupInfo: this.state.backupInfo,
             });
@@ -157,7 +226,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 phase: PHASE_DONE,
             });
         } catch (e) {
-            this.setState({ error: e });
+            if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
+                this.setState({
+                    accountPasswordCorrect: false,
+                    phase: PHASE_MIGRATE,
+                });
+            } else {
+                this.setState({ error: e });
+            }
             console.error("Error bootstrapping secret storage", e);
         }
     }
@@ -173,7 +249,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _onRestoreKeyBackupClick = () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
+            'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
             /* priority = */ false, /* static = */ true,
         );
     }
@@ -285,6 +361,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
     }
 
+    _onAccountPasswordChange = (e) => {
+        this.setState({
+            accountPassword: e.target.value,
+        });
+    }
+
     _renderPhaseRestoreKeyBackup() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
@@ -309,22 +391,47 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // it automatically.
         // https://github.com/vector-im/riot-web/issues/11696
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <div>
+        const Field = sdk.getComponent('views.elements.Field');
+
+        let authPrompt;
+        if (this.state.canUploadKeysWithPasswordOnly) {
+            authPrompt = <div>
+                <div>{_t("Enter your account password to confirm the upgrade:")}</div>
+                <div><Field type="password"
+                    id="mx_CreateSecretStorage_accountPassword"
+                    label={_t("Password")}
+                    value={this.state.accountPassword}
+                    onChange={this._onAccountPasswordChange}
+                    flagInvalid={this.state.accountPasswordCorrect === false}
+                    autoFocus={true}
+                /></div>
+            </div>;
+        } else {
+            authPrompt = <p>
+                {_t("You'll need to authenticate with the server to confirm the upgrade.")}
+            </p>;
+        }
+
+        return <form onSubmit={this._onMigrateFormSubmit}>
             <p>{_t(
-                "Secret Storage will be set up using your existing key backup details. " +
-                "Your secret storage passphrase and recovery key will be the same as " +
-                "they were for your key backup.",
+                "Upgrade this device to allow it to verify other devices, " +
+                "granting them access to encrypted messages and marking them " +
+                "as trusted for other users.",
             )}</p>
+            <div>{authPrompt}</div>
             <DialogButtons primaryButton={_t('Next')}
-                onPrimaryButtonClick={this._onMigrateNextClick}
+                primaryIsSubmit={true}
                 hasCancel={true}
                 onCancel={this._onCancel}
+                primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             />
-        </div>;
+        </form>;
     }
 
     _renderPhasePassPhrase() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const Field = sdk.getComponent('views.elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let strengthMeter;
         let helpText;
@@ -350,51 +457,52 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <div>
             <p>{_t(
-                "<b>Warning</b>: You should only set up secret storage from a trusted computer.", {},
-                { b: sub => <b>{sub}</b> },
+                "Set up encryption on this device to allow it to verify other devices, " +
+                "granting them access to encrypted messages and marking them as trusted for other users.",
             )}</p>
             <p>{_t(
-                "We'll use secret storage to optionally store an encrypted copy of " +
-                "your cross-signing identity for verifying other devices and message " +
-                "keys on our server. Protect your access to encrypted messages with a " +
-                "passphrase to keep it secure.",
+                "Secure your encryption keys with a passphrase. For maximum security " +
+                "this should be different to your account password:",
             )}</p>
-            <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
-                <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                    <input type="password"
-                        onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
-                        value={this.state.passPhrase}
-                        className="mx_CreateSecretStorageDialog_passPhraseInput"
-                        placeholder={_t("Enter a passphrase...")}
-                        autoFocus={true}
-                    />
-                    <div className="mx_CreateSecretStorageDialog_passPhraseHelp">
-                        {strengthMeter}
-                        {helpText}
-                    </div>
+            <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
+                <Field type="password"
+                    className="mx_CreateSecretStorageDialog_passPhraseField"
+                    onChange={this._onPassPhraseChange}
+                    onKeyPress={this._onPassPhraseKeyPress}
+                    value={this.state.passPhrase}
+                    label={_t("Enter a passphrase")}
+                    autoFocus={true}
+                />
+                <div className="mx_CreateSecretStorageDialog_passPhraseHelp">
+                    {strengthMeter}
+                    {helpText}
                 </div>
             </div>
 
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
                 disabled={!this._passPhraseIsValid()}
-            />
+            >
+                <button type="button"
+                    onClick={this._onCancel}
+                    className="danger"
+                >{_t("Skip")}</button>
+            </DialogButtons>
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><button onClick={this._onSkipPassPhraseClick} >
+                <p><AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
                     {_t("Set up with a recovery key")}
-                </button></p>
+                </AccessibleButton></p>
             </details>
         </div>;
     }
 
     _renderPhasePassPhraseConfirm() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const Field = sdk.getComponent('views.elements.Field');
 
         let matchText;
         if (this.state.passPhraseConfirm === this.state.passPhrase) {
@@ -412,7 +520,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         let passPhraseMatch = null;
         if (matchText) {
-            passPhraseMatch = <div className="mx_CreateSecretStorageDialog_passPhraseMatch">
+            passPhraseMatch = <div>
                 <div>{matchText}</div>
                 <div>
                     <AccessibleButton element="span" className="mx_linkButton" onClick={this._onSetAgainClick}>
@@ -424,28 +532,32 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Please enter your passphrase a second time to confirm.",
+                "Enter your passphrase a second time to confirm it.",
             )}</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
-                <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                    <div>
-                        <input type="password"
-                            onChange={this._onPassPhraseConfirmChange}
-                            onKeyPress={this._onPassPhraseConfirmKeyPress}
-                            value={this.state.passPhraseConfirm}
-                            className="mx_CreateSecretStorageDialog_passPhraseInput"
-                            placeholder={_t("Repeat your passphrase...")}
-                            autoFocus={true}
-                        />
-                    </div>
+            <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
+                <Field type="password"
+                    id="mx_CreateSecretStorageDialog_passPhraseField"
+                    onChange={this._onPassPhraseConfirmChange}
+                    onKeyPress={this._onPassPhraseConfirmKeyPress}
+                    value={this.state.passPhraseConfirm}
+                    className="mx_CreateSecretStorageDialog_passPhraseField"
+                    label={_t("Confirm your passphrase")}
+                    autoFocus={true}
+                />
+                <div className="mx_CreateSecretStorageDialog_passPhraseMatch">
                     {passPhraseMatch}
                 </div>
             </div>
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseConfirmNextClick}
                 hasCancel={false}
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
-            />
+            >
+                <button type="button"
+                    onClick={this._onCancel}
+                    className="danger"
+                >{_t("Skip")}</button>
+            </DialogButtons>
         </div>;
     }
 
@@ -463,6 +575,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             );
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div>
             <p>{_t(
                 "Your recovery key is a safety net - you can use it to restore " +
@@ -481,12 +594,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                         <code ref={this._collectRecoveryKeyNode}>{this._encodedRecoveryKey}</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
-                        <button className="mx_Dialog_primary" onClick={this._onCopyClick}>
+                        <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>
                             {_t("Copy to clipboard")}
-                        </button>
-                        <button className="mx_Dialog_primary" onClick={this._onDownloadClick}>
+                        </AccessibleButton>
+                        <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onDownloadClick}>
                             {_t("Download")}
-                        </button>
+                        </AccessibleButton>
                     </div>
                 </div>
             </div>
@@ -533,7 +646,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Your access to encrypted messages is now protected.",
+                "This device can now verify other devices, granting them access " +
+                "to encrypted messages and marking them as trusted for other users.",
+            )}</p>
+            <p>{_t(
+                "Verify other users in their profile.",
             )}</p>
             <DialogButtons primaryButton={_t('OK')}
                 onPrimaryButtonClick={this._onDone}
@@ -564,11 +681,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_RESTORE_KEY_BACKUP:
                 return _t('Restore your Key Backup');
             case PHASE_MIGRATE:
-                return _t('Migrate from Key Backup');
+                return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
-                return _t('Secure your encrypted messages with a passphrase');
+                return _t('Set up encryption');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm your passphrase');
+                return _t('Confirm passphrase');
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
@@ -578,9 +695,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_STORING:
                 return _t('Storing secrets...');
             case PHASE_DONE:
-                return _t('Success!');
+                return this.state.doingUpgrade ? _t('Encryption upgraded') : _t('Encryption setup complete');
             default:
-                return null;
+                return '';
         }
     }
 
@@ -635,11 +752,17 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             }
         }
 
+        let headerImage;
+        if (this._titleForPhase(this.state.phase)) {
+            headerImage = require("../../../../../res/img/e2e/normal.svg");
+        }
+
         return (
             <BaseDialog className='mx_CreateSecretStorageDialog'
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
-                hasCancel={[PHASE_PASSPHRASE, PHASE_DONE].includes(this.state.phase)}
+                headerImage={headerImage}
+                hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
             >
             <div>
                 {content}

@@ -128,12 +128,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_ftue_dms": {
-        isFeature: true,
-        displayName: _td("New invite dialog"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_presence_in_room_list": {
         isFeature: true,
         displayName: _td("Show a presence dot next to DMs in the room list"),
@@ -485,5 +479,10 @@ export const SETTINGS = {
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: RIGHT_PANEL_PHASES.GroupMemberList,
+    },
+    "enableEventIndexing": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Enable message search in encrypted rooms"),
+        default: true,
     },
 };

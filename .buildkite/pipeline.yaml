@@ -1,8 +1,10 @@
 steps:
   - label: ":eslint: JS Lint"
     command:
+      # We fetch the develop js-sdk to get our latest eslint rules
       - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      - "./scripts/ci/install-deps.sh --ignore-scripts"
+      - "echo '+++ Lint'"
       - "yarn lint:js"
     plugins:
       - docker#v3.0.1:
@@ -10,8 +12,9 @@ steps:
 
   - label: ":eslint: TS Lint"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      - "echo '--- Install'"
+      - "yarn install --ignore-scripts"
+      - "echo '+++ Lint'"
       - "yarn lint:ts"
     plugins:
       - docker#v3.0.1:
@@ -19,9 +22,18 @@ steps:
 
   - label: ":eslint: Types Lint"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
+      - "echo '--- Install'"
+      - "yarn install --ignore-scripts"
+      - "echo '+++ Lint'"
       - "yarn lint:types"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:12"
+  - label: ":stylelint: Style Lint"
+    command:
+      - "echo '--- Install'"
+      - "yarn install --ignore-scripts"
+      - "yarn lint:style"
     plugins:
       - docker#v3.0.1:
           image: "node:12"
@@ -33,13 +45,11 @@ steps:
       queue: "medium"
     command:
       - "echo '--- Install js-sdk'"
-      # TODO: Remove hacky chmod for BuildKite
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
-      - "echo '--- Installing Dependencies'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '--- Running initial build steps'"
-      - "yarn build"
+      # We don't use the babel-ed output for anything so we can --ignore-scripts
+      # to save transpiling the files. We run the transpile step explicitly in
+      # the 'build' job.
+      - "./scripts/ci/install-deps.sh --ignore-scripts"
+      - "yarn run reskindex"
       - "echo '+++ Running Tests'"
       - "yarn test"
     plugins:
@@ -48,10 +58,8 @@ steps:
 
   - label: "🛠 Build"
     command:
-      - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '+++ Building Project'"
-      - "yarn build"
+      - "echo '+++ Install & Build'"
+      - "yarn install"
     plugins:
       - docker#v3.0.1:
           image: "node:12"
@@ -62,20 +70,19 @@ steps:
       # e2e tests otherwise take +-8min
       queue: "xlarge"
     command:
-      # TODO: Remove hacky chmod for BuildKite
-      - "echo '--- Setup'"
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
       - "echo '--- Install js-sdk'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '--- Running initial build steps'"
-      - "yarn build"
+      - "./scripts/ci/install-deps.sh --ignore-scripts"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/end-to-end-tests.sh"
     plugins:
       - docker#v3.0.1:
           image: "matrixdotorg/riotweb-ci-e2etests-env:latest"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
+    retry:
+      automatic:
+        - exit_status: 1 # retry end-to-end tests once as Puppeteer sometimes fails
+          limit: 1
 
   - label: "🔧 Riot Tests"
     agents:
@@ -83,32 +90,18 @@ steps:
       # webpack loves to gorge itself on resources.
       queue: "medium"
     command:
-      # Install chrome
-      - "echo '--- Installing Chrome'"
-      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
-      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
-      - "apt-get update"
-      - "apt-get install -y google-chrome-stable"
-      # TODO: Remove hacky chmod for BuildKite
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
-      - "echo '--- Installing Dependencies'"
-      - "./scripts/ci/install-deps.sh"
-      - "echo '--- Running initial build steps'"
-      - "yarn build"
       - "echo '+++ Running Tests'"
       - "./scripts/ci/riot-unit-tests.sh"
-    env:
-      CHROME_BIN: "/usr/bin/google-chrome-stable"
     plugins:
       - docker#v3.0.1:
           image: "node:10"
           propagate-environment: true
+          workdir: "/workdir/matrix-react-sdk"
 
   - label: "🌐 i18n"
     command:
       - "echo '--- Fetching Dependencies'"
-      - "yarn install"
+      - "yarn install --ignore-scripts"
       - "echo '+++ Testing i18n output'"
       - "yarn diff-i18n"
     plugins:

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +17,12 @@ limitations under the License.
 
 .mx_AuthBody {
     width: 500px;
+    font-size: 12px;
+    color: $authpage-secondary-color;
     background-color: $authpage-body-bg-color;
     border-radius: 0 4px 4px 0;
     padding: 25px 60px;
     box-sizing: border-box;
-    font-size: 12px;
-    color: $authpage-secondary-color;
 
     h2 {
         font-size: 24px;

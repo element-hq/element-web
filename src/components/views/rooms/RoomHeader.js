@@ -31,7 +31,9 @@ import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
+import DMRoomMap from '../../../utils/DMRoomMap';
 import E2EIcon from './E2EIcon';
+import InviteOnlyIcon from './InviteOnlyIcon';
 
 export default createReactClass({
     displayName: 'RoomHeader',
@@ -160,13 +162,16 @@ export default createReactClass({
             <E2EIcon status={this.props.e2eStatus} /> :
             undefined;
 
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
         const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
-        const joinRuleClass = classNames("mx_RoomHeader_PrivateIcon",
-                                         {"mx_RoomHeader_isPrivate": joinRule === "invite"});
-        const privateIcon = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
-            <div className={joinRuleClass} /> :
-            undefined;
+        let privateIcon;
+        // Don't show an invite-only icon for DMs. Users know they're invite-only.
+        if (!dmUserId && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            if (joinRule == "invite") {
+                privateIcon = <InviteOnlyIcon />;
+            }
+        }
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
@@ -310,8 +315,7 @@ export default createReactClass({
         return (
             <div className="mx_RoomHeader light-panel">
                 <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
-                    { e2eIcon }
+                    <div className="mx_RoomHeader_avatar">{ roomAvatar }{ e2eIcon }</div>
                     { privateIcon }
                     { name }
                     { topicElement }

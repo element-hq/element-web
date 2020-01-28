@@ -98,6 +98,19 @@ limitations under the License.
     z-index: 2;
 }
 
+// Note we match .mx_E2EIcon to make sure this matches more tightly than just
+// .mx_E2EIcon on its own
+.mx_RoomTile_e2eIcon.mx_E2EIcon {
+    height: 10px;
+    width: 10px;
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    right: -2px;
+    z-index: 1;
+    margin: 0;
+}
+
 .mx_RoomTile_name {
     font-size: 14px;
     padding: 0 6px;
@@ -142,10 +155,11 @@ limitations under the License.
     }
 }
 
-// toggle menuButton and badge on hover/menu displayed
+// toggle menuButton and badge on menu displayed
 .mx_RoomTile_menuDisplayed,
 // or on keyboard focus of room tile
-.mx_RoomTile.focus-visible:focus-within,
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:focus-within,
+// or on pointer hover
 .mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
     .mx_RoomTile_menuButton {
         display: block;
@@ -201,30 +215,7 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_RoomTile.mx_RoomTile.mx_RoomTile_isPrivate .mx_RoomTile_name {
+.mx_InviteOnlyIcon + .mx_RoomTile_nameContainer .mx_RoomTile_name {
     // Scoot the padding in a bit from 6px to make it look better
     padding-left: 3px;
-}
-
-.mx_RoomTile.mx_RoomTile_isPrivate .mx_RoomTile_PrivateIcon {
-    width: 12px;
-    height: 12px;
-    position: relative;
-    display: block !important;
-    // Align the padlock with unencrypted room names
-    margin-left: 6px;
-
-    &::before {
-        background-color: $roomtile-name-color;
-        mask-image: url('$(res)/img/feather-customised/lock-solid.svg');
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
 }

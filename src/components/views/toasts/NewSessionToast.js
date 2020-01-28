@@ -32,7 +32,7 @@ export default class VerifySessionToast extends React.PureComponent {
         DeviceListener.sharedInstance().dismissVerification(this.props.deviceId);
     };
 
-    _onVerifyClick = async () => {
+    _onReviewClick = async () => {
         const cli = MatrixClientPeg.get();
         const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
 
@@ -47,10 +47,10 @@ export default class VerifySessionToast extends React.PureComponent {
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
         return (<div>
-            <div className="mx_Toast_description">{_t("Other users may not trust it")}</div>
+            <div className="mx_Toast_description">{_t("Review & verify your new session")}</div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
-                <FormButton label={_t("Verify")} onClick={this._onVerifyClick} />
+                <FormButton label={_t("Review")} onClick={this._onReviewClick} />
             </div>
         </div>);
     }

@@ -16,20 +16,26 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
+import {EventTimeline, RoomMember} from 'matrix-js-sdk';
+import {sleep} from "../utils/promise";
+import {EventEmitter} from "events";
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
  */
-export default class EventIndex {
+export default class EventIndex extends EventEmitter {
     constructor() {
+        super();
         this.crawlerCheckpoints = [];
-        // The time that the crawler will wait between /rooms/{room_id}/messages
-        // requests
-        this._crawlerTimeout = 3000;
+        // The time in ms that the crawler will wait loop iterations if there
+        // have not been any checkpoints to consume in the last iteration.
+        this._crawlerIdleTime = 5000;
+        this._crawlerSleepTime = 3000;
         // The maximum number of events our crawler should fetch in a single
         // crawl.
         this._eventsPerCrawl = 100;
         this._crawler = null;
+        this._currentCheckpoint = null;
         this.liveEventsForIndex = new Set();
     }
 
@@ -64,59 +70,62 @@ export default class EventIndex {
         client.removeListener('Room.timelineReset', this.onTimelineReset);
     }
 
+    /**
+     * Get crawler checkpoints for the encrypted rooms and store them in the index.
+     */
+    async addInitialCheckpoints() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        const client = MatrixClientPeg.get();
+        const rooms = client.getRooms();
+
+        const isRoomEncrypted = (room) => {
+            return client.isRoomEncrypted(room.roomId);
+        };
+
+        // We only care to crawl the encrypted rooms, non-encrypted
+        // rooms can use the search provided by the homeserver.
+        const encryptedRooms = rooms.filter(isRoomEncrypted);
+
+        console.log("EventIndex: Adding initial crawler checkpoints");
+
+        // Gather the prev_batch tokens and create checkpoints for
+        // our message crawler.
+        await Promise.all(encryptedRooms.map(async (room) => {
+            const timeline = room.getLiveTimeline();
+            const token = timeline.getPaginationToken("b");
+
+            console.log("EventIndex: Got token for indexer",
+                        room.roomId, token);
+
+            const backCheckpoint = {
+                roomId: room.roomId,
+                token: token,
+                direction: "b",
+            };
+
+            const forwardCheckpoint = {
+                roomId: room.roomId,
+                token: token,
+                direction: "f",
+            };
+
+            await indexManager.addCrawlerCheckpoint(backCheckpoint);
+            await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+            this.crawlerCheckpoints.push(backCheckpoint);
+            this.crawlerCheckpoints.push(forwardCheckpoint);
+        }));
+    }
+
     onSync = async (state, prevState, data) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === "PREPARED" && state === "SYNCING") {
-            const addInitialCheckpoints = async () => {
-                const client = MatrixClientPeg.get();
-                const rooms = client.getRooms();
-
-                const isRoomEncrypted = (room) => {
-                    return client.isRoomEncrypted(room.roomId);
-                };
-
-                // We only care to crawl the encrypted rooms, non-encrypted.
-                // rooms can use the search provided by the homeserver.
-                const encryptedRooms = rooms.filter(isRoomEncrypted);
-
-                console.log("EventIndex: Adding initial crawler checkpoints");
-
-                // Gather the prev_batch tokens and create checkpoints for
-                // our message crawler.
-                await Promise.all(encryptedRooms.map(async (room) => {
-                    const timeline = room.getLiveTimeline();
-                    const token = timeline.getPaginationToken("b");
-
-                    console.log("EventIndex: Got token for indexer",
-                                room.roomId, token);
-
-                    const backCheckpoint = {
-                        roomId: room.roomId,
-                        token: token,
-                        direction: "b",
-                    };
-
-                    const forwardCheckpoint = {
-                        roomId: room.roomId,
-                        token: token,
-                        direction: "f",
-                    };
-
-                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
-                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                    this.crawlerCheckpoints.push(backCheckpoint);
-                    this.crawlerCheckpoints.push(forwardCheckpoint);
-                }));
-            };
-
             // If our indexer is empty we're most likely running Riot the
             // first time with indexing support or running it with an
             // initial sync. Add checkpoints to crawl our encrypted rooms.
             const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();
-            if (eventIndexWasEmpty) await addInitialCheckpoints();
+            if (eventIndexWasEmpty) await this.addInitialCheckpoints();
 
-            // Start our crawler.
             this.startCrawler();
             return;
         }
@@ -170,7 +179,9 @@ export default class EventIndex {
             return;
         }
 
-        const e = ev.toJSON().decrypted;
+        const jsonEvent = ev.toJSON();
+        const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
+
         const profile = {
             displayname: ev.sender.rawDisplayName,
             avatar_url: ev.sender.getMxcAvatarUrl(),
@@ -179,13 +190,11 @@ export default class EventIndex {
         indexManager.addEventToIndex(e, profile);
     }
 
-    async crawlerFunc() {
-        // TODO either put this in a better place or find a library provided
-        // method that does this.
-        const sleep = async (ms) => {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        };
+    emitNewCheckpoint() {
+        this.emit("changedCheckpoint", this.currentRoom());
+    }
 
+    async crawlerFunc() {
         let cancelled = false;
 
         console.log("EventIndex: Started crawler function");
@@ -199,11 +208,27 @@ export default class EventIndex {
             cancelled = true;
         };
 
+        let idle = false;
+
         while (!cancelled) {
             // This is a low priority task and we don't want to spam our
             // homeserver with /messages requests so we set a hefty timeout
             // here.
-            await sleep(this._crawlerTimeout);
+            let sleepTime = this._crawlerSleepTime;
+
+            // Don't let the user configure a lower sleep time than 100 ms.
+            sleepTime = Math.max(sleepTime, 100);
+
+            if (idle) {
+                sleepTime = this._crawlerIdleTime;
+            }
+
+            if (this._currentCheckpoint !== null) {
+                this._currentCheckpoint = null;
+                this.emitNewCheckpoint();
+            }
+
+            await sleep(sleepTime);
 
             console.log("EventIndex: Running the crawler loop.");
 
@@ -216,8 +241,14 @@ export default class EventIndex {
             /// There is no checkpoint available currently, one may appear if
             // a sync with limited room timelines happens, so go back to sleep.
             if (checkpoint === undefined) {
+                idle = true;
                 continue;
             }
+
+            this._currentCheckpoint = checkpoint;
+            this.emitNewCheckpoint();
+
+            idle = false;
 
             console.log("EventIndex: crawling using checkpoint", checkpoint);
 
@@ -236,6 +267,11 @@ export default class EventIndex {
                 console.log("EventIndex: Error crawling events:", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
+            }
+
+            if (cancelled) {
+                this.crawlerCheckpoints.push(checkpoint);
+                break;
             }
 
             if (res.chunk.length === 0) {
@@ -305,10 +341,7 @@ export default class EventIndex {
             // consume.
             const events = filteredEvents.map((ev) => {
                 const jsonEvent = ev.toJSON();
-
-                let e;
-                if (ev.isEncrypted()) e = jsonEvent.decrypted;
-                else e = jsonEvent;
+                const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
 
                 let profile = {};
                 if (e.sender in profiles) profile = profiles[e.sender];
@@ -405,5 +438,224 @@ export default class EventIndex {
     async search(searchArgs) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
+    }
+
+    /**
+     * Load events that contain URLs from the event index.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {number} limit The maximum number of events to fetch.
+     *
+     * @param {string} fromEvent From which event should we continue fetching
+     * events from the index. This is only needed if we're continuing to fill
+     * the timeline, e.g. if we're paginating. This needs to be set to a event
+     * id of an event that was previously fetched with this function.
+     *
+     * @param {string} direction The direction in which we will continue
+     * fetching events. EventTimeline.BACKWARDS to continue fetching events that
+     * are older than the event given in fromEvent, EventTimeline.FORWARDS to
+     * fetch newer events.
+     *
+     * @returns {Promise<MatrixEvent[]>} Resolves to an array of events that
+     * contain URLs.
+     */
+    async loadFileEvents(room, limit = 10, fromEvent = null, direction = EventTimeline.BACKWARDS) {
+        const client = MatrixClientPeg.get();
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+
+        const loadArgs = {
+            roomId: room.roomId,
+            limit: limit,
+        };
+
+        if (fromEvent) {
+            loadArgs.fromEvent = fromEvent;
+            loadArgs.direction = direction;
+        }
+
+        let events;
+
+        // Get our events from the event index.
+        try {
+            events = await indexManager.loadFileEvents(loadArgs);
+        } catch (e) {
+            console.log("EventIndex: Error getting file events", e);
+            return [];
+        }
+
+        const eventMapper = client.getEventMapper();
+
+        // Turn the events into MatrixEvent objects.
+        const matrixEvents = events.map(e => {
+            const matrixEvent = eventMapper(e.event);
+
+            const member = new RoomMember(room.roomId, matrixEvent.getSender());
+
+            // We can't really reconstruct the whole room state from our
+            // EventIndex to calculate the correct display name. Use the
+            // disambiguated form always instead.
+            member.name = e.profile.displayname + " (" + matrixEvent.getSender() + ")";
+
+            // This is sets the avatar URL.
+            const memberEvent = eventMapper(
+                {
+                    content: {
+                        membership: "join",
+                        avatar_url: e.profile.avatar_url,
+                        displayname: e.profile.displayname,
+                    },
+                    type: "m.room.member",
+                    event_id: matrixEvent.getId() + ":eventIndex",
+                    room_id: matrixEvent.getRoomId(),
+                    sender: matrixEvent.getSender(),
+                    origin_server_ts: matrixEvent.getTs(),
+                    state_key: matrixEvent.getSender(),
+                },
+            );
+
+            // We set this manually to avoid emitting RoomMember.membership and
+            // RoomMember.name events.
+            member.events.member = memberEvent;
+            matrixEvent.sender = member;
+
+            return matrixEvent;
+        });
+
+        return matrixEvents;
+    }
+
+    /**
+     * Fill a timeline with events that contain URLs.
+     *
+     * @param {TimelineSet} timelineSet The TimelineSet the Timeline belongs to,
+     * used to check if we're adding duplicate events.
+     *
+     * @param {Timeline} timeline The Timeline which should be filed with
+     * events.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {number} limit The maximum number of events to fetch.
+     *
+     * @param {string} fromEvent From which event should we continue fetching
+     * events from the index. This is only needed if we're continuing to fill
+     * the timeline, e.g. if we're paginating. This needs to be set to a event
+     * id of an event that was previously fetched with this function.
+     *
+     * @param {string} direction The direction in which we will continue
+     * fetching events. EventTimeline.BACKWARDS to continue fetching events that
+     * are older than the event given in fromEvent, EventTimeline.FORWARDS to
+     * fetch newer events.
+     *
+     * @returns {Promise<boolean>} Resolves to true if events were added to the
+     * timeline, false otherwise.
+     */
+    async populateFileTimeline(timelineSet, timeline, room, limit = 10,
+                               fromEvent = null, direction = EventTimeline.BACKWARDS) {
+        const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
+
+        // If this is a normal fill request, not a pagination request, we need
+        // to get our events in the BACKWARDS direction but populate them in the
+        // forwards direction.
+        // This needs to happen because a fill request might come with an
+        // exisitng timeline e.g. if you close and re-open the FilePanel.
+        if (fromEvent === null) {
+            matrixEvents.reverse();
+            direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS: EventTimeline.BACKWARDS;
+        }
+
+        // Add the events to the timeline of the file panel.
+        matrixEvents.forEach(e => {
+            if (!timelineSet.eventIdToTimeline(e.getId())) {
+                timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
+            }
+        });
+
+        // Set the pagination token to the oldest event that we retrieved.
+        if (matrixEvents.length > 0) {
+            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(), EventTimeline.BACKWARDS);
+            return true;
+        } else {
+            timeline.setPaginationToken("", EventTimeline.BACKWARDS);
+            return false;
+        }
+    }
+
+    /**
+     * Emulate a TimelineWindow pagination() request with the event index as the event source
+     *
+     * Might not fetch events from the index if the timeline already contains
+     * events that the window isn't showing.
+     *
+     * @param {Room} room The room for which we should fetch events containing
+     * URLs
+     *
+     * @param {TimelineWindow} timelineWindow The timeline window that should be
+     * populated with new events.
+     *
+     * @param {string} direction The direction in which we should paginate.
+     * EventTimeline.BACKWARDS to paginate back, EventTimeline.FORWARDS to
+     * paginate forwards.
+     *
+     * @param {number} limit The maximum number of events to fetch while
+     * paginating.
+     *
+     * @returns {Promise<boolean>} Resolves to a boolean which is true if more
+     * events were successfully retrieved.
+     */
+    paginateTimelineWindow(room, timelineWindow, direction, limit) {
+        const tl = timelineWindow.getTimelineIndex(direction);
+
+        if (!tl) return Promise.resolve(false);
+        if (tl.pendingPaginate) return tl.pendingPaginate;
+
+        if (timelineWindow.extend(direction, limit)) {
+            return Promise.resolve(true);
+        }
+
+        const paginationMethod = async (timelineWindow, timeline, room, direction, limit) => {
+            const timelineSet = timelineWindow._timelineSet;
+            const token = timeline.timeline.getPaginationToken(direction);
+
+            const ret = await this.populateFileTimeline(timelineSet, timeline.timeline, room, limit, token, direction);
+
+            timeline.pendingPaginate = null;
+            timelineWindow.extend(direction, limit);
+
+            return ret;
+        };
+
+        const paginationPromise = paginationMethod(timelineWindow, tl, room, direction, limit);
+        tl.pendingPaginate = paginationPromise;
+
+        return paginationPromise;
+    }
+
+    async getStats() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        return indexManager.getStats();
+    }
+
+    /**
+     * Get the room that we are currently crawling.
+     *
+     * @returns {Room} A MatrixRoom that is being currently crawled, null
+     * if no room is currently being crawled.
+     */
+    currentRoom() {
+        if (this._currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {
+            return null;
+        }
+
+        const client = MatrixClientPeg.get();
+
+        if (this._currentCheckpoint !== null) {
+            return client.getRoom(this._currentCheckpoint.roomId);
+        } else {
+            return client.getRoom(this.crawlerCheckpoints[0].roomId);
+        }
     }
 }

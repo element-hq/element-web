@@ -20,6 +20,8 @@ import { _t } from '../../../languageHandler';
 import PropTypes from "prop-types";
 import {MatrixEvent} from "matrix-js-sdk";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import SdkConfig from '../../../SdkConfig';
+import Markdown from '../../../Markdown';
 
 /*
  * A dialog for reporting an event.
@@ -95,6 +97,15 @@ export default class ReportEventDialog extends PureComponent {
             );
         }
 
+        const adminMessageMD =
+            SdkConfig.get().reportEvent &&
+            SdkConfig.get().reportEvent.adminMessageMD;
+        let adminMessage;
+        if (adminMessageMD) {
+            const html = new Markdown(adminMessageMD).toHTML({ externalLinks: true });
+            adminMessage = <p dangerouslySetInnerHTML={{ __html: html }} />;
+        }
+
         return (
             <BaseDialog
                 className="mx_BugReportDialog"
@@ -110,7 +121,7 @@ export default class ReportEventDialog extends PureComponent {
                                 "administrator will not be able to read the message text or view any files or images.")
                         }
                     </p>
-
+                    {adminMessage}
                     <Field
                         id="mx_ReportEventDialog_reason"
                         className="mx_ReportEventDialog_reason"

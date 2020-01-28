@@ -17,16 +17,15 @@ limitations under the License.
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import { _t } from '../languageHandler';
 
-export function getNameForEventRoom(userId, mxEvent) {
-    const roomId = mxEvent.getRoomId();
+export function getNameForEventRoom(userId, roomId) {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
-    const member = room.getMember(userId);
+    const member = room && room.getMember(userId);
     return member ? member.name : userId;
 }
 
-export function userLabelForEventRoom(userId, mxEvent) {
-    const name = getNameForEventRoom(userId, mxEvent);
+export function userLabelForEventRoom(userId, roomId) {
+    const name = getNameForEventRoom(userId, roomId);
     if (name !== userId) {
         return _t("%(name)s (%(userId)s)", {name, userId});
     } else {
