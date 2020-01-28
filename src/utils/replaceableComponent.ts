@@ -32,9 +32,13 @@ import * as sdk from '../index';
  * with a skinned version. If no skinned version is available, this component
  * will be used.
  */
-export function replaceableComponent(name: string, origComponent: React.Component) {
+export function replaceableComponent<T extends{new(...args:any[])}>(name: string) {
     // Decorators return a function to override the class (origComponent). This
     // ultimately assumes that `getComponent()` won't throw an error and instead
     // return a falsey value like `null` when the skin doesn't have a component.
-    return () => sdk.getComponent(name) || origComponent;
+    return (origComponent) => {
+        const c = sdk.getComponent(name) || origComponent;
+        c.kind = "class"; // appeases babel
+        return c;
+    };
 }
