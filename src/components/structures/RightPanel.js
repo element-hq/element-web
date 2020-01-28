@@ -180,65 +180,82 @@ export default class RightPanel extends React.Component {
 
         let panel = <div />;
 
-        if (this.props.roomId && this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList) {
-            panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
-        } else if (this.props.groupId && this.state.phase === RIGHT_PANEL_PHASES.GroupMemberList) {
-            panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
-            panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo ||
-            this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel) {
-            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-                const onClose = () => {
-                    dis.dispatch({
-                        action: "view_user",
-                        member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
-                    });
-                };
-                panel = <UserInfo
-                    user={this.state.member}
-                    roomId={this.props.roomId}
-                    key={this.props.roomId || this.state.member.userId}
-                    onClose={onClose}
-                    phase={this.state.phase}
-                    verificationRequest={this.state.verificationRequest}
-                />;
-            } else {
-                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
-            }
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
-            panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-                const onClose = () => {
-                    dis.dispatch({
-                        action: "view_user",
-                        member: null,
-                    });
-                };
-                panel = <UserInfo
-                    user={this.state.member}
-                    groupId={this.props.groupId}
-                    key={this.state.member.userId}
-                    onClose={onClose} />;
-            } else {
-                panel = (
-                    <GroupMemberInfo
-                        groupMember={this.state.member}
+        switch (this.state.phase) {
+            case RIGHT_PANEL_PHASES.RoomMemberList:
+                if (this.props.roomId) {
+                    panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupMemberList:
+                if (this.props.groupId) {
+                    panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupRoomList:
+                panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
+                break;
+            case RIGHT_PANEL_PHASES.RoomMemberInfo:
+            case RIGHT_PANEL_PHASES.EncryptionPanel:
+                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                    const onClose = () => {
+                        dis.dispatch({
+                            action: "view_user",
+                            member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
+                        });
+                    };
+                    panel = <UserInfo
+                        user={this.state.member}
+                        roomId={this.props.roomId}
+                        key={this.props.roomId || this.state.member.userId}
+                        onClose={onClose}
+                        phase={this.state.phase}
+                        verificationRequest={this.state.verificationRequest}
+                    />;
+                } else {
+                    panel = <MemberInfo
+                        member={this.state.member}
+                        key={this.props.roomId || this.state.member.userId}
+                    />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.Room3pidMemberInfo:
+                panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
+                break;
+            case RIGHT_PANEL_PHASES.GroupMemberInfo:
+                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                    const onClose = () => {
+                        dis.dispatch({
+                            action: "view_user",
+                            member: null,
+                        });
+                    };
+                    panel = <UserInfo
+                        user={this.state.member}
                         groupId={this.props.groupId}
-                        key={this.state.member.user_id}
-                    />
-                );
-            }
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomInfo) {
-            panel = <GroupRoomInfo
-                groupRoomId={this.state.groupRoomId}
-                groupId={this.props.groupId}
-                key={this.state.groupRoomId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.NotificationPanel) {
-            panel = <NotificationPanel />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
-            panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                        key={this.state.member.userId}
+                        onClose={onClose} />;
+                } else {
+                    panel = (
+                        <GroupMemberInfo
+                            groupMember={this.state.member}
+                            groupId={this.props.groupId}
+                            key={this.state.member.user_id}
+                        />
+                    );
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupRoomInfo:
+                panel = <GroupRoomInfo
+                    groupRoomId={this.state.groupRoomId}
+                    groupId={this.props.groupId}
+                    key={this.state.groupRoomId} />;
+                break;
+            case RIGHT_PANEL_PHASES.NotificationPanel:
+                panel = <NotificationPanel />;
+                break;
+            case RIGHT_PANEL_PHASES.FilePanel:
+                panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                break;
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {
