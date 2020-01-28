@@ -39,7 +39,6 @@ export default class VerificationPanel extends React.PureComponent {
 
     renderQRPhase(pending) {
         const {member, request} = this.props;
-        // TODO change the button into a spinner when on click
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let button;
