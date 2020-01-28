@@ -32,7 +32,7 @@ const PHASE_SHOWKEY = 4;
 const PHASE_KEEPITSAFE = 5;
 const PHASE_STORING = 6;
 const PHASE_DONE = 7;
-const PHASE_OPTOUT_CONFIRM = 8;
+const PHASE_CONFIRM_SKIP = 8;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
@@ -146,11 +146,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
-    }
-
-    _onSkipClick = () => {
-        // TODO: add confirmation
-        this.props.onFinished(false);
     }
 
     _onMigrateFormSubmit = (e) => {
@@ -271,8 +266,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         }
     }
 
-    _onOptOutClick = () => {
-        this.setState({phase: PHASE_OPTOUT_CONFIRM});
+    _onSkipSetupClick = () => {
+        this.setState({phase: PHASE_CONFIRM_SKIP});
     }
 
     _onSetUpClick = () => {
@@ -496,7 +491,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 disabled={!this._passPhraseIsValid()}
             >
                 <button type="button"
-                    onClick={this._onCancel}
+                    onClick={this._onSkipSetupClick}
                     className="danger"
                 >{_t("Skip")}</button>
             </DialogButtons>
@@ -564,7 +559,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             >
                 <button type="button"
-                    onClick={this._onCancel}
+                    onClick={this._onSkipSetupClick}
                     className="danger"
                 >{_t("Skip")}</button>
             </DialogButtons>
@@ -669,19 +664,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         </div>;
     }
 
-    _renderPhaseOptOutConfirm() {
+    _renderPhaseSkipConfirm() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {_t(
-                "Without setting up secret storage, you won't be able to restore your " +
-                "access to encrypted messages or your cross-signing identity for " +
-                "verifying other devices if you log out or use another device.",
+                "Without completing security on this device, it won’t have " +
+                "access to encrypted messages.",
         )}
-            <DialogButtons primaryButton={_t('Set up secret storage')}
+            <DialogButtons primaryButton={_t('Go back')}
                 onPrimaryButtonClick={this._onSetUpClick}
                 hasCancel={false}
             >
-                <button onClick={this._onCancel}>I understand, continue without</button>
+                <button type="button" className="danger" onClick={this._onCancel}>{_t('Skip')}</button>
             </DialogButtons>
         </div>;
     }
@@ -694,8 +688,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 return _t('Set up encryption');
             case PHASE_PASSPHRASE_CONFIRM:
                 return _t('Confirm passphrase');
-            case PHASE_OPTOUT_CONFIRM:
-                return _t('Warning!');
+            case PHASE_CONFIRM_SKIP:
+                return _t('Are you sure?');
             case PHASE_SHOWKEY:
                 return _t('Recovery key');
             case PHASE_KEEPITSAFE:
@@ -751,8 +745,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 case PHASE_DONE:
                     content = this._renderPhaseDone();
                     break;
-                case PHASE_OPTOUT_CONFIRM:
-                    content = this._renderPhaseOptOutConfirm();
+                case PHASE_CONFIRM_SKIP:
+                    content = this._renderPhaseSkipConfirm();
                     break;
             }
         }
