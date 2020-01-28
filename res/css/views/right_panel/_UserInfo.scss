@@ -81,7 +81,7 @@ limitations under the License.
     .mx_UserInfo_avatar > div {
         max-width: 30vh;
         margin: 0 auto;
-        transition: 1s;
+        transition: 0.5s;
     }
 
     .mx_UserInfo_avatar > div > div {
@@ -111,7 +111,7 @@ limitations under the License.
         // override the calculated sizes so that the letter isn't HUGE
         font-size: 56px !important;
         width: 100% !important;
-        transition: font-size 1s;
+        transition: font-size 0.5s;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
