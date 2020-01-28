@@ -24,6 +24,7 @@ import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+
 @replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent {
     static propTypes = {
