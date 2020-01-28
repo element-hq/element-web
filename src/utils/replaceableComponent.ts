@@ -32,7 +32,7 @@ import * as sdk from '../index';
  * with a skinned version. If no skinned version is available, this component
  * will be used.
  */
-export function replaceableComponent<T extends{new(...args:any[])}>(name: string) {
+export function replaceableComponent<T extends{new(...args: any[])}>(name: string) {
     // Decorators return a function to override the class (origComponent). This
     // ultimately assumes that `getComponent()` won't throw an error and instead
     // return a falsey value like `null` when the skin doesn't have a component.

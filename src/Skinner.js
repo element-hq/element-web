@@ -42,7 +42,7 @@ class Skinner {
         };
 
         // Check the skin first
-        let comp = doLookup(this.components);
+        const comp = doLookup(this.components);
 
         // Just return nothing instead of erroring - the consumer should be smart enough to
         // handle this at this point.
