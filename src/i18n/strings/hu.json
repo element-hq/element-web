@@ -2146,5 +2146,6 @@
     "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot a kereshetőség érdekében a titkosított üzeneteket biztonságos módon helyileg tárolja:",
     "Space used:": "Hely felhasználva:",
     "Indexed messages:": "Indexált üzenetek:",
-    "Number of rooms:": "Szobák száma:"
+    "Number of rooms:": "Szobák száma:",
+    "Restore your key backup to upgrade your encryption": "A titkosítás fejlesztéséhez allítsd vissza a kulcs mentést"
 }
