@@ -82,10 +82,14 @@ export default class VerificationRequestToast extends React.PureComponent {
                     should_peek: false,
                 });
                 await request.accept();
+                const cli = MatrixClientPeg.get();
                 dis.dispatch({
                     action: "set_right_panel_phase",
                     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                    refireParams: {verificationRequest: request},
+                    refireParams: {
+                        verificationRequest: request,
+                        member: cli.getUser(request.otherUserId),
+                    },
                 });
             } else if (request.channel.deviceId && request.verifier) {
                 // show to_device verifications in dialog still

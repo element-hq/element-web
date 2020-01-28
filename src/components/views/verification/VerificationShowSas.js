@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
+import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
+import AccessibleButton from "../elements/AccessibleButton";
+import DialogButtons from "../elements/DialogButtons";
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -25,18 +27,26 @@ function capFirst(s) {
 
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
+        displayName: PropTypes.string.isRequired,
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            pending: false,
+        };
     }
 
-    constructor() {
-        super();
-    }
+    onMatchClick = () => {
+        this.setState({ pending: true });
+        this.props.onDone();
+    };
 
     render() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
@@ -69,26 +79,34 @@ export default class VerificationShowSas extends React.Component {
         } else {
             return <div>
                 {_t("Unable to find a supported verification method.")}
-                <DialogButtons
-                    primaryButton={_t('Cancel')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this.props.onCancel}
-                />
+                <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_verify">
+                    {_t('Cancel')}
+                </AccessibleButton>
             </div>;
+        }
+
+        let confirm;
+        if (this.state.pending) {
+            const {displayName} = this.props;
+            const text = _t("Waiting for %(displayName)s to verify…", {displayName});
+            confirm = <PendingActionSpinner text={text} />;
+        } else {
+            // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
+            confirm = <DialogButtons
+                primaryButton={_t("They match")}
+                onPrimaryButtonClick={this.onMatchClick}
+                primaryButtonClassName="mx_UserInfo_verify"
+                cancelButton={_t("They don't match")}
+                onCancel={this.props.onCancel}
+                cancelButtonClass="mx_UserInfo_verify"
+            />;
         }
 
         return <div className="mx_VerificationShowSas">
             <p>{sasCaption}</p>
-            <p>{_t(
-                "For maximum security, we recommend you do this in person or use another " +
-                "trusted means of communication.",
-            )}</p>
+            <p>{_t("For ultimate security, do this in person or use another way to communicate.")}</p>
             {sasDisplay}
-            <DialogButtons onPrimaryButtonClick={this.props.onDone}
-                primaryButton={_t("Continue")}
-                hasCancel={true}
-                onCancel={this.props.onCancel}
-            />
+            {confirm}
         </div>;
     }
 }
