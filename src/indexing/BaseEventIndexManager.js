@@ -105,7 +105,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(): Promise<> {
+    async initEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -146,7 +146,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the queued up events
      * were added to the index.
      */
-    async commitLiveEvents(): Promise<> {
+    async commitLiveEvents(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -197,7 +197,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been stored.
      */
-    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -210,7 +210,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been removed.
      */
-    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -250,7 +250,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the event index has
      * been closed.
      */
-    async closeEventIndex(): Promise<> {
+    async closeEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -260,7 +260,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the event index has
      * been deleted.
      */
-    async deleteEventIndex(): Promise<> {
+    async deleteEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 }
