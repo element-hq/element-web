@@ -83,7 +83,7 @@ export default createReactClass({
                 // primary in the DOM so will get form submissions unless we make it not a submit.
                 type="button"
                 onClick={this._onCancelClick}
-		className={this.props.cancelButtonClass}
+                className={this.props.cancelButtonClass}
                 disabled={this.props.disabled}
             >
                 { this.props.cancelButton || _t("Cancel") }
