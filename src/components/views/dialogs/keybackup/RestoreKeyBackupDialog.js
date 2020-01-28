@@ -39,7 +39,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         showSummary: PropTypes.bool,
     };
 
-    defaultProps = {
+    static defaultProps = {
         showSummary: true,
     };
 

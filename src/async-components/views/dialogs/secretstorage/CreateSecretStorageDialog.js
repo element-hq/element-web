@@ -25,15 +25,14 @@ import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 
 const PHASE_LOADING = 0;
-const PHASE_RESTORE_KEY_BACKUP = 1;
-const PHASE_MIGRATE = 2;
-const PHASE_PASSPHRASE = 3;
-const PHASE_PASSPHRASE_CONFIRM = 4;
-const PHASE_SHOWKEY = 5;
-const PHASE_KEEPITSAFE = 6;
-const PHASE_STORING = 7;
-const PHASE_DONE = 8;
-const PHASE_OPTOUT_CONFIRM = 9;
+const PHASE_MIGRATE = 1;
+const PHASE_PASSPHRASE = 2;
+const PHASE_PASSPHRASE_CONFIRM = 3;
+const PHASE_SHOWKEY = 4;
+const PHASE_KEEPITSAFE = 5;
+const PHASE_STORING = 6;
+const PHASE_DONE = 7;
+const PHASE_OPTOUT_CONFIRM = 8;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
@@ -58,7 +57,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         accountPassword: PropTypes.string,
     };
 
-    defaultProps = {
+    static defaultProps = {
         hasCancel: true,
     };
 
@@ -110,9 +109,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
         );
 
-        const phase = backupInfo ?
-            (backupSigStatus.usable ? PHASE_MIGRATE : PHASE_RESTORE_KEY_BACKUP) :
-            PHASE_PASSPHRASE;
+        const phase = backupInfo ? PHASE_MIGRATE : PHASE_PASSPHRASE;
 
         this.setState({
             phase,
@@ -151,9 +148,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this._recoveryKeyNode = n;
     }
 
+    _onSkipClick = () => {
+        // TODO: add confirmation
+        this.props.onFinished(false);
+    }
+
     _onMigrateFormSubmit = (e) => {
         e.preventDefault();
-        this._bootstrapSecretStorage();
+        if (this.state.backupSigStatus.usable) {
+            this._bootstrapSecretStorage();
+        } else {
+            this._restoreBackup();
+        }
     }
 
     _onCopyClick = () => {
@@ -228,6 +234,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         } catch (e) {
             if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
                 this.setState({
+                    accountPassword: '',
                     accountPasswordCorrect: false,
                     phase: PHASE_MIGRATE,
                 });
@@ -246,12 +253,22 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this.props.onFinished(true);
     }
 
-    _onRestoreKeyBackupClick = () => {
+    _restoreBackup = async () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-        Modal.createTrackedDialog(
+        const { finished } = Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
             /* priority = */ false, /* static = */ true,
         );
+
+        await finished;
+        await this._fetchBackupInfo();
+        if (
+            this.state.backupSigStatus.usable &&
+            this.state.canUploadKeysWithPasswordOnly &&
+            this.state.accountPassword
+        ) {
+            this._bootstrapSecretStorage();
+        }
     }
 
     _onOptOutClick = () => {
@@ -367,23 +384,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
-    _renderPhaseRestoreKeyBackup() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <div>
-            <p>{_t(
-                "Key Backup is enabled on your account but has not been set " +
-                "up from this session. To set up secret storage, " +
-                "restore your key backup.",
-            )}</p>
-            <DialogButtons primaryButton={_t('Restore')}
-                onPrimaryButtonClick={this._onRestoreKeyBackupClick}
-                onCancel={this._onCancel}
-                hasCancel={true}
-            >
-            </DialogButtons>
-        </div>;
-    }
-
     _renderPhaseMigrate() {
         // TODO: This is a temporary screen so people who have the labs flag turned on and
         // click the button are aware they're making a change to their account.
@@ -392,9 +392,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // https://github.com/vector-im/riot-web/issues/11696
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let authPrompt;
-        if (this.state.canUploadKeysWithPasswordOnly) {
+        let nextCaption = _t("Next");
+        if (!this.state.backupSigStatus.usable) {
+            authPrompt = <div>
+                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
+            </div>;
+            nextCaption = _t("Restore");
+        } else if (this.state.canUploadKeysWithPasswordOnly) {
             authPrompt = <div>
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field type="password"
@@ -419,12 +426,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "as trusted for other users.",
             )}</p>
             <div>{authPrompt}</div>
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons primaryButton={nextCaption}
                 primaryIsSubmit={true}
-                hasCancel={true}
-                onCancel={this._onCancel}
+                hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
-            />
+            >
+                <button type="button" className="danger" onClick={this._onSkipClick}>
+                    {_t('Skip')}
+                </button>
+            </DialogButtons>
         </form>;
     }
 
@@ -678,8 +688,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _titleForPhase(phase) {
         switch (phase) {
-            case PHASE_RESTORE_KEY_BACKUP:
-                return _t('Restore your Key Backup');
             case PHASE_MIGRATE:
                 return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
@@ -722,9 +730,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 case PHASE_LOADING:
                     content = this._renderBusyPhase();
                     break;
-                case PHASE_RESTORE_KEY_BACKUP:
-                    content = this._renderPhaseRestoreKeyBackup();
-                    break;
                 case PHASE_MIGRATE:
                     content = this._renderPhaseMigrate();
                     break;
@@ -763,6 +768,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 title={this._titleForPhase(this.state.phase)}
                 headerImage={headerImage}
                 hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
+                fixedWidth={false}
             >
             <div>
                 {content}
