@@ -14,7 +14,7 @@ module.exports = {
         "@babel/preset-react"
     ],
     "plugins": [
-        ["@babel/plugin-proposal-decorators", {"legacy": false, decoratorsBeforeExport: true}],
+        ["@babel/plugin-proposal-decorators", {decoratorsBeforeExport: true}],
         "@babel/plugin-proposal-export-default-from",
         "@babel/plugin-proposal-numeric-separator",
         "@babel/plugin-proposal-class-properties",
