@@ -16,12 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import Modal from "../../../Modal";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import DeviceListener from '../../../DeviceListener';
+import NewSessionReviewDialog from '../dialogs/NewSessionReviewDialog';
+import FormButton from '../elements/FormButton';
+import { replaceableComponent } from '../../../utils/replaceableComponent';
 
+@replaceableComponent("views.toasts.VerifySessionToast")
 export default class VerifySessionToast extends React.PureComponent {
     static propTypes = {
         toastKey: PropTypes.string.isRequired,
@@ -34,8 +37,6 @@ export default class VerifySessionToast extends React.PureComponent {
 
     _onReviewClick = async () => {
         const cli = MatrixClientPeg.get();
-        const NewSessionReviewDialog =
-            sdk.getComponent('views.dialogs.NewSessionReviewDialog');
 
         const device = await cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
 
@@ -46,7 +47,6 @@ export default class VerifySessionToast extends React.PureComponent {
     };
 
     render() {
-        const FormButton = sdk.getComponent("elements.FormButton");
         return (<div>
             <div className="mx_Toast_description">{_t("Review & verify your new session")}</div>
             <div className="mx_Toast_buttons" aria-live="off">

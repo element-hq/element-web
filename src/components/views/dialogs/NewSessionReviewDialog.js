@@ -16,10 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import Modal from "../../../Modal";
+import Modal from '../../../Modal';
+import { replaceableComponent } from '../../../utils/replaceableComponent';
+import DeviceVerifyDialog from './DeviceVerifyDialog';
+import BaseDialog from './BaseDialog';
+import DialogButtons from '../elements/DialogButtons';
 
+@replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
     static propTypes = {
         userId: PropTypes.string.isRequired,
@@ -32,8 +36,6 @@ export default class NewSessionReviewDialog extends React.PureComponent {
     }
 
     onContinueClick = () => {
-        const DeviceVerifyDialog =
-            sdk.getComponent('views.dialogs.DeviceVerifyDialog');
         const { userId, device } = this.props;
         Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
             userId,
@@ -42,9 +44,6 @@ export default class NewSessionReviewDialog extends React.PureComponent {
     }
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
-
         const { device } = this.props;
 
         const icon = <span className="mx_NewSessionReviewDialog_headerIcon mx_E2EIcon_warning"></span>;
