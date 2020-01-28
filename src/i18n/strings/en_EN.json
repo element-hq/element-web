@@ -2020,8 +2020,6 @@
     "<b>Copy it</b> to your personal cloud storage": "<b>Copy it</b> to your personal cloud storage",
     "This device can now verify other devices, granting them access to encrypted messages and marking them as trusted for other users.": "This device can now verify other devices, granting them access to encrypted messages and marking them as trusted for other users.",
     "Verify other users in their profile.": "Verify other users in their profile.",
-    "Without setting up secret storage, you won't be able to restore your access to encrypted messages or your cross-signing identity for verifying other devices if you log out or use another device.": "Without setting up secret storage, you won't be able to restore your access to encrypted messages or your cross-signing identity for verifying other devices if you log out or use another device.",
-    "Set up secret storage": "Set up secret storage",
     "Upgrade your encryption": "Upgrade your encryption",
     "Recovery key": "Recovery key",
     "Keep it safe": "Keep it safe",
