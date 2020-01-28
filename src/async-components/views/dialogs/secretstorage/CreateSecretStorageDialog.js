@@ -87,6 +87,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // set if we are 'upgrading' encryption (making an SSSS store from
             // an existing key backup secret).
             doingUpgrade: null,
+            // status of the key backup toggle switch
+            useKeyBackup: true,
         };
 
         this._fetchBackupInfo();
@@ -141,11 +143,17 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onKeyBackupStatusChange = () => {
-        this._fetchBackupInfo();
+        if (this.state.phase === PHASE_MIGRATE) this._fetchBackupInfo();
     }
 
     _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
+    }
+
+    _onUseKeyBackupChange = (enabled) => {
+        this.setState({
+            useKeyBackup: enabled,
+        });
     }
 
     _onMigrateFormSubmit = (e) => {
@@ -222,6 +230,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 createSecretStorageKey: async () => this._keyInfo,
                 keyBackupInfo: this.state.backupInfo,
+                setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
             });
             this.setState({
                 phase: PHASE_DONE,
@@ -425,7 +434,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             >
-                <button type="button" className="danger" onClick={this._onSkipClick}>
+                <button type="button" className="danger" onClick={this._onSkipSetupClick}>
                     {_t('Skip')}
                 </button>
             </DialogButtons>
@@ -436,6 +445,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
 
         let strengthMeter;
         let helpText;
@@ -483,6 +493,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     {helpText}
                 </div>
             </div>
+
+            <LabelledToggleSwitch
+                label={ _t("Back up my encryption keys, securing them with the same passphrase")}
+                onChange={this._onUseKeyBackupChange} value={this.state.useKeyBackup}
+            />
 
             <DialogButtons primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
