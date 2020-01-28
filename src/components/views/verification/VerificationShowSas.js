@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
+import DialogButtons from "../elements/DialogButtons";
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -90,14 +91,15 @@ export default class VerificationShowSas extends React.Component {
             const text = _t("Waiting for %(displayName)s to verify…", {displayName});
             confirm = <PendingActionSpinner text={text} />;
         } else {
-            confirm = <React.Fragment>
-                <AccessibleButton kind="primary" onClick={this.onMatchClick} className="mx_UserInfo_verify">
-                    {_t("They match")}
-                </AccessibleButton>
-                <AccessibleButton kind="danger" onClick={this.props.onCancel} className="mx_UserInfo_verify">
-                    {_t("They don't match")}
-                </AccessibleButton>
-            </React.Fragment>;
+            // FIXME: stop using DialogButtons here once it this component is only used in the right panel verification
+            confirm = <DialogButtons
+                primaryButton={_t("They match")}
+                onPrimaryButtonClick={this.onMatchClick}
+                primaryButtonClassName="mx_UserInfo_verify"
+                cancelButton={_t("They don't match")}
+                onCancel={this.props.onCancel}
+                cancelButtonClass="mx_UserInfo_verify"
+            />;
         }
 
         return <div className="mx_VerificationShowSas">
