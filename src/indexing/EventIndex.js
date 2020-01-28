@@ -122,7 +122,7 @@ export default class EventIndex extends EventEmitter {
         }));
     }
 
-    /**
+    /*
      * The sync event listener.
      *
      * The listener has two cases:
@@ -154,7 +154,7 @@ export default class EventIndex extends EventEmitter {
         }
     }
 
-    /**
+    /*
      * The Room.timeline listener.
      *
      * This listener waits for live events in encrypted rooms, if they are
@@ -185,7 +185,7 @@ export default class EventIndex extends EventEmitter {
         }
     }
 
-    /**
+    /*
      * The Event.decrypted listener.
      *
      * Checks if the event was marked for addition in the Room.timeline
@@ -200,7 +200,7 @@ export default class EventIndex extends EventEmitter {
         await this.addLiveEventToIndex(ev);
     }
 
-    /**
+    /*
      * The Room.timelineReset listener.
      *
      * Listens for timeline resets that are caused by a limited timeline to
