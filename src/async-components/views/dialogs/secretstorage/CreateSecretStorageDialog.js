@@ -387,7 +387,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // https://github.com/vector-im/riot-web/issues/11696
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let authPrompt;
         let nextCaption = _t("Next");
