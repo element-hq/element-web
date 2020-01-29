@@ -77,8 +77,8 @@ export default class DeviceListener {
         this._recheck();
     }
 
-    _onDeviceVerificationChanged = (users) => {
-        if (!users.includes(MatrixClientPeg.get().getUserId())) return;
+    _onDeviceVerificationChanged = (userId) => {
+        if (userId !== MatrixClientPeg.get().getUserId()) return;
         this._recheck();
     }
 
