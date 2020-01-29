@@ -32,7 +32,8 @@ export default class UnverifiedSessionToast extends React.PureComponent {
     };
 
     _onLaterClick = () => {
-        DeviceListener.sharedInstance().dismissVerification(this.props.deviceId);
+        const { device } = this.props;
+        DeviceListener.sharedInstance().dismissVerification(device.deviceId);
     };
 
     _onReviewClick = async () => {
