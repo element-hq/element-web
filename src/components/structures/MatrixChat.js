@@ -1864,7 +1864,9 @@ export default createReactClass({
         try {
             masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
         } catch (e) {
-            if (e.errcode !== "M_NOT_FOUND") throw e;
+            if (e.errcode !== "M_NOT_FOUND") {
+                console.warn("Secret storage account data check failed", e);
+            }
         }
 
         if (masterKeyInStorage) {
