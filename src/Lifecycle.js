@@ -378,7 +378,7 @@ export function hydrateSession(credentials) {
 
     const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
-        console.warn("Clearing all data: Old session belongs to a different user/device");
+        console.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
     return _doSetLoggedIn(credentials, overwrite);

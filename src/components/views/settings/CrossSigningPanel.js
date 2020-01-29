@@ -127,7 +127,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         } else if (crossSigningPrivateKeysInStorage) {
             summarisedStatus = <p>{_t(
                 "Your account has a cross-signing identity in secret storage, but it " +
-                "is not yet trusted by this device.",
+                "is not yet trusted by this session.",
             )}</p>;
         } else {
             summarisedStatus = <p>{_t(
@@ -152,7 +152,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                     <table className="mx_CrossSigningPanel_statusList"><tbody>
                         <tr>
                             <td>{_t("Cross-signing public keys:")}</td>
-                            <td>{crossSigningPublicKeysOnDevice ? _t("on device") : _t("not found")}</td>
+                            <td>{crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Cross-signing private keys:")}</td>

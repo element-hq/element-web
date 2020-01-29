@@ -208,7 +208,7 @@ function DevicesSection({devices, userId, loading}) {
         return <Spinner />;
     }
     if (devices === null) {
-        return _t("Unable to load device list");
+        return _t("Unable to load session list");
     }
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
@@ -1255,11 +1255,12 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         userTrust.isCrossSigningVerified() :
         userTrust.isVerified();
     const isMe = member.userId === cli.getUserId();
+
     let verifyButton;
     if (isRoomEncrypted && !userVerified && !isMe) {
         verifyButton = (
-            <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={() => verifyUser(member)}>
-                {_t("Verify")}
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+                {_t("Learn more")}
             </AccessibleButton>
         );
     }

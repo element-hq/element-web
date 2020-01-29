@@ -32,23 +32,23 @@ export const E2E_STATE = {
 };
 
 const crossSigningUserTitles = {
-    [E2E_STATE.WARNING]: _td("This user has not verified all of their devices."),
-    [E2E_STATE.NORMAL]: _td("You have not verified this user. This user has verified all of their devices."),
-    [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their devices."),
+    [E2E_STATE.WARNING]: _td("This user has not verified all of their sessions."),
+    [E2E_STATE.NORMAL]: _td("You have not verified this user. This user has verified all of their sessions."),
+    [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their sessions."),
 };
 const crossSigningRoomTitles = {
-    [E2E_STATE.WARNING]: _td("Someone is using an unknown device"),
+    [E2E_STATE.WARNING]: _td("Someone is using an unknown session"),
     [E2E_STATE.NORMAL]: _td("This room is end-to-end encrypted"),
     [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
 
 const legacyUserTitles = {
-    [E2E_STATE.WARNING]: _td("Some devices for this user are not trusted"),
-    [E2E_STATE.VERIFIED]: _td("All devices for this user are trusted"),
+    [E2E_STATE.WARNING]: _td("Some sessions for this user are not trusted"),
+    [E2E_STATE.VERIFIED]: _td("All sessions for this user are trusted"),
 };
 const legacyRoomTitles = {
-    [E2E_STATE.WARNING]: _td("Some devices in this encrypted room are not trusted"),
-    [E2E_STATE.VERIFIED]: _td("All devices in this encrypted room are trusted"),
+    [E2E_STATE.WARNING]: _td("Some sessions in this encrypted room are not trusted"),
+    [E2E_STATE.VERIFIED]: _td("All sessions in this encrypted room are trusted"),
 };
 
 const E2EIcon = ({isUser, status, className, size, onClick}) => {

@@ -424,7 +424,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form onSubmit={this._onMigrateFormSubmit}>
             <p>{_t(
-                "Upgrade this device to allow it to verify other devices, " +
+                "Upgrade this session to allow it to verify other sessions, " +
                 "granting them access to encrypted messages and marking them " +
                 "as trusted for other users.",
             )}</p>
@@ -471,7 +471,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <div>
             <p>{_t(
-                "Set up encryption on this device to allow it to verify other devices, " +
+                "Set up encryption on this session to allow it to verify other sessions, " +
                 "granting them access to encrypted messages and marking them as trusted for other users.",
             )}</p>
             <p>{_t(
@@ -665,7 +665,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "This device can now verify other devices, granting them access " +
+                "This session can now verify other sessions, granting them access " +
                 "to encrypted messages and marking them as trusted for other users.",
             )}</p>
             <p>{_t(
@@ -682,7 +682,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {_t(
-                "Without completing security on this device, it won’t have " +
+                "Without completing security on this session, it won’t have " +
                 "access to encrypted messages.",
         )}
             <DialogButtons primaryButton={_t('Go back')}
