@@ -20,7 +20,7 @@
         "feature_many_integration_managers": "labs",
         "feature_mjolnir": "labs",
         "feature_dm_verification": "labs",
-        "feature_cross_signing": "labs",
+        "feature_cross_signing": "enable",
         "feature_event_indexing": "disable",
         "feature_bridge_state": "labs",
         "feature_presence_in_room_list": "labs"
