@@ -937,6 +937,7 @@ export default class InviteDialog extends React.PureComponent {
                 value={this.state.filterText}
                 ref={this._editorRef}
                 onPaste={this._onPaste}
+                autoFocus={true}
             />
         );
         return (
