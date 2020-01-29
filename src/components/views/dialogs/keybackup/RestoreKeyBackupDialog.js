@@ -22,7 +22,6 @@ import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
 import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
-import {Key} from "../../../../Keyboard";
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
@@ -125,6 +124,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
     }
 
     _onRecoveryKeyNext = async () => {
+        if (!this.state.recoveryKeyValid) return;
+
         this.setState({
             loading: true,
             restoreError: null,
@@ -155,12 +156,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         this.setState({
             passPhrase: e.target.value,
         });
-    }
-
-    _onRecoveryKeyKeyPress = (e) => {
-        if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
-            this._onRecoveryKeyNext();
-        }
     }
 
     async _restoreWithSecretStorage() {
@@ -366,7 +361,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"
                         onChange={this._onRecoveryKeyChange}
-                        onKeyPress={this._onRecoveryKeyKeyPress}
                         value={this.state.recoveryKey}
                         autoFocus={true}
                     />
