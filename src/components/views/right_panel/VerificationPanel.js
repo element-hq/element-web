@@ -51,7 +51,7 @@ export default class VerificationPanel extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
-        this._hasVerifier = !!props.request.verifier;
+        this._hasVerifier = false;
     }
 
     renderQRPhase(pending) {
@@ -234,6 +234,7 @@ export default class VerificationPanel extends React.PureComponent {
 
     componentDidMount() {
         this.props.request.on("change", this._onRequestChange);
+        this._onRequestChange();
     }
 
     componentWillUnmount() {
