@@ -194,10 +194,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     { _t("Verify by comparing a short text string.") }
                 </p>
                 <p>
-                    {_t(
-                        "For maximum security, we recommend you do this in person or " +
-                        "use another trusted means of communication.",
-                    )}
+                    {_t("To be secure, do this in person or use a trusted way to communicate.")}
                 </p>
                 <DialogButtons
                     primaryButton={_t('Begin Verifying')}
