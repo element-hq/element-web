@@ -1092,22 +1092,32 @@ export const useDevices = (userId) => {
     // Listen to changes
     useEffect(() => {
         let cancel = false;
-        const onDeviceVerificationChanged = (_userId, device) => {
-            if (_userId === userId) {
-                // no need to re-download the whole thing; just update our copy of the list.
-
-                // Promise.resolve to handle transition from static result to promise; can be removed in future
-                Promise.resolve(cli.getStoredDevicesForUser(userId)).then((devices) => {
-                    if (cancel) return;
-                    setDevices(devices);
-                });
-            }
+        const updateDevices = async () => {
+            const newDevices = await cli.getStoredDevicesForUser(userId);
+            if (cancel) return;
+            setDevices(newDevices);
         };
+        const onDevicesUpdated = (users) => {
+            if (!users.includes(userId)) return;
+            updateDevices();
+        };
+        const onDeviceVerificationChanged = (_userId, device) => {
+            if (_userId !== userId) return;
+            updateDevices();
+        };
+        const onUserTrustStatusChanged = (_userId, trustStatus) => {
+            if (_userId !== userId) return;
+            updateDevices();
+        };
+        cli.on("crypto.devicesUpdated", onDevicesUpdated);
         cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
+        cli.on("userTrustStatusChanged", onUserTrustStatusChanged);
         // Handle being unmounted
         return () => {
             cancel = true;
+            cli.removeListener("crypto.devicesUpdated", onDevicesUpdated);
             cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
+            cli.removeListener("userTrustStatusChanged", onUserTrustStatusChanged);
         };
     }, [cli, userId]);
 
