@@ -27,7 +27,8 @@ function capFirst(s) {
 
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
-        displayName: PropTypes.string.isRequired,
+        pending: PropTypes.bool,
+        displayName: PropTypes.string, // required if pending is true
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
@@ -95,7 +96,7 @@ export default class VerificationShowSas extends React.Component {
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
                 onPrimaryButtonClick={this.onMatchClick}
-                primaryButtonClassName="mx_UserInfo_verify"
+                primaryButtonClass="mx_UserInfo_verify"
                 cancelButton={_t("They don't match")}
                 onCancel={this.props.onCancel}
                 cancelButtonClass="mx_UserInfo_verify"

@@ -264,6 +264,9 @@ limitations under the License.
         display: block;
         margin: 16px 0;
     }
+    button.mx_UserInfo_verify {
+        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
+    }
 }
 
 .mx_UserInfo.mx_UserInfo_smallAvatar {
