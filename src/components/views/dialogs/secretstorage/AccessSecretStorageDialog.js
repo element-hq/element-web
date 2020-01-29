@@ -1,6 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 
 import { _t } from '../../../../languageHandler';
-import { Key } from "../../../../Keyboard";
 
 /*
  * Access Secure Secret Storage by requesting the user's passphrase.
@@ -69,6 +68,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     }
 
     _onPassPhraseNext = async () => {
+        if (this.state.passPhrase.length <= 0) return;
+
         this.setState({ keyMatches: null });
         const input = { passphrase: this.state.passPhrase };
         const keyMatches = await this.props.checkPrivateKey(input);
@@ -80,6 +81,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     }
 
     _onRecoveryKeyNext = async () => {
+        if (!this.state.recoveryKeyValid) return;
+
         this.setState({ keyMatches: null });
         const input = { recoveryKey: this.state.recoveryKey };
         const keyMatches = await this.props.checkPrivateKey(input);
@@ -95,18 +98,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             passPhrase: e.target.value,
             keyMatches: null,
         });
-    }
-
-    _onPassPhraseKeyPress = (e) => {
-        if (e.key === Key.ENTER && this.state.passPhrase.length > 0) {
-            this._onPassPhraseNext();
-        }
-    }
-
-    _onRecoveryKeyKeyPress = (e) => {
-        if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
-            this._onRecoveryKeyNext();
-        }
     }
 
     render() {
@@ -135,7 +126,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     )}
                 </div>;
             } else {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus"></div>;
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus" />;
             }
 
             content = <div>
@@ -149,23 +140,26 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     "identity for verifying other devices by entering your passphrase.",
                 )}</p>
 
-                <div className="mx_AccessSecretStorageDialog_primaryContainer">
-                    <input type="password"
+                <form className="mx_AccessSecretStorageDialog_primaryContainer">
+                    <input
+                        type="password"
                         className="mx_AccessSecretStorageDialog_passPhraseInput"
                         onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
                         value={this.state.passPhrase}
                         autoFocus={true}
+                        autoComplete="new-password"
                     />
                     {keyStatus}
-                    <DialogButtons primaryButton={_t('Next')}
+                    <DialogButtons
+                        primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
+                        primaryIsSubmit={true}
                         primaryDisabled={this.state.passPhrase.length === 0}
                     />
-                </div>
+                </form>
                 {_t(
                     "If you've forgotten your passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
@@ -192,7 +186,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus"></div>;
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus" />;
             } else if (this.state.recoveryKeyValid) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
@@ -221,22 +215,23 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     "identity for verifying other devices by entering your recovery key.",
                 )}</p>
 
-                <div className="mx_AccessSecretStorageDialog_primaryContainer">
+                <form className="mx_AccessSecretStorageDialog_primaryContainer">
                     <input className="mx_AccessSecretStorageDialog_recoveryKeyInput"
                         onChange={this._onRecoveryKeyChange}
-                        onKeyPress={this._onRecoveryKeyKeyPress}
                         value={this.state.recoveryKey}
                         autoFocus={true}
                     />
                     {keyStatus}
-                    <DialogButtons primaryButton={_t('Next')}
+                    <DialogButtons
+                        primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onRecoveryKeyNext}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
+                        primaryIsSubmit={true}
                         primaryDisabled={!this.state.recoveryKeyValid}
                     />
-                </div>
+                </form>
                 {_t(
                     "If you've forgotten your recovery key you can "+
                     "<button>set up new recovery options</button>."

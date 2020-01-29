@@ -160,6 +160,7 @@ export default createReactClass({
                     onKeyDown={ this._onKeyDown }
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
+                    autoComplete="off"
                 />
                 { clearButton }
             </div>
