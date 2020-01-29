@@ -451,7 +451,7 @@
     "Waiting for %(displayName)s to verify…": "Waiting for %(displayName)s to verify…",
     "They match": "They match",
     "They don't match": "They don't match",
-    "To be secure, do this in person or use another way to communicate.": "To be secure, do this in person or use another way to communicate.",
+    "To be secure, do this in person or use a trusted way to communicate.": "To be secure, do this in person or use a trusted way to communicate.",
     "Dog": "Dog",
     "Cat": "Cat",
     "Lion": "Lion",

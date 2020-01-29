@@ -56,7 +56,7 @@ const EncryptionInfo = ({pending, member, onStartVerification}) => {
             <h3>{_t("Verify User")}</h3>
             <div>
                 <p>{_t("For extra security, verify this user by checking a one-time code on both of your devices.")}</p>
-                <p>{_t("To be secure, do this in person or use another way to communicate.")}</p>
+                <p>{_t("To be secure, do this in person or use a trusted way to communicate.")}</p>
                 { content }
             </div>
         </div>
