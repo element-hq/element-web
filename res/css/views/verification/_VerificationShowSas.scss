@@ -36,7 +36,6 @@ limitations under the License.
 
 .mx_VerificationShowSas_emojiSas_block {
     display: inline-block;
-    text-align: center;
     margin-bottom: 30px;
     position: relative;
     // allow the blocks to grow to space themselves evenly up to a limit of 100px
@@ -50,12 +49,9 @@ limitations under the License.
 
 .mx_UserInfo .mx_VerificationShowSas_emojiSas_emoji {
     font-size: 32px; // in UserInfo use a smaller font-size to fit in a smaller space
-    width: 43px;
-    margin: 0 auto;
 }
 
 .mx_VerificationShowSas_emojiSas_label {
-    text-align: center;
     font-weight: bold;
     // allow the text to overflow the parent by 15px on each side
     // this is to keep the width of the parent consistent for spacing centrally via flexbox
