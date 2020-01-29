@@ -48,6 +48,7 @@ export default class RightPanel extends React.Component {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
             member: this._getUserForPanel(),
+            verificationRequest: RightPanelStore.getSharedInstance().roomPanelPhaseParams.verificationRequest,
         };
         this.onAction = this.onAction.bind(this);
         this.onRoomStateMember = this.onRoomStateMember.bind(this);
@@ -68,15 +69,34 @@ export default class RightPanel extends React.Component {
         return this.props.user || lastParams['member'];
     }
 
+    // gets the current phase from the props and also maybe the store
     _getPhaseFromProps() {
         const rps = RightPanelStore.getSharedInstance();
+        const userForPanel = this._getUserForPanel();
         if (this.props.groupId) {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
                 dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.GroupMemberList});
                 return RIGHT_PANEL_PHASES.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (this._getUserForPanel()) {
+        } else if (userForPanel) {
+            // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
+            // from its props and some from a store, except if the contents of the store changes
+            // while it's mounted in which case it replaces all of its state with that of the store,
+            // except it uses a dispatch instead of a normal store listener?
+            // Unfortunately rewriting this would almost certainly break showing the right panel
+            // in some of the many cases, and I don't have time to re-architect it and test all
+            // the flows now, so adding yet another special case so if the store thinks there is
+            // a verification going on for the member we're displaying, we show that, otherwise
+            // we race if a verification is started while the panel isn't displayed because we're
+            // not mounted in time to get the dispatch.
+            // Until then, let this code serve as a warning from history.
+            if (
+                userForPanel.userId === rps.roomPanelPhaseParams.member.userId &&
+                rps.roomPanelPhaseParams.verificationRequest
+            ) {
+                return rps.roomPanelPhase;
+            }
             return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
