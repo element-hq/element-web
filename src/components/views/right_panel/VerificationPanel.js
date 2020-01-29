@@ -191,7 +191,7 @@ export default class VerificationPanel extends React.PureComponent {
             case PHASE_CANCELLED:
                 return this.renderCancelledPhase();
         }
-        console.error("VerificationPanel unhandled phase:", phase)
+        console.error("VerificationPanel unhandled phase:", phase);
         return null;
     }
 
