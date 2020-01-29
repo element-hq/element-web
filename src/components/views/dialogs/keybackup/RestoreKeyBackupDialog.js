@@ -157,12 +157,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         });
     }
 
-    _onPassPhraseKeyPress = (e) => {
-        if (e.key === Key.ENTER) {
-            this._onPassPhraseNext();
-        }
-    }
-
     _onRecoveryKeyKeyPress = (e) => {
         if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
             this._onRecoveryKeyNext();
@@ -305,21 +299,22 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     "messaging by entering your recovery passphrase.",
                 )}</p>
 
-                <div className="mx_RestoreKeyBackupDialog_primaryContainer">
+                <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
                         className="mx_RestoreKeyBackupDialog_passPhraseInput"
                         onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
                         value={this.state.passPhrase}
                         autoFocus={true}
                     />
-                    <DialogButtons primaryButton={_t('Next')}
+                    <DialogButtons
+                        primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
+                        primaryIsSubmit={true}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
                     />
-                </div>
+                </form>
                 {_t(
                     "If you've forgotten your recovery passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
