@@ -83,7 +83,7 @@ export default class RightPanel extends React.Component {
             // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
             // from its props and some from a store, except if the contents of the store changes
             // while it's mounted in which case it replaces all of its state with that of the store,
-            // expect it uses a dispatch instead of a normal store listener?
+            // except it uses a dispatch instead of a normal store listener?
             // Unfortunately rewriting this would almost certainly break showing the right panel
             // in some of the many cases, and I don't have time to re-architect it and test all
             // the flows now, so adding yet another special case so if the store thinks there is
