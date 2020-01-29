@@ -820,7 +820,7 @@ export default createReactClass({
                 this.setState({
                     e2eStatus: "warning",
                 });
-                debuglog("e2e status set to warning as not all users trust all of their devices." +
+                debuglog("e2e status set to warning as not all users trust all of their sessions." +
                          " Aborted on user", userId);
                 return;
             }
