@@ -318,7 +318,7 @@ export default class DeviceVerifyDialog extends React.Component {
 }
 
 async function ensureDMExistsAndOpen(userId) {
-    const roomId = ensureDMExists(MatrixClientPeg.get(), userId);
+    const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
     // don't use andView and spinner in createRoom, together, they cause this dialog to close and reopen,
     // we causes us to loose the verifier and restart, and we end up having two verification requests
     dis.dispatch({
