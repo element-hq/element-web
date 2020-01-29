@@ -39,7 +39,7 @@ export default class ConfirmWipeDeviceDialog extends React.Component {
         return (
             <BaseDialog className='mx_ConfirmWipeDeviceDialog' hasCancel={true}
                         onFinished={this.props.onFinished}
-                        title={_t("Clear all data on this session?")}>
+                        title={_t("Clear all data in this session?")}>
                 <div className='mx_ConfirmWipeDeviceDialog_content'>
                     <p>
                         {_t(

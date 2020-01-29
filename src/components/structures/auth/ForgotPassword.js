@@ -360,7 +360,7 @@ export default createReactClass({
             <p>{_t(
                 "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
-                "session.",
+                "device.",
             )}</p>
             <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />

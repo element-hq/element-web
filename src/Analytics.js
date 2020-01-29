@@ -272,7 +272,7 @@ class Analytics {
                 ),
             },
             { expl: _td('Your User Agent'), value: navigator.userAgent },
-            { expl: _td('Your session resolution'), value: resolution },
+            { expl: _td('Your device resolution'), value: resolution },
         ];
 
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
