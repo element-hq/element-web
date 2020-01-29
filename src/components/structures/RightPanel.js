@@ -81,7 +81,7 @@ export default class RightPanel extends React.Component {
             return rps.groupPanelPhase;
         } else if (userForPanel) {
             // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
-            // from its props and some from a store, expect if the contents of the store changes
+            // from its props and some from a store, except if the contents of the store changes
             // while it's mounted in which case it replaces all of its state with that of the store,
             // expect it uses a dispatch instead of a normal store listener?
             // Unfortunately rewriting this would almost certainly break showing the right panel
