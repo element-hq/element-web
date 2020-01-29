@@ -349,7 +349,7 @@ export const SETTINGS = {
         supportedLevelsAreOrdered: true,
         displayName: {
             "default": _td('Never send encrypted messages to unverified sessions from this session'),
-            "room-session": _td('Never send encrypted messages to unverified sessions in this room from this session'),
+            "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
     },
