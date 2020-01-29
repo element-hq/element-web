@@ -1259,7 +1259,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     let verifyButton;
     if (isRoomEncrypted && !userVerified && !isMe) {
         verifyButton = (
-            <AccessibleButton kind="secondary" className="mx_UserInfo_verify" onClick={() => verifyUser(member)}>
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
                 {_t("Learn more")}
             </AccessibleButton>
         );
