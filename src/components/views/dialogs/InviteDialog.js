@@ -758,6 +758,12 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _onPaste = async (e) => {
+        if (this.state.filterText) {
+            // if the user has already typed something, just let them
+            // paste normally.
+            return;
+        }
+
         // Prevent the text being pasted into the textarea
         e.preventDefault();
 
