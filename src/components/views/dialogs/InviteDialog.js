@@ -351,9 +351,19 @@ export default class InviteDialog extends React.PureComponent {
                 continue;
             }
 
-            const lastEventTs = room.timeline && room.timeline.length
-                ? room.timeline[room.timeline.length - 1].getTs()
-                : 0;
+            // Find the last timestamp for a message event
+            const searchTypes = ["m.room.message", "m.room.encrypted", "m.sticker"];
+            const maxSearchEvents = 20; // to prevent traversing history
+            let lastEventTs = 0;
+            if (room.timeline && room.timeline.length) {
+                for (let i = room.timeline.length - 1; i >= 0; i--) {
+                    const ev = room.timeline[i];
+                    if (searchTypes.includes(ev.getType())) {
+                        lastEventTs = ev.getTs();
+                    }
+                    if (room.timeline.length - i > maxSearchEvents) break;
+                }
+            }
             if (!lastEventTs) {
                 // something weird is going on with this room
                 console.warn(`[Invite:Recents] ${userId} (${room.roomId}) has a weird last timestamp: ${lastEventTs}`);
