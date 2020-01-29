@@ -20,7 +20,7 @@ limitations under the License.
     position: relative;
     display: block !important;
     // Align the padlock with unencrypted room names
-    margin-left: 6px;
+    margin: 0 4px;
 
     &::before {
         background-color: $roomtile-name-color;
