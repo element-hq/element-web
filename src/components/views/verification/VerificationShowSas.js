@@ -27,7 +27,8 @@ function capFirst(s) {
 
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
-        displayName: PropTypes.string.isRequired,
+        pending: PropTypes.bool,
+        displayName: PropTypes.string, // required if pending is true
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,

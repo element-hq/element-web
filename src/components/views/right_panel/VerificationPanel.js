@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
 import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
@@ -23,6 +24,8 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {_t} from "../../../languageHandler";
 import E2EIcon from "../rooms/E2EIcon";
 import {
+    PHASE_UNSENT,
+    PHASE_REQUESTED,
     PHASE_READY,
     PHASE_DONE,
     PHASE_STARTED,
@@ -31,6 +34,20 @@ import {
 import Spinner from "../elements/Spinner";
 
 export default class VerificationPanel extends React.PureComponent {
+    static propTypes = {
+        request: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
+        phase: PropTypes.oneOf([
+            PHASE_UNSENT,
+            PHASE_REQUESTED,
+            PHASE_READY,
+            PHASE_STARTED,
+            PHASE_CANCELLED,
+            PHASE_DONE,
+        ]).isRequired,
+        onClose: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
         this.state = {};
