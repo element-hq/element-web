@@ -360,6 +360,7 @@ export default class InviteDialog extends React.PureComponent {
                     const ev = room.timeline[i];
                     if (searchTypes.includes(ev.getType())) {
                         lastEventTs = ev.getTs();
+                        break;
                     }
                     if (room.timeline.length - i > maxSearchEvents) break;
                 }
