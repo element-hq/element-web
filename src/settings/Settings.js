@@ -144,7 +144,7 @@ export const SETTINGS = {
     },
     "feature_cross_signing": {
         isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -348,8 +348,8 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td('Never send encrypted messages to unverified devices from this device'),
-            "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),
+            "default": _td('Never send encrypted messages to unverified sessions from this session'),
+            "room-session": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
     },

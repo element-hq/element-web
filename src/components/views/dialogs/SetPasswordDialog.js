@@ -29,7 +29,7 @@ const WarmFuzzy = function(props) {
     if (props.didSetEmail) {
         title = _t('You have successfully set a password and an email address!');
     }
-    const advice = _t('You can now return to your account after signing out, and sign in on other devices.');
+    const advice = _t('You can now return to your account after signing out, and sign in on other sessions.');
     let extraAdvice = null;
     if (!props.didSetEmail) {
         extraAdvice = _t('Remember, you can always set an email address in user settings if you change your mind.');
@@ -114,7 +114,7 @@ export default createReactClass({
             >
                 <div className="mx_Dialog_content">
                     <p>
-                        { _t('This will allow you to return to your account after signing out, and sign in on other devices.') }
+                        { _t('This will allow you to return to your account after signing out, and sign in on other sessions.') }
                     </p>
                     <ChangePassword
                         className="mx_SetPasswordDialog_change_password"

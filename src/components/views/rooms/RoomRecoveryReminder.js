@@ -124,7 +124,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
 
         let setupCaption;
         if (this.state.backupInfo) {
-            setupCaption = _t("Connect this device to Key Backup");
+            setupCaption = _t("Connect this session to Key Backup");
         } else {
             setupCaption = _t("Start using Key Backup");
         }

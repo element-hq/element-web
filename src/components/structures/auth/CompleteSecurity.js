@@ -197,7 +197,7 @@ export default class CompleteSecurity extends React.Component {
             body = (
                 <div>
                     <p>{_t(
-                        "Without completing security on this device, it won’t have " +
+                        "Without completing security on this session, it won’t have " +
                         "access to encrypted messages.",
                     )}</p>
                     <div className="mx_CompleteSecurity_actionRow">

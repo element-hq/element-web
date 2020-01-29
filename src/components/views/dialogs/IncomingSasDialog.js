@@ -157,10 +157,10 @@ export default class IncomingSasDialog extends React.Component {
                     "end-to-end encrypted messages.",
                 )}</p>
                 <p>{_t(
-                    // NB. Below wording adjusted to singular 'device' until we have
+                    // NB. Below wording adjusted to singular 'session' until we have
                     // cross-signing
-                    "Verifying this user will mark their device as trusted, and " +
-                    "also mark your device as trusted to them.",
+                    "Verifying this user will mark their session as trusted, and " +
+                    "also mark your session as trusted to them.",
                 )}</p>
                 <DialogButtons
                     primaryButton={_t('Continue')}

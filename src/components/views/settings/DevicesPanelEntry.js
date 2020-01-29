@@ -40,7 +40,7 @@ export default class DevicesPanelEntry extends React.Component {
         return MatrixClientPeg.get().setDeviceDetails(device.device_id, {
             display_name: value,
         }).catch((e) => {
-            console.error("Error setting device display name", e);
+            console.error("Error setting session display name", e);
             throw new Error(_t("Failed to set display name"));
         });
     }

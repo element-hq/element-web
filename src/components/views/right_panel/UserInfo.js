@@ -208,7 +208,7 @@ function DevicesSection({devices, userId, loading}) {
         return <Spinner />;
     }
     if (devices === null) {
-        return _t("Unable to load device list");
+        return _t("Unable to load session list");
     }
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
