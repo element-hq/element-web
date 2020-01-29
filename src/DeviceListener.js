@@ -21,7 +21,7 @@ import { _t } from './languageHandler';
 import ToastStore from './stores/ToastStore';
 
 function toastKey(deviceId) {
-    return 'newsession_' + deviceId;
+    return 'unverified_session_' + deviceId;
 }
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
@@ -160,10 +160,10 @@ export default class DeviceListener {
                 this._activeNagToasts.add(device.deviceId);
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: toastKey(device.deviceId),
-                    title: _t("New Session"),
+                    title: _t("Unverified session"),
                     icon: "verification_warning",
-                    props: {deviceId: device.deviceId},
-                    component: sdk.getComponent("toasts.NewSessionToast"),
+                    props: { device },
+                    component: sdk.getComponent("toasts.UnverifiedSessionToast"),
                 });
                 newActiveToasts.add(device.deviceId);
             }

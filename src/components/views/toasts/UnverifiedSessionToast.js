@@ -24,11 +24,11 @@ import NewSessionReviewDialog from '../dialogs/NewSessionReviewDialog';
 import FormButton from '../elements/FormButton';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 
-@replaceableComponent("views.toasts.VerifySessionToast")
-export default class VerifySessionToast extends React.PureComponent {
+@replaceableComponent("views.toasts.UnverifiedSessionToast")
+export default class UnverifiedSessionToast extends React.PureComponent {
     static propTypes = {
         toastKey: PropTypes.string.isRequired,
-        deviceId: PropTypes.string,
+        device: PropTypes.object.isRequired,
     };
 
     _onLaterClick = () => {
@@ -36,9 +36,7 @@ export default class VerifySessionToast extends React.PureComponent {
     };
 
     _onReviewClick = async () => {
-        const cli = MatrixClientPeg.get();
-
-        const device = await cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
+        const { device } = this.props;
 
         Modal.createTrackedDialog('New Session Review', 'Starting dialog', NewSessionReviewDialog, {
             userId: MatrixClientPeg.get().getUserId(),
@@ -47,8 +45,16 @@ export default class VerifySessionToast extends React.PureComponent {
     };
 
     render() {
+        const { device } = this.props;
+
         return (<div>
-            <div className="mx_Toast_description">{_t("Review & verify your new session")}</div>
+            <div className="mx_Toast_description">
+                <span className="mx_Toast_deviceName">
+                    {device.getDisplayName()}
+                </span> <span className="mx_Toast_deviceID">
+                    ({device.deviceId})
+                </span>
+            </div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
                 <FormButton label={_t("Review")} onClick={this._onReviewClick} />
