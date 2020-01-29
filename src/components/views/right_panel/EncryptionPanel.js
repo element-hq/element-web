@@ -36,7 +36,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose}) => {
         setRequest(verificationRequest);
     }, [verificationRequest]);
 
-    const [phase, setPhase] = useState(request.phase);
+    const [phase, setPhase] = useState(request && request.phase);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
