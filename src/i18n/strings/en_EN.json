@@ -561,6 +561,7 @@
     "Unable to load session list": "Unable to load session list",
     "Authentication": "Authentication",
     "Delete %(count)s sessions|other": "Delete %(count)s sessions",
+    "Delete %(count)s sessions|one": "Delete %(count)s session",
     "ID": "ID",
     "Public Name": "Public Name",
     "Last seen": "Last seen",
