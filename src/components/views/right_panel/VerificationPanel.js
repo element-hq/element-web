@@ -164,11 +164,11 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     render() {
-        const {member} = this.props;
+        const {member, phase} = this.props;
 
         const displayName = member.displayName || member.name || member.userId;
 
-        switch (this.props.phase) {
+        switch (phase) {
             case PHASE_READY:
                 return this.renderQRPhase();
             case PHASE_STARTED:
@@ -191,6 +191,7 @@ export default class VerificationPanel extends React.PureComponent {
             case PHASE_CANCELLED:
                 return this.renderCancelledPhase();
         }
+        console.error("VerificationPanel unhandled phase:", phase)
         return null;
     }
 
