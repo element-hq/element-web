@@ -480,7 +480,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                <Field type="password"
+                <Field
+                    type="password"
+                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
                     onKeyPress={this._onPassPhraseKeyPress}
@@ -512,9 +514,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
+                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
                     {_t("Set up with a recovery key")}
-                </AccessibleButton></p>
+                </AccessibleButton>
             </details>
         </div>;
     }
