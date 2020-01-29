@@ -263,7 +263,9 @@ limitations under the License.
     .mx_UserInfo_verify {
         display: block;
         margin: 16px 0;
-        width: 100%;
+    }
+    button.mx_UserInfo_verify {
+        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
     }
 }
 
