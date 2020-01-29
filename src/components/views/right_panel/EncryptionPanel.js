@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,35 +14,81 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from "react";
+import PropTypes from "prop-types";
+
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import Modal from "../../../Modal";
+import {PHASE_REQUESTED} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import * as sdk from "../../../index";
+import {_t} from "../../../languageHandler";
 
-export default class EncryptionPanel extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+// cancellation codes which constitute a key mismatch
+const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-    render() {
-        const request = this.props.verificationRequest || this.state.verificationRequest;
-        const {member} = this.props;
-        if (request) {
-            return <VerificationPanel request={request} key={request.channel.transactionId} />;
-        } else if (member) {
-            return <EncryptionInfo onStartVerification={this._onStartVerification} member={member} />;
-        } else {
-            return <p>Not a member nor request, not sure what to render</p>;
+const EncryptionPanel = ({verificationRequest, member, onClose}) => {
+    const [request, setRequest] = useState(verificationRequest);
+    useEffect(() => {
+        setRequest(verificationRequest);
+    }, [verificationRequest]);
+
+    const [phase, setPhase] = useState(false);
+    const changeHandler = useCallback(() => {
+        // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
+        if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
+                headerImage: require("../../../../res/img/e2e/warning.svg"),
+                title: _t("Your messages are not secure"),
+                description: <div>
+                    {_t("One of the following may be compromised:")}
+                    <ul>
+                        <li>{_t("Your homeserver")}</li>
+                        <li>{_t("The homeserver the user you’re verifying is connected to")}</li>
+                        <li>{_t("Yours, or the other users’ internet connection")}</li>
+                        <li>{_t("Yours, or the other users’ device")}</li>
+                    </ul>
+                </div>,
+                onFinished: onClose,
+            });
+            return; // don't update phase here as we will be transitioning away from this view shortly
         }
-    }
 
-    _onStartVerification = async () => {
-        const client = MatrixClientPeg.get();
-        const {member} = this.props;
-        const roomId = await ensureDMExists(client, member.userId);
-        const verificationRequest = await client.requestVerificationDM(member.userId, roomId);
-        this.setState({verificationRequest});
-    };
-}
+        if (request) {
+            setPhase(request.phase);
+        }
+    }, [onClose, request]);
+    useEventEmitter(request, "change", changeHandler);
+
+    const onStartVerification = useCallback(async () => {
+        const cli = MatrixClientPeg.get();
+        const roomId = await ensureDMExists(cli, member.userId);
+        const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
+        setRequest(verificationRequest);
+    }, [member.userId]);
+
+    const requested = request && phase === PHASE_REQUESTED;
+    if (!request || requested) {
+        return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
+    } else {
+        return (
+            <VerificationPanel
+                onClose={onClose}
+                member={member}
+                request={request}
+                key={request.channel.transactionId}
+                phase={phase} />
+        );
+    }
+};
+EncryptionPanel.propTypes = {
+    member: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
+    verificationRequest: PropTypes.object,
+};
+
+export default EncryptionPanel;

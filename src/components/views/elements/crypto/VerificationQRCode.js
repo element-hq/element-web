@@ -51,6 +51,6 @@ export default class VerificationQRCode extends React.PureComponent {
 
         const uri = `https://matrix.to/#/${this.props.keyholderUserId}?${qs.stringify(query)}`;
 
-        return <QRCode value={uri} size={256} logoWidth={48} logo={require("../../../../../res/img/matrix-m.svg")} />;
+        return <QRCode value={uri} size={512} logoWidth={64} logo={require("../../../../../res/img/matrix-m.svg")} />;
     }
 }
