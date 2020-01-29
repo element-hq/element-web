@@ -218,8 +218,10 @@ export default class VerificationPanel extends React.PureComponent {
 
     _onRequestChange = async () => {
         const {request} = this.props;
-        if (!this._hasVerifier && !!request.verifier) {
-            request.verifier.on('show_sas', this._onVerifierShowSas);
+        const hadVerifier = this._hasVerifier;
+        this._hasVerifier = !!request.verifier;
+        if (!hadVerifier && this._hasVerifier) {
+            request.verifier.once('show_sas', this._onVerifierShowSas);
             try {
                 // on the requester side, this is also awaited in _startSAS,
                 // but that's ok as verify should return the same promise.
@@ -227,10 +229,7 @@ export default class VerificationPanel extends React.PureComponent {
             } catch (err) {
                 console.error("error verify", err);
             }
-        } else if (this._hasVerifier && !request.verifier) {
-            request.verifier.removeListener('show_sas', this._onVerifierShowSas);
         }
-        this._hasVerifier = !!request.verifier;
     };
 
     componentDidMount() {
