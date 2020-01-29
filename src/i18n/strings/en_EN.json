@@ -1173,6 +1173,7 @@
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> in %(roomName)s",
     "This client does not support end-to-end encryption.": "This client does not support end-to-end encryption.",
     "Messages in this room are not end-to-end encrypted.": "Messages in this room are not end-to-end encrypted.",
+    "Learn more": "Learn more",
     "Security": "Security",
     "Verify by emoji": "Verify by emoji",
     "Verify by comparing unique emoji.": "Verify by comparing unique emoji.",

@@ -38,7 +38,7 @@ const EncryptionInfo = ({pending, member, onStartVerification}) => {
     } else {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         content = (
-            <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={onStartVerification}>
+            <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={onStartVerification}>
                 {_t("Start Verification")}
             </AccessibleButton>
         );

@@ -63,7 +63,7 @@ export default class VerificationPanel extends React.PureComponent {
             button = <Spinner />;
         } else {
             button = (
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
                     {_t("Verify by emoji")}
                 </AccessibleButton>
             );
@@ -128,7 +128,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <E2EIcon isUser={true} status="verified" size={128} />
                 <p>Verify all users in a room to ensure it's secure.</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
             </div>
@@ -156,7 +156,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <h3>Verification cancelled</h3>
                 <p>{ text }</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
             </div>

@@ -80,7 +80,7 @@ export default class VerificationShowSas extends React.Component {
         } else {
             return <div>
                 {_t("Unable to find a supported verification method.")}
-                <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_verify">
+                <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_wideButton">
                     {_t('Cancel')}
                 </AccessibleButton>
             </div>;
@@ -96,10 +96,10 @@ export default class VerificationShowSas extends React.Component {
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
                 onPrimaryButtonClick={this.onMatchClick}
-                primaryButtonClass="mx_UserInfo_verify"
+                primaryButtonClass="mx_UserInfo_wideButton"
                 cancelButton={_t("They don't match")}
                 onCancel={this.props.onCancel}
-                cancelButtonClass="mx_UserInfo_verify"
+                cancelButtonClass="mx_UserInfo_wideButton"
             />;
         }
 
