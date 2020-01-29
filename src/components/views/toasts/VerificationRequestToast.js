@@ -56,7 +56,10 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        if (request.ready || request.started || request.done || request.cancelled || request.observeOnly) {
+        const isPendingInRoomRequest = request.channel.roomId &&
+            !(request.ready || request.started || request.done || request.cancelled || request.observeOnly);
+        const isPendingDeviceRequest = request.channel.deviceId && request.started;
+        if (!isPendingInRoomRequest && !isPendingDeviceRequest) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
