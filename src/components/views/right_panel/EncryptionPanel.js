@@ -36,7 +36,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose}) => {
         setRequest(verificationRequest);
     }, [verificationRequest]);
 
-    const [phase, setPhase] = useState(false);
+    const [phase, setPhase] = useState(undefined);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
@@ -71,7 +71,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose}) => {
         setRequest(verificationRequest);
     }, [member.userId]);
 
-    const requested = request && phase === PHASE_REQUESTED;
+    const requested = request && (phase === PHASE_REQUESTED || phase === undefined);
     if (!request || requested) {
         return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
     } else {

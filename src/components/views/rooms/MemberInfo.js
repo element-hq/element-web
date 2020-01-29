@@ -1113,7 +1113,8 @@ export default createReactClass({
             }
         }
 
-        const avatarUrl = this.props.member.getMxcAvatarUrl();
+        const {member} = this.props;
+        const avatarUrl = member.avatarUrl || (member.getMxcAvatarUrl && member.getMxcAvatarUrl());
         let avatarElement;
         if (avatarUrl) {
             const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
