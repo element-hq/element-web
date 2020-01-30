@@ -62,7 +62,9 @@ export default class VerificationShowSas extends React.Component {
                 </div>,
             );
             sasDisplay = <div className="mx_VerificationShowSas_emojiSas">
-                {emojiBlocks}
+                {emojiBlocks.slice(0, 4)}
+                <div className="mx_VerificationShowSas_emojiSas_break" />
+                {emojiBlocks.slice(4)}
             </div>;
             sasCaption = _t(
                 "Verify this user by confirming the following emoji appear on their screen.",
@@ -105,8 +107,8 @@ export default class VerificationShowSas extends React.Component {
 
         return <div className="mx_VerificationShowSas">
             <p>{sasCaption}</p>
-            <p>{_t("To be secure, do this in person or use a trusted way to communicate.")}</p>
             {sasDisplay}
+            <p>{_t("To be secure, do this in person or use a trusted way to communicate.")}</p>
             {confirm}
         </div>;
     }
