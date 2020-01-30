@@ -442,23 +442,6 @@ function textForHistoryVisibilityEvent(event) {
     }
 }
 
-function textForEncryptionEvent(event) {
-    const senderName = event.sender ? event.sender.name : event.getSender();
-    if (event.getContent().algorithm === "m.megolm.v1.aes-sha2") {
-        return _t('%(senderName)s turned on end-to-end encryption.', {
-            senderName,
-        });
-    }
-    return _t(
-        '%(senderName)s turned on end-to-end encryption ' +
-        '(unrecognised algorithm %(algorithm)s).',
-        {
-            senderName,
-            algorithm: event.getContent().algorithm,
-        },
-    );
-}
-
 // Currently will only display a change if a user's power level is changed
 function textForPowerEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
@@ -636,7 +619,6 @@ const stateHandlers = {
     'm.room.member': textForMemberEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
-    'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
     'm.room.server_acl': textForServerACLEvent,
