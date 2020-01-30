@@ -255,11 +255,15 @@ function DevicesSection({devices, userId, loading}) {
     let expandButton;
     if (expandSectionDevices.length) {
         if (isExpanded) {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton" onClick={() => setExpanded(false)}>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
+                onClick={() => setExpanded(false)}
+            >
                 <div>{expandHideCaption}</div>
             </AccessibleButton>);
         } else {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton" onClick={() => setExpanded(true)}>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
+                onClick={() => setExpanded(true)}
+            >
                 <div className={expandIconClasses} />
                 <div>{expandCountCaption}</div>
             </AccessibleButton>);
