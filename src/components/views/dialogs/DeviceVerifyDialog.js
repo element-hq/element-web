@@ -233,6 +233,7 @@ export default class DeviceVerifyDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
+            isSelf={MatrixClientPeg.get().getUserId() === this.props.userId}
         />;
     }
 

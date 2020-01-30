@@ -32,6 +32,7 @@ export default class VerificationShowSas extends React.Component {
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
+        isSelf: PropTypes.bool,
     };
 
     constructor(props) {
@@ -66,9 +67,13 @@ export default class VerificationShowSas extends React.Component {
                 <div className="mx_VerificationShowSas_emojiSas_break" />
                 {emojiBlocks.slice(4)}
             </div>;
-            sasCaption = _t(
-                "Verify this user by confirming the following emoji appear on their screen.",
-            );
+            sasCaption = this.props.isSelf ?
+                _t(
+                    "Verify the device by confirming the following emoji appers on its screen.",
+                ):
+                _t(
+                    "Verify this user by confirming the following emoji appear on their screen.",
+                );
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>
                 {num}
@@ -76,9 +81,13 @@ export default class VerificationShowSas extends React.Component {
             sasDisplay = <div className="mx_VerificationShowSas_decimalSas">
                 {numberBlocks}
             </div>;
-            sasCaption = _t(
-                "Verify this user by confirming the following number appears on their screen.",
-            );
+            sasCaption = this.props.isSelf ?
+                _t(
+                    "Verify this device by confirming the following number appears on its screen.",
+                ):
+                _t(
+                    "Verify this user by confirming the following number appears on their screen.",
+                );
         } else {
             return <div>
                 {_t("Unable to find a supported verification method.")}

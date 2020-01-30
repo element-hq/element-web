@@ -121,7 +121,7 @@ export default class IncomingSasDialog extends React.Component {
         const Spinner = sdk.getComponent("views.elements.Spinner");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        const isSelf = this.props.verifier.userId == MatrixClientPeg.get().credentials.userId;
+        const isSelf = this.props.verifier.userId == MatrixClientPeg.get().getUserId();
 
         let profile;
         if (this.state.opponentProfile) {
@@ -196,6 +196,7 @@ export default class IncomingSasDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
+            isSelf={this.props.verifier.userId == MatrixClientPeg.get().getUserId()}
         />;
     }
 
