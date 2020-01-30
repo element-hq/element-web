@@ -1985,6 +1985,7 @@ export default createReactClass({
                     onLoggedIn={this.onRegisterFlowComplete}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     {...this.getServerProperties()}
                 />
             );
