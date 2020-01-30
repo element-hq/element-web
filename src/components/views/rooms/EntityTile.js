@@ -156,18 +156,13 @@ const EntityTile = createReactClass({
             );
         }
 
-        let power;
+        let powerLabel;
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
-            const src = {
-                [EntityTile.POWER_STATUS_MODERATOR]: require("../../../../res/img/mod.svg"),
-                [EntityTile.POWER_STATUS_ADMIN]: require("../../../../res/img/admin.svg"),
-            }[powerStatus];
-            const alt = {
+            powerLabel = {
                 [EntityTile.POWER_STATUS_MODERATOR]: _t("Moderator"),
                 [EntityTile.POWER_STATUS_ADMIN]: _t("Admin"),
             }[powerStatus];
-            power = <img src={src} className="mx_EntityTile_power" width="16" height="17" alt={alt} />;
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
@@ -181,7 +176,7 @@ const EntityTile = createReactClass({
                                   onClick={this.props.onClick}>
                     <div className="mx_EntityTile_avatar">
                         { av }
-                        { power }
+                        { powerLabel }
                     </div>
                     { nameEl }
                     { inviteButton }
