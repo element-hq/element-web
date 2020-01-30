@@ -121,6 +121,8 @@ export default class IncomingSasDialog extends React.Component {
         const Spinner = sdk.getComponent("views.elements.Spinner");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
+        const isSelf = this.props.verifier.userId == MatrixClientPeg.get().credentials.userId;
+
         let profile;
         if (this.state.opponentProfile) {
             profile = <div className="mx_IncomingSasDialog_opponentProfile">
@@ -148,20 +150,36 @@ export default class IncomingSasDialog extends React.Component {
             profile = <Spinner />;
         }
 
+        const userDetailText = [
+            <p>{_t(
+                "Verify this user to mark them as trusted. " +
+                "Trusting users gives you extra peace of mind when using " +
+                "end-to-end encrypted messages.",
+            )}</p>,
+            <p>{_t(
+                // NB. Below wording adjusted to singular 'session' until we have
+                // cross-signing
+                "Verifying this user will mark their session as trusted, and " +
+                "also mark your session as trusted to them.",
+            )}</p>
+        ];
+
+        const selfDetailText = [
+            <p>{_t(
+                "Verify this device to mark it as trusted. " +
+                "Trusting this device gives you and other users extra peace of mind when using " +
+                "end-to-end encrypted messages.",
+            )}</p>,
+            <p>{_t(
+                "Verifying this device will mark it as trusted, and users who have verified with " +
+                "you will trust this device.",
+            )}</p>
+        ];
+
         return (
             <div>
                 {profile}
-                <p>{_t(
-                    "Verify this user to mark them as trusted. " +
-                    "Trusting users gives you extra peace of mind when using " +
-                    "end-to-end encrypted messages.",
-                )}</p>
-                <p>{_t(
-                    // NB. Below wording adjusted to singular 'session' until we have
-                    // cross-signing
-                    "Verifying this user will mark their session as trusted, and " +
-                    "also mark your session as trusted to them.",
-                )}</p>
+                {isSelf ? selfDetailText : userDetailText}
                 <DialogButtons
                     primaryButton={_t('Continue')}
                     hasCancel={true}
