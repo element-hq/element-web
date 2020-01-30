@@ -43,7 +43,7 @@ export default class EncryptionEvent extends React.Component {
         } else {
             body = <div>
                 <div className="mx_cryptoEvent_title">{_t("Encryption not enabled")}</div>
-                <div className="mx_cryptoEvent_subtitle">{_t("The encryption used by this room isn't supported")}</div>
+                <div className="mx_cryptoEvent_subtitle">{_t("The encryption used by this room isn't supported.")}</div>
             </div>;
             classes += " mx_cryptoEvent_icon_warning";
         }
