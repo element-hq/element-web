@@ -16,13 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {getNameForEventRoom, userLabelForEventRoom}
-    from '../../../utils/KeyVerificationStateObserver';
-import dis from "../../../dispatcher";
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 export default class EncryptionEvent extends React.Component {
     render() {
@@ -51,7 +45,6 @@ export default class EncryptionEvent extends React.Component {
         return (<div className={classes}>
             {body}
         </div>);
-        return null;
     }
 }
 
