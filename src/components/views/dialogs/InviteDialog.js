@@ -381,10 +381,8 @@ export default class InviteDialog extends React.PureComponent {
 
     _buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember} {
         const maxConsideredMembers = 200;
-        const client = MatrixClientPeg.get();
-        const joinedRooms = client.getRooms()
-            .filter(r => r.getMyMembership() === 'join')
-            .filter(r => r.getJoinedMemberCount() <= maxConsideredMembers);
+        const joinedRooms = MatrixClientPeg.get().getRooms()
+            .filter(r => r.getMyMembership() === 'join' && r.getJoinedMemberCount() <= maxConsideredMembers);
 
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
