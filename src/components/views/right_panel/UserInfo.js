@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 Vector Creations Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,7 +67,9 @@ export const getE2EStatus = (cli, userId, devices) => {
     }
     const isMe = userId === cli.getUserId();
     const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-    const allDevicesVerified = devices.every(device => {
+    if (!userVerified) return "normal";
+
+    const anyDeviceUnverified = devices.some(device => {
         const { deviceId } = device;
         // For your own devices, we use the stricter check of cross-signing
         // verification to encourage everyone to trust their own devices via
@@ -75,12 +77,9 @@ export const getE2EStatus = (cli, userId, devices) => {
         // For other people's devices, the more general verified check that
         // includes locally verified devices can be used.
         const deviceTrust = cli.checkDeviceTrust(userId, deviceId);
-        return isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
+        return isMe ? !deviceTrust.isCrossSigningVerified() : !deviceTrust.isVerified();
     });
-    if (allDevicesVerified) {
-        return userVerified ? "verified" : "normal";
-    }
-    return "warning";
+    return anyDeviceUnverified ? "warning" : "verified";
 };
 
 async function openDMForUser(matrixClient, userId) {
@@ -156,6 +155,7 @@ function DeviceItem({userId, device}) {
     const cli = useContext(MatrixClientContext);
     const isMe = userId === cli.getUserId();
     const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
+    const userTrust = cli.checkUserTrust(userId);
     // For your own devices, we use the stricter check of cross-signing
     // verification to encourage everyone to trust their own devices via
     // cross-signing so that other users can then safely trust you.
@@ -170,8 +170,9 @@ function DeviceItem({userId, device}) {
         mx_UserInfo_device_unverified: !isVerified,
     });
     const iconClasses = classNames("mx_E2EIcon", {
+        mx_E2EIcon_normal: !userTrust.isVerified(),
         mx_E2EIcon_verified: isVerified,
-        mx_E2EIcon_warning: !isVerified,
+        mx_E2EIcon_warning: userTrust.isVerified() && !isVerified,
     });
 
     const onDeviceClick = () => {
@@ -183,7 +184,8 @@ function DeviceItem({userId, device}) {
     const deviceName = device.ambiguous ?
             (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
             device.getDisplayName();
-    const trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
+    let trustedLabel = null;
+    if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
     return (
         <AccessibleButton
             className={classes}
@@ -200,6 +202,7 @@ function DeviceItem({userId, device}) {
 function DevicesSection({devices, userId, loading}) {
     const Spinner = sdk.getComponent("elements.Spinner");
     const cli = useContext(MatrixClientContext);
+    const userTrust = cli.checkUserTrust(userId);
 
     const [isExpanded, setExpanded] = useState(false);
 
@@ -213,38 +216,54 @@ function DevicesSection({devices, userId, loading}) {
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
 
+    let expandSectionDevices = [];
     const unverifiedDevices = [];
-    const verifiedDevices = [];
 
-    for (let i = 0; i < devices.length; ++i) {
-        const device = devices[i];
-        const deviceTrust = deviceTrusts[i];
-        // For your own devices, we use the stricter check of cross-signing
-        // verification to encourage everyone to trust their own devices via
-        // cross-signing so that other users can then safely trust you.
-        // For other people's devices, the more general verified check that
-        // includes locally verified devices can be used.
-        const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
-            deviceTrust.isCrossSigningVerified() :
-            deviceTrust.isVerified();
+    let expandCountCaption;
+    let expandHideCaption;
+    let expandClasses = "mx_UserInfo_expand";
+    let expandIconClasses = "mx_E2EIcon";
 
-        if (isVerified) {
-            verifiedDevices.push(device);
-        } else {
-            unverifiedDevices.push(device);
+    if (userTrust.isVerified()) {
+        for (let i = 0; i < devices.length; ++i) {
+            const device = devices[i];
+            const deviceTrust = deviceTrusts[i];
+            // For your own devices, we use the stricter check of cross-signing
+            // verification to encourage everyone to trust their own devices via
+            // cross-signing so that other users can then safely trust you.
+            // For other people's devices, the more general verified check that
+            // includes locally verified devices can be used.
+            const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+                deviceTrust.isCrossSigningVerified() :
+                deviceTrust.isVerified();
+
+            if (isVerified) {
+                expandSectionDevices.push(device);
+            } else {
+                unverifiedDevices.push(device);
+            }
         }
+        expandCountCaption = _t("%(count)s verified sessions", {count: expandSectionDevices.length});
+        expandHideCaption = _t("Hide verified sessions");
+        expandClasses += " mx_UserInfo_expand_verified";
+        expandIconClasses += " mx_E2EIcon_verified";
+    } else {
+        expandSectionDevices = devices;
+        expandCountCaption = _t("%(count)s sessions", {count: devices.length});
+        expandHideCaption = _t("Hide sessions");
+        expandIconClasses += " mx_E2EIcon_normal";
     }
 
     let expandButton;
-    if (verifiedDevices.length) {
+    if (expandSectionDevices.length) {
         if (isExpanded) {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(false)}>
-                <div>{_t("Hide verified sessions")}</div>
+            expandButton = (<AccessibleButton className={expandClasses} onClick={() => setExpanded(false)}>
+                <div>{expandHideCaption}</div>
             </AccessibleButton>);
         } else {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(true)}>
-                <div className="mx_E2EIcon mx_E2EIcon_verified" />
-                <div>{_t("%(count)s verified sessions", {count: verifiedDevices.length})}</div>
+            expandButton = (<AccessibleButton className={expandClasses} onClick={() => setExpanded(true)}>
+                <div className={expandIconClasses} />
+                <div>{expandCountCaption}</div>
             </AccessibleButton>);
         }
     }
@@ -254,7 +273,7 @@ function DevicesSection({devices, userId, loading}) {
     });
     if (isExpanded) {
         const keyStart = unverifiedDevices.length;
-        deviceList = deviceList.concat(verifiedDevices.map((device, i) => {
+        deviceList = deviceList.concat(expandSectionDevices.map((device, i) => {
             return (<DeviceItem key={i + keyStart} userId={userId} device={device} />);
         }));
     }

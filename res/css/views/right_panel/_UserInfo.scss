@@ -256,6 +256,9 @@ limitations under the License.
         .mx_UserInfo_expand {
             display: flex;
             margin-top: 11px;
+        }
+
+        .mx_UserInfo_expand_verified {
             color: $accent-color;
         }
     }
