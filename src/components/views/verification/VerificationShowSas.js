@@ -117,7 +117,9 @@ export default class VerificationShowSas extends React.Component {
         return <div className="mx_VerificationShowSas">
             <p>{sasCaption}</p>
             {sasDisplay}
-            <p>{_t("To be secure, do this in person or use a trusted way to communicate.")}</p>
+            <p>{this.props.isSelf ?
+                "":
+                _t("To be secure, do this in person or use a trusted way to communicate.")}</p>
             {confirm}
         </div>;
     }
