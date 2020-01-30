@@ -160,10 +160,11 @@ const EntityTile = createReactClass({
         let powerLabel;
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
-            powerLabel = {
-                [EntityTile.POWER_STATUS_MODERATOR]: _t("Moderator"),
+            const powerText = {
+                [EntityTile.POWER_STATUS_MODERATOR]: _t("Mod"),
                 [EntityTile.POWER_STATUS_ADMIN]: _t("Admin"),
             }[powerStatus];
+            powerLabel = <div className="mx_EntityTile_power">{powerText}</div>;
         }
 
         let e2eIcon;
@@ -183,10 +184,10 @@ const EntityTile = createReactClass({
                                   onClick={this.props.onClick}>
                     <div className="mx_EntityTile_avatar">
                         { av }
-                        { powerLabel }
                         { e2eIcon }
                     </div>
                     { nameEl }
+                    { powerLabel }
                     { inviteButton }
                 </AccessibleButton>
             </div>

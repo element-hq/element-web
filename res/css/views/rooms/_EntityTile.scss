@@ -40,7 +40,7 @@ limitations under the License.
     content: "";
     position: absolute;
     top: calc(50% - 8px); // center
-    right: 10px;
+    right: -8px;
     mask: url('$(res)/img/member_chevron.png');
     mask-repeat: no-repeat;
     width: 16px;
@@ -85,6 +85,7 @@ limitations under the License.
 
 .mx_EntityTile_details {
     overflow: hidden;
+    flex: 1;
 }
 
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
@@ -120,4 +121,14 @@ limitations under the License.
     overflow: hidden;
     white-space: nowrap;
     text-overflow: clip;
+}
+
+.mx_EntityTile_power {
+    padding-inline-start: 6px;
+    font-size: 10px;
+    color: $notice-secondary-color;
+}
+
+.mx_EntityTile:hover .mx_EntityTile_power {
+    display: none;
 }
