@@ -69,7 +69,7 @@ export default class VerificationShowSas extends React.Component {
             </div>;
             sasCaption = this.props.isSelf ?
                 _t(
-                    "Verify the device by confirming the following emoji appers on its screen.",
+                    "Confirm the emoji below are displayed on both devices, in the same order:",
                 ):
                 _t(
                     "Verify this user by confirming the following emoji appear on their screen.",
