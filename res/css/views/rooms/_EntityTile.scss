@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,15 @@ limitations under the License.
     align-items: center;
     color: $primary-fg-color;
     cursor: pointer;
+
+    .mx_E2EIcon {
+        margin: 0;
+        position: absolute;
+        bottom: 2px;
+        right: 7px;
+        height: 15px;
+        width: 15px;
+    }
 }
 
 .mx_EntityTile:hover {

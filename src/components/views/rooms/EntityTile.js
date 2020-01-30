@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,14 +23,13 @@ import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
-
+import E2EIcon from './E2EIcon';
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
     "online": "mx_EntityTile_online",
     "unavailable": "mx_EntityTile_unavailable",
 };
-
 
 function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     if (showPresence === false) {
@@ -69,6 +69,7 @@ const EntityTile = createReactClass({
         suppressOnHover: PropTypes.bool,
         showPresence: PropTypes.bool,
         subtextLabel: PropTypes.string,
+        e2eStatus: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -165,6 +166,12 @@ const EntityTile = createReactClass({
             }[powerStatus];
         }
 
+        let e2eIcon;
+        const { e2eStatus } = this.props;
+        if (e2eStatus) {
+            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} />;
+        }
+
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
@@ -177,6 +184,7 @@ const EntityTile = createReactClass({
                     <div className="mx_EntityTile_avatar">
                         { av }
                         { powerLabel }
+                        { e2eIcon }
                     </div>
                     { nameEl }
                     { inviteButton }
@@ -188,6 +196,5 @@ const EntityTile = createReactClass({
 
 EntityTile.POWER_STATUS_MODERATOR = "moderator";
 EntityTile.POWER_STATUS_ADMIN = "admin";
-
 
 export default EntityTile;

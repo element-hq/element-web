@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
 import dis from "../../../dispatcher";
 import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 export default createReactClass({
     displayName: 'MemberTile',
@@ -40,29 +41,101 @@ export default createReactClass({
     getInitialState: function() {
         return {
             statusMessage: this.getStatusMessage(),
+            isRoomEncrypted: false,
+            e2eStatus: null,
         };
     },
 
     componentDidMount() {
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            return;
+        const cli = MatrixClientPeg.get();
+
+        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            const { user } = this.props.member;
+            if (user) {
+                user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
+            }
         }
-        const { user } = this.props.member;
-        if (!user) {
-            return;
+
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            const { roomId } = this.props.member;
+            if (roomId) {
+                const isRoomEncrypted = cli.isRoomEncrypted(roomId);
+                this.setState({
+                    isRoomEncrypted,
+                });
+                if (isRoomEncrypted) {
+                    cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
+                    this.updateE2EStatus();
+                } else {
+                    // Listen for room to become encrypted
+                    cli.on("RoomState.events", this.onRoomStateEvents);
+                }
+            }
         }
-        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     },
 
     componentWillUnmount() {
+        const cli = MatrixClientPeg.get();
+
         const { user } = this.props.member;
-        if (!user) {
+        if (user) {
+            user.removeListener(
+                "User._unstable_statusMessage",
+                this._onStatusMessageCommitted,
+            );
+        }
+
+        if (cli) {
+            cli.removeListener("RoomState.events", this.onRoomStateEvents);
+            cli.removeListener("userTrustStatusChanged", this.onUserTrustStatusChanged);
+        }
+    },
+
+    onRoomStateEvents: function(ev) {
+        if (ev.getType() !== "m.room.encryption") return;
+        const { roomId } = this.props.member;
+        if (ev.getRoomId() !== roomId) return;
+
+        // The room is encrypted now.
+        const cli = MatrixClientPeg.get();
+        cli.removeListener("RoomState.events", this.onRoomStateEvents);
+        this.setState({
+            isRoomEncrypted: true,
+        });
+        this.updateE2EStatus();
+    },
+
+    onUserTrustStatusChanged: function(userId, trustStatus) {
+        if (userId !== this.props.member.userId) return;
+        this.updateE2EStatus();
+    },
+
+    updateE2EStatus: async function() {
+        const cli = MatrixClientPeg.get();
+        const { userId } = this.props.member;
+        const isMe = userId === cli.getUserId();
+        const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
+        if (!userVerified) {
+            this.setState({
+                e2eStatus: "normal",
+            });
             return;
         }
-        user.removeListener(
-            "User._unstable_statusMessage",
-            this._onStatusMessageCommitted,
-        );
+
+        const devices = await cli.getStoredDevicesForUser(userId);
+        const anyDeviceUnverified = devices.some(device => {
+            const { deviceId } = device;
+            // For your own devices, we use the stricter check of cross-signing
+            // verification to encourage everyone to trust their own devices via
+            // cross-signing so that other users can then safely trust you.
+            // For other people's devices, the more general verified check that
+            // includes locally verified devices can be used.
+            const deviceTrust = cli.checkDeviceTrust(userId, deviceId);
+            return isMe ? !deviceTrust.isCrossSigningVerified() : !deviceTrust.isVerified();
+        });
+        this.setState({
+            e2eStatus: anyDeviceUnverified ? "warning" : "verified",
+        });
     },
 
     getStatusMessage() {
@@ -91,6 +164,12 @@ export default createReactClass({
             nextProps.member.user &&
             (this.user_last_modified_time === undefined ||
             this.user_last_modified_time < nextProps.member.user.getLastModifiedTime())
+        ) {
+            return true;
+        }
+        if (
+            nextState.isRoomEncrypted !== this.state.isRoomEncrypted ||
+            nextState.e2eStatus !== this.state.e2eStatus
         ) {
             return true;
         }
@@ -153,14 +232,26 @@ export default createReactClass({
 
         const powerStatus = powerStatusMap.get(powerLevel);
 
+        let e2eStatus;
+        if (this.state.isRoomEncrypted) {
+            e2eStatus = this.state.e2eStatus;
+        }
+
         return (
-            <EntityTile {...this.props} presenceState={presenceState}
+            <EntityTile
+                {...this.props}
+                presenceState={presenceState}
                 presenceLastActiveAgo={member.user ? member.user.lastActiveAgo : 0}
                 presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
                 presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}
-                avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
-                name={name} powerStatus={powerStatus} showPresence={this.props.showPresence}
+                avatarJsx={av}
+                title={this.getPowerLabel()}
+                name={name}
+                powerStatus={powerStatus}
+                showPresence={this.props.showPresence}
                 subtextLabel={statusMessage}
+                e2eStatus={e2eStatus}
+                onClick={this.onClick}
             />
         );
     },
