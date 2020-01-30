@@ -259,8 +259,6 @@
     "%(senderName)s made future room history visible to all room members.": "%(senderName)s made future room history visible to all room members.",
     "%(senderName)s made future room history visible to anyone.": "%(senderName)s made future room history visible to anyone.",
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s made future room history visible to unknown (%(visibility)s).",
-    "%(senderName)s turned on end-to-end encryption.": "%(senderName)s turned on end-to-end encryption.",
-    "%(senderName)s turned on end-to-end encryption (unrecognised algorithm %(algorithm)s).": "%(senderName)s turned on end-to-end encryption (unrecognised algorithm %(algorithm)s).",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s changed the pinned messages for the room.",
