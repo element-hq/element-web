@@ -435,7 +435,7 @@ export default class InviteDialog extends React.PureComponent {
         // room to see who has sent a message in the last few hours, and giving them a score
         // which correlates to the freshness of their message. In theory, this results in suggestions
         // which are closer to "continue this conversation" rather than "this person exists".
-        const trueJoinedRooms = client.getRooms().filter(r => r.getMyMembership() === 'join');
+        const trueJoinedRooms = MatrixClientPeg.get().getRooms().filter(r => r.getMyMembership() === 'join');
         const now = (new Date()).getTime();
         const earliestAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
         const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
