@@ -127,7 +127,9 @@ export default class VerificationRequestToast extends React.PureComponent {
                 nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
             }
         }
-        const declineLabel = this.state.counter == 0 ? _t("Decline") : _t("Decline (%(counter)s)", {counter: this.state.counter});
+        const declineLabel = this.state.counter == 0 ?
+            _t("Decline") :
+            _t("Decline (%(counter)s)", {counter: this.state.counter});
         return (<div>
             <div className="mx_Toast_description">{nameLabel}</div>
             <div className="mx_Toast_buttons" aria-live="off">
