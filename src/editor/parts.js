@@ -426,7 +426,7 @@ export class PartCreator {
         let room;
         if (alias[0] === '#') {
             room = this._client.getRooms().find((r) => {
-                return r.getAliases().includes(alias);
+                return r.getAliases().includes(alias) || r.getCanonicalAlias() === alias;
             });
         } else {
             room = this._client.getRoom(alias);

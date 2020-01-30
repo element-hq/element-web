@@ -56,7 +56,7 @@ export default class RoomProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            let matcherObjects = client.getRooms().filter(
+            let matcherObjects = client.getVisibleRooms().filter(
                 (room) => !!room && !!getDisplayAliasForRoom(room),
             ).map((room) => {
                 return {
