@@ -221,7 +221,6 @@ function DevicesSection({devices, userId, loading}) {
 
     let expandCountCaption;
     let expandHideCaption;
-    let expandClasses = "mx_UserInfo_expand";
     let expandIconClasses = "mx_E2EIcon";
 
     if (userTrust.isVerified()) {
@@ -245,7 +244,6 @@ function DevicesSection({devices, userId, loading}) {
         }
         expandCountCaption = _t("%(count)s verified sessions", {count: expandSectionDevices.length});
         expandHideCaption = _t("Hide verified sessions");
-        expandClasses += " mx_UserInfo_expand_verified";
         expandIconClasses += " mx_E2EIcon_verified";
     } else {
         expandSectionDevices = devices;
@@ -257,11 +255,11 @@ function DevicesSection({devices, userId, loading}) {
     let expandButton;
     if (expandSectionDevices.length) {
         if (isExpanded) {
-            expandButton = (<AccessibleButton className={expandClasses} onClick={() => setExpanded(false)}>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton" onClick={() => setExpanded(false)}>
                 <div>{expandHideCaption}</div>
             </AccessibleButton>);
         } else {
-            expandButton = (<AccessibleButton className={expandClasses} onClick={() => setExpanded(true)}>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton" onClick={() => setExpanded(true)}>
                 <div className={expandIconClasses} />
                 <div>{expandCountCaption}</div>
             </AccessibleButton>);
