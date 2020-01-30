@@ -485,4 +485,9 @@ export const SETTINGS = {
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
+    "keepSecretStoragePassphraseForSession": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Keep secret storage passphrase in memory for this session"),
+        default: false,
+    },
 };
