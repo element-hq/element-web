@@ -119,6 +119,16 @@ limitations under the License.
     display: inline-block;
 }
 
+.mx_RoomDirectory_perm {
+    border-radius: 10px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    color: $accent-fg-color;
+    background-color: $rte-room-pill-color;
+}
+
 .mx_RoomDirectory_topic {
     cursor: initial;
     color: $light-fg-color;
