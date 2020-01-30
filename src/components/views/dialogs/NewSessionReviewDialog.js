@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import dis from "../../../dispatcher";
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
@@ -22,6 +23,9 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 import DeviceVerifyDialog from './DeviceVerifyDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -35,12 +39,27 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         this.props.onFinished(false);
     }
 
-    onContinueClick = () => {
+    onContinueClick = async () => {
         const { userId, device } = this.props;
-        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
+        const cli = MatrixClientPeg.get();
+        const request = await cli.requestVerification(
             userId,
-            device,
-        }, null, /* priority = */ false, /* static = */ true);
+            [verificationMethods.SAS],
+            [device.deviceId],
+        );
+                dis.dispatch({
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {
+                        verificationRequest: request,
+                        member: cli.getUser(request.otherUserId),
+                    },
+                });
+
+        // Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
+        //     userId,
+        //     device,
+        // }, null, /* priority = */ false, /* static = */ true);
     }
 
     render() {
