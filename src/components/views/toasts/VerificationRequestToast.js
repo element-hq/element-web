@@ -58,10 +58,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        const isPendingInRoomRequest = request.channel.roomId &&
-            !(request.ready || request.started || request.done || request.cancelled || request.observeOnly);
-        const isPendingDeviceRequest = request.channel.deviceId && request.started;
-        if (!isPendingInRoomRequest && !isPendingDeviceRequest) {
+        if (request.done || request.cancelled || request.observeOnly) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
@@ -79,6 +76,7 @@ export default class VerificationRequestToast extends React.PureComponent {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
         // no room id for to_device requests
+        const cli = MatrixClientPeg.get();
         try {
             if (request.channel.roomId) {
                 dis.dispatch({
@@ -86,23 +84,29 @@ export default class VerificationRequestToast extends React.PureComponent {
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                await request.accept();
-                const cli = MatrixClientPeg.get();
+            } else {
                 dis.dispatch({
-                    action: "set_right_panel_phase",
-                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                    refireParams: {
-                        verificationRequest: request,
-                        member: cli.getUser(request.otherUserId),
-                    },
+                    action: 'view_room',
+                    room_id: cli.getRooms()[0].roomId,
+                    should_peek: false,
                 });
-            } else if (request.channel.deviceId && request.verifier) {
-                // show to_device verifications in dialog still
-                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
-                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                    verifier: request.verifier,
-                }, null, /* priority = */ false, /* static = */ true);
             }
+            await request.accept();
+            dis.dispatch({
+                action: "set_right_panel_phase",
+                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                refireParams: {
+                    verificationRequest: request,
+                    member: cli.getUser(request.otherUserId),
+                },
+            });
+            // } else if (request.channel.deviceId && request.verifier) {
+            //     // show to_device verifications in dialog still
+            //     const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+            //     Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+            //         verifier: request.verifier,
+            //     }, null, /* priority = */ false, /* static = */ true);
+            // }
         } catch (err) {
             console.error(err.message);
         }
