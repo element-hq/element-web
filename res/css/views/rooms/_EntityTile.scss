@@ -114,10 +114,6 @@ limitations under the License.
     opacity: 0.25;
 }
 
-.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_EntityTile_name {
-    font-size: 13px;
-}
-
 .mx_EntityTile_subtext {
     font-size: 11px;
     opacity: 0.5;
