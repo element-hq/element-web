@@ -227,6 +227,7 @@ export default class IncomingSasDialog extends React.Component {
             <BaseDialog
                 title={_t("Incoming Verification Request")}
                 onFinished={this._onFinished}
+                fixedWidth={false}
             >
                 {body}
             </BaseDialog>
