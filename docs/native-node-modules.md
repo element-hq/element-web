@@ -47,7 +47,7 @@ Again from the `electron_app/` directory:
 
 Recompiling Seshat itself can be done like so:
 
-    yarn run electron-build-env -- --electron 6.1.1 -- neon build matrix-seshat --release`
+    yarn run electron-build-env -- --electron 6.1.1 -- neon build matrix-seshat --release
 
 Please make sure to include all the `--` as well as the `--release` command line
 switch at the end. Modify your electron version accordingly depending on the
