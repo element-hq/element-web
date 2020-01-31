@@ -43,7 +43,20 @@ export default class NewSessionReviewDialog extends React.PureComponent {
     onContinueClick = async () => {
         const { userId, device } = this.props;
         const cli = MatrixClientPeg.get();
-        // const request = await cli.requestVerification(
+        const request = await cli.requestVerification(
+            userId,
+            [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
+            [device.deviceId],
+        );
+        dis.dispatch({
+            action: "set_right_panel_phase",
+            phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+            refireParams: {
+                verificationRequest: request,
+                member: cli.getUser(request.otherUserId),
+            },
+        });
+        // Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
         //     userId,
         //     [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
         //     [device.deviceId],
@@ -56,11 +69,6 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         //                 member: cli.getUser(request.otherUserId),
         //             },
         //         });
-
-        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
-            userId,
-            device,
-        }, null, /* priority = */ false, /* static = */ true);
     }
 
     render() {
