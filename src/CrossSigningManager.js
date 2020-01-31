@@ -139,7 +139,7 @@ export async function accessSecretStorage(func = async () => { }) {
                     const { finished } = Modal.createTrackedDialog(
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
                         {
-                            title: _t("Send cross-signing keys to homeserver"),
+                            title: _t("Setting up keys"),
                             matrixClient: MatrixClientPeg.get(),
                             makeRequest,
                         },
