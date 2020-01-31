@@ -142,7 +142,7 @@ export const PasswordAuthEntry = createReactClass({
 
         return (
             <div>
-                <p>{ _t("To continue, please enter your password.") }</p>
+                <p>{ _t("Confirm your identity by entering your account password below.") }</p>
                 <form onSubmit={this._onSubmit} className="mx_InteractiveAuthEntryComponents_passwordSection">
                     <Field
                         id="mx_InteractiveAuthEntryComponents_password"
