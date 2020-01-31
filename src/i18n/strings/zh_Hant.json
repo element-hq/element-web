@@ -2087,5 +2087,14 @@
     "This session can now verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another session.": "沒有設定安全訊息復原，如果您登出的或是用其他工作階段的話，您就無法復原您已加密的訊習歷史。",
     "This session is encrypting history using the new recovery method.": "此工作階段正在使用新的復原方法加密歷史。",
-    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "此工作階段已偵測到您的復原通關密語與安全訊息金鑰已被移除。"
+    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "此工作階段已偵測到您的復原通關密語與安全訊息金鑰已被移除。",
+    "Keep secret storage passphrase in memory for this session": "此工作階段會將秘密儲存空間通關密語置於記憶體中",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "確認以下顯示的表情符號以相同的順序顯示在兩個裝置上：",
+    "Verify this device by confirming the following number appears on its screen.": "透過確認以下顯示在螢幕上的數字來驗證此裝置。",
+    "Mod": "模組",
+    "Encryption enabled": "加密已啟用",
+    "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "此聊天室中的訊息已端到端加密。了解更多資訊並在使用者的個人檔案中驗證使用者。",
+    "Encryption not enabled": "加密未啟用",
+    "The encryption used by this room isn't supported.": "不支援此聊天室使用的加密。",
+    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "驗證此裝置以標記其為受信任。"
 }
