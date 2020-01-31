@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from "../../../dispatcher";
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
-import DeviceVerifyDialog from './DeviceVerifyDialog';
+import DeviceVerifyOwnDialog from './DeviceVerifyOwnDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
@@ -48,28 +47,17 @@ export default class NewSessionReviewDialog extends React.PureComponent {
             [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
             [device.deviceId],
         );
-        dis.dispatch({
-            action: "set_right_panel_phase",
-            phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-            refireParams: {
-                verificationRequest: request,
-                member: cli.getUser(request.otherUserId),
-            },
+
+        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyOwnDialog, {
+            verificationRequest: request,
         });
+
         this.props.onFinished(true);
         // Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
         //     userId,
         //     [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
         //     [device.deviceId],
         // );
-        //         dis.dispatch({
-        //             action: "set_right_panel_phase",
-        //             phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        //             refireParams: {
-        //                 verificationRequest: request,
-        //                 member: cli.getUser(request.otherUserId),
-        //             },
-        //         });
     }
 
     render() {
