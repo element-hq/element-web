@@ -1476,5 +1476,8 @@
     "Verifies a user, session, and pubkey tuple": "Bir kullanıcı, oturum ve açık anahtar çiftini doğrular",
     "Unknown (user, session) pair:": "Bilinmeyen (kullanıcı, oturum) çifti:",
     "Session already verified!": "Oturum zaten doğrulanmış!",
-    "WARNING: Session already verified, but keys do NOT MATCH!": "UYARI: Oturum zaten doğrulanmış, ama anahtarlar EŞLEŞMİYOR!"
+    "WARNING: Session already verified, but keys do NOT MATCH!": "UYARI: Oturum zaten doğrulanmış, ama anahtarlar EŞLEŞMİYOR!",
+    "Your Matrix account on <underlinedServerName />": "Matrix hesabınız <underlinedServerName /> da yer almakta",
+    "No identity server is configured: add one in server settings to reset your password.": "Kimlik sunucusu yapılandırılmamış: sunucu ayarlarından ekleyerek parolanızı sıfırlayabilirsiniz.",
+    "A verification email will be sent to your inbox to confirm setting your new password.": "Yeni parolanızın ayarlandığını doğrulamak için bir e-posta gelen kutunuza gönderilecek."
 }
