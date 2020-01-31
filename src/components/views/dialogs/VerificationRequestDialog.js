@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 
-export default class DeviceVerifyOwnDialog extends React.Component {
+export default class VerificationRequestDialog extends React.Component {
     static propTypes = {
         verificationRequest: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
