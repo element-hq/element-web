@@ -223,7 +223,7 @@ export default class CompleteSecurity extends React.Component {
         } else if (phase === PHASE_BUSY) {
             const Spinner = sdk.getComponent('views.elements.Spinner');
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
-            title = '';
+            title = _t("Complete security");
             body = <Spinner />;
         } else {
             throw new Error(`Unknown phase ${phase}`);
