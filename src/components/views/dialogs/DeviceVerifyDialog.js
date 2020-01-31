@@ -136,6 +136,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,
                     SCAN_QR_CODE_METHOD,
+                    verificationMethods.RECIPROCATE_QR_CODE,
                 ]);
 
                 await this._request.waitFor(r => r.ready || r.started);
