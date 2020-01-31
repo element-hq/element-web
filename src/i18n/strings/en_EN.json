@@ -415,6 +415,7 @@
     "Show previews/thumbnails for images": "Show previews/thumbnails for images",
     "Enable message search in encrypted rooms": "Enable message search in encrypted rooms",
     "Keep secret storage passphrase in memory for this session": "Keep secret storage passphrase in memory for this session",
+    "How fast should messages be downloaded.": "How fast should messages be downloaded.",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading report": "Uploading report",
@@ -2094,6 +2095,7 @@
     "Space used:": "Space used:",
     "Indexed messages:": "Indexed messages:",
     "Number of rooms:": "Number of rooms:",
+    "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
