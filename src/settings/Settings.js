@@ -492,8 +492,13 @@ export const SETTINGS = {
         default: true,
     },
     "keepSecretStoragePassphraseForSession": {
+         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         default: false,
+    },
+    "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Keep secret storage passphrase in memory for this session"),
-        default: false,
+        displayName: _td("How fast should messages be downloaded."),
+        default: 3000,
     },
 };

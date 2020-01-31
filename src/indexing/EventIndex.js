@@ -18,6 +18,7 @@ import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {EventTimeline, RoomMember} from 'matrix-js-sdk';
 import {sleep} from "../utils/promise";
+import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {EventEmitter} from "events";
 
 /*
@@ -30,7 +31,6 @@ export default class EventIndex extends EventEmitter {
         // The time in ms that the crawler will wait loop iterations if there
         // have not been any checkpoints to consume in the last iteration.
         this._crawlerIdleTime = 5000;
-        this._crawlerSleepTime = 3000;
         // The maximum number of events our crawler should fetch in a single
         // crawl.
         this._eventsPerCrawl = 100;
@@ -115,10 +115,20 @@ export default class EventIndex extends EventEmitter {
                 direction: "f",
             };
 
-            await indexManager.addCrawlerCheckpoint(backCheckpoint);
-            await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-            this.crawlerCheckpoints.push(backCheckpoint);
-            this.crawlerCheckpoints.push(forwardCheckpoint);
+            try {
+                if (backCheckpoint.token) {
+                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                    this.crawlerCheckpoints.push(backCheckpoint);
+                }
+
+                if (forwardCheckpoint.token) {
+                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+                    this.crawlerCheckpoints.push(forwardCheckpoint);
+                }
+            } catch (e) {
+                console.log("EventIndex: Error adding initial checkpoints for room",
+                            room.roomId, backCheckpoint, forwardCheckpoint, e);
+            }
         }));
     }
 
@@ -289,10 +299,7 @@ export default class EventIndex extends EventEmitter {
         let idle = false;
 
         while (!cancelled) {
-            // This is a low priority task and we don't want to spam our
-            // homeserver with /messages requests so we set a hefty timeout
-            // here.
-            let sleepTime = this._crawlerSleepTime;
+            let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime');
 
             // Don't let the user configure a lower sleep time than 100 ms.
             sleepTime = Math.max(sleepTime, 100);
@@ -356,7 +363,11 @@ export default class EventIndex extends EventEmitter {
                 console.log("EventIndex: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
-                await indexManager.removeCrawlerCheckpoint(checkpoint);
+                try {
+                    await indexManager.removeCrawlerCheckpoint(checkpoint);
+                } catch (e) {
+                    console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                }
                 continue;
             }
 
