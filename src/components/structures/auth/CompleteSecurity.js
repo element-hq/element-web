@@ -83,12 +83,13 @@ export default class CompleteSecurity extends React.Component {
         }
     }
 
-    onVerificationRequest = (request) => {
+    onVerificationRequest = async (request) => {
         if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
 
         if (this.state.verificationRequest) {
             this.state.verificationRequest.off("change", this.onVerificationRequestChange);
         }
+        await request.accept();
         request.on("change", this.onVerificationRequestChange);
         this.setState({
             verificationRequest: request,
