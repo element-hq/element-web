@@ -115,10 +115,20 @@ export default class EventIndex extends EventEmitter {
                 direction: "f",
             };
 
-            await indexManager.addCrawlerCheckpoint(backCheckpoint);
-            await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-            this.crawlerCheckpoints.push(backCheckpoint);
-            this.crawlerCheckpoints.push(forwardCheckpoint);
+            try {
+                if (backCheckpoint.token) {
+                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                    this.crawlerCheckpoints.push(backCheckpoint);
+                }
+
+                if (forwardCheckpoint.token) {
+                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+                    this.crawlerCheckpoints.push(forwardCheckpoint);
+                }
+            } catch (e) {
+                console.log("EventIndex: Error adding initial checkpoints for room",
+                            room.roomId, backCheckpoint, forwardCheckpoint, e);
+            }
         }));
     }
 
