@@ -33,7 +33,7 @@ export const E2E_STATE = {
 
 const crossSigningUserTitles = {
     [E2E_STATE.WARNING]: _td("This user has not verified all of their sessions."),
-    [E2E_STATE.NORMAL]: _td("You have not verified this user. This user has verified all of their sessions."),
+    [E2E_STATE.NORMAL]: _td("You have not verified this user."),
     [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their sessions."),
 };
 const crossSigningRoomTitles = {
