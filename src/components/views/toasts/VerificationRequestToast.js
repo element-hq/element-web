@@ -38,11 +38,6 @@ export default class VerificationRequestToast extends React.PureComponent {
                 let {counter} = this.state;
                 counter = Math.max(0, counter - 1);
                 this.setState({counter});
-
-                if (counter == 0) {
-                    clearInterval(this._intervalHandle);
-                    this.cancel();
-                }
             }, 1000);
         }
         request.on("change", this._checkRequestIsPending);
