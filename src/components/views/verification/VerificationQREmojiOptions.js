@@ -66,10 +66,10 @@ export default class VerificationQREmojiOptions extends React.Component {
                         <p>{_t("Scan this unique code")}</p>
                         {qrCode}
                     </div>
-                    <span>{_t("or")}</span>
+                    <div className='mx_IncomingSasDialog_betweenText'>{_t("or")}</div>
                     <div className='mx_IncomingSasDialog_startOption'>
                         <p>{_t("Compare unique emoji")}</p>
-                        <span>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
+                        <span className='mx_IncomingSasDialog_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
                         <AccessibleButton onClick={this.props.onStartEmoji} kind='primary'>
                             {_t("Start")}
                         </AccessibleButton>
