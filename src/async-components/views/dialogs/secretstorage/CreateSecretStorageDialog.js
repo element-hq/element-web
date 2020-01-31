@@ -453,14 +453,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
                 helpText = _t("Great! This passphrase looks strong enough.");
             } else {
-                const suggestions = [];
-                for (let i = 0; i < this.state.zxcvbnResult.feedback.suggestions.length; ++i) {
-                    suggestions.push(<div key={i}>{this.state.zxcvbnResult.feedback.suggestions[i]}</div>);
-                }
-                const suggestionBlock = <div>{suggestions.length > 0 ? suggestions : _t("Keep going...")}</div>;
+                // We take the warning from zxcvbn or failing that, the first
+                // suggestion. In practice The first is generally the most relevant
+                // and it's probably better to present the user with one thing to
+                // improve about their password than a whole collection - it can
+                // spit out a warning and multiple suggestions which starts getting
+                // very information-dense.
+                const suggestion = (
+                    this.state.zxcvbnResult.feedback.warning ||
+                    this.state.zxcvbnResult.feedback.suggestions[0]
+                );
+                const suggestionBlock = <div>{suggestion || _t("Keep going...")}</div>;
 
                 helpText = <div>
-                    {this.state.zxcvbnResult.feedback.warning}
                     {suggestionBlock}
                 </div>;
             }
