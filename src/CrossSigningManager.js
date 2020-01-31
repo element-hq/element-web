@@ -29,6 +29,12 @@ import { _t } from './languageHandler';
 let secretStorageKeys = {};
 let cachingAllowed = false;
 
+export class AccessCancelledError extends Error {
+    constructor() {
+        super("Secret storage access canceled");
+    }
+}
+
 async function getSecretStorageKey({ keys: keyInfos }) {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
@@ -66,7 +72,7 @@ async function getSecretStorageKey({ keys: keyInfos }) {
     );
     const [input] = await finished;
     if (!input) {
-        throw new Error("Secret storage access canceled");
+        throw new AccessCancelledError();
     }
     const key = await inputToKey(input);
 
