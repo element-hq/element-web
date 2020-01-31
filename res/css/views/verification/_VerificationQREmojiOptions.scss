@@ -66,6 +66,26 @@ limitations under the License.
     }
 }
 
+// Special case styling for EncryptionPanel in a Modal dialog
+.mx_Dialog {
+    // fixed with for when showing sas and once verified.
+    .mx_VerificationShowSas, .mx_VerificationPanel_verified_section {
+        width: 500px;
+    }
+
+    // EncryptionPanel when verification is done
+    .mx_VerificationPanel_verified_section {
+        // center the big shield icon
+        .mx_E2EIcon {
+            margin: 0 auto;
+        }
+        // right align the "Got it" button
+        .mx_AccessibleButton {
+            float: right;
+        }
+    }
+}
+
 //mx_IncomingSasDialog_startOptions
 //mx_IncomingSasDialog_startOption > canvas
 //mx_VerificationQREmojiOptions_noQR
