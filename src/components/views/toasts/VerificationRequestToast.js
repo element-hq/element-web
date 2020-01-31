@@ -78,28 +78,28 @@ export default class VerificationRequestToast extends React.PureComponent {
         // no room id for to_device requests
         const cli = MatrixClientPeg.get();
         try {
+            await request.accept();
             if (request.channel.roomId) {
                 dis.dispatch({
                     action: 'view_room',
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-            } else {
                 dis.dispatch({
-                    action: 'view_room',
-                    room_id: cli.getRooms()[0].roomId,
-                    should_peek: false,
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {
+                        verificationRequest: request,
+                        member: cli.getUser(request.otherUserId),
+                    },
                 });
-            }
-            await request.accept();
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {
+            } else {
+                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
                     verificationRequest: request,
-                    member: cli.getUser(request.otherUserId),
-                },
-            });
+                }, null, /* priority = */ false, /* static = */ true);
+            }
+
             // } else if (request.channel.deviceId && request.verifier) {
             //     // show to_device verifications in dialog still
             //     const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
