@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 export default class EncryptionEvent extends React.Component {
     render() {
@@ -24,7 +25,10 @@ export default class EncryptionEvent extends React.Component {
 
         let body;
         let classes = "mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon";
-        if (mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2') {
+        if (
+            mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2' &&
+            MatrixClientPeg.get().isRoomEncrypted(mxEvent.getRoomId())
+        ) {
             body = <div>
                 <div className="mx_cryptoEvent_title">{_t("Encryption enabled")}</div>
                 <div className="mx_cryptoEvent_subtitle">
