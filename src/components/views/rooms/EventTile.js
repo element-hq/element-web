@@ -40,12 +40,14 @@ const eventTileTypes = {
     'm.sticker': 'messages.MessageEvent',
     'm.key.verification.cancel': 'messages.MKeyVerificationConclusion',
     'm.key.verification.done': 'messages.MKeyVerificationConclusion',
+    'm.room.encryption': 'messages.EncryptionEvent',
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
 };
 
 const stateEventTileTypes = {
+    'm.room.encryption': 'messages.EncryptionEvent',
     'm.room.aliases': 'messages.TextualEvent',
     // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
     'm.room.canonical_alias': 'messages.TextualEvent',
@@ -55,7 +57,6 @@ const stateEventTileTypes = {
     'm.room.avatar': 'messages.RoomAvatarEvent',
     'm.room.third_party_invite': 'messages.TextualEvent',
     'm.room.history_visibility': 'messages.TextualEvent',
-    'm.room.encryption': 'messages.TextualEvent',
     'm.room.topic': 'messages.TextualEvent',
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
@@ -600,7 +601,8 @@ export default createReactClass({
 
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification"));
+            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === "m.room.encryption");
         let isInfoMessage = (
             !isBubbleMessage && eventType !== 'm.room.message' &&
             eventType !== 'm.sticker' && eventType !== 'm.room.create'
