@@ -901,7 +901,7 @@
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
     "Ongoing conference call%(supportedText)s.": "Ongoing conference call%(supportedText)s.",
     "This user has not verified all of their sessions.": "This user has not verified all of their sessions.",
-    "You have not verified this user. This user has verified all of their sessions.": "You have not verified this user. This user has verified all of their sessions.",
+    "You have not verified this user.": "You have not verified this user.",
     "You have verified this user. This user has verified all of their sessions.": "You have verified this user. This user has verified all of their sessions.",
     "Someone is using an unknown session": "Someone is using an unknown session",
     "This room is end-to-end encrypted": "This room is end-to-end encrypted",
