@@ -43,7 +43,12 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const request = await cli.requestVerification(
             userId,
-            [verificationMethods.SAS, SHOW_QR_CODE_METHOD, SCAN_QR_CODE_METHOD, verificationMethods.RECIPROCATE_QR_CODE],
+            [
+                verificationMethods.SAS,
+                SHOW_QR_CODE_METHOD,
+                SCAN_QR_CODE_METHOD,
+                verificationMethods.RECIPROCATE_QR_CODE,
+            ],
             [device.deviceId],
         );
 
