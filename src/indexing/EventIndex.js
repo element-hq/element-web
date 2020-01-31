@@ -356,7 +356,11 @@ export default class EventIndex extends EventEmitter {
                 console.log("EventIndex: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
-                await indexManager.removeCrawlerCheckpoint(checkpoint);
+                try {
+                    await indexManager.removeCrawlerCheckpoint(checkpoint);
+                } catch (e) {
+                    console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                }
                 continue;
             }
 
