@@ -63,6 +63,14 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request.pending) {
             return false;
         }
+
+        // User isn't actually verified
+        if (!MatrixClientPeg.get()
+                            .checkUserTrust(mxEvent.verificationRequest.otherUserId)
+                            .isCrossSigningVerified()) {
+            return false;
+        }
+
         return true;
     }
 
