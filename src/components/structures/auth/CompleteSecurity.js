@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { accessSecretStorage } from '../../../CrossSigningManager';
+import { accessSecretStorage, AccessCancelledError } from '../../../CrossSigningManager';
 
 const PHASE_INTRO = 0;
 const PHASE_BUSY = 1;
@@ -73,6 +73,9 @@ export default class CompleteSecurity extends React.Component {
                 });
             }
         } catch (e) {
+            if (!(e instanceof AccessCancelledError)) {
+                console.log(e);
+            }
             // this will throw if the user hits cancel, so ignore
             this.setState({
                 phase: PHASE_INTRO,
