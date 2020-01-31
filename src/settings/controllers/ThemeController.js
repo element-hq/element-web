@@ -19,8 +19,16 @@ import SettingController from "./SettingController";
 import {DEFAULT_THEME, enumerateThemes} from "../../theme";
 
 export default class ThemeController extends SettingController {
+    static isLogin = false;
+
+    static setIsLogin(val) {
+        ThemeController.isLogin = val;
+    }
+
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         if (!calculatedValue) return null; // Don't override null themes
+
+        if (ThemeController.isLogin) return 'light';
 
         const themes = enumerateThemes();
         // Override in case some no longer supported theme is stored here
