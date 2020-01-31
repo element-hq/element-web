@@ -140,6 +140,7 @@ export default class CompleteSecurity extends React.Component {
         if (this.state.verificationRequest) {
             const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
             body = <EncryptionPanel
+                layout="dialog"
                 verificationRequest={this.state.verificationRequest}
                 onClose={this.props.onFinished}
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}

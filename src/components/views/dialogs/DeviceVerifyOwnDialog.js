@@ -28,6 +28,7 @@ export default class DeviceVerifyOwnDialog extends React.Component {
     render() {
         const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
         return <EncryptionPanel
+            layout="dialog"
             verificationRequest={this.props.verificationRequest}
             onClose={this.props.onFinished}
             member={MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId)}

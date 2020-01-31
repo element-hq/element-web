@@ -30,7 +30,7 @@ import {_t} from "../../../languageHandler";
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = ({verificationRequest, member, onClose}) => {
+const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
     useEffect(() => {
         setRequest(verificationRequest);
@@ -77,6 +77,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose}) => {
     } else {
         return (
             <VerificationPanel
+                layout={layout}
                 onClose={onClose}
                 member={member}
                 request={request}
@@ -89,6 +90,7 @@ EncryptionPanel.propTypes = {
     member: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     verificationRequest: PropTypes.object,
+    layout: PropTypes.string,
 };
 
 export default EncryptionPanel;

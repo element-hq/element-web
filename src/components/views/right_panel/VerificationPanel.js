@@ -31,9 +31,11 @@ import {
     PHASE_CANCELLED, VerificationRequest,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
+import AccessibleButton from "../elements/AccessibleButton";
 
 export default class VerificationPanel extends React.PureComponent {
     static propTypes = {
+        layout: PropTypes.string,
         request: PropTypes.object.isRequired,
         member: PropTypes.object.isRequired,
         phase: PropTypes.oneOf([
@@ -68,6 +70,33 @@ export default class VerificationPanel extends React.PureComponent {
     renderQRPhase(pending) {
         const {member} = this.props;
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        if (this.props.layout === 'dialog') {
+            // HACK: This is a terrible idea.
+            let qrCode = <div className='mx_VerificationQREmojiOptions_noQR'><Spinner /></div>;
+            if (this.state.qrCodeProps) {
+                qrCode = <VerificationQRCode {...this.state.qrCodeProps} />;
+            }
+            return (
+                <div>
+                    {_t("Verify this session by completing one of the following:")}
+                    <div className='mx_IncomingSasDialog_startOptions'>
+                        <div className='mx_IncomingSasDialog_startOption'>
+                            <p>{_t("Scan this unique code")}</p>
+                            {qrCode}
+                        </div>
+                        <div className='mx_IncomingSasDialog_betweenText'>{_t("or")}</div>
+                        <div className='mx_IncomingSasDialog_startOption'>
+                            <p>{_t("Compare unique emoji")}</p>
+                            <span className='mx_IncomingSasDialog_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
+                            <AccessibleButton onClick={this._startSAS} kind='primary'>
+                                {_t("Start")}
+                            </AccessibleButton>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
 
         let button;
         if (pending) {
