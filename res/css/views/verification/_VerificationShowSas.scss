@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,11 +37,9 @@ limitations under the License.
 
 .mx_VerificationShowSas_emojiSas_block {
     display: inline-block;
-    margin-bottom: 30px;
+    margin-bottom: 16px;
     position: relative;
-    // allow the blocks to grow to space themselves evenly up to a limit of 100px
-    flex-grow: 1;
-    max-width: 100px;
+    width: 52px;
 }
 
 .mx_VerificationShowSas_emojiSas_emoji {
@@ -52,12 +51,9 @@ limitations under the License.
 }
 
 .mx_VerificationShowSas_emojiSas_label {
-    font-weight: bold;
-    // allow the text to overflow the parent by 15px on each side
-    // this is to keep the width of the parent consistent for spacing centrally via flexbox
-    position: absolute;
-    left: -15px;
-    right: -15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mx_VerificationShowSas_emojiSas_break {
