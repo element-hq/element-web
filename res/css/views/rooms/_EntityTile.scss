@@ -127,6 +127,10 @@ limitations under the License.
     padding-inline-start: 6px;
     font-size: 10px;
     color: $notice-secondary-color;
+    max-width: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mx_EntityTile:hover .mx_EntityTile_power {
