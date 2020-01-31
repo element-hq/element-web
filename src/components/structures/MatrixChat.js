@@ -507,7 +507,7 @@ export default createReactClass({
                     view: VIEWS.LOGIN,
                 });
                 this.notifyNewScreen('login');
-                ThemeController.setIsLogin(true);
+                ThemeController.isLogin = true;
                 this._themeWatcher.recheck();
                 break;
             case 'start_post_registration':
@@ -763,7 +763,7 @@ export default createReactClass({
         }
 
         this.setStateForNewView(newState);
-        ThemeController.setIsLogin(true);
+        ThemeController.isLogin = true;
         this._themeWatcher.recheck();
         this.notifyNewScreen('register');
     },
@@ -915,7 +915,7 @@ export default createReactClass({
             view: VIEWS.WELCOME,
         });
         this.notifyNewScreen('welcome');
-        ThemeController.setIsLogin(true);
+        ThemeController.isLogin = true;
         this._themeWatcher.recheck();
     },
 
@@ -926,7 +926,7 @@ export default createReactClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
-        ThemeController.setIsLogin(false);
+        ThemeController.isLogin = false;
         this._themeWatcher.recheck();
     },
 
@@ -1240,7 +1240,7 @@ export default createReactClass({
         });
         this.subTitleStatus = '';
         this._setPageSubtitle();
-        ThemeController.setIsLogin(true);
+        ThemeController.isLogin = true;
         this._themeWatcher.recheck();
     },
 
