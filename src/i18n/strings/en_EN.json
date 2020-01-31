@@ -374,6 +374,7 @@
     "Enable cross-signing to verify per-user instead of per-session (in development)": "Enable cross-signing to verify per-user instead of per-session (in development)",
     "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
+    "Show padlocks on invite only rooms": "Show padlocks on invite only rooms",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
     "Show a placeholder for removed messages": "Show a placeholder for removed messages",

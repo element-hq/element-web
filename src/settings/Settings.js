@@ -160,6 +160,12 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
+    "feature_invite_only_padlocks": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show padlocks on invite only rooms"),
+        default: true,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
