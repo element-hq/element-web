@@ -56,6 +56,5 @@ version that is installed on your system.
 After this is done the Electron version of Riot can be run from the main folder
 as usual using:
 
-    yarn build
     yarn electron
 
