@@ -112,7 +112,9 @@ describe("GroupMemberList", function() {
             const memberList = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_MemberList_joined");
             const memberListElement = ReactDOM.findDOMNode(memberList);
             expect(memberListElement).toBeTruthy();
-            expect(memberListElement.textContent).toBe("Test");
+            const userNameElement = memberListElement.querySelector(".mx_EntityTile_name");
+            expect(userNameElement).toBeTruthy();
+            expect(userNameElement.textContent).toBe("Test");
         });
 
         httpBackend.when("GET", "/groups/" + groupIdEncoded + "/summary").respond(200, summaryResponse);

@@ -909,6 +909,7 @@
     "Some sessions in this encrypted room are not trusted": "Some sessions in this encrypted room are not trusted",
     "All sessions in this encrypted room are trusted": "All sessions in this encrypted room are trusted",
     "Edit message": "Edit message",
+    "Mod": "Mod",
     "This event could not be displayed": "This event could not be displayed",
     "%(senderName)s sent an image": "%(senderName)s sent an image",
     "%(senderName)s sent a video": "%(senderName)s sent a video",
