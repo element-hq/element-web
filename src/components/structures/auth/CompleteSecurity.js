@@ -73,7 +73,7 @@ export default class CompleteSecurity extends React.Component {
                 });
             }
         } catch (e) {
-            if (!e instanceof AccessCancelledError) {
+            if (!(e instanceof AccessCancelledError)) {
                 console.log(e);
             }
             // this will throw if the user hits cancel, so ignore
