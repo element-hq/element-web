@@ -1479,5 +1479,22 @@
     "WARNING: Session already verified, but keys do NOT MATCH!": "UYARI: Oturum zaten doğrulanmış, ama anahtarlar EŞLEŞMİYOR!",
     "Your Matrix account on <underlinedServerName />": "Matrix hesabınız <underlinedServerName /> da yer almakta",
     "No identity server is configured: add one in server settings to reset your password.": "Kimlik sunucusu yapılandırılmamış: sunucu ayarlarından ekleyerek parolanızı sıfırlayabilirsiniz.",
-    "A verification email will be sent to your inbox to confirm setting your new password.": "Yeni parolanızın ayarlandığını doğrulamak için bir e-posta gelen kutunuza gönderilecek."
+    "A verification email will be sent to your inbox to confirm setting your new password.": "Yeni parolanızın ayarlandığını doğrulamak için bir e-posta gelen kutunuza gönderilecek.",
+    "Invalid homeserver discovery response": "Geçersiz anasunucu keşif yanıtı",
+    "Failed to get autodiscovery configuration from server": "Sunucudan otokeşif yapılandırması alınması başarısız",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
+    "Invalid identity server discovery response": "Geçersiz kimlik sunucu keşfi yanıtı",
+    "Please <a>contact your service administrator</a> to continue using this service.": "Bu servisi kullanmaya devam etmek için lütfen <a>servis yöneticinizle bağlantı kurun</a>.",
+    "Failed to perform homeserver discovery": "Anasunucu keşif işlemi başarısız",
+    "Sender session information": "Gönderici oturum bilgisi",
+    "Go back to set it again.": "Geri git ve yeniden ayarla.",
+    "Your recovery key": "Kurtarma anahtarınız",
+    "Copy": "Kopyala",
+    "Upgrade your encryption": "Şifrelemenizi güncelleyin",
+    "Make a copy of your recovery key": "Kurtarma anahtarınızın bir kopyasını oluşturun",
+    "Create key backup": "Anahtar yedeği oluştur",
+    "Set up Secure Messages": "Güvenli Mesajları Ayarla",
+    "Space used:": "Kullanılan alan:",
+    "Indexed messages:": "İndekslenmiş mesajlar:",
+    "Number of rooms:": "Oda sayısı:"
 }
