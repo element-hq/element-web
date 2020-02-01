@@ -2123,5 +2123,8 @@
     "Make a copy of your recovery key": "Faire une copie de votre clé de récupération",
     "You're done!": "Vous avez terminé !",
     "Create key backup": "Créer une sauvegarde de clé",
-    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération."
+    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération.",
+    "How fast should messages be downloaded.": "À quelle fréquence les messages doivent être téléchargés.",
+    "of ": "sur ",
+    "Message downloading sleep time(ms)": "Temps d’attente de téléchargement des messages (ms)"
 }
