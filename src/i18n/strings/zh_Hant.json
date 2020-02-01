@@ -2125,5 +2125,6 @@
     "Make a copy of your recovery key": "複製您的復原金鑰",
     "You're done!": "您已經完成了！",
     "Create key backup": "建立金鑰備份",
-    "Message downloading sleep time(ms)": "訊息下載休眠時間（毫秒）"
+    "Message downloading sleep time(ms)": "訊息下載休眠時間（毫秒）",
+    "of ": "的 "
 }
