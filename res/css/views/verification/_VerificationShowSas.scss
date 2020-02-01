@@ -42,18 +42,20 @@ limitations under the License.
     width: 52px;
 }
 
-.mx_VerificationShowSas_emojiSas_emoji {
-    font-size: 48px;
+.mx_Dialog .mx_VerificationShowSas_emojiSas_block,
+.mx_AuthPage_modal .mx_VerificationShowSas_emojiSas_block {
+    width: 60px;
 }
 
-.mx_UserInfo .mx_VerificationShowSas_emojiSas_emoji {
-    font-size: 32px; // in UserInfo use a smaller font-size to fit in a smaller space
+.mx_VerificationShowSas_emojiSas_emoji {
+    font-size: 32px;
 }
 
 .mx_VerificationShowSas_emojiSas_label {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 12px;
 }
 
 .mx_VerificationShowSas_emojiSas_break {
