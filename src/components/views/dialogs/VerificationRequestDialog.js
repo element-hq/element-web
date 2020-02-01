@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default class VerificationRequestDialog extends React.Component {
     static propTypes = {
@@ -26,12 +27,19 @@ export default class VerificationRequestDialog extends React.Component {
     };
 
     render() {
+        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
         const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
-        return <EncryptionPanel
-            layout="dialog"
-            verificationRequest={this.props.verificationRequest}
-            onClose={this.props.onFinished}
-            member={MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId)}
-        />;
+        return <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
+                contentId="mx_Dialog_content"
+                title={_t("Verification Request")}
+                hasCancel={true}
+            >
+            <EncryptionPanel
+                layout="dialog"
+                verificationRequest={this.props.verificationRequest}
+                onClose={this.props.onFinished}
+                member={MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId)}
+            />
+        </BaseDialog>;
     }
 }
