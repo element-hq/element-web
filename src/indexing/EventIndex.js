@@ -748,4 +748,31 @@ export default class EventIndex extends EventEmitter {
             return client.getRoom(this.crawlerCheckpoints[0].roomId);
         }
     }
+
+    crawlingRooms() {
+        const totalRooms = new Set();
+        const crawlingRooms = new Set();
+
+        this.crawlerCheckpoints.forEach((checkpoint, index) => {
+            crawlingRooms.add(checkpoint.roomId);
+        });
+
+        if (this._currentCheckpoint !== null) {
+            crawlingRooms.add(this._currentCheckpoint.roomId);
+        }
+
+        const client = MatrixClientPeg.get();
+        const rooms = client.getRooms();
+
+        const isRoomEncrypted = (room) => {
+            return client.isRoomEncrypted(room.roomId);
+        };
+
+        const encryptedRooms = rooms.filter(isRoomEncrypted);
+        encryptedRooms.forEach((room, index) => {
+            totalRooms.add(room.roomId);
+        });
+
+        return {crawlingRooms, totalRooms};
+    }
 }
