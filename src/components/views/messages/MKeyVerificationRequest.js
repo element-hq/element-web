@@ -27,6 +27,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     componentDidMount() {
@@ -58,6 +59,7 @@ export default class MKeyVerificationRequest extends React.Component {
     };
 
     _onAcceptClicked = async () => {
+        this.setState({acceptOrCancelClicked: true});
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
@@ -70,6 +72,7 @@ export default class MKeyVerificationRequest extends React.Component {
     };
 
     _onRejectClicked = async () => {
+        this.setState({acceptOrCancelClicked: true});
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
@@ -135,9 +138,10 @@ export default class MKeyVerificationRequest extends React.Component {
             subtitle = (<div className="mx_cryptoEvent_subtitle">{
                 userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
             if (request.requested && !request.observeOnly) {
+                const disabled = this.state.acceptOrCancelClicked;
                 stateNode = (<div className="mx_cryptoEvent_buttons">
-                    <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
-                    <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
+                    <FormButton disabled={disabled} kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
+                    <FormButton disabled={disabled} onClick={this._onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
         } else { // request sent by us
