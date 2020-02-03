@@ -48,5 +48,5 @@ describe('editor/serialize', function() {
         const model = new EditorModel([pc.plain('\\*hello\\* world')]);
         const html = htmlSerializeIfNeeded(model, {});
         expect(html).toBe('*hello* world');
-    })
+    });
 });
