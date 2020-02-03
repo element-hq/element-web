@@ -2000,5 +2000,14 @@
     "This backup is trusted because it has been restored on this session": "Questo backup è fidato perchè è stato ripristinato in questa sessione",
     "Space used:": "Spazio usato:",
     "Indexed messages:": "Messaggi indicizzati:",
-    "Number of rooms:": "Numero di stanze:"
+    "Number of rooms:": "Numero di stanze:",
+    "Setting up keys": "Configurazione chiavi",
+    "Show padlocks on invite only rooms": "Mostra lucchetto nelle stanze solo a invito",
+    "Keep secret storage passphrase in memory for this session": "Tieni in memoria la password dell'archivio segreto per questa sessione",
+    "How fast should messages be downloaded.": "Quanto veloce devono essere scaricati i messaggi.",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Conferma che le emoji sottostanti sono mostrate in entrambi i dispositivi, nello stesso ordine:",
+    "Verify this device by confirming the following number appears on its screen.": "Verifica questo dispositivo confermando che il seguente numero appare sullo schermo.",
+    "Verify yourself & others to keep your chats safe": "Verifica te stesso e gli altri per mantenere sicure le chat",
+    "Backup key stored in secret storage, but this feature is not enabled on this session. Please enable cross-signing in Labs to modify key backup state.": "Backup chiavi salvato nell'archivio segreto, ma questa funzione non è attiva in questa sessione. Attiva la firma incrociata in Laboratori per modificare lo stato del backup chiavi.",
+    "Your keys are <b>not being backed up from this session</b>.": "Il backup chiavi <b>non viene fatto per questa sessione</b>."
 }
