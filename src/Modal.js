@@ -217,9 +217,13 @@ class ModalManager {
     }
 
     closeAll() {
-        const modalsToClose = [...this._modals, this._priorityModal];
+        const modalsToClose = this._modals.slice();
         this._modals = [];
-        this._priorityModal = null;
+
+        if (this._priorityModal) {
+            modalsToClose.push(this._priorityModal);
+            this._priorityModal = null;
+        }
 
         if (this._staticModal && modalsToClose.length === 0) {
             modalsToClose.push(this._staticModal);
