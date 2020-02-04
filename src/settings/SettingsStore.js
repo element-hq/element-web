@@ -141,7 +141,7 @@ export default class SettingsStore {
             settingName = setting.invertedSettingName;
         }
 
-        const watcherId = `${SettingsStore._watcherCount++}_${settingName}_${roomId}`;
+        const watcherId = `${new Date().getTime()}_${SettingsStore._watcherCount++}_${settingName}_${roomId}`;
 
         const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
             const newValue = SettingsStore.getValue(originalSettingName);
