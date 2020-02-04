@@ -54,25 +54,12 @@ import CallHandler from 'matrix-react-sdk/src/CallHandler';
 let lastLocationHashSet = null;
 
 function checkBrowserFeatures(featureList) {
-    let featureComplete = true;
-
-    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on:
-    // ran prior to Modernizr so the missing features are logged even if Modernizr is broken
-    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
-    if (typeof Promise.prototype.finally !== "function") {
-        console.error("Browser missing feature: Promise.prototype.finally");
-        featureComplete = false;
-    }
-    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
-    if (typeof Object.fromEntries !== "function") {
-        console.error("Browser missing feature: Object.fromEntries");
-        featureComplete = false;
-    }
-
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
+
+    let featureComplete = true;
     for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
             console.error(
@@ -86,6 +73,18 @@ function checkBrowserFeatures(featureList) {
             // toggle flag rather than return early so we log all missing features rather than just the first.
             featureComplete = false;
         }
+    }
+
+    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on:
+    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
+    if (!Promise || !Promise.prototype || typeof Promise.prototype.finally !== "function") {
+        console.error("Browser missing feature: Promise.prototype.finally");
+        featureComplete = false;
+    }
+    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
+    if (!Object || typeof Object.fromEntries !== "function") {
+        console.error("Browser missing feature: Object.fromEntries");
+        featureComplete = false;
     }
 
     return featureComplete;
