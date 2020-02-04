@@ -564,7 +564,7 @@ export default class SettingsStore {
         const handlers = {};
         for (const level of SETTINGS[settingName].supportedLevels) {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
-            handlers[level] = LEVEL_HANDLERS[level];
+            if (SettingsStore.isLevelSupported(level)) handlers[level] = LEVEL_HANDLERS[level];
         }
 
         // Always support 'default'
