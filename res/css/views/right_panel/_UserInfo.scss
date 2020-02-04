@@ -49,12 +49,17 @@ limitations under the License.
     }
 
     .mx_UserInfo_container {
-        padding: 0 16px 16px 16px;
+        padding: 8px 16px;
+    }
+
+    .mx_UserInfo_separator {
         border-bottom: 1px solid lightgray;
     }
 
     .mx_UserInfo_memberDetailsContainer {
+        padding-top: 0;
         padding-bottom: 0;
+        margin-bottom: 8px;
     }
 
     .mx_RoomTile_nameContainer {
@@ -76,6 +81,7 @@ limitations under the License.
     .mx_UserInfo_avatar > div {
         max-width: 30vh;
         margin: 0 auto;
+        transition: 0.5s;
     }
 
     .mx_UserInfo_avatar > div > div {
@@ -105,6 +111,7 @@ limitations under the License.
         // override the calculated sizes so that the letter isn't HUGE
         font-size: 56px !important;
         width: 100% !important;
+        transition: font-size 0.5s;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
@@ -204,10 +211,9 @@ limitations under the License.
         padding-bottom: 16px;
     }
 
-    .mx_UserInfo_scrollContainer .mx_UserInfo_container {
+    .mx_UserInfo_container:not(.mx_UserInfo_separator) {
         padding-top: 16px;
         padding-bottom: 0;
-        border-bottom: none;
 
         > :not(h3) {
             margin-left: 8px;
@@ -250,17 +256,25 @@ limitations under the License.
         .mx_UserInfo_expand {
             display: flex;
             margin-top: 11px;
-            color: $accent-color;
         }
     }
 
-    .mx_UserInfo_verify {
+    .mx_UserInfo_wideButton {
         display: block;
-        background-color: $accent-color;
-        color: $accent-fg-color;
-        border-radius: 4px;
-        padding: 7px 1.5em;
-        text-align: center;
         margin: 16px 0;
+    }
+    button.mx_UserInfo_wideButton {
+        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
+    }
+}
+
+.mx_UserInfo.mx_UserInfo_smallAvatar {
+    .mx_UserInfo_avatar > div {
+        max-width: 72px;
+        margin: 0 auto;
+    }
+
+    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
+        font-size: 40px !important; // override the other override because here the avatar is smaller
     }
 }

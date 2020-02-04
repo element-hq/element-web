@@ -2,7 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
-var args = require('optimist').argv;
+var args = require('minimist')(process.argv);
 var chokidar = require('chokidar');
 
 var componentIndex = path.join('src', 'component-index.js');

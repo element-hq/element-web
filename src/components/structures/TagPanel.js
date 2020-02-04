@@ -1,5 +1,6 @@
 /*
 Copyright 2017, 2018 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -64,8 +65,8 @@ const TagPanel = createReactClass({
         this.unmounted = true;
         this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
         this.context.removeListener("sync", this._onClientSync);
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagOrderStoreToken) {
+            this._tagOrderStoreToken.remove();
         }
     },
 

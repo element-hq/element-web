@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,79 +14,185 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
+
 import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
-import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {_t} from "../../../languageHandler";
+import E2EIcon from "../rooms/E2EIcon";
+import {
+    PHASE_UNSENT,
+    PHASE_REQUESTED,
+    PHASE_READY,
+    PHASE_DONE,
+    PHASE_STARTED,
+    PHASE_CANCELLED,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import Spinner from "../elements/Spinner";
 
 export default class VerificationPanel extends React.PureComponent {
+    static propTypes = {
+        request: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
+        phase: PropTypes.oneOf([
+            PHASE_UNSENT,
+            PHASE_REQUESTED,
+            PHASE_READY,
+            PHASE_STARTED,
+            PHASE_CANCELLED,
+            PHASE_DONE,
+        ]).isRequired,
+        onClose: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
         this.state = {};
-        this._hasVerifier = !!props.request.verifier;
+        this._hasVerifier = false;
+    }
+
+    renderQRPhase(pending) {
+        const {member, request} = this.props;
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        let button;
+        if (pending) {
+            button = <Spinner />;
+        } else {
+            button = (
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
+                    {_t("Verify by emoji")}
+                </AccessibleButton>
+            );
+        }
+
+        const cli = MatrixClientPeg.get();
+        const crossSigningInfo = cli.getStoredCrossSigningForUser(request.otherUserId);
+        if (!crossSigningInfo || !request.requestEvent || !request.requestEvent.getId()) {
+            // for whatever reason we can't generate a QR code, offer only SAS Verification
+            return <div className="mx_UserInfo_container">
+                <h3>Verify by emoji</h3>
+                <p>{_t("Verify by comparing unique emoji.")}</p>
+
+                { button }
+            </div>;
+        }
+
+        const myKeyId = cli.getCrossSigningId();
+        const qrCodeKeys = [
+            [cli.getDeviceId(), cli.getDeviceEd25519Key()],
+            [myKeyId, myKeyId],
+        ];
+
+        // TODO: add way to open camera to scan a QR code
+        return <React.Fragment>
+            <div className="mx_UserInfo_container">
+                <h3>Verify by scanning</h3>
+                <p>{_t("Ask %(displayName)s to scan your code:", {
+                    displayName: member.displayName || member.name || member.userId,
+                })}</p>
+
+                <div className="mx_VerificationPanel_qrCode">
+                    <VerificationQRCode
+                        keyholderUserId={MatrixClientPeg.get().getUserId()}
+                        requestEventId={request.requestEvent.getId()}
+                        otherUserKey={crossSigningInfo.getId("master")}
+                        secret={request.encodedSharedSecret}
+                        keys={qrCodeKeys}
+                    />
+                </div>
+            </div>
+
+            <div className="mx_UserInfo_container">
+                <h3>Verify by emoji</h3>
+                <p>{_t("If you can't scan the code above, verify by comparing unique emoji.")}</p>
+
+                { button }
+            </div>
+        </React.Fragment>;
+    }
+
+    renderVerifiedPhase() {
+        const {member} = this.props;
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return (
+            <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
+                <h3>Verified</h3>
+                <p>{_t("You've successfully verified %(displayName)s!", {
+                    displayName: member.displayName || member.name || member.userId,
+                })}</p>
+                <E2EIcon isUser={true} status="verified" size={128} />
+                <p>Verify all users in a room to ensure it's secure.</p>
+
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
+                    {_t("Got it")}
+                </AccessibleButton>
+            </div>
+        );
+    }
+
+    renderCancelledPhase() {
+        const {member, request} = this.props;
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
+        let text;
+        if (request.cancellationCode === "m.timeout") {
+            text = _t("Verification timed out. Start verification again from their profile.");
+        } else if (request.cancellingUserId === request.otherUserId) {
+            text = _t("%(displayName)s cancelled verification. Start verification again from their profile.", {
+                displayName: member.displayName || member.name || member.userId,
+            });
+        } else {
+            text = _t("You cancelled verification. Start verification again from their profile.");
+        }
+
+        return (
+            <div className="mx_UserInfo_container">
+                <h3>Verification cancelled</h3>
+                <p>{ text }</p>
+
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
+                    {_t("Got it")}
+                </AccessibleButton>
+            </div>
+        );
     }
 
     render() {
-        return <div className="mx_UserInfo">
-            <div className="mx_UserInfo_container">
-                { this.renderStatus() }
-            </div>
-        </div>;
-    }
+        const {member, phase} = this.props;
 
-    renderStatus() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Spinner = sdk.getComponent('elements.Spinner');
-        const {request: req} = this.props;
-        const request: VerificationRequest = req;
+        const displayName = member.displayName || member.name || member.userId;
 
-        if (request.requested) {
-            return (<p>Waiting for {request.otherUserId} to accept ... <Spinner /></p>);
-        } else if (request.ready) {
-            const verifyButton = <AccessibleButton kind="primary" onClick={this._startSAS}>
-                Verify by emoji
-            </AccessibleButton>;
-
-            const crossSigningInfo = MatrixClientPeg.get().getStoredCrossSigningForUser(request.otherUserId);
-            const myKeyId = MatrixClientPeg.get().getCrossSigningId();
-            if (request.requestEvent && request.requestEvent.getId() && crossSigningInfo) {
-                const qrCodeKeys = [
-                    [MatrixClientPeg.get().getDeviceId(), MatrixClientPeg.get().getDeviceEd25519Key()],
-                    [myKeyId, myKeyId],
-                ];
-                const qrCode = <VerificationQRCode
-                    keyholderUserId={MatrixClientPeg.get().getUserId()}
-                    requestEventId={request.requestEvent.getId()}
-                    otherUserKey={crossSigningInfo.getId("master")}
-                    secret={request.encodedSharedSecret}
-                    keys={qrCodeKeys}
-                />;
-                return (<p>{request.otherUserId} is ready, start {verifyButton} or have them scan: {qrCode}</p>);
-            }
-
-            return (<p>{request.otherUserId} is ready, start {verifyButton}</p>);
-        } else if (request.started) {
-            if (this.state.sasWaitingForOtherParty) {
-                return <p>Waiting for {request.otherUserId} to confirm ...</p>;
-            } else if (this.state.sasEvent) {
-                const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
-                return (<div>
-                    <VerificationShowSas
-                        sas={this.state.sasEvent.sas}
-                        onCancel={this._onSasMismatchesClick}
-                        onDone={this._onSasMatchesClick}
-                    />
-                </div>);
-            } else {
-                return (<p>Setting up SAS verification...</p>);
-            }
-        } else if (request.done) {
-            return <p>verified {request.otherUserId}!!</p>;
-        } else if (request.cancelled) {
-            return <p>cancelled by {request.cancellingUserId}!</p>;
+        switch (phase) {
+            case PHASE_READY:
+                return this.renderQRPhase();
+            case PHASE_STARTED:
+                if (this.state.sasEvent) {
+                    const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+                    return <div className="mx_UserInfo_container">
+                        <h3>Compare emoji</h3>
+                        <VerificationShowSas
+                            displayName={displayName}
+                            sas={this.state.sasEvent.sas}
+                            onCancel={this._onSasMismatchesClick}
+                            onDone={this._onSasMatchesClick}
+                        />
+                    </div>;
+                } else {
+                    return this.renderQRPhase(true); // keep showing same phase but with a spinner
+                }
+            case PHASE_DONE:
+                return this.renderVerifiedPhase();
+            case PHASE_CANCELLED:
+                return this.renderCancelledPhase();
         }
+        console.error("VerificationPanel unhandled phase:", phase);
+        return null;
     }
 
     _startSAS = async () => {
@@ -95,18 +201,15 @@ export default class VerificationPanel extends React.PureComponent {
             await verifier.verify();
         } catch (err) {
             console.error(err);
-        } finally {
-            this.setState({sasEvent: null});
         }
     };
 
     _onSasMatchesClick = () => {
-        this.setState({sasWaitingForOtherParty: true});
         this.state.sasEvent.confirm();
     };
 
     _onSasMismatchesClick = () => {
-        this.state.sasEvent.cancel();
+        this.state.sasEvent.mismatch();
     };
 
     _onVerifierShowSas = (sasEvent) => {
@@ -115,8 +218,10 @@ export default class VerificationPanel extends React.PureComponent {
 
     _onRequestChange = async () => {
         const {request} = this.props;
-        if (!this._hasVerifier && !!request.verifier) {
-            request.verifier.on('show_sas', this._onVerifierShowSas);
+        const hadVerifier = this._hasVerifier;
+        this._hasVerifier = !!request.verifier;
+        if (!hadVerifier && this._hasVerifier) {
+            request.verifier.once('show_sas', this._onVerifierShowSas);
             try {
                 // on the requester side, this is also awaited in _startSAS,
                 // but that's ok as verify should return the same promise.
@@ -124,15 +229,12 @@ export default class VerificationPanel extends React.PureComponent {
             } catch (err) {
                 console.error("error verify", err);
             }
-        } else if (this._hasVerifier && !request.verifier) {
-            request.verifier.removeListener('show_sas', this._onVerifierShowSas);
         }
-        this._hasVerifier = !!request.verifier;
-        this.forceUpdate();
     };
 
     componentDidMount() {
         this.props.request.on("change", this._onRequestChange);
+        this._onRequestChange();
     }
 
     componentWillUnmount() {

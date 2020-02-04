@@ -172,7 +172,7 @@ export default class DeviceVerifyDialog extends React.Component {
         const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
         return (
             <BaseDialog
-                title={_t("Verify device")}
+                title={_t("Verify session")}
                 onFinished={this._onCancelClick}
             >
                 {body}
@@ -194,10 +194,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     { _t("Verify by comparing a short text string.") }
                 </p>
                 <p>
-                    {_t(
-                        "For maximum security, we recommend you do this in person or " +
-                        "use another trusted means of communication.",
-                    )}
+                    {_t("To be secure, do this in person or use a trusted way to communicate.")}
                 </p>
                 <DialogButtons
                     primaryButton={_t('Begin Verifying')}
@@ -236,6 +233,7 @@ export default class DeviceVerifyDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
+            isSelf={MatrixClientPeg.get().getUserId() === this.props.userId}
         />;
     }
 
@@ -265,12 +263,12 @@ export default class DeviceVerifyDialog extends React.Component {
 
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
-            text = _t("To verify that this device can be trusted, please check that the key you see " +
+            text = _t("To verify that this session can be trusted, please check that the key you see " +
                 "in User Settings on that device matches the key below:");
         } else {
-            text = _t("To verify that this device can be trusted, please contact its owner using some other " +
+            text = _t("To verify that this session can be trusted, please contact its owner using some other " +
                 "means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings " +
-                "for this device matches the key below:");
+                "for this session matches the key below:");
         }
 
         const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
@@ -286,14 +284,14 @@ export default class DeviceVerifyDialog extends React.Component {
                 </p>
                 <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
-                        <li><label>{ _t("Device name") }:</label> <span>{ this.props.device.getDisplayName() }</span></li>
-                        <li><label>{ _t("Device ID") }:</label> <span><code>{ this.props.device.deviceId }</code></span></li>
-                        <li><label>{ _t("Device key") }:</label> <span><code><b>{ key }</b></code></span></li>
+                        <li><label>{ _t("Session name") }:</label> <span>{ this.props.device.getDisplayName() }</span></li>
+                        <li><label>{ _t("Session ID") }:</label> <span><code>{ this.props.device.deviceId }</code></span></li>
+                        <li><label>{ _t("Session key") }:</label> <span><code><b>{ key }</b></code></span></li>
                     </ul>
                 </div>
                 <p>
                     { _t("If it matches, press the verify button below. " +
-                        "If it doesn't, then someone else is intercepting this device " +
+                        "If it doesn't, then someone else is intercepting this session " +
                         "and you probably want to press the blacklist button instead.") }
                 </p>
             </div>
@@ -301,7 +299,7 @@ export default class DeviceVerifyDialog extends React.Component {
 
         return (
             <QuestionDialog
-                title={_t("Verify device")}
+                title={_t("Verify session")}
                 description={body}
                 button={_t("I verify that the keys match")}
                 onFinished={this._onLegacyFinished}
@@ -321,7 +319,7 @@ export default class DeviceVerifyDialog extends React.Component {
 }
 
 async function ensureDMExistsAndOpen(userId) {
-    const roomId = ensureDMExists(MatrixClientPeg.get(), userId);
+    const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
     // don't use andView and spinner in createRoom, together, they cause this dialog to close and reopen,
     // we causes us to loose the verifier and restart, and we end up having two verification requests
     dis.dispatch({

@@ -46,6 +46,7 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
+    matrixClientIsReady: false,
 };
 
 /**
@@ -59,6 +60,9 @@ class RoomViewStore extends Store {
 
         // Initialise state
         this._state = INITIAL_STATE;
+        if (MatrixClientPeg.get()) {
+            this._state.matrixClientIsReady = MatrixClientPeg.get().isInitialSyncComplete();
+        }
     }
 
     _setState(newState) {
@@ -136,6 +140,11 @@ class RoomViewStore extends Store {
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
+            case 'sync_state':
+                this._setState({
+                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
+                });
+                break;
         }
     }
 
@@ -350,7 +359,7 @@ class RoomViewStore extends Store {
     }
 
     shouldPeek() {
-        return this._state.shouldPeek;
+        return this._state.shouldPeek && this._state.matrixClientIsReady;
     }
 }
 

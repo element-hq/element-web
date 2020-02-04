@@ -864,7 +864,7 @@ export default createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
                                           onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this device')} />
+                                          label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
                                           onChange={this.onEnableDesktopNotificationBodyChange}
@@ -872,7 +872,7 @@ export default createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
                                           onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this device')} />
+                                          label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 
