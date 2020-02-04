@@ -40,7 +40,10 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request) {
             request.off("change", this._onRequestChanged);
         }
-        MatrixClientPeg.removeListener("userTrustStatusChanged", this._onTrustChanged);
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("userTrustStatusChanged", this._onTrustChanged);
+        }
     }
 
     _onRequestChanged = () => {
