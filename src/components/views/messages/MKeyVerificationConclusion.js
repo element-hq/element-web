@@ -32,6 +32,7 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request) {
             request.on("change", this._onRequestChanged);
         }
+        MatrixClientPeg.get().on("userTrustStatusChanged", this._onTrustChanged);
     }
 
     componentWillUnmount() {
@@ -39,9 +40,19 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request) {
             request.off("change", this._onRequestChanged);
         }
+        MatrixClientPeg.removeListener("userTrustStatusChanged", this._onTrustChanged);
     }
 
     _onRequestChanged = () => {
+        this.forceUpdate();
+    };
+
+    _onTrustChanged = (userId, status) => {
+        const { mxEvent } = this.props;
+        const request = mxEvent.verificationRequest;
+        if (!request || request.otherUserId !== userId) {
+            return;
+        }
         this.forceUpdate();
     };
 
@@ -63,6 +74,14 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request.pending) {
             return false;
         }
+
+        // User isn't actually verified
+        if (!MatrixClientPeg.get()
+                            .checkUserTrust(request.otherUserId)
+                            .isCrossSigningVerified()) {
+            return false;
+        }
+
         return true;
     }
 
