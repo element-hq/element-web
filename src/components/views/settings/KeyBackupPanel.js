@@ -186,23 +186,23 @@ export default class KeyBackupPanel extends React.PureComponent {
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
                 clientBackupStatus = <div>
                     <p>{encryptedMessageAreEncrypted}</p>
-                    <p>✅ {_t("This device is backing up your keys. ")}</p>
+                    <p>✅ {_t("This session is backing up your keys. ")}</p>
                 </div>;
             } else {
                 clientBackupStatus = <div>
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t(
-                        "This device is <b>not backing up your keys</b>, " +
+                        "This session is <b>not backing up your keys</b>, " +
                         "but you do have an existing backup you can restore from " +
                         "and add to going forward.", {},
                         {b: sub => <b>{sub}</b>},
                     )}</p>
                     <p>{_t(
-                        "Connect this device to key backup before signing out to avoid " +
-                        "losing any keys that may only be on this device.",
+                        "Connect this session to key backup before signing out to avoid " +
+                        "losing any keys that may only be on this session.",
                     )}</p>
                 </div>;
-                restoreButtonCaption = _t("Connect this device to Key Backup");
+                restoreButtonCaption = _t("Connect this session to Key Backup");
             }
 
             let keyStatus;
@@ -264,42 +264,42 @@ export default class KeyBackupPanel extends React.PureComponent {
                     );
                 } else if (!sig.device) {
                     sigStatus = _t(
-                        "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s",
+                        "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s",
                         { deviceId: sig.deviceId }, { verify },
                     );
                 } else if (sig.valid && fromThisDevice) {
                     sigStatus = _t(
-                        "Backup has a <validity>valid</validity> signature from this device",
+                        "Backup has a <validity>valid</validity> signature from this session",
                         {}, { validity },
                     );
                 } else if (!sig.valid && fromThisDevice) {
                     // it can happen...
                     sigStatus = _t(
-                        "Backup has an <validity>invalid</validity> signature from this device",
+                        "Backup has an <validity>invalid</validity> signature from this session",
                         {}, { validity },
                     );
                 } else if (sig.valid && sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
-                        "<verify>verified</verify> device <device></device>",
+                        "<verify>verified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
                 } else if (sig.valid && !sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
-                        "<verify>unverified</verify> device <device></device>",
+                        "<verify>unverified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
                 } else if (!sig.valid && sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
-                        "<verify>verified</verify> device <device></device>",
+                        "<verify>verified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
                 } else if (!sig.valid && !sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
-                        "<verify>unverified</verify> device <device></device>",
+                        "<verify>unverified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
                 }
@@ -309,12 +309,12 @@ export default class KeyBackupPanel extends React.PureComponent {
                 </div>;
             });
             if (this.state.backupSigStatus.sigs.length === 0) {
-                backupSigStatuses = _t("Backup is not signed by any of your devices");
+                backupSigStatuses = _t("Backup is not signed by any of your sessions");
             }
 
             let trustedLocally;
             if (this.state.backupSigStatus.trusted_locally) {
-                trustedLocally = _t("This backup is trusted because it has been restored on this device");
+                trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 
             let buttonRow = (
@@ -330,7 +330,7 @@ export default class KeyBackupPanel extends React.PureComponent {
             if (this.state.backupKeyStored && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 buttonRow = <p>⚠️ {_t(
                     "Backup key stored in secret storage, but this feature is not " +
-                    "enabled on this device. Please enable cross-signing in Labs to " +
+                    "enabled on this session. Please enable cross-signing in Labs to " +
                     "modify key backup state.",
                 )}</p>;
             }
@@ -352,7 +352,7 @@ export default class KeyBackupPanel extends React.PureComponent {
             return <div>
                 <div>
                     <p>{_t(
-                        "Your keys are <b>not being backed up from this device</b>.", {},
+                        "Your keys are <b>not being backed up from this session</b>.", {},
                         {b: sub => <b>{sub}</b>},
                     )}</p>
                     <p>{encryptedMessageAreEncrypted}</p>

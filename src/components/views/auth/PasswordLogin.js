@@ -202,6 +202,7 @@ export default class PasswordLogin extends React.Component {
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
@@ -216,6 +217,7 @@ export default class PasswordLogin extends React.Component {
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
@@ -240,6 +242,7 @@ export default class PasswordLogin extends React.Component {
                     prefix={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
                     onBlur={this.onPhoneNumberBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             }
@@ -291,6 +294,7 @@ export default class PasswordLogin extends React.Component {
                         element="select"
                         value={this.state.loginType}
                         onChange={this.onLoginTypeChange}
+                        disabled={this.props.disableSubmit}
                     >
                         <option
                             key={PasswordLogin.LOGIN_FIELD_MXID}
@@ -330,6 +334,7 @@ export default class PasswordLogin extends React.Component {
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
+                        disabled={this.props.disableSubmit}
                     />
                     {forgotPasswordJsx}
                     <input className="mx_Login_submit"

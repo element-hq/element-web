@@ -1171,28 +1171,40 @@ const TimelinePanel = createReactClass({
         // get the user's membership at the last event by getting the timeline
         // that the event belongs to, and traversing the timeline looking for
         // that event, while keeping track of the user's membership
-        const lastEvent = events[events.length - 1];
-        const timeline = room.getTimelineForEvent(lastEvent.getId());
-        const userMembershipEvent =
-              timeline.getState(EventTimeline.FORWARDS).getMember(userId);
-        let userMembership = userMembershipEvent
-            ? userMembershipEvent.membership : "leave";
-        const timelineEvents = timeline.getEvents();
-        for (let i = timelineEvents.length - 1; i >= 0; i--) {
-            const event = timelineEvents[i];
-            if (event.getId() === lastEvent.getId()) {
-                // found the last event, so we can stop looking through the timeline
-                break;
-            } else if (event.getStateKey() === userId
-                       && event.getType() === "m.room.member") {
-                const prevContent = event.getPrevContent();
-                userMembership = prevContent.membership || "leave";
+        let i;
+        let userMembership = "leave";
+        for (i = events.length - 1; i >= 0; i--) {
+            const timeline = room.getTimelineForEvent(events[i].getId());
+            if (!timeline) {
+                // Somehow, it seems to be possible for live events to not have
+                // a timeline, even though that should not happen. :(
+                // https://github.com/vector-im/riot-web/issues/12120
+                console.warn(
+                    `Event ${events[i].getId()} in room ${room.roomId} is live, ` +
+                    `but it does not have a timeline`,
+                );
+                continue;
             }
+            const userMembershipEvent =
+                    timeline.getState(EventTimeline.FORWARDS).getMember(userId);
+            userMembership = userMembershipEvent ? userMembershipEvent.membership : "leave";
+            const timelineEvents = timeline.getEvents();
+            for (let j = timelineEvents.length - 1; j >= 0; j--) {
+                const event = timelineEvents[j];
+                if (event.getId() === events[i].getId()) {
+                    break;
+                } else if (event.getStateKey() === userId
+                    && event.getType() === "m.room.member") {
+                    const prevContent = event.getPrevContent();
+                    userMembership = prevContent.membership || "leave";
+                }
+            }
+            break;
         }
 
-        // now go through the events that we have and find the first undecryptable
+        // now go through the rest of the events and find the first undecryptable
         // one that was sent when the user wasn't in the room
-        for (let i = events.length - 1; i >= 0; i--) {
+        for (; i >= 0; i--) {
             const event = events[i];
             if (event.getStateKey() === userId
                 && event.getType() === "m.room.member") {

@@ -83,7 +83,7 @@ export default class SoftLogout extends React.Component {
             onFinished: (wipeData) => {
                 if (!wipeData) return;
 
-                console.log("Clearing data from soft-logged-out device");
+                console.log("Clearing data from soft-logged-out session");
                 Lifecycle.logout();
             },
         });
@@ -212,8 +212,8 @@ export default class SoftLogout extends React.Component {
         let introText = null; // null is translated to something area specific in this function
         if (this.state.keyBackupNeeded) {
             introText = _t(
-                "Regain access to your account and recover encryption keys stored on this device. " +
-                "Without them, you won’t be able to read all of your secure messages on any device.");
+                "Regain access to your account and recover encryption keys stored in this session. " +
+                "Without them, you won’t be able to read all of your secure messages in any session.");
         }
 
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
@@ -306,7 +306,7 @@ export default class SoftLogout extends React.Component {
                     <p>
                         {_t(
                             "Warning: Your personal data (including encryption keys) is still stored " +
-                            "on this device. Clear it if you're finished using this device, or want to sign " +
+                            "in this session. Clear it if you're finished using this session, or want to sign " +
                             "in to another account.",
                         )}
                     </p>

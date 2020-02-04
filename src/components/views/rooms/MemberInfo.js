@@ -260,7 +260,7 @@ export default createReactClass({
                 e2eStatus: self._getE2EStatus(devices),
             });
         }, function(err) {
-            console.log("Error downloading devices", err);
+            console.log("Error downloading sessions", err);
             self.setState({devicesLoading: false});
         });
     },
@@ -766,9 +766,9 @@ export default createReactClass({
             // still loading
             devComponents = <Spinner />;
         } else if (devices === null) {
-            devComponents = _t("Unable to load device list");
+            devComponents = _t("Unable to load session list");
         } else if (devices.length === 0) {
-            devComponents = _t("No devices with registered encryption keys");
+            devComponents = _t("No sessions with registered encryption keys");
         } else {
             devComponents = [];
             for (let i = 0; i < devices.length; i++) {
@@ -780,7 +780,7 @@ export default createReactClass({
 
         return (
             <div>
-                <h3>{ _t("Devices") }</h3>
+                <h3>{ _t("Sessions") }</h3>
                 <div className="mx_MemberInfo_devices">
                     { devComponents }
                 </div>
@@ -1113,7 +1113,8 @@ export default createReactClass({
             }
         }
 
-        const avatarUrl = this.props.member.getMxcAvatarUrl();
+        const {member} = this.props;
+        const avatarUrl = member.avatarUrl || (member.getMxcAvatarUrl && member.getMxcAvatarUrl());
         let avatarElement;
         if (avatarUrl) {
             const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);

@@ -248,7 +248,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         } else if (this.state.restoreError) {
             if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
                 if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
-                    title = _t("Recovery Key Mismatch");
+                    title = _t("Recovery key mismatch");
                     content = <div>
                         <p>{_t(
                             "Backup could not be decrypted with this key: " +
@@ -256,7 +256,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         )}</p>
                     </div>;
                 } else {
-                    title = _t("Incorrect Recovery Passphrase");
+                    title = _t("Incorrect recovery passphrase");
                     content = <div>
                         <p>{_t(
                             "Backup could not be decrypted with this passphrase: " +
@@ -273,7 +273,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            title = _t("Backup Restored");
+            title = _t("Backup restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
@@ -293,7 +293,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-            title = _t("Enter Recovery Passphrase");
+            title = _t("Enter recovery passphrase");
             content = <div>
                 <p>{_t(
                     "<b>Warning</b>: you should only set up key backup " +
@@ -340,7 +340,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 })}
             </div>;
         } else {
-            title = _t("Enter Recovery Key");
+            title = _t("Enter recovery key");
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 

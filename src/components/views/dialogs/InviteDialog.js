@@ -301,17 +301,15 @@ export default class InviteDialog extends React.PureComponent {
             throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
         }
 
-        let alreadyInvited = [];
+        const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get()['welcomeUserId']]);
         if (props.roomId) {
             const room = MatrixClientPeg.get().getRoom(props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
-            alreadyInvited = [
-                ...room.getMembersWithMembership('invite'),
-                ...room.getMembersWithMembership('join'),
-                ...room.getMembersWithMembership('ban'), // so we don't try to invite them
-            ].map(m => m.userId);
+            room.getMembersWithMembership('invite').forEach(m => alreadyInvited.add(m.userId));
+            room.getMembersWithMembership('join').forEach(m => alreadyInvited.add(m.userId));
+            // add banned users, so we don't try to invite them
+            room.getMembersWithMembership('ban').forEach(m => alreadyInvited.add(m.userId));
         }
-
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
@@ -333,12 +331,12 @@ export default class InviteDialog extends React.PureComponent {
         this._editorRef = createRef();
     }
 
-    _buildRecents(excludedTargetIds: string[]): {userId: string, user: RoomMember, lastActive: number} {
+    _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals();
         const recents = [];
         for (const userId in rooms) {
             // Filter out user IDs that are already in the room / should be excluded
-            if (excludedTargetIds.includes(userId)) {
+            if (excludedTargetIds.has(userId)) {
                 console.warn(`[Invite:Recents] Excluding ${userId} from recents`);
                 continue;
             }
@@ -351,9 +349,20 @@ export default class InviteDialog extends React.PureComponent {
                 continue;
             }
 
-            const lastEventTs = room.timeline && room.timeline.length
-                ? room.timeline[room.timeline.length - 1].getTs()
-                : 0;
+            // Find the last timestamp for a message event
+            const searchTypes = ["m.room.message", "m.room.encrypted", "m.sticker"];
+            const maxSearchEvents = 20; // to prevent traversing history
+            let lastEventTs = 0;
+            if (room.timeline && room.timeline.length) {
+                for (let i = room.timeline.length - 1; i >= 0; i--) {
+                    const ev = room.timeline[i];
+                    if (searchTypes.includes(ev.getType())) {
+                        lastEventTs = ev.getTs();
+                        break;
+                    }
+                    if (room.timeline.length - i > maxSearchEvents) break;
+                }
+            }
             if (!lastEventTs) {
                 // something weird is going on with this room
                 console.warn(`[Invite:Recents] ${userId} (${room.roomId}) has a weird last timestamp: ${lastEventTs}`);
@@ -370,13 +379,10 @@ export default class InviteDialog extends React.PureComponent {
         return recents;
     }
 
-    _buildSuggestions(excludedTargetIds: string[]): {userId: string, user: RoomMember} {
+    _buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember} {
         const maxConsideredMembers = 200;
-        const client = MatrixClientPeg.get();
-        const excludedUserIds = [client.getUserId(), SdkConfig.get()['welcomeUserId']];
-        const joinedRooms = client.getRooms()
-            .filter(r => r.getMyMembership() === 'join')
-            .filter(r => r.getJoinedMemberCount() <= maxConsideredMembers);
+        const joinedRooms = MatrixClientPeg.get().getRooms()
+            .filter(r => r.getMyMembership() === 'join' && r.getJoinedMemberCount() <= maxConsideredMembers);
 
         // Generates { userId: {member, rooms[]} }
         const memberRooms = joinedRooms.reduce((members, room) => {
@@ -385,10 +391,10 @@ export default class InviteDialog extends React.PureComponent {
                 return members; // Do nothing
             }
 
-            const joinedMembers = room.getJoinedMembers().filter(u => !excludedUserIds.includes(u.userId));
+            const joinedMembers = room.getJoinedMembers().filter(u => !excludedTargetIds.has(u.userId));
             for (const member of joinedMembers) {
                 // Filter out user IDs that are already in the room / should be excluded
-                if (excludedTargetIds.includes(member.userId)) {
+                if (excludedTargetIds.has(member.userId)) {
                     continue;
                 }
 
@@ -429,7 +435,7 @@ export default class InviteDialog extends React.PureComponent {
         // room to see who has sent a message in the last few hours, and giving them a score
         // which correlates to the freshness of their message. In theory, this results in suggestions
         // which are closer to "continue this conversation" rather than "this person exists".
-        const trueJoinedRooms = client.getRooms().filter(r => r.getMyMembership() === 'join');
+        const trueJoinedRooms = MatrixClientPeg.get().getRooms().filter(r => r.getMyMembership() === 'join');
         const now = (new Date()).getTime();
         const earliestAgeConsidered = now - (60 * 60 * 1000); // 1 hour ago
         const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
@@ -445,7 +451,7 @@ export default class InviteDialog extends React.PureComponent {
             const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
             for (let i = events.length - 1; i >= Math.max(0, events.length - maxMessagesConsidered); i--) {
                 const ev = events[i];
-                if (excludedUserIds.includes(ev.getSender())) {
+                if (excludedTargetIds.has(ev.getSender())) {
                     continue;
                 }
                 if (ev.getTs() <= earliestAgeConsidered) {
@@ -747,6 +753,12 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _onPaste = async (e) => {
+        if (this.state.filterText) {
+            // if the user has already typed something, just let them
+            // paste normally.
+            return;
+        }
+
         // Prevent the text being pasted into the textarea
         e.preventDefault();
 
@@ -937,6 +949,7 @@ export default class InviteDialog extends React.PureComponent {
                 value={this.state.filterText}
                 ref={this._editorRef}
                 onPaste={this._onPaste}
+                autoFocus={true}
             />
         );
         return (

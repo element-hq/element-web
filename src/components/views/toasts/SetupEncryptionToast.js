@@ -39,7 +39,7 @@ export default class SetupEncryptionToast extends React.PureComponent {
         switch (this.props.kind) {
             case 'set_up_encryption':
             case 'upgrade_encryption':
-                return _t('Verify your other devices easier');
+                return _t('Verify yourself & others to keep your chats safe');
             case 'verify_this_session':
                 return _t('Other users may not trust it');
         }

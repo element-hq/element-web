@@ -771,7 +771,7 @@ export const CommandMap = {
     verify: new Command({
         name: 'verify',
         args: '<user-id> <device-id> <device-signing-key>',
-        description: _td('Verifies a user, device, and pubkey tuple'),
+        description: _td('Verifies a user, session, and pubkey tuple'),
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
@@ -785,22 +785,22 @@ export const CommandMap = {
                     return success((async () => {
                         const device = await cli.getStoredDevice(userId, deviceId);
                         if (!device) {
-                            throw new Error(_t('Unknown (user, device) pair:') + ` (${userId}, ${deviceId})`);
+                            throw new Error(_t('Unknown (user, session) pair:') + ` (${userId}, ${deviceId})`);
                         }
                         const deviceTrust = await cli.checkDeviceTrust(userId, deviceId);
 
                         if (deviceTrust.isVerified()) {
                             if (device.getFingerprint() === fingerprint) {
-                                throw new Error(_t('Device already verified!'));
+                                throw new Error(_t('Session already verified!'));
                             } else {
-                                throw new Error(_t('WARNING: Device already verified, but keys do NOT MATCH!'));
+                                throw new Error(_t('WARNING: Session already verified, but keys do NOT MATCH!'));
                             }
                         }
 
                         if (device.getFingerprint() !== fingerprint) {
                             const fprint = device.getFingerprint();
                             throw new Error(
-                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
+                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
                                     ' %(deviceId)s is "%(fprint)s" which does not match the provided key ' +
                                     '"%(fingerprint)s". This could mean your communications are being intercepted!',
                                     {
@@ -821,7 +821,7 @@ export const CommandMap = {
                                 <p>
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
-                                            'from %(userId)s\'s device %(deviceId)s. Device marked as verified.',
+                                            'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
                                             {userId, deviceId})
                                     }
                                 </p>

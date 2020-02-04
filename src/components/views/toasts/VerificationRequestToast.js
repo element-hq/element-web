@@ -33,11 +33,13 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     componentDidMount() {
         const {request} = this.props;
-        this._intervalHandle = setInterval(() => {
-            let {counter} = this.state;
-            counter = Math.max(0, counter - 1);
-            this.setState({counter});
-        }, 1000);
+        if (request.timeout && request.timeout > 0) {
+            this._intervalHandle = setInterval(() => {
+                let {counter} = this.state;
+                counter = Math.max(0, counter - 1);
+                this.setState({counter});
+            }, 1000);
+        }
         request.on("change", this._checkRequestIsPending);
         // We should probably have a separate class managing the active verification toasts,
         // rather than monitoring this in the toast component itself, since we'll get problems
@@ -56,7 +58,10 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        if (request.ready || request.started || request.done || request.cancelled || request.observeOnly) {
+        const isPendingInRoomRequest = request.channel.roomId &&
+            !(request.ready || request.started || request.done || request.cancelled || request.observeOnly);
+        const isPendingDeviceRequest = request.channel.deviceId && request.started;
+        if (!isPendingInRoomRequest && !isPendingDeviceRequest) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
@@ -82,10 +87,14 @@ export default class VerificationRequestToast extends React.PureComponent {
                     should_peek: false,
                 });
                 await request.accept();
+                const cli = MatrixClientPeg.get();
                 dis.dispatch({
                     action: "set_right_panel_phase",
                     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                    refireParams: {verificationRequest: request},
+                    refireParams: {
+                        verificationRequest: request,
+                        member: cli.getUser(request.otherUserId),
+                    },
                 });
             } else if (request.channel.deviceId && request.verifier) {
                 // show to_device verifications in dialog still
@@ -113,10 +122,13 @@ export default class VerificationRequestToast extends React.PureComponent {
                 nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
             }
         }
+        const declineLabel = this.state.counter == 0 ?
+            _t("Decline") :
+            _t("Decline (%(counter)s)", {counter: this.state.counter});
         return (<div>
             <div className="mx_Toast_description">{nameLabel}</div>
             <div className="mx_Toast_buttons" aria-live="off">
-                <FormButton label={_t("Decline (%(counter)s)", {counter: this.state.counter})} kind="danger" onClick={this.cancel} />
+                <FormButton label={declineLabel} kind="danger" onClick={this.cancel} />
                 <FormButton label={_t("Accept")} onClick={this.accept} />
             </div>
         </div>);
