@@ -33,11 +33,13 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     componentDidMount() {
         const {request} = this.props;
-        this._intervalHandle = setInterval(() => {
-            let {counter} = this.state;
-            counter = Math.max(0, counter - 1);
-            this.setState({counter});
-        }, 1000);
+        if (request.timeout && request.timeout > 0) {
+            this._intervalHandle = setInterval(() => {
+                let {counter} = this.state;
+                counter = Math.max(0, counter - 1);
+                this.setState({counter});
+            }, 1000);
+        }
         request.on("change", this._checkRequestIsPending);
         // We should probably have a separate class managing the active verification toasts,
         // rather than monitoring this in the toast component itself, since we'll get problems
@@ -120,10 +122,13 @@ export default class VerificationRequestToast extends React.PureComponent {
                 nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
             }
         }
+        const declineLabel = this.state.counter == 0 ?
+            _t("Decline") :
+            _t("Decline (%(counter)s)", {counter: this.state.counter});
         return (<div>
             <div className="mx_Toast_description">{nameLabel}</div>
             <div className="mx_Toast_buttons" aria-live="off">
-                <FormButton label={_t("Decline (%(counter)s)", {counter: this.state.counter})} kind="danger" onClick={this.cancel} />
+                <FormButton label={declineLabel} kind="danger" onClick={this.cancel} />
                 <FormButton label={_t("Accept")} onClick={this.accept} />
             </div>
         </div>);
