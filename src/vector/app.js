@@ -54,6 +54,8 @@ import CallHandler from 'matrix-react-sdk/src/CallHandler';
 let lastLocationHashSet = null;
 
 function checkBrowserFeatures(featureList) {
+    let featureComplete = true;
+
     // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on:
     // ran prior to Modernizr so the missing features are logged even if Modernizr is broken
     // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
@@ -71,7 +73,6 @@ function checkBrowserFeatures(featureList) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
-    let featureComplete = true;
     for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
             console.error(
