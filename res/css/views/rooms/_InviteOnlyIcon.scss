@@ -14,27 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_InviteOnlyIcon {
+@define-mixin mx_InviteOnlyIcon {
     width: 12px;
     height: 12px;
     position: relative;
     display: block !important;
-    // Align the padlock with unencrypted room names
+}
+
+@define-mixin mx_InviteOnlyIcon_padlock {
+    background-color: $roomtile-name-color;
+    mask-image: url("$(res)/img/feather-customised/lock-solid.svg");
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.mx_InviteOnlyIcon_large {
+    @mixin mx_InviteOnlyIcon;
     margin: 0 4px;
 
     &::before {
-        background-color: $roomtile-name-color;
-        mask-image: url('$(res)/img/feather-customised/lock-solid.svg');
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        @mixin mx_InviteOnlyIcon_padlock;
         width: 12px;
         height: 12px;
+    }
+}
+
+.mx_InviteOnlyIcon_small {
+    @mixin mx_InviteOnlyIcon;
+    left: -2px;
+
+    &::before {
+        @mixin mx_InviteOnlyIcon_padlock;
+        width: 10px;
+        height: 10px;
     }
 }

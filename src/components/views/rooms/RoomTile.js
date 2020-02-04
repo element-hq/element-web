@@ -526,7 +526,7 @@ export default createReactClass({
         let privateIcon = null;
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             if (this.state.joinRule == "invite" && !dmUserId) {
-                privateIcon = <InviteOnlyIcon />;
+                privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
             }
         }
 
