@@ -18,6 +18,7 @@ import React from 'react';
 import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
+import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
 import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
@@ -37,8 +38,11 @@ export default class ManageEventIndexDialog extends React.Component {
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
+            crawlingRoomsCount: 0,
             roomCount: 0,
             currentRoom: null,
+            crawlerSleepTime:
+                SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime'),
         };
     }
 
@@ -48,11 +52,15 @@ export default class ManageEventIndexDialog extends React.Component {
         let currentRoom = null;
 
         if (room) currentRoom = room.name;
+        const roomStats = eventIndex.crawlingRooms();
+        const crawlingRoomsCount = roomStats.crawlingRooms.size;
+        const roomCount = roomStats.totalRooms.size;
 
         this.setState({
             eventIndexSize: stats.size,
-            roomCount: stats.roomCount,
             eventCount: stats.eventCount,
+            crawlingRoomsCount: crawlingRoomsCount,
+            roomCount: roomCount,
             currentRoom: currentRoom,
         });
     }
@@ -67,6 +75,7 @@ export default class ManageEventIndexDialog extends React.Component {
 
     async componentWillMount(): void {
         let eventIndexSize = 0;
+        let crawlingRoomsCount = 0;
         let roomCount = 0;
         let eventCount = 0;
         let currentRoom = null;
@@ -77,8 +86,10 @@ export default class ManageEventIndexDialog extends React.Component {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom.bind(this));
 
             const stats = await eventIndex.getStats();
+            const roomStats = eventIndex.crawlingRooms();
             eventIndexSize = stats.size;
-            roomCount = stats.roomCount;
+            crawlingRoomsCount = roomStats.crawlingRooms.size;
+            roomCount = roomStats.totalRooms.size;
             eventCount = stats.eventCount;
 
             const room = eventIndex.currentRoom();
@@ -88,6 +99,7 @@ export default class ManageEventIndexDialog extends React.Component {
         this.setState({
             eventIndexSize,
             eventCount,
+            crawlingRoomsCount,
             roomCount,
             currentRoom,
         });
@@ -104,6 +116,11 @@ export default class ManageEventIndexDialog extends React.Component {
         this.props.onFinished(true);
     }
 
+    _onCrawlerSleepTimeChange = (e) => {
+        this.setState({crawlerSleepTime: e.target.value});
+        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
+    }
+
     render() {
         let crawlerState;
 
@@ -115,6 +132,8 @@ export default class ManageEventIndexDialog extends React.Component {
             );
         }
 
+        const Field = sdk.getComponent('views.elements.Field');
+
         const eventIndexingSettings = (
             <div>
                 {
@@ -125,8 +144,15 @@ export default class ManageEventIndexDialog extends React.Component {
                 <div className='mx_SettingsTab_subsectionText'>
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
                     {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
-                    {_t("Number of rooms:")} {formatCountLong(this.state.roomCount)}<br />
+                    {_t("Number of rooms:")} {formatCountLong(this.state.crawlingRoomsCount)} {_t("of ")}
+                    {formatCountLong(this.state.roomCount)}<br />
                     {crawlerState}<br />
+                    <Field
+                        id={"crawlerSleepTimeMs"}
+                        label={_t('Message downloading sleep time(ms)')}
+                        type='number'
+                        value={this.state.crawlerSleepTime}
+                        onChange={this._onCrawlerSleepTimeChange} />
                 </div>
             </div>
         );

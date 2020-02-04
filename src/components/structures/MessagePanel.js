@@ -465,6 +465,12 @@ export default class MessagePanel extends React.Component {
                }
                return false;
             };
+            // events that we include in the group but then eject out and place
+            // above the group.
+            const shouldEject = (ev) => {
+                if (ev.getType() === "m.room.encryption") return true;
+                return false;
+            };
             if (mxEv.getType() === "m.room.create") {
                 let summaryReadMarker = null;
                 const ts1 = mxEv.getTs();
@@ -484,6 +490,7 @@ export default class MessagePanel extends React.Component {
                 }
 
                 const summarisedEvents = []; // Don't add m.room.create here as we don't want it inside the summary
+                const ejectedEvents = [];
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
 
@@ -501,7 +508,11 @@ export default class MessagePanel extends React.Component {
                     // If RM event is in the summary, mark it as such and the RM will be appended after the summary.
                     summaryReadMarker = summaryReadMarker || this._readMarkerForEvent(collapsedMxEv.getId());
 
-                    summarisedEvents.push(collapsedMxEv);
+                    if (shouldEject(collapsedMxEv)) {
+                        ejectedEvents.push(collapsedMxEv);
+                    } else {
+                        summarisedEvents.push(collapsedMxEv);
+                    }
                 }
 
                 // At this point, i = the index of the last event in the summary sequence
@@ -512,6 +523,10 @@ export default class MessagePanel extends React.Component {
                     // timestamp of the current event, and no DateSeparator is inserted.
                     return this._getTilesForEvent(e, e, e === lastShownEvent);
                 }).reduce((a, b) => a.concat(b), []);
+
+                for (const ejected of ejectedEvents) {
+                    ret.push(...this._getTilesForEvent(mxEv, ejected, last));
+                }
 
                 // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
                 const ev = this.props.events[i];

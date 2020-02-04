@@ -20,6 +20,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
+import SettingsStore from './settings/SettingsStore';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -27,7 +28,20 @@ import { _t } from './languageHandler';
 // single secret storage operation, as it will clear the cached keys once the
 // operation ends.
 let secretStorageKeys = {};
-let cachingAllowed = false;
+let secretStorageBeingAccessed = false;
+
+function isCachingAllowed() {
+    return (
+        secretStorageBeingAccessed ||
+        SettingsStore.getValue("keepSecretStoragePassphraseForSession")
+    );
+}
+
+export class AccessCancelledError extends Error {
+    constructor() {
+        super("Secret storage access canceled");
+    }
+}
 
 async function getSecretStorageKey({ keys: keyInfos }) {
     const keyInfoEntries = Object.entries(keyInfos);
@@ -37,7 +51,7 @@ async function getSecretStorageKey({ keys: keyInfos }) {
     const [name, info] = keyInfoEntries[0];
 
     // Check the in-memory cache
-    if (cachingAllowed && secretStorageKeys[name]) {
+    if (isCachingAllowed() && secretStorageKeys[name]) {
         return [name, secretStorageKeys[name]];
     }
 
@@ -66,12 +80,12 @@ async function getSecretStorageKey({ keys: keyInfos }) {
     );
     const [input] = await finished;
     if (!input) {
-        throw new Error("Secret storage access canceled");
+        throw new AccessCancelledError();
     }
     const key = await inputToKey(input);
 
     // Save to cache to avoid future prompts in the current session
-    if (cachingAllowed) {
+    if (isCachingAllowed()) {
         secretStorageKeys[name] = key;
     }
 
@@ -104,7 +118,7 @@ export const crossSigningCallbacks = {
  */
 export async function accessSecretStorage(func = async () => { }) {
     const cli = MatrixClientPeg.get();
-    cachingAllowed = true;
+    secretStorageBeingAccessed = true;
 
     try {
         if (!await cli.hasSecretStorageKey()) {
@@ -125,7 +139,7 @@ export async function accessSecretStorage(func = async () => { }) {
                     const { finished } = Modal.createTrackedDialog(
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
                         {
-                            title: _t("Send cross-signing keys to homeserver"),
+                            title: _t("Setting up keys"),
                             matrixClient: MatrixClientPeg.get(),
                             makeRequest,
                         },
@@ -143,7 +157,9 @@ export async function accessSecretStorage(func = async () => { }) {
         return await func();
     } finally {
         // Clear secret storage key cache now that work is complete
-        cachingAllowed = false;
-        secretStorageKeys = {};
+        secretStorageBeingAccessed = false;
+        if (!isCachingAllowed()) {
+            secretStorageKeys = {};
+        }
     }
 }

@@ -14,27 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_InviteOnlyIcon {
-    width: 12px;
-    height: 12px;
-    position: relative;
-    display: block !important;
-    // Align the padlock with unencrypted room names
-    margin: 0 4px;
+.mx_UserInfo {
+    .mx_EncryptionInfo_spinner {
+        .mx_Spinner {
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
 
-    &::before {
-        background-color: $roomtile-name-color;
-        mask-image: url('$(res)/img/feather-customised/lock-solid.svg');
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 12px;
-        height: 12px;
+        text-align: center;
     }
 }

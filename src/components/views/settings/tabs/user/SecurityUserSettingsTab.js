@@ -185,11 +185,11 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
                 <ul className='mx_SettingsTab_subsectionText mx_SecurityUserSettingsTab_deviceInfo'>
                     <li>
-                        <label>{_t("Device ID:")}</label>
+                        <label>{_t("Session ID:")}</label>
                         <span><code>{deviceId}</code></span>
                     </li>
                     <li>
-                        <label>{_t("Device key:")}</label>
+                        <label>{_t("Session key:")}</label>
                         <span><code><b>{identityKey}</b></code></span>
                     </li>
                 </ul>
@@ -285,9 +285,9 @@ export default class SecurityUserSettingsTab extends React.Component {
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Devices")}</span>
+                    <span className="mx_SettingsTab_subheading">{_t("Sessions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("A device's public name is visible to people you communicate with")}
+                        {_t("A session's public name is visible to people you communicate with")}
                         <DevicesPanel />
                     </div>
                 </div>

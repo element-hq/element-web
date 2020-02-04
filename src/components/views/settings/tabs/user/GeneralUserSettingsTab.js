@@ -261,7 +261,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             title: _t("Success"),
             description: _t(
                 "Your password was successfully changed. You will not receive " +
-                "push notifications on other devices until you log back in to them",
+                "push notifications on other sessions until you log back in to them",
             ) + ".",
         });
     };

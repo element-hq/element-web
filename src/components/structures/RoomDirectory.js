@@ -155,7 +155,7 @@ export default createReactClass({
 
             this.nextBatch = data.next_batch;
             this.setState((s) => {
-                s.publicRooms.push(...data.chunk);
+                s.publicRooms.push(...(data.chunk || []));
                 s.loading = false;
                 return s;
             });
