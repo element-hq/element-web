@@ -7,23 +7,14 @@ import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import MKeyVerificationConclusion from '../../../../src/components/views/messages/MKeyVerificationConclusion';
 
-class UserTrustLevel {
-    constructor(cs) {
-        this.cs = cs;
-    }
-
-    isCrossSigningVerified() {
-        return this.cs;
-    }
-}
+const trustworthy = () => ({ isCrossSigningVerified: () => true });
+const untrustworthy = () => ({ isCrossSigningVerified: () => false });
 
 describe("MKeyVerificationConclusion", () => {
     beforeEach(() => {
         TestUtils.stubClient();
         const client = MatrixClientPeg.get();
-
-        const userTrust = new UserTrustLevel(true);
-        client.checkUserTrust = () => userTrust;
+        client.checkUserTrust = trustworthy;
 
         const emitter = new EventEmitter();
         client.on = emitter.on.bind(emitter);
@@ -71,8 +62,7 @@ describe("MKeyVerificationConclusion", () => {
 
     it("shouldn't render if the user isn't actually trusted", () => {
         const client = MatrixClientPeg.get();
-        const userTrust = new UserTrustLevel(false);
-        client.checkUserTrust = () => userTrust;
+        client.checkUserTrust = untrustworthy;
 
         const event = new MatrixEvent({ type: "m.key.verification.done" });
         event.verificationRequest = new EventEmitter();
@@ -85,8 +75,7 @@ describe("MKeyVerificationConclusion", () => {
 
     it("should rerender appropriately if user trust status changes", () => {
         const client = MatrixClientPeg.get();
-        const userTrust = new UserTrustLevel(false);
-        client.checkUserTrust = () => userTrust;
+        client.checkUserTrust = untrustworthy;
 
         const event = new MatrixEvent({ type: "m.key.verification.done" });
         event.verificationRequest = new EventEmitter();
@@ -97,7 +86,7 @@ describe("MKeyVerificationConclusion", () => {
         );
         expect(renderer.toJSON()).toBeNull();
 
-        client.checkUserTrust = () => new UserTrustLevel(true);
+        client.checkUserTrust = trustworthy;
 
         /* Ensure we don't rerender for every trust status change of any user */
         client.emit("userTrustStatusChanged", "@anotheruser:domain");
