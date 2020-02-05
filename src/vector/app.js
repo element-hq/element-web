@@ -53,11 +53,22 @@ import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
 let lastLocationHashSet = null;
 
-function checkBrowserFeatures(featureList) {
+function checkBrowserFeatures() {
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
+
+    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
+    // Modernizr requires rules to be lowercase with no punctuation:
+    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
+    window.Modernizr.addTest("promiseprototypefinally", () =>
+        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
+    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
+    window.Modernizr.addTest("objectfromentries", () =>
+        window.Object && typeof window.Object.fromEntries === "function");
+
+    const featureList = Object.keys(window.Modernizr);
 
     let featureComplete = true;
     for (let i = 0; i < featureList.length; i++) {
@@ -74,19 +85,6 @@ function checkBrowserFeatures(featureList) {
             featureComplete = false;
         }
     }
-
-    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on:
-    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
-    if (!Promise || !Promise.prototype || typeof Promise.prototype.finally !== "function") {
-        console.error("Browser missing feature: Promise.prototype.finally");
-        featureComplete = false;
-    }
-    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
-    if (!Object || typeof Object.fromEntries !== "function") {
-        console.error("Browser missing feature: Object.fromEntries");
-        featureComplete = false;
-    }
-
     return featureComplete;
 }
 
@@ -273,10 +271,7 @@ export async function loadApp() {
         return;
     }
 
-    const validBrowser = checkBrowserFeatures([
-        "displaytable", "flexbox", "es5object", "es5function", "localstorage",
-        "objectfit", "indexeddb", "webworkers",
-    ]);
+    const validBrowser = checkBrowserFeatures();
 
     const acceptInvalidBrowser = window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser');
 

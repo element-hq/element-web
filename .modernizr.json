@@ -11,6 +11,16 @@
     "test/css/objectfit",
     "test/storage/localstorage",
     "test/workers/webworkers",
-    "test/indexeddb"
+    "test/indexeddb",
+    "test/es6/array",
+    "test/es6/collections",
+    "test/es6/promises",
+    "test/serviceworker",
+    "test/svg",
+    "test/svg/asimg",
+    "test/svg/filters",
+    "test/css/animations",
+    "test/css/filters",
+    "test/network/fetch"
   ]
 }
