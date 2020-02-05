@@ -53,11 +53,23 @@ import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
 let lastLocationHashSet = null;
 
-function checkBrowserFeatures(featureList) {
+function checkBrowserFeatures() {
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
+
+    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
+    // Modernizr requires rules to be lowercase with no punctuation:
+    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
+    window.Modernizr.addTest("promiseprototypefinally", () =>
+        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
+    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
+    window.Modernizr.addTest("objectfromentries", () =>
+        window.Object && typeof window.Object.fromEntries === "function");
+
+    const featureList = Object.keys(window.Modernizr);
+
     let featureComplete = true;
     for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
@@ -69,8 +81,7 @@ function checkBrowserFeatures(featureList) {
         }
         if (window.Modernizr[featureList[i]] === false) {
             console.error("Browser missing feature: '%s'", featureList[i]);
-            // toggle flag rather than return early so we log all missing features
-            // rather than just the first.
+            // toggle flag rather than return early so we log all missing features rather than just the first.
             featureComplete = false;
         }
     }
@@ -260,10 +271,7 @@ export async function loadApp() {
         return;
     }
 
-    const validBrowser = checkBrowserFeatures([
-        "displaytable", "flexbox", "es5object", "es5function", "localstorage",
-        "objectfit", "indexeddb", "webworkers",
-    ]);
+    const validBrowser = checkBrowserFeatures();
 
     const acceptInvalidBrowser = window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser');
 
