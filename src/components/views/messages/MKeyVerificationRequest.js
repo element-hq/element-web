@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -125,30 +125,30 @@ export default class MKeyVerificationRequest extends React.Component {
             } else {
                 stateLabel = this._cancelledLabel(request.cancellingUserId);
             }
-            stateNode = (<div className="mx_KeyVerification_state">{stateLabel}</div>);
+            stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
         }
 
         if (!request.initiatedByMe) {
             const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId());
-            title = (<div className="mx_KeyVerification_title">{
+            title = (<div className="mx_cryptoEvent_title">{
                 _t("%(name)s wants to verify", {name})}</div>);
-            subtitle = (<div className="mx_KeyVerification_subtitle">{
+            subtitle = (<div className="mx_cryptoEvent_subtitle">{
                 userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
             if (request.requested && !request.observeOnly) {
-                stateNode = (<div className="mx_KeyVerification_buttons">
+                stateNode = (<div className="mx_cryptoEvent_buttons">
                     <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
                     <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
         } else { // request sent by us
-            title = (<div className="mx_KeyVerification_title">{
+            title = (<div className="mx_cryptoEvent_title">{
                 _t("You sent a verification request")}</div>);
-            subtitle = (<div className="mx_KeyVerification_subtitle">{
+            subtitle = (<div className="mx_cryptoEvent_subtitle">{
                 userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId())}</div>);
         }
 
         if (title) {
-            return (<div className="mx_EventTile_bubble mx_KeyVerification mx_KeyVerification_icon">
+            return (<div className="mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon">
                 {title}
                 {subtitle}
                 {stateNode}

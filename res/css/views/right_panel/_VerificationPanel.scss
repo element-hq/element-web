@@ -16,7 +16,8 @@ limitations under the License.
 
 .mx_UserInfo {
     .mx_VerificationPanel_verified_section .mx_E2EIcon {
-        margin: 0 auto;
+        // Override general user info margin
+        margin: 0 auto !important;
     }
 
     .mx_VerificationPanel_qrCode {
@@ -25,7 +26,8 @@ limitations under the License.
         border-radius: 4px;
         width: max-content;
         max-width: 100%;
-        margin: 0 auto;
+        // Override general user info margin
+        margin: 0 auto !important;
 
         canvas {
             // override height and width which are set on the element directly

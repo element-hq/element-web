@@ -113,7 +113,7 @@ export default createReactClass({
             description:
                 <div>
                     { _t(
-                        'Changing password will currently reset any end-to-end encryption keys on all devices, ' +
+                        'Changing password will currently reset any end-to-end encryption keys on all sessions, ' +
                         'making encrypted chat history unreadable, unless you first export your room keys ' +
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',

@@ -53,6 +53,7 @@ import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -506,6 +507,8 @@ export default createReactClass({
                     view: VIEWS.LOGIN,
                 });
                 this.notifyNewScreen('login');
+                ThemeController.isLogin = true;
+                this._themeWatcher.recheck();
                 break;
             case 'start_post_registration':
                 this.setState({
@@ -760,6 +763,8 @@ export default createReactClass({
         }
 
         this.setStateForNewView(newState);
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
         this.notifyNewScreen('register');
     },
 
@@ -910,6 +915,8 @@ export default createReactClass({
             view: VIEWS.WELCOME,
         });
         this.notifyNewScreen('welcome');
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     _viewHome: function() {
@@ -919,6 +926,8 @@ export default createReactClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
+        ThemeController.isLogin = false;
+        this._themeWatcher.recheck();
     },
 
     _viewUser: function(userId, subAction) {
@@ -1231,6 +1240,8 @@ export default createReactClass({
         });
         this.subTitleStatus = '';
         this._setPageSubtitle();
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     /**
@@ -1864,7 +1875,9 @@ export default createReactClass({
         try {
             masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
         } catch (e) {
-            if (e.errcode !== "M_NOT_FOUND") throw e;
+            if (e.errcode !== "M_NOT_FOUND") {
+                console.warn("Secret storage account data check failed", e);
+            }
         }
 
         if (masterKeyInStorage) {
@@ -1983,6 +1996,7 @@ export default createReactClass({
                     onLoggedIn={this.onRegisterFlowComplete}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     {...this.getServerProperties()}
                 />
             );

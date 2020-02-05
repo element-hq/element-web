@@ -76,7 +76,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             copied: false,
             downloaded: false,
             zxcvbnResult: null,
-            setPassPhrase: false,
             backupInfo: null,
             backupSigStatus: null,
             // does the server offer a UI auth flow with just m.login.password
@@ -84,9 +83,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword,
             accountPasswordCorrect: null,
-            // set if we are 'upgrading' encryption (making an SSSS store from
-            // an existing key backup secret).
-            doingUpgrade: null,
             // status of the key backup toggle switch
             useKeyBackup: true,
         };
@@ -117,8 +113,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             phase,
             backupInfo,
             backupSigStatus,
-            // remember this after this phase so we can use appropriate copy
-            doingUpgrade: phase === PHASE_MIGRATE,
         });
     }
 
@@ -205,7 +199,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             const { finished } = Modal.createTrackedDialog(
                 'Cross-signing keys dialog', '', InteractiveAuthDialog,
                 {
-                    title: _t("Send cross-signing keys to homeserver"),
+                    title: _t("Setting up keys"),
                     matrixClient: MatrixClientPeg.get(),
                     makeRequest,
                 },
@@ -321,7 +315,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this._keyInfo = keyInfo;
         this._encodedRecoveryKey = encodedRecoveryKey;
         this.setState({
-            setPassPhrase: true,
             copied: false,
             downloaded: false,
             phase: PHASE_SHOWKEY,
@@ -415,7 +408,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form onSubmit={this._onMigrateFormSubmit}>
             <p>{_t(
-                "Upgrade this device to allow it to verify other devices, " +
+                "Upgrade this session to allow it to verify other sessions, " +
                 "granting them access to encrypted messages and marking them " +
                 "as trusted for other users.",
             )}</p>
@@ -444,14 +437,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
                 helpText = _t("Great! This passphrase looks strong enough.");
             } else {
-                const suggestions = [];
-                for (let i = 0; i < this.state.zxcvbnResult.feedback.suggestions.length; ++i) {
-                    suggestions.push(<div key={i}>{this.state.zxcvbnResult.feedback.suggestions[i]}</div>);
-                }
-                const suggestionBlock = <div>{suggestions.length > 0 ? suggestions : _t("Keep going...")}</div>;
+                // We take the warning from zxcvbn or failing that, the first
+                // suggestion. In practice The first is generally the most relevant
+                // and it's probably better to present the user with one thing to
+                // improve about their password than a whole collection - it can
+                // spit out a warning and multiple suggestions which starts getting
+                // very information-dense.
+                const suggestion = (
+                    this.state.zxcvbnResult.feedback.warning ||
+                    this.state.zxcvbnResult.feedback.suggestions[0]
+                );
+                const suggestionBlock = <div>{suggestion || _t("Keep going...")}</div>;
 
                 helpText = <div>
-                    {this.state.zxcvbnResult.feedback.warning}
                     {suggestionBlock}
                 </div>;
             }
@@ -462,7 +460,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form>
             <p>{_t(
-                "Set up encryption on this device to allow it to verify other devices, " +
+                "Set up encryption on this session to allow it to verify other sessions, " +
                 "granting them access to encrypted messages and marking them as trusted for other users.",
             )}</p>
             <p>{_t(
@@ -473,6 +471,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
                     type="password"
+                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
                     value={this.state.passPhrase}
@@ -506,9 +505,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
+                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
                     {_t("Set up with a recovery key")}
-                </AccessibleButton></p>
+                </AccessibleButton>
             </details>
         </form>;
     }
@@ -578,19 +577,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhaseShowKey() {
-        let bodyText;
-        if (this.state.setPassPhrase) {
-            bodyText = _t(
-                "As a safety net, you can use it to restore your access to encrypted " +
-                "messages if you forget your passphrase.",
-            );
-        } else {
-            bodyText = _t(
-                "As a safety net, you can use it to restore your access to encrypted " +
-                "messages.",
-            );
-        }
-
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <div>
             <p>{_t(
@@ -598,12 +584,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "access to your encrypted messages if you forget your passphrase.",
             )}</p>
             <p>{_t(
-                "Keep your recovery key somewhere very secure, like a password manager (or a safe).",
+                "Keep a copy of it somewhere secure, like a password manager or even a safe.",
             )}</p>
-            <p>{bodyText}</p>
             <div className="mx_CreateSecretStorageDialog_primaryContainer">
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyHeader">
-                    {_t("Your Recovery Key")}
+                    {_t("Your recovery key")}
                 </div>
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKey">
@@ -611,7 +596,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
                         <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>
-                            {_t("Copy to clipboard")}
+                            {_t("Copy")}
                         </AccessibleButton>
                         <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onDownloadClick}>
                             {_t("Download")}
@@ -643,7 +628,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <li>{_t("<b>Save it</b> on a USB key or backup drive", {}, {b: s => <b>{s}</b>})}</li>
                 <li>{_t("<b>Copy it</b> to your personal cloud storage", {}, {b: s => <b>{s}</b>})}</li>
             </ul>
-            <DialogButtons primaryButton={_t("OK")}
+            <DialogButtons primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._bootstrapSecretStorage}
                 hasCancel={false}>
                 <button onClick={this._onKeepItSafeBackClick}>{_t("Back")}</button>
@@ -662,11 +647,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "This device can now verify other devices, granting them access " +
-                "to encrypted messages and marking them as trusted for other users.",
-            )}</p>
-            <p>{_t(
-                "Verify other users in their profile.",
+                "You can now verify your other devices, " +
+                "and other users to keep your chats safe.",
             )}</p>
             <DialogButtons primaryButton={_t('OK')}
                 onPrimaryButtonClick={this._onDone}
@@ -679,7 +661,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {_t(
-                "Without completing security on this device, it won’t have " +
+                "Without completing security on this session, it won’t have " +
                 "access to encrypted messages.",
         )}
             <DialogButtons primaryButton={_t('Go back')}
@@ -702,13 +684,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_CONFIRM_SKIP:
                 return _t('Are you sure?');
             case PHASE_SHOWKEY:
-                return _t('Recovery key');
             case PHASE_KEEPITSAFE:
-                return _t('Keep it safe');
+                return _t('Make a copy of your recovery key');
             case PHASE_STORING:
-                return _t('Storing secrets...');
+                return _t('Setting up keys');
             case PHASE_DONE:
-                return this.state.doingUpgrade ? _t('Encryption upgraded') : _t('Encryption setup complete');
+                return _t("You're done!");
             default:
                 return '';
         }

@@ -113,6 +113,9 @@ export default class SettingsStore {
     static _watchers = {}; // { callbackRef => { callbackFn } }
     static _monitors = {}; // { settingName => { roomId => callbackRef } }
 
+    // Counter used for generation of watcher IDs
+    static _watcherCount = 1;
+
     /**
      * Watches for changes in a particular setting. This is done without any local echo
      * wrapping and fires whenever a change is detected in a setting's value, at any level.
@@ -138,7 +141,7 @@ export default class SettingsStore {
             settingName = setting.invertedSettingName;
         }
 
-        const watcherId = `${new Date().getTime()}_${settingName}_${roomId}`;
+        const watcherId = `${new Date().getTime()}_${SettingsStore._watcherCount++}_${settingName}_${roomId}`;
 
         const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
             const newValue = SettingsStore.getValue(originalSettingName);
@@ -564,7 +567,7 @@ export default class SettingsStore {
         const handlers = {};
         for (const level of SETTINGS[settingName].supportedLevels) {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
-            handlers[level] = LEVEL_HANDLERS[level];
+            if (SettingsStore.isLevelSupported(level)) handlers[level] = LEVEL_HANDLERS[level];
         }
 
         // Always support 'default'

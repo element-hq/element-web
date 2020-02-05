@@ -114,7 +114,7 @@ export default createReactClass({
             >
                 <div className="mx_Dialog_content">
                     <p>
-                        { _t('This will allow you to return to your account after signing out, and sign in on other devices.') }
+                        { _t('This will allow you to return to your account after signing out, and sign in on other sessions.') }
                     </p>
                     <ChangePassword
                         className="mx_SetPasswordDialog_change_password"

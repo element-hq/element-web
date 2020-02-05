@@ -137,7 +137,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                 )}</p>
                 <p>{_t(
                     "Access your secure message history and your cross-signing " +
-                    "identity for verifying other devices by entering your passphrase.",
+                    "identity for verifying other sessions by entering your passphrase.",
                 )}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer">
@@ -212,7 +212,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                 )}</p>
                 <p>{_t(
                     "Access your secure message history and your cross-signing " +
-                    "identity for verifying other devices by entering your recovery key.",
+                    "identity for verifying other sessions by entering your recovery key.",
                 )}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer">

@@ -51,7 +51,7 @@ export default class VerificationPanel extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
-        this._hasVerifier = !!props.request.verifier;
+        this._hasVerifier = false;
     }
 
     renderQRPhase(pending) {
@@ -63,7 +63,7 @@ export default class VerificationPanel extends React.PureComponent {
             button = <Spinner />;
         } else {
             button = (
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this._startSAS}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
                     {_t("Verify by emoji")}
                 </AccessibleButton>
             );
@@ -128,7 +128,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <E2EIcon isUser={true} status="verified" size={128} />
                 <p>Verify all users in a room to ensure it's secure.</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
             </div>
@@ -156,7 +156,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <h3>Verification cancelled</h3>
                 <p>{ text }</p>
 
-                <AccessibleButton kind="primary" className="mx_UserInfo_verify" onClick={this.props.onClose}>
+                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
             </div>
@@ -218,8 +218,10 @@ export default class VerificationPanel extends React.PureComponent {
 
     _onRequestChange = async () => {
         const {request} = this.props;
-        if (!this._hasVerifier && !!request.verifier) {
-            request.verifier.on('show_sas', this._onVerifierShowSas);
+        const hadVerifier = this._hasVerifier;
+        this._hasVerifier = !!request.verifier;
+        if (!hadVerifier && this._hasVerifier) {
+            request.verifier.once('show_sas', this._onVerifierShowSas);
             try {
                 // on the requester side, this is also awaited in _startSAS,
                 // but that's ok as verify should return the same promise.
@@ -227,14 +229,12 @@ export default class VerificationPanel extends React.PureComponent {
             } catch (err) {
                 console.error("error verify", err);
             }
-        } else if (this._hasVerifier && !request.verifier) {
-            request.verifier.removeListener('show_sas', this._onVerifierShowSas);
         }
-        this._hasVerifier = !!request.verifier;
     };
 
     componentDidMount() {
         this.props.request.on("change", this._onRequestChange);
+        this._onRequestChange();
     }
 
     componentWillUnmount() {

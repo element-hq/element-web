@@ -60,7 +60,7 @@ export default createReactClass({
             const deviceInfo = r[userId][deviceId];
 
             if (!deviceInfo) {
-                console.warn(`No details found for device ${userId}:${deviceId}`);
+                console.warn(`No details found for session ${userId}:${deviceId}`);
 
                 this.props.onFinished(false);
                 return;
@@ -121,10 +121,10 @@ export default createReactClass({
 
         let text;
         if (this.state.wasNewDevice) {
-            text = _td("You added a new device '%(displayName)s', which is"
+            text = _td("You added a new session '%(displayName)s', which is"
                 + " requesting encryption keys.");
         } else {
-            text = _td("Your unverified device '%(displayName)s' is requesting"
+            text = _td("Your unverified session '%(displayName)s' is requesting"
                 + " encryption keys.");
         }
         text = _t(text, {displayName: displayName});
@@ -159,7 +159,7 @@ export default createReactClass({
         } else {
             content = (
                 <div id='mx_Dialog_content'>
-                    <p>{ _t('Loading device info...') }</p>
+                    <p>{ _t('Loading session info...') }</p>
                     <Spinner />
                 </div>
             );
