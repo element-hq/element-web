@@ -29,6 +29,11 @@ require('highlight.js/styles/github.css');
 import './rageshakesetup';
 import './modernizr';
 
+// load service worker if available on this platform
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
+
 // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
 // the SDK until we have to in imports.
 console.log("Loading skin...");
