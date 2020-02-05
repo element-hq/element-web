@@ -24,7 +24,8 @@
     "LICENSE",
     "README.md",
     "AUTHORS.rst",
-    "package.json"
+    "package.json",
+    "contribute.json"
   ],
   "style": "bundle.css",
   "scripts": {

@@ -66,7 +66,7 @@ const COPY_LIST = [
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
     ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
-    ["res/contribute.json", "webapp"],
+    ["contribute.json", "webapp"],
 ];
 
 const parseArgs = require('minimist');
