@@ -162,6 +162,8 @@ function onTokenLoginCompleted() {
 }
 
 export async function loadApp() {
+    // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
+    // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
     if (!vectorIndexeddbWorkerScript) {
         // If this is missing, something has probably gone wrong with
