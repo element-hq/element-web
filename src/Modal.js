@@ -201,7 +201,6 @@ class ModalManager {
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal, options = {}) {
         const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className, options);
-        modal.close = closeDialog;
         if (isPriorityModal) {
             // XXX: This is destructive
             this._priorityModal = modal;
