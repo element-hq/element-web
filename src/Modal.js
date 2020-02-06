@@ -171,6 +171,12 @@ class ModalManager {
     }
 
     /**
+     * @callback onBeforeClose
+     * @param {string?} reason either "backgroundClick" or null
+     * @return {Promise<bool>} whether the dialog should close
+     */
+
+    /**
      * Open a modal view.
      *
      * This can be used to display a react component which is loaded as an asynchronous
@@ -197,6 +203,8 @@ class ModalManager {
      *                                 also be removed from the stack. This is not compatible
      *                                 with being a priority modal. Only one modal can be
      *                                 static at a time.
+     * @param {Object} options? extra options for the dialog
+     * @param {onBeforeClose} options.onBeforeClose a callback to decide whether to close the dialog
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal, options = {}) {
