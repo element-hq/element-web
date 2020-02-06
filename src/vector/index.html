@@ -22,7 +22,7 @@
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com; img-src * blob: data:; connect-src *; font-src 'self'; media-src * blob: data:; worker-src 'self'; frame-src * blob: data:; form-action 'self'; object-src 'self'; manifest-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com; img-src * blob: data:; connect-src *; font-src 'self' data:; media-src * blob: data:; worker-src 'self'; frame-src * blob: data:; form-action 'self'; object-src 'self'; manifest-src 'self'">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
