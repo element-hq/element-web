@@ -70,11 +70,28 @@ async function getSecretStorageKey({ keys: keyInfos }) {
         sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
         AccessSecretStorageDialog,
+        /* props= */
         {
             keyInfo: info,
             checkPrivateKey: async (input) => {
                 const key = await inputToKey(input);
                 return MatrixClientPeg.get().checkSecretStoragePrivateKey(key, info.pubkey);
+            },
+        },
+        /* className= */ null,
+        /* isPriorityModal= */ false,
+        /* isStaticModal= */ false,
+        /* options= */ {
+            onBeforeClose: async (reason) => {
+                if (reason !== "backgroundClick") {
+                    return true;
+                }
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                const [sure] = await Modal.createDialog(QuestionDialog, {
+                    title: _t("Cancel entering passphrase?"),
+                    description: _t("If you cancel now, you won't complete your SSSS operation!"),
+                }).finished;
+                return sure;
             },
         },
     );
