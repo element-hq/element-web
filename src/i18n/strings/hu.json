@@ -2120,5 +2120,11 @@
     "Make a copy of your recovery key": "Készíts másolatot a visszaállítási kulcsodról",
     "You're done!": "Kész!",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another session.": "A Biztonságos Üzenet Visszaállítás beállítása nélkül kijelentkezés után vagy másik munkamenetet használva nem tudod visszaállítani a titkosított üzeneteidet.",
-    "Create key backup": "Kulcs mentés készítése"
+    "Create key backup": "Kulcs mentés készítése",
+    "This session is encrypting history using the new recovery method.": "Ez a munkamenet az új visszaállítási metódussal titkosítja a régi üzeneteket.",
+    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "A munkamenet észrevette, hogy a visszaállítási jelmondat és a kulcs a Biztonságos Üzenetekhez törölve lett.",
+    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ha véletlenül tetted, beállíthatod a Biztonságos Üzeneteket ezen a munkameneten ami újra titkosítja a régi üzeneteket az visszaállítási eljárással.",
+    "Indexed rooms:": "Indexált szobák:",
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s / %(totalRooms)s",
+    "Message downloading sleep time(ms)": "Üzenet letöltés alvási idő (ms)"
 }
