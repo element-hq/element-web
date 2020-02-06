@@ -47,7 +47,7 @@ class ModalManager {
                } */
         ];
 
-        this.closeAll = this.closeAll.bind(this);
+        this.onBackgroundClick = this.onBackgroundClick.bind(this);
     }
 
     hasDialogs() {
@@ -124,6 +124,7 @@ class ModalManager {
         );
         modal.onFinished = props ? props.onFinished : null;
         modal.className = className;
+        modal.close = closeDialog;
 
         return {modal, closeDialog, onFinishedProm};
     }
@@ -216,28 +217,16 @@ class ModalManager {
         };
     }
 
-    closeAll() {
-        const modalsToClose = this._modals.slice();
-        this._modals = [];
-
-        if (this._priorityModal) {
-            modalsToClose.push(this._priorityModal);
-            this._priorityModal = null;
+    onBackgroundClick() {
+        const modal = this._getCurrentModal();
+        if (!modal) {
+            return;
         }
+        modal.close();
+    }
 
-        if (this._staticModal && modalsToClose.length === 0) {
-            modalsToClose.push(this._staticModal);
-            this._staticModal = null;
-        }
-
-        for (let i = 0; i < modalsToClose.length; i++) {
-            const m = modalsToClose[i];
-            if (m && m.onFinished) {
-                m.onFinished(false);
-            }
-        }
-
-        this._reRender();
+    _getCurrentModal() {
+        return this._priorityModal ? this._priorityModal : (this._modals[0] || this._staticModal);
     }
 
     _reRender() {
@@ -268,7 +257,7 @@ class ModalManager {
                     <div className="mx_Dialog">
                         { this._staticModal.elem }
                     </div>
-                    <div className="mx_Dialog_background mx_Dialog_staticBackground" onClick={this.closeAll}></div>
+                    <div className="mx_Dialog_background mx_Dialog_staticBackground" onClick={this.onBackgroundClick}></div>
                 </div>
             );
 
@@ -278,8 +267,8 @@ class ModalManager {
             ReactDOM.unmountComponentAtNode(this.getOrCreateStaticContainer());
         }
 
-        const modal = this._priorityModal ? this._priorityModal : this._modals[0];
-        if (modal) {
+        const modal = this._getCurrentModal();
+        if (modal !== this._staticModal) {
             const classes = "mx_Dialog_wrapper "
                 + (this._staticModal ? "mx_Dialog_wrapperWithStaticUnder " : '')
                 + (modal.className ? modal.className : '');
@@ -289,7 +278,7 @@ class ModalManager {
                     <div className="mx_Dialog">
                         {modal.elem}
                     </div>
-                    <div className="mx_Dialog_background" onClick={this.closeAll}></div>
+                    <div className="mx_Dialog_background" onClick={this.onBackgroundClick}></div>
                 </div>
             );
 
