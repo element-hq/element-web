@@ -2126,5 +2126,7 @@
     "You're done!": "您已經完成了！",
     "Create key backup": "建立金鑰備份",
     "Message downloading sleep time(ms)": "訊息下載休眠時間（毫秒）",
-    "of ": "的 "
+    "of ": "的 ",
+    "Indexed rooms:": "已索引的聊天室：",
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(crawlingRooms)s"
 }
