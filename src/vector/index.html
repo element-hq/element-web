@@ -22,6 +22,21 @@
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
+        img-src * blob: data:;
+        connect-src *;
+        font-src 'self' data:;
+        media-src * blob: data:;
+        child-src * blob: data:;
+        worker-src 'self';
+        frame-src * blob: data:;
+        form-action 'self';
+        object-src 'self';
+        manifest-src 'self';
+    ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
@@ -34,18 +49,10 @@
         <% }
     } %>
   </head>
-  <body style="height: 100%;">
+  <body style="height: 100%;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
     <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <script>
-        window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
-    </script>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-      }
-    </script>
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
