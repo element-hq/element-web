@@ -106,7 +106,7 @@ class ModalManager {
         return this.appendDialogAsync(...rest);
     }
 
-    _buildModal(prom, props, className) {
+    _buildModal(prom, props, className, options) {
         const modal = {};
 
         // never call this from onFinished() otherwise it will loop
@@ -124,14 +124,27 @@ class ModalManager {
         );
         modal.onFinished = props ? props.onFinished : null;
         modal.className = className;
+        modal.onBeforeClose = options.onBeforeClose;
+        modal.beforeClosePromise = null;
         modal.close = closeDialog;
+        modal.closeReason = null;
 
         return {modal, closeDialog, onFinishedProm};
     }
 
     _getCloseFn(modal, props) {
         const deferred = defer();
-        return [(...args) => {
+        return [async (...args) => {
+            if (modal.beforeClosePromise) {
+                await modal.beforeClosePromise;
+            } else if (modal.onBeforeClose) {
+                modal.beforeClosePromise = modal.onBeforeClose(modal.closeReason);
+                const shouldClose = await modal.beforeClosePromise;
+                modal.beforeClosePromise = null;
+                if (!shouldClose) {
+                    return;
+                }
+            }
             deferred.resolve(args);
             if (props && props.onFinished) props.onFinished.apply(null, args);
             const i = this._modals.indexOf(modal);
@@ -186,9 +199,9 @@ class ModalManager {
      *                                 static at a time.
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
-    createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
-
+    createDialogAsync(prom, props, className, isPriorityModal, isStaticModal, options = {}) {
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className, options);
+        modal.close = closeDialog;
         if (isPriorityModal) {
             // XXX: This is destructive
             this._priorityModal = modal;
@@ -207,7 +220,7 @@ class ModalManager {
     }
 
     appendDialogAsync(prom, props, className) {
-        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className);
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className, {});
 
         this._modals.push(modal);
         this._reRender();
@@ -222,7 +235,13 @@ class ModalManager {
         if (!modal) {
             return;
         }
+        // we want to pass a reason to the onBeforeClose
+        // callback, but close is currently defined to
+        // pass all number of arguments to the onFinished callback
+        // so, pass the reason to close through a member variable
+        modal.closeReason = "backgroundClick";
         modal.close();
+        modal.closeReason = null;
     }
 
     _getCurrentModal() {
