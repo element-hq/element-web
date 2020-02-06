@@ -89,7 +89,7 @@ async function getSecretStorageKey({ keys: keyInfos }) {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 const [sure] = await Modal.createDialog(QuestionDialog, {
                     title: _t("Cancel entering passphrase?"),
-                    description: _t("If you cancel now, you won't complete your SSSS operation!"),
+                    description: _t("If you cancel now, you won't complete your secret storage operation!"),
                 }).finished;
                 return sure;
             },
