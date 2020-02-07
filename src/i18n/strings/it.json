@@ -2123,5 +2123,12 @@
     "Downloading mesages for %(currentRoom)s.": "Scaricamento messaggi per %(currentRoom)s.",
     "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot sta tenendo in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca:",
     "of ": "di ",
-    "Message downloading sleep time(ms)": "Tempo di attesa scaricamento messaggi (ms)"
+    "Message downloading sleep time(ms)": "Tempo di attesa scaricamento messaggi (ms)",
+    "If you cancel now, you won't complete verifying the other user.": "Se adesso annulli, non completerai la verifica dell'altro utente.",
+    "If you cancel now, you won't complete verifying your other session.": "Se adesso annulli, non completerai la verifica dell'altra tua sessione.",
+    "If you cancel now, you won't complete your secret storage operation.": "Se adesso annulli, non completerai l'operazione dell'archivio segreto.",
+    "Cancel entering passphrase?": "Annullare l'inserimento della password?",
+    "Mod": "Moderatore",
+    "Indexed rooms:": "Stanze indicizzate:",
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s di %(totalRooms)s"
 }
