@@ -37,9 +37,11 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_ConfirmDestroyCrossSigningDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Destroy cross-signing keys?")}>
+            <BaseDialog
+                    className='mx_ConfirmDestroyCrossSigningDialog'
+                    hasCancel={true}
+                    onFinished={this.props.onFinished}
+                    title={_t("Destroy cross-signing keys?")}>
                 <div className='mx_ConfirmDestroyCrossSigningDialog_content'>
                     <p>
                         {_t(

@@ -122,7 +122,6 @@ export async function accessSecretStorage(func = async () => { }, force = false)
     secretStorageBeingAccessed = true;
     try {
         if (!await cli.hasSecretStorageKey() || force) {
-            console.warn(!force ? "!hasSecretStorageKey()" : "force");
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
