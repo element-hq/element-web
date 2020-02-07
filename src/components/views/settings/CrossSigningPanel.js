@@ -87,6 +87,7 @@ export default class CrossSigningPanel extends React.PureComponent {
      * 2. Access existing secret storage by requesting passphrase and accessing
      *    cross-signing keys as needed.
      * 3. All keys are loaded and there's nothing to do.
+     * @param {bool} [force] Bootstrap again even if keys already present
      */
     _bootstrapSecureSecretStorage = async (force=false) => {
         this.setState({ error: null });
@@ -109,7 +110,7 @@ export default class CrossSigningPanel extends React.PureComponent {
     _destroySecureSecretStorage = () => {
         const ConfirmDestoryCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
         Modal.createDialog(ConfirmDestoryCrossSigningDialog, {
-            onFinished: this.onDestroyStorage
+            onFinished: this.onDestroyStorage,
         });
     }
 

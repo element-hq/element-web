@@ -115,6 +115,7 @@ export const crossSigningCallbacks = {
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
+ * @param {bool} [force] Reset secret storage even if it's already set up
  */
 export async function accessSecretStorage(func = async () => { }, force = false) {
     const cli = MatrixClientPeg.get();
