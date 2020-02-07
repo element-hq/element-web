@@ -55,10 +55,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     static propTypes = {
         hasCancel: PropTypes.bool,
         accountPassword: PropTypes.string,
+        force: PropTypes.bool,
     };
 
     static defaultProps = {
         hasCancel: true,
+        force: false,
     };
 
     constructor(props) {
@@ -107,7 +109,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
         );
 
-        const phase = backupInfo ? PHASE_MIGRATE : PHASE_PASSPHRASE;
+        const { force } = this.props;
+        const phase = (backupInfo && !force) ? PHASE_MIGRATE : PHASE_PASSPHRASE;
 
         this.setState({
             phase,
@@ -219,12 +222,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         const cli = MatrixClientPeg.get();
 
+        const { force } = this.props;
+
         try {
             await cli.bootstrapSecretStorage({
+                setupNewSecretStorage: force,
                 authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 createSecretStorageKey: async () => this._keyInfo,
                 keyBackupInfo: this.state.backupInfo,
-                setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
+                setupNewKeyBackup: force || !this.state.backupInfo && this.state.useKeyBackup,
             });
             this.setState({
                 phase: PHASE_DONE,
