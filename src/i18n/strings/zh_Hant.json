@@ -2128,5 +2128,9 @@
     "Message downloading sleep time(ms)": "訊息下載休眠時間（毫秒）",
     "of ": "的 ",
     "Indexed rooms:": "已索引的聊天室：",
-    "%(crawlingRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(crawlingRooms)s"
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(crawlingRooms)s",
+    "If you cancel now, you won't complete verifying the other user.": "如果您現在取消，您將無法完成驗證其他使用者。",
+    "If you cancel now, you won't complete verifying your other session.": "如果您現在取消，您將無法完成驗證您其他的工作階段。",
+    "If you cancel now, you won't complete your secret storage operation.": "如果您現在取消，您將無法完成驗證您的秘密儲存空間動作。",
+    "Cancel entering passphrase?": "取消輸入通關密語？"
 }
