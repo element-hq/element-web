@@ -34,7 +34,7 @@ export default class VerificationQRCode extends React.PureComponent {
         // User verification use case only
         secret: PropTypes.string,
         otherUserKey: PropTypes.string, // Base64 key being verified
-        otherUserDeviceKey: PropTypes.string, // Base64 key of the other user's device (optional)
+        otherUserDeviceKey: PropTypes.string, // Base64 key of the other user's device (or what we think it is; optional)
         requestEventId: PropTypes.string, // for DM verification only
     };
 
@@ -68,10 +68,10 @@ export default class VerificationQRCode extends React.PureComponent {
         // Populate the keys we need depending on which direction and users are involved in the verification.
         if (myUserId === otherUserId) {
             if (!otherDeviceId) {
-                // New -> Existing session QR code
+                // Existing scanning New session's QR code
                 qrProps.otherUserDeviceKey = null;
             } else {
-                // Existing -> New session QR code
+                // New scanning Existing session's QR code
                 const myDevices = (await cli.getStoredDevicesForUser(myUserId)) || [];
                 const device = myDevices.find(d => d.deviceId === otherDeviceId);
                 if (device) qrProps.otherUserDeviceKey = device.getFingerprint();
