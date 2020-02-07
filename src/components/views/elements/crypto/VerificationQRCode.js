@@ -19,6 +19,9 @@ import PropTypes from "prop-types";
 import {replaceableComponent} from "../../../../utils/replaceableComponent";
 import * as qs from "qs";
 import QRCode from "qrcode-react";
+import {MatrixClientPeg} from "../../../../MatrixClientPeg";
+import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {ToDeviceChannel} from "matrix-js-sdk/src/crypto/verification/request/ToDeviceChannel";
 
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
 export default class VerificationQRCode extends React.PureComponent {
@@ -31,12 +34,80 @@ export default class VerificationQRCode extends React.PureComponent {
         // User verification use case only
         secret: PropTypes.string,
         otherUserKey: PropTypes.string, // Base64 key being verified
-        requestEventId: PropTypes.string,
+        otherUserDeviceKey: PropTypes.string, // Base64 key of the other user's device (or what we think it is; optional)
+        requestEventId: PropTypes.string, // for DM verification only
     };
 
     static defaultProps = {
         action: "verify",
     };
+
+    static async getPropsForRequest(verificationRequest: VerificationRequest) {
+        const cli = MatrixClientPeg.get();
+        const myUserId = cli.getUserId();
+        const otherUserId = verificationRequest.otherUserId;
+        const myDeviceId = cli.getDeviceId();
+        const otherDevice = verificationRequest.targetDevice;
+        const otherDeviceId = otherDevice ? otherDevice.deviceId : null;
+
+        const qrProps = {
+            secret: verificationRequest.encodedSharedSecret,
+            keyholderUserId: myUserId,
+            action: "verify",
+            keys: [], // array of pairs: keyId, base64Key
+            otherUserKey: "", // base64key
+            otherUserDeviceKey: "", // base64key
+            requestEventId: "", // we figure this out in a moment
+        };
+
+        const requestEvent = verificationRequest.requestEvent;
+        qrProps.requestEventId = requestEvent.getId()
+            ? requestEvent.getId()
+            : ToDeviceChannel.getTransactionId(requestEvent);
+
+        // Populate the keys we need depending on which direction and users are involved in the verification.
+        if (myUserId === otherUserId) {
+            if (!otherDeviceId) {
+                // Existing scanning New session's QR code
+                qrProps.otherUserDeviceKey = null;
+            } else {
+                // New scanning Existing session's QR code
+                const myDevices = (await cli.getStoredDevicesForUser(myUserId)) || [];
+                const device = myDevices.find(d => d.deviceId === otherDeviceId);
+                if (device) qrProps.otherUserDeviceKey = device.getFingerprint();
+            }
+
+            // Either direction shares these next few props
+
+            const xsignInfo = cli.getStoredCrossSigningForUser(myUserId);
+            qrProps.otherUserKey = xsignInfo.getId("master");
+
+            qrProps.keys = [
+                [myDeviceId, cli.getDeviceEd25519Key()],
+                [xsignInfo.getId("master"), xsignInfo.getId("master")],
+            ];
+        } else {
+            // Doesn't matter which direction the verification is, we always show the same QR code
+            // for not-ourself verification.
+            const myXsignInfo = cli.getStoredCrossSigningForUser(myUserId);
+            const otherXsignInfo = cli.getStoredCrossSigningForUser(otherUserId);
+            const otherDevices = (await cli.getStoredDevicesForUser(otherUserId)) || [];
+            const otherDevice = otherDevices.find(d => d.deviceId === otherDeviceId);
+
+            qrProps.keys = [
+                [myDeviceId, cli.getDeviceEd25519Key()],
+                [myXsignInfo.getId("master"), myXsignInfo.getId("master")],
+            ];
+            qrProps.otherUserKey = otherXsignInfo.getId("master");
+            if (otherDevice) qrProps.otherUserDeviceKey = otherDevice.getFingerprint();
+        }
+
+        return qrProps;
+    }
+
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         const query = {
