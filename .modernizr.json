@@ -7,7 +7,6 @@
   "feature-detects": [
     "test/css/displaytable",
     "test/css/flexbox",
-    "test/es5/specification",
     "test/css/objectfit",
     "test/storage/localstorage",
     "test/es6/array",
@@ -18,6 +17,7 @@
     "test/svg/filters",
     "test/css/animations",
     "test/css/filters",
-    "test/network/fetch"
+    "test/network/fetch",
+    "test/iframe/sandbox"
   ]
 }
