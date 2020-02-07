@@ -43,7 +43,28 @@ export class AccessCancelledError extends Error {
     }
 }
 
-async function getSecretStorageKey({ keys: keyInfos }) {
+async function confirmToDismiss(name) {
+    let description;
+    if (name === "m.cross_signing.user_signing") {
+        description = _t("If you cancel now, you won't complete verifying the other user.");
+    } else if (name === "m.cross_signing.self_signing") {
+        description = _t("If you cancel now, you won't complete verifying your other session.");
+    } else {
+        description = _t("If you cancel now, you won't complete your secret storage operation.");
+    }
+
+    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    const [sure] = await Modal.createDialog(QuestionDialog, {
+        title: _t("Cancel entering passphrase?"),
+        description,
+        danger: true,
+        cancelButton: _t("Enter passphrase"),
+        button: _t("Cancel"),
+    }).finished;
+    return sure;
+}
+
+async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     const keyInfoEntries = Object.entries(keyInfos);
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
@@ -83,15 +104,10 @@ async function getSecretStorageKey({ keys: keyInfos }) {
         /* isStaticModal= */ false,
         /* options= */ {
             onBeforeClose: async (reason) => {
-                if (reason !== "backgroundClick") {
-                    return true;
+                if (reason === "backgroundClick") {
+                    return confirmToDismiss(ssssItemName);
                 }
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                const [sure] = await Modal.createDialog(QuestionDialog, {
-                    title: _t("Cancel entering passphrase?"),
-                    description: _t("If you cancel now, you won't complete your secret storage operation!"),
-                }).finished;
-                return sure;
+                return true;
             },
         },
     );
