@@ -47,7 +47,7 @@ export default class VerificationQRCode extends React.PureComponent {
         const myUserId = cli.getUserId();
         const otherUserId = verificationRequest.otherUserId;
         const myDeviceId = cli.getDeviceId();
-        const otherDevice = verificationRequest.estimatedTargetDevice;
+        const otherDevice = verificationRequest.targetDevice;
         const otherDeviceId = otherDevice ? otherDevice.deviceId : null;
 
         const qrProps = {
