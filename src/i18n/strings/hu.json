@@ -2126,5 +2126,8 @@
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ha véletlenül tetted, beállíthatod a Biztonságos Üzeneteket ezen a munkameneten ami újra titkosítja a régi üzeneteket az visszaállítási eljárással.",
     "Indexed rooms:": "Indexált szobák:",
     "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s / %(totalRooms)s",
-    "Message downloading sleep time(ms)": "Üzenet letöltés alvási idő (ms)"
+    "Message downloading sleep time(ms)": "Üzenet letöltés alvási idő (ms)",
+    "If you cancel now, you won't complete verifying the other user.": "A másik felhasználó ellenőrzését nem fejezed be, ha ezt most megszakítod.",
+    "If you cancel now, you won't complete verifying your other session.": "A másik munkameneted ellenőrzését nem fejezed be, ha ezt most megszakítod.",
+    "If you cancel now, you won't complete your secret storage operation.": "A Biztonsági tárolóval kapcsolatos műveletet nem fejezed be ha ezt most megszakítod."
 }
