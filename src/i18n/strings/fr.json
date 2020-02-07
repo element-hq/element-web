@@ -1153,7 +1153,7 @@
     "Waiting for partner to confirm...": "Nous attendons que le partenaire confirme…",
     "Incoming Verification Request": "Demande de vérification entrante",
     "Go back": "Revenir en arrière",
-    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "Pour éviter la duplication d'issues, veuillez <existingIssuesLink>voir les issues existants</existingIssuesLink>d'abord (et ajouter un +1) ou <newIssueLink>créer un nouvel issue</newIssueLink> si vous ne le trouvez pas.",
+    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "Pour éviter la duplication de problèmes, veuillez <existingIssuesLink>voir les problèmes existants</existingIssuesLink> d'abord (et ajouter un +1) ou <newIssueLink>créer un nouveau problème</newIssueLink> si vous ne le trouvez pas.",
     "Report bugs & give feedback": "Rapporter des anomalies & Donner son avis",
     "Backup could not be decrypted with this key: please verify that you entered the correct recovery key.": "La sauvegarde n'a pas pu être déchiffrée avec cette clé : veuillez vérifier que vous avez saisi la bonne clé de récupération.",
     "Update status": "Mettre à jour le statut",
