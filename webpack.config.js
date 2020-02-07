@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
     if (argv.mode !== "production") {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
-        development['devtool'] = 'source-map';
+        development['devtool'] = 'eval-source-map';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -355,7 +355,6 @@ module.exports = (env, argv) => {
             // tedious in Riot since that can take a while.
             hot: false,
             inline: false,
-            disableHostCheck: true,
         },
     };
 };
