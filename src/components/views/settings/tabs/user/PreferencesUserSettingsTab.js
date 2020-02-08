@@ -32,6 +32,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
     ];
 
     static TIMELINE_SETTINGS = [
+        'showTypingNotifications',
         'autoplayGifsAndVideos',
         'urlPreviewsEnabled',
         'TextualBody.enableBigEmoji',
