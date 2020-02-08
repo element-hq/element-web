@@ -148,7 +148,7 @@
     "Passwords can't be empty": "Le mot de passe ne peut pas être vide",
     "Permissions": "Permissions",
     "Phone": "Numéro de téléphone",
-    "Operation failed": "L'opération a échoué",
+    "Operation failed": "L’opération a échoué",
     "Default": "Par défaut",
     "Email address": "Adresse e-mail",
     "Error decrypting attachment": "Erreur lors du déchiffrement de la pièce jointe",
@@ -2130,5 +2130,8 @@
     "Cancel entering passphrase?": "Annuler la saisie de la phrase de passe ?",
     "If you cancel now, you won't complete your secret storage operation!": "Si vous annulez maintenant, vous ne terminerez pas votre opération du coffre secret !",
     "Indexed rooms:": "Salons indexés :",
-    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s sur %(totalRooms)s"
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s sur %(totalRooms)s",
+    "If you cancel now, you won't complete verifying the other user.": "Si vous annuler maintenant, vous ne terminerez pas la vérification de l’autre utilisateur.",
+    "If you cancel now, you won't complete verifying your other session.": "Si vous annulez maintenant, vous ne terminerez pas la vérification de votre autre session.",
+    "If you cancel now, you won't complete your secret storage operation.": "Si vous annulez maintenant, vous ne terminerez pas votre opération sur le coffre secret."
 }
