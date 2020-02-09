@@ -24,6 +24,7 @@ import { scorePassword } from '../../../../utils/PasswordScorer';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 import SettingsStore from '../../../../settings/SettingsStore';
+import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -191,7 +192,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         });
     }
 
-    _onPassPhraseNextClick = async () => {
+    _onPassPhraseNextClick = async (e) => {
+        e.preventDefault();
+
         // If we're waiting for the timeout before updating the result at this point,
         // skip ahead and do it now, otherwise we'll deny the attempt to proceed
         // even if the user entered a valid passphrase
@@ -209,7 +212,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         }
     };
 
-    _onPassPhraseConfirmNextClick = async () => {
+    _onPassPhraseConfirmNextClick = async (e) => {
+        e.preventDefault();
+
         if (this.state.passPhrase !== this.state.passPhraseConfirm) return;
 
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion(this.state.passPhrase);
@@ -289,7 +294,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             </div>;
         }
 
-        return <form>
+        return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
                 "<b>Warning</b>: You should only set up key backup from a trusted computer.", {},
                 { b: sub => <b>{sub}</b> },
@@ -320,15 +325,14 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
-                primaryIsSubmit={true}
                 disabled={!this._passPhraseIsValid()}
             />
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><button onClick={this._onSkipPassPhraseClick} >
+                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
                     {_t("Set up with a recovery key")}
-                </button></p>
+                </AccessibleButton>
             </details>
         </form>;
     }
@@ -362,7 +366,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             </div>;
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <form>
+        return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
                 "Please enter your passphrase a second time to confirm.",
             )}</p>
@@ -384,7 +388,6 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onPassPhraseConfirmNextClick}
                 hasCancel={false}
-                primaryIsSubmit={true}
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             />
         </form>;

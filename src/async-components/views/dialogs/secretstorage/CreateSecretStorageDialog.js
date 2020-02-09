@@ -413,8 +413,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "as trusted for other users.",
             )}</p>
             <div>{authPrompt}</div>
-            <DialogButtons primaryButton={nextCaption}
-                primaryIsSubmit={true}
+            <DialogButtons
+                primaryButton={nextCaption}
                 hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             >
@@ -458,7 +458,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             </div>;
         }
 
-        return <form>
+        return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
                 "Set up encryption on this session to allow it to verify other sessions, " +
                 "granting them access to encrypted messages and marking them as trusted for other users.",
@@ -495,7 +495,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
                 disabled={!this._passPhraseIsValid()}
-                primaryIsSubmit={true}
             >
                 <button type="button"
                     onClick={this._onSkipSetupClick}
@@ -542,7 +541,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             </div>;
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <form>
+        return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
                 "Enter your passphrase a second time to confirm it.",
             )}</p>
@@ -565,7 +564,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseConfirmNextClick}
                 hasCancel={false}
-                primaryIsSubmit={true}
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             >
                 <button type="button"
