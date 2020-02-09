@@ -289,7 +289,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
-    _onPassPhraseNextClick = async () => {
+    _onPassPhraseNextClick = async (e) => {
+        e.preventDefault();
+
         // If we're waiting for the timeout before updating the result at this point,
         // skip ahead and do it now, otherwise we'll deny the attempt to proceed
         // even if the user entered a valid passphrase
@@ -307,7 +309,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         }
     };
 
-    _onPassPhraseConfirmNextClick = async () => {
+    _onPassPhraseConfirmNextClick = async (e) => {
+        e.preventDefault();
+
         if (this.state.passPhrase !== this.state.passPhraseConfirm) return;
 
         const [keyInfo, encodedRecoveryKey] =
