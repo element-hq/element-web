@@ -67,7 +67,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         });
     }
 
-    _onPassPhraseNext = async () => {
+    _onPassPhraseNext = async (e) => {
+        e.preventDefault();
+
         if (this.state.passPhrase.length <= 0) return;
 
         this.setState({ keyMatches: null });
@@ -80,7 +82,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         }
     }
 
-    _onRecoveryKeyNext = async () => {
+    _onRecoveryKeyNext = async (e) => {
+        e.preventDefault();
+
         if (!this.state.recoveryKeyValid) return;
 
         this.setState({ keyMatches: null });
@@ -140,7 +144,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     "identity for verifying other sessions by entering your passphrase.",
                 )}</p>
 
-                <form className="mx_AccessSecretStorageDialog_primaryContainer">
+                <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onPassPhraseNext}>
                     <input
                         type="password"
                         className="mx_AccessSecretStorageDialog_passPhraseInput"
@@ -156,7 +160,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
-                        primaryIsSubmit={true}
                         primaryDisabled={this.state.passPhrase.length === 0}
                     />
                 </form>
@@ -215,7 +218,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     "identity for verifying other sessions by entering your recovery key.",
                 )}</p>
 
-                <form className="mx_AccessSecretStorageDialog_primaryContainer">
+                <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onRecoveryKeyNext}>
                     <input className="mx_AccessSecretStorageDialog_recoveryKeyInput"
                         onChange={this._onRecoveryKeyChange}
                         value={this.state.recoveryKey}
@@ -228,7 +231,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
-                        primaryIsSubmit={true}
                         primaryDisabled={!this.state.recoveryKeyValid}
                     />
                 </form>
