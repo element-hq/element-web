@@ -66,6 +66,20 @@ class RoomViewStore extends Store {
     }
 
     _setState(newState) {
+        // If values haven't changed, there's nothing to do.
+        // This only tries a shallow comparison, so unchanged objects will slip
+        // through, but that's probably okay for now.
+        let stateChanged = false;
+        for (const key of Object.keys(newState)) {
+            if (this._state[key] !== newState[key]) {
+                stateChanged = true;
+                break;
+            }
+        }
+        if (!stateChanged) {
+            return;
+        }
+
         this._state = Object.assign(this._state, newState);
         this.__emitChange();
     }

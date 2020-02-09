@@ -144,8 +144,10 @@ export default class ManageEventIndexDialog extends React.Component {
                 <div className='mx_SettingsTab_subsectionText'>
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
                     {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
-                    {_t("Number of rooms:")} {formatCountLong(this.state.crawlingRoomsCount)} {_t("of ")}
-                    {formatCountLong(this.state.roomCount)}<br />
+                    {_t("Indexed rooms:")} {_t("%(crawlingRooms)s out of %(totalRooms)s", {
+                        crawlingRooms: formatCountLong(this.state.crawlingRoomsCount),
+                        totalRooms: formatCountLong(this.state.roomCount),
+                    })} <br />
                     {crawlerState}<br />
                     <Field
                         id={"crawlerSleepTimeMs"}
