@@ -174,29 +174,6 @@ async function verifyDevice(userId, device) {
         primaryButton: _t("Done"),
         cancelButton: _t("Manually Verify"),
     });
-
-    // const cli = MatrixClientPeg.get();
-    // const verificationRequest = await cli.requestVerification(
-    //     userId,
-    //     [
-    //         verificationMethods.SAS,
-    //         SHOW_QR_CODE_METHOD,
-    //         SCAN_QR_CODE_METHOD,
-    //         verificationMethods.RECIPROCATE_QR_CODE,
-    //     ],
-    //     [device.deviceId],
-    // );
-    // dis.dispatch({
-    //     action: "set_right_panel_phase",
-    //     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-    //     refireParams: {member, verificationRequest},
-    // });
-
-    // const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-    // Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-    //     userId: userId,
-    //     device: device,
-    // }, null, /* priority = */ false, /* static = */ true);
 }
 
 function verifyUser(user) {
