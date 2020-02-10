@@ -26,6 +26,7 @@ import DialogButtons from '../elements/DialogButtons';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -44,7 +45,7 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const request = await cli.requestVerification(
             userId,
-            [verificationMethods.SAS],
+            [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
             [device.deviceId],
         );
                 dis.dispatch({
