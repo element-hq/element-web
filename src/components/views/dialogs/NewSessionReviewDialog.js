@@ -52,12 +52,6 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
             verificationRequest: request,
         });
-
-        // Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
-        //     userId,
-        //     [verificationMethods.SAS, SHOW_QR_CODE_METHOD],
-        //     [device.deviceId],
-        // );
     }
 
     render() {
