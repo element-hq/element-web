@@ -111,9 +111,8 @@ export default class VerificationPanel extends React.PureComponent {
 
         if (!this.state.qrCodeProps) {
             return <div className="mx_UserInfo_container">
-                <h3>Verify by emoji</h3>
+                <h3>{_t("Verify by emoji")}</h3>
                 <p>{_t("Verify by comparing unique emoji.")}</p>
-
                 { button }
             </div>;
         }
@@ -121,7 +120,7 @@ export default class VerificationPanel extends React.PureComponent {
         // TODO: add way to open camera to scan a QR code
         return <React.Fragment>
             <div className="mx_UserInfo_container">
-                <h3>Verify by scanning</h3>
+                <h3>{_t("Verify by scanning")}</h3>
                 <p>{_t("Ask %(displayName)s to scan your code:", {
                     displayName: member.displayName || member.name || member.userId,
                 })}</p>
@@ -132,7 +131,7 @@ export default class VerificationPanel extends React.PureComponent {
             </div>
 
             <div className="mx_UserInfo_container">
-                <h3>Verify by emoji</h3>
+                <h3>{_t("Verify by emoji")}</h3>
                 <p>{_t("If you can't scan the code above, verify by comparing unique emoji.")}</p>
 
                 { button }

@@ -1192,6 +1192,7 @@
     "Security": "Security",
     "Verify by emoji": "Verify by emoji",
     "Verify by comparing unique emoji.": "Verify by comparing unique emoji.",
+    "Verify by scanning": "Verify by scanning",
     "Ask %(displayName)s to scan your code:": "Ask %(displayName)s to scan your code:",
     "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
     "You've successfully verified %(displayName)s!": "You've successfully verified %(displayName)s!",
