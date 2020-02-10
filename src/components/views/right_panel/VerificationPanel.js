@@ -73,22 +73,22 @@ export default class VerificationPanel extends React.PureComponent {
 
         if (this.props.layout === 'dialog') {
             // HACK: This is a terrible idea.
-            let qrCode = <div className='mx_VerificationQREmojiOptions_noQR'><Spinner /></div>;
+            let qrCode = <div className='mx_VerificationPanel_QRPhase_noQR'><Spinner /></div>;
             if (this.state.qrCodeProps) {
                 qrCode = <VerificationQRCode {...this.state.qrCodeProps} />;
             }
             return (
                 <div>
                     {_t("Verify this session by completing one of the following:")}
-                    <div className='mx_IncomingSasDialog_startOptions'>
-                        <div className='mx_IncomingSasDialog_startOption'>
+                    <div className='mx_VerificationPanel_QRPhase_startOptions'>
+                        <div className='mx_VerificationPanel_QRPhase_startOption'>
                             <p>{_t("Scan this unique code")}</p>
                             {qrCode}
                         </div>
-                        <div className='mx_IncomingSasDialog_betweenText'>{_t("or")}</div>
-                        <div className='mx_IncomingSasDialog_startOption'>
+                        <div className='mx_VerificationPanel_QRPhase_betweenText'>{_t("or")}</div>
+                        <div className='mx_VerificationPanel_QRPhase_startOption'>
                             <p>{_t("Compare unique emoji")}</p>
-                            <span className='mx_IncomingSasDialog_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
+                            <span className='mx_VerificationPanel_QRPhase_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
                             <AccessibleButton onClick={this._startSAS} kind='primary'>
                                 {_t("Start")}
                             </AccessibleButton>
