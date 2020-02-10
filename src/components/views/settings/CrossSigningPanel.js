@@ -160,7 +160,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         } else {
             bootstrapButton = <div className="mx_CrossSigningPanel_buttonRow">
                 <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
-                    {_t("Reset Secret Store and Cross-signing")}
+                    {_t("Reset cross-signing and secret storage")}
                 </AccessibleButton>
             </div>;
         }
