@@ -2095,5 +2095,12 @@
     "Enter your account password to confirm the upgrade:": "Potvrďte, že chcete aktualizaci provést zadáním svého uživatelského hesla:",
     "You'll need to authenticate with the server to confirm the upgrade.": "Server si vás potřebuje ověřit, abychom mohli provést aktualizaci.",
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Aktualizujte tuto přihlášenou relaci abyste mohli ověřovat ostatní relace. Tím jim dáte přístup k šifrovaným konverzacím a ostatní uživatelé je jim budou automaticky věřit.",
-    "Set up encryption on this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Zapněte v této přihlášené relaci šifrování abyste mohli ověřovat ostatní relace. Tím jim dáte přístup k šifrovaným konverzacím a ostatní uživatelé je jim budou automaticky věřit."
+    "Set up encryption on this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Zapněte v této přihlášené relaci šifrování abyste mohli ověřovat ostatní relace. Tím jim dáte přístup k šifrovaným konverzacím a ostatní uživatelé je jim budou automaticky věřit.",
+    "Show typing notifications": "Zobrazovat notifikace \"... právě píše...\"",
+    "Reset cross-signing and secret storage": "Resetovat bezpečné úložiště a cross-signing",
+    "Destroy cross-signing keys?": "Nenávratně smazat klíče pro cross-signing?",
+    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Smazání klíčů pro cross-signing je definitivní. Každý kdo vás ověřil teď uvidí bezpečnostní varování. Pokud jste zrovna neztratili všechna zařízení ze kterých se můžete ověřit, tak to asi nechcete udělat.",
+    "Clear cross-signing keys": "Smazat klíče pro cross-signing",
+    "Secure your encryption keys with a passphrase. For maximum security this should be different to your account password:": "Zabezpečte si šifrovací klíče silným heslem. Pro lepší bezpečnost by mělo být jiné než vaše heslo k přihlášení:",
+    "Enter a passphrase": "Zadejte heslo"
 }
