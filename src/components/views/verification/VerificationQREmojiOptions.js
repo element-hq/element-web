@@ -16,10 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
-import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
+import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
-import DialogButtons from "../elements/DialogButtons";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";

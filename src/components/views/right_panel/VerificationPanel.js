@@ -31,7 +31,6 @@ import {
     PHASE_CANCELLED, VerificationRequest,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
-import AccessibleButton from "../elements/AccessibleButton";
 
 export default class VerificationPanel extends React.PureComponent {
     static propTypes = {

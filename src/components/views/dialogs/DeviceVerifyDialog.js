@@ -132,7 +132,7 @@ export default class DeviceVerifyDialog extends React.Component {
                     this._verifier = request.verifier;
                 }
             } else if (verifyingOwnDevice && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-                this._request = await client.requestVerification(this.props.userId,[
+                this._request = await client.requestVerification(this.props.userId, [
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,
                 ]);

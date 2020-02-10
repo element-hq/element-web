@@ -24,7 +24,6 @@ import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
