@@ -2122,5 +2122,9 @@
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Nëse këtë e keni bërë pa dashje, mund të ujdisni Mesazhe të Sigurt në këtë sesion, gjë që do të sjellë rifshehtëzimin e historikut të mesazheve të sesionit me një metodë të re rimarrjesh.",
     "Indexed rooms:": "Dhoma të indeksuara:",
     "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s nga %(totalRooms)s gjithsej",
-    "Message downloading sleep time(ms)": "Kohë fjetjeje shkarkimi mesazhi(ms)"
+    "Message downloading sleep time(ms)": "Kohë fjetjeje shkarkimi mesazhi(ms)",
+    "Show typing notifications": "Shfaq njoftime shtypjeje",
+    "Destroy cross-signing keys?": "Të shkatërrohen kyçet <em>cross-signing</em>?",
+    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Fshirja e kyçeve <em>cross-signing</em> është e përhershme. Cilido që keni verifikuar me to, do të shohë një sinjalizim sigurie. Thuajse e sigurt që s’keni pse ta bëni një gjë të tillë, veç në paçi humbur çdo pajisje prej nga mund të bëni <em>cross-sign</em>.",
+    "Clear cross-signing keys": "Spastro kyçe <em>cross-signing</em>"
 }
