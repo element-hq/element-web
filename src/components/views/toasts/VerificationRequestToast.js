@@ -99,14 +99,6 @@ export default class VerificationRequestToast extends React.PureComponent {
                     verificationRequest: request,
                 }, null, /* priority = */ false, /* static = */ true);
             }
-
-            // } else if (request.channel.deviceId && request.verifier) {
-            //     // show to_device verifications in dialog still
-            //     const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
-            //     Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-            //         verifier: request.verifier,
-            //     }, null, /* priority = */ false, /* static = */ true);
-            // }
         } catch (err) {
             console.error(err.message);
         }
