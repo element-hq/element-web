@@ -402,8 +402,6 @@ export default class MessagePanel extends React.Component {
     };
 
     _getEventTiles() {
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
-
         this.eventNodes = {};
 
         let i;
@@ -814,7 +812,7 @@ export default class MessagePanel extends React.Component {
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
 // the first non-state event or membership event which is not regarding the sender of the `m.room.create` event
 class CreationGrouper {
-    static canStartGroup = function (panel, ev) {
+    static canStartGroup = function(panel, ev) {
         return ev.getType() === "m.room.create";
     };
 
@@ -875,8 +873,8 @@ class CreationGrouper {
         if (panel._wantsDateSeparator(this.prevEvent, createEvent.getDate())) {
             const ts = createEvent.getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>
-            )
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+            );
         }
 
         // If this m.room.create event should be shown (room upgrade) then show it before the summary
@@ -887,7 +885,7 @@ class CreationGrouper {
 
         for (const ejected of this.ejectedEvents) {
             ret.push(...panel._getTilesForEvent(
-                createEvent, ejected, createEvent === lastShownEvent
+                createEvent, ejected, createEvent === lastShownEvent,
             ));
         }
 
@@ -911,11 +909,11 @@ class CreationGrouper {
                  })}
             >
                  { eventTiles }
-            </EventListSummary>
+            </EventListSummary>,
         );
 
         if (this.readMarker) {
-            ret.push(readMarker);
+            ret.push(this.readMarker);
         }
 
         return ret;
@@ -928,7 +926,7 @@ class CreationGrouper {
 
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper {
-    static canStartGroup = function (panel, ev) {
+    static canStartGroup = function(panel, ev) {
         return panel._shouldShowEvent(ev) && isMembershipChange(ev);
     }
 
@@ -954,13 +952,13 @@ class MemberGrouper {
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         const panel = this.panel;
-        const lastShownEvent = lastShownEvent;
+        const lastShownEvent = this.lastShownEvent;
         const ret = [];
 
         if (panel._wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
             const ts = this.events[0].getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
             );
         }
 
@@ -999,7 +997,7 @@ class MemberGrouper {
                  startExpanded={highlightInMels}
             >
                  { eventTiles }
-            </MemberEventListSummary>
+            </MemberEventListSummary>,
         );
 
         if (this.readMarker) {
