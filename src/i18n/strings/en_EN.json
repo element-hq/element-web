@@ -559,7 +559,6 @@
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
     "Cross-signing and secret storage are not yet set up.": "Cross-signing and secret storage are not yet set up.",
     "Bootstrap cross-signing and secret storage": "Bootstrap cross-signing and secret storage",
-    "Reset cross-signing and secret storage": "Reset cross-signing and secret storage",
     "Cross-signing public keys:": "Cross-signing public keys:",
     "in memory": "in memory",
     "not found": "not found",
