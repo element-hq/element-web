@@ -35,6 +35,11 @@ limitations under the License.
     padding-top: 1px;
 }
 
+.mx_WhoIsTypingTile_avatars .mx_BaseAvatar {
+    border: 1px solid $primary-bg-color;
+    border-radius: 40px;
+}
+
 .mx_WhoIsTypingTile_remainingAvatarPlaceholder {
     position: relative;
     display: inline-block;
