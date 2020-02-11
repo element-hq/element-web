@@ -2129,5 +2129,19 @@
     "Message downloading sleep time(ms)": "Üzenet letöltés alvási idő (ms)",
     "If you cancel now, you won't complete verifying the other user.": "A másik felhasználó ellenőrzését nem fejezed be, ha ezt most megszakítod.",
     "If you cancel now, you won't complete verifying your other session.": "A másik munkameneted ellenőrzését nem fejezed be, ha ezt most megszakítod.",
-    "If you cancel now, you won't complete your secret storage operation.": "A Biztonsági tárolóval kapcsolatos műveletet nem fejezed be ha ezt most megszakítod."
+    "If you cancel now, you won't complete your secret storage operation.": "A Biztonsági tárolóval kapcsolatos műveletet nem fejezed be ha ezt most megszakítod.",
+    "Show typing notifications": "Gépelés visszajelzés megjelenítése",
+    "Verify this session by completing one of the following:": "Ellenőrizd ezt a munkamenetet az alábbiak egyikével:",
+    "Scan this unique code": "Ennek az egyedi kódnak a beolvasása",
+    "or": "vagy",
+    "Compare unique emoji": "Egyedi emodzsik összehasonlítása",
+    "Compare a unique set of emoji if you don't have a camera on either device": "Hasonlítsd össze az egyedi emodzsikat ha valamelyik eszközön nincs kamera",
+    "Not Trusted": "Megbízhatatlan",
+    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) új munkamenetbe lépett be anélkül, hogy ellenőrizte volna:",
+    "Ask this user to verify their session, or manually verify it below.": "Kérd meg a felhasználót, hogy hitelesítse a munkamenetét vagy ellenőrizd kézzel alább.",
+    "Manually Verify": "Manuális ellenőrzés",
+    "Verify by scanning": "Ellenőrzés kód beolvasással",
+    "Destroy cross-signing keys?": "Eszközök közti hitelesítési kulcsok megsemmisítése?",
+    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Eszközök közti hitelesítési kulcsok törlése végleges. Mindenki akit ezzel hitelesítettél biztonsági figyelmeztetéseket fog látni. Hacsak nem vesztetted el az összes eszközödet amivel eszközök közti hitelesítést tudsz végezni, nem valószínű, hogy ezt szeretnéd tenni.",
+    "Clear cross-signing keys": "Eszközök közti hitelesítési kulcsok törlése"
 }
