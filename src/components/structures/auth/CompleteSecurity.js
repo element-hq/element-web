@@ -83,12 +83,13 @@ export default class CompleteSecurity extends React.Component {
         }
     }
 
-    onVerificationRequest = (request) => {
+    onVerificationRequest = async (request) => {
         if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
 
         if (this.state.verificationRequest) {
             this.state.verificationRequest.off("change", this.onVerificationRequestChange);
         }
+        await request.accept();
         request.on("change", this.onVerificationRequestChange);
         this.setState({
             verificationRequest: request,
@@ -138,9 +139,12 @@ export default class CompleteSecurity extends React.Component {
         let body;
 
         if (this.state.verificationRequest) {
-            const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
-            body = <IncomingSasDialog verifier={this.state.verificationRequest.verifier}
-                onFinished={this.props.onFinished}
+            const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
+            body = <EncryptionPanel
+                layout="dialog"
+                verificationRequest={this.state.verificationRequest}
+                onClose={this.props.onFinished}
+                member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
