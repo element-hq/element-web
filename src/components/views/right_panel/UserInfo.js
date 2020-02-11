@@ -157,12 +157,6 @@ async function verifyDevice(userId, device) {
             const cli = MatrixClientPeg.get();
             const verificationRequest = await cli.requestVerification(
                 userId,
-                [
-                    verificationMethods.SAS,
-                    SHOW_QR_CODE_METHOD,
-                    SCAN_QR_CODE_METHOD,
-                    verificationMethods.RECIPROCATE_QR_CODE,
-                ],
                 [device.deviceId],
             );
             dis.dispatch({
