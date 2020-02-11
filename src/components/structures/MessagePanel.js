@@ -167,7 +167,7 @@ export default class MessagePanel extends React.Component {
         this._scrollPanel = createRef();
 
         this._showTypingNotificationsWatcherRef =
-            SettingsStore.watchSetting("showTypingNotifications", this.onShowTypingNotificationsChange);
+            SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
     }
 
     componentDidMount() {
