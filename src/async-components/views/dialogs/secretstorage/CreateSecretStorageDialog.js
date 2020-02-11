@@ -225,19 +225,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const { force } = this.props;
 
         try {
-            if (!force) {
-                await cli.bootstrapSecretStorage({
-                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    createSecretStorageKey: async () => this._keyInfo,
-                    keyBackupInfo: this.state.backupInfo,
-                    setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
-                });
-            } else {
+            if (force) {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._keyInfo,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
+                });
+            } else {
+                await cli.bootstrapSecretStorage({
+                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
+                    createSecretStorageKey: async () => this._keyInfo,
+                    keyBackupInfo: this.state.backupInfo,
+                    setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
                 });
             }
             this.setState({
