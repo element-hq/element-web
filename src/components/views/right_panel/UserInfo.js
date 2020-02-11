@@ -141,7 +141,7 @@ async function verifyDevice(userId, device) {
     const cli = MatrixClientPeg.get();
     const member = cli.getUser(userId);
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-    Modal.createTrackedDialog("Verification failed", "insecure", QuestionDialog, {
+    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
         headerImage: require("../../../../res/img/e2e/warning.svg"),
         title: _t("Not Trusted"),
         description: <div>
