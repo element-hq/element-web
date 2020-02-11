@@ -103,7 +103,6 @@ export default class CrossSigningPanel extends React.PureComponent {
 
     onDestroyStorage = (act) => {
         if (!act) return;
-        console.log("Destroy secret storage:", act);
         this._bootstrapSecureSecretStorage(true);
     }
 
@@ -157,13 +156,13 @@ export default class CrossSigningPanel extends React.PureComponent {
                     {_t("Bootstrap cross-signing and secret storage")}
                 </AccessibleButton>
             </div>;
-        } /*else { // TODO https://github.com/vector-im/riot-web/issues/12221
+        } else {
             bootstrapButton = <div className="mx_CrossSigningPanel_buttonRow">
                 <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
                     {_t("Reset cross-signing and secret storage")}
                 </AccessibleButton>
             </div>;
-        }*/
+        }
 
         return (
             <div>
