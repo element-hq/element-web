@@ -22,46 +22,46 @@ import { stubClient } from '../../../test-utils';
 
 const AccessSecretStorageDialog = sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
 
-describe("AccessSecretStorageDialog", function () {
+describe("AccessSecretStorageDialog", function() {
     it("Closes the dialog if _onRecoveryKeyNext is called with a valid key", (done) => {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
               checkPrivateKey={(p) => p && p.recoveryKey && p.recoveryKey == "a"}
               onFinished={(v) => {
-                  if (v) { done() }
+                  if (v) { done(); }
                 }}
-            />
+            />,
         );
         testInstance.getInstance().setState({
             recoveryKeyValid: true,
             recoveryKey: "a",
         });
-        const e = { preventDefault: () => {} }
+        const e = { preventDefault: () => {} };
         testInstance.getInstance()._onRecoveryKeyNext(e);
     });
 
-    it("Considers a valid key to be valid", function () {
+    it("Considers a valid key to be valid", function() {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
               checkPrivateKey={() => true}
-            />
+            />,
         );
         const v = "asfd";
         const e = { target: { value: v } };
         stubClient();
-        MatrixClientPeg.get().isValidRecoveryKey = function (k) {
+        MatrixClientPeg.get().isValidRecoveryKey = function(k) {
             return k == v;
-        }
+        };
         testInstance.getInstance()._onRecoveryKeyChange(e);
         const { recoveryKeyValid } = testInstance.getInstance().state;
         expect(recoveryKeyValid).toBe(true);
     });
 
-    it("Notifies the user if they input an invalid recovery key", async function (done) {
+    it("Notifies the user if they input an invalid recovery key", async function(done) {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
               checkPrivateKey={async () => false}
-            />
+            />,
         );
         const e = { target: { value: "a" } };
         stubClient();
@@ -76,10 +76,10 @@ describe("AccessSecretStorageDialog", function () {
         expect(notification.props.children).toEqual(
             ["\uD83D\uDC4E ", "Unable to access secret storage. Please verify that you " +
                      "entered the correct recovery key."]);
-        done()
+        done();
     });
 
-    it("Notifies the user if they input an invalid passphrase", async function (done) {
+    it("Notifies the user if they input an invalid passphrase", async function(done) {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
               checkPrivateKey={() => false}
@@ -88,13 +88,13 @@ describe("AccessSecretStorageDialog", function () {
                   salt: 'nonempty',
                   iterations: 2,
               } } }
-            />
+            />,
         );
         const e = { target: { value: "a" } };
         stubClient();
         MatrixClientPeg.get().isValidRecoveryKey = () => false;
         testInstance.getInstance()._onPassPhraseChange(e);
-        await testInstance.getInstance()._onPassPhraseNext({ preventDefault: () => {} })
+        await testInstance.getInstance()._onPassPhraseNext({ preventDefault: () => {} });
         const notification = testInstance.root.findByProps({
             className: "mx_AccessSecretStorageDialog_keyStatus",
         });
