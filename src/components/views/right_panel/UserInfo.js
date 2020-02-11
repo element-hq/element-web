@@ -42,6 +42,8 @@ import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
+import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -135,12 +137,43 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
-function verifyDevice(userId, device) {
-    const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-    Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-        userId: userId,
-        device: device,
-    }, null, /* priority = */ false, /* static = */ true);
+async function verifyDevice(userId, device) {
+    const cli = MatrixClientPeg.get();
+    const member = cli.getUser(userId);
+    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
+        headerImage: require("../../../../res/img/e2e/warning.svg"),
+        title: _t("Not Trusted"),
+        description: <div>
+            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: member.displayName, userId})}</p>
+            <p>{device.getDisplayName()} ({device.deviceId})</p>
+            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
+        </div>,
+        onFinished: async (doneClicked) => {
+            const manuallyVerifyClicked = !doneClicked;
+            if (!manuallyVerifyClicked) {
+                return;
+            }
+            const cli = MatrixClientPeg.get();
+            const verificationRequest = await cli.requestVerification(
+                userId,
+                [
+                    verificationMethods.SAS,
+                    SHOW_QR_CODE_METHOD,
+                    SCAN_QR_CODE_METHOD,
+                    verificationMethods.RECIPROCATE_QR_CODE,
+                ],
+                [device.deviceId],
+            );
+            dis.dispatch({
+                action: "set_right_panel_phase",
+                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                refireParams: {member, verificationRequest},
+            });
+        },
+        primaryButton: _t("Done"),
+        cancelButton: _t("Manually Verify"),
+    });
 }
 
 function verifyUser(user) {
