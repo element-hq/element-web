@@ -42,8 +42,6 @@ import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
-import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
