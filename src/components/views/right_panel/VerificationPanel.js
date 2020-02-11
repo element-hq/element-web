@@ -101,8 +101,9 @@ export default class VerificationPanel extends React.PureComponent {
         if (pending) {
             button = <Spinner />;
         } else {
+            const disabled = this.state.emojiButtonClicked;
             button = (
-                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
+                <AccessibleButton disabled={disabled} kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
                     {_t("Verify by emoji")}
                 </AccessibleButton>
             );
@@ -219,6 +220,7 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     _startSAS = async () => {
+        this.setState({emojiButtonClicked: true});
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
         try {
             await verifier.verify();
