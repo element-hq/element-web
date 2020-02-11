@@ -190,16 +190,16 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus" />;
-            } else if (this.state.recoveryKeyValid) {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
-                    {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
-                </div>;
             } else if (this.state.keyMatches === false) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4E "}{_t(
                         "Unable to access secret storage. Please verify that you " +
                         "entered the correct recovery key.",
                     )}
+                </div>;
+            } else if (this.state.recoveryKeyValid) {
+                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
+                    {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
                 </div>;
             } else {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
