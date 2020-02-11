@@ -274,15 +274,13 @@ export default class ServerConfig extends React.PureComponent {
             : null;
 
         return (
-            <div className="mx_ServerConfig">
+            <form className="mx_ServerConfig" onSubmit={this.onSubmit} autoComplete="off">
                 <h3>{_t("Other servers")}</h3>
                 {errorText}
                 {this._renderHomeserverSection()}
                 {this._renderIdentityServerSection()}
-                <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
-                    {submitButton}
-                </form>
-            </div>
+                {submitButton}
+            </form>
         );
     }
 }
