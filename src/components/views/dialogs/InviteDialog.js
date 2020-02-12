@@ -482,15 +482,6 @@ export default class InviteDialog extends React.PureComponent {
             record.score += scoreBoost;
         }
 
-        // Last chance: if the user ID matches the search term, score it higher
-        if (this.state.filterText && this.state.filterText[0] === '@') {
-            for (const memberId in memberScores) {
-                if (memberId.startsWith(this.state.filterText)) {
-                    memberScores[memberId] += 2; // arbitrary score bump
-                }
-            }
-        }
-
         const members = Object.values(memberScores);
         members.sort((a, b) => {
             if (a.score === b.score) {
