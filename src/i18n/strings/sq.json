@@ -2126,5 +2126,15 @@
     "Show typing notifications": "Shfaq njoftime shtypjeje",
     "Destroy cross-signing keys?": "Të shkatërrohen kyçet <em>cross-signing</em>?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Fshirja e kyçeve <em>cross-signing</em> është e përhershme. Cilido që keni verifikuar me to, do të shohë një sinjalizim sigurie. Thuajse e sigurt që s’keni pse ta bëni një gjë të tillë, veç në paçi humbur çdo pajisje prej nga mund të bëni <em>cross-sign</em>.",
-    "Clear cross-signing keys": "Spastro kyçe <em>cross-signing</em>"
+    "Clear cross-signing keys": "Spastro kyçe <em>cross-signing</em>",
+    "Verify this session by completing one of the following:": "Verifikoni këtë sesion duke plotësuar një nga sa vijon:",
+    "Scan this unique code": "Skanoni këtë kod unik",
+    "or": "ose",
+    "Compare unique emoji": "Krahasoni emoji unik",
+    "Compare a unique set of emoji if you don't have a camera on either device": "Krahasoni një grup unik emoji-sh, nëse s’keni kamera në njërën nga pajisjet",
+    "Not Trusted": "Jo e Besuar",
+    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
+    "Ask this user to verify their session, or manually verify it below.": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
+    "Manually Verify": "Verifikoje Dorazi",
+    "Verify by scanning": "Verifikoje me skanim"
 }
