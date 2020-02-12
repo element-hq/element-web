@@ -2138,5 +2138,15 @@
     "Reset cross-signing and secret storage": "Réinitialiser la signature croisée et le coffre secret",
     "Destroy cross-signing keys?": "Détruire les clés de signature croisée ?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "La suppression des clés de signature croisée est permanente. Tous ceux que vous avez vérifié vont voir des alertes de sécurité. Il est peu probable que ce soit ce que vous voulez faire, sauf si vous avez perdu tous les appareils vous permettant d’effectuer une signature croisée.",
-    "Clear cross-signing keys": "Vider les clés de signature croisée"
+    "Clear cross-signing keys": "Vider les clés de signature croisée",
+    "Verify this session by completing one of the following:": "Vérifiez cette session en réalisant une des actions suivantes :",
+    "Scan this unique code": "Scannez ce code unique",
+    "or": "ou",
+    "Compare unique emoji": "Comparez des émojis uniques",
+    "Compare a unique set of emoji if you don't have a camera on either device": "Comparez une liste unique d’émojis si vous n’avez d’appareil photo sur aucun des deux appareils",
+    "Not Trusted": "Non fiable",
+    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) s’est connecté à une nouvelle session sans la vérifier :",
+    "Ask this user to verify their session, or manually verify it below.": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
+    "Manually Verify": "Vérifier manuellement",
+    "Verify by scanning": "Vérifier en scannant"
 }
