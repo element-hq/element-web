@@ -211,7 +211,7 @@ const Pill = createReactClass({
                 if (room) {
                     linkText = "@room";
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <RoomAvatar room={room} width={16} height={16} />;
+                        avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
                     pillClass = 'mx_AtRoomPill';
                 }
@@ -225,7 +225,7 @@ const Pill = createReactClass({
                         member.rawDisplayName = member.rawDisplayName || '';
                         linkText = member.rawDisplayName;
                         if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} />;
+                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                         }
                         pillClass = 'mx_UserPill';
                         href = null;
@@ -238,7 +238,7 @@ const Pill = createReactClass({
                 if (room) {
                     linkText = (room ? getDisplayAliasForRoom(room) : null) || resource;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <RoomAvatar room={room} width={16} height={16} />;
+                        avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
                     pillClass = 'mx_RoomPill';
                 }
@@ -251,7 +251,7 @@ const Pill = createReactClass({
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16}
+                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
                                              url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
