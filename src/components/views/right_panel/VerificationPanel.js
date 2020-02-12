@@ -88,7 +88,7 @@ export default class VerificationPanel extends React.PureComponent {
                         <div className='mx_VerificationPanel_QRPhase_startOption'>
                             <p>{_t("Compare unique emoji")}</p>
                             <span className='mx_VerificationPanel_QRPhase_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
-                            <AccessibleButton onClick={this._startSAS} kind='primary'>
+                            <AccessibleButton disabled={this.state.emojiButtonClicked} onClick={this._startSAS} kind='primary'>
                                 {_t("Start")}
                             </AccessibleButton>
                         </div>
