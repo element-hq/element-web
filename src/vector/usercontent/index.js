@@ -11,11 +11,12 @@ function remoteRender(event) {
     const img = document.createElement("img");
     img.id = "img";
     img.src = data.imgSrc;
+    img.style = data.imgStyle;
 
     const a = document.createElement("a");
     a.id = "a";
-    a.rel = data.rel;
-    a.target = data.target;
+    a.rel = "noopener";
+    a.target = "_blank";
     a.download = data.download;
     a.style = data.style;
     a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
