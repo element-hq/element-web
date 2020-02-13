@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
+import createRoom, {findDMForUser} from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -169,10 +169,19 @@ async function verifyDevice(userId, device) {
 }
 
 function verifyUser(user) {
+    const cli = MatrixClientPeg.get();
+    const dmRoom = findDMForUser(cli, user.userId);
+    let existingRequest;
+    if (dmRoom) {
+        existingRequest = cli.findVerificationRequestDMInProgress(dmRoom.roomId);
+    }
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        refireParams: {member: user},
+        refireParams: {
+            member: user,
+            verificationRequest: existingRequest,
+        },
     });
 }
 

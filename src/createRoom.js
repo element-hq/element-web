@@ -159,7 +159,7 @@ export default function createRoom(opts) {
     });
 }
 
-export async function ensureDMExists(client, userId) {
+export function findDMForUser(client, userId) {
     const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const rooms = roomIds.map(id => client.getRoom(id));
     const suitableDMRooms = rooms.filter(r => {
@@ -169,10 +169,16 @@ export async function ensureDMExists(client, userId) {
         }
         return false;
     });
-    let roomId;
     if (suitableDMRooms.length) {
-        const room = suitableDMRooms[0];
-        roomId = room.roomId;
+        return suitableDMRooms[0];
+    }
+}
+
+export async function ensureDMExists(client, userId) {
+    const existingDMRoom = findDMForUser(client, userId);
+    let roomId;
+    if (existingDMRoom) {
+        roomId = existingDMRoom.roomId;
     } else {
         roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
     }
