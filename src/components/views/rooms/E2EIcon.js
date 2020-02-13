@@ -51,9 +51,7 @@ const legacyRoomTitles = {
     [E2E_STATE.VERIFIED]: _td("All sessions in this encrypted room are trusted"),
 };
 
-const E2EIcon = ({isUser, status, className, size, onClick}) => {
-    const sizeThreshold = 25; // the size of an avatar + 1
-
+const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
@@ -84,7 +82,7 @@ const E2EIcon = ({isUser, status, className, size, onClick}) => {
     const onMouseOut = () => setHover(false);
 
     let tip;
-    if (hover && (!size || size <= sizeThreshold)) {
+    if (hover && !hideTooltip) {
         tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} />;
     }
 
