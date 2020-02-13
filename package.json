@@ -66,8 +66,8 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-    "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+    "matrix-js-sdk": "5.0.0-rc.1",
+    "matrix-react-sdk": "2.1.0-rc.2",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
     "prop-types": "^15.7.2",
@@ -191,7 +191,9 @@
     "afterSign": "scripts/electron_afterSign.js"
   },
   "jest": {
-    "modulePathIgnorePatterns": ["<rootDir>/electron_app"],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/electron_app"
+    ],
     "testEnvironment": "jest-environment-jsdom-fourteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
