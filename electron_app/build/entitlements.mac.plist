@@ -9,6 +9,9 @@
          Latest electron-builder does, but it appears to be causing issues:
          (https://github.com/electron-userland/electron-builder/issues/4390)
     -->
+    <!-- https://github.com/electron/electron-notarize#prerequisites -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
     <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
     <true/>
     <!-- https://github.com/electron-userland/electron-builder/issues/3940 -->
