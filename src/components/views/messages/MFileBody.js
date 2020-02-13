@@ -268,11 +268,11 @@ export default createReactClass({
                     // will have the correct name when the user tries to download it.
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
-                    rel: "noopener",
-                    target: "_blank",
                     textContent: _t("Download %(text)s", { text: text }),
                 }, "*");
             };
+
+            const url = "usercontent/"; // XXX: this path should probably be passed from the skin
 
             // If the attachment is encrypted then put the link inside an iframe.
             return (
@@ -286,7 +286,11 @@ export default createReactClass({
                               */ }
                             <a ref={this._dummyLink} />
                         </div>
-                        <iframe src="usercontent/" onLoad={onIframeLoad} ref={this._iframe} sandbox="allow-scripts allow-downloads" />
+                        <iframe
+                            src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
+                            onLoad={onIframeLoad}
+                            ref={this._iframe}
+                            sandbox="allow-scripts allow-downloads" />
                     </div>
                 </span>
             );
