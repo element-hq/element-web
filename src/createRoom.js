@@ -23,6 +23,7 @@ import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
+import SettingsStore from "./settings/SettingsStore";
 
 /**
  * Create a new room, and switch to it.
@@ -174,13 +175,47 @@ export function findDMForUser(client, userId) {
     }
 }
 
+/*
+ * Try to ensure the user is already in the megolm session before continuing
+ * NOTE: this assumes you've just created the room and there's not been an opportunity
+ * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
+ */
+export async function _waitForMember(client, roomId, userId, opts = { timeout: 1500 }) {
+    const { timeout } = opts;
+    let handler;
+    return new Promise((resolve) => {
+        handler = function(_event, _roomstate, member) {
+            if (member.userId !== userId) return;
+            if (member.roomId !== roomId) return;
+            resolve(true);
+        };
+        client.on("RoomState.newMember", handler);
+
+        /* We don't want to hang if this goes wrong, so we proceed and hope the other
+           user is already in the megolm session */
+        setTimeout(resolve, timeout, false);
+    }).finally(() => {
+        client.removeListener("RoomState.newMember", handler);
+    });
+}
+
 export async function ensureDMExists(client, userId) {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
-        roomId = await createRoom({dmUserId: userId, spinner: false, andView: false});
+        let encryption;
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            /* If the user's devices can all do encryption, start an encrypted DM */
+            const userDeviceMap = await client.downloadKeys([userId]);
+            // => { "@userId:host": { DEVICE: DeviceInfo, ... }}
+            const userDevices = Object.values(userDeviceMap[userId]);
+            // => [DeviceInfo, DeviceInfo...]
+            encryption = userDevices.every((device) => device.keys);
+        }
+        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
+        await _waitForMember(client, roomId, userId);
     }
     return roomId;
 }
