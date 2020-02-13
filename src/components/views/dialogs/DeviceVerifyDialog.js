@@ -123,7 +123,7 @@ export default class DeviceVerifyDialog extends React.Component {
                 const roomId = await ensureDMExistsAndOpen(this.props.userId);
                 // throws upon cancellation before having started
                 const request = await client.requestVerificationDM(
-                    this.props.userId, roomId, [verificationMethods.SAS],
+                    this.props.userId, roomId,
                 );
                 await request.waitFor(r => r.ready || r.started);
                 if (request.ready) {

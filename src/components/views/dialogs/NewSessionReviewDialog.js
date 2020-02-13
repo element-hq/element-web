@@ -22,9 +22,7 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -43,12 +41,6 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const request = await cli.requestVerification(
             userId,
-            [
-                verificationMethods.SAS,
-                SHOW_QR_CODE_METHOD,
-                SCAN_QR_CODE_METHOD,
-                verificationMethods.RECIPROCATE_QR_CODE,
-            ],
             [device.deviceId],
         );
 

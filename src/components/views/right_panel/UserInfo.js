@@ -42,8 +42,6 @@ import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
-import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -157,12 +155,6 @@ async function verifyDevice(userId, device) {
             const cli = MatrixClientPeg.get();
             const verificationRequest = await cli.requestVerification(
                 userId,
-                [
-                    verificationMethods.SAS,
-                    SHOW_QR_CODE_METHOD,
-                    SCAN_QR_CODE_METHOD,
-                    verificationMethods.RECIPROCATE_QR_CODE,
-                ],
                 [device.deviceId],
             );
             dis.dispatch({
