@@ -59,7 +59,6 @@ export default class MKeyVerificationRequest extends React.Component {
     };
 
     _onAcceptClicked = async () => {
-        this.setState({acceptOrCancelClicked: true});
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
@@ -72,7 +71,6 @@ export default class MKeyVerificationRequest extends React.Component {
     };
 
     _onRejectClicked = async () => {
-        this.setState({acceptOrCancelClicked: true});
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
@@ -137,11 +135,10 @@ export default class MKeyVerificationRequest extends React.Component {
                 _t("%(name)s wants to verify", {name})}</div>);
             subtitle = (<div className="mx_cryptoEvent_subtitle">{
                 userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
-            if (request.requested && !request.observeOnly) {
-                const disabled = this.state.acceptOrCancelClicked;
+            if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
-                    <FormButton disabled={disabled} kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
-                    <FormButton disabled={disabled} onClick={this._onAcceptClicked} label={_t("Accept")} />
+                    <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
+                    <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
         } else { // request sent by us
