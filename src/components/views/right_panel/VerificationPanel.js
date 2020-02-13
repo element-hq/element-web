@@ -34,6 +34,7 @@ import Spinner from "../elements/Spinner";
 
 export default class VerificationPanel extends React.PureComponent {
     static propTypes = {
+        layout: PropTypes.string,
         request: PropTypes.object.isRequired,
         member: PropTypes.object.isRequired,
         phase: PropTypes.oneOf([
@@ -69,12 +70,40 @@ export default class VerificationPanel extends React.PureComponent {
         const {member} = this.props;
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
+        if (this.props.layout === 'dialog') {
+            // HACK: This is a terrible idea.
+            let qrCode = <div className='mx_VerificationPanel_QRPhase_noQR'><Spinner /></div>;
+            if (this.state.qrCodeProps) {
+                qrCode = <VerificationQRCode {...this.state.qrCodeProps} />;
+            }
+            return (
+                <div>
+                    {_t("Verify this session by completing one of the following:")}
+                    <div className='mx_VerificationPanel_QRPhase_startOptions'>
+                        <div className='mx_VerificationPanel_QRPhase_startOption'>
+                            <p>{_t("Scan this unique code")}</p>
+                            {qrCode}
+                        </div>
+                        <div className='mx_VerificationPanel_QRPhase_betweenText'>{_t("or")}</div>
+                        <div className='mx_VerificationPanel_QRPhase_startOption'>
+                            <p>{_t("Compare unique emoji")}</p>
+                            <span className='mx_VerificationPanel_QRPhase_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
+                            <AccessibleButton disabled={this.state.emojiButtonClicked} onClick={this._startSAS} kind='primary'>
+                                {_t("Start")}
+                            </AccessibleButton>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         let button;
         if (pending) {
             button = <Spinner />;
         } else {
+            const disabled = this.state.emojiButtonClicked;
             button = (
-                <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
+                <AccessibleButton disabled={disabled} kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
                     {_t("Verify by emoji")}
                 </AccessibleButton>
             );
@@ -82,9 +111,8 @@ export default class VerificationPanel extends React.PureComponent {
 
         if (!this.state.qrCodeProps) {
             return <div className="mx_UserInfo_container">
-                <h3>Verify by emoji</h3>
+                <h3>{_t("Verify by emoji")}</h3>
                 <p>{_t("Verify by comparing unique emoji.")}</p>
-
                 { button }
             </div>;
         }
@@ -92,7 +120,7 @@ export default class VerificationPanel extends React.PureComponent {
         // TODO: add way to open camera to scan a QR code
         return <React.Fragment>
             <div className="mx_UserInfo_container">
-                <h3>Verify by scanning</h3>
+                <h3>{_t("Verify by scanning")}</h3>
                 <p>{_t("Ask %(displayName)s to scan your code:", {
                     displayName: member.displayName || member.name || member.userId,
                 })}</p>
@@ -103,7 +131,7 @@ export default class VerificationPanel extends React.PureComponent {
             </div>
 
             <div className="mx_UserInfo_container">
-                <h3>Verify by emoji</h3>
+                <h3>{_t("Verify by emoji")}</h3>
                 <p>{_t("If you can't scan the code above, verify by comparing unique emoji.")}</p>
 
                 { button }
@@ -121,7 +149,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <p>{_t("You've successfully verified %(displayName)s!", {
                     displayName: member.displayName || member.name || member.userId,
                 })}</p>
-                <E2EIcon isUser={true} status="verified" size={128} />
+                <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <p>Verify all users in a room to ensure it's secure.</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
@@ -192,6 +220,7 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     _startSAS = async () => {
+        this.setState({emojiButtonClicked: true});
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
         try {
             await verifier.verify();

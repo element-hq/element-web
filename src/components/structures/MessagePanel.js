@@ -115,6 +115,7 @@ export default class MessagePanel extends React.Component {
             // previous positions the read marker has been in, so we can
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
+            showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -164,6 +165,9 @@ export default class MessagePanel extends React.Component {
         this._readMarkerNode = createRef();
         this._whoIsTyping = createRef();
         this._scrollPanel = createRef();
+
+        this._showTypingNotificationsWatcherRef =
+            SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
     }
 
     componentDidMount() {
@@ -172,6 +176,7 @@ export default class MessagePanel extends React.Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -183,6 +188,12 @@ export default class MessagePanel extends React.Component {
             });
         }
     }
+
+    onShowTypingNotificationsChange = () => {
+        this.setState({
+            showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
+        });
+    };
 
     /* get the DOM node representing the given event */
     getNodeForEventId(eventId) {
@@ -921,7 +932,7 @@ export default class MessagePanel extends React.Component {
         );
 
         let whoIsTyping;
-        if (this.props.room && !this.props.tileShape) {
+        if (this.props.room && !this.props.tileShape && this.state.showTypingNotifications) {
             whoIsTyping = (<WhoIsTypingTile
                 room={this.props.room}
                 onShown={this._onTypingShown}

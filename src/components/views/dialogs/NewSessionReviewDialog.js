@@ -19,9 +19,10 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
-import DeviceVerifyDialog from './DeviceVerifyDialog';
+import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -35,12 +36,18 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         this.props.onFinished(false);
     }
 
-    onContinueClick = () => {
+    onContinueClick = async () => {
         const { userId, device } = this.props;
-        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', DeviceVerifyDialog, {
+        const cli = MatrixClientPeg.get();
+        const request = await cli.requestVerification(
             userId,
-            device,
-        }, null, /* priority = */ false, /* static = */ true);
+            [device.deviceId],
+        );
+
+        this.props.onFinished(true);
+        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
+            verificationRequest: request,
+        });
     }
 
     render() {

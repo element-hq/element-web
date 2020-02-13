@@ -51,7 +51,7 @@ const legacyRoomTitles = {
     [E2E_STATE.VERIFIED]: _td("All sessions in this encrypted room are trusted"),
 };
 
-const E2EIcon = ({isUser, status, className, size, onClick}) => {
+const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
@@ -82,7 +82,7 @@ const E2EIcon = ({isUser, status, className, size, onClick}) => {
     const onMouseOut = () => setHover(false);
 
     let tip;
-    if (hover) {
+    if (hover && !hideTooltip) {
         tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} />;
     }
 
