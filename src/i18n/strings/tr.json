@@ -1496,5 +1496,6 @@
     "Set up Secure Messages": "Güvenli Mesajları Ayarla",
     "Space used:": "Kullanılan alan:",
     "Indexed messages:": "İndekslenmiş mesajlar:",
-    "Number of rooms:": "Oda sayısı:"
+    "Number of rooms:": "Oda sayısı:",
+    "Enable inline URL previews by default": "Varsayılan olarak satır içi URL önizlemeleri aç"
 }
