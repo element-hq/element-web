@@ -632,7 +632,7 @@ export async function onLoggedOut() {
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 async function _clearStorage() {
-    Analytics.logout();
+    Analytics.disable();
 
     if (window.localStorage) {
         window.localStorage.clear();
