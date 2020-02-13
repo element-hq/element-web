@@ -1,7 +1,7 @@
-var params = window.location.search.substring(1).split('&');
-var lockOrigin;
-for (var i = 0; i < params.length; ++i) {
-    var parts = params[i].split('=');
+const params = window.location.search.substring(1).split('&');
+let lockOrigin;
+for (let i = 0; i < params.length; ++i) {
+    const parts = params[i].split('=');
     if (parts[0] === 'origin') lockOrigin = decodeURIComponent(parts[1]);
 }
 
