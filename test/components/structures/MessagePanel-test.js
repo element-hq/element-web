@@ -34,9 +34,14 @@ import Matrix from 'matrix-js-sdk';
 const test_utils = require('../../test-utils');
 const mockclock = require('../../mock-clock');
 
+import Adapter from "enzyme-adapter-react-16";
+import { configure, mount } from "enzyme";
+
 import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
+
+configure({ adapter: new Adapter() });
 
 let client;
 const room = new Matrix.Room();
@@ -250,5 +255,112 @@ describe('MessagePanel', function() {
                 done();
             }, 100);
         }, 100);
+    });
+
+    it('should collapse creation events', function() {
+        const mkEvent = test_utils.mkEvent;
+        const mkMembership = test_utils.mkMembership;
+        const roomId = "!someroom";
+        const alice = "@alice:example.org";
+        const ts0 = Date.now();
+        const events = [
+            mkEvent({
+                event: true,
+                type: "m.room.create",
+                room: roomId,
+                user: alice,
+                content: {
+                    creator: alice,
+                    room_version: "5",
+                    predecessor: {
+                        room_id: "!prevroom",
+                        event_id: "$someevent",
+                    },
+                },
+                ts: ts0,
+            }),
+            mkMembership({
+                event: true,
+                room: roomId,
+                user: alice,
+                target: {
+                    userId: alice,
+                    name: "Alice",
+                    getAvatarUrl: () => {
+                        return "avatar.jpeg";
+                    },
+                },
+                ts: ts0 + 1,
+                mship: 'join',
+                name: 'Alice',
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.join_rules",
+                room: roomId,
+                user: alice,
+                content: {
+                    "join_rule": "invite"
+                },
+                ts: ts0 + 2,
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.history_visibility",
+                room: roomId,
+                user: alice,
+                content: {
+                    "history_visibility": "invited",
+                },
+                ts: ts0 + 3,
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.encryption",
+                room: roomId,
+                user: alice,
+                content: {
+                    "algorithm": "m.megolm.v1.aes-sha2",
+                },
+                ts: ts0 + 4,
+            }),
+            mkMembership({
+                event: true,
+                room: roomId,
+                user: alice,
+                skey: "@bob:example.org",
+                target: {
+                    userId: "@bob:example.org",
+                    name: "Bob",
+                    getAvatarUrl: () => {
+                        return "avatar.jpeg";
+                    },
+                },
+                ts: ts0 + 5,
+                mship: 'invite',
+                name: 'Bob',
+            }),
+        ];
+        const res = mount(
+            <WrappedMessagePanel className="cls" events={events} />,
+        );
+
+        // we expect that
+        // - the room creation event, the room encryption event, and Alice inviting Bob,
+        //   should be outside of the room creation summary
+        // - all other events should be inside the room creation summary
+
+        const tiles = res.find(sdk.getComponent('views.rooms.EventTile'));
+
+        expect(tiles.at(0).props().mxEvent.getType()).toEqual("m.room.create");
+        expect(tiles.at(1).props().mxEvent.getType()).toEqual("m.room.encryption");
+
+        const summaryTiles = res.find(sdk.getComponent('views.elements.EventListSummary'));
+        const summaryTile = summaryTiles.at(0);
+
+        const summaryEventTiles = summaryTile.find(sdk.getComponent('views.rooms.EventTile'));
+        // every event except for the room creation, room encryption, and Bob's
+        // invite event should be in the event summary
+        expect(summaryEventTiles.length).toEqual(tiles.length - 3);
     });
 });
