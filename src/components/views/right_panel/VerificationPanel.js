@@ -149,7 +149,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <p>{_t("You've successfully verified %(displayName)s!", {
                     displayName: member.displayName || member.name || member.userId,
                 })}</p>
-                <E2EIcon isUser={true} status="verified" size={128} />
+                <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <p>Verify all users in a room to ensure it's secure.</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
