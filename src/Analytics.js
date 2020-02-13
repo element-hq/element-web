@@ -195,8 +195,7 @@ class Analytics {
     }
 
     /**
-     * Disable Analytics calls, will not fully unload Piwik until a refresh,
-     * but this is second best, Piwik should not pull anything implicitly.
+     * Disable Analytics, stop the heartbeat and clear identifiers from localStorage
      */
     disable() {
         if (this.disabled) return;
@@ -204,6 +203,10 @@ class Analytics {
         window.clearInterval(this._heartbeatIntervalID);
         this.baseUrl = null;
         this.visitVariables = {};
+        localStorage.removeItem(UID_KEY);
+        localStorage.removeItem(CREATION_TS_KEY);
+        localStorage.removeItem(VISIT_COUNT_KEY);
+        localStorage.removeItem(LAST_VISIT_TS_KEY);
     }
 
     async _track(data) {
