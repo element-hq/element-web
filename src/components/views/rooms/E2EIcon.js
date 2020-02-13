@@ -52,6 +52,8 @@ const legacyRoomTitles = {
 };
 
 const E2EIcon = ({isUser, status, className, size, onClick}) => {
+    const sizeThreshold = 25; // the size of an avatar + 1
+
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
@@ -82,7 +84,7 @@ const E2EIcon = ({isUser, status, className, size, onClick}) => {
     const onMouseOut = () => setHover(false);
 
     let tip;
-    if (hover) {
+    if (hover && (!size || size <= sizeThreshold)) {
         tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} />;
     }
 
