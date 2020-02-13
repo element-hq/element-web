@@ -34,7 +34,7 @@ module.exports = (env, argv) => {
             "bundle": "./src/vector/index.js",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
-            "usercontent": "./src/vector/usercontent/index.js",
+            "usercontent": "./node_modules/matrix-react-sdk/src/vector/usercontent/index.js",
 
             // CSS themes
             "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
@@ -320,7 +320,7 @@ module.exports = (env, argv) => {
 
             // This is the usercontent sandbox's entry point (separate for iframing)
             new HtmlWebpackPlugin({
-                template: './src/vector/usercontent/index.html',
+                template: './node_modules/matrix-react-sdk/src/vector/usercontent/index.html',
                 filename: 'usercontent/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['usercontent'],
