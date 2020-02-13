@@ -217,7 +217,7 @@ class Analytics {
             ...data,
             url: getRedactedUrl(),
 
-            _cvar: this.visitVariables, // user custom vars
+            _cvar: JSON.stringify(this.visitVariables), // user custom vars
             res: `${window.screen.width}x${window.screen.height}`, // resolution as WWWWxHHHH
             rand: String(Math.random()).slice(2, 8), // random nonce to cache-bust
             h: now.getHours(),
