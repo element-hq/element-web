@@ -24,13 +24,22 @@ do
     latestver=`yarn info -s $i dist-tags.next`
     if [ "$depver" != "$latestver" ]
     then
-        echo "The latest version of $i is $latestver but package.json depends on $depver"
-        echo -n "Type 'Yes' to continue anyway: "
+        echo "The latest version of $i is $latestver but package.json depends on $depver."
+        echo -n "Type 'u' to auto-upgrade, 'c' to continue anyway, or 'a' to abort:"
         read resp
-        if [ "$resp" != "Yes" ]
+        if [ "$resp" != "u" ] && [ "$resp" != "c" ]
         then
-            echo "OK, never mind."
+            echo "Aborting."
             exit 1
+        fi
+        if [ "$resp" == "u" ]
+        then
+            echo "Upgrading $i to $latestver..."
+            yarn add -E $i@$latestver
+            git add -u
+            # The `-e` flag opens the editor and gives you a chance to check
+            # the upgrade for correctness.
+            git commit -m "Upgrade $i to $latestver" -e
         fi
     fi
 done
