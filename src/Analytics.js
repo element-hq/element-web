@@ -57,6 +57,8 @@ function getRedactedUrl() {
 }
 
 const customVariables = {
+    // The Matomo installation at https://matomo.riot.im is currently configured
+    // with a limit of 10 custom variables.
     'App Platform': {
         id: 1,
         expl: _td('The platform you\'re on'),
@@ -92,10 +94,10 @@ const customVariables = {
         expl: _td('Your homeserver\'s URL'),
         example: 'https://matrix.org',
     },
-    'Identity Server URL': {
+    'Touch Input': {
         id: 8,
-        expl: _td('Your identity server\'s URL'),
-        example: 'https://vector.im',
+        expl: _td("Whether you're using Riot on a device where touch is the primary input mechanism"),
+        example: 'false',
     },
     'Breadcrumbs': {
         id: 9,
@@ -202,6 +204,13 @@ class Analytics {
         } catch (e) { }
         this._setVisitVariable('Installed PWA', installedPWA);
 
+        let touchInput = "unknown";
+        try {
+            // MDN claims broad support across browsers
+            touchInput = window.matchMedia('(pointer: coarse)').matches;
+        } catch (e) { }
+        this._setVisitVariable('Touch Input', touchInput);
+
         // start heartbeat
         this._heartbeatIntervalID = window.setInterval(this.ping.bind(this), HEARTBEAT_INTERVAL);
     }
@@ -303,11 +312,9 @@ class Analytics {
         if (!config.piwik) return;
 
         const whitelistedHSUrls = config.piwik.whitelistedHSUrls || [];
-        const whitelistedISUrls = config.piwik.whitelistedISUrls || [];
 
         this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
-        this._setVisitVariable('Identity Server URL', whitelistRedact(whitelistedISUrls, identityServerUrl));
     }
 
     setBreadcrumbs(state) {
