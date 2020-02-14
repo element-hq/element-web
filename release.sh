@@ -36,3 +36,24 @@ do
 done
 
 exec ./node_modules/matrix-js-sdk/release.sh -z "$@"
+
+release="${1#v}"
+prerelease=0
+# We check if this build is a prerelease by looking to
+# see if the version has a hyphen in it. Crude,
+# but semver doesn't support postreleases so anything
+# with a hyphen is a prerelease.
+echo $release | grep -q '-' && prerelease=1
+
+if [ $prerelease -eq 0 ]
+then
+    # For a release, reset SDK deps back to the `develop` branch.
+    for i in matrix-js-sdk
+    do
+        echo "Resetting $i to develop branch..."
+        yarn add github:matrix-org/$i#develop
+        git add -u
+        git commit -m "Reset $i back to develop branch"
+    done
+    git push origin develop
+fi
