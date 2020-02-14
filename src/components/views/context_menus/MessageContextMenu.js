@@ -414,7 +414,7 @@ export default createReactClass({
         }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
-            <MenuItem className="mx_MessageContextMenu_field">
+            <MenuItem className="mx_MessageContextMenu_field" onClick={this.onPermalinkClick}>
                 <a href={permalink} target="_blank" rel="noopener" onClick={this.onPermalinkClick} tabIndex={-1}>
                     { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
                         ? _t('Share Permalink') : _t('Share Message') }
