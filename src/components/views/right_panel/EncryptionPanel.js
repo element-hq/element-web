@@ -69,6 +69,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
         const roomId = await ensureDMExists(cli, member.userId);
         const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
         setRequest(verificationRequest);
+        setPhase(verificationRequest.phase);
     }, [member.userId]);
 
     const requested = request && (phase === PHASE_REQUESTED || phase === undefined);

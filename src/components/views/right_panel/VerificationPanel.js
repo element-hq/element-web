@@ -258,7 +258,11 @@ export default class VerificationPanel extends React.PureComponent {
     };
 
     componentDidMount() {
-        this.props.request.on("change", this._onRequestChange);
+        const {request} = this.props;
+        request.on("change", this._onRequestChange);
+        if (request.verifier) {
+            this.setState({sasEvent: request.verifier.sasEvent});
+        }
         this._onRequestChange();
     }
 
