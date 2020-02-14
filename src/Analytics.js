@@ -64,7 +64,7 @@ const customVariables = {
     },
     'App Version': {
         id: 2,
-        expl: _td('The version of Riot.im'),
+        expl: _td('The version of Riot'),
         example: '15.0.0',
     },
     'User Type': {
@@ -87,11 +87,6 @@ const customVariables = {
         expl: _td('Whether or not you\'re using the Richtext mode of the Rich Text Editor'),
         example: 'off',
     },
-    'Breadcrumbs': {
-        id: 9,
-        expl: _td("Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)"),
-        example: 'disabled',
-    },
     'Homeserver URL': {
         id: 7,
         expl: _td('Your homeserver\'s URL'),
@@ -101,6 +96,16 @@ const customVariables = {
         id: 8,
         expl: _td('Your identity server\'s URL'),
         example: 'https://vector.im',
+    },
+    'Breadcrumbs': {
+        id: 9,
+        expl: _td("Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)"),
+        example: 'disabled',
+    },
+    'Installed PWA': {
+        id: 10,
+        expl: _td("Whether you're using Riot as an installed Progressive Web App"),
+        example: 'false',
     },
 };
 
@@ -189,6 +194,13 @@ class Analytics {
         if (window.location.hostname === 'riot.im') {
             this._setVisitVariable('Instance', window.location.pathname);
         }
+
+        let installedPWA = "unknown";
+        try {
+            // Known to work at least for desktop Chrome
+            installedPWA = window.matchMedia('(display-mode: standalone)').matches;
+        } catch (e) { }
+        this._setVisitVariable('Installed PWA', installedPWA);
 
         // start heartbeat
         this._heartbeatIntervalID = window.setInterval(this.ping.bind(this), HEARTBEAT_INTERVAL);
@@ -328,7 +340,7 @@ class Analytics {
                     },
                 ),
             },
-            { expl: _td('Your User Agent'), value: navigator.userAgent },
+            { expl: _td('Your user agent'), value: navigator.userAgent },
             { expl: _td('Your device resolution'), value: resolution },
         ];
 
@@ -337,7 +349,7 @@ class Analytics {
             title: _t('Analytics'),
             description: <div className="mx_AnalyticsModal">
                 <div>
-                    { _t('The information being sent to us to help make Riot.im better includes:') }
+                    { _t('The information being sent to us to help make Riot better includes:') }
                 </div>
                 <table>
                     { rows.map((row) => <tr key={row[0]}>

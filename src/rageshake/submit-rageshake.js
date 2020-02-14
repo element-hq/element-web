@@ -67,6 +67,12 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         userAgent = window.navigator.userAgent;
     }
 
+    let installedPWA = "UNKNOWN";
+    try {
+        // Known to work at least for desktop Chrome
+        installedPWA = window.matchMedia('(display-mode: standalone)').matches;
+    } catch (e) { }
+
     const client = MatrixClientPeg.get();
 
     console.log("Sending bug report.");
@@ -76,6 +82,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     body.append('app', 'riot-web');
     body.append('version', version);
     body.append('user_agent', userAgent);
+    body.append('installed_pwa', installedPWA);
 
     if (client) {
         body.append('user_id', client.credentials.userId);
