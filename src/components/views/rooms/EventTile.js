@@ -671,6 +671,9 @@ export default createReactClass({
             mx_EventTile_redacted: isRedacted,
         });
 
+        // If the tile is in the Sending state, don't speak the message.
+        const suppressSpeech = (isSending) ? "off" : undefined;
+
         let permalink = "#";
         if (this.props.permalinkCreator) {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
@@ -789,7 +792,7 @@ export default createReactClass({
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={suppressSpeech}>
                         <div className="mx_EventTile_roomName">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
@@ -815,7 +818,7 @@ export default createReactClass({
             }
             case 'file_grid': {
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={suppressSpeech}>
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -851,7 +854,7 @@ export default createReactClass({
                     );
                 }
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={suppressSpeech}>
                         { avatar }
                         { sender }
                         <div className="mx_EventTile_reply">
@@ -879,7 +882,7 @@ export default createReactClass({
                 );
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    <div className={classes} tabIndex={-1}>
+                    <div className={classes} tabIndex={-1} aria-live={suppressSpeech}>
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
