@@ -21,7 +21,7 @@ cd `dirname $0`
 for i in matrix-js-sdk matrix-react-sdk
 do
     depver=`cat package.json | jq -r .dependencies[\"$i\"]`
-    latestver=`yarn info -s $i version`
+    latestver=`yarn info -s $i dist-tags.next`
     if [ "$depver" != "$latestver" ]
     then
         echo "The latest version of $i is $latestver but package.json depends on $depver"
