@@ -1,3 +1,10 @@
+Changes in [1.5.9](https://github.com/vector-im/riot-web/releases/tag/v1.5.9) (2020-02-17)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.9-rc.1...v1.5.9)
+
+ * Automate SDK dep upgrades for release
+   [\#12374](https://github.com/vector-im/riot-web/pull/12374)
+
 Changes in [1.5.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.9-rc.1) (2020-02-13)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.8...v1.5.9-rc.1)
