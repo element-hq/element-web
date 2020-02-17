@@ -1717,5 +1717,6 @@
     "Send cross-signing keys to homeserver": "Отправка ключей перекрестной подписи на домашний сервер",
     "Error upgrading room": "Ошибка обновления комнаты",
     "Match system theme": "Изменить тему",
-    "Show tray icon and minimize window to it on close": "Показать иконку в панели задач и свернуть окно при закрытии"
+    "Show tray icon and minimize window to it on close": "Показать иконку в панели задач и свернуть окно при закрытии",
+    "The version of Riot": "Версия Riot"
 }
