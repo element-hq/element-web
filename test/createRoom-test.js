@@ -26,7 +26,7 @@ describe("waitForMember", () => {
             done();
         });
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId: "@anotherClient:domain" });
-    })
+    });
 
     it("resolves with true if RoomState.newMember fires", (done) => {
         const roomId = "!roomId:domain";
@@ -37,5 +37,5 @@ describe("waitForMember", () => {
             done();
         });
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId });
-    })
+    });
 });
