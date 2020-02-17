@@ -1,3 +1,10 @@
+Changes in [2.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0) (2020-02-17)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0-rc.2...v2.1.0)
+
+ * Automate SDK dep upgrades for release
+   [\#4076](https://github.com/matrix-org/matrix-react-sdk/pull/4076)
+
 Changes in [2.1.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0-rc.2) (2020-02-13)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0-rc.1...v2.1.0-rc.2)
