@@ -46,7 +46,7 @@ export default class ManageEventIndexDialog extends React.Component {
         };
     }
 
-    updateCurrentRoom = async (room) => {
+    updateCurrentRoom = async(room) => {
         const eventIndex = EventIndexPeg.get();
         const stats = await eventIndex.getStats();
         let currentRoom = null;
