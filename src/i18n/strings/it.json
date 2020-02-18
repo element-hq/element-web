@@ -2150,5 +2150,10 @@
     "Verify by scanning": "Verifica con la scansione",
     "Destroy cross-signing keys?": "Distruggere le chiavi di firma incrociata?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "L'eliminazione delle chiavi di firma incrociata è permanente. Chiunque si sia verificato con te vedrà avvisi di sicurezza. Quasi sicuramente non vuoi fare questa cosa, a meno che tu non abbia perso tutti i dispositivi da cui puoi fare l'accesso.",
-    "Clear cross-signing keys": "Elimina chiavi di firma incrociata"
+    "Clear cross-signing keys": "Elimina chiavi di firma incrociata",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "La sessione che stai cercando di verificare non supporta la scansione del codice QR o la verifica emoji, che sono supportate da Riot. Prova con un client diverso.",
+    "You declined": "Hai rifiutato",
+    "%(name)s declined": "%(name)s ha rifiutato",
+    "accepting …": "accettazione …",
+    "declining …": "rifiuto …"
 }
