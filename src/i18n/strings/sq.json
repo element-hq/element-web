@@ -2141,5 +2141,10 @@
     "Whether you're using Riot on a device where touch is the primary input mechanism": "Nëse po e përdorni Riot-in në një pajisje ku touch-i është mekanizmi parësor për input-e",
     "Whether you're using Riot as an installed Progressive Web App": "Nëse po e përdorni Riot-in të instaluar si një Aplikacion Web Progresiv",
     "Your user agent": "Agjenti juaj i përdoruesit",
-    "The information being sent to us to help make Riot better includes:": "Te të dhënat e dërguara te ne për të na ndihmuar ta bëjmë Riot-in më të mirë përfshihen:"
+    "The information being sent to us to help make Riot better includes:": "Te të dhënat e dërguara te ne për të na ndihmuar ta bëjmë Riot-in më të mirë përfshihen:",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "Sesioni që po provoni të verifikoni, nuk mbulon skanim kodesh QR apo verifikim emoji-sh, çka janë ato që Riot-i mbulon. Provoni me një tjetër klient.",
+    "You declined": "Hodhët poshtë",
+    "%(name)s declined": "%(name)s hodhi poshtë",
+    "accepting …": "po pranohet …",
+    "declining …": "po hidhet poshtë …"
 }
