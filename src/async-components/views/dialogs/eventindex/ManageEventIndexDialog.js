@@ -48,7 +48,16 @@ export default class ManageEventIndexDialog extends React.Component {
 
     updateCurrentRoom = async(room) => {
         const eventIndex = EventIndexPeg.get();
-        const stats = await eventIndex.getStats();
+        let stats;
+
+        // This call may fail if sporadically, not a huge issue as we will try
+        // later again and probably succeed.
+        try {
+            stats = await eventIndex.getStats();
+        } catch {
+            return;
+        }
+
         let currentRoom = null;
 
         if (room) currentRoom = room.name;
@@ -85,12 +94,16 @@ export default class ManageEventIndexDialog extends React.Component {
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            const stats = await eventIndex.getStats();
+            try {
+                const stats = await eventIndex.getStats();
+                eventIndexSize = stats.size;
+                eventCount = stats.eventCount;
+            } catch {
+            }
+
             const roomStats = eventIndex.crawlingRooms();
-            eventIndexSize = stats.size;
             crawlingRoomsCount = roomStats.crawlingRooms.size;
             roomCount = roomStats.totalRooms.size;
-            eventCount = stats.eventCount;
 
             const room = eventIndex.currentRoom();
             if (room) currentRoom = room.name;

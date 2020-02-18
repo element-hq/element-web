@@ -39,7 +39,15 @@ export default class EventIndexPanel extends React.Component {
 
     updateCurrentRoom = async (room) => {
         const eventIndex = EventIndexPeg.get();
-        const stats = await eventIndex.getStats();
+        let stats;
+
+        // This call may fail if sporadically, not a huge issue as we will try
+        // later again and probably succeed.
+        try {
+            stats = await eventIndex.getStats();
+        } catch {
+            return;
+        }
 
         this.setState({
             eventIndexSize: stats.size,
@@ -70,9 +78,12 @@ export default class EventIndexPanel extends React.Component {
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            const stats = await eventIndex.getStats();
-            eventIndexSize = stats.size;
-            roomCount = stats.roomCount;
+            try {
+                const stats = await eventIndex.getStats();
+                eventIndexSize = stats.size;
+                roomCount = stats.roomCount;
+            } catch {
+            }
         }
 
         this.setState({
