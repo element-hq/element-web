@@ -2147,5 +2147,10 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) 登入到未驗證的新工作階段：",
     "Ask this user to verify their session, or manually verify it below.": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
     "Manually Verify": "手動驗證",
-    "Verify by scanning": "透過掃描來驗證"
+    "Verify by scanning": "透過掃描來驗證",
+    "The version of Riot": "Riot 版本",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "您是否在以觸控為主要機制的裝置上使用 Riot",
+    "Whether you're using Riot as an installed Progressive Web App": "您是否使用 PWA 形式的 Riot",
+    "Your user agent": "您的使用者代理字串",
+    "The information being sent to us to help make Riot better includes:": "傳送給我們以協助改進 Riot 的資訊包含了："
 }
