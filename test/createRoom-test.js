@@ -1,4 +1,4 @@
-import {_waitForMember} from '../src/createRoom';
+import {_waitForMember, canEncryptToAllUsers} from '../src/createRoom';
 import {EventEmitter} from 'events';
 
 /* Shorter timeout, we've got tests to run */
@@ -37,5 +37,36 @@ describe("waitForMember", () => {
             done();
         });
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId });
+    });
+});
+
+describe("canEncryptToAllUsers", () => {
+    const trueUser = {
+        "@goodUser:localhost": {
+            "DEV1": {},
+            "DEV2": {},
+        },
+    };
+    const falseUser = {
+        "@badUser:localhost": {},
+    };
+
+    it("returns true if all devices have crypto", async (done) => {
+        const client = {
+            downloadKeys: async function(userIds) { return trueUser; },
+        };
+        const response = await canEncryptToAllUsers(client, ["@goodUser:localhost"]);
+        expect(response).toBe(true);
+        done();
+    });
+
+
+    it("returns false if not all users have crypto", async (done) => {
+        const client = {
+            downloadKeys: async function(userIds) { return {...trueUser, ...falseUser}; },
+        };
+        const response = await canEncryptToAllUsers(client, ["@goodUser:localhost", "@badUser:localhost"]);
+        expect(response).toBe(false);
+        done();
     });
 });

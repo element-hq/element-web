@@ -199,6 +199,19 @@ export async function _waitForMember(client, roomId, userId, opts = { timeout: 1
     });
 }
 
+/*
+ * Ensure that for every user in a room, there is at least one device that we
+ * can encrypt to.
+ */
+export async function canEncryptToAllUsers(client, userIds) {
+    const usersDeviceMap = await client.downloadKeys(userIds);
+    // { "@user:host": { "DEVICE": {...}, ... }, ... }
+    return Object.values(usersDeviceMap).every((userDevices) =>
+        // { "DEVICE": {...}, ... }
+        Object.keys(userDevices).length > 0,
+    );
+}
+
 export async function ensureDMExists(client, userId) {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;
@@ -207,12 +220,7 @@ export async function ensureDMExists(client, userId) {
     } else {
         let encryption;
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            /* If the user's devices can all do encryption, start an encrypted DM */
-            const userDeviceMap = await client.downloadKeys([userId]);
-            // => { "@userId:host": { DEVICE: DeviceInfo, ... }}
-            const userDevices = Object.values(userDeviceMap[userId]);
-            // => [DeviceInfo, DeviceInfo...]
-            encryption = userDevices.every((device) => device.keys);
+            encryption = canEncryptToAllUsers(client, [userId]);
         }
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);
