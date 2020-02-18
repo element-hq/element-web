@@ -48,6 +48,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
     ];
 
     static ROOM_LIST_SETTINGS = [
+        'RoomList.orderingAlgorithm', // this has a controller which maps the boolean inputs to algorithms
         'RoomList.orderByImportance',
         'breadcrumbs',
     ];

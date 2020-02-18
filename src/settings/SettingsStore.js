@@ -420,9 +420,13 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
+        const controller = setting.controller;
+        if (controller) {
+            value = controller.augmentValue(level, roomId, value);
+        }
+
         await handler.setValue(settingName, roomId, value);
 
-        const controller = setting.controller;
         if (controller) {
             controller.onChange(level, roomId, value);
         }

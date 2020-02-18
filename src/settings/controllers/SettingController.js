@@ -47,4 +47,15 @@ export default class SettingController {
     onChange(level, roomId, newValue) {
         // do nothing by default
     }
+
+    /**
+     * Gets the value which should actually get written into the store based on the input value from setValue.
+     * @param {string} level The level at which the setting has been modified.
+     * @param {String} roomId The room ID, may be null.
+     * @param {*} newValue The new value for the setting, may be null.
+     * @return {*} The value that should be used, may be null.
+     */
+    augmentValue(level, roomId, newValue) {
+        return newValue;
+    }
 }
