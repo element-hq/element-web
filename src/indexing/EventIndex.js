@@ -241,6 +241,36 @@ export default class EventIndex extends EventEmitter {
     }
 
     /**
+     * Check if an event should be added to the event index.
+     *
+     * Most notably we filter events for which decryption failed, are redacted
+     * or aren't of a type that we know how to index.
+     *
+     * @param {MatrixEvent} ev The event that should checked.
+     */
+    isValidEvent(ev) {
+        const validEventType = ([
+            "m.room.message",
+            "m.room.name",
+            "m.room.topic",
+            ].indexOf(ev.getType()) >= 0
+                && !ev.isRedacted() && !ev.isDecryptionFailure()
+        );
+
+        let validMsgType = true;
+
+        if (ev.getType() === "m.room.message" && !ev.isRedacted()) {
+            // Expand this if there are more invalid msgtypes.
+            const msgtype = ev.getContent().msgtype;
+
+            if (!msgtype) validMsgType = false;
+            else validMsgType = !msgtype.startsWith("m.key.verification");
+        }
+
+        return validEventType && validMsgType;
+    }
+
+    /**
      * Queue up live events to be added to the event index.
      *
      * @param {MatrixEvent} ev The event that should be added to the index.
@@ -248,10 +278,7 @@ export default class EventIndex extends EventEmitter {
     async addLiveEventToIndex(ev) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        if (["m.room.message", "m.room.name", "m.room.topic"]
-            .indexOf(ev.getType()) == -1) {
-            return;
-        }
+        if (!this.isValidEvent(ev)) return;
 
         const jsonEvent = ev.toJSON();
         const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
@@ -407,22 +434,11 @@ export default class EventIndex extends EventEmitter {
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);
 
-            // We filter out events for which decryption failed, are redacted
-            // or aren't of a type that we know how to index.
-            const isValidEvent = (value) => {
-                return ([
-                        "m.room.message",
-                        "m.room.name",
-                        "m.room.topic",
-                    ].indexOf(value.getType()) >= 0
-                        && !value.isRedacted() && !value.isDecryptionFailure()
-                );
-            };
 
             // TODO if there are no events at this point we're missing a lot
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
-            const filteredEvents = matrixEvents.filter(isValidEvent);
+            const filteredEvents = matrixEvents.filter(this.isValidEvent);
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
