@@ -74,7 +74,6 @@ export default class AliasSettings extends React.Component {
         roomId: PropTypes.string.isRequired,
         canSetCanonicalAlias: PropTypes.bool.isRequired,
         canSetAliases: PropTypes.bool.isRequired,
-        aliasEvents: PropTypes.array, // [MatrixEvent]
         canonicalAliasEvent: PropTypes.object, // MatrixEvent
     };
 
@@ -94,27 +93,49 @@ export default class AliasSettings extends React.Component {
             updatingCanonicalAlias: false,
         };
 
-        const localDomain = MatrixClientPeg.get().getDomain();
-        state.domainToAliases = this.aliasEventsToDictionary(props.aliasEvents || []);
-        state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
-            return domain !== localDomain && state.domainToAliases[domain].length > 0;
-        });
-
         if (props.canonicalAliasEvent) {
+            const cli = MatrixClientPeg.get();
+            const localDomain = cli.getDomain();
+            state.domainToAliases = this.aliasesToDictionary(this._getAltAliases());
+            state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
+                return domain !== localDomain && state.domainToAliases[domain].length > 0;
+            });
             state.canonicalAlias = props.canonicalAliasEvent.getContent().alias;
         }
 
         this.state = state;
     }
 
-    aliasEventsToDictionary(aliasEvents) { // m.room.alias events
-        const dict = {};
-        aliasEvents.forEach((event) => {
-            dict[event.getStateKey()] = (
-                (event.getContent().aliases || []).slice() // shallow-copy
-            );
-        });
-        return dict;
+    async componentWillMount() {
+        const cli = MatrixClientPeg.get();
+        const response = await cli.getLocalAliases(this.props.roomId);
+        const localAliases = response.aliases;
+        const localDomain = cli.getDomain();
+        const domainToAliases = Object.assign(
+            {},
+            this.state.domainToAliases,
+            {[localDomain]: localAliases || []},
+        );
+        this.setState({ domainToAliases });
+    }
+
+    aliasesToDictionary(aliases) {
+        return aliases.reduce((dict, alias) => {
+            const domain = alias.split(":")[1];
+            dict[domain] = dict[domain] || [];
+            dict[domain].push(alias);
+            return dict;
+        }, {});
+    }
+
+    _getAltAliases() {
+        if (this.props.canonicalAliasEvent) {
+            const altAliases = this.props.canonicalAliasEvent.getContent().alt_aliases;
+            if (Array.isArray(altAliases)) {
+                return altAliases;
+            }
+        }
+        return [];
     }
 
     changeCanonicalAlias(alias) {
@@ -125,7 +146,9 @@ export default class AliasSettings extends React.Component {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent = {};
+        const eventContent = {
+            alt_aliases: this._getAltAliases(),
+        };
         if (alias) eventContent["alias"] = alias;
 
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
