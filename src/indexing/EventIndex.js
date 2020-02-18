@@ -247,6 +247,8 @@ export default class EventIndex extends EventEmitter {
      * or aren't of a type that we know how to index.
      *
      * @param {MatrixEvent} ev The event that should checked.
+     * @returns {bool} Returns true if the event can be indexed, false
+     * otherwise.
      */
     isValidEvent(ev) {
         const validEventType = ([
