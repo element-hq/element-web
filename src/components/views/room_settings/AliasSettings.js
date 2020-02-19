@@ -94,12 +94,6 @@ export default class AliasSettings extends React.Component {
         };
 
         if (props.canonicalAliasEvent) {
-            const cli = MatrixClientPeg.get();
-            const localDomain = cli.getDomain();
-            state.domainToAliases = this.aliasesToDictionary(this._getAltAliases());
-            state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
-                return domain !== localDomain && state.domainToAliases[domain].length > 0;
-            });
             state.canonicalAlias = props.canonicalAliasEvent.getContent().alias;
         }
 
@@ -108,15 +102,29 @@ export default class AliasSettings extends React.Component {
 
     async componentWillMount() {
         const cli = MatrixClientPeg.get();
-        const response = await cli.getLocalAliases(this.props.roomId);
-        const localAliases = response.aliases;
-        const localDomain = cli.getDomain();
-        const domainToAliases = Object.assign(
-            {},
-            this.state.domainToAliases,
-            {[localDomain]: localAliases || []},
-        );
-        this.setState({ domainToAliases });
+        if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
+            const response = await cli.unstableGetLocalAliases(this.props.roomId);
+            const localAliases = response.aliases;
+            const localDomain = cli.getDomain();
+            const domainToAliases = Object.assign(
+                {},
+                // FIXME, any localhost alt_aliases will be ignored as they are overwritten by localAliases
+                this.aliasesToDictionary(this._getAltAliases()),
+                {[localDomain]: localAliases || []},
+            );
+            const remoteDomains = Object.keys(domainToAliases).filter((domain) => {
+                return domain !== localDomain && domainToAliases[domain].length > 0;
+            });
+            this.setState({ domainToAliases, remoteDomains });
+        } else {
+            const state = {};
+            const localDomain = cli.getDomain();
+            state.domainToAliases = this.aliasEventsToDictionary(this.props.aliasEvents || []);
+            state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
+                return domain !== localDomain && state.domainToAliases[domain].length > 0;
+            });
+            this.setState(state);
+        }
     }
 
     aliasesToDictionary(aliases) {
@@ -126,6 +134,16 @@ export default class AliasSettings extends React.Component {
             dict[domain].push(alias);
             return dict;
         }, {});
+    }
+
+    aliasEventsToDictionary(aliasEvents) { // m.room.alias events
+        const dict = {};
+        aliasEvents.forEach((event) => {
+            dict[event.getStateKey()] = (
+                (event.getContent().aliases || []).slice() // shallow-copy
+            );
+        });
+        return dict;
     }
 
     _getAltAliases() {
@@ -146,9 +164,9 @@ export default class AliasSettings extends React.Component {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent = {
-            alt_aliases: this._getAltAliases(),
-        };
+        const eventContent = {};
+        const altAliases = this._getAltAliases();
+        if (altAliases) eventContent["alt_aliases"] = altAliases;
         if (alias) eventContent["alias"] = alias;
 
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
