@@ -2136,5 +2136,15 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
     "Ask this user to verify their session, or manually verify it below.": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
     "Manually Verify": "Verifikoje Dorazi",
-    "Verify by scanning": "Verifikoje me skanim"
+    "Verify by scanning": "Verifikoje me skanim",
+    "The version of Riot": "Versioni i Riot-it",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Nëse po e përdorni Riot-in në një pajisje ku touch-i është mekanizmi parësor për input-e",
+    "Whether you're using Riot as an installed Progressive Web App": "Nëse po e përdorni Riot-in të instaluar si një Aplikacion Web Progresiv",
+    "Your user agent": "Agjenti juaj i përdoruesit",
+    "The information being sent to us to help make Riot better includes:": "Te të dhënat e dërguara te ne për të na ndihmuar ta bëjmë Riot-in më të mirë përfshihen:",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "Sesioni që po provoni të verifikoni, nuk mbulon skanim kodesh QR apo verifikim emoji-sh, çka janë ato që Riot-i mbulon. Provoni me një tjetër klient.",
+    "You declined": "Hodhët poshtë",
+    "%(name)s declined": "%(name)s hodhi poshtë",
+    "accepting …": "po pranohet …",
+    "declining …": "po hidhet poshtë …"
 }
