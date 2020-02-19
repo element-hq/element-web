@@ -26,7 +26,6 @@ import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
-import RoomListOrderingController from "./controllers/RoomListOrderingController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -434,11 +433,10 @@ export const SETTINGS = {
             deny: [],
         },
     },
-    "RoomList.orderingAlgorithm": {
+    "RoomList.orderByRecents": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by message activity instead of by name"),
-        default: "recent", // controller maps boolean onto algorithm for future flexibility to >2 algorithms
-        controller: new RoomListOrderingController(),
+        default: true,
     },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
