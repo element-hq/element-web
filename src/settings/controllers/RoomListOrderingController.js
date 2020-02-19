@@ -22,4 +22,14 @@ export default class RoomListOrderingController extends SettingController {
         // where we may want >2 algorithms available for the user to choose between.
         return newValue ? "recent" : "alphabetic";
     }
+
+    getValueOverride(level: string, roomId: String, calculatedValue: *, calculatedAtLevel: string): * {
+        switch (calculatedValue) {
+            case "alphabetic":
+                return false;
+            case "recent":
+            default:
+                return true;
+        }
+    }
 }

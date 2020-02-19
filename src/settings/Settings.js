@@ -437,7 +437,7 @@ export const SETTINGS = {
     "RoomList.orderingAlgorithm": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by message activity instead of by name"),
-        default: "recent", // XXX controller maps boolean onto algorithm for future flexibility
+        default: "recent", // controller maps boolean onto algorithm for future flexibility to >2 algorithms
         controller: new RoomListOrderingController(),
     },
     "RoomList.orderByImportance": {
