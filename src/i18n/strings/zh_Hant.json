@@ -2152,5 +2152,10 @@
     "Whether you're using Riot on a device where touch is the primary input mechanism": "您是否在以觸控為主要機制的裝置上使用 Riot",
     "Whether you're using Riot as an installed Progressive Web App": "您是否使用 PWA 形式的 Riot",
     "Your user agent": "您的使用者代理字串",
-    "The information being sent to us to help make Riot better includes:": "傳送給我們以協助改進 Riot 的資訊包含了："
+    "The information being sent to us to help make Riot better includes:": "傳送給我們以協助改進 Riot 的資訊包含了：",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "您嘗試驗證的工作階段不支援 Riot 支援的掃描 QR code 或顏文字驗證。請用其他客戶端試試看。",
+    "You declined": "您拒絕了",
+    "%(name)s declined": "%(name)s 拒絕了",
+    "accepting …": "正在接受……",
+    "declining …": "正在拒絕……"
 }
