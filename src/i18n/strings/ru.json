@@ -1739,5 +1739,12 @@
     "Unverified session": "Непроверенная сессия",
     "Verifies a user, session, and pubkey tuple": "Проверяет пользователя, сессию и публичные ключи",
     "Unknown (user, session) pair:": "Неизвестная (пользователь:сессия) пара:",
-    "Session already verified!": "Сессия уже подтверждена!"
+    "Session already verified!": "Сессия уже подтверждена!",
+    "Never send encrypted messages to unverified sessions from this session": "Никогда не отправляйте зашифрованные сообщения в непроверенные сессий из этой сессии",
+    "Never send encrypted messages to unverified sessions in this room from this session": "Никогда не отправляйте зашифрованные сообщения в непроверенные сессии в эту комнату из этой сессии",
+    "Your keys are <b>not being backed up from this session</b>.": "Ваши ключи <b>не резервируются с этой сессии</b>.",
+    "Server or user ID to ignore": "ID сервера или пользователя для игнорирования",
+    "Subscribed lists": "Подписанные списки",
+    "Subscribe": "Подписать",
+    "A session's public name is visible to people you communicate with": "Публичное имя сессии видны людям, с которыми вы общаетесь"
 }
