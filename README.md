@@ -1,12 +1,29 @@
 Riot
 ====
 
-Riot (formerly known as Vector) is a Matrix web client built using the [Matrix React SDK](https://github.com/matrix-org/matrix-react-sdk).
+Riot (formerly known as Vector) is a Matrix web client built using the [Matrix
+React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
-Riot is officially supported on the web in the last 2 major versions of Chrome, Firefox, and Safari. For Riot on Desktop (electron),
-only the officially published app is supported. Other browsers and packages may work, however official support is not provided.
-For accessing Riot on an Android or iOS device, check out [riot-android](https://github.com/vector-im/riot-android)
-and [riot-ios](https://github.com/vector-im/riot-ios) - riot-web does not support mobile devices.
+Supported Environments
+======================
+
+Riot has several tiers of support for different environments:
+
+* Supported
+  * Definition: Issues **actively triaged**, regressions **block** the release
+  * Last 2 major versions of Chrome, Firefox, and Safari
+  * Latest release of official Riot Desktop app on macOS, Windows, and Linux versions that are actively supported by the OS vendor and receive security updates
+* Experimental
+  * Definition: Issues **accepted**, regressions **do not block** the release
+  * Riot as an installed PWA via current stable version of Chrome, Firefox, and Safari
+  * Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
+* Not supported
+  * Definition: Issues only affecting unsupported environments are **closed**
+  * Everything else
+
+For accessing Riot on an Android or iOS device, we currently recommend the
+native apps [riot-android](https://github.com/vector-im/riot-android)
+and [riot-ios](https://github.com/vector-im/riot-ios).
 
 Getting Started
 ===============
