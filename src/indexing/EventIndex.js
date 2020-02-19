@@ -251,13 +251,8 @@ export default class EventIndex extends EventEmitter {
      * otherwise.
      */
     isValidEvent(ev) {
-        const validEventType = ([
-            "m.room.message",
-            "m.room.name",
-            "m.room.topic",
-            ].indexOf(ev.getType()) >= 0
-                && !ev.isRedacted() && !ev.isDecryptionFailure()
-        );
+        const isUsefulType = ["m.room.message", "m.room.name", "m.room.topic"].includes(ev.getType());
+        const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
 
