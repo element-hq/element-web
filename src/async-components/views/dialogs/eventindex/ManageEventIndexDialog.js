@@ -50,11 +50,11 @@ export default class ManageEventIndexDialog extends React.Component {
         const eventIndex = EventIndexPeg.get();
         let stats;
 
-        // This call may fail if sporadically, not a huge issue as we will try
-        // later again and probably succeed.
         try {
             stats = await eventIndex.getStats();
         } catch {
+            // This call may fail if sporadically, not a huge issue as we will
+            // try later again and probably succeed.
             return;
         }
 
@@ -99,6 +99,9 @@ export default class ManageEventIndexDialog extends React.Component {
                 eventIndexSize = stats.size;
                 eventCount = stats.eventCount;
             } catch {
+                // This call may fail if sporadically, not a huge issue as we
+                // will try later again in the updateCurrentRoom call and
+                // probably succeed.
             }
 
             const roomStats = eventIndex.crawlingRooms();

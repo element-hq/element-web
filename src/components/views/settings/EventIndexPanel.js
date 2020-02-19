@@ -41,11 +41,11 @@ export default class EventIndexPanel extends React.Component {
         const eventIndex = EventIndexPeg.get();
         let stats;
 
-        // This call may fail if sporadically, not a huge issue as we will try
-        // later again and probably succeed.
         try {
             stats = await eventIndex.getStats();
         } catch {
+            // This call may fail if sporadically, not a huge issue as we will
+            // try later again and probably succeed.
             return;
         }
 
@@ -83,6 +83,9 @@ export default class EventIndexPanel extends React.Component {
                 eventIndexSize = stats.size;
                 roomCount = stats.roomCount;
             } catch {
+                // This call may fail if sporadically, not a huge issue as we
+                // will try later again in the updateCurrentRoom call and
+                // probably succeed.
             }
         }
 
