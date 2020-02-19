@@ -42,7 +42,7 @@ function remoteSetTint(event) {
 }
 
 window.onmessage = function(e) {
-    if (lockOrigin === undefined || e.origin === lockOrigin) {
+    if (e.origin === lockOrigin) {
         if (e.data.blob) remoteRender(e);
         else remoteSetTint(e);
     }
