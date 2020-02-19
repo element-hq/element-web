@@ -55,6 +55,7 @@ export const ALGO_ALPHABETIC = "alphabetic";
 export const ALGO_RECENT = "recent";
 
 const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
+
 const getListAlgorithm = (listKey, settingAlgorithm) => {
     // apply manual sorting only to m.favourite, otherwise respect the global setting
     // all the known tags are listed explicitly here to simplify future changes
@@ -743,7 +744,6 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(entryA, entryB, tsOfNewestEventFn) {
-        console.trace("DEBUG recents");
         const timestampA = tsOfNewestEventFn(entryA.room);
         const timestampB = tsOfNewestEventFn(entryB.room);
         return timestampB - timestampA;
