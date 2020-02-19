@@ -924,7 +924,7 @@
     "Failed to invite users to the room:": "Не удалось пригласить пользователей в комнату:",
     "Upgrades a room to a new version": "Модернизирует комнату до новой версии",
     "Sets the room name": "Устанавливает название комнаты",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Принудительно отбрасывает текущий сеанс исходящей группы в зашифрованной комнате",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Принудительно отбрасывает текущая сессия исходящей группы в зашифрованной комнате",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s модернизировал эту комнату.",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s добавил %(addedAddresses)s к списку адресов комнаты.",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s добавил %(addedAddresses)s к списку адресов комнаты.",
@@ -1733,5 +1733,11 @@
     "Hide sessions": "Скрытые сессии",
     "Enable 'Manage Integrations' in Settings to do this.": "Включите «Управление интеграциями» в настройках, чтобы сделать это.",
     "Unknown sessions": "Неизвестные сессии",
-    "Help": "Помощь"
+    "Help": "Помощь",
+    "If you cancel now, you won't complete verifying your other session.": "Если вы отмените сейчас, вы не завершите проверку вашей другой сессии.",
+    "Verify this session": "Проверьте эту сессию",
+    "Unverified session": "Непроверенная сессия",
+    "Verifies a user, session, and pubkey tuple": "Проверяет пользователя, сессию и публичные ключи",
+    "Unknown (user, session) pair:": "Неизвестная (пользователь:сессия) пара:",
+    "Session already verified!": "Сессия уже подтверждена!"
 }
