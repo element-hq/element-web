@@ -57,11 +57,6 @@ For a good example, see https://riot.im/develop/config.json.
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
    and `win32` (for update packages, not installer packages).
-1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
-   encrypted file attachments. This MUST be hosted on a completely separate domain to
-   anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
-   https://github.com/matrix-org/usercontent/blob/master/v1.html
 1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
    option out of your config file. If you want to enable analytics, set `piwik` to be an object
    containing the following properties:
@@ -87,7 +82,7 @@ For a good example, see https://riot.im/develop/config.json.
    default homeserver when signing up or logging in.
 1. `permalinkPrefix`: Used to change the URL that Riot generates permalinks with.
    By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
-   Set this to your Riot instance URL if you run an unfederated server (eg: 
+   Set this to your Riot instance URL if you run an unfederated server (eg:
    "https://riot.example.org").
 
 Note that `index.html` also has an og:image meta tag that is set to an image

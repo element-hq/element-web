@@ -18,6 +18,7 @@
     "test/svg/filters",
     "test/css/animations",
     "test/css/filters",
-    "test/network/fetch"
+    "test/network/fetch",
+    "test/iframe/sandbox"
   ]
 }
