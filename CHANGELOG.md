@@ -1,3 +1,37 @@
+Changes in [2.1.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.1) (2020-02-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0...v2.1.1)
+
+ * show spinner while loading local aliases
+   [\#4090](https://github.com/matrix-org/matrix-react-sdk/pull/4090)
+ * Don't index key verification events.
+   [\#4083](https://github.com/matrix-org/matrix-react-sdk/pull/4083)
+ * Get rid of dependence on usercontent.riot.im
+   [\#4046](https://github.com/matrix-org/matrix-react-sdk/pull/4046)
+ * also detect aliases using new /aliases endpoint for room access settings
+   [\#4089](https://github.com/matrix-org/matrix-react-sdk/pull/4089)
+ * get local aliases from /aliases in room settings
+   [\#4086](https://github.com/matrix-org/matrix-react-sdk/pull/4086)
+ * Start verification sessions in an E2E DM where possible
+   [\#4080](https://github.com/matrix-org/matrix-react-sdk/pull/4080)
+ * Only show supported verification methods
+   [\#4077](https://github.com/matrix-org/matrix-react-sdk/pull/4077)
+ * Use local echo in VerificationRequest for accepting/declining a verification
+   request
+   [\#4072](https://github.com/matrix-org/matrix-react-sdk/pull/4072)
+ * Report installed PWA, touch input status in rageshakes, analytics
+   [\#4078](https://github.com/matrix-org/matrix-react-sdk/pull/4078)
+ * refactor event grouping into separate helper classes
+   [\#4059](https://github.com/matrix-org/matrix-react-sdk/pull/4059)
+ * Find existing requests when starting a new verification request
+   [\#4070](https://github.com/matrix-org/matrix-react-sdk/pull/4070)
+ * Always speak the full text of the typing indicator when it updates.
+   [\#4074](https://github.com/matrix-org/matrix-react-sdk/pull/4074)
+ * Fix escaped markdown passing backslashes through
+   [\#4008](https://github.com/matrix-org/matrix-react-sdk/pull/4008)
+ * Move the sidebar to below the sidebar tab buttons for screen readers.
+   [\#4071](https://github.com/matrix-org/matrix-react-sdk/pull/4071)
+
 Changes in [2.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0) (2020-02-17)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0-rc.2...v2.1.0)
