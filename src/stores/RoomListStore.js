@@ -509,7 +509,7 @@ class RoomListStore extends Store {
             // Speed optimization: Don't do complicated math if we don't have to.
             if (!shouldHaveRoom) {
                 listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
-            } else if (getListAlgorithm(key, this._state.algorithm) === ALGO_MANUAL || !this._state.orderImportantFirst) {
+            } else if (getListAlgorithm(key, this._state.algorithm) === ALGO_MANUAL) {
                 // Manually ordered tags are sorted later, so for now we'll just clone the tag
                 // and add our room if needed
                 listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
