@@ -1590,5 +1590,6 @@
     "You have %(count)s unread notifications in a prior version of this room.|one": "Sie haben %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raumes.",
     "Go Back": "Gehe zurück",
     "Notification Autocomplete": "Benachrichtigung Autovervollständigen",
-    "If disabled, messages from encrypted rooms won't appear in search results.": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen."
+    "If disabled, messages from encrypted rooms won't appear in search results.": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
+    "This user has not verified all of their sessions.": "Dieser Benutzer hat nicht alle seine Sitzungen verifiziert."
 }
