@@ -23,7 +23,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import Modal from "../../../Modal";
-import {PHASE_REQUESTED} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {PHASE_REQUESTED, PHASE_UNSENT} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import * as sdk from "../../../index";
 import {_t} from "../../../languageHandler";
 
@@ -69,9 +69,10 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
         const roomId = await ensureDMExists(cli, member.userId);
         const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
         setRequest(verificationRequest);
+        setPhase(verificationRequest.phase);
     }, [member.userId]);
 
-    const requested = request && (phase === PHASE_REQUESTED || phase === undefined);
+    const requested = request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined);
     if (!request || requested) {
         return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
     } else {

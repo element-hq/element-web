@@ -435,7 +435,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         }
     }
 
-    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     if (localStorage) {
         try {
