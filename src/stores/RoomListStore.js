@@ -474,6 +474,12 @@ class RoomListStore extends Store {
     _setRoomCategory(room, category) {
         if (!room) return; // This should only happen in tests
 
+        if (!this._state.orderImportantFirst) {
+            // XXX bail here early to avoid https://github.com/vector-im/riot-web/issues/9216
+            // this may mean that category updates are missed whilst not ordering by importance first
+            return;
+        }
+
         const listsClone = {};
 
         // Micro optimization: Support lazily loading the last timestamp in a room
