@@ -1,3 +1,12 @@
+Changes in [1.5.10](https://github.com/vector-im/riot-web/releases/tag/v1.5.10) (2020-02-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.9...v1.5.10)
+
+ * Get rid of dependence on usercontent.riot.im
+   [\#12292](https://github.com/vector-im/riot-web/pull/12292)
+ * Add experimental support tier
+   [\#12377](https://github.com/vector-im/riot-web/pull/12377)
+
 Changes in [1.5.9](https://github.com/vector-im/riot-web/releases/tag/v1.5.9) (2020-02-17)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.9-rc.1...v1.5.9)
