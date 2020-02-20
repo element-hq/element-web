@@ -26,10 +26,15 @@ export default class VerificationRequestDialog extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
+    constructor(...args) {
+        super(...args);
+        this.onFinished = this.onFinished.bind(this);
+    }
+
     render() {
         const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
         const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
-        return <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
+        return <BaseDialog className="mx_InfoDialog" onFinished={this.onFinished}
                 contentId="mx_Dialog_content"
                 title={_t("Verification Request")}
                 hasCancel={true}
@@ -41,5 +46,10 @@ export default class VerificationRequestDialog extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId)}
             />
         </BaseDialog>;
+    }
+
+    onFinished() {
+        this.props.verificationRequest.cancel();
+        this.props.onFinished();
     }
 }
