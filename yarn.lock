@@ -7595,21 +7595,6 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
-matrix-js-sdk@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.0.1.tgz#ffbbc89d2436f9eb378cd81bd3993f59ec8fb895"
-  integrity sha512-1Jl18tYDGQNo+PWC2mBdYd6WNrL20jhG9+FF1p2w6paS7IBC74QDCEKP3GLXr3SSmWdNuAYTFB94vZQRJ31HzA==
-  dependencies:
-    "@babel/runtime" "^7.8.3"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.2"
-    loglevel "^1.6.4"
-    qs "^6.5.2"
-    request "^2.88.0"
-    unhomoglyph "^1.0.2"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "5.0.1"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a998006842ae558f02819ca84fbaad43685cc10b"
@@ -7632,10 +7617,9 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@2.1.1:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.1.1.tgz#16071d0fbb37203316648e17ea0b63923e05c0fd"
-  integrity sha512-1owROsu0Qw/IzGxh6b5y9oJ00rESEsPAJ00iWz+IUQA7oGdMzsPefJXF9OhE4tAUaVbwoOBmqzBHEvfM6EJUDw==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/b1a3d8ad63d570d638f858f715d09d63b664e0a3"
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7663,7 +7647,7 @@ matrix-react-sdk@2.1.1:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "5.0.1"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     minimist "^1.2.0"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
