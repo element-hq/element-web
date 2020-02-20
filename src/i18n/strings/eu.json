@@ -2097,5 +2097,8 @@
     "Your unverified session '%(displayName)s' is requesting encryption keys.": "Zure egiaztatu gabeko '%(displayName)s' saioa zifratze gakoak eskatzen ari da.",
     "We recommend you go through the verification process for each session to confirm they belong to their legitimate owner, but you can resend the message without verifying if you prefer.": "Egiaztaketa prozesua saio bakoitzeko egitea aholkatzen dizugu, benetan jabearenak direla baieztatzeko, baina egiaztaketa egin gabe mezua bidali dezakezu ere.",
     "Access your secure message history and your cross-signing identity for verifying other sessions by entering your passphrase.": "Atzitu zure mezu seguruen historiala eta zeharkako sinatzerako identitatea beste saioak egiaztatzeko zure pasa-esaldia sartuz.",
-    "<showSessionsText>Show sessions</showSessionsText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showSessionsText>Erakutsi saioak</showSessionsText>, <sendAnywayText>bidali edonola ere</sendAnywayText> edo <cancelText>ezeztatu</cancelText>."
+    "<showSessionsText>Show sessions</showSessionsText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showSessionsText>Erakutsi saioak</showSessionsText>, <sendAnywayText>bidali edonola ere</sendAnywayText> edo <cancelText>ezeztatu</cancelText>.",
+    "The information being sent to us to help make Riot better includes:": "Riot hobetzeko bidaltzen zaigun informazioa honakoa da, besteren artean:",
+    "Verify this session by completing one of the following:": "Egiaztatu saio hau hauetako bat osatuz:",
+    "or": "ala"
 }
