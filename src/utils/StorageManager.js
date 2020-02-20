@@ -43,6 +43,16 @@ function track(action) {
     Analytics.trackEvent("StorageManager", action);
 }
 
+export function tryPersistStorage() {
+    if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().then(persistent => {
+            console.log("StorageManager: Persistent?", persistent);
+        });
+    } else {
+        console.log("StorageManager: Persistence unsupported");
+    }
+}
+
 export async function checkConsistency() {
     log("Checking storage consistency");
     log(`Local storage supported? ${!!localStorage}`);
