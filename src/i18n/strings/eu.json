@@ -2101,5 +2101,12 @@
     "The information being sent to us to help make Riot better includes:": "Riot hobetzeko bidaltzen zaigun informazioa honakoa da, besteren artean:",
     "Verify this session by completing one of the following:": "Egiaztatu saio hau hauetako bat osatuz:",
     "or": "ala",
-    "The version of Riot": "Riot bertsioa"
+    "The version of Riot": "Riot bertsioa",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Sarrera mekanismo nagusia ukimena den gailu bat erabiltzen duzun",
+    "Whether you're using Riot as an installed Progressive Web App": "Riot instalatutako aplikazio progresibo gisa erabiltzen duzun",
+    "Your user agent": "Zure erabiltzaile-agentea",
+    "Show typing notifications": "Erakutsi idazketa jakinarazpenak",
+    "Scan this unique code": "Eskaneatu kode bakan hau",
+    "Compare unique emoji": "Konparatu emoji bakana",
+    "Compare a unique set of emoji if you don't have a camera on either device": "Konparatu emoji sorta bakana gailuek kamerarik ez badute"
 }
