@@ -516,5 +516,8 @@
     "Multiple integration managers": "Flere integrationsmanagere",
     "Enable Emoji suggestions while typing": "Aktiver emoji forslag under indtastning",
     "Use compact timeline layout": "Brug kompakt tidslinje",
-    "Show a placeholder for removed messages": "Vis en pladsholder for fjernede beskeder"
+    "Show a placeholder for removed messages": "Vis en pladsholder for fjernede beskeder",
+    "The version of Riot": "Riot versionen",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Hvorvidt du benytter Riot på en enhed, hvor touch er den primære input-grænseflade",
+    "Your user agent": "Din user agent"
 }
