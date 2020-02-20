@@ -59,7 +59,7 @@ export default class VerificationQRCode extends React.PureComponent {
         }
 
         const requestEvent = verificationRequest.requestEvent;
-        let transactionId = requestEvent.getId()
+        const transactionId = requestEvent.getId()
             ? requestEvent.getId()
             : ToDeviceChannel.getTransactionId(requestEvent);
 
@@ -112,7 +112,7 @@ export default class VerificationQRCode extends React.PureComponent {
         this.generateQrCode();
     }
 
-    componentDidUpdate(prevProps: Readonly<P>): void {
+    componentDidUpdate(prevProps): void {
         if (JSON.stringify(this.props) === JSON.stringify(prevProps)) return; // No prop change
 
         this.generateQRCode();
