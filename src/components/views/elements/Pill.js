@@ -128,7 +128,8 @@ const Pill = createReactClass({
             case Pill.TYPE_ROOM_MENTION: {
                 const localRoom = resourceId[0] === '#' ?
                     MatrixClientPeg.get().getRooms().find((r) => {
-                        return r.getAliases().includes(resourceId);
+                        return r.getCanonicalAlias() === resourceId ||
+                               r.getAliases().includes(resourceId);
                     }) : MatrixClientPeg.get().getRoom(resourceId);
                 room = localRoom;
                 if (!localRoom) {
