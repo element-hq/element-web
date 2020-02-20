@@ -2100,5 +2100,6 @@
     "<showSessionsText>Show sessions</showSessionsText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showSessionsText>Erakutsi saioak</showSessionsText>, <sendAnywayText>bidali edonola ere</sendAnywayText> edo <cancelText>ezeztatu</cancelText>.",
     "The information being sent to us to help make Riot better includes:": "Riot hobetzeko bidaltzen zaigun informazioa honakoa da, besteren artean:",
     "Verify this session by completing one of the following:": "Egiaztatu saio hau hauetako bat osatuz:",
-    "or": "ala"
+    "or": "ala",
+    "The version of Riot": "Riot bertsioa"
 }
