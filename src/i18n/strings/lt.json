@@ -755,7 +755,7 @@
     "Sign In": "Prisijungti",
     "Explore rooms": "Žvalgyti kambarius",
     "Your Riot is misconfigured": "Jūsų Riot yra neteisingai sukonfigūruotas",
-    "Sign in to your Matrix account on %(serverName)s": "Prisijunkite prie savo paskyros %(serverName)s serveryje",
+    "Sign in to your Matrix account on %(serverName)s": "Prisijunkite prie savo Matrix paskyros %(serverName)s serveryje",
     "Sign in to your Matrix account on <underlinedServerName />": "Prisijunkite prie savo paskyros <underlinedServerName /> serveryje",
     "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Nepriklausomai nuo to ar jūs naudojate 'duonos trupinių' funkciją (avatarai virš kambarių sąrašo)",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Kur šis puslapis įtraukia identifikuojamą informaciją, kaip kambarys, vartotojas ar grupės ID, tie duomenys yra pašalinami prieš siunčiant į serverį.",
@@ -900,5 +900,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Ar tikrai norite palikti kambarį %(roomName)s?",
     "%(creator)s created and configured the room.": "%(creator)s sukūrė ir sukonfigūravo kambarį.",
     "Riot failed to get the public room list.": "Riot nepavyko gauti viešų kambarių sąrašą.",
-    "General failure": "Bendras triktis"
+    "General failure": "Bendras triktis",
+    "Messages containing my username": "Žinutės, kuriose yra mano vartotojo vardas"
 }
