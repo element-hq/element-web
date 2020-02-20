@@ -27,7 +27,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {ensureDMExists} from "../../../createRoom";
 import dis from "../../../dispatcher";
 import SettingsStore from '../../../settings/SettingsStore';
-import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import VerificationQREmojiOptions from "../verification/VerificationQREmojiOptions";
 
 const MODE_LEGACY = 'legacy';
@@ -135,7 +135,6 @@ export default class DeviceVerifyDialog extends React.Component {
                 this._request = await client.requestVerification(this.props.userId, [
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,
-                    SCAN_QR_CODE_METHOD,
                     verificationMethods.RECIPROCATE_QR_CODE,
                 ]);
 
