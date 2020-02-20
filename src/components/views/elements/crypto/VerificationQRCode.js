@@ -24,9 +24,9 @@ import {decodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 import Spinner from "../Spinner";
 import * as QRCode from "qrcode";
 
-const CODE_VERSION = 0x02;
-const BINARY_PREFIX = "MATRIX"; // ASCII, used to prefix the
-const MODE_VERIFY_OTHER_USER = 0x00;
+const CODE_VERSION = 0x02; // the version of binary QR codes we support
+const BINARY_PREFIX = "MATRIX"; // ASCII, used to prefix the binary format
+const MODE_VERIFY_OTHER_USER = 0x00; // Verifying someone who isn't us
 const MODE_VERIFY_SELF_TRUSTED = 0x01; // We trust the master key
 const MODE_VERIFY_SELF_UNTRUSTED = 0x02; // We do not trust the master key
 
