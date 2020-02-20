@@ -645,6 +645,13 @@ export default class InviteDialog extends React.PureComponent {
                     } catch (e) {
                         console.warn("Non-fatal error trying to make an invite for a user ID");
                         console.warn(e);
+
+                        // Add a result anyways, just without a profile
+                        r.results.push({
+                            user_id: term,
+                            display_name: term,
+                            avatar_url: null,
+                        });
                     }
                 }
 
