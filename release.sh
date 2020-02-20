@@ -61,7 +61,7 @@ git commit package.json -m "$tag"
 
 cd ..
 
-exec ./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
+./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
 
 if [ $prerelease -eq 0 ]
 then
