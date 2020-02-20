@@ -1857,5 +1857,10 @@
     "All sessions for this user are trusted": "Alle sessies van deze gebruiker zijn vertrouwd",
     "Some sessions in this encrypted room are not trusted": "Sommige sessies in dit versleutelde gesprek zijn niet vertrouwd",
     "All sessions in this encrypted room are trusted": "Alle sessies in dit versleutelde gesprek zijn vertrouwd",
-    "Mod": "Mod"
+    "Mod": "Mod",
+    "rooms.": "gesprekken.",
+    "Recent rooms": "Actuele gesprekken",
+    "Direct Messages": "Tweegesprekken",
+    "If disabled, messages from encrypted rooms won't appear in search results.": "Dit moet aanstaan om te kunnen zoeken in versleutelde gesprekken.",
+    "Indexed rooms:": "Geïndexeerde gesprekken:"
 }
