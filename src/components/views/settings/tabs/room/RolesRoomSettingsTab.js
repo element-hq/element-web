@@ -107,20 +107,20 @@ export default class RolesRoomSettingsTab extends React.Component {
     };
 
     componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership.bind(this));
+        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership);
     }
 
     componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.members", this._onRoomMembership.bind(this));
+            client.removeListener("RoomState.members", this._onRoomMembership);
         }
     }
 
-    _onRoomMembership(event, state, member) {
+    _onRoomMembership = (event, state, member) => {
         if (state.roomId !== this.props.roomId) return;
         this.forceUpdate();
-    }
+    };
 
     _populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
         for (const desiredEvent of Object.keys(plEventsToShow)) {
