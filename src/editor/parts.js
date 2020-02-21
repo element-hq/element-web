@@ -254,8 +254,8 @@ class RoomPillPart extends PillPart {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this._room.name);
-            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+            initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
+            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId)}`;
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
