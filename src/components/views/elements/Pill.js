@@ -129,7 +129,7 @@ const Pill = createReactClass({
                 const localRoom = resourceId[0] === '#' ?
                     MatrixClientPeg.get().getRooms().find((r) => {
                         return r.getCanonicalAlias() === resourceId ||
-                               r.getAliases().includes(resourceId);
+                               r.getAltAliases().includes(resourceId);
                     }) : MatrixClientPeg.get().getRoom(resourceId);
                 room = localRoom;
                 if (!localRoom) {
