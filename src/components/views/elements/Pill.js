@@ -23,7 +23,6 @@ import classNames from 'classnames';
 import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import { getDisplayAliasForRoom } from '../../../Rooms';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
