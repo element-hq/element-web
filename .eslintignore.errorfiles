@@ -61,3 +61,7 @@ test/mock-clock.js
 test/notifications/ContentRules-test.js
 test/notifications/PushRuleVectorState-test.js
 test/stores/RoomViewStore-test.js
+src/component-index.js
+test/end-to-end-tests/node_modules/
+test/end-to-end-tests/riot/
+test/end-to-end-tests/synapse/
