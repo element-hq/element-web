@@ -70,7 +70,7 @@ export class ThemeWatcher {
         }
     };
 
-    // XXX: forceTheme param aded here as local echo appears to be unreliable
+    // XXX: forceTheme param added here as local echo appears to be unreliable
     // https://github.com/vector-im/riot-web/issues/11443
     recheck(forceTheme) {
         const oldTheme = this._currentTheme;
