@@ -241,8 +241,8 @@ const Pill = createReactClass({
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
-                    pillClass = 'mx_RoomPill';
                 }
+                pillClass = 'mx_RoomPill';
             }
                 break;
             case Pill.TYPE_GROUP_MENTION: {
