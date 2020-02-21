@@ -630,13 +630,14 @@ export default class InviteDialog extends React.PureComponent {
 
                 // While we're here, try and autocomplete a search result for the mxid itself
                 // if there's no matches (and the input looks like a mxid).
-                if (term[0] === '@' && term.indexOf(':') > 1 && r.results.length === 0) {
+                if (term[0] === '@' && term.indexOf(':') > 1) {
                     try {
                         const profile = await MatrixClientPeg.get().getProfileInfo(term);
                         if (profile) {
                             // If we have a profile, we have enough information to assume that
-                            // the mxid can be invited - add it to the list
-                            r.results.push({
+                            // the mxid can be invited - add it to the list. We stick it at the
+                            // top so it is most obviously presented to the user.
+                            r.results.splice(0, 0, {
                                 user_id: term,
                                 display_name: profile['displayname'],
                                 avatar_url: profile['avatar_url'],
@@ -646,8 +647,9 @@ export default class InviteDialog extends React.PureComponent {
                         console.warn("Non-fatal error trying to make an invite for a user ID");
                         console.warn(e);
 
-                        // Add a result anyways, just without a profile
-                        r.results.push({
+                        // Add a result anyways, just without a profile. We stick it at the
+                        // top so it is most obviously presented to the user.
+                        r.results.splice(0, 0,{
                             user_id: term,
                             display_name: term,
                             avatar_url: null,
