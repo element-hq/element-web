@@ -512,9 +512,27 @@ export default class InviteDialog extends React.PureComponent {
         return false;
     }
 
+    _convertFilter(): Member[] {
+        // Check to see if there's anything to convert first
+        if (!this.state.filterText || !this.state.filterText.includes('@')) return this.state.targets || [];
+
+        let newMember: Member;
+        if (this.state.filterText.startsWith('@')) {
+            // Assume mxid
+            newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null});
+        } else {
+            // Assume email
+            newMember = new ThreepidMember(this.state.filterText);
+        }
+        const newTargets = [...(this.state.targets || []), newMember];
+        this.setState({targets: newTargets, filterText: ''});
+        return newTargets;
+    }
+
     _startDm = async () => {
         this.setState({busy: true});
-        const targetIds = this.state.targets.map(t => t.userId);
+        const targets = this._convertFilter();
+        const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
         const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
@@ -544,8 +562,11 @@ export default class InviteDialog extends React.PureComponent {
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         let createRoomPromise = Promise.resolve();
-        if (targetIds.length === 1) {
+        const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
+        if (targetIds.length === 1 && !isSelf) {
             createRoomOptions.dmUserId = targetIds[0];
+            createRoomPromise = createRoom(createRoomOptions);
+        } else if (isSelf) {
             createRoomPromise = createRoom(createRoomOptions);
         } else {
             // Create a boring room and try to invite the targets manually.
@@ -573,7 +594,9 @@ export default class InviteDialog extends React.PureComponent {
 
     _inviteUsers = () => {
         this.setState({busy: true});
-        const targetIds = this.state.targets.map(t => t.userId);
+        this._convertFilter();
+        const targets = this._convertFilter();
+        const targetIds = targets.map(t => t.userId);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         if (!room) {
@@ -630,13 +653,14 @@ export default class InviteDialog extends React.PureComponent {
 
                 // While we're here, try and autocomplete a search result for the mxid itself
                 // if there's no matches (and the input looks like a mxid).
-                if (term[0] === '@' && term.indexOf(':') > 1 && r.results.length === 0) {
+                if (term[0] === '@' && term.indexOf(':') > 1) {
                     try {
                         const profile = await MatrixClientPeg.get().getProfileInfo(term);
                         if (profile) {
                             // If we have a profile, we have enough information to assume that
-                            // the mxid can be invited - add it to the list
-                            r.results.push({
+                            // the mxid can be invited - add it to the list. We stick it at the
+                            // top so it is most obviously presented to the user.
+                            r.results.splice(0, 0, {
                                 user_id: term,
                                 display_name: profile['displayname'],
                                 avatar_url: profile['avatar_url'],
@@ -645,6 +669,14 @@ export default class InviteDialog extends React.PureComponent {
                     } catch (e) {
                         console.warn("Non-fatal error trying to make an invite for a user ID");
                         console.warn(e);
+
+                        // Add a result anyways, just without a profile. We stick it at the
+                        // top so it is most obviously presented to the user.
+                        r.results.splice(0, 0, {
+                            user_id: term,
+                            display_name: term,
+                            avatar_url: null,
+                        });
                     }
                 }
 
@@ -1029,6 +1061,8 @@ export default class InviteDialog extends React.PureComponent {
             goButtonFn = this._inviteUsers;
         }
 
+        const hasSelection = this.state.targets.length > 0
+            || (this.state.filterText && this.state.filterText.includes('@'));
         return (
             <BaseDialog
                 className='mx_InviteDialog'
@@ -1045,7 +1079,7 @@ export default class InviteDialog extends React.PureComponent {
                                 kind="primary"
                                 onClick={goButtonFn}
                                 className='mx_InviteDialog_goButton'
-                                disabled={this.state.busy}
+                                disabled={this.state.busy || !hasSelection}
                             >
                                 {buttonText}
                             </AccessibleButton>
