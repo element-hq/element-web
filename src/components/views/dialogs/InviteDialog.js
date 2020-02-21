@@ -801,7 +801,7 @@ export default class InviteDialog extends React.PureComponent {
         ];
         const toAdd = [];
         const failed = [];
-        const potentialAddresses = text.split(/[\s,]+/);
+        const potentialAddresses = text.split(/[\s,]+/).map(p => p.trim()).filter(p => !!p); // filter empty strings
         for (const address of potentialAddresses) {
             const member = possibleMembers.find(m => m.userId === address);
             if (member) {
