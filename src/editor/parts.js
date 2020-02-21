@@ -422,14 +422,14 @@ export class PartCreator {
         return new PillCandidatePart(text, this._autoCompleteCreator);
     }
 
-    roomPill(alias) {
+    roomPill(alias, roomId) {
         let room;
-        if (alias[0] === '#') {
+        if (roomId || alias[0] !== "#") {
+            room = this._client.getRoom(roomId || alias);
+        } else {
             room = this._client.getRooms().find((r) => {
                 return r.getCanonicalAlias() === alias || r.getAliases().includes(alias);
             });
-        } else {
-            room = this._client.getRoom(alias);
         }
         return new RoomPillPart(alias, room);
     }
