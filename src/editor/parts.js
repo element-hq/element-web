@@ -428,7 +428,8 @@ export class PartCreator {
             room = this._client.getRoom(roomId || alias);
         } else {
             room = this._client.getRooms().find((r) => {
-                return r.getCanonicalAlias() === alias || r.getAliases().includes(alias);
+                return r.getCanonicalAlias() === alias ||
+                       r.getAltAliases().includes(alias);
             });
         }
         return new RoomPillPart(alias, room);
