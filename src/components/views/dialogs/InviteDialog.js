@@ -513,7 +513,8 @@ export default class InviteDialog extends React.PureComponent {
     }
 
     _convertFilter(): Member[] {
-        if (!this.state.filterText || !this.state.filterText.includes('@')) return; // nothing to convert
+        // Check to see if there's anything to convert first
+        if (!this.state.filterText || !this.state.filterText.includes('@')) return this.state.targets || [];
 
         let newMember: Member;
         if (this.state.filterText.startsWith('@')) {
@@ -523,7 +524,7 @@ export default class InviteDialog extends React.PureComponent {
             // Assume email
             newMember = new ThreepidMember(this.state.filterText);
         }
-        const newTargets = [...this.state.targets, newMember];
+        const newTargets = [...(this.state.targets || []), newMember];
         this.setState({targets: newTargets, filterText: ''});
         return newTargets;
     }
@@ -561,8 +562,11 @@ export default class InviteDialog extends React.PureComponent {
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         let createRoomPromise = Promise.resolve();
-        if (targetIds.length === 1) {
+        const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
+        if (targetIds.length === 1 && !isSelf) {
             createRoomOptions.dmUserId = targetIds[0];
+            createRoomPromise = createRoom(createRoomOptions);
+        } else if (isSelf) {
             createRoomPromise = createRoom(createRoomOptions);
         } else {
             // Create a boring room and try to invite the targets manually.
