@@ -674,6 +674,7 @@ export default createReactClass({
                     this.state.view !== VIEWS.E2E_SETUP
                 ) {
                     this._onLoggedIn();
+                    ThemeController.isLogin = false;
                 }
                 break;
             case 'on_client_not_viable':
