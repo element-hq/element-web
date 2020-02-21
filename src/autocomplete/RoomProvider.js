@@ -23,7 +23,6 @@ import AutocompleteProvider from './AutocompleteProvider';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import {getDisplayAliasForRoom} from '../Rooms';
 import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
@@ -92,6 +91,7 @@ export default class RoomProvider extends AutocompleteProvider {
             completions = _sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
+            ]);
             completions = completions.map((room) => {
                 return {
                     completion: room.displayedAlias,
