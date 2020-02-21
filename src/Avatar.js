@@ -102,6 +102,8 @@ export function getInitialLetter(name) {
 }
 
 export function avatarUrlForRoom(room, width, height, resizeMethod) {
+    if (!room) return null; // null-guard
+
     const explicitRoomAvatar = room.getAvatarUrl(
         MatrixClientPeg.get().getHomeserverUrl(),
         width,
