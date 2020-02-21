@@ -237,15 +237,7 @@ const Pill = createReactClass({
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    const isModeratedAlias = room.getCanonicalAlias() === resource ||
-                        room.getAltAliases().includes(resource);
-                    if (!isModeratedAlias) {
-                        linkText = getDisplayAliasForRoom(room);
-                    }
-                    // if there are no moderated aliases, stick to resource
-                    if (!linkText) {
-                        linkText = resource;
-                    }
+                    linkText = resource;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
