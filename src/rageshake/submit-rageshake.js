@@ -106,6 +106,25 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         body.append('enabled_labs', enabledLabs.join(', '));
     }
 
+    // add storage persistence/quota information
+    if (navigator.storage && navigator.storage.persisted) {
+        try {
+            body.append("storageManager_persisted", await navigator.storage.persisted());
+        } catch (e) {}
+    }
+    if (navigator.storage && navigator.storage.estimate) {
+        try {
+            const estimate = await navigator.storage.estimate();
+            body.append("storageManager_quota", estimate.quota);
+            body.append("storageManager_usage", estimate.usage);
+            if (estimate.usageDetails) {
+                Object.keys(estimate.usageDetails).forEach(k => {
+                    body.append(`storageManager_usage_${k}`, estimate.usageDetails[k]);
+                });
+            }
+        } catch (e) {}
+    }
+
     if (opts.sendLogs) {
         progressCallback(_t("Collecting logs"));
         const logs = await rageshake.getLogsForReport();

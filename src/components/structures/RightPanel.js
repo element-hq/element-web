@@ -92,6 +92,7 @@ export default class RightPanel extends React.Component {
             // not mounted in time to get the dispatch.
             // Until then, let this code serve as a warning from history.
             if (
+                rps.roomPanelPhaseParams.member &&
                 userForPanel.userId === rps.roomPanelPhaseParams.member.userId &&
                 rps.roomPanelPhaseParams.verificationRequest
             ) {

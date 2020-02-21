@@ -65,6 +65,7 @@ import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
+import * as StorageManager from "../../utils/StorageManager";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -1193,6 +1194,8 @@ export default createReactClass({
         } else {
             this._showScreenAfterLogin();
         }
+
+        StorageManager.tryPersistStorage();
     },
 
     _showScreenAfterLogin: function() {

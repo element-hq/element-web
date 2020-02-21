@@ -54,14 +54,14 @@ export class IntegrationManagers {
     startWatching(): void {
         this.stopWatching();
         this._client = MatrixClientPeg.get();
-        this._client.on("accountData", this._onAccountData.bind(this));
+        this._client.on("accountData", this._onAccountData);
         this._compileManagers();
         setInterval(() => this._setupHomeserverManagers(), HS_MANAGERS_REFRESH_INTERVAL);
     }
 
     stopWatching(): void {
         if (!this._client) return;
-        this._client.removeListener("accountData", this._onAccountData.bind(this));
+        this._client.removeListener("accountData", this._onAccountData);
         if (this._wellknownRefreshTimerId !== null) clearInterval(this._wellknownRefreshTimerId);
     }
 
@@ -136,11 +136,11 @@ export class IntegrationManagers {
         this._primaryManager = null; // reset primary
     }
 
-    _onAccountData(ev: MatrixEvent): void {
+    _onAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() === 'm.widgets') {
             this._compileManagers();
         }
-    }
+    };
 
     hasManager(): boolean {
         return this._managers.length > 0;

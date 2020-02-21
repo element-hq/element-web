@@ -46,9 +46,18 @@ export default class ManageEventIndexDialog extends React.Component {
         };
     }
 
-    async updateCurrentRoom(room) {
+    updateCurrentRoom = async (room) => {
         const eventIndex = EventIndexPeg.get();
-        const stats = await eventIndex.getStats();
+        let stats;
+
+        try {
+            stats = await eventIndex.getStats();
+        } catch {
+            // This call may fail if sporadically, not a huge issue as we will
+            // try later again and probably succeed.
+            return;
+        }
+
         let currentRoom = null;
 
         if (room) currentRoom = room.name;
@@ -63,13 +72,13 @@ export default class ManageEventIndexDialog extends React.Component {
             roomCount: roomCount,
             currentRoom: currentRoom,
         });
-    }
+    };
 
     componentWillUnmount(): void {
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
-            eventIndex.removeListener("changedCheckpoint", this.updateCurrentRoom.bind(this));
+            eventIndex.removeListener("changedCheckpoint", this.updateCurrentRoom);
         }
     }
 
@@ -83,14 +92,21 @@ export default class ManageEventIndexDialog extends React.Component {
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
-            eventIndex.on("changedCheckpoint", this.updateCurrentRoom.bind(this));
+            eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            const stats = await eventIndex.getStats();
+            try {
+                const stats = await eventIndex.getStats();
+                eventIndexSize = stats.size;
+                eventCount = stats.eventCount;
+            } catch {
+                // This call may fail if sporadically, not a huge issue as we
+                // will try later again in the updateCurrentRoom call and
+                // probably succeed.
+            }
+
             const roomStats = eventIndex.crawlingRooms();
-            eventIndexSize = stats.size;
             crawlingRoomsCount = roomStats.crawlingRooms.size;
             roomCount = roomStats.totalRooms.size;
-            eventCount = stats.eventCount;
 
             const room = eventIndex.currentRoom();
             if (room) currentRoom = room.name;

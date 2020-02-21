@@ -35,7 +35,7 @@ do
     fi
 done
 
-exec ./node_modules/matrix-js-sdk/release.sh -z "$@"
+./node_modules/matrix-js-sdk/release.sh -z "$@"
 
 release="${1#v}"
 prerelease=0

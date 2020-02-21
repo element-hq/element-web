@@ -95,8 +95,8 @@ const FilePanel = createReactClass({
         // this could be made more general in the future or the filter logic
         // could be fixed.
         if (EventIndexPeg.get() !== null) {
-            client.on('Room.timeline', this.onRoomTimeline.bind(this));
-            client.on('Event.decrypted', this.onEventDecrypted.bind(this));
+            client.on('Room.timeline', this.onRoomTimeline);
+            client.on('Event.decrypted', this.onEventDecrypted);
         }
     },
 
@@ -107,8 +107,8 @@ const FilePanel = createReactClass({
         if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
 
         if (EventIndexPeg.get() !== null) {
-            client.removeListener('Room.timeline', this.onRoomTimeline.bind(this));
-            client.removeListener('Event.decrypted', this.onEventDecrypted.bind(this));
+            client.removeListener('Room.timeline', this.onRoomTimeline);
+            client.removeListener('Event.decrypted', this.onEventDecrypted);
         }
     },
 
