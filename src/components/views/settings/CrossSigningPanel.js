@@ -128,13 +128,12 @@ export default class CrossSigningPanel extends React.PureComponent {
         }
 
         const enabled = (
-            crossSigningPublicKeysOnDevice &&
             crossSigningPrivateKeysInStorage &&
             secretStorageKeyInAccount
         );
 
         let summarisedStatus;
-        if (enabled) {
+        if (enabled && crossSigningPublicKeysOnDevice) {
             summarisedStatus = <p>✅ {_t(
                 "Cross-signing and secret storage are enabled.",
             )}</p>;
