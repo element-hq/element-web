@@ -672,7 +672,7 @@ export default class InviteDialog extends React.PureComponent {
 
                         // Add a result anyways, just without a profile. We stick it at the
                         // top so it is most obviously presented to the user.
-                        r.results.splice(0, 0,{
+                        r.results.splice(0, 0, {
                             user_id: term,
                             display_name: term,
                             avatar_url: null,
@@ -1061,7 +1061,8 @@ export default class InviteDialog extends React.PureComponent {
             goButtonFn = this._inviteUsers;
         }
 
-        const hasSelection = this.state.targets.length > 0 || (this.state.filterText && this.state.filterText.includes('@'));
+        const hasSelection = this.state.targets.length > 0
+            || (this.state.filterText && this.state.filterText.includes('@'));
         return (
             <BaseDialog
                 className='mx_InviteDialog'
