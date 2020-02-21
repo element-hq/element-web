@@ -512,9 +512,26 @@ export default class InviteDialog extends React.PureComponent {
         return false;
     }
 
+    _convertFilter(): Member[] {
+        if (!this.state.filterText || !this.state.filterText.includes('@')) return; // nothing to convert
+
+        let newMember: Member;
+        if (this.state.filterText.startsWith('@')) {
+            // Assume mxid
+            newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null});
+        } else {
+            // Assume email
+            newMember = new ThreepidMember(this.state.filterText);
+        }
+        const newTargets = [...this.state.targets, newMember];
+        this.setState({targets: newTargets, filterText: ''});
+        return newTargets;
+    }
+
     _startDm = async () => {
         this.setState({busy: true});
-        const targetIds = this.state.targets.map(t => t.userId);
+        const targets = this._convertFilter();
+        const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
         const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
@@ -573,7 +590,9 @@ export default class InviteDialog extends React.PureComponent {
 
     _inviteUsers = () => {
         this.setState({busy: true});
-        const targetIds = this.state.targets.map(t => t.userId);
+        this._convertFilter();
+        const targets = this._convertFilter();
+        const targetIds = targets.map(t => t.userId);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         if (!room) {
@@ -1038,6 +1057,7 @@ export default class InviteDialog extends React.PureComponent {
             goButtonFn = this._inviteUsers;
         }
 
+        const hasSelection = this.state.targets.length > 0 || (this.state.filterText && this.state.filterText.includes('@'));
         return (
             <BaseDialog
                 className='mx_InviteDialog'
@@ -1054,7 +1074,7 @@ export default class InviteDialog extends React.PureComponent {
                                 kind="primary"
                                 onClick={goButtonFn}
                                 className='mx_InviteDialog_goButton'
-                                disabled={this.state.busy}
+                                disabled={this.state.busy || !hasSelection}
                             >
                                 {buttonText}
                             </AccessibleButton>
