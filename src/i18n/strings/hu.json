@@ -2144,5 +2144,15 @@
     "Destroy cross-signing keys?": "Eszközök közti hitelesítési kulcsok megsemmisítése?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Eszközök közti hitelesítési kulcsok törlése végleges. Mindenki akit ezzel hitelesítettél biztonsági figyelmeztetéseket fog látni. Hacsak nem vesztetted el az összes eszközödet amivel eszközök közti hitelesítést tudsz végezni, nem valószínű, hogy ezt szeretnéd tenni.",
     "Clear cross-signing keys": "Eszközök közti hitelesítési kulcsok törlése",
-    "Reset cross-signing and secret storage": "Eszközök közti hitelesítés és biztonsági tároló visszaállítása"
+    "Reset cross-signing and secret storage": "Eszközök közti hitelesítés és biztonsági tároló visszaállítása",
+    "The version of Riot": "Riot verziója",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Hogy olyan eszközön használod a Riotot ahol az érintés az elsődleges beviteli forma",
+    "Whether you're using Riot as an installed Progressive Web App": "Hogy a Riotot mint progresszív webes alkalmazást használod",
+    "Your user agent": "Felhasználói ügynök",
+    "The information being sent to us to help make Riot better includes:": "Az alábbi információk kerülnek elküldésre amivel a Riotot jobbá tudjuk tenni:",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "Az ellenőrizni kívánt munkamenet nem támogatja se a QR kód beolvasást se az emodzsi ellenőrzést, amit a Riot támogat. Próbáld meg egy másik klienssel.",
+    "You declined": "Elutasítottad",
+    "%(name)s declined": "%(name)s elutasította",
+    "accepting …": "elfogadás …",
+    "declining …": "elutasítás …"
 }
