@@ -490,6 +490,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        document.removeEventListener("selectionchange", this._onSelectionChange);
         this._editorRef.removeEventListener("input", this._onInput, true);
         this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
         this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
