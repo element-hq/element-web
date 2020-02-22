@@ -373,7 +373,6 @@ export default class BasicMessageEditor extends React.Component {
         // redo
         } else if ((modKey && event.key === Key.Y) ||
                   (IS_MAC && event.shiftKey && event.key === Key.Z)) {
-            debugger;
             if (this.historyManager.canRedo()) {
                 const {parts, caret} = this.historyManager.redo();
                 // pass matching inputType so historyManager doesn't push echo
