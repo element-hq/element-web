@@ -1055,7 +1055,10 @@ export default class InviteDialog extends React.PureComponent {
             helpText = _t(
                 "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
                 "<a>share this room</a>.", {},
-                {a: (sub) => <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>},
+                {
+                    a: (sub) =>
+                        <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                },
             );
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;

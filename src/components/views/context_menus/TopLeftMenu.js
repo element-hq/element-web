@@ -68,7 +68,8 @@ export default class TopLeftMenu extends React.Component {
                 {_t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener" tabIndex={-1}>{sub}</a>,
+                        a: sub =>
+                            <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener" tabIndex={-1}>{sub}</a>,
                     },
                 )}
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener" role="presentation" aria-hidden={true} tabIndex={-1}>

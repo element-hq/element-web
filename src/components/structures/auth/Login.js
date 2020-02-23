@@ -496,11 +496,10 @@ export default createReactClass({
                         "<a>homeserver's SSL certificate</a> is trusted, and that a browser extension " +
                         "is not blocking requests.", {},
                         {
-                            'a': (sub) => {
-                                return <a target="_blank" rel="noreferrer noopener" href={this.props.serverConfig.hsUrl}>
+                            'a': (sub) =>
+                                <a target="_blank" rel="noreferrer noopener" href={this.props.serverConfig.hsUrl}>
                                     { sub }
-                                </a>;
-                            },
+                                </a>,
                         },
                     ) }
                 </span>;

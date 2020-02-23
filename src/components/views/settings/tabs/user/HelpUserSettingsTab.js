@@ -140,8 +140,8 @@ export default class HelpUserSettingsTab extends React.Component {
                         CC-BY-SA 4.0</a>.
                     </li>
                     <li>
-                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener" target="_blank">
-                        twemoji-colr</a> font is ©&nbsp;
+                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener"
+                               target="_blank"> twemoji-colr</a> font is ©&nbsp;
                         <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">Mozilla Foundation</a>{' '}
                         used under the terms of&nbsp;
                         <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">
