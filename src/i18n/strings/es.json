@@ -1519,5 +1519,22 @@
     "Verify the link in your inbox": "Verifica el enlace en tu bandeja de entrada",
     "Complete": "Completar",
     "Share": "Compartir",
-    "Remove %(email)s?": "¿Eliminar %(email)s?"
+    "Remove %(email)s?": "¿Eliminar %(email)s?",
+    "Backup is not signed by any of your sessions": "La copia de seguridad no está firmada por ninguna de tus sesiones",
+    "This backup is trusted because it has been restored on this session": "Esta copia de seguridad es de confianza porque ha sido restaurada en esta sesión",
+    "Backup key stored: ": "Clave de seguridad almacenada: ",
+    "Your keys are <b>not being backed up from this session</b>.": "<b>No se está haciendo una copia de seguridad de tus claves en esta sesión</b>.",
+    "Clear notifications": "Limpiar notificaciones",
+    "Enable desktop notifications for this session": "Habilitar notificaciones de escritorio para esta sesión",
+    "Enable audible notifications for this session": "Habilitar notificaciones sonoras para esta sesión",
+    "Checking server": "Comprobando servidor",
+    "Change identity server": "Cambiar servidor de identidad",
+    "Disconnect from the identity server <current /> and connect to <new /> instead?": "¿Desconectarse del servidor de identidad <current /> y conectarse a <new/>?",
+    "Terms of service not accepted or the identity server is invalid.": "Términos de servicio no aceptados o el servidor de identidad es inválido.",
+    "The identity server you have chosen does not have any terms of service.": "El servidor de identidad que has elegido no tiene ningún término de servicio.",
+    "Disconnect identity server": "Desconectar servidor de identidad",
+    "Disconnect from the identity server <idserver />?": "¿Desconectarse del servidor de identidad <idserver />?",
+    "Disconnect": "Desconectarse",
+    "You should:": "Deberías:",
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s de %(totalRooms)s"
 }
