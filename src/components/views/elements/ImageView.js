@@ -216,7 +216,7 @@ export default class ImageView extends React.Component {
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
+                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } rel="noreferrer noopener">
                                 <div className="mx_ImageView_download">
                                         { _t('Download this file') }<br />
                                          <span className="mx_ImageView_size">{ sizeRes }</span>
