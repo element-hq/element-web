@@ -68,7 +68,7 @@ export default class BridgeSettingsTab extends React.Component {
                     {
                         // TODO: We don't have this link yet: this will prevent the translators
                         // having to re-translate the string when we do.
-                        a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}</p>
                 <ul className="mx_RoomSettingsDialog_BridgeList">
@@ -82,7 +82,7 @@ export default class BridgeSettingsTab extends React.Component {
                 {
                     // TODO: We don't have this link yet: this will prevent the translators
                     // having to re-translate the string when we do.
-                    a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noopener">{sub}</a>,
+                    a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{sub}</a>,
                 },
             )}</p>;
         }

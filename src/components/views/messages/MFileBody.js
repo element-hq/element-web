@@ -297,7 +297,7 @@ export default createReactClass({
         } else if (contentUrl) {
             const downloadProps = {
                 target: "_blank",
-                rel: "noopener",
+                rel: "noreferrer noopener",
 
                 // We set the href regardless of whether or not we intercept the download
                 // because we don't really want to convert the file to a blob eagerly, and

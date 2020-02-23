@@ -331,7 +331,7 @@ export const TermsAuthEntry = createReactClass({
             checkboxes.push(
                 <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
                     <input type="checkbox" onChange={() => this._togglePolicy(policy.id)} checked={checked} />
-                    <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
+                    <a href={policy.url} target="_blank" rel="noreferrer noopener">{ policy.name }</a>
                 </label>,
             );
         }

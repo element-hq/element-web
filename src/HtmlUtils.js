@@ -160,7 +160,7 @@ const transformTags = { // custom to matrix
                 delete attribs.target;
             }
         }
-        attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
+        attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
     'img': function(tagName, attribs) {

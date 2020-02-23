@@ -91,7 +91,7 @@ export default class ImageView extends React.Component {
     getName() {
         let name = this.props.name;
         if (name && this.props.link) {
-            name = <a href={ this.props.link } target="_blank" rel="noopener">{ name }</a>;
+            name = <a href={ this.props.link } target="_blank" rel="noreferrer noopener">{ name }</a>;
         }
         return name;
     }
