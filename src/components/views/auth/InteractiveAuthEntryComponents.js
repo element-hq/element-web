@@ -604,6 +604,7 @@ export const FallbackAuthEntry = createReactClass({
             this.props.authSessionId,
         );
         this._popupWindow = window.open(url);
+        this._popupWindow.opener = null;
     },
 
     _onReceiveMessage: function(event) {
