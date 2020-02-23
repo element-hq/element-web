@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,20 @@ import SettingsStore from "../settings/SettingsStore";
 import {PushProcessor} from 'matrix-js-sdk/src/pushprocessor';
 import * as sdk from '../index';
 
-export function pillifyLinks(nodes, mxEvent) {
+/**
+ * Recurses depth-first through a DOM tree, converting matrix.to links
+ * into pills based on the context of a given room.  Returns a list of
+ * the resulting React nodes so they can be unmounted rather than leaking.
+ *
+ * @param {Node[]} nodes - a list of sibling DOM nodes to traverse to try
+ *   to turn into pills.
+ * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
+ *   part of representing.
+ * @param {Node[]} pills: an accumulator of the DOM nodes which contain
+ *   React components which have been mounted as part of this.
+ *   The initial caller should pass in an empty array to seed the accumulator.
+ */
+export function pillifyLinks(nodes, mxEvent, pills) {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
@@ -45,6 +58,7 @@ export function pillifyLinks(nodes, mxEvent) {
 
                 ReactDOM.render(pill, pillContainer);
                 node.parentNode.replaceChild(pillContainer, node);
+                pills.push(pillContainer);
                 // Pills within pills aren't going to go well, so move on
                 pillified = true;
 
@@ -102,6 +116,7 @@ export function pillifyLinks(nodes, mxEvent) {
 
                         ReactDOM.render(pill, pillContainer);
                         roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
+                        pills.push(pillContainer);
                     }
                     // Nothing else to do for a text node (and we don't need to advance
                     // the loop pointer because we did it above)
@@ -111,9 +126,26 @@ export function pillifyLinks(nodes, mxEvent) {
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes, mxEvent);
+            pillifyLinks(node.childNodes, mxEvent, pills);
         }
 
         node = node.nextSibling;
+    }
+}
+
+/**
+ * Unmount all the pill containers from React created by pillifyLinks.
+ *
+ * It's critical to call this after pillifyLinks, otherwise
+ * Pills will leak, leaking entire DOM trees via the event
+ * emitter on BaseAvatar as per
+ * https://github.com/vector-im/riot-web/issues/12417
+ *
+ * @param {Node[]} pills - array of pill containers whose React
+ *   components should be unmounted.
+ */
+export function unmountPills(pills) {
+    for (const pillContainer of pills) {
+        ReactDOM.unmountComponentAtNode(pillContainer);
     }
 }
