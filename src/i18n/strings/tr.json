@@ -1536,5 +1536,19 @@
     "Someone is using an unknown session": "Birisi bilinmeyen bir oturum kullanıyor",
     "Everyone in this room is verified": "Bu odadaki herkes doğrulanmış",
     "Some sessions for this user are not trusted": "Bu kullanıcı için bazı oturumlar güvenilir değil",
-    "All sessions for this user are trusted": "Bu kullanıcı için tüm oturumlar güvenilir"
+    "All sessions for this user are trusted": "Bu kullanıcı için tüm oturumlar güvenilir",
+    "The version of Riot": "Riot sürümü",
+    "Your user agent": "Kullanıcı ajanınız",
+    "If you cancel now, you won't complete verifying the other user.": "Şimdi iptal ederseniz, diğer kullanıcıyı doğrulamayı tamamlamış olmayacaksınız.",
+    "If you cancel now, you won't complete verifying your other session.": "Şimdi iptal ederseniz, diğer oturumu doğrulamış olmayacaksınız.",
+    "Setting up keys": "Anahtarları ayarla",
+    "Custom (%(level)s)": "Özel (%(level)s)",
+    "Room contains unknown sessions": "Oda bilinmeyen oturumlar içeriyor",
+    "Unknown sessions": "Bilinmeyen oturumlar",
+    "Upload %(count)s other files|other": "%(count)s diğer dosyaları yükle",
+    "Upload %(count)s other files|one": "%(count)s dosyayı sağla",
+    "A widget would like to verify your identity": "Bir görsel tasarım kimliğinizi teyit etmek istiyor",
+    "Remember my selection for this widget": "Bu görsel bileşen işin seçimimi hatırla",
+    "Deny": "Reddet",
+    "Recovery key mismatch": "Kurtarma anahtarı uyumsuz"
 }
