@@ -637,6 +637,7 @@ function VerificationRequest({txnId, request}) {
     useEffect(() => {
         if (request.timeout == 0) return;
 
+        /* Note that request.timeout is a getter, so its value changes */
         const id = setInterval(() => {
            setTimeout(request.timeout);
         }, 500);
