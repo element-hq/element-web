@@ -166,7 +166,9 @@ export default createReactClass({
             });
 
         /* Check all verified user devices. */
-        for (const userId of [...verified, cli.getUserId()]) {
+        /* Don't alarm if no other users are verified  */
+        const targets = (verified.length > 0) ? [...verified, cli.getUserId()] : verified;
+        for (const userId of targets) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const allDevicesVerified = devices.every(({deviceId}) => {
                 return cli.checkDeviceTrust(userId, deviceId).isVerified();

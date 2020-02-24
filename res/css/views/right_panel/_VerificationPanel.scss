@@ -37,3 +37,70 @@ limitations under the License.
         }
     }
 }
+
+// Special case styling for EncryptionPanel in a Modal dialog
+.mx_Dialog, .mx_CompleteSecurity_body {
+    .mx_VerificationPanel_QRPhase_startOptions {
+        display: flex;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        align-items: stretch;
+
+        > .mx_VerificationPanel_QRPhase_betweenText {
+            width: 50px;
+            vertical-align: middle;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mx_VerificationPanel_QRPhase_startOption {
+            background-color: $user-tile-hover-bg-color;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+
+            canvas, .mx_VerificationPanel_QRPhase_noQR {
+                width: 220px !important;
+                height: 220px !important;
+                background-color: #fff;
+                border-radius: 4px;
+                vertical-align: middle;
+                text-align: center;
+                padding: 10px;
+            }
+
+            > p {
+                font-weight: 700;
+            }
+
+            .mx_VerificationPanel_QRPhase_helpText {
+                font-size: 14px;
+                margin-top: 71px;
+                text-align: center;
+            }
+
+            .mx_AccessibleButton {
+                position: absolute;
+                bottom: 30px;
+            }
+        }
+    }
+
+    // EncryptionPanel when verification is done
+    .mx_VerificationPanel_verified_section {
+        // center the big shield icon
+        .mx_E2EIcon {
+            margin: 0 auto;
+        }
+        // right align the "Got it" button
+        .mx_AccessibleButton {
+            float: right;
+        }
+    }
+}

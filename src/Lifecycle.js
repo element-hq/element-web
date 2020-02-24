@@ -435,7 +435,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         }
     }
 
-    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     if (localStorage) {
         try {
@@ -632,7 +632,7 @@ export async function onLoggedOut() {
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 async function _clearStorage() {
-    Analytics.logout();
+    Analytics.disable();
 
     if (window.localStorage) {
         window.localStorage.clear();

@@ -58,10 +58,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        const isPendingInRoomRequest = request.channel.roomId &&
-            !(request.ready || request.started || request.done || request.cancelled || request.observeOnly);
-        const isPendingDeviceRequest = request.channel.deviceId && request.started;
-        if (!isPendingInRoomRequest && !isPendingDeviceRequest) {
+        if (!request.canAccept) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
@@ -79,15 +76,15 @@ export default class VerificationRequestToast extends React.PureComponent {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
         // no room id for to_device requests
+        const cli = MatrixClientPeg.get();
         try {
+            await request.accept();
             if (request.channel.roomId) {
                 dis.dispatch({
                     action: 'view_room',
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                await request.accept();
-                const cli = MatrixClientPeg.get();
                 dis.dispatch({
                     action: "set_right_panel_phase",
                     phase: RIGHT_PANEL_PHASES.EncryptionPanel,
@@ -96,11 +93,10 @@ export default class VerificationRequestToast extends React.PureComponent {
                         member: cli.getUser(request.otherUserId),
                     },
                 });
-            } else if (request.channel.deviceId && request.verifier) {
-                // show to_device verifications in dialog still
-                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
-                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                    verifier: request.verifier,
+            } else {
+                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
+                    verificationRequest: request,
                 }, null, /* priority = */ false, /* static = */ true);
             }
         } catch (err) {

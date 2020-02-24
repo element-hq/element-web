@@ -119,7 +119,7 @@ export default createReactClass({
                         'In future this will be improved.',
                     ) }
                     {' '}
-                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noopener">
+                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noreferrer noopener">
                         https://github.com/vector-im/riot-web/issues/2671
                     </a>
                 </div>,
@@ -253,20 +253,24 @@ export default createReactClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPassword"
+                            <Field
+                                id="mx_ChangePassword_newPassword"
                                 type="password"
                                 label={passwordLabel}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
+                                autoComplete="new-password"
                             />
                         </div>
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPasswordConfirm"
+                            <Field
+                                id="mx_ChangePassword_newPasswordConfirm"
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
                                 onChange={this.onChangeNewPasswordConfirm}
+                                autoComplete="new-password"
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>

@@ -32,9 +32,9 @@ limitations under the License.
     width: 4px;
     height: 4px;
     border-radius: 16px;
-    overflow: hidden;
     background-color: $secondary-accent-color;
     border: 6px solid $accent-color;
+    pointer-events: none;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {

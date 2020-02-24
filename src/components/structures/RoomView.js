@@ -460,8 +460,6 @@ export default createReactClass({
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        SettingsStore.unwatchSetting(this._ciderWatcherRef);
-
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
@@ -811,7 +809,9 @@ export default createReactClass({
         debuglog("e2e verified", verified, "unverified", unverified);
 
         /* Check all verified user devices. */
-        for (const userId of [...verified, cli.getUserId()]) {
+        /* Don't alarm if no other users are verified  */
+        const targets = (verified.length > 0) ? [...verified, cli.getUserId()] : verified;
+        for (const userId of targets) {
             const devices = await cli.getStoredDevicesForUser(userId);
             const anyDeviceNotVerified = devices.some(({deviceId}) => {
                 return !cli.checkDeviceTrust(userId, deviceId).isVerified();

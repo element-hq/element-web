@@ -74,7 +74,6 @@ export default class AliasSettings extends React.Component {
         roomId: PropTypes.string.isRequired,
         canSetCanonicalAlias: PropTypes.bool.isRequired,
         canSetAliases: PropTypes.bool.isRequired,
-        aliasEvents: PropTypes.array, // [MatrixEvent]
         canonicalAliasEvent: PropTypes.object, // MatrixEvent
     };
 
@@ -92,19 +91,54 @@ export default class AliasSettings extends React.Component {
             remoteDomains: [], // [ domain.com, foobar.com ]
             canonicalAlias: null, // #canonical:domain.com
             updatingCanonicalAlias: false,
+            localAliasesLoading: true,
         };
-
-        const localDomain = MatrixClientPeg.get().getDomain();
-        state.domainToAliases = this.aliasEventsToDictionary(props.aliasEvents || []);
-        state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
-            return domain !== localDomain && state.domainToAliases[domain].length > 0;
-        });
 
         if (props.canonicalAliasEvent) {
             state.canonicalAlias = props.canonicalAliasEvent.getContent().alias;
         }
 
         this.state = state;
+    }
+
+    async componentWillMount() {
+        const cli = MatrixClientPeg.get();
+        try {
+            if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
+                const response = await cli.unstableGetLocalAliases(this.props.roomId);
+                const localAliases = response.aliases;
+                const localDomain = cli.getDomain();
+                const domainToAliases = Object.assign(
+                    {},
+                    // FIXME, any localhost alt_aliases will be ignored as they are overwritten by localAliases
+                    this.aliasesToDictionary(this._getAltAliases()),
+                    {[localDomain]: localAliases || []},
+                );
+                const remoteDomains = Object.keys(domainToAliases).filter((domain) => {
+                    return domain !== localDomain && domainToAliases[domain].length > 0;
+                });
+                this.setState({ domainToAliases, remoteDomains });
+            } else {
+                const state = {};
+                const localDomain = cli.getDomain();
+                state.domainToAliases = this.aliasEventsToDictionary(this.props.aliasEvents || []);
+                state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
+                    return domain !== localDomain && state.domainToAliases[domain].length > 0;
+                });
+                this.setState(state);
+            }
+        } finally {
+            this.setState({localAliasesLoading: false});
+        }
+    }
+
+    aliasesToDictionary(aliases) {
+        return aliases.reduce((dict, alias) => {
+            const domain = alias.split(":")[1];
+            dict[domain] = dict[domain] || [];
+            dict[domain].push(alias);
+            return dict;
+        }, {});
     }
 
     aliasEventsToDictionary(aliasEvents) { // m.room.alias events
@@ -117,6 +151,16 @@ export default class AliasSettings extends React.Component {
         return dict;
     }
 
+    _getAltAliases() {
+        if (this.props.canonicalAliasEvent) {
+            const altAliases = this.props.canonicalAliasEvent.getContent().alt_aliases;
+            if (Array.isArray(altAliases)) {
+                return altAliases;
+            }
+        }
+        return [];
+    }
+
     changeCanonicalAlias(alias) {
         if (!this.props.canSetCanonicalAlias) return;
 
@@ -126,6 +170,8 @@ export default class AliasSettings extends React.Component {
         });
 
         const eventContent = {};
+        const altAliases = this._getAltAliases();
+        if (altAliases) eventContent["alt_aliases"] = altAliases;
         if (alias) eventContent["alias"] = alias;
 
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
@@ -261,26 +307,34 @@ export default class AliasSettings extends React.Component {
             );
         }
 
+        let localAliasesList;
+        if (this.state.localAliasesLoading) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            localAliasesList = <Spinner />;
+        } else {
+            localAliasesList = <EditableAliasesList
+                id="roomAliases"
+                className={"mx_RoomSettings_localAliases"}
+                items={this.state.domainToAliases[localDomain] || []}
+                newItem={this.state.newAlias}
+                onNewItemChanged={this.onNewAliasChanged}
+                canRemove={this.props.canSetAliases}
+                canEdit={this.props.canSetAliases}
+                onItemAdded={this.onLocalAliasAdded}
+                onItemRemoved={this.onLocalAliasDeleted}
+                itemsLabel={_t('Local addresses for this room:')}
+                noItemsLabel={_t('This room has no local addresses')}
+                placeholder={_t(
+                    'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
+                )}
+                domain={localDomain}
+            />;
+        }
+
         return (
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
-                <EditableAliasesList
-                    id="roomAliases"
-                    className={"mx_RoomSettings_localAliases"}
-                    items={this.state.domainToAliases[localDomain] || []}
-                    newItem={this.state.newAlias}
-                    onNewItemChanged={this.onNewAliasChanged}
-                    canRemove={this.props.canSetAliases}
-                    canEdit={this.props.canSetAliases}
-                    onItemAdded={this.onLocalAliasAdded}
-                    onItemRemoved={this.onLocalAliasDeleted}
-                    itemsLabel={_t('Local addresses for this room:')}
-                    noItemsLabel={_t('This room has no local addresses')}
-                    placeholder={_t(
-                        'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
-                    )}
-                    domain={localDomain}
-                />
+                {localAliasesList}
                 {remoteAliasesSection}
             </div>
         );

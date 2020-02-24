@@ -37,21 +37,29 @@ export default class EventIndexPanel extends React.Component {
         };
     }
 
-    async updateCurrentRoom(room) {
+    updateCurrentRoom = async (room) => {
         const eventIndex = EventIndexPeg.get();
-        const stats = await eventIndex.getStats();
+        let stats;
+
+        try {
+            stats = await eventIndex.getStats();
+        } catch {
+            // This call may fail if sporadically, not a huge issue as we will
+            // try later again and probably succeed.
+            return;
+        }
 
         this.setState({
             eventIndexSize: stats.size,
             roomCount: stats.roomCount,
         });
-    }
+    };
 
     componentWillUnmount(): void {
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
-            eventIndex.removeListener("changedCheckpoint", this.updateCurrentRoom.bind(this));
+            eventIndex.removeListener("changedCheckpoint", this.updateCurrentRoom);
         }
     }
 
@@ -68,11 +76,17 @@ export default class EventIndexPanel extends React.Component {
         let roomCount = 0;
 
         if (eventIndex !== null) {
-            eventIndex.on("changedCheckpoint", this.updateCurrentRoom.bind(this));
+            eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            const stats = await eventIndex.getStats();
-            eventIndexSize = stats.size;
-            roomCount = stats.roomCount;
+            try {
+                const stats = await eventIndex.getStats();
+                eventIndexSize = stats.size;
+                roomCount = stats.roomCount;
+            } catch {
+                // This call may fail if sporadically, not a huge issue as we
+                // will try later again in the updateCurrentRoom call and
+                // probably succeed.
+            }
         }
 
         this.setState({
@@ -158,7 +172,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'nativeLink': (sub) => <a href={nativeLink} target="_blank"
-                                    rel="noopener">{sub}</a>,
+                                    rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }
@@ -174,7 +188,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'riotLink': (sub) => <a href="https://riot.im/download/desktop"
-                                    target="_blank" rel="noopener">{sub}</a>,
+                                    target="_blank" rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }

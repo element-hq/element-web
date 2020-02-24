@@ -392,6 +392,20 @@ export default class BasicMessageEditor extends React.Component {
         } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
             this._insertText("\n");
             handled = true;
+        // move selection to start of composer
+        } else if (modKey && event.key === Key.HOME) {
+            setSelection(this._editorRef, model, {
+                index: 0,
+                offset: 0,
+            });
+            handled = true;
+        // move selection to end of composer
+        } else if (modKey && event.key === Key.END) {
+            setSelection(this._editorRef, model, {
+                index: model.parts.length - 1,
+                offset: model.parts[model.parts.length - 1].text.length,
+            });
+            handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
         } else {
             const metaOrAltPressed = event.metaKey || event.altKey;
@@ -490,6 +504,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        document.removeEventListener("selectionchange", this._onSelectionChange);
         this._editorRef.removeEventListener("input", this._onInput, true);
         this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
         this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);

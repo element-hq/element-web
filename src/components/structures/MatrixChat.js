@@ -65,6 +65,7 @@ import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
+import * as StorageManager from "../../utils/StorageManager";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -1174,6 +1175,7 @@ export default createReactClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
+        ThemeController.isLogin = false;
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
         if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
@@ -1193,6 +1195,8 @@ export default createReactClass({
         } else {
             this._showScreenAfterLogin();
         }
+
+        StorageManager.tryPersistStorage();
     },
 
     _showScreenAfterLogin: function() {
@@ -1371,7 +1375,8 @@ export default createReactClass({
                 cancelButton: _t('Dismiss'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        window.open(consentUri, '_blank');
+                        const wnd = window.open(consentUri, '_blank');
+                        wnd.opener = null;
                     }
                 },
             }, null, true);

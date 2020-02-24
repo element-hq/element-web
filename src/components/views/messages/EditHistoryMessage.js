@@ -20,7 +20,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
-import {pillifyLinks} from '../../../utils/pillify';
+import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -53,6 +53,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
 
         this._content = createRef();
+        this._pills = [];
     }
 
     _onAssociatedStatusChanged = () => {
@@ -81,7 +82,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     pillifyLinks() {
         // not present for redacted events
         if (this._content.current) {
-            pillifyLinks(this._content.current.children, this.props.mxEvent);
+            pillifyLinks(this._content.current.children, this.props.mxEvent, this._pills);
         }
     }
 
@@ -90,6 +91,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     }
 
     componentWillUnmount() {
+        unmountPills(this._pills);
         const event = this.props.mxEvent;
         if (event.localRedactionEvent()) {
             event.localRedactionEvent().off("status", this._onAssociatedStatusChanged);

@@ -27,6 +27,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     componentDidMount() {
@@ -93,10 +94,20 @@ export default class MKeyVerificationRequest extends React.Component {
     _cancelledLabel(userId) {
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
+        const {cancellationCode} = this.props.mxEvent.verificationRequest;
+        const declined = cancellationCode === "m.user";
         if (userId === myUserId) {
-            return _t("You cancelled");
+            if (declined) {
+                return _t("You declined");
+            } else {
+                return _t("You cancelled");
+            }
         } else {
-            return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
+            if (declined) {
+                return _t("%(name)s declined", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
+            } else {
+                return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
+            }
         }
     }
 
@@ -115,15 +126,19 @@ export default class MKeyVerificationRequest extends React.Component {
         let subtitle;
         let stateNode;
 
-        const accepted = request.ready || request.started || request.done;
-        if (accepted || request.cancelled) {
+        if (!request.canAccept) {
             let stateLabel;
+            const accepted = request.ready || request.started || request.done;
             if (accepted) {
                 stateLabel = (<AccessibleButton onClick={this._openRequest}>
                     {this._acceptedLabel(request.receivingUserId)}
                 </AccessibleButton>);
-            } else {
+            } else if (request.cancelled) {
                 stateLabel = this._cancelledLabel(request.cancellingUserId);
+            } else if (request.accepting) {
+                stateLabel = _t("accepting …");
+            } else if (request.declining) {
+                stateLabel = _t("declining …");
             }
             stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
         }
@@ -134,7 +149,7 @@ export default class MKeyVerificationRequest extends React.Component {
                 _t("%(name)s wants to verify", {name})}</div>);
             subtitle = (<div className="mx_cryptoEvent_subtitle">{
                 userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
-            if (request.requested && !request.observeOnly) {
+            if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
                     <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
                     <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />

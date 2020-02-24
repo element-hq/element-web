@@ -22,7 +22,6 @@ import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
 import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
-import {Key} from "../../../../Keyboard";
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
@@ -125,6 +124,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
     }
 
     _onRecoveryKeyNext = async () => {
+        if (!this.state.recoveryKeyValid) return;
+
         this.setState({
             loading: true,
             restoreError: null,
@@ -155,18 +156,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         this.setState({
             passPhrase: e.target.value,
         });
-    }
-
-    _onPassPhraseKeyPress = (e) => {
-        if (e.key === Key.ENTER) {
-            this._onPassPhraseNext();
-        }
-    }
-
-    _onRecoveryKeyKeyPress = (e) => {
-        if (e.key === Key.ENTER && this.state.recoveryKeyValid) {
-            this._onRecoveryKeyNext();
-        }
     }
 
     async _restoreWithSecretStorage() {
@@ -305,21 +294,22 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     "messaging by entering your recovery passphrase.",
                 )}</p>
 
-                <div className="mx_RestoreKeyBackupDialog_primaryContainer">
+                <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
                         className="mx_RestoreKeyBackupDialog_passPhraseInput"
                         onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
                         value={this.state.passPhrase}
                         autoFocus={true}
                     />
-                    <DialogButtons primaryButton={_t('Next')}
+                    <DialogButtons
+                        primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
+                        primaryIsSubmit={true}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
                     />
-                </div>
+                </form>
                 {_t(
                     "If you've forgotten your recovery passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
@@ -371,7 +361,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"
                         onChange={this._onRecoveryKeyChange}
-                        onKeyPress={this._onRecoveryKeyKeyPress}
                         value={this.state.recoveryKey}
                         autoFocus={true}
                     />

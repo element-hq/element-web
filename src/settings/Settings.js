@@ -263,6 +263,11 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'dontSendTypingNotifications',
     },
+    "showTypingNotifications": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show typing notifications"),
+        default: true,
+    },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),
@@ -492,7 +497,7 @@ export const SETTINGS = {
         default: true,
     },
     "keepSecretStoragePassphraseForSession": {
-         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+         supportedLevels: ['device', 'config'],
          displayName: _td("Keep secret storage passphrase in memory for this session"),
          default: false,
     },

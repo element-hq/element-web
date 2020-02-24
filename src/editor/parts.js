@@ -254,8 +254,8 @@ class RoomPillPart extends PillPart {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this._room.name);
-            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+            initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
+            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId)}`;
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
@@ -422,14 +422,15 @@ export class PartCreator {
         return new PillCandidatePart(text, this._autoCompleteCreator);
     }
 
-    roomPill(alias) {
+    roomPill(alias, roomId) {
         let room;
-        if (alias[0] === '#') {
-            room = this._client.getRooms().find((r) => {
-                return r.getCanonicalAlias() === alias || r.getAliases().includes(alias);
-            });
+        if (roomId || alias[0] !== "#") {
+            room = this._client.getRoom(roomId || alias);
         } else {
-            room = this._client.getRoom(alias);
+            room = this._client.getRooms().find((r) => {
+                return r.getCanonicalAlias() === alias ||
+                       r.getAltAliases().includes(alias);
+            });
         }
         return new RoomPillPart(alias, room);
     }

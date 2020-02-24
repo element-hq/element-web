@@ -32,7 +32,7 @@ import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientB
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks } from './CrossSigningManager';
-import {SCAN_QR_CODE_METHOD, SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -221,7 +221,6 @@ class _MatrixClientPeg {
             verificationMethods: [
                 verificationMethods.SAS,
                 SHOW_QR_CODE_METHOD,
-                SCAN_QR_CODE_METHOD, // XXX: We don't actually support scanning yet!
                 verificationMethods.RECIPROCATE_QR_CODE,
             ],
             unstableClientRelationAggregation: true,
