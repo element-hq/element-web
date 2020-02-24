@@ -655,6 +655,8 @@ function VerificationRequest({txnId, request}) {
             <dd>{request.methods && request.methods.join(", ")}</dd>
             <dt>requestingUserId</dt>
             <dd>{request.requestingUserId}</dd>
+            <dt>observeOnly</dt>
+            <dd>{JSON.stringify(request.observeOnly)}</dd>
         </dl>
     </div>);
 }
