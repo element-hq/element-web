@@ -195,7 +195,7 @@ limitations under the License.
     border-radius: 3px;
     padding: 1px 5px;
     margin-bottom: 6px;
-    font-family: "Inconsolata", courier;
+    font-family: $monospace-font-family;
 
     dl {
         display: grid;

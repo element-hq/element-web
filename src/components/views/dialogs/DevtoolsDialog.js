@@ -30,7 +30,7 @@ import {
     PHASE_DONE,
     PHASE_STARTED,
     PHASE_CANCELLED,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest"
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -621,7 +621,7 @@ const PHASE_MAP = {
     [PHASE_DONE]: "done",
     [PHASE_STARTED]: "started",
     [PHASE_CANCELLED]: "cancelled",
-}
+};
 
 function VerificationRequest({txnId, request}) {
     const [, updateState] = useState();
@@ -631,18 +631,18 @@ function VerificationRequest({txnId, request}) {
     useEffect(() => {
         request.on("change", updateState);
         return () => request.off("change", updateState);
-    }, []);
+    }, [request]);
 
     /* Keep re-rendering if there's a timeout */
     useEffect(() => {
-        if (timeout == 0) return;
+        if (request.timeout == 0) return;
 
         const id = setInterval(() => {
            setTimeout(request.timeout);
         }, 500);
 
-        return () => { clearInterval(id); }
-    }, []);
+        return () => { clearInterval(id); };
+    }, [request]);
 
     return (<div className="mx_DevTools_VerificationRequest">
         <dl>
@@ -660,13 +660,27 @@ function VerificationRequest({txnId, request}) {
     </div>);
 }
 
-class VerificationExplorer extends React.PureComponent {
+class VerificationExplorer extends React.Component {
     static getLabel() {
         return _t("Verification Requests");
     }
 
     /* Ensure this.context is the cli */
     static contextType = MatrixClientContext;
+
+    onNewRequest = () => {
+        this.forceUpdate();
+    }
+
+    componentDidMount() {
+        const cli = this.context;
+        cli.on("crypto.verification.request", this.onNewRequest);
+    }
+
+    componentWillUnmount() {
+        const cli = this.context;
+        cli.off("crypto.verification.request", this.onNewRequest);
+    }
 
     render() {
         const cli = this.context;
@@ -677,7 +691,7 @@ class VerificationExplorer extends React.PureComponent {
         return (<div>
             <div className="mx_Dialog_content">
                 {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
-                    <VerificationRequest txnId={txnId} request={request} key={txnId}/>
+                    <VerificationRequest txnId={txnId} request={request} key={txnId} />,
                 )}
             </div>
         </div>);
