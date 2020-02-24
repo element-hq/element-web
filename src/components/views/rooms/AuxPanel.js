@@ -219,7 +219,7 @@ export default createReactClass({
 
                 if (link) {
                     span = (
-                        <a href={link} target="_blank" rel="noopener">
+                        <a href={link} target="_blank" rel="noreferrer noopener">
                             { span }
                         </a>
                     );

@@ -97,7 +97,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 {},
                 {
                     'a': (sub) => {
-                        return <a rel='noopener' target='_blank'
+                        return <a rel='noreferrer noopener' target='_blank'
                                   href='https://about.riot.im/help#end-to-end-encryption'>{sub}</a>;
                     },
                 },

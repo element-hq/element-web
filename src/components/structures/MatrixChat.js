@@ -1375,7 +1375,8 @@ export default createReactClass({
                 cancelButton: _t('Dismiss'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        window.open(consentUri, '_blank');
+                        const wnd = window.open(consentUri, '_blank');
+                        wnd.opener = null;
                     }
                 },
             }, null, true);

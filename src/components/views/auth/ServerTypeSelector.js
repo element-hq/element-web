@@ -46,7 +46,7 @@ export const TYPES = {
         label: () => _t('Premium'),
         logo: () => <img src={require('../../../../res/img/modular-bw-logo.svg')} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
-            a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
+            a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                 {sub}
             </a>,
         }),

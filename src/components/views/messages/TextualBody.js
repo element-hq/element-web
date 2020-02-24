@@ -374,7 +374,9 @@ export default createReactClass({
                     const height = window.screen.height > 800 ? 800 : window.screen.height;
                     const left = (window.screen.width - width) / 2;
                     const top = (window.screen.height - height) / 2;
-                    window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
+                    const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
+                    const wnd = window.open(completeUrl, '_blank', features);
+                    wnd.opener = null;
                 },
             });
         });
