@@ -42,6 +42,7 @@ import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
+import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -916,6 +917,12 @@ const useIsSynapseAdmin = (cli) => {
     return isAdmin;
 };
 
+const useHomeserverSupportsCrossSigning = (cli) => {
+    return useAsyncMemo(async () => {
+        return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+    }, [cli], false);
+};
+
 function useRoomPermissions(cli, room, user) {
     const [roomPermissions, setRoomPermissions] = useState({
         // modifyLevelMax is the max PL we can set this user to, typically min(their PL, our PL) && canSetPL
@@ -1315,19 +1322,23 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
-    const userTrust = cli.checkUserTrust(member.userId);
-    const userVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
-        userTrust.isCrossSigningVerified() :
-        userTrust.isVerified();
-    const isMe = member.userId === cli.getUserId();
-
     let verifyButton;
-    if (isRoomEncrypted && !userVerified && !isMe) {
-        verifyButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
-                {_t("Verify")}
-            </AccessibleButton>
-        );
+    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
+    if (
+        SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+        homeserverSupportsCrossSigning
+    ) {
+        const userTrust = cli.checkUserTrust(member.userId);
+        const userVerified = userTrust.isCrossSigningVerified();
+        const isMe = member.userId === cli.getUserId();
+
+        if (isRoomEncrypted && !userVerified && !isMe) {
+            verifyButton = (
+                <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+                    {_t("Verify")}
+                </AccessibleButton>
+            );
+        }
     }
 
     let devicesSection;
