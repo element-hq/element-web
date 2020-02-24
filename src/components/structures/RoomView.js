@@ -460,8 +460,6 @@ export default createReactClass({
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        SettingsStore.unwatchSetting(this._ciderWatcherRef);
-
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
