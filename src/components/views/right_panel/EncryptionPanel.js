@@ -32,11 +32,14 @@ const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
 const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
-    useEffect(() => {
-        setRequest(verificationRequest);
-    }, [verificationRequest]);
 
     const [phase, setPhase] = useState(request && request.phase);
+    useEffect(() => {
+        setRequest(verificationRequest);
+        if (verificationRequest) {
+            setPhase(verificationRequest.phase);
+        }
+    }, [verificationRequest]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
