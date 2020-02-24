@@ -22,6 +22,7 @@ import { _t } from '../../../languageHandler';
 import { Room } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
 
 import {
     PHASE_UNSENT,
@@ -628,10 +629,7 @@ function VerificationRequest({txnId, request}) {
     const [timeout, setRequestTimeout] = useState(request.timeout);
 
     /* Re-render if something changes state */
-    useEffect(() => {
-        request.on("change", updateState);
-        return () => request.off("change", updateState);
-    }, [request]);
+    useEventEmitter(request, "change", updateState);
 
     /* Keep re-rendering if there's a timeout */
     useEffect(() => {
