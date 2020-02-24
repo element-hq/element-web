@@ -53,7 +53,6 @@ function selectText(target) {
  */
 export default class CreateKeyBackupDialog extends React.PureComponent {
     static propTypes = {
-        secureSecretStorage: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
     }
 
@@ -65,7 +64,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         this._setZxcvbnResultTimeout = null;
 
         this.state = {
-            secureSecretStorage: props.secureSecretStorage,
+            secureSecretStorage: null,
             phase: PHASE_PASSPHRASE,
             passPhrase: '',
             passPhraseConfirm: '',
@@ -73,23 +72,20 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             downloaded: false,
             zxcvbnResult: null,
         };
-
-        if (this.state.secureSecretStorage === undefined) {
-            this.state.secureSecretStorage =
-                SettingsStore.isFeatureEnabled("feature_cross_signing");
-        }
-
-        // If we're using secret storage, skip ahead to the backing up step, as
-        // `accessSecretStorage` will handle passphrases as needed.
-        if (this.state.secureSecretStorage) {
-            this.state.phase = PHASE_BACKINGUP;
-        }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const cli = MatrixClientPeg.get();
+        const secureSecretStorage = (
+            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        );
+        this.setState({ secureSecretStorage });
+
         // If we're using secret storage, skip ahead to the backing up step, as
         // `accessSecretStorage` will handle passphrases as needed.
-        if (this.state.secureSecretStorage) {
+        if (secureSecretStorage) {
+            this.setState({ phase: PHASE_BACKINGUP });
             this._createBackup();
         }
     }
