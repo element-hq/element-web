@@ -625,7 +625,7 @@ const PHASE_MAP = {
 
 function VerificationRequest({txnId, request}) {
     const [, updateState] = useState();
-    const [timeout, setTimeout] = useState(request.timeout);
+    const [timeout, setRequestTimeout] = useState(request.timeout);
 
     /* Re-render if something changes state */
     useEffect(() => {
@@ -639,7 +639,7 @@ function VerificationRequest({txnId, request}) {
 
         /* Note that request.timeout is a getter, so its value changes */
         const id = setInterval(() => {
-           setTimeout(request.timeout);
+           setRequestTimeout(request.timeout);
         }, 500);
 
         return () => { clearInterval(id); };
