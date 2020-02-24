@@ -43,10 +43,4 @@ describe('editor/serialize', function() {
         const html = htmlSerializeIfNeeded(model, {});
         expect(html).toBe("<em>hello</em> world");
     });
-    it('escaped markdown should not retain backslashes', function() {
-        const pc = createPartCreator();
-        const model = new EditorModel([pc.plain('\\*hello\\* world')]);
-        const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe('*hello* world');
-    });
 });
