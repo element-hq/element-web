@@ -16,7 +16,6 @@ function remoteRender(event) {
     const a = document.createElement("a");
     a.id = "a";
     a.rel = "noreferrer noopener";
-    a.target = "_blank";
     a.download = data.download;
     a.style = data.style;
     a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
