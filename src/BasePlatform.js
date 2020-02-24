@@ -162,4 +162,6 @@ export default class BasePlatform {
     getEventIndexingManager(): BaseEventIndexManager | null {
         return null;
     }
+
+    async setLanguage(preferredLangs: string[]): Promise<void> {}
 }
