@@ -23,7 +23,6 @@ import AutocompleteProvider from './AutocompleteProvider';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import {getDisplayAliasForRoom} from '../Rooms';
 import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
@@ -40,11 +39,19 @@ function score(query, space) {
     }
 }
 
+function matcherObject(room, displayedAlias, matchName = "") {
+    return {
+        room,
+        matchName,
+        displayedAlias,
+    };
+}
+
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super(ROOM_REGEX);
         this.matcher = new QueryMatcher([], {
-            keys: ['displayedAlias', 'name'],
+            keys: ['displayedAlias', 'matchName'],
         });
     }
 
@@ -56,16 +63,16 @@ export default class RoomProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            let matcherObjects = client.getVisibleRooms().filter(
-                (room) => !!room && !!getDisplayAliasForRoom(room),
-            ).map((room) => {
-                return {
-                    room: room,
-                    name: room.name,
-                    displayedAlias: getDisplayAliasForRoom(room),
-                };
-            });
-
+            let matcherObjects = client.getVisibleRooms().reduce((aliases, room) => {
+                if (room.getCanonicalAlias()) {
+                    aliases = aliases.concat(matcherObject(room, room.getCanonicalAlias(), room.name));
+                }
+                if (room.getAltAliases().length) {
+                    const altAliases = room.getAltAliases().map(alias => matcherObject(room, alias));
+                    aliases = aliases.concat(altAliases);
+                }
+                return aliases;
+            }, []);
             // Filter out any matches where the user will have also autocompleted new rooms
             matcherObjects = matcherObjects.filter((r) => {
                 const tombstone = r.room.currentState.getStateEvents("m.room.tombstone", "");
@@ -84,16 +91,16 @@ export default class RoomProvider extends AutocompleteProvider {
             completions = _sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
-            ]).map((room) => {
-                const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
+            ]);
+            completions = completions.map((room) => {
                 return {
-                    completion: displayAlias,
-                    completionId: displayAlias,
+                    completion: room.displayedAlias,
+                    completionId: room.room.roomId,
                     type: "room",
                     suffix: ' ',
-                    href: makeRoomPermalink(displayAlias),
+                    href: makeRoomPermalink(room.displayedAlias),
                     component: (
-                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
+                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.room.name} description={room.displayedAlias} />
                     ),
                     range,
                 };
