@@ -873,6 +873,11 @@ class CreationGrouper {
     }
 
     getTiles() {
+        // If we don't have any events to group, don't even try to group them. The logic
+        // below assumes that we have a group of events to deal with, but we might not if
+        // the events we were supposed to group were redacted.
+        if (!this.events || !this.events.length) return [];
+
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
 
@@ -959,6 +964,11 @@ class MemberGrouper {
     }
 
     getTiles() {
+        // If we don't have any events to group, don't even try to group them. The logic
+        // below assumes that we have a group of events to deal with, but we might not if
+        // the events we were supposed to group were redacted.
+        if (!this.events || !this.events.length) return [];
+
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
