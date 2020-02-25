@@ -576,7 +576,7 @@ export default class MessagePanel extends React.Component {
                 ref={this._collectEventNode.bind(this, eventId)}
                 data-scroll-tokens={scrollToken}
             >
-                <TileErrorBoundary>
+                <TileErrorBoundary mxEvent={mxEv}>
                     <EventTile mxEvent={mxEv}
                         continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
