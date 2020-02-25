@@ -158,18 +158,27 @@ export default class CrossSigningPanel extends React.PureComponent {
             )}</p>;
         }
 
-        let bootstrapButton;
+        let resetButton;
         if (enabledForAccount) {
-            bootstrapButton = (
-                <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
-                    {_t("Reset cross-signing and secret storage")}
-                </AccessibleButton>
+            resetButton = (
+                <div className="mx_CrossSigningPanel_buttonRow">
+                    <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
+                        {_t("Reset cross-signing and secret storage")}
+                    </AccessibleButton>
+                </div>
             );
-        } else if (!enabledForAccount && homeserverSupportsCrossSigning) {
+        }
+        let bootstrapButton;
+        if (
+            (!enabledForAccount || !crossSigningPublicKeysOnDevice) &&
+            homeserverSupportsCrossSigning
+        ) {
             bootstrapButton = (
-                <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
-                    {_t("Bootstrap cross-signing and secret storage")}
-                </AccessibleButton>
+                <div className="mx_CrossSigningPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                        {_t("Bootstrap cross-signing and secret storage")}
+                    </AccessibleButton>
+                </div>
             );
         }
 
@@ -198,9 +207,8 @@ export default class CrossSigningPanel extends React.PureComponent {
                    </tbody></table>
                 </details>
                 {errorSection}
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    {bootstrapButton}
-                </div>
+                {bootstrapButton}
+                {resetButton}
             </div>
         );
     }
