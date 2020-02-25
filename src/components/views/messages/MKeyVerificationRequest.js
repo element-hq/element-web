@@ -62,8 +62,8 @@ export default class MKeyVerificationRequest extends React.Component {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
-                await request.accept();
                 this._openRequest();
+                await request.accept();
             } catch (err) {
                 console.error(err.message);
             }
