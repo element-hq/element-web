@@ -37,7 +37,7 @@ const EncryptionInfo = ({waitingForOtherParty, waitingForNetwork, member, onStar
                 displayName: member.displayName || member.name || member.userId,
             });
         } else {
-            text = _t("Waiting for network…");
+            text = _t("Accepting…");
         }
         content = <PendingActionSpinner text={text} />;
     } else {

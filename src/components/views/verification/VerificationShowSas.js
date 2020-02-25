@@ -109,7 +109,7 @@ export default class VerificationShowSas extends React.Component {
                 const {displayName} = this.props;
                 text = _t("Waiting for %(displayName)s to verify…", {displayName});
             } else {
-                text = _t("Waiting for network…");
+                text = _t("Cancelling…");
             }
             confirm = <PendingActionSpinner text={text} />;
         } else {
