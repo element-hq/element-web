@@ -335,7 +335,7 @@ export default class InviteDialog extends React.PureComponent {
     _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
-        // Also pull in all the rooms tagged as m.direct so we don't miss anything. Sometimes the
+        // Also pull in all the rooms tagged as TAG_DM so we don't miss anything. Sometimes the
         // room list doesn't tag the room for the DMRoomMap, but does for the room list.
         const taggedRooms = RoomListStore.getRoomLists();
         const dmTaggedRooms = taggedRooms[TAG_DM];
