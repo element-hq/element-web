@@ -471,10 +471,14 @@ export default class BasicMessageEditor extends React.Component {
                 const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
                 return model.positionForOffset(caret.offset + addedLen, true);
             });
-            await model.autoComplete.onTab();
-            if (!model.autoComplete.hasSelection()) {
-                this.setState({showVisualBell: true});
-                model.autoComplete.close();
+
+            // Don't try to do things with the autocomplete if there is none shown
+            if (model.autoComplete) {
+                await model.autoComplete.onTab();
+                if (!model.autoComplete.hasSelection()) {
+                    this.setState({showVisualBell: true});
+                    model.autoComplete.close();
+                }
             }
         } catch (err) {
             console.error(err);
