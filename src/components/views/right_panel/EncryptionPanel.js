@@ -76,8 +76,13 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     }, [member.userId]);
 
     const requested = request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined);
+    const initiatedByMe = request && request.initiatedByMe;
     if (!request || requested) {
-        return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
+        return <EncryptionInfo
+            onStartVerification={onStartVerification}
+            member={member}
+            waitingForOtherParty={requested && initiatedByMe}
+            waitingForNetwork={requested && !initiatedByMe} />;
     } else {
         return (
             <VerificationPanel
