@@ -2157,5 +2157,9 @@
     "You declined": "您拒絕了",
     "%(name)s declined": "%(name)s 拒絕了",
     "accepting …": "正在接受……",
-    "declining …": "正在拒絕……"
+    "declining …": "正在拒絕……",
+    "Your homeserver does not support cross-signing.": "您的家伺服器不支援交叉簽章。",
+    "Homeserver feature support:": "家伺服器功能支援：",
+    "exists": "存在",
+    "Verification Requests": "驗證請求"
 }
