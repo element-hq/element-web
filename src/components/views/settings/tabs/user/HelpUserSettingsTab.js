@@ -225,6 +225,15 @@ export default class HelpUserSettingsTab extends React.Component {
                                 {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>
+                        {
+                            _t( "To submit a security-related bug report, please read the Matrix.org " +
+                                "<a>Security Disclosure Policy</a>.", {},
+                                {
+                                    'a': (sub) =>
+                                        <a href="https://matrix.org/security-disclosure-policy/"
+                                        rel='noreferrer noopener' target='_blank'>{sub}</a>,
+                                })
+                        }
                     </div>
                 </div>
                 <div className='mx_SettingsTab_section'>

@@ -2133,5 +2133,6 @@
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>.": "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>."
 }
