@@ -371,8 +371,8 @@ export default class BasicMessageEditor extends React.Component {
             this._onFormatAction("quote");
             handled = true;
         // redo
-        } else if ((modKey && event.key === Key.Y) ||
-                  (IS_MAC && event.shiftKey && event.key === Key.Z)) {
+        } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
+                  (IS_MAC && modkey && event.shiftKey && event.key === Key.Z)) {
             if (this.historyManager.canRedo()) {
                 const {parts, caret} = this.historyManager.redo();
                 // pass matching inputType so historyManager doesn't push echo
