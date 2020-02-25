@@ -34,6 +34,7 @@ import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 import SettingsStore from '../../../settings/SettingsStore';
+import RoomListStore, {TAG_DM} from "../../../stores/RoomListStore";
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -332,7 +333,23 @@ export default class InviteDialog extends React.PureComponent {
     }
 
     _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
-        const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals();
+        const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
+
+        // Also pull in all the rooms tagged as m.direct so we don't miss anything. Sometimes the
+        // room list doesn't tag the room for the DMRoomMap, but does for the room list.
+        const taggedRooms = RoomListStore.getRoomLists();
+        const dmTaggedRooms = taggedRooms[TAG_DM];
+        const myUserId = MatrixClientPeg.get().getUserId();
+        for (const dmRoom of dmTaggedRooms) {
+            const otherMembers = dmRoom.getJoinedMembers().filter(u => u.userId !== myUserId);
+            for (const member of otherMembers) {
+                if (rooms[member.userId]) continue; // already have a room
+
+                console.warn(`Adding DM room for ${member.userId} as ${dmRoom.roomId} from tag, not DM map`);
+                rooms[member.userId] = dmRoom;
+            }
+        }
+
         const recents = [];
         for (const userId in rooms) {
             // Filter out user IDs that are already in the room / should be excluded

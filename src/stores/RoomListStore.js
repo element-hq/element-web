@@ -37,11 +37,14 @@ const CATEGORY_BOLD = "bold";   // Unread messages (not notified, 'Mentions Only
 const CATEGORY_IDLE = "idle";   // Nothing of interest
 
 const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
+
+export const TAG_DM = "im.vector.fake.direct";
+
 const LIST_ORDERS = {
     "m.favourite": "manual",
     "im.vector.fake.invite": "recent",
     "im.vector.fake.recent": "recent",
-    "im.vector.fake.direct": "recent",
+    [TAG_DM]: "recent",
     "m.lowpriority": "recent",
     "im.vector.fake.archived": "recent",
 };
@@ -95,7 +98,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -323,7 +326,7 @@ class RoomListStore extends Store {
             } else if (dmRoomMap.getUserIdForRoomId(room.roomId) && tags.length === 0) {
                 // We intentionally don't duplicate rooms in other tags into the people list
                 // as a feature.
-                tags.push("im.vector.fake.direct");
+                tags.push(TAG_DM);
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
@@ -553,7 +556,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -590,7 +593,7 @@ class RoomListStore extends Store {
                     }
                 } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push({room, category: this._calculateCategory(room)});
+                    lists[TAG_DM].push({room, category: this._calculateCategory(room)});
                 } else {
                     lists["im.vector.fake.recent"].push({room, category: this._calculateCategory(room)});
                 }
