@@ -2154,5 +2154,18 @@
     "You declined": "Elutasítottad",
     "%(name)s declined": "%(name)s elutasította",
     "accepting …": "elfogadás …",
-    "declining …": "elutasítás …"
+    "declining …": "elutasítás …",
+    "Cancelling…": "Megszakítás…",
+    "Your homeserver does not support cross-signing.": "A matrix szervered nem támogatja az eszközök közti hitelesítést.",
+    "Homeserver feature support:": "Matrix szerver támogatott szolgáltatások:",
+    "exists": "létezik",
+    "Accepting…": "Elfogadás…",
+    "Accepting …": "Elfogadás …",
+    "Declining …": "Elutasítás …",
+    "Verification Requests": "Hitelesítés Kérések",
+    "Your account is not secure": "A fiókod nem biztonságos",
+    "Your password": "A jelszavad",
+    "This session, or the other session": "Ez vagy másik munkamenet",
+    "The internet connection either session is using": "Az egyik munkamenet internet kapcsolata",
+    "We recommend you change your password and recovery key in Settings immediately": "Javasoljuk, hogy a jelszavadat és a visszaállítási kulcsodat mihamarabb változtasd meg a Beállításokban"
 }
