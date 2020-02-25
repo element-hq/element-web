@@ -2155,5 +2155,9 @@
     "You declined": "Hai rifiutato",
     "%(name)s declined": "%(name)s ha rifiutato",
     "accepting …": "accettazione …",
-    "declining …": "rifiuto …"
+    "declining …": "rifiuto …",
+    "Your homeserver does not support cross-signing.": "Il tuo homeserver non supporta la firma incrociata.",
+    "Homeserver feature support:": "Funzioni supportate dall'homeserver:",
+    "exists": "esiste",
+    "Verification Requests": "Richieste di verifica"
 }
