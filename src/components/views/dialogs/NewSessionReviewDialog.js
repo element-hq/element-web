@@ -23,6 +23,7 @@ import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -33,7 +34,24 @@ export default class NewSessionReviewDialog extends React.PureComponent {
     }
 
     onCancelClick = () => {
-        this.props.onFinished(false);
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
+            headerImage: require("../../../../res/img/e2e/warning.svg"),
+            title: _t("Your account is not secure"),
+            description: <div>
+                {_t("One of the following may be compromised:")}
+                <ul>
+                    <li>{_t("Your password")}</li>
+                    <li>{_t("Your homeserver")}</li>
+                    <li>{_t("This device, or the other device")}</li>
+                    <li>{_t("The internet connection either device is using")}</li>
+                </ul>
+                <div>
+                    {_t("We recomment you change your password and recovery key in Settings immediately")}
+                </div>
+            </div>,
+            onFinished: () => this.props.onFinished(false),
+        });
     }
 
     onContinueClick = async () => {
