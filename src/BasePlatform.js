@@ -163,5 +163,5 @@ export default class BasePlatform {
         return null;
     }
 
-    async setLanguage(preferredLangs: string[]): Promise<void> {}
+    setLanguage(preferredLangs: string[]) {}
 }
