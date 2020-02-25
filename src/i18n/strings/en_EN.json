@@ -1165,6 +1165,7 @@
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
     "Waiting for %(displayName)s to accept…": "Waiting for %(displayName)s to accept…",
+    "Waiting for network…": "Waiting for network…",
     "Start Verification": "Start Verification",
     "Messages in this room are end-to-end encrypted.": "Messages in this room are end-to-end encrypted.",
     "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Your messages are secured and only you and the recipient have the unique keys to unlock them.",

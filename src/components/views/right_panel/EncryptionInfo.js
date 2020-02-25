@@ -28,12 +28,17 @@ export const PendingActionSpinner = ({text}) => {
     </div>;
 };
 
-const EncryptionInfo = ({pending, member, onStartVerification}) => {
+const EncryptionInfo = ({waitingForOtherParty, waitingForNetwork, member, onStartVerification}) => {
     let content;
-    if (pending) {
-        const text = _t("Waiting for %(displayName)s to accept…", {
-            displayName: member.displayName || member.name || member.userId,
-        });
+    if (waitingForOtherParty || waitingForNetwork) {
+        let text;
+        if (waitingForOtherParty) {
+            text = _t("Waiting for %(displayName)s to accept…", {
+                displayName: member.displayName || member.name || member.userId,
+            });
+        } else {
+            text = _t("Waiting for network…");
+        }
         content = <PendingActionSpinner text={text} />;
     } else {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
