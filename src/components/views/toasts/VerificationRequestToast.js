@@ -78,7 +78,6 @@ export default class VerificationRequestToast extends React.PureComponent {
         // no room id for to_device requests
         const cli = MatrixClientPeg.get();
         try {
-            await request.accept();
             if (request.channel.roomId) {
                 dis.dispatch({
                     action: 'view_room',
@@ -99,6 +98,7 @@ export default class VerificationRequestToast extends React.PureComponent {
                     verificationRequest: request,
                 }, null, /* priority = */ false, /* static = */ true);
             }
+            await request.accept();
         } catch (err) {
             console.error(err.message);
         }
