@@ -725,6 +725,7 @@
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.",
     "Submit debug logs": "Submit debug logs",
     "Clear cache and reload": "Clear cache and reload",
+    "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>.": "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>.",
     "FAQ": "FAQ",
     "Versions": "Versions",
     "riot-web version:": "riot-web version:",
@@ -2133,6 +2134,5 @@
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
-    "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>.": "To submit a security-related bug report, please read the Matrix.org <a>Security Disclosure Policy</a>."
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }
