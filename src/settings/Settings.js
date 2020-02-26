@@ -435,7 +435,7 @@ export const SETTINGS = {
     },
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Order rooms alphabetically by name instead of by recent activity"),
+        displayName: _td("Order rooms by name"),
         default: true,
         invertedSettingName: "RoomList.orderByRecents",
     },
