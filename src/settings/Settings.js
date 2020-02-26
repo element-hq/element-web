@@ -437,7 +437,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: true,
-        invertedSettingName: "RoomList.orderByRecents",
     },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
