@@ -11,9 +11,10 @@ exports.default = async function(context) {
         const userId = process.env.NOTARIZE_APPLE_ID;
         if (userId === undefined) {
             console.warn(
-                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
-                "! Skipping notarisation: User ID not found, set NOTARIZE_APPLE_ID. !\n" +
-                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
+                "! Skipping macOS notarisation.              !\n" +
+                "! User ID not found, set NOTARIZE_APPLE_ID. !\n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             );
             return;
         }
