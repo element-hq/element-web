@@ -1550,5 +1550,19 @@
     "A widget would like to verify your identity": "Bir görsel tasarım kimliğinizi teyit etmek istiyor",
     "Remember my selection for this widget": "Bu görsel bileşen işin seçimimi hatırla",
     "Deny": "Reddet",
-    "Recovery key mismatch": "Kurtarma anahtarı uyumsuz"
+    "Recovery key mismatch": "Kurtarma anahtarı uyumsuz",
+    "Backup restored": "Yedek geri dönüldü",
+    "Enter recovery key": "Kurtarma anahtarı gir",
+    "Help": "Yardım",
+    "Take picture": "Resim çek",
+    "Premium": "Premium",
+    "Sign in to your Matrix account on %(serverName)s": "%(serverName)s adresindeki Matrix hesabınıza oturum açın",
+    "Sign in to your Matrix account on <underlinedServerName />": "<underlinedServerName /> adresindeki Matrix hesabına oturum açın",
+    "Add to summary": "Özete ekle",
+    "Add users to the community summary": "Topluluk özetine kullanıcıları ekle",
+    "Who would you like to add to this summary?": "Bu özete kimi eklemek istersiniz?",
+    "Failed to update community": "Toluluğu güncelleme başarısız",
+    "Downloading mesages for %(currentRoom)s.": "%(currentRoom)s için mesajlar indiriliyor.",
+    "Indexed rooms:": "İndekslenmiş odalar:",
+    "%(crawlingRooms)s out of %(totalRooms)s": "%(totalRooms)s odadan %(crawlingRooms)s tanesi"
 }

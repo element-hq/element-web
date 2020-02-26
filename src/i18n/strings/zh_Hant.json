@@ -2157,5 +2157,18 @@
     "You declined": "您拒絕了",
     "%(name)s declined": "%(name)s 拒絕了",
     "accepting …": "正在接受……",
-    "declining …": "正在拒絕……"
+    "declining …": "正在拒絕……",
+    "Your homeserver does not support cross-signing.": "您的家伺服器不支援交叉簽章。",
+    "Homeserver feature support:": "家伺服器功能支援：",
+    "exists": "存在",
+    "Verification Requests": "驗證請求",
+    "Cancelling…": "正在取消……",
+    "Accepting…": "正在接受……",
+    "Accepting …": "正在接受……",
+    "Declining …": "正在拒絕……",
+    "Your account is not secure": "您的帳號不安全",
+    "Your password": "您的密碼",
+    "This session, or the other session": "此工作階段或其他工作階段",
+    "The internet connection either session is using": "任何一個工作階段正在使用的網際網路連線",
+    "We recommend you change your password and recovery key in Settings immediately": "我們建議您立刻在設定中變更您的密碼與復原金鑰"
 }
