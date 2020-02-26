@@ -243,42 +243,14 @@ into Riot itself.
 Setting up a dev environment
 ============================
 
-Much of the functionality in Riot is actually in the `matrix-react-sdk` and
-`matrix-js-sdk` modules. It is possible to set these up in a way that makes it
-easy to track the `develop` branches in git and to make local changes without
-having to manually rebuild each time.
-
-First clone and build `matrix-js-sdk`:
-
-``` bash
-git clone https://github.com/matrix-org/matrix-js-sdk.git
-pushd matrix-js-sdk
-git checkout develop
-yarn link
-yarn install
-popd
-```
-
-Then similarly with `matrix-react-sdk`:
-
-```bash
-git clone https://github.com/matrix-org/matrix-react-sdk.git
-pushd matrix-react-sdk
-git checkout develop
-yarn link
-yarn link matrix-js-sdk
-yarn install
-popd
-```
-
-Finally, build and start Riot itself:
+Previously, `matrix-js-sdk` and `matrix-react-sdk` needed to be cloned and 
+symlinked into the `riot-web` directory. Users should now be able to check out 
+`riot-web` and build it without having to check out either of the SDK's.
 
 ```bash
 git clone https://github.com/vector-im/riot-web.git
 cd riot-web
 git checkout develop
-yarn link matrix-js-sdk
-yarn link matrix-react-sdk
 yarn install
 yarn start
 ```
