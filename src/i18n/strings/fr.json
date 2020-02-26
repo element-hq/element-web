@@ -2158,5 +2158,9 @@
     "You declined": "Vous avez refusé",
     "%(name)s declined": "%(name)s a refusé",
     "accepting …": "nous acceptons…",
-    "declining …": "nous refusons…"
+    "declining …": "nous refusons…",
+    "Your homeserver does not support cross-signing.": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
+    "Homeserver feature support:": "Prise en charge de la fonctionnalité par le serveur d’accueil :",
+    "exists": "existant",
+    "Verification Requests": "Demandes de vérification"
 }
