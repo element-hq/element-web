@@ -385,4 +385,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     getEventIndexingManager(): BaseEventIndexManager | null {
         return this.eventIndexManager;
     }
+
+    setLanguage(preferredLangs: string[]) {
+        this._ipcCall('setLanguage', preferredLangs).catch(error => {
+            console.log("Failed to send setLanguage IPC to Electron");
+            console.error(error);
+        });
+    }
 }
