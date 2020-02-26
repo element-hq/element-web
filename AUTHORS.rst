@@ -16,3 +16,6 @@ include:
 
 * Alexandr Korsak (https://github.com/oivoodoo)
   Improved multiple file uploading
+
+*Thom Cleary (https://github.com/thomcatdotrocks)
+  Improve README.md with updated build instructions
