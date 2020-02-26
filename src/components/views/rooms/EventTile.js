@@ -100,6 +100,17 @@ export function getHandlerTile(ev) {
         }
     }
 
+    // sometimes MKeyVerificationConclusion declines to render.  Jankily decline to render and
+    // fall back to showing hidden events, if we're viewing hidden events
+    // XXX: This is extremely a hack. Possibly these components should have an interface for
+    // declining to render?
+    if (type === "m.key.verification.cancel" && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
+        if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
+            return;
+        }
+    }
+
     return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
 }
 

@@ -172,7 +172,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'nativeLink': (sub) => <a href={nativeLink} target="_blank"
-                                    rel="noopener">{sub}</a>,
+                                    rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }
@@ -188,7 +188,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'riotLink': (sub) => <a href="https://riot.im/download/desktop"
-                                    target="_blank" rel="noopener">{sub}</a>,
+                                    target="_blank" rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }

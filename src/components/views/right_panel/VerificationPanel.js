@@ -270,6 +270,8 @@ export default class VerificationPanel extends React.PureComponent {
     };
 
     _onVerifierShowSas = (sasEvent) => {
+        const {request} = this.props;
+        request.verifier.off('show_sas', this._onVerifierShowSas);
         this.setState({sasEvent});
     };
 
@@ -278,7 +280,7 @@ export default class VerificationPanel extends React.PureComponent {
         const hadVerifier = this._hasVerifier;
         this._hasVerifier = !!request.verifier;
         if (!hadVerifier && this._hasVerifier) {
-            request.verifier.once('show_sas', this._onVerifierShowSas);
+            request.verifier.on('show_sas', this._onVerifierShowSas);
             try {
                 // on the requester side, this is also awaited in _startSAS,
                 // but that's ok as verify should return the same promise.
@@ -299,6 +301,10 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.request.off("change", this._onRequestChange);
+        const {request} = this.props;
+        if (request.verifier) {
+            request.verifier.off('show_sas', this._onVerifierShowSas);
+        }
+        request.off("change", this._onRequestChange);
     }
 }

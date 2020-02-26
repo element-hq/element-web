@@ -121,7 +121,7 @@ describe("<TextualBody />", () => {
             expect(wrapper.text()).toBe(ev.getContent().body);
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe('<span class="mx_EventTile_body" dir="auto">' +
-                'Visit <a href="https://matrix.org/" class="linkified" target="_blank" rel="noopener">' +
+                'Visit <a href="https://matrix.org/" class="linkified" target="_blank" rel="noreferrer noopener">' +
                 'https://matrix.org/</a></span>');
         });
     });

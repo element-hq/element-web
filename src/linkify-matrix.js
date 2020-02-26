@@ -227,7 +227,7 @@ matrixLinkify.options = {
     },
 
     linkAttributes: {
-        rel: 'noopener',
+        rel: 'noreferrer noopener',
     },
 
     target: function(href, type) {

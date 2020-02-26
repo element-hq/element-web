@@ -36,6 +36,8 @@ const CATEGORY_GREY = "grey";   // Unread notified messages (not mentions)
 const CATEGORY_BOLD = "bold";   // Unread messages (not notified, 'Mentions Only' rooms)
 const CATEGORY_IDLE = "idle";   // Nothing of interest
 
+export const TAG_DM = "im.vector.fake.direct";
+
 /**
  * Identifier for manual sorting behaviour: sort by the user defined order.
  * @type {string}
@@ -64,9 +66,9 @@ const getListAlgorithm = (listKey, settingAlgorithm) => {
             return ALGO_MANUAL;
         case "im.vector.fake.invite":
         case "im.vector.fake.recent":
-        case "im.vector.fake.direct":
         case "im.vector.fake.archived":
         case "m.lowpriority":
+        case TAG_DM:
         default:
             return settingAlgorithm;
     }
@@ -76,9 +78,9 @@ const knownLists = new Set([
     "m.favourite",
     "im.vector.fake.invite",
     "im.vector.fake.recent",
-    "im.vector.fake.direct",
     "im.vector.fake.archived",
     "m.lowpriority",
+    TAG_DM,
 ]);
 
 /**
@@ -102,6 +104,7 @@ class RoomListStore extends Store {
     updateSortingAlgorithm(algorithm, orderImportantFirst) {
         // Dev note: We only have two algorithms at the moment, but it isn't impossible that we want
         // multiple in the future. Also constants make things slightly clearer.
+        console.log("Updating room sorting algorithm: ", {algorithm, orderImportantFirst});
         this._setState({algorithm, orderImportantFirst});
 
         // Trigger a resort of the entire list to reflect the change in algorithm
@@ -115,7 +118,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -353,7 +356,7 @@ class RoomListStore extends Store {
             } else if (dmRoomMap.getUserIdForRoomId(room.roomId) && tags.length === 0) {
                 // We intentionally don't duplicate rooms in other tags into the people list
                 // as a feature.
-                tags.push("im.vector.fake.direct");
+                tags.push(TAG_DM);
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
@@ -589,7 +592,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -628,7 +631,7 @@ class RoomListStore extends Store {
                     }
                 } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push({room, category: this._calculateCategory(room)});
+                    lists[TAG_DM].push({room, category: this._calculateCategory(room)});
                 } else {
                     lists["im.vector.fake.recent"].push({room, category: this._calculateCategory(room)});
                 }

@@ -2148,5 +2148,19 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) s’est connecté à une nouvelle session sans la vérifier :",
     "Ask this user to verify their session, or manually verify it below.": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
     "Manually Verify": "Vérifier manuellement",
-    "Verify by scanning": "Vérifier en scannant"
+    "Verify by scanning": "Vérifier en scannant",
+    "The version of Riot": "La version de Riot",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Si vous utilisez Riot sur un appareil où le toucher est le mécanisme primaire de saisie",
+    "Whether you're using Riot as an installed Progressive Web App": "Si vous utilisez Riot en tant qu’application web progressive (PWA)",
+    "Your user agent": "Votre agent utilisateur",
+    "The information being sent to us to help make Riot better includes:": "Les informations qui nous sont envoyées et qui nous aident à améliorer Riot comportent :",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "La session que vous essayez de vérifier ne prend pas en charge les codes QR ou la vérification d’émojis, qui sont les méthodes prises en charge par Riot. Essayez avec un autre client.",
+    "You declined": "Vous avez refusé",
+    "%(name)s declined": "%(name)s a refusé",
+    "accepting …": "nous acceptons…",
+    "declining …": "nous refusons…",
+    "Your homeserver does not support cross-signing.": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
+    "Homeserver feature support:": "Prise en charge de la fonctionnalité par le serveur d’accueil :",
+    "exists": "existant",
+    "Verification Requests": "Demandes de vérification"
 }

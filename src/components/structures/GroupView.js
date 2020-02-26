@@ -821,10 +821,10 @@ export default createReactClass({
                 {_t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;

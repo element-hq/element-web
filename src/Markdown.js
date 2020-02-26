@@ -136,7 +136,7 @@ export default class Markdown {
                 // thus opening in a new tab.
                 if (externalLinks) {
                     attrs.push(['target', '_blank']);
-                    attrs.push(['rel', 'noopener']);
+                    attrs.push(['rel', 'noreferrer noopener']);
                 }
                 this.tag('a', attrs);
             } else {

@@ -137,11 +137,18 @@ limitations under the License.
             font-size: 18px;
             line-height: 25px;
             flex: 1;
-            overflow-x: auto;
-            max-height: 50px;
-            display: flex;
             justify-content: center;
             align-items: center;
+
+            // limit to 2 lines, show an ellipsis if it overflows
+            // this looks webkit specific but is supported by Firefox 68+
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+
+            overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
 
             .mx_E2EIcon {
                 margin: 5px;

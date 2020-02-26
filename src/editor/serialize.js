@@ -41,14 +41,6 @@ export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
     if (!parser.isPlainText() || forceHTML) {
         return parser.toHTML();
     }
-    // Format "plain" text to ensure removal of backslash escapes
-    // https://github.com/vector-im/riot-web/issues/11230
-    // https://github.com/vector-im/riot-web/issues/2870
-    const postParsePlaintext = parser.toPlaintext();
-    if (postParsePlaintext !== md) {
-        // only return "formatted" text if it differs from the source text
-        return postParsePlaintext;
-    }
 }
 
 export function textSerialize(model) {

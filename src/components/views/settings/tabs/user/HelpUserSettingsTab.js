@@ -37,7 +37,7 @@ const ghVersionLabel = function(repo, token='') {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
+    return <a target="_blank" rel="noreferrer noopener" href={url}>{ token }</a>;
 };
 
 export default class HelpUserSettingsTab extends React.Component {
@@ -110,7 +110,7 @@ export default class HelpUserSettingsTab extends React.Component {
         const legalLinks = [];
         for (const tocEntry of SdkConfig.get().terms_and_conditions_links) {
             legalLinks.push(<div key={tocEntry.url}>
-                <a href={tocEntry.url} rel="noopener" target="_blank">{tocEntry.text}</a>
+                <a href={tocEntry.url} rel="noreferrer noopener" target="_blank">{tocEntry.text}</a>
             </div>);
         }
 
@@ -132,27 +132,27 @@ export default class HelpUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
                 <ul>
                     <li>
-                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noopener" target="_blank">
+                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noreferrer noopener" target="_blank">
                         default cover photo</a> is ©&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>{' '}
+                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener" target="_blank">
                         CC-BY-SA 4.0</a>.
                     </li>
                     <li>
-                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noopener" target="_blank">
-                        twemoji-colr</a> font is ©&nbsp;
-                        <a href="https://mozilla.org" rel="noopener" target="_blank">Mozilla Foundation</a>{' '}
+                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener"
+                               target="_blank"> twemoji-colr</a> font is ©&nbsp;
+                        <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">Mozilla Foundation</a>{' '}
                         used under the terms of&nbsp;
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noopener" target="_blank">
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">
                         Apache 2.0</a>.
                     </li>
                     <li>
-                        The <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">
+                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
                         Twemoji</a> emoji art is ©&nbsp;
-                        <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">Twitter, Inc and other
+                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">Twitter, Inc and other
                         contributors</a> used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener" target="_blank">
+                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener" target="_blank">
                         CC-BY 4.0</a>.
                     </li>
                 </ul>
@@ -162,7 +162,8 @@ export default class HelpUserSettingsTab extends React.Component {
 
     render() {
         let faqText = _t('For help with using Riot, click <a>here</a>.', {}, {
-            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noopener' target='_blank'>{sub}</a>,
+            'a': (sub) =>
+                <a href="https://about.riot.im/need-help/" rel='noreferrer noopener' target='_blank'>{sub}</a>,
         });
         if (SdkConfig.get().welcomeUserId && getCurrentLanguage().startsWith('en')) {
             faqText = (
@@ -170,7 +171,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     {
                         _t('For help with using Riot, click <a>here</a> or start a chat with our ' +
                             'bot using the button below.', {}, {
-                            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noopener'
+                            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noreferrer noopener'
                                              target='_blank'>{sub}</a>,
                         })
                     }

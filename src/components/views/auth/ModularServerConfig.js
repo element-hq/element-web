@@ -99,7 +99,7 @@ export default class ModularServerConfig extends ServerConfig {
                     "Enter the location of your Modular homeserver. It may use your own " +
                     "domain name or be a subdomain of <a>modular.im</a>.",
                     {}, {
-                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
+                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                             {sub}
                         </a>,
                     },
