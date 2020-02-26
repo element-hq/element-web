@@ -162,4 +162,6 @@ export default class BasePlatform {
     getEventIndexingManager(): BaseEventIndexManager | null {
         return null;
     }
+
+    setLanguage(preferredLangs: string[]) {}
 }
