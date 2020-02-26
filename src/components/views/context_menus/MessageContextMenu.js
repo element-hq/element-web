@@ -90,7 +90,8 @@ export default createReactClass({
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
         if (!pinnedEvent) return false;
-        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
+        const content = pinnedEvent.getContent();
+        return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     },
 
     onResendClick: function() {
