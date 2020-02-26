@@ -70,6 +70,7 @@ export async function startAnyRegistrationFlow(options) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const modal = Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
             hasCancelButton: true,
+            quitOnly: true,
             title: _t("Sign In or Create Account"),
             description: _t("Use your account or create a new one to continue."),
             button: _t("Create Account"),
