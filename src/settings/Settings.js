@@ -433,10 +433,11 @@ export const SETTINGS = {
             deny: [],
         },
     },
-    "RoomList.orderByRecents": {
+    "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Order rooms by message activity instead of by name"),
+        displayName: _td("Order rooms alphabetically by name instead of by recent activity"),
         default: true,
+        invertedSettingName: "RoomList.orderByRecents",
     },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

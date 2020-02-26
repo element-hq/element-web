@@ -133,8 +133,8 @@ class RoomListStore extends Store {
             orderImportantFirst: false,
         };
 
+        SettingsStore.monitorSetting('RoomList.orderAlphabetically', null);
         SettingsStore.monitorSetting('RoomList.orderByImportance', null);
-        SettingsStore.monitorSetting('RoomList.orderByRecents', null);
         SettingsStore.monitorSetting('feature_custom_tags', null);
     }
 
@@ -161,8 +161,8 @@ class RoomListStore extends Store {
                 if (!logicallyReady) break;
 
                 switch (payload.settingName) {
-                    case "RoomList.orderByRecents":
-                        this.updateSortingAlgorithm(payload.newValue ? ALGO_RECENT : ALGO_ALPHABETIC,
+                    case "RoomList.orderAlphabetically":
+                        this.updateSortingAlgorithm(payload.newValue ? ALGO_ALPHABETIC : ALGO_RECENT,
                             this._state.orderImportantFirst);
                         break;
                     case "RoomList.orderByImportance":
@@ -189,9 +189,9 @@ class RoomListStore extends Store {
 
                 this._matrixClient = payload.matrixClient;
 
-                const orderByRecents = SettingsStore.getValue("RoomList.orderByRecents");
                 const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
-                this.updateSortingAlgorithm(orderByRecents ? ALGO_RECENT : ALGO_ALPHABETIC, orderByImportance);
+                const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
+                this.updateSortingAlgorithm(orderAlphabetically ? ALGO_ALPHABETIC : ALGO_RECENT, orderByImportance);
             }
             break;
             case 'MatrixActions.Room.receipt': {
