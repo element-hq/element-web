@@ -126,7 +126,7 @@ export default class VerificationQRCode extends React.PureComponent {
             buf = Buffer.concat([buf, tmpBuf]);
         };
         const appendInt = (i: number) => {
-            const tmpBuf = Buffer.alloc(4);
+            const tmpBuf = Buffer.alloc(2);
             tmpBuf.writeInt8(i, 0);
             buf = Buffer.concat([buf, tmpBuf]);
         };
