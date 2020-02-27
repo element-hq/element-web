@@ -32,7 +32,9 @@ const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
 const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
-
+    // state to show a spinner immediately after clicking "start verification",
+    // before we have a request
+    const [isRequesting, setRequesting] = useState(false);
     const [phase, setPhase] = useState(request && request.phase);
     useEffect(() => {
         setRequest(verificationRequest);
@@ -68,9 +70,6 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     }, [onClose, request]);
     useEventEmitter(request, "change", changeHandler);
 
-    // state to show a spinner immediately after clicking "start verification",
-    // before we have a request
-    const [isRequesting, setRequesting] = useState(false);
     const onStartVerification = useCallback(async () => {
         setRequesting(true);
         const cli = MatrixClientPeg.get();
