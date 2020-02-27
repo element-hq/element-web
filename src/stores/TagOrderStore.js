@@ -19,6 +19,7 @@ import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import SettingsStore from "../settings/SettingsStore";
 
 const INITIAL_STATE = {
     orderedTags: null,
@@ -40,6 +41,7 @@ class TagOrderStore extends Store {
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
+        SettingsStore.monitorSetting("TagPanel.enableTagPanel", null);
     }
 
     _setState(newState) {
@@ -178,6 +180,14 @@ class TagOrderStore extends Store {
                 this._state = Object.assign({}, INITIAL_STATE);
                 break;
             }
+            case 'setting_updated':
+                if (payload.settingName === 'TagPanel.enableTagPanel' && !payload.newValue) {
+                    this._setState({
+                        selectedTags: [],
+                    });
+                    Analytics.trackEvent('FilterStore', 'disable_tags');
+                }
+                break;
         }
     }
 
