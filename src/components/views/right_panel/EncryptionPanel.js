@@ -32,11 +32,14 @@ const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
 const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
-
+    // state to show a spinner immediately after clicking "start verification",
+    // before we have a request
+    const [isRequesting, setRequesting] = useState(false);
     const [phase, setPhase] = useState(request && request.phase);
     useEffect(() => {
         setRequest(verificationRequest);
         if (verificationRequest) {
+            setRequesting(false);
             setPhase(verificationRequest.phase);
         }
     }, [verificationRequest]);
@@ -68,6 +71,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     useEventEmitter(request, "change", changeHandler);
 
     const onStartVerification = useCallback(async () => {
+        setRequesting(true);
         const cli = MatrixClientPeg.get();
         const roomId = await ensureDMExists(cli, member.userId);
         const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
@@ -75,9 +79,11 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
         setPhase(verificationRequest.phase);
     }, [member.userId]);
 
-    const requested = request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined);
-    const initiatedByMe = request && request.initiatedByMe;
+    const requested =
+        (!request && isRequesting) ||
+        (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
     if (!request || requested) {
+        const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
         return <EncryptionInfo
             onStartVerification={onStartVerification}
             member={member}
