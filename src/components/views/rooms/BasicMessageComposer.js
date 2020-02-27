@@ -563,6 +563,7 @@ export default class BasicMessageEditor extends React.Component {
             return;
         }
         this.historyManager.ensureLastChangesPushed(this.props.model);
+        this._modifiedFlag = true;
         switch (action) {
             case "bold":
                 toggleInlineFormat(range, "**");
