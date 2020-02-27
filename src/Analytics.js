@@ -260,7 +260,6 @@ class Analytics {
             });
         } catch (e) {
             console.error("Analytics error: ", e);
-            window.err = e;
         }
     }
 
