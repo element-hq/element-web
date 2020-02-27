@@ -307,7 +307,7 @@ describe('loading:', function() {
                 indexedDB,
                 "matrix-js-sdk:crypto",
             );
-            await cryptoStore._connect();
+            await cryptoStore.startup();
         });
 
         it('shows the last known room by default', function() {
