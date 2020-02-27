@@ -393,14 +393,14 @@ export default class BasicMessageEditor extends React.Component {
             this._insertText("\n");
             handled = true;
         // move selection to start of composer
-        } else if (modKey && event.key === Key.HOME) {
+        } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
             setSelection(this._editorRef, model, {
                 index: 0,
                 offset: 0,
             });
             handled = true;
         // move selection to end of composer
-        } else if (modKey && event.key === Key.END) {
+        } else if (modKey && event.key === Key.END && !event.shiftKey) {
             setSelection(this._editorRef, model, {
                 index: model.parts.length - 1,
                 offset: model.parts[model.parts.length - 1].text.length,
