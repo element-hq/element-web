@@ -117,6 +117,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             backupInfo,
             backupSigStatus,
         });
+
+        return {
+            backupInfo,
+            backupSigStatus,
+        };
     }
 
     async _queryKeyUploadAuth() {
@@ -269,13 +274,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
-            /* priority = */ false, /* static = */ true,
+            /* priority = */ false, /* static = */ false,
         );
 
         await finished;
-        await this._fetchBackupInfo();
+        const { backupSigStatus } = await this._fetchBackupInfo();
         if (
-            this.state.backupSigStatus.usable &&
+            backupSigStatus.usable &&
             this.state.canUploadKeysWithPasswordOnly &&
             this.state.accountPassword
         ) {
