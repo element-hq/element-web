@@ -1,10 +1,10 @@
 {
     "Custom Server Options": "Egyedi szerverbeállítások",
-    "Dismiss": "Eltüntet",
+    "Dismiss": "Eltüntetés",
     "powered by Matrix": "Matrix hajtja",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s alkalmazás %(browserName)s böngészőn %(osName)s rendszeren",
     "Riot Desktop on %(platformName)s": "Riot Desktop itt: %(platformName)s",
-    "Unknown device": "Ismeretlen készülék",
+    "Unknown device": "Ismeretlen eszköz",
     "You need to be using HTTPS to place a screen-sharing call.": "Képernyőmegosztás indításához HTTPS-t kell használnod.",
     "Welcome to Riot.im": "Üdvözöl a Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizált, titkosított csevegés és kollaboráció [matrix] alapokon",
