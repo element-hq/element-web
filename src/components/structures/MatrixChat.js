@@ -1008,6 +1008,10 @@ export default createReactClass({
                 // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
                 go_welcome_on_cancel: true,
+                screen_after: {
+                    screen: `user/${this.props.config.welcomeUserId}`,
+                    params: { action: 'chat' },
+                },
             });
             return;
         }
@@ -1177,7 +1181,15 @@ export default createReactClass({
     _onLoggedIn: async function() {
         ThemeController.isLogin = false;
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (MatrixClientPeg.currentUserIsJustRegistered()) {
+        // If a specific screen is set to be shown after login, show that above
+        // all else, as it probably means the user clicked on something already.
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
+            this.showScreen(
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
+            );
+            this._screenAfterLogin = null;
+        } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {

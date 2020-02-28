@@ -32,6 +32,7 @@ export default createReactClass({
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
         headerImage: PropTypes.string,
+        quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
     },
 
     getDefaultProps: function() {
@@ -42,6 +43,7 @@ export default createReactClass({
             focus: true,
             hasCancelButton: true,
             danger: false,
+            quitOnly: false,
         };
     },
 
@@ -73,7 +75,7 @@ export default createReactClass({
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
                     primaryButtonClass={primaryButtonClass}
                     cancelButton={this.props.cancelButton}
-                    hasCancel={this.props.hasCancelButton}
+                    hasCancel={this.props.hasCancelButton && !this.props.quitOnly}
                     onPrimaryButtonClick={this.onOk}
                     focus={this.props.focus}
                     onCancel={this.onCancel}
