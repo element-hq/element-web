@@ -219,7 +219,7 @@ class DMRoomTile extends React.PureComponent {
         }
 
         // Push any text we missed (end of text)
-        if (i < (str.length - 1)) {
+        if (i < str.length) {
             result.push(<span key={i + 'end'}>{str.substring(i)}</span>);
         }
 
