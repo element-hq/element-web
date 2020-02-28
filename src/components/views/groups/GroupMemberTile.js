@@ -59,7 +59,8 @@ export default createReactClass({
         );
 
         const av = (
-            <BaseAvatar aria-hidden="true"
+            <BaseAvatar
+                aria-hidden="true"
                 name={this.props.member.displayname || this.props.member.userId}
                 idName={this.props.member.userId}
                 width={36} height={36}
