@@ -61,6 +61,8 @@ export default class GeneralUserSettingsTab extends React.Component {
             emails: [],
             msisdns: [],
             ...this._calculateThemeState(),
+            customThemeUrl: "",
+            customThemeError: "",
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -274,6 +276,33 @@ export default class GeneralUserSettingsTab extends React.Component {
         });
     };
 
+    _onAddCustomTheme = async () => {
+        let currentThemes = SettingsStore.getValue("custom_themes");
+        if (!currentThemes) currentThemes = [];
+        currentThemes = currentThemes.map(c => c); // cheap clone
+
+        try {
+            const r = await fetch(this.state.customThemeUrl);
+            const themeInfo = await r.json();
+            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
+                console.log(themeInfo);
+                this.setState({customThemeError: _t("Invalid theme schema.")});
+                return;
+            }
+            currentThemes.push(themeInfo);
+        } catch (e) {
+            console.error(e);
+            this.setState({customThemeError: _t("Error downloading theme information.")});
+        }
+
+        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
+        this.setState({customThemeUrl: "", customThemeError: ""});
+    };
+
+    _onCustomThemeChange = (e) => {
+        this.setState({customThemeUrl: e.target.value});
+    };
+
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
@@ -368,6 +397,28 @@ export default class GeneralUserSettingsTab extends React.Component {
                 />
             </div>;
         }
+
+        let customThemeForm;
+        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+            customThemeForm = (
+                <form onSubmit={this._onAddCustomTheme}>
+                    <Field
+                        label={_t("Custom theme URL")}
+                        type='text'
+                        id='mx_GeneralUserSettingsTab_customThemeInput'
+                        autoComplete="off"
+                        onChange={this._onCustomThemeChange}
+                        value={this.state.customThemeUrl}
+                    />
+                    <div className='error'>{this.state.customThemeError}</div>
+                    <AccessibleButton
+                        onClick={this._onAddCustomTheme}
+                        type="submit" kind="primary_sm"
+                    >{_t("Add theme")}</AccessibleButton>
+                </form>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -380,6 +431,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                         return <option key={theme} value={theme}>{text}</option>;
                     })}
                 </Field>
+                {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
         );
