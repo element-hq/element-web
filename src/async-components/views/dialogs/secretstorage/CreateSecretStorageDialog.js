@@ -83,7 +83,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             canUploadKeysWithPasswordOnly: null,
-            accountPassword: props.accountPassword,
+            accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
             // status of the key backup toggle switch
             useKeyBackup: true,
