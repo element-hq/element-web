@@ -564,7 +564,7 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
-        const createRoomOptions = {};
+        const createRoomOptions = {inlineErrors: true};
 
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             // Check whether all users have uploaded device keys before.
