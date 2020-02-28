@@ -433,6 +433,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div>{authPrompt}</div>
             <DialogButtons
                 primaryButton={nextCaption}
+                onPrimaryButtonClick={this._onMigrateFormSubmit}
                 hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             >
