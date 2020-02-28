@@ -614,6 +614,22 @@ export default createReactClass({
                     this.onCancelSearchClick();
                 }
                 break;
+            case 'quote':
+                if (this.state.searchResults) {
+                    const roomId = payload.event.getRoomId();
+                    if (roomId === this.state.roomId) {
+                        this.onCancelSearchClick();
+                    }
+
+                    setImmediate(() => {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: roomId,
+                            deferred_action: payload,
+                        });
+                    });
+                }
+                break;
         }
     },
 
