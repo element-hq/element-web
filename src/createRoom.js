@@ -37,6 +37,8 @@ import SettingsStore from "./settings/SettingsStore";
  *     Default: True
  * @param {bool=} opts.encryption Whether to enable encryption.
  *     Default: False
+ * @param {bool=} opts.inlineErrors True to raise errors off the promise instead of resolving to null.
+ *     Default: False
  *
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
@@ -140,6 +142,9 @@ export default function createRoom(opts) {
         }
         return roomId;
     }, function(err) {
+        // Raise the error if the caller requested that we do so.
+        if (opts.inlineErrors) throw err;
+
         // We also failed to join the room (this sets joining to false in RoomViewStore)
         dis.dispatch({
             action: 'join_room_error',
