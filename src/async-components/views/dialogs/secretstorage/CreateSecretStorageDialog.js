@@ -400,12 +400,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         let authPrompt;
         let nextCaption = _t("Next");
-        if (!this.state.backupSigStatus.usable) {
-            authPrompt = <div>
-                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
-            </div>;
-            nextCaption = _t("Restore");
-        } else if (this.state.canUploadKeysWithPasswordOnly) {
+        if (this.state.canUploadKeysWithPasswordOnly) {
             authPrompt = <div>
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field
@@ -418,6 +413,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     autoFocus={true}
                 /></div>
             </div>;
+        } else if (!this.state.backupSigStatus.usable) {
+            authPrompt = <div>
+                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
+            </div>;
+            nextCaption = _t("Restore");
         } else {
             authPrompt = <p>
                 {_t("You'll need to authenticate with the server to confirm the upgrade.")}
