@@ -559,13 +559,19 @@ export default createReactClass({
             case 'view_user_info':
                 this._viewUser(payload.userId, payload.subAction);
                 break;
-            case 'view_room':
+            case 'view_room': {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(payload);
+                const promise = this._viewRoom(payload);
+                if (payload.deferred_action) {
+                    promise.then(() => {
+                        dis.dispatch(payload.deferred_action);
+                    });
+                }
                 break;
+            }
             case 'view_prev_room':
                 this._viewNextRoom(-1);
                 break;
@@ -862,7 +868,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.then(() => {
+        return waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -885,7 +891,7 @@ export default createReactClass({
                 presentedId += "/" + roomInfo.event_id;
             }
             newState.ready = true;
-            this.setState(newState, ()=>{
+            this.setState(newState, () => {
                 this.notifyNewScreen('room/' + presentedId);
             });
         });
