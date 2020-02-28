@@ -2167,5 +2167,8 @@
     "Your password": "A jelszavad",
     "This session, or the other session": "Ez vagy másik munkamenet",
     "The internet connection either session is using": "Az egyik munkamenet internet kapcsolata",
-    "We recommend you change your password and recovery key in Settings immediately": "Javasoljuk, hogy a jelszavadat és a visszaállítási kulcsodat mihamarabb változtasd meg a Beállításokban"
+    "We recommend you change your password and recovery key in Settings immediately": "Javasoljuk, hogy a jelszavadat és a visszaállítási kulcsodat mihamarabb változtasd meg a Beállításokban",
+    "Order rooms by name": "Szobák rendezése név szerint",
+    "Show rooms with unread notifications first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elől",
+    "Show shortcuts to recently viewed rooms above the room list": "Billentyűkombináció megjelenítése a nemrég meglátogatott szobákhoz a szoba lista felett"
 }
