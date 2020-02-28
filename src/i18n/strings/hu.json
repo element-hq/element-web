@@ -2170,5 +2170,8 @@
     "We recommend you change your password and recovery key in Settings immediately": "Javasoljuk, hogy a jelszavadat és a visszaállítási kulcsodat mihamarabb változtasd meg a Beállításokban",
     "Order rooms by name": "Szobák rendezése név szerint",
     "Show rooms with unread notifications first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elől",
-    "Show shortcuts to recently viewed rooms above the room list": "Billentyűkombináció megjelenítése a nemrég meglátogatott szobákhoz a szoba lista felett"
+    "Show shortcuts to recently viewed rooms above the room list": "Billentyűkombináció megjelenítése a nemrég meglátogatott szobákhoz a szoba lista felett",
+    "Sign In or Create Account": "Belépés vagy Fiók Készítés",
+    "Use your account or create a new one to continue.": "A folytatáshoz használd a fiókodat vagy készíts egy újat.",
+    "Create Account": "Fiók létrehozása"
 }
