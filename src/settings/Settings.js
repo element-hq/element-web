@@ -433,14 +433,19 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    "RoomList.orderAlphabetically": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Order rooms by name"),
+        default: false,
+    },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        displayName: _td("Show rooms with unread notifications first"),
         default: true,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show recently visited rooms above the room list"),
+        displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
