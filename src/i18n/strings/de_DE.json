@@ -1646,5 +1646,15 @@
     "Sign in to your Matrix account on <underlinedServerName />": "Melde dich bei deinem Matrix-Konto auf <underlinedServerName /> an",
     "Enter your password to sign in and regain access to your account.": "Gib dein Passwort ein, um dich anzumelden und wieder Zugang zu deinem Konto zu erhalten.",
     "Sign in and regain access to your account.": "Melden dich an und erhalte wieder Zugang zu deinem Konto.",
-    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Du kannst dich nicht bei deinem Konto anmelden. Bitte kontaktiere deinen Homeserver-Administrator für weitere Informationen."
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Du kannst dich nicht bei deinem Konto anmelden. Bitte kontaktiere deinen Homeserver-Administrator für weitere Informationen.",
+    "Sign In or Create Account": "Anmelden oder Account erstellen",
+    "Use your account or create a new one to continue.": "Benutze deinen Account oder erstellen einen neuen, um fortzufahren.",
+    "Create Account": "Account erstellen",
+    "Show typing notifications": "Zeige Tipp-Benachrichtigungen",
+    "Order rooms by name": "Sortiere Räume nach Name",
+    "When rooms are upgraded": "Wenn Räume verbessert werden",
+    "Scan this unique code": "Scanne diesen einzigartigen Code",
+    "or": "oder",
+    "Compare unique emoji": "Vergleiche einzigartige Emojis",
+    "Start": "Starte"
 }
