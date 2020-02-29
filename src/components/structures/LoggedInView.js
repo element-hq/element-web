@@ -586,7 +586,7 @@ const LoggedInView = createReactClass({
             />;
         } else if (this.props.showCookieBar &&
             this.props.config.piwik &&
-            navigator.doNotTrack != 1
+            navigator.doNotTrack !== "1"
         ) {
             const policyUrl = this.props.config.piwik.policyUrl || null;
             topBar = <CookieBar policyUrl={policyUrl} />;
