@@ -28,9 +28,11 @@ import classNames from 'classnames';
  *     An array of rules describing how to check to input value. Each rule in an object
  *     and may have the following properties:
  *     - `key`: A unique ID for the rule. Required.
+ *     - `skip`: A function used to determine whether the rule should even be evaluated.
  *     - `test`: A function used to determine the rule's current validity. Required.
  *     - `valid`: Function returning text to show when the rule is valid. Only shown if set.
  *     - `invalid`: Function returning text to show when the rule is invalid. Only shown if set.
+ *     - `final`: A Boolean if true states that this rule will only be considered if all rules before it returned valid.
  * @returns {Function}
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
@@ -49,6 +51,10 @@ export default function withValidation({ description, rules }) {
         if (rules && rules.length) {
             for (const rule of rules) {
                 if (!rule.key || !rule.test) {
+                    continue;
+                }
+
+                if (!valid && rule.final) {
                     continue;
                 }
 
