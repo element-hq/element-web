@@ -234,7 +234,7 @@
     "Voice call": "Appel vocal",
     "VoIP conference finished.": "Téléconférence VoIP terminée.",
     "VoIP conference started.": "Téléconférence VoIP démarrée.",
-    "VoIP is unsupported": "Voix sur IP non supportée",
+    "VoIP is unsupported": "VoIP (Appels par Internet) n'est pas supportée",
     "Warning!": "Attention !",
     "Who can access this room?": "Qui peut accéder au salon ?",
     "Who can read history?": "Qui peut lire l'historique ?",
@@ -2162,5 +2162,14 @@
     "Your homeserver does not support cross-signing.": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
     "Homeserver feature support:": "Prise en charge de la fonctionnalité par le serveur d’accueil :",
     "exists": "existant",
-    "Verification Requests": "Demandes de vérification"
+    "Verification Requests": "Demandes de vérification",
+    "Cancelling…": "Annulation…",
+    "Accepting…": "Acceptation…",
+    "Accepting …": "Acceptation…",
+    "Declining …": "Refus…",
+    "Your account is not secure": "Votre compte n'est pas sécurisé",
+    "Your password": "Votre mot de passe",
+    "This session, or the other session": "Cette session, ou l'autre session",
+    "The internet connection either session is using": "La connection internet de l'une des sessions",
+    "We recommend you change your password and recovery key in Settings immediately": "Nous vous recommandons de changer votre mot de passe et la clé de récupération dans Paramètres dès que possible"
 }
