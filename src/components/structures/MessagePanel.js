@@ -955,6 +955,9 @@ class MemberGrouper {
     }
 
     shouldGroup(ev) {
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
         return isMembershipChange(ev);
     }
 
