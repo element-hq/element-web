@@ -38,6 +38,13 @@ export default class RoomAliasField extends React.PureComponent {
         return `#${localpart}:${this.props.domain}`;
     }
 
+    _isValid(value) {
+        const fullAlias = this._asFullAlias(value);
+        // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
+        return !value.includes("#") && !value.includes(":") && !value.includes(",") &&
+            encodeURI(fullAlias) === fullAlias;
+    }
+
     render() {
         const Field = sdk.getComponent('views.elements.Field');
         const poundSign = (<span>#</span>);
@@ -80,10 +87,7 @@ export default class RoomAliasField extends React.PureComponent {
                     if (!value) {
                         return true;
                     }
-                    const fullAlias = this._asFullAlias(value);
-                    // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
-                    return !value.includes("#") && !value.includes(":") && !value.includes(",") &&
-                        encodeURI(fullAlias) === fullAlias;
+                    return this._isValid(value);
                 },
                 invalid: () => _t("Some characters not allowed"),
             }, {
@@ -92,7 +96,7 @@ export default class RoomAliasField extends React.PureComponent {
                 invalid: () => _t("Please provide a room alias"),
             }, {
                 key: "taken",
-                skip: ({value}) => !value,
+                skip: ({value}) => !value || !this._isValid(value),
                 test: async ({value}) => {
                     if (!value) {
                         return true;
