@@ -204,6 +204,7 @@
     "Sends the given message coloured as a rainbow": "Sends the given message coloured as a rainbow",
     "Sends the given emote coloured as a rainbow": "Sends the given emote coloured as a rainbow",
     "Displays list of commands with usages and descriptions": "Displays list of commands with usages and descriptions",
+    "Displays information about a user": "Displays information about a user",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
     "%(targetName)s accepted an invitation.": "%(targetName)s accepted an invitation.",
