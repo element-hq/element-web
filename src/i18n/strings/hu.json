@@ -2067,7 +2067,7 @@
     "Verification timed out. Start verification again from their profile.": "Ellenőrzés időtúllépés. Kezd újra az ellenőrzést a másik felhasználó profiljából.",
     "%(displayName)s cancelled verification. Start verification again from their profile.": "%(displayName)s törölte az ellenőrzést. Kezd újra az ellenőrzést a felhasználó profiljából.",
     "You cancelled verification. Start verification again from their profile.": "Törölted az ellenőrzést. Kezd újra az ellenőrzést a felhasználó profiljából.",
-    "Encryption enabled": "Titkosítás engedélyezve",
+    "Encryption enabled": "Titkosítás bekapcsolva",
     "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Ebben a szobában az üzenetek végpontok között titkosítottak. További információkért és ellenőrzéshez nyisd meg a felhasználó profilját.",
     "Encryption not enabled": "Titkosítás nincs engedélyezve",
     "The encryption used by this room isn't supported.": "A szobában használt titkosítás nem támogatott.",
