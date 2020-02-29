@@ -51,9 +51,16 @@ export default function withValidation({ description, rules }) {
                 if (!rule.key || !rule.test) {
                     continue;
                 }
+
+                const data = { value, allowEmpty };
+
+                if (rule.skip && rule.skip.call(this, data)) {
+                    continue;
+                }
+
                 // We're setting `this` to whichever component holds the validation
                 // function. That allows rules to access the state of the component.
-                const ruleValid = await rule.test.call(this, { value, allowEmpty });
+                const ruleValid = await rule.test.call(this, data);
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
                     // If the rule's result is valid and has text to show for

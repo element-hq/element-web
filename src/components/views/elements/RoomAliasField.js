@@ -92,6 +92,7 @@ export default class RoomAliasField extends React.PureComponent {
                 invalid: () => _t("Please provide a room alias"),
             }, {
                 key: "taken",
+                skip: ({value}) => !value,
                 test: async ({value}) => {
                     if (!value) {
                         return true;
