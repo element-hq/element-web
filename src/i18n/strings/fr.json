@@ -1374,7 +1374,7 @@
     "The homeserver may be unavailable or overloaded.": "Le serveur d’accueil est peut-être indisponible ou surchargé.",
     "You have %(count)s unread notifications in a prior version of this room.|other": "Vous avez %(count)s notifications non lues dans une version précédente de ce salon.",
     "You have %(count)s unread notifications in a prior version of this room.|one": "Vous avez %(count)s notification non lue dans une version précédente de ce salon.",
-    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Si vous utilisez ou non la fonction « fil d’ariane » (les avatars au-dessus de la liste des salons)",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Si vous utilisez ou non la fonction « fil d’Ariane » (avatars au-dessus de la liste des salons)",
     "Replying With Files": "Répondre avec des fichiers",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Pour le moment, il n’est pas possible de répondre avec un fichier. Souhaitez-vous envoyer ce fichier sans répondre ?",
     "The file '%(fileName)s' failed to upload.": "Le fichier « %(fileName)s » n’a pas pu être envoyé.",
