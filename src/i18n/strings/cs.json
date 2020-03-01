@@ -1303,7 +1303,7 @@
     "Create account": "Vytvořit účet",
     "Unable to query for supported registration methods.": "Nepovedlo se načíst podporované způsoby přihlášení.",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Vloží ¯\\_(ツ)_/¯ na začátek zprávy",
-    "Changes your display nickname in the current room only": "Pro tuto místnost změní vaší přezdívku",
+    "Changes your display nickname in the current room only": "Změní vaši zobrazovanou přezdívku pouze v současné místnosti",
     "User %(userId)s is already in the room": "Uživatel %(userId)s už je v této místnosti",
     "The user must be unbanned before they can be invited.": "Uživatel je vykázán, nelze ho pozvat.",
     "Show read receipts sent by other users": "Zobrazovat potvrzení o přijetí",
