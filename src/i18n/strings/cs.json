@@ -2163,5 +2163,7 @@
     "Your account is not secure": "Váš účet není zabezpečený",
     "Your password": "Vaše heslo",
     "This session, or the other session": "Tato relace, nebo jiná",
-    "We recommend you change your password and recovery key in Settings immediately": "Doporučujeme vám si v nastavení okamžitě změnit své heslo a obnovovací klíče"
+    "We recommend you change your password and recovery key in Settings immediately": "Doporučujeme vám si v nastavení okamžitě změnit své heslo a obnovovací klíče",
+    "exists": "existuje",
+    "The internet connection either session is using": "Internetové připojení používané jednou z relací"
 }
