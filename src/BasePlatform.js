@@ -181,8 +181,8 @@ export default class BasePlatform {
 
     /**
      * Begin Single Sign On flows.
-     * @param mxClient the matrix client using which we should start the flow
-     * @param loginType the type of SSO it is, CAS/SSO.
+     * @param {MatrixClient} mxClient the matrix client using which we should start the flow
+     * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
      */
     startSingleSignOn(mxClient: MatrixClient, loginType: "sso"|"cas") {
         const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl());
