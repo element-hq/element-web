@@ -35,6 +35,7 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
+const protocolInit = require('./protocol');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
@@ -426,6 +427,9 @@ if (!gotLock) {
     console.log('Other instance detected: exiting');
     app.exit();
 }
+
+// do this after we know we are the primary instance of the app
+protocolInit();
 
 const launcher = new AutoLaunch({
     name: vectorConfig.brand || 'Riot',

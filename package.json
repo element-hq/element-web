@@ -188,7 +188,11 @@
       "output": "electron_app/dist",
       "app": "electron_app"
     },
-    "afterSign": "scripts/electron_afterSign.js"
+    "afterSign": "scripts/electron_afterSign.js",
+      "protocols": [{
+          "name": "riot",
+          "schemes": ["riot"]
+      }]
   },
   "jest": {
     "modulePathIgnorePatterns": [
