@@ -1,3 +1,11 @@
+Changes in [1.5.11](https://github.com/vector-im/riot-web/releases/tag/v1.5.11) (2020-03-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.11-rc.1...v1.5.11)
+
+ * Upgrade to JS SDK 5.1.0 and React SDK 2.2.0
+ * Fix SSO flows for Electron 8.0.2 by disabling will-navigate
+   [\#12585](https://github.com/vector-im/riot-web/pull/12585)
+
 Changes in [1.5.11-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.11-rc.1) (2020-02-26)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.10...v1.5.11-rc.1)
