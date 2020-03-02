@@ -13,6 +13,11 @@
     padding-left: 5px;
 }
 
+a.mx_Pill {
+    word-break: break-all;
+    display: inline;
+}
+
 /* More specific to override `.markdown-body a` text-decoration */
 .mx_EventTile_content .markdown-body a.mx_Pill {
     text-decoration: none;
