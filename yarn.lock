@@ -7618,6 +7618,21 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.1.tgz#6dff66c99d55ecf739ca53c492e626f1d12a33cc"
   integrity sha512-pWB896KPGSGkp1XtyzRBftpTzwSOL0Gfk0wLvxt4f2mgzjY19o0LxJ3U25vNWTzsh7da+KTbuXQoQ3lOJZ8WHw==
 
+matrix-js-sdk@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.1.0.tgz#9b3b02af227ecc2d0cc35fb7312c92b8a6754293"
+  integrity sha512-IGRq5iACiKp3iIxAghwtdBPrbdgORowc0i8YuIMkZZMpRJDXnNaudt2BFwyQdukV7gvzz7F0sfxBUerySfOnKA==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.2"
+    loglevel "^1.6.4"
+    qs "^6.5.2"
+    request "^2.88.0"
+    unhomoglyph "^1.0.2"
+
 matrix-js-sdk@5.1.0-rc.1:
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.1.0-rc.1.tgz#48154133f1c8bc19557164a24535d6d45d1cf482"
