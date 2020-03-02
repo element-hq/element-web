@@ -1,3 +1,43 @@
+Changes in [1.5.11](https://github.com/vector-im/riot-web/releases/tag/v1.5.11) (2020-03-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.11-rc.1...v1.5.11)
+
+ * Upgrade to JS SDK 5.1.0 and React SDK 2.2.0
+ * Fix SSO flows for Electron 8.0.2 by disabling will-navigate
+   [\#12585](https://github.com/vector-im/riot-web/pull/12585)
+
+Changes in [1.5.11-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.11-rc.1) (2020-02-26)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.10...v1.5.11-rc.1)
+
+ * Upgrade to JS SDK 5.1.0-rc.1 and React SDK 2.2.0-rc.1
+ * Change Windows signing to warning when missing token
+   [\#12523](https://github.com/vector-im/riot-web/pull/12523)
+ * Modernizr remove t3st/es6/contains
+   [\#12524](https://github.com/vector-im/riot-web/pull/12524)
+ * Switch out any eval-using Modernizr rules
+   [\#12519](https://github.com/vector-im/riot-web/pull/12519)
+ * Update from Weblate
+   [\#12522](https://github.com/vector-im/riot-web/pull/12522)
+ * Notify electron of language changes
+   [\#12487](https://github.com/vector-im/riot-web/pull/12487)
+ * Relax macOS notarisation check to print a warning
+   [\#12503](https://github.com/vector-im/riot-web/pull/12503)
+ * Clarify supported tier means desktop OSes
+   [\#12486](https://github.com/vector-im/riot-web/pull/12486)
+ * Use noreferrer in addition to noopener for edge case browsers
+   [\#12477](https://github.com/vector-im/riot-web/pull/12477)
+ * Document start / end composer shortcuts
+   [\#12466](https://github.com/vector-im/riot-web/pull/12466)
+ * Update from Weblate
+   [\#12480](https://github.com/vector-im/riot-web/pull/12480)
+ * Remove buildkite pipeline
+   [\#12464](https://github.com/vector-im/riot-web/pull/12464)
+ * Remove exec so release script continues
+   [\#12435](https://github.com/vector-im/riot-web/pull/12435)
+ * Use Persistent Storage where possible
+   [\#12425](https://github.com/vector-im/riot-web/pull/12425)
+
 Changes in [1.5.10](https://github.com/vector-im/riot-web/releases/tag/v1.5.10) (2020-02-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.9...v1.5.10)
