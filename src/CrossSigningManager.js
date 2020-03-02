@@ -21,6 +21,7 @@ import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 import SettingsStore from './settings/SettingsStore';
+import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -125,8 +126,37 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     return [name, key];
 }
 
+const onSecretRequested = async function({
+    user_id: userId,
+    device_id: deviceId,
+    request_id: requestId,
+    name,
+    device_trust: deviceTrust,
+}) {
+    console.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
+    const client = MatrixClientPeg.get();
+    if (userId !== client.getUserId()) {
+        return;
+    }
+    if (!deviceTrust || !deviceTrust.isVerified()) {
+        console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
+        return;
+    }
+    const crossSigning = client._crypto._crossSigningInfo;
+    if (!crossSigning._cacheCallbacks.getCrossSigningKeyCache) return;
+    if (name === "m.key.self_signing") {
+        const key = await crossSigning._cacheCallbacks.getCrossSigningKeyCache("self_signing");
+        return key && encodeBase64(key);
+    } else if (name === "m.key.user_signing") {
+        const key = await crossSigning._cacheCallbacks.getCrossSigningKeyCache("user_signing");
+        return key && encodeBase64(key);
+    }
+    console.warn("onSecretRequested didn't recognise the secret named ", name);
+};
+
 export const crossSigningCallbacks = {
     getSecretStorageKey,
+    onSecretRequested,
 };
 
 /**
