@@ -174,7 +174,8 @@ function onEditableContextMenu(ev, params) {
 
 module.exports = (webContents) => {
     webContents.on('new-window', onWindowOrNavigate);
-    webContents.on('will-navigate', onWindowOrNavigate);
+    // XXX: https://github.com/vector-im/riot-web/issues/8247
+    // webContents.on('will-navigate', onWindowOrNavigate);
 
     webContents.on('context-menu', function(ev, params) {
         if (params.linkURL || params.srcURL) {
