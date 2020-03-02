@@ -62,15 +62,16 @@ const getListAlgorithm = (listKey, settingAlgorithm) => {
     // apply manual sorting only to m.favourite, otherwise respect the global setting
     // all the known tags are listed explicitly here to simplify future changes
     switch (listKey) {
-        case "m.favourite":
-            return ALGO_MANUAL;
         case "im.vector.fake.invite":
         case "im.vector.fake.recent":
         case "im.vector.fake.archived":
         case "m.lowpriority":
         case TAG_DM:
-        default:
             return settingAlgorithm;
+
+        case "m.favourite":
+        default: // custom-tags
+            return ALGO_MANUAL;
     }
 };
 
