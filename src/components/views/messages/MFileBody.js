@@ -247,6 +247,8 @@ export default createReactClass({
                     });
                 };
 
+                // This button should actually Download because usercontent/ will try to click itself
+                // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
@@ -290,7 +292,7 @@ export default createReactClass({
                             src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
                             onLoad={onIframeLoad}
                             ref={this._iframe}
-                            sandbox="allow-scripts allow-downloads" />
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
                     </div>
                 </span>
             );
