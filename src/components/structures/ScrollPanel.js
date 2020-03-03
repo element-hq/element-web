@@ -523,7 +523,7 @@ export default createReactClass({
     scrollRelative: function(mult) {
         const scrollNode = this._getScrollNode();
         const delta = mult * scrollNode.clientHeight * 0.5;
-        scrollNode.scrollTop = scrollNode.scrollTop + delta;
+        scrollNode.scrollBy(0, delta);
         this._saveScrollState();
     },
 
