@@ -27,6 +27,7 @@ import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
+import SSOButton from "../../views/elements/SSOButton";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -120,8 +121,8 @@ export default createReactClass({
             'm.login.password': this._renderPasswordStep,
 
             // CAS and SSO are the same thing, modulo the url we link to
-            'm.login.cas': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("cas")),
-            'm.login.sso': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("sso")),
+            'm.login.cas': () => this._renderSsoStep("cas"),
+            'm.login.sso': () => this._renderSsoStep("sso"),
         };
 
         this._initLoginLogic();
@@ -579,7 +580,7 @@ export default createReactClass({
         );
     },
 
-    _renderSsoStep: function(url) {
+    _renderSsoStep: function(loginType) {
         const SignInToText = sdk.getComponent('views.auth.SignInToText');
 
         let onEditServerDetailsClick = null;
@@ -600,7 +601,10 @@ export default createReactClass({
                 <SignInToText serverConfig={this.props.serverConfig}
                     onEditServerDetailsClick={onEditServerDetailsClick} />
 
-                <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
+                <SSOButton
+                    className="mx_Login_sso_link mx_Login_submit"
+                    matrixClient={this._loginLogic.createTemporaryClient()}
+                    loginType={loginType} />
             </div>
         );
     },
