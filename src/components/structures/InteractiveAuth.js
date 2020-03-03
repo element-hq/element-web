@@ -186,6 +186,12 @@ export default createReactClass({
                 stageErrorText: null,
             });
         }
+        // The JS SDK eagerly reports itself as "not busy" right after any
+        // immediate work has completed, but that's not really what we want at
+        // the UI layer, so we ignore this signal and show a spinner until
+        // there's a new screen to show the user. This is implemented by setting
+        // `busy: false` in `_authStateUpdated`.
+        // See also https://github.com/vector-im/riot-web/issues/12546
     },
 
     _setFocus: function() {
