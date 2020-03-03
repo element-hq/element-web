@@ -962,6 +962,17 @@ class MemberGrouper {
     }
 
     add(ev) {
+        if (ev.getType() === 'm.room.member') {
+            // We'll just double check that it's worth our time to do so...
+            if (ev.getPrevContent()) {
+                const membershipChange = ev.getPrevContent()['membership'] !== ev.getContent()['membership'];
+                const displayNameChange = ev.getPrevContent()['displayname'] !== ev.getContent()['displayname'];
+                const avatarChange = ev.getPrevContent()['avatar_url'] !== ev.getContent()['avatar_url'];
+                if (!membershipChange && !displayNameChange && !avatarChange) {
+                    return; // Not a substantial change - quietly ignore
+                }
+            }
+        }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
         this.events.push(ev);
     }
