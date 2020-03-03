@@ -1896,5 +1896,10 @@
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "U moet uw <b>persoonlijke informatie</b> van de identiteitsserver <idserver /> <b>verwijderen</b> voordat u zich ontkoppelt. Helaas kan de identiteitsserver <idserver /> op dit moment niet worden bereikt. Mogelijk is hij offline.",
     "Your homeserver does not support cross-signing.": "Uw thuisserver biedt geen ondersteuning voor kruiselings ondertekenen.",
     "Homeserver feature support:": "Functies ondersteund door thuisserver:",
-    "exists": "bestaat"
+    "exists": "bestaat",
+    "Sign In or Create Account": "Aanmelden of Account Aanmaken",
+    "Use your account or create a new one to continue.": "Gebruik uw account of maak een nieuwe om door te gaan.",
+    "Create Account": "Account aanmaken",
+    "Displays information about a user": "Geef informatie weer over deze gebruiker",
+    "Order rooms by name": "Sorteer gesprekken op naam"
 }
