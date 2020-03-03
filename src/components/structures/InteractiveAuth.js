@@ -161,6 +161,7 @@ export default createReactClass({
     _authStateUpdated: function(stageType, stageState) {
         const oldStage = this.state.authStage;
         this.setState({
+            busy: false,
             authStage: stageType,
             stageState: stageState,
             errorText: stageState.error,
@@ -183,10 +184,6 @@ export default createReactClass({
                 busy: true,
                 errorText: null,
                 stageErrorText: null,
-            });
-        } else {
-            this.setState({
-                busy: false,
             });
         }
     },
