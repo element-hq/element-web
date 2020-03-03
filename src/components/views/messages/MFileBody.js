@@ -271,6 +271,8 @@ export default createReactClass({
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
                     textContent: _t("Download %(text)s", { text: text }),
+                    // only auto-download if a user triggered this iframe explicitly
+                    auto: !this.props.decryptedBlob,
                 }, "*");
             };
 
