@@ -906,24 +906,24 @@ export default class InviteDialog extends React.PureComponent {
         // Mix in the server results if we have any, but only if we're searching. We track the additional
         // members separately because we want to filter sourceMembers but trust the mixin arrays to have
         // the right members in them.
-        let additionalMembers = [];
+        let priorityAdditionalMembers = []; // Shows up before our own suggestions, higher quality
+        let otherAdditionalMembers = []; // Shows up after our own suggestions, lower quality
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
         if (this.state.filterText && hasMixins && kind === 'suggestions') {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
             const notAlreadyExists = (u: Member): boolean => {
                 return !sourceMembers.some(m => m.userId === u.userId)
-                    && !additionalMembers.some(m => m.userId === u.userId);
+                    && !priorityAdditionalMembers.some(m => m.userId === u.userId)
+                    && !otherAdditionalMembers.some(m => m.userId === u.userId);
             };
 
-            const uniqueServerResults = this.state.serverResultsMixin.filter(notAlreadyExists);
-            additionalMembers = additionalMembers.concat(...uniqueServerResults);
-
-            const uniqueThreepidResults = this.state.threepidResultsMixin.filter(notAlreadyExists);
-            additionalMembers = additionalMembers.concat(...uniqueThreepidResults);
+            otherAdditionalMembers = this.state.serverResultsMixin.filter(notAlreadyExists);
+            priorityAdditionalMembers = this.state.threepidResultsMixin.filter(notAlreadyExists);
         }
+        const hasAdditionalMembers = priorityAdditionalMembers.length > 0 || otherAdditionalMembers.length > 0;
 
         // Hide the section if there's nothing to filter by
-        if (sourceMembers.length === 0 && additionalMembers.length === 0) return null;
+        if (sourceMembers.length === 0 && !hasAdditionalMembers) return null;
 
         // Do some simple filtering on the input before going much further. If we get no results, say so.
         if (this.state.filterText) {
@@ -931,7 +931,7 @@ export default class InviteDialog extends React.PureComponent {
             sourceMembers = sourceMembers
                 .filter(m => m.user.name.toLowerCase().includes(filterBy) || m.userId.toLowerCase().includes(filterBy));
 
-            if (sourceMembers.length === 0 && additionalMembers.length === 0) {
+            if (sourceMembers.length === 0 && !hasAdditionalMembers) {
                 return (
                     <div className='mx_InviteDialog_section'>
                         <h3>{sectionName}</h3>
@@ -943,7 +943,7 @@ export default class InviteDialog extends React.PureComponent {
 
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
-        sourceMembers = [...additionalMembers, ...sourceMembers];
+        sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
         // with the member's tile instead.
