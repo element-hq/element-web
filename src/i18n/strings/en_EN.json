@@ -7,6 +7,7 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.",
     "Invalid configuration: no default server specified.": "Invalid configuration: no default server specified.",
     "Riot Desktop on %(platformName)s": "Riot Desktop on %(platformName)s",
+    "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
     "Unknown device": "Unknown device",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s on %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "You need to be using HTTPS to place a screen-sharing call.",
