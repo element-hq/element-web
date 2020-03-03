@@ -2173,5 +2173,6 @@
     "Show shortcuts to recently viewed rooms above the room list": "Billentyűkombináció megjelenítése a nemrég meglátogatott szobákhoz a szoba lista felett",
     "Sign In or Create Account": "Belépés vagy Fiók Készítés",
     "Use your account or create a new one to continue.": "A folytatáshoz használd a fiókodat vagy készíts egy újat.",
-    "Create Account": "Fiók létrehozása"
+    "Create Account": "Fiók létrehozása",
+    "Displays information about a user": "A felhasználóról információ megjelenítése"
 }
