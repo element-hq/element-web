@@ -765,6 +765,7 @@ export default createReactClass({
     },
 
     _topFromBottom(node) {
+        // current capped height - distance from top = distance from bottom of container to top of tracked element
         return this._itemlist.current.clientHeight - node.offsetTop;
     },
 
