@@ -7519,10 +7519,9 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@2.2.1:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "2.2.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.2.1.tgz#1f443d35bdcc46c7ef3dc3066adda59f7f43b348"
-  integrity sha512-zIgf/i9z2x+KHf0caQtFVc3JEFiIFd9MH36XnqXaPYyRSuS0zWRLY/tFTR51pMblMIb3DskTYlf9q7JLDAP/+A==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/845656064e802054b3857c2a240aaaf88f94f740"
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7550,7 +7549,7 @@ matrix-react-sdk@2.2.1:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "5.1.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     minimist "^1.2.0"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
