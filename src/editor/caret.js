@@ -38,12 +38,27 @@ function setDocumentRangeSelection(editor, model, range) {
 }
 
 export function setCaretPosition(editor, model, caretPosition) {
-    const sel = document.getSelection();
-    sel.removeAllRanges();
     const range = document.createRange();
     const {node, offset} = getNodeAndOffsetForPosition(editor, model, caretPosition);
     range.setStart(node, offset);
     range.collapse(true);
+
+    const sel = document.getSelection();
+    if (sel.rangeCount === 1) {
+        const existingRange = sel.getRangeAt(0);
+        if (
+            existingRange.startContainer === range.startContainer &&
+            existingRange.startOffset === range.startOffset &&
+            existingRange.collapsed === range.collapsed
+        ) {
+            // If the selection matches, it's important to leave it alone.
+            // Recreating the selection state in at least Chrome can cause
+            // strange side effects, like touch bar flickering on every key.
+            // See https://github.com/vector-im/riot-web/issues/9299
+            return;
+        }
+    }
+    sel.removeAllRanges();
     sel.addRange(range);
 }
 
