@@ -491,15 +491,15 @@ export default createReactClass({
                 alt="dm"
             />;
 
-            const { room } = this.props;
-            const member = room.getMember(dmUserId);
-            if (
-                member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
-                SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
-            ) {
-                const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
-                dmOnline = <UserOnlineDot userId={dmUserId} />;
-            }
+        }
+        const { room } = this.props;
+        const member = room.getMember(dmUserId);
+        if (
+            member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
+            SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
+        ) {
+            const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
+            dmOnline = <UserOnlineDot userId={dmUserId} />;
         }
 
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
