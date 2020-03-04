@@ -157,7 +157,7 @@ export default createReactClass({
 
     _getSsoUrl: function(kind) {
         if (kind === 'm.login.cas') {
-            return this._loginLogic.getSsoLoginUrl("cas")
+            return this._loginLogic.getSsoLoginUrl("cas");
         } else {
             return this._loginLogic.getSsoLoginUrl("sso");
         }
