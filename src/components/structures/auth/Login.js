@@ -152,10 +152,6 @@ export default createReactClass({
         return this.state.busy || this.props.busy;
     },
 
-    _isSsoStep: function() {
-        return this._getCurrentFlowStep() === 'm.login.sso' || this._getCurrentFlowStep() === 'm.login.cas';
-    },
-
     onPasswordLogin: async function(username, phoneCountry, phoneNumber, password) {
         if (!this.state.serverIsAlive) {
             this.setState({busy: true});
@@ -345,12 +341,13 @@ export default createReactClass({
     },
 
     onTryRegisterClick: function(ev) {
-        if (this._isSsoStep()) {
+        const step = this._getCurrentFlowStep();
+        if (step === 'm.login.sso' || step === 'm.login.cas') {
             // If we're showing SSO it means that registration is also probably disabled,
             // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
             ev.preventDefault();
             ev.stopPropagation();
-            const ssoKind = this._getCurrentFlowStep() === 'm.login.sso' ? 'sso' : 'cas';
+            const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
             PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
         } else {
             // Don't intercept - just go through to the register page
