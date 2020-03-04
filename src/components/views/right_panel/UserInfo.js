@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useMemo, useState, useEffect, useContext} from 'react';
+import React, {useCallback, useMemo, useState, useEffect, useContext, useRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
@@ -136,25 +136,28 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
-function useHasCrossSigningKeys(cli, member, canVerify) {
-    const [waitingForCrossSigningKeys, setWaitingForCrossSigningKeys] = useState(false);
-    const [hasCrossSigningKeys, setHasCrossSigningKeys] = useState(false);
+function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
+    // use a ref to setUpdating because we don't want to rerun
+    // the useAsyncMemo hook when it changes.
+    const updatingRef = useRef();
     useEffect(() => {
-        if (canVerify) {
-            setWaitingForCrossSigningKeys(true);
-            (async () => {
-                try {
-                    await cli.downloadKeys([member.userId]);
-                    const xsi = cli.getStoredCrossSigningForUser(member.userId);
-                    const key = xsi && xsi.getId();
-                    setHasCrossSigningKeys(!!key);
-                } finally {
-                    setWaitingForCrossSigningKeys(false);
-                }
-            })();
+        updatingRef.current = setUpdating;
+    }, [setUpdating]);
+
+    return useAsyncMemo(async () => {
+        if (!canVerify) {
+            return false;
         }
-    }, [canVerify, cli, member]);
-    return {waitingForCrossSigningKeys, hasCrossSigningKeys};
+        updatingRef.current(true);
+        try {
+            await cli.downloadKeys([member.userId]);
+            const xsi = cli.getStoredCrossSigningForUser(member.userId);
+            const key = xsi && xsi.getId();
+            return !!key;
+        } finally {
+            updatingRef.current(false);
+        }
+    }, [cli, member, canVerify], false);
 }
 
 async function verifyDevice(userId, device) {
@@ -1353,20 +1356,18 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
                       homeserverSupportsCrossSigning &&
                       isRoomEncrypted && !userVerified && !isMe;
 
-    const {hasCrossSigningKeys, waitingForCrossSigningKeys} =
-        useHasCrossSigningKeys(cli, member, canVerify);
+    const setUpdating = useCallback((updating) => {
+        setPendingUpdateCount(pendingUpdateCount + (updating ? 1 : -1));
+    }, [setPendingUpdateCount, pendingUpdateCount]);
+    const hasCrossSigningKeys =
+        useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
-    if (canVerify) {
-        if (hasCrossSigningKeys) {
-            verifyButton = (
-                <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
-                    {_t("Verify")}
-                </AccessibleButton>
-            );
-        } else if (waitingForCrossSigningKeys) {
-            const Spinner = sdk.getComponent("elements.Spinner");
-            verifyButton = <Spinner />;
-        }
+    if (canVerify && hasCrossSigningKeys) {
+        verifyButton = (
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+                {_t("Verify")}
+            </AccessibleButton>
+        );
     }
 
     let devicesSection;
