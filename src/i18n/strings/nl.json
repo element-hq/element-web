@@ -1196,7 +1196,7 @@
     "Invite anyway": "Alsnog uitnodigen",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Vooraleer u logboeken indient, dient u uw probleem te <a>melden op GitHub</a>.",
     "Unable to load commit detail: %(msg)s": "Kan commitdetail niet laden: %(msg)s",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Om uw gespreksgeschiedenis niet te verliezen, moet u vóór het afmelden uw gesprekssleutels wegschrijven. Dat moet vanuit de nieuwere versie van Riot",
+    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Schrijf om uw gespreksgeschiedenis niet te verliezen vóór het afmelden uw gesprekssleutels weg. Dat moet vanuit de nieuwere versie van Riot",
     "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "U heeft eerder een nieuwere versie van Riot op %(host)s gebruikt. Om deze versie opnieuw met eind-tot-eind-versleuteling te gebruiken, zult u zich moeten afmelden en opnieuw aanmelden. ",
     "Incompatible Database": "Incompatibele database",
     "Continue With Encryption Disabled": "Verdergaan met versleuteling uitgeschakeld",
