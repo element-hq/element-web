@@ -136,6 +136,27 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
+function useHasCrossSigningKeys(cli, member, canVerify) {
+    const [waitingForCrossSigningKeys, setWaitingForCrossSigningKeys] = useState(false);
+    const [hasCrossSigningKeys, setHasCrossSigningKeys] = useState(false);
+    useEffect(() => {
+        if (canVerify) {
+            setWaitingForCrossSigningKeys(true);
+            (async () => {
+                try {
+                    await cli.downloadKeys([member.userId]);
+                    const xsi = cli.getStoredCrossSigningForUser(member.userId);
+                    const key = xsi && xsi.getId();
+                    setHasCrossSigningKeys(!!key);
+                } finally {
+                    setWaitingForCrossSigningKeys(false);
+                }
+            })();
+        }
+    }, [canVerify, cli, member]);
+    return {waitingForCrossSigningKeys, hasCrossSigningKeys};
+}
+
 async function verifyDevice(userId, device) {
     const cli = MatrixClientPeg.get();
     const member = cli.getUser(userId);
@@ -1324,20 +1345,27 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
 
     let verifyButton;
     const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-    if (
-        SettingsStore.isFeatureEnabled("feature_cross_signing") &&
-        homeserverSupportsCrossSigning
-    ) {
-        const userTrust = cli.checkUserTrust(member.userId);
-        const userVerified = userTrust.isCrossSigningVerified();
-        const isMe = member.userId === cli.getUserId();
 
-        if (isRoomEncrypted && !userVerified && !isMe) {
+    const userTrust = cli.checkUserTrust(member.userId);
+    const userVerified = userTrust.isCrossSigningVerified();
+    const isMe = member.userId === cli.getUserId();
+    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+                      homeserverSupportsCrossSigning &&
+                      isRoomEncrypted && !userVerified && !isMe;
+
+    const {hasCrossSigningKeys, waitingForCrossSigningKeys} =
+        useHasCrossSigningKeys(cli, member, canVerify);
+
+    if (canVerify) {
+        if (hasCrossSigningKeys) {
             verifyButton = (
                 <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
                     {_t("Verify")}
                 </AccessibleButton>
             );
+        } else if (waitingForCrossSigningKeys) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            verifyButton = <Spinner />;
         }
     }
 
