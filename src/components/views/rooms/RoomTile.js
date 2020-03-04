@@ -490,8 +490,8 @@ export default createReactClass({
                 height="13"
                 alt="dm"
             />;
-
         }
+
         const { room } = this.props;
         const member = room.getMember(dmUserId);
         if (
