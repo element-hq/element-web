@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useMemo, useState, useEffect, useContext, useRef} from 'react';
+import React, {useCallback, useMemo, useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
@@ -137,25 +137,18 @@ function useIsEncrypted(cli, room) {
 }
 
 function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
-    // use a ref to setUpdating because we don't want to rerun
-    // the useAsyncMemo hook when it changes.
-    const updatingRef = useRef();
-    useEffect(() => {
-        updatingRef.current = setUpdating;
-    }, [setUpdating]);
-
     return useAsyncMemo(async () => {
         if (!canVerify) {
             return false;
         }
-        updatingRef.current(true);
+        setUpdating(true);
         try {
             await cli.downloadKeys([member.userId]);
             const xsi = cli.getStoredCrossSigningForUser(member.userId);
             const key = xsi && xsi.getId();
             return !!key;
         } finally {
-            updatingRef.current(false);
+            setUpdating(false);
         }
     }, [cli, member, canVerify], false);
 }
@@ -1356,9 +1349,9 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
                       homeserverSupportsCrossSigning &&
                       isRoomEncrypted && !userVerified && !isMe;
 
-    const setUpdating = useCallback((updating) => {
-        setPendingUpdateCount(pendingUpdateCount + (updating ? 1 : -1));
-    }, [setPendingUpdateCount, pendingUpdateCount]);
+    const setUpdating = (updating) => {
+        setPendingUpdateCount(count => count + (updating ? 1 : -1));
+    };
     const hasCrossSigningKeys =
         useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
