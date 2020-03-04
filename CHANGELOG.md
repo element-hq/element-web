@@ -1,3 +1,11 @@
+Changes in [1.5.12](https://github.com/vector-im/riot-web/releases/tag/v1.5.12) (2020-03-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.11...v1.5.12)
+
+ * Upgrade to React SDK 2.2.1
+ * Revert to Electron 7.1.12 to fix Arch Linux tray icon
+ * Fix image download links so they open in a new tab
+
 Changes in [1.5.11](https://github.com/vector-im/riot-web/releases/tag/v1.5.11) (2020-03-02)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.11-rc.1...v1.5.11)
