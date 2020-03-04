@@ -151,6 +151,18 @@ export default createReactClass({
         return this.state.busy || this.props.busy;
     },
 
+    _isSsoStep: function() {
+        return this._getCurrentFlowStep() === 'm.login.sso' || this._getCurrentFlowStep() === 'm.login.cas';
+    },
+
+    _getSsoUrl: function(kind) {
+        if (kind === 'm.login.cas') {
+            return this._loginLogic.getSsoLoginUrl("cas")
+        } else {
+            return this._loginLogic.getSsoLoginUrl("sso");
+        }
+    },
+
     onPasswordLogin: async function(username, phoneCountry, phoneNumber, password) {
         if (!this.state.serverIsAlive) {
             this.setState({busy: true});
@@ -337,6 +349,19 @@ export default createReactClass({
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
+    },
+
+    onTryRegisterClick: function(ev) {
+        if (this._isSsoStep()) {
+            // If we're showing SSO it means that registration is also probably disabled,
+            // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
+            ev.preventDefault();
+            ev.stopPropagation();
+            window.location = this._getSsoUrl(this._getCurrentFlowStep());
+        } else {
+            // Don't intercept - just go through to the register page
+            this.onRegisterClick(ev);
+        }
     },
 
     async onServerDetailsNextPhaseClick() {
@@ -652,7 +677,7 @@ export default createReactClass({
                     { serverDeadSection }
                     { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
-                    <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
+                    <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
                 </AuthBody>
