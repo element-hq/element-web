@@ -28,6 +28,7 @@ import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDisc
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
 import SSOButton from "../../views/elements/SSOButton";
+import PlatformPeg from '../../../PlatformPeg';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -337,6 +338,21 @@ export default createReactClass({
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
+    },
+
+    onTryRegisterClick: function(ev) {
+        const step = this._getCurrentFlowStep();
+        if (step === 'm.login.sso' || step === 'm.login.cas') {
+            // If we're showing SSO it means that registration is also probably disabled,
+            // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
+            ev.preventDefault();
+            ev.stopPropagation();
+            const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
+            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
+        } else {
+            // Don't intercept - just go through to the register page
+            this.onRegisterClick(ev);
+        }
     },
 
     async onServerDetailsNextPhaseClick() {
@@ -652,7 +668,7 @@ export default createReactClass({
                     { serverDeadSection }
                     { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
-                    <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
+                    <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
                 </AuthBody>
