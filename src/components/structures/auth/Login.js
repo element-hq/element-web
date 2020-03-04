@@ -28,6 +28,7 @@ import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDisc
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
 import SSOButton from "../../views/elements/SSOButton";
+import PlatformPeg from '../../../PlatformPeg';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -153,14 +154,6 @@ export default createReactClass({
 
     _isSsoStep: function() {
         return this._getCurrentFlowStep() === 'm.login.sso' || this._getCurrentFlowStep() === 'm.login.cas';
-    },
-
-    _getSsoUrl: function(kind) {
-        if (kind === 'm.login.cas') {
-            return this._loginLogic.getSsoLoginUrl("cas");
-        } else {
-            return this._loginLogic.getSsoLoginUrl("sso");
-        }
     },
 
     onPasswordLogin: async function(username, phoneCountry, phoneNumber, password) {
@@ -357,7 +350,8 @@ export default createReactClass({
             // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
             ev.preventDefault();
             ev.stopPropagation();
-            window.location = this._getSsoUrl(this._getCurrentFlowStep());
+            const ssoKind = this._getCurrentFlowStep() === 'm.login.sso' ? 'sso' : 'cas';
+            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
         } else {
             // Don't intercept - just go through to the register page
             this.onRegisterClick(ev);
