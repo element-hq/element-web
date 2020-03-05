@@ -30,7 +30,7 @@ import {_t} from "../../../languageHandler";
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
+const EncryptionPanel = ({verificationRequest, verificationRequestPromise, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
@@ -43,6 +43,19 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
             setPhase(verificationRequest.phase);
         }
     }, [verificationRequest]);
+
+    useEffect(() => {
+        async function awaitPromise() {
+            setRequesting(true);
+            const request = await verificationRequestPromise;
+            setRequesting(false);
+            setRequest(request);
+            setPhase(request.phase);
+        }
+        if (verificationRequestPromise) {
+            awaitPromise();
+        }
+    }, [verificationRequestPromise]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
