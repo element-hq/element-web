@@ -19,7 +19,6 @@ import dis from '../../../dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import SettingsStore from "../../../settings/SettingsStore";
 import PropTypes from "prop-types";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 

@@ -97,7 +97,6 @@ class ReplyTile extends React.Component {
     }
 
     componentWillUnmount() {
-        const client = this.context.matrixClient;
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
     }
 
@@ -185,7 +184,7 @@ class ReplyTile extends React.Component {
         }
 
         let sender;
-        let needsSenderProfile = tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
+        const needsSenderProfile = tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
 
         if (needsSenderProfile) {
             let text = null;
@@ -224,10 +223,10 @@ class ReplyTile extends React.Component {
                         showUrlPreview={false}
                         overrideBodyTypes={msgtypeOverrides}
                         overrideEventTypes={evOverrides}
-                        maxImageHeight={96}/>
+                        maxImageHeight={96} />
                 </a>
             </div>
-        )
+        );
     }
 }
 

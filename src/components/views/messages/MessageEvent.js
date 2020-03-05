@@ -123,6 +123,6 @@ export default createReactClass({
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
-        /> : null
+        /> : null;
     },
 });
