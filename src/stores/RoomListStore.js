@@ -62,15 +62,16 @@ const getListAlgorithm = (listKey, settingAlgorithm) => {
     // apply manual sorting only to m.favourite, otherwise respect the global setting
     // all the known tags are listed explicitly here to simplify future changes
     switch (listKey) {
-        case "m.favourite":
-            return ALGO_MANUAL;
         case "im.vector.fake.invite":
         case "im.vector.fake.recent":
         case "im.vector.fake.archived":
         case "m.lowpriority":
         case TAG_DM:
-        default:
             return settingAlgorithm;
+
+        case "m.favourite":
+        default: // custom-tags
+            return ALGO_MANUAL;
     }
 };
 
@@ -371,6 +372,14 @@ class RoomListStore extends Store {
     _slotRoomIntoList(room, category, tag, existingEntries, newList, lastTimestampFn) {
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
 
+        let categoryComparator = (a, b) => lastTimestampFn(a.room) >= lastTimestampFn(b.room);
+        const sortAlgorithm = getListAlgorithm(tag, this._state.algorithm);
+        if (sortAlgorithm === ALGO_RECENT) {
+            categoryComparator = (a, b) => this._recentsComparator(a, b, lastTimestampFn);
+        } else if (sortAlgorithm === ALGO_ALPHABETIC) {
+            categoryComparator = (a, b) => this._lexicographicalComparator(a, b);
+        }
+
         // The slotting algorithm works by trying to position the room in the most relevant
         // category of the list (red > grey > etc). To accomplish this, we need to consider
         // a couple cases: the category existing in the list but having other rooms in it and
@@ -448,7 +457,7 @@ class RoomListStore extends Store {
                 // based on most recent timestamp.
                 const changedBoundary = entryCategoryIndex > targetCategoryIndex;
                 const currentCategory = entryCategoryIndex === targetCategoryIndex;
-                if (changedBoundary || (currentCategory && lastTimestampFn(room) >= lastTimestampFn(entry.room))) {
+                if (changedBoundary || (currentCategory && categoryComparator({room}, entry) <= 0)) {
                     if (changedBoundary) {
                         // If we changed a boundary, then we've gone too far - go to the top of the last
                         // section instead.
@@ -477,12 +486,6 @@ class RoomListStore extends Store {
 
     _setRoomCategory(room, category) {
         if (!room) return; // This should only happen in tests
-
-        if (!this._state.orderImportantFirst) {
-            // XXX bail here early to avoid https://github.com/vector-im/riot-web/issues/9216
-            // this may mean that category updates are missed whilst not ordering by importance first
-            return;
-        }
 
         const listsClone = {};
 

@@ -136,6 +136,23 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
+function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
+    return useAsyncMemo(async () => {
+        if (!canVerify) {
+            return false;
+        }
+        setUpdating(true);
+        try {
+            await cli.downloadKeys([member.userId]);
+            const xsi = cli.getStoredCrossSigningForUser(member.userId);
+            const key = xsi && xsi.getId();
+            return !!key;
+        } finally {
+            setUpdating(false);
+        }
+    }, [cli, member, canVerify], false);
+}
+
 async function verifyDevice(userId, device) {
     const cli = MatrixClientPeg.get();
     const member = cli.getUser(userId);
@@ -1324,21 +1341,26 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
 
     let verifyButton;
     const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-    if (
-        SettingsStore.isFeatureEnabled("feature_cross_signing") &&
-        homeserverSupportsCrossSigning
-    ) {
-        const userTrust = cli.checkUserTrust(member.userId);
-        const userVerified = userTrust.isCrossSigningVerified();
-        const isMe = member.userId === cli.getUserId();
 
-        if (isRoomEncrypted && !userVerified && !isMe) {
-            verifyButton = (
-                <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
-                    {_t("Verify")}
-                </AccessibleButton>
-            );
-        }
+    const userTrust = cli.checkUserTrust(member.userId);
+    const userVerified = userTrust.isCrossSigningVerified();
+    const isMe = member.userId === cli.getUserId();
+    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+                        homeserverSupportsCrossSigning &&
+                        isRoomEncrypted && !userVerified && !isMe;
+
+    const setUpdating = (updating) => {
+        setPendingUpdateCount(count => count + (updating ? 1 : -1));
+    };
+    const hasCrossSigningKeys =
+        useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
+
+    if (canVerify && hasCrossSigningKeys) {
+        verifyButton = (
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+                {_t("Verify")}
+            </AccessibleButton>
+        );
     }
 
     let devicesSection;

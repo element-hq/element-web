@@ -28,6 +28,7 @@ import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
+import {textForEvent} from "../../TextForEvent";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -955,10 +956,20 @@ class MemberGrouper {
     }
 
     shouldGroup(ev) {
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
         return isMembershipChange(ev);
     }
 
     add(ev) {
+        if (ev.getType() === 'm.room.member') {
+            // We'll just double check that it's worth our time to do so, through an
+            // ugly hack. If textForEvent returns something, we should group it for
+            // rendering but if it doesn't then we'll exclude it.
+            const renderText = textForEvent(ev);
+            if (!renderText || renderText.trim().length === 0) return; // quietly ignore
+        }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
         this.events.push(ev);
     }
