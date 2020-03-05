@@ -226,7 +226,7 @@ export default class HelpUserSettingsTab extends React.Component {
                             </AccessibleButton>
                         </div>
                         {
-                            _t( "To submit a security-related bug report, please read the Matrix.org " +
+                            _t( "To report a Matrix-related security issue, please read the Matrix.org " +
                                 "<a>Security Disclosure Policy</a>.", {},
                                 {
                                     'a': (sub) =>
