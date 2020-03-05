@@ -2167,5 +2167,6 @@
     "Use your account or create a new one to continue.": "Që të vazhdohet, përdorni llogarinë tuaj të përdoruesit ose krijoni një të re.",
     "Create Account": "Krijoni Llogari",
     "Displays information about a user": "Shfaq të dhëna rreth një përdoruesi",
-    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Që të njoftoni një problem sigurie lidhur me Matrix-in, ju lutemi, lexoni <a>Rregulla Tregimi Çështjes Sigurie</a> te Matrix.org."
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Që të njoftoni një problem sigurie lidhur me Matrix-in, ju lutemi, lexoni <a>Rregulla Tregimi Çështjes Sigurie</a> te Matrix.org.",
+    "Mark all as read": "Vëru të tërave shenjë si të lexuara"
 }
