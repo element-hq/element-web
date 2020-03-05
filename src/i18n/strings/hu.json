@@ -2174,5 +2174,7 @@
     "Sign In or Create Account": "Belépés vagy Fiók Készítés",
     "Use your account or create a new one to continue.": "A folytatáshoz használd a fiókodat vagy készíts egy újat.",
     "Create Account": "Fiók létrehozása",
-    "Displays information about a user": "A felhasználóról információ megjelenítése"
+    "Displays information about a user": "A felhasználóról információ megjelenítése",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix-szal kapcsolatos biztonsági hibák jelentésével kapcsolatban kérlek olvasd el a Matrix.org <a>Biztonsági hiba közzétételi szabályzatot</a>.",
+    "Mark all as read": "Mindent olvasottnak jelöl"
 }
