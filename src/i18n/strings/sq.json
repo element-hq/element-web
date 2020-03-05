@@ -2003,7 +2003,7 @@
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ky sesion <b>nuk po bën kopjeruajtje të kyçeve tuaja</b>, por keni një kopjeruajtje ekzistuese që mund ta përdorni për rimarrje dhe ta shtoni më tej.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Lidheni këtë sesion kopjeruajtje kyçesh, përpara se të dilni, që të shmangni humbje të çfarëdo kyçi që mund të gjendet vetëm në këtë pajisje.",
     "Connect this session to Key Backup": "Lidhe këtë sesion me Kopjeruajtje Kyçesh",
-    "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Kopjeruajtja ka nënshkrim nga sesion <verify>i panjohur</verify> me ID %(deviceId)s.",
+    "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Kopjeruajtja ka nënshkrim nga sesion <verify>i panjohur</verify> me ID %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Kopjeruajtja ka një nënshkrim të <validity>vlefshëm</validity> prej këtij sesioni",
     "Backup has an <validity>invalid</validity> signature from this session": "Kopjeruajtja ka një nënshkrim të <validity>pavlefshëm</validity> prej këtij sesioni",
     "Backup has a <validity>valid</validity> signature from <verify>verified</verify> session <device></device>": "Kopjeruajtja ka një nënshkrim të <validity>vlefshëm</validity> prej sesioni të <verify>verifikuar</verify> <device></device>",
@@ -2162,5 +2162,10 @@
     "Your password": "Fjalëkalimi juaj",
     "This session, or the other session": "Ky sesion, ose sesioni tjetër",
     "The internet connection either session is using": "Lidhja internet që përdor cilido nga dy sesionet",
-    "We recommend you change your password and recovery key in Settings immediately": "Këshillojmë të ndryshoni menjëherë te Rregullimet fjalëkalimin tuaj dhe kyçin e rimarrjeve"
+    "We recommend you change your password and recovery key in Settings immediately": "Këshillojmë të ndryshoni menjëherë te Rregullimet fjalëkalimin tuaj dhe kyçin e rimarrjeve",
+    "Sign In or Create Account": "Hyni ose Krijoni një Llogari",
+    "Use your account or create a new one to continue.": "Që të vazhdohet, përdorni llogarinë tuaj të përdoruesit ose krijoni një të re.",
+    "Create Account": "Krijoni Llogari",
+    "Displays information about a user": "Shfaq të dhëna rreth një përdoruesi",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Që të njoftoni një problem sigurie lidhur me Matrix-in, ju lutemi, lexoni <a>Rregulla Tregimi Çështjes Sigurie</a> te Matrix.org."
 }
