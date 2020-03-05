@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {
@@ -65,14 +65,14 @@ module.exports = createReactClass({
 
         return (
                 <div className="mx_RoomHeader_name">
-                    <EditableText ref="editor"
-                         className="mx_RoomHeader_nametext mx_RoomHeader_editable"
-                         placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder={this._placeholderName}
-                         blurToCancel={false}
-                         initialValue={this.state.name}
-                         onValueChanged={this._onValueChanged}
-                         dir="auto" />
+                    <EditableText
+                        className="mx_RoomHeader_nametext mx_RoomHeader_editable"
+                        placeholderClassName="mx_RoomHeader_placeholder"
+                        placeholder={this._placeholderName}
+                        blurToCancel={false}
+                        initialValue={this.state.name}
+                        onValueChanged={this._onValueChanged}
+                        dir="auto" />
                 </div>
         );
     },

@@ -232,7 +232,7 @@ Example:
 }
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
@@ -279,7 +279,7 @@ function inviteUser(event, roomId, userId) {
         }
     }
 
-    client.invite(roomId, userId).done(function() {
+    client.invite(roomId, userId).then(function() {
         sendResponse(event, {
             success: true,
         });
@@ -398,7 +398,7 @@ function setPlumbingState(event, roomId, status) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).done(() => {
+    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).then(() => {
         sendResponse(event, {
             success: true,
         });
@@ -414,7 +414,7 @@ function setBotOptions(event, roomId, userId) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).then(() => {
         sendResponse(event, {
             success: true,
         });
@@ -444,7 +444,7 @@ function setBotPower(event, roomId, userId, level) {
             },
         );
 
-        client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
+        client.setPowerLevel(roomId, userId, level, powerEvent).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -658,30 +658,29 @@ const onMessage = function(event) {
 
 let listenerCount = 0;
 let openManagerUrl = null;
-module.exports = {
-    startListening: function() {
-        if (listenerCount === 0) {
-            window.addEventListener("message", onMessage, false);
-        }
-        listenerCount += 1;
-    },
 
-    stopListening: function() {
-        listenerCount -= 1;
-        if (listenerCount === 0) {
-            window.removeEventListener("message", onMessage);
-        }
-        if (listenerCount < 0) {
-            // Make an error so we get a stack trace
-            const e = new Error(
-                "ScalarMessaging: mismatched startListening / stopListening detected." +
-                " Negative count",
-            );
-            console.error(e);
-        }
-    },
+export function startListening() {
+    if (listenerCount === 0) {
+        window.addEventListener("message", onMessage, false);
+    }
+    listenerCount += 1;
+}
 
-    setOpenManagerUrl: function(url) {
-        openManagerUrl = url;
-    },
-};
+export function stopListening() {
+    listenerCount -= 1;
+    if (listenerCount === 0) {
+        window.removeEventListener("message", onMessage);
+    }
+    if (listenerCount < 0) {
+        // Make an error so we get a stack trace
+        const e = new Error(
+            "ScalarMessaging: mismatched startListening / stopListening detected." +
+            " Negative count",
+        );
+        console.error(e);
+    }
+}
+
+export function setOpenManagerUrl(url) {
+    openManagerUrl = url;
+}

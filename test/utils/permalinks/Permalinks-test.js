@@ -13,12 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-import peg from '../../../src/MatrixClientPeg';
+import {MatrixClientPeg as peg} from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
+    parsePermalink,
     RoomPermalinkCreator,
 } from "../../../src/utils/permalinks/Permalinks";
 import * as testUtils from "../../test-utils";
@@ -65,16 +65,9 @@ function mockRoom(roomId, members, serverACL) {
 }
 
 describe('Permalinks', function() {
-    let sandbox;
-
     beforeEach(function() {
-        testUtils.beforeEach(this);
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
         peg.get().credentials = { userId: "@test:example.com" };
-    });
-
-    afterEach(function() {
-        sandbox.restore();
     });
 
     it('should pick no candidate servers when the room has no members', function() {
@@ -449,5 +442,25 @@ describe('Permalinks', function() {
     it('should generate a group permalink', function() {
         const result = makeGroupPermalink("+community:example.org");
         expect(result).toBe("https://matrix.to/#/+community:example.org");
+    });
+
+    it('should correctly parse room permalinks with a via argument', () => {
+        const result = parsePermalink("https://matrix.to/#/!room_id:server?via=some.org");
+        expect(result.roomIdOrAlias).toBe("!room_id:server");
+        expect(result.viaServers).toEqual(["some.org"]);
+    });
+
+    it('should correctly parse room permalink via arguments', () => {
+        const result = parsePermalink("https://matrix.to/#/!room_id:server?via=foo.bar&via=bar.foo");
+        expect(result.roomIdOrAlias).toBe("!room_id:server");
+        expect(result.viaServers).toEqual(["foo.bar", "bar.foo"]);
+    });
+
+    it('should correctly parse event permalink via arguments', () => {
+        const result = parsePermalink("https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" +
+            "?via=m1.org&via=m2.org");
+        expect(result.eventId).toBe("$event_id/some_thing_here/foobar");
+        expect(result.roomIdOrAlias).toBe("!room_id:server");
+        expect(result.viaServers).toEqual(["m1.org", "m2.org"]);
     });
 });

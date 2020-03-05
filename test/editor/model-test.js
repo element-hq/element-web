@@ -14,19 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import EditorModel from "../../src/editor/model";
-import {createPartCreator} from "./mock";
-
-function createRenderer() {
-    const render = (c) => {
-        render.caret = c;
-        render.count += 1;
-    };
-    render.count = 0;
-    render.caret = null;
-    return render;
-}
+import {createPartCreator, createRenderer} from "./mock";
 
 describe('editor/model', function() {
     describe('plain text manipulation', function() {

@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +17,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
-import { getAddressType } from './UserAddress';
-import createRoom from './createRoom';
-import sdk from './';
-import dis from './dispatcher';
-import DMRoomMap from './utils/DMRoomMap';
+import * as sdk from './';
 import { _t } from './languageHandler';
+import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 
 /**
  * Invites multiple addresses to a room
@@ -35,50 +33,27 @@ import { _t } from './languageHandler';
  * @param {string[]} addrs Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @returns {Promise} Promise
  */
-function inviteMultipleToRoom(roomId, addrs) {
+export function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
     return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
 export function showStartChatInviteDialog() {
-    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
-
-    Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
-        title: _t('Start a chat'),
-        description: _t("Who would you like to communicate with?"),
-        placeholder: (validAddressTypes) => {
-            // The set of valid address type can be mutated inside the dialog
-            // when you first have no IS but agree to use one in the dialog.
-            if (validAddressTypes.includes('email')) {
-                return _t("Email, name or Matrix ID");
-            }
-            return _t("Name or Matrix ID");
-        },
-        validAddressTypes: ['mx-user-id', 'email'],
-        button: _t("Start Chat"),
-        onFinished: _onStartDmFinished,
-    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+    // This dialog handles the room creation internally - we don't need to worry about it.
+    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
+    Modal.createTrackedDialog(
+        'Start DM', '', InviteDialog, {kind: KIND_DM},
+        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+    );
 }
 
 export function showRoomInviteDialog(roomId) {
-    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
-
-    Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
-        title: _t('Invite new room members'),
-        button: _t('Send Invites'),
-        placeholder: (validAddressTypes) => {
-            // The set of valid address type can be mutated inside the dialog
-            // when you first have no IS but agree to use one in the dialog.
-            if (validAddressTypes.includes('email')) {
-                return _t("Email, name or Matrix ID");
-            }
-            return _t("Name or Matrix ID");
-        },
-        validAddressTypes: ['mx-user-id', 'email'],
-        onFinished: (shouldInvite, addrs) => {
-            _onRoomInviteFinished(roomId, shouldInvite, addrs);
-        },
-    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+    // This dialog handles the room creation internally - we don't need to worry about it.
+    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
+    Modal.createTrackedDialog(
+        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+    );
 }
 
 /**
@@ -99,67 +74,8 @@ export function isValid3pidInvite(event) {
     return true;
 }
 
-// TODO: Immutable DMs replaces this
-function _onStartDmFinished(shouldInvite, addrs) {
-    if (!shouldInvite) return;
-
-    const addrTexts = addrs.map((addr) => addr.address);
-
-    if (_isDmChat(addrTexts)) {
-        const rooms = _getDirectMessageRooms(addrTexts[0]);
-        if (rooms.length > 0) {
-            // A Direct Message room already exists for this user, so reuse it
-            dis.dispatch({
-                action: 'view_room',
-                room_id: rooms[0],
-                should_peek: false,
-                joining: false,
-            });
-        } else {
-            // Start a new DM chat
-            createRoom({dmUserId: addrTexts[0]}).catch((err) => {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to start chat', '', ErrorDialog, {
-                    title: _t("Failed to start chat"),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
-                });
-            });
-        }
-    } else if (addrTexts.length === 1) {
-        // Start a new DM chat
-        createRoom({dmUserId: addrTexts[0]}).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to start chat', '', ErrorDialog, {
-                title: _t("Failed to start chat"),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
-            });
-        });
-    } else {
-        // Start multi user chat
-        let room;
-        createRoom().then((roomId) => {
-            room = MatrixClientPeg.get().getRoom(roomId);
-            return inviteMultipleToRoom(roomId, addrTexts);
-        }).then((result) => {
-            return _showAnyInviteErrors(result.states, room, result.inviter);
-        }).catch((err) => {
-            console.error(err.stack);
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
-                title: _t("Failed to invite"),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
-            });
-        });
-    }
-}
-
-function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
-    if (!shouldInvite) return;
-
-    const addrTexts = addrs.map((addr) => addr.address);
-
-    // Invite new users to a room
-    inviteMultipleToRoom(roomId, addrTexts).then((result) => {
+export function inviteUsersToRoom(roomId, userIds) {
+    return inviteMultipleToRoom(roomId, userIds).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
         return _showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
@@ -170,15 +86,6 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
             description: ((err && err.message) ? err.message : _t("Operation failed")),
         });
     });
-}
-
-// TODO: Immutable DMs replaces this
-function _isDmChat(addrTexts) {
-    if (addrTexts.length === 1 && getAddressType(addrTexts[0]) === 'mx-user-id') {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function _showAnyInviteErrors(addrs, room, inviter) {
@@ -203,26 +110,16 @@ function _showAnyInviteErrors(addrs, room, inviter) {
         }
 
         if (errorList.length > 0) {
+            // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
+            const description = <div>{errorList.map(e => <div key={e}>{e}</div>)}</div>;
+
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
                 title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
-                description: errorList.join(<br />),
+                description,
             });
         }
     }
 
     return addrs;
 }
-
-function _getDirectMessageRooms(addr) {
-    const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-    const dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
-    const rooms = dmRooms.filter((dmRoom) => {
-        const room = MatrixClientPeg.get().getRoom(dmRoom);
-        if (room) {
-            return room.getMyMembership() === 'join';
-        }
-    });
-    return rooms;
-}
-

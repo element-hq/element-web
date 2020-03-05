@@ -20,12 +20,13 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from 'classnames';
+import AuthPage from "../../views/auth/AuthPage";
 
 // Phases
 // Show controls to configure server details
@@ -39,7 +40,7 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
@@ -105,7 +106,7 @@ module.exports = createReactClass({
             phase: PHASE_SENDING_EMAIL,
         });
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
-        this.reset.resetPassword(email, password).done(() => {
+        this.reset.resetPassword(email, password).then(() => {
             this.setState({
                 phase: PHASE_EMAIL_SENT,
             });
@@ -151,8 +152,8 @@ module.exports = createReactClass({
                     <div>
                         { _t(
                             "Changing your password will reset any end-to-end encryption keys " +
-                            "on all of your devices, making encrypted chat history unreadable. Set up " +
-                            "Key Backup or export your room keys from another device before resetting your " +
+                            "on all of your sessions, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another session before resetting your " +
                             "password.",
                         ) }
                     </div>,
@@ -357,7 +358,7 @@ module.exports = createReactClass({
         return <div>
             <p>{_t("Your password has been reset.")}</p>
             <p>{_t(
-                "You have been logged out of all devices and will no longer receive " +
+                "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
             )}</p>
@@ -367,7 +368,6 @@ module.exports = createReactClass({
     },
 
     render: function() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
 

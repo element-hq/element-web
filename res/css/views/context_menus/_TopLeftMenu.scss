@@ -49,23 +49,27 @@ limitations under the License.
         padding: 0;
         list-style: none;
 
-        li.mx_TopLeftMenu_icon_home::after {
+        .mx_TopLeftMenu_icon_home::after {
             mask-image: url('$(res)/img/feather-customised/home.svg');
         }
 
-        li.mx_TopLeftMenu_icon_settings::after {
+        .mx_TopLeftMenu_icon_help::after {
+            mask-image: url('$(res)/img/feather-customised/life-buoy.svg');
+        }
+
+        .mx_TopLeftMenu_icon_settings::after {
             mask-image: url('$(res)/img/feather-customised/settings.svg');
         }
 
-        li.mx_TopLeftMenu_icon_signin::after {
+        .mx_TopLeftMenu_icon_signin::after {
             mask-image: url('$(res)/img/feather-customised/sign-in.svg');
         }
 
-        li.mx_TopLeftMenu_icon_signout::after {
+        .mx_TopLeftMenu_icon_signout::after {
             mask-image: url('$(res)/img/feather-customised/sign-out.svg');
         }
 
-        li::after {
+        .mx_AccessibleButton::after {
             mask-repeat: no-repeat;
             mask-position: 0 center;
             mask-size: 16px;
@@ -78,14 +82,14 @@ limitations under the License.
             background-color: $primary-fg-color;
         }
 
-        li {
+        .mx_AccessibleButton {
             position: relative;
             cursor: pointer;
             white-space: nowrap;
             padding: 5px 20px 5px 43px;
         }
 
-        li:hover {
+        .mx_AccessibleButton:hover {
             background-color: $menu-selected-color;
         }
     }

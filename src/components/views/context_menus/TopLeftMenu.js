@@ -23,10 +23,11 @@ import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
 import { getHostingLink } from '../../../utils/HostingLink';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from "../../../index";
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {MenuItem} from "../../structures/ContextMenu";
+import * as sdk from "../../../index";
 
-export class TopLeftMenu extends React.Component {
+export default class TopLeftMenu extends React.Component {
     static propTypes = {
         displayName: PropTypes.string.isRequired,
         userId: PropTypes.string.isRequired,
@@ -58,8 +59,6 @@ export class TopLeftMenu extends React.Component {
     }
 
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         const isGuest = MatrixClientPeg.get().isGuest();
 
         const hostingSignupLink = getHostingLink('user-context-menu');
@@ -69,10 +68,11 @@ export class TopLeftMenu extends React.Component {
                 {_t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener" tabIndex="0">{sub}</a>,
+                        a: sub =>
+                            <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener" tabIndex={-1}>{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener" aria-hidden={true}>
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener" role="presentation" aria-hidden={true} tabIndex={-1}>
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;
@@ -81,46 +81,59 @@ export class TopLeftMenu extends React.Component {
         let homePageItem = null;
         if (this.hasHomePage()) {
             homePageItem = (
-                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>
+                <MenuItem className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>
                     {_t("Home")}
-                </AccessibleButton>
+                </MenuItem>
             );
         }
 
         let signInOutItem;
         if (isGuest) {
             signInOutItem = (
-                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>
+                <MenuItem className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>
                     {_t("Sign in")}
-                </AccessibleButton>
+                </MenuItem>
             );
         } else {
             signInOutItem = (
-                <AccessibleButton element="li" className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>
+                <MenuItem className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>
                     {_t("Sign out")}
-                </AccessibleButton>
+                </MenuItem>
             );
         }
 
-        const settingsItem = (
-            <AccessibleButton element="li" className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>
-                {_t("Settings")}
-            </AccessibleButton>
+        const helpItem = (
+            <MenuItem className="mx_TopLeftMenu_icon_help" onClick={this.openHelp}>
+                {_t("Help")}
+            </MenuItem>
         );
 
-        return <div className="mx_TopLeftMenu" ref={this.props.containerRef}>
-            <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true}>
+        const settingsItem = (
+            <MenuItem className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>
+                {_t("Settings")}
+            </MenuItem>
+        );
+
+        return <div className="mx_TopLeftMenu" ref={this.props.containerRef} role="menu">
+            <div className="mx_TopLeftMenu_section_noIcon" aria-readonly={true} tabIndex={-1}>
                 <div>{this.props.displayName}</div>
                 <div className="mx_TopLeftMenu_greyedText" aria-hidden={true}>{this.props.userId}</div>
                 {hostingSignup}
             </div>
-            <ul className="mx_TopLeftMenu_section_withIcon">
+            <ul className="mx_TopLeftMenu_section_withIcon" role="none">
                 {homePageItem}
                 {settingsItem}
+                {helpItem}
                 {signInOutItem}
             </ul>
         </div>;
     }
+
+    openHelp = () => {
+        this.closeMenu();
+        const RedesignFeedbackDialog = sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
+        Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
+    };
 
     viewHomePage() {
         dis.dispatch({action: 'view_home_page'});

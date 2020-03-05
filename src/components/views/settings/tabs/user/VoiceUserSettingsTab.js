@@ -20,9 +20,9 @@ import CallMediaHandler from "../../../../../CallMediaHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
-const Modal = require("../../../../../Modal");
-const sdk = require("../../../../..");
-const MatrixClientPeg = require("../../../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import * as sdk from "../../../../../index";
+import Modal from "../../../../../Modal";
 
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {

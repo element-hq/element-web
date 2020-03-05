@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import classnames from 'classnames';
-import { KeyCode } from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import { _t } from '../../../languageHandler';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 
@@ -63,8 +62,13 @@ export default createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._input_value = createRef();
+        this._uiAuth = createRef();
+    },
+
     componentDidMount: function() {
-        this.refs.input_value.select();
+        this._input_value.current.select();
 
         this._matrixClient = MatrixClientPeg.get();
     },
@@ -97,14 +101,14 @@ export default createReactClass({
     },
 
     onKeyUp: function(ev) {
-        if (ev.keyCode === KeyCode.ENTER) {
+        if (ev.key === Key.ENTER) {
             this.onSubmit();
         }
     },
 
     onSubmit: function(ev) {
-        if (this.refs.uiAuth) {
-            this.refs.uiAuth.tryContinue();
+        if (this._uiAuth.current) {
+            this._uiAuth.current.tryContinue();
         }
         this.setState({
             doingUIAuth: true,
@@ -216,7 +220,7 @@ export default createReactClass({
                 onAuthFinished={this._onUIAuthFinished}
                 inputs={{}}
                 poll={true}
-                ref="uiAuth"
+                ref={this._uiAuth}
                 continueIsManaged={true}
             />;
         }
@@ -258,7 +262,7 @@ export default createReactClass({
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <div className="mx_SetMxIdDialog_input_group">
-                        <input type="text" ref="input_value" value={this.state.username}
+                        <input type="text" ref={this._input_value} value={this.state.username}
                             autoFocus={true}
                             onChange={this.onValueChange}
                             onKeyUp={this.onKeyUp}

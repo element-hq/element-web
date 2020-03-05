@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
 import MessageEvent from "../messages/MessageEvent";
@@ -25,7 +25,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PinnedEventTile',
     propTypes: {
         mxRoom: PropTypes.object.isRequired,
@@ -61,7 +61,9 @@ module.exports = createReactClass({
         return this.props.mxRoom.currentState.mayClientSendStateEvent('m.room.pinned_events', MatrixClientPeg.get());
     },
     render: function() {
-        const sender = this.props.mxRoom.getMember(this.props.mxEvent.getSender());
+        const sender = this.props.mxEvent.getSender();
+        // Get the latest sender profile rather than historical
+        const senderProfile = this.props.mxRoom.getMember(sender);
         const avatarSize = 40;
 
         let unpinButton = null;
@@ -83,10 +85,10 @@ module.exports = createReactClass({
                 </div>
 
                 <span className="mx_PinnedEventTile_senderAvatar">
-                    <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                    <MemberAvatar member={senderProfile} width={avatarSize} height={avatarSize} fallbackUserId={sender} />
                 </span>
                 <span className="mx_PinnedEventTile_sender">
-                    { sender.name }
+                    { senderProfile ? senderProfile.name : sender }
                 </span>
                 <span className="mx_PinnedEventTile_timestamp">
                     { formatFullDate(new Date(this.props.mxEvent.getTs())) }

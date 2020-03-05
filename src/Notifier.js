@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
-import TextForEvent from './TextForEvent';
+import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
-import Avatar from './Avatar';
+import * as Avatar from './Avatar';
 import dis from './dispatcher';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
@@ -146,17 +146,19 @@ const Notifier = {
                 }
                 document.body.appendChild(audioElement);
             }
-            audioElement.play();
+            await audioElement.play();
         } catch (ex) {
             console.warn("Caught error when trying to fetch room notification sound:", ex);
         }
     },
 
     start: function() {
-        this.boundOnEvent = this.onEvent.bind(this);
-        this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
-        this.boundOnRoomReceipt = this.onRoomReceipt.bind(this);
-        this.boundOnEventDecrypted = this.onEventDecrypted.bind(this);
+        // do not re-bind in the case of repeated call
+        this.boundOnEvent = this.boundOnEvent || this.onEvent.bind(this);
+        this.boundOnSyncStateChange = this.boundOnSyncStateChange || this.onSyncStateChange.bind(this);
+        this.boundOnRoomReceipt = this.boundOnRoomReceipt || this.onRoomReceipt.bind(this);
+        this.boundOnEventDecrypted = this.boundOnEventDecrypted || this.onEventDecrypted.bind(this);
+
         MatrixClientPeg.get().on('event', this.boundOnEvent);
         MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
         MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
@@ -166,7 +168,7 @@ const Notifier = {
     },
 
     stop: function() {
-        if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
+        if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
             MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
@@ -198,7 +200,7 @@ const Notifier = {
 
         if (enable) {
             // Attempt to get permission from user
-            plaf.requestNotificationPermission().done((result) => {
+            plaf.requestNotificationPermission().then((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
@@ -364,4 +366,4 @@ if (!global.mxNotifier) {
     global.mxNotifier = Notifier;
 }
 
-module.exports = global.mxNotifier;
+export default global.mxNotifier;

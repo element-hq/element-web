@@ -20,7 +20,7 @@ import Notifier from "../../../Notifier";
 import dis from "../../../dispatcher";
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EnableNotificationsButton',
 
     componentDidMount: function() {

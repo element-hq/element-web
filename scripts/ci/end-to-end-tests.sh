@@ -21,21 +21,23 @@ handle_error() {
 
 trap 'handle_error' ERR
 
-RIOT_WEB_DIR=riot-web
-REACT_SDK_DIR=`pwd`
-
 
 echo "--- Building Riot"
-scripts/ci/build.sh
+scripts/ci/layered-riot-web.sh
+cd ../riot-web
+riot_web_dir=`pwd`
+CI_PACKAGE=true yarn build
+cd ../matrix-react-sdk
 # run end to end tests
-echo "--- Fetching end-to-end tests from master"
-scripts/fetchdep.sh matrix-org matrix-react-end-to-end-tests master
-pushd matrix-react-end-to-end-tests
-ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
+pushd test/end-to-end-tests
+ln -s $riot_web_dir riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 echo "--- Install synapse & other dependencies"
 ./install.sh
+# install static webserver to server symlinked local copy of riot
+./riot/install-webserver.sh
+rm -r logs || true
 mkdir logs
 echo "+++ Running end-to-end tests"
 TESTS_STARTED=1

@@ -16,17 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default class MImageBody extends React.Component {
     static propTypes = {
@@ -40,9 +39,7 @@ export default class MImageBody extends React.Component {
         maxImageHeight: PropTypes.number,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
@@ -66,11 +63,13 @@ export default class MImageBody extends React.Component {
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
         };
+
+        this._image = createRef();
     }
 
     componentWillMount() {
         this.unmounted = false;
-        this.context.matrixClient.on('sync', this.onClientSync);
+        this.context.on('sync', this.onClientSync);
     }
 
     // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
@@ -159,8 +158,8 @@ export default class MImageBody extends React.Component {
 
         let loadedImageDimensions;
 
-        if (this.refs.image) {
-            const { naturalWidth, naturalHeight } = this.refs.image;
+        if (this._image.current) {
+            const { naturalWidth, naturalHeight } = this._image.current;
             // this is only used as a fallback in case content.info.w/h is missing
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
@@ -173,7 +172,7 @@ export default class MImageBody extends React.Component {
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
-            return this.context.matrixClient.mxcUrlToHttp(content.url);
+            return this.context.mxcUrlToHttp(content.url);
         }
     }
 
@@ -197,7 +196,7 @@ export default class MImageBody extends React.Component {
             // special case to return clientside sender-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
-            return this.context.matrixClient.mxcUrlToHttp(
+            return this.context.mxcUrlToHttp(
                 content.info.thumbnail_url,
                 thumbWidth,
                 thumbHeight,
@@ -220,7 +219,7 @@ export default class MImageBody extends React.Component {
                 pixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
-                return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
+                return this.context.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
             } else {
                 // we should only request thumbnails if the image is bigger than 800x600
                 // (or 1600x1200 on retina) otherwise the image in the timeline will just
@@ -241,7 +240,7 @@ export default class MImageBody extends React.Component {
                     // image is too large physically and bytewise to clutter our timeline so
                     // we ask for a thumbnail, despite knowing that it will be max 800x600
                     // despite us being retina (as synapse doesn't do 1600x1200 thumbs yet).
-                    return this.context.matrixClient.mxcUrlToHttp(
+                    return this.context.mxcUrlToHttp(
                         content.url,
                         thumbWidth,
                         thumbHeight,
@@ -250,7 +249,7 @@ export default class MImageBody extends React.Component {
                     // download the original image otherwise, so we can scale it client side
                     // to take pixelRatio into account.
                     // ( no width/height means we want the original image)
-                    return this.context.matrixClient.mxcUrlToHttp(
+                    return this.context.mxcUrlToHttp(
                         content.url,
                     );
                 }
@@ -289,7 +288,7 @@ export default class MImageBody extends React.Component {
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
 
         // Remember that the user wanted to show this particular image
@@ -307,7 +306,7 @@ export default class MImageBody extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this.context.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
 
         if (this.state.decryptedUrl) {
@@ -343,7 +342,7 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{display: 'none'}} src={thumbUrl} ref="image"
+                        <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
                              alt={content.body}
                              onError={this.onImageError}
                              onLoad={this.onImageLoad}
@@ -386,7 +385,7 @@ export default class MImageBody extends React.Component {
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
                      style={{ maxWidth: maxWidth + "px" }}
                      alt={content.body}
                      onError={this.onImageError}
@@ -460,7 +459,7 @@ export default class MImageBody extends React.Component {
 
         if (this.state.error !== null) {
             return (
-                <span className="mx_MImageBody" ref="body">
+                <span className="mx_MImageBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting image") }
                 </span>
@@ -478,7 +477,7 @@ export default class MImageBody extends React.Component {
         const thumbnail = this._messageContent(contentUrl, thumbUrl, content);
         const fileBody = this.getFileBody();
 
-        return <span className="mx_MImageBody" ref="body">
+        return <span className="mx_MImageBody">
             { thumbnail }
             { fileBody }
         </span>;

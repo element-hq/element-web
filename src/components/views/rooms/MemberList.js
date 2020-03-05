@@ -23,16 +23,20 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
-const CallHandler = require("../../../CallHandler");
+import rate_limited_func from "../../../ratelimitedfunc";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import CallHandler from "../../../CallHandler";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
-module.exports = createReactClass({
+// Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
+// matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
+
+export default createReactClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
@@ -187,7 +191,7 @@ module.exports = createReactClass({
         }
     },
 
-    _updateList: new rate_limited_func(function() {
+    _updateList: rate_limited_func(function() {
         this._updateListNow();
     }, 500),
 
@@ -336,10 +340,13 @@ module.exports = createReactClass({
         }
 
         // Fourth by name (alphabetical)
-        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+        const nameA = (memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name).replace(SORT_REGEX, "");
+        const nameB = (memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name).replace(SORT_REGEX, "");
         // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
-        return nameA.localeCompare(nameB);
+        return nameA.localeCompare(nameB, {
+            ignorePunctuation: true,
+            sensitivity: "base",
+        });
     },
 
     onSearchQueryChanged: function(searchQuery) {

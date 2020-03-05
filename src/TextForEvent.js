@@ -13,12 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
+import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -274,6 +275,8 @@ function textForRoomAliasesEvent(ev) {
     // This feels a bit overkill though, and it's not clear the i18n really needs it
     // so instead it's landing as a simple textual event.
 
+    const maxShown = 3;
+
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAliases = ev.getPrevContent().aliases || [];
     const newAliases = ev.getContent().aliases || [];
@@ -286,18 +289,40 @@ function textForRoomAliasesEvent(ev) {
     }
 
     if (addedAliases.length && !removedAliases.length) {
+        if (addedAliases.length > maxShown) {
+            return _t("%(senderName)s added %(addedAddresses)s and %(count)s other addresses to this room", {
+                senderName: senderName,
+                count: addedAliases.length - maxShown,
+                addedAddresses: addedAliases.slice(0, maxShown).join(', '),
+            });
+        }
         return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: addedAliases.length,
             addedAddresses: addedAliases.join(', '),
         });
     } else if (!addedAliases.length && removedAliases.length) {
+        if (removedAliases.length > maxShown) {
+            return _t("%(senderName)s removed %(removedAddresses)s and %(count)s other addresses from this room", {
+                senderName: senderName,
+                count: removedAliases.length - maxShown,
+                removedAddresses: removedAliases.slice(0, maxShown).join(', '),
+            });
+        }
         return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: removedAliases.length,
             removedAddresses: removedAliases.join(', '),
         });
     } else {
+        const combined = addedAliases.length + removedAliases.length;
+        if (combined > maxShown) {
+            return _t("%(senderName)s removed %(countRemoved)s and added %(countAdded)s addresses to this room", {
+                senderName: senderName,
+                countAdded: addedAliases.length,
+                countRemoved: removedAliases.length,
+            });
+        }
         return _t(
             '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
                 senderName: senderName,
@@ -358,13 +383,25 @@ function textForCallHangupEvent(event) {
 function textForCallInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     // FIXME: Find a better way to determine this from the event?
-    let callType = "voice";
+    let isVoice = true;
     if (event.getContent().offer && event.getContent().offer.sdp &&
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        callType = "video";
+        isVoice = false;
     }
-    const supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call.', {senderName, callType}) + ' ' + supported;
+    const isSupported = MatrixClientPeg.get().supportsVoip();
+
+    // This ladder could be reduced down to a couple string variables, however other languages
+    // can have a hard time translating those strings. In an effort to make translations easier
+    // and more accurate, we break out the string-based variables to a couple booleans.
+    if (isVoice && isSupported) {
+        return _t("%(senderName)s placed a voice call.", {senderName});
+    } else if (isVoice && !isSupported) {
+        return _t("%(senderName)s placed a voice call. (not supported by this browser)", {senderName});
+    } else if (!isVoice && isSupported) {
+        return _t("%(senderName)s placed a video call.", {senderName});
+    } else if (!isVoice && !isSupported) {
+        return _t("%(senderName)s placed a video call. (not supported by this browser)", {senderName});
+    }
 }
 
 function textForThreePidInviteEvent(event) {
@@ -403,14 +440,6 @@ function textForHistoryVisibilityEvent(event) {
                 visibility: event.getContent().history_visibility,
             });
     }
-}
-
-function textForEncryptionEvent(event) {
-    const senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {
-        senderName,
-        algorithm: event.getContent().algorithm,
-    });
 }
 
 // Currently will only display a change if a user's power level is changed
@@ -460,7 +489,7 @@ function textForPowerEvent(event) {
 }
 
 function textForPinnedEvent(event) {
-    const senderName = event.getSender();
+    const senderName = event.sender ? event.sender.name : event.getSender();
     return _t("%(senderName)s changed the pinned messages for the room.", {senderName});
 }
 
@@ -494,6 +523,87 @@ function textForWidgetEvent(event) {
     }
 }
 
+function textForMjolnirEvent(event) {
+    const senderName = event.getSender();
+    const {entity: prevEntity} = event.getPrevContent();
+    const {entity, recommendation, reason} = event.getContent();
+
+    // Rule removed
+    if (!entity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning users matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning rooms matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning servers matching %(glob)s",
+                {senderName, glob: prevEntity});
+        }
+
+        // Unknown type. We'll say something, but we shouldn't end up here.
+        return _t("%(senderName)s removed a ban rule matching %(glob)s", {senderName, glob: prevEntity});
+    }
+
+    // Invalid rule
+    if (!recommendation || !reason) return _t(`%(senderName)s updated an invalid ban rule`, {senderName});
+
+    // Rule updated
+    if (entity === prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s updated a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // New rule
+    if (!prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s created a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // else the entity !== prevEntity - count as a removal & add
+    if (USER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    }
+
+    // Unknown type. We'll say something but we shouldn't end up here.
+    return _t("%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s " +
+        "for %(reason)s", {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+}
+
 const handlers = {
     'm.room.message': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
@@ -509,7 +619,6 @@ const stateHandlers = {
     'm.room.member': textForMemberEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
-    'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
     'm.room.server_acl': textForServerACLEvent,
@@ -521,10 +630,13 @@ const stateHandlers = {
     'im.vector.modular.widgets': textForWidgetEvent,
 };
 
-module.exports = {
-    textForEvent: function(ev) {
-        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-        if (handler) return handler(ev);
-        return '';
-    },
-};
+// Add all the Mjolnir stuff to the renderer
+for (const evType of ALL_RULE_TYPES) {
+    stateHandlers[evType] = textForMjolnirEvent;
+}
+
+export function textForEvent(ev) {
+    const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
+    if (handler) return handler(ev);
+    return '';
+}

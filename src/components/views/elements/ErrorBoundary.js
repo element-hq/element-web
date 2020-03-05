@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import Modal from '../../../Modal';
 
@@ -54,7 +54,7 @@ export default class ErrorBoundary extends React.PureComponent {
         if (!PlatformPeg.get()) return;
 
         MatrixClientPeg.get().stopClient();
-        MatrixClientPeg.get().store.deleteAllData().done(() => {
+        MatrixClientPeg.get().store.deleteAllData().then(() => {
             PlatformPeg.get().reload();
         });
     };

@@ -25,19 +25,16 @@ limitations under the License.
 }
 
 .mx_TopUnreadMessagesBar::after {
-    content: "·";
+    content: "";
     position: absolute;
     top: -8px;
     left: 11px;
-    width: 16px;
-    height: 16px;
+    width: 4px;
+    height: 4px;
     border-radius: 16px;
-    font-weight: 600;
-    font-size: 30px;
-    line-height: 14px;
-    text-align: center;
-    color: $secondary-accent-color;
-    background-color: $accent-color;
+    background-color: $secondary-accent-color;
+    border: 6px solid $accent-color;
+    pointer-events: none;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {

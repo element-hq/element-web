@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import {wantsDateSeparator} from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
 
@@ -116,7 +116,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             nodes.push((
                 <EditHistoryMessage
                     key={e.getId()}
-                    previousEdit={!isBaseEvent && allEvents[i + 1]}
+                    previousEdit={!isBaseEvent ? allEvents[i + 1] : null}
                     isBaseEvent={isBaseEvent}
                     mxEvent={e}
                     isTwelveHour={this.state.isTwelveHour}

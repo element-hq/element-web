@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default createReactClass({
@@ -31,6 +31,8 @@ export default createReactClass({
         danger: PropTypes.bool,
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
+        headerImage: PropTypes.string,
+        quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
     },
 
     getDefaultProps: function() {
@@ -41,6 +43,7 @@ export default createReactClass({
             focus: true,
             hasCancelButton: true,
             danger: false,
+            quitOnly: false,
         };
     },
 
@@ -63,6 +66,7 @@ export default createReactClass({
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
+                headerImage={this.props.headerImage}
                 hasCancel={this.props.hasCancelButton}
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
@@ -71,7 +75,7 @@ export default createReactClass({
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
                     primaryButtonClass={primaryButtonClass}
                     cancelButton={this.props.cancelButton}
-                    hasCancel={this.props.hasCancelButton}
+                    hasCancel={this.props.hasCancelButton && !this.props.quitOnly}
                     onPrimaryButtonClick={this.onOk}
                     focus={this.props.focus}
                     onCancel={this.onCancel}

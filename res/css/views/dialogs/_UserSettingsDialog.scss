@@ -45,6 +45,10 @@ limitations under the License.
     mask-image: url('$(res)/img/feather-customised/flag.svg');
 }
 
+.mx_UserSettingsDialog_mjolnirIcon::before {
+    mask-image: url('$(res)/img/feather-customised/face.svg');
+}
+
 .mx_UserSettingsDialog_flairIcon::before {
     mask-image: url('$(res)/img/feather-customised/flair.svg');
 }

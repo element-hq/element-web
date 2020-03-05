@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,18 +18,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
-import Velocity from 'velocity-animate';
 import { _t } from '../../../languageHandler';
 
 export default class DeactivateAccountDialog extends React.Component {
-    constructor(props, context) {
-        super(props, context);
-
-        this._passwordField = null;
+    constructor(props) {
+        super(props);
 
         this._onOk = this._onOk.bind(this);
         this._onCancel = this._onCancel.bind(this);
@@ -78,7 +76,6 @@ export default class DeactivateAccountDialog extends React.Component {
             // https://matrix.org/jira/browse/SYN-744
             if (err.httpStatus === 401 || err.httpStatus === 403) {
                 errStr = _t('Incorrect password');
-                Velocity(this._passwordField, "callout.shake", 300);
             }
             this.setState({
                 busy: false,
@@ -121,6 +118,7 @@ export default class DeactivateAccountDialog extends React.Component {
 
         const Field = sdk.getComponent('elements.Field');
 
+        // this is on purpose not a <form /> to prevent Enter triggering submission, to further prevent accidents
         return (
             <BaseDialog className="mx_DeactivateAccountDialog"
                 onFinished={this.props.onFinished}
@@ -181,7 +179,6 @@ export default class DeactivateAccountDialog extends React.Component {
                             label={_t('Password')}
                             onChange={this._onPasswordFieldChange}
                             value={this.state.password}
-                            ref={(e) => {this._passwordField = e;}}
                             className={passwordBoxClass}
                         />
                     </div>

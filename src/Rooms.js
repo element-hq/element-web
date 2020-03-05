@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
-import Promise from 'bluebird';
+import {MatrixClientPeg} from './MatrixClientPeg';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -24,7 +23,7 @@ import Promise from 'bluebird';
  * of aliases. Otherwise return null;
  */
 export function getDisplayAliasForRoom(room) {
-    return room.getCanonicalAlias() || room.getAliases()[0];
+    return room.getCanonicalAlias() || room.getAltAliases()[0];
 }
 
 /**

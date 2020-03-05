@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +21,15 @@ limitations under the License.
     padding-top: 18px;
     font-size: 14px;
     position: relative;
+}
+
+.mx_EventTile_bubble {
+    background-color: $dark-panel-bg-color;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 75%;
+    box-sizing: border-box;
 }
 
 .mx_EventTile.mx_EventTile_info {
@@ -112,6 +122,21 @@ limitations under the License.
     line-height: 22px;
 }
 
+.mx_EventTile_bubbleContainer {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+
+    .mx_EventTile_line {
+        margin-right: 0px;
+        grid-column: 1 / 3;
+        padding: 0;
+    }
+
+    .mx_EventTile_msgOption {
+        grid-column: 2;
+    }
+}
+
 .mx_EventTile_reply {
     margin-right: 10px;
 }
@@ -138,12 +163,15 @@ limitations under the License.
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile_last > div > a > .mx_MessageTimestamp,
 .mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp {
+.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp,
+.mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp {
     visibility: visible;
 }
 
 .mx_EventTile:hover .mx_MessageActionBar,
-.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar {
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
+[data-whatinput='keyboard'] .mx_EventTile:focus-within .mx_MessageActionBar,
+.mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
     visibility: visible;
 }
 
@@ -165,8 +193,13 @@ limitations under the License.
     }
 }
 
+.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
+    padding-left: 78px;
+}
+
 .mx_EventTile:hover .mx_EventTile_line,
-.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line {
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
+.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
     background-color: $event-selected-color;
 }
 
@@ -316,27 +349,32 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 }
 
 .mx_EventTile_e2eIcon {
-    display: block;
     position: absolute;
-    top: 8px;
+    top: 6px;
     left: 46px;
     width: 15px;
     height: 15px;
-    cursor: pointer;
-    mask-size: 14px;
-    mask-repeat: no-repeat;
-    mask-position: 0;
+    display: block;
+    bottom: 0;
+    right: 0;
     opacity: 0.2;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {
-    mask-image: url('$(res)/img/e2e/warning.svg');
-    background-color: $warning-color;
+    background-image: url('$(res)/img/e2e/warning.svg');
+    opacity: 1;
+}
+
+.mx_EventTile_e2eIcon_unknown {
+    background-image: url('$(res)/img/e2e/warning.svg');
+    opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_unencrypted {
-    mask-image: url('$(res)/img/e2e/warning.svg');
-    background-color: $composer-e2e-icon-color;
+    background-image: url('$(res)/img/e2e/warning.svg');
+    opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_hidden {
@@ -381,12 +419,9 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     padding-left: 5px;
 }
 
-.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 78px;
-}
-
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line,
+.mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
     padding-left: 60px;
 }
 
@@ -398,8 +433,13 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     border-left: $e2e-unverified-color 5px solid;
 }
 
+.mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
+    border-left: $e2e-unknown-color 5px solid;
+}
+
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-.mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line {
+.mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+.mx_EventTile:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
     padding-left: 78px;
 }
 
@@ -410,14 +450,16 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp {
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
+.mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
     left: 3px;
     width: auto;
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > .mx_EventTile_e2eIcon,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon {
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon,
+.mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > .mx_EventTile_e2eIcon {
     display: block;
     left: 41px;
 }
@@ -465,7 +507,8 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     }
 }
 
-.mx_EventTile:hover .mx_EventTile_body pre {
+.mx_EventTile:hover .mx_EventTile_body pre,
+.mx_EventTile.focus-visible:focus-within .mx_EventTile_body pre {
     border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
@@ -487,6 +530,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     background-image: url($copy-button-url);
 }
 
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
 .mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton {
     visibility: visible;
 }
@@ -532,9 +576,6 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 /* end of overrides */
 
-/* Ordering this block by specificity would require breaking it up into several
-   chunks, which seems like it would be more confusing to read. */
-/* stylelint-disable no-descending-specificity */
 .mx_MatrixChat_useCompactLayout {
     .mx_EventTile {
         padding-top: 4px;
@@ -612,4 +653,3 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
         }
     }
 }
-/* stylelint-enable no-descending-specificity */

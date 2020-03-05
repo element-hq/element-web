@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 export default createReactClass({
     displayName: 'TextInputDialog',
@@ -42,15 +42,19 @@ export default createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._textinput = createRef();
+    },
+
     componentDidMount: function() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
-            this.refs.textinput.value = this.props.value;
+            this._textinput.current.value = this.props.value;
         }
     },
 
     onOk: function() {
-        this.props.onFinished(true, this.refs.textinput.value);
+        this.props.onFinished(true, this._textinput.current.value);
     },
 
     onCancel: function() {
@@ -70,7 +74,13 @@ export default createReactClass({
                             <label htmlFor="textinput"> { this.props.description } </label>
                         </div>
                         <div>
-                            <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
+                            <input
+                                id="textinput"
+                                ref={this._textinput}
+                                className="mx_TextInputDialog_input"
+                                defaultValue={this.props.value}
+                                autoFocus={this.props.focus}
+                                size="64" />
                         </div>
                     </div>
                 </form>

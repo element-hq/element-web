@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import Email from '../../../email';
+import * as sdk from '../../../index';
+import * as Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
@@ -62,7 +62,7 @@ export default createReactClass({
             return;
         }
         this._addThreepid = new AddThreepid();
-        this._addThreepid.addEmailAddress(emailAddress).done(() => {
+        this._addThreepid.addEmailAddress(emailAddress).then(() => {
             Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                 title: _t("Verification Pending"),
                 description: _t(
@@ -96,7 +96,7 @@ export default createReactClass({
     },
 
     verifyEmailAddress: function() {
-        this._addThreepid.checkEmailLinkClicked().done(() => {
+        this._addThreepid.checkEmailLinkClicked().then(() => {
             this.props.onFinished(true);
         }, (err) => {
             this.setState({emailBusy: false});

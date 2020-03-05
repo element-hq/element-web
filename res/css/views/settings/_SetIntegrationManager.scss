@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SetIntegrationManager .mx_Field_input {
-    @mixin mx_Settings_fullWidthField;
-}
-
 .mx_SetIntegrationManager {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -32,6 +28,10 @@ limitations under the License.
     padding-left: 5px;
 }
 
-.mx_SetIntegrationManager_tooltip {
-    @mixin mx_Settings_tooltip;
+.mx_SetIntegrationManager .mx_ToggleSwitch {
+    display: inline-block;
+    float: right;
+    top: 9px;
+
+    @mixin mx_Settings_fullWidthField;
 }

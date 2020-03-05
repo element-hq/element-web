@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Resend from './Resend';
-import sdk from './index';
+import * as sdk from './index';
 import dis from './dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';
@@ -44,7 +44,7 @@ export function markAllDevicesKnown(matrixClient, devices) {
  * module:crypto~DeviceInfo|DeviceInfo}.
  */
 export async function getUnknownDevicesForRoom(matrixClient, room) {
-    const roomMembers = await room.getEncryptionTargetMembers().map((m) => {
+    const roomMembers = (await room.getEncryptionTargetMembers()).map((m) => {
         return m.userId;
     });
     const devices = await matrixClient.downloadKeys(roomMembers, false);

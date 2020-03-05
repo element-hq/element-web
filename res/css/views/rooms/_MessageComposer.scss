@@ -23,10 +23,6 @@ limitations under the License.
     padding-left: 84px;
 }
 
-.mx_MessageComposer_wrapper.mx_MessageComposer_hasE2EIcon {
-    padding-left: 109px;
-}
-
 .mx_MessageComposer_replaced_wrapper {
     margin-left: auto;
     margin-right: auto;
@@ -78,7 +74,10 @@ limitations under the License.
 .mx_MessageComposer_e2eIcon.mx_E2EIcon {
     position: absolute;
     left: 60px;
-    background-color: $composer-e2e-icon-color;
+    margin-right: 0; // Counteract the E2EIcon class
+    margin-left: 3px; // Counteract the E2EIcon class
+    width: 15px;
+    height: 15px;
 }
 
 .mx_MessageComposer_noperm_error {
@@ -104,7 +103,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     min-height: 60px;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: flex-start;
     font-size: 14px;
     margin-right: 6px;
@@ -180,34 +179,42 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
+    position: relative;
     margin-right: 12px;
     cursor: pointer;
-    padding-top: 4px;
     height: 20px;
     width: 20px;
-    background-color: $composer-button-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
+
+    &::before {
+        content: '';
+        position: absolute;
+
+        height: 20px;
+        width: 20px;
+        background-color: $composer-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
 }
 
-.mx_MessageComposer_upload {
+.mx_MessageComposer_upload::before {
     mask-image: url('$(res)/img/feather-customised/paperclip.svg');
 }
 
-.mx_MessageComposer_hangup {
+.mx_MessageComposer_hangup::before {
     mask-image: url('$(res)/img/hangup.svg');
 }
 
-.mx_MessageComposer_voicecall {
+.mx_MessageComposer_voicecall::before {
     mask-image: url('$(res)/img/feather-customised/phone.svg');
 }
 
-.mx_MessageComposer_videocall {
+.mx_MessageComposer_videocall::before {
     mask-image: url('$(res)/img/feather-customised/video.svg');
 }
 
-.mx_MessageComposer_stickers {
+.mx_MessageComposer_stickers::before {
     mask-image: url('$(res)/img/feather-customised/face.svg');
 }
 

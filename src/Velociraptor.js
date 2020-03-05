@@ -1,8 +1,7 @@
-const React = require('react');
-const ReactDom = require('react-dom');
+import React from "react";
+import ReactDom from "react-dom";
+import Velocity from "velocity-animate";
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-const Velocity = require('velocity-animate');
 
 /**
  * The Velociraptor contains components and animates transitions with velocity.
@@ -11,10 +10,8 @@ const Velocity = require('velocity-animate');
  * from DOM order. This makes it a lot simpler and lighter: if you need fully
  * automatic positional animation, look at react-shuffle or similar libraries.
  */
-module.exports = createReactClass({
-    displayName: 'Velociraptor',
-
-    propTypes: {
+export default class Velociraptor extends React.Component {
+    static propTypes = {
         // either a list of child nodes, or a single child.
         children: PropTypes.any,
 
@@ -26,82 +23,71 @@ module.exports = createReactClass({
 
         // a list of transition options from the corresponding startStyle
         enterTransitionOpts: PropTypes.array,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            startStyles: [],
-            enterTransitionOpts: [],
-        };
-    },
+    static defaultProps = {
+        startStyles: [],
+        enterTransitionOpts: [],
+    };
 
-    componentWillMount: function() {
+    constructor(props) {
+        super(props);
+
         this.nodes = {};
         this._updateChildren(this.props.children);
-    },
+    }
 
-    componentWillReceiveProps: function(nextProps) {
-        this._updateChildren(nextProps.children);
-    },
+    componentDidUpdate() {
+        this._updateChildren(this.props.children);
+    }
 
-    /**
-     * update `this.children` according to the new list of children given
-     */
-    _updateChildren: function(newChildren) {
-        const self = this;
+    _updateChildren(newChildren) {
         const oldChildren = this.children || {};
         this.children = {};
-        React.Children.toArray(newChildren).forEach(function(c) {
+        React.Children.toArray(newChildren).forEach((c) => {
             if (oldChildren[c.key]) {
                 const old = oldChildren[c.key];
-                const oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
+                const oldNode = ReactDom.findDOMNode(this.nodes[old.key]);
 
-                if (oldNode && oldNode.style.left != c.props.style.left) {
-                    Velocity(oldNode, { left: c.props.style.left }, self.props.transition).then(function() {
+                if (oldNode && oldNode.style.left !== c.props.style.left) {
+                    Velocity(oldNode, { left: c.props.style.left }, this.props.transition).then(() => {
                         // special case visibility because it's nonsensical to animate an invisible element
                         // so we always hidden->visible pre-transition and visible->hidden after
-                        if (oldNode.style.visibility == 'visible' && c.props.style.visibility == 'hidden') {
+                        if (oldNode.style.visibility === 'visible' && c.props.style.visibility === 'hidden') {
                             oldNode.style.visibility = c.props.style.visibility;
                         }
                     });
                     //console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
-                if (oldNode && oldNode.style.visibility == 'hidden' && c.props.style.visibility == 'visible') {
+                if (oldNode && oldNode.style.visibility === 'hidden' && c.props.style.visibility === 'visible') {
                     oldNode.style.visibility = c.props.style.visibility;
                 }
                 // clone the old element with the props (and children) of the new element
                 // so prop updates are still received by the children.
-                self.children[c.key] = React.cloneElement(old, c.props, c.props.children);
+                this.children[c.key] = React.cloneElement(old, c.props, c.props.children);
             } else {
                 // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations
                 const newProps = {};
                 const restingStyle = c.props.style;
 
-                const startStyles = self.props.startStyles;
+                const startStyles = this.props.startStyles;
                 if (startStyles.length > 0) {
                     const startStyle = startStyles[0];
                     newProps.style = startStyle;
                     // console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
                 }
 
-                newProps.ref = ((n) => self._collectNode(
+                newProps.ref = ((n) => this._collectNode(
                     c.key, n, restingStyle,
                 ));
 
-                self.children[c.key] = React.cloneElement(c, newProps);
+                this.children[c.key] = React.cloneElement(c, newProps);
             }
         });
-    },
+    }
 
-    /**
-     * called when a child element is mounted/unmounted
-     *
-     * @param {string}     k              key of the child
-     * @param {null|Object} node          On mount: React node. On unmount: null
-     * @param {Object}     restingStyle   final style
-     */
-    _collectNode: function(k, node, restingStyle) {
+    _collectNode(k, node, restingStyle) {
         if (
             node &&
             this.nodes[k] === undefined &&
@@ -125,12 +111,12 @@ module.exports = createReactClass({
 
             // and then we animate to the resting state
             Velocity(domNode, restingStyle,
-                     transitionOpts[i-1])
-            .then(() => {
-                // once we've reached the resting state, hide the element if
-                // appropriate
-                domNode.style.visibility = restingStyle.visibility;
-            });
+                transitionOpts[i-1])
+                .then(() => {
+                    // once we've reached the resting state, hide the element if
+                    // appropriate
+                    domNode.style.visibility = restingStyle.visibility;
+                });
 
             /*
             console.log("enter:",
@@ -153,13 +139,13 @@ module.exports = createReactClass({
             if (domNode) Velocity.Utilities.removeData(domNode);
         }
         this.nodes[k] = node;
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <span>
                 { Object.values(this.children) }
             </span>
         );
-    },
-});
+    }
+}

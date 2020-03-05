@@ -17,10 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 import { COUNTRIES } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
+import { _t } from "../../../languageHandler";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
@@ -130,10 +131,17 @@ export default class CountryDropdown extends React.Component {
         // values between mounting and the initial value propgating
         const value = this.props.value || this.state.defaultCountry.iso2;
 
-        return <Dropdown className={this.props.className + " mx_CountryDropdown"}
-            onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
-            menuWidth={298} getShortOption={this._getShortOption}
-            value={value} searchEnabled={true} disabled={this.props.disabled}
+        return <Dropdown
+            id="mx_CountryDropdown"
+            className={this.props.className + " mx_CountryDropdown"}
+            onOptionChange={this._onOptionChange}
+            onSearchChange={this._onSearchChange}
+            menuWidth={298}
+            getShortOption={this._getShortOption}
+            value={value}
+            searchEnabled={true}
+            disabled={this.props.disabled}
+            label={_t("Country Dropdown")}
         >
             { options }
         </Dropdown>;

@@ -18,19 +18,16 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-
-const MatrixClientPeg = require('../../MatrixClientPeg');
-const ContentRepo = require("matrix-js-sdk").ContentRepo;
-const Modal = require('../../Modal');
-const sdk = require('../../index');
-const dis = require('../../dispatcher');
-
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
+import dis from "../../dispatcher";
+import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -39,7 +36,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
@@ -66,16 +63,6 @@ module.exports = createReactClass({
         };
     },
 
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    },
-
     componentWillMount: function() {
         this._unmounted = false;
         this.nextBatch = null;
@@ -89,7 +76,7 @@ module.exports = createReactClass({
             this.setState({protocolsLoading: false});
             return;
         }
-        MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
+        MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
@@ -109,20 +96,9 @@ module.exports = createReactClass({
                 ),
             });
         });
-
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: true,
-        //     middleDisabled: true,
-        // });
     },
 
     componentWillUnmount: function() {
-        // dis.dispatch({
-        //     action: 'panel_disable',
-        //     sideDisabled: false,
-        //     middleDisabled: false,
-        // });
         if (this.filterTimeout) {
             clearTimeout(this.filterTimeout);
         }
@@ -135,7 +111,7 @@ module.exports = createReactClass({
             publicRooms: [],
             loading: true,
         });
-        this.getMoreRooms().done();
+        this.getMoreRooms();
     },
 
     getMoreRooms: function() {
@@ -179,7 +155,7 @@ module.exports = createReactClass({
 
             this.nextBatch = data.next_batch;
             this.setState((s) => {
-                s.publicRooms.push(...data.chunk);
+                s.publicRooms.push(...(data.chunk || []));
                 s.loading = false;
                 return s;
             });
@@ -246,7 +222,7 @@ module.exports = createReactClass({
                     if (!alias) return;
                     step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
-                }).done(() => {
+                }).then(() => {
                     modal.close();
                     this.refreshRoomList();
                 }, (err) => {
@@ -282,6 +258,7 @@ module.exports = createReactClass({
             roomServer: server,
             instanceId: instanceId,
             includeAll: includeAll,
+            error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side
@@ -348,7 +325,7 @@ module.exports = createReactClass({
                 });
                 return;
             }
-            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).done((resp) => {
+            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).then((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
                     this.showRoomAlias(resp[0].alias, true);
                 } else {
@@ -477,7 +454,7 @@ module.exports = createReactClass({
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
         topic = linkifyAndSanitizeHtml(topic);
-        const avatarUrl = ContentRepo.getHttpUriForMxc(
+        const avatarUrl = getHttpUriForMxc(
                                 MatrixClientPeg.get().getHomeserverUrl(),
                                 room.avatar_url, 32, 32, "crop",
                             );
@@ -573,7 +550,7 @@ module.exports = createReactClass({
             if (rows.length === 0 && !this.state.loading) {
                 scrollpanel_content = <i>{ _t('No rooms to show') }</i>;
             } else {
-                scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
+                scrollpanel_content = <table className="mx_RoomDirectory_table">
                     <tbody>
                         { rows }
                     </tbody>

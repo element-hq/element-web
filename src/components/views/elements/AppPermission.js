@@ -19,79 +19,126 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from "../../../utils/WidgetUtils";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 export default class AppPermission extends React.Component {
+    static propTypes = {
+        url: PropTypes.string.isRequired,
+        creatorUserId: PropTypes.string.isRequired,
+        roomId: PropTypes.string.isRequired,
+        onPermissionGranted: PropTypes.func.isRequired,
+        isRoomEncrypted: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        onPermissionGranted: () => {},
+    };
+
     constructor(props) {
         super(props);
 
-        const curlBase = this.getCurlBase();
-        this.state = { curlBase: curlBase};
+        // The first step is to pick apart the widget so we can render information about it
+        const urlInfo = this.parseWidgetUrl();
+
+        // The second step is to find the user's profile so we can show it on the prompt
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        let roomMember;
+        if (room) roomMember = room.getMember(this.props.creatorUserId);
+
+        // Set all this into the initial state
+        this.state = {
+            ...urlInfo,
+            roomMember,
+        };
     }
 
-    // Return string representation of content URL without query parameters
-    getCurlBase() {
-        const wurl = url.parse(this.props.url);
-        let curl;
-        let curlString;
+    parseWidgetUrl() {
+        const widgetUrl = url.parse(this.props.url);
+        const params = new URLSearchParams(widgetUrl.search);
 
-        const searchParams = new URLSearchParams(wurl.search);
-
-        if (WidgetUtils.isScalarUrl(wurl) && searchParams && searchParams.get('url')) {
-            curl = url.parse(searchParams.get('url'));
-            if (curl) {
-                curl.search = curl.query = "";
-                curlString = curl.format();
-            }
+        // HACK: We're relying on the query params when we should be relying on the widget's `data`.
+        // This is a workaround for Scalar.
+        if (WidgetUtils.isScalarUrl(widgetUrl) && params && params.get('url')) {
+            const unwrappedUrl = url.parse(params.get('url'));
+            return {
+                widgetDomain: unwrappedUrl.host || unwrappedUrl.hostname,
+                isWrapped: true,
+            };
+        } else {
+            return {
+                widgetDomain: widgetUrl.host || widgetUrl.hostname,
+                isWrapped: false,
+            };
         }
-        if (!curl && wurl) {
-            wurl.search = wurl.query = "";
-            curlString = wurl.format();
-        }
-        return curlString;
     }
 
     render() {
-        let e2eWarningText;
-        if (this.props.isRoomEncrypted) {
-            e2eWarningText =
-                <span className='mx_AppPermissionWarningTextLabel'>{ _t('NOTE: Apps are not end-to-end encrypted') }</span>;
-        }
-        const cookieWarning =
-            <span className='mx_AppPermissionWarningTextLabel'>
-                { _t('Warning: This widget might use cookies.') }
-            </span>;
+        const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
+        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
+        const TextWithTooltip = sdk.getComponent("views.elements.TextWithTooltip");
+
+        const displayName = this.state.roomMember ? this.state.roomMember.name : this.props.creatorUserId;
+        const userId = displayName === this.props.creatorUserId ? null : this.props.creatorUserId;
+
+        const avatar = this.state.roomMember
+            ? <MemberAvatar member={this.state.roomMember} width={38} height={38} />
+            : <BaseAvatar name={this.props.creatorUserId} width={38} height={38} />;
+
+        const warningTooltipText = (
+            <div>
+                {_t("Any of the following data may be shared:")}
+                <ul>
+                    <li>{_t("Your display name")}</li>
+                    <li>{_t("Your avatar URL")}</li>
+                    <li>{_t("Your user ID")}</li>
+                    <li>{_t("Your theme")}</li>
+                    <li>{_t("Riot URL")}</li>
+                    <li>{_t("Room ID")}</li>
+                    <li>{_t("Widget ID")}</li>
+                </ul>
+            </div>
+        );
+        const warningTooltip = (
+            <TextWithTooltip tooltip={warningTooltipText} tooltipClass='mx_AppPermissionWarning_tooltip mx_Tooltip_dark'>
+                <span className='mx_AppPermissionWarning_helpIcon' />
+            </TextWithTooltip>
+        );
+
+        // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
+        const warning = this.state.isWrapped
+            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
+                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip})
+            : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
+                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
+
+        const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
+
         return (
             <div className='mx_AppPermissionWarning'>
-                <div className='mx_AppPermissionWarningImage'>
-                    <img src={require("../../../../res/img/feather-customised/warning-triangle.svg")} alt={_t('Warning!')} />
+                <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_bolder mx_AppPermissionWarning_smallText'>
+                    {_t("Widget added by")}
                 </div>
-                <div className='mx_AppPermissionWarningText'>
-                    <span className='mx_AppPermissionWarningTextLabel'>{_t('Do you want to load widget from URL:')}</span>
-                    <span className='mx_AppPermissionWarningTextURL'
-                        title={this.state.curlBase}
-                    >{this.state.curlBase}</span>
-                    { e2eWarningText }
-                    { cookieWarning }
+                <div className='mx_AppPermissionWarning_row'>
+                    {avatar}
+                    <h4 className='mx_AppPermissionWarning_bolder'>{displayName}</h4>
+                    <div className='mx_AppPermissionWarning_smallText'>{userId}</div>
                 </div>
-                <input
-                    className='mx_AppPermissionButton'
-                    type='button'
-                    value={_t('Allow')}
-                    onClick={this.props.onPermissionGranted}
-                />
+                <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
+                    {warning}
+                </div>
+                <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
+                    {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
+                </div>
+                <div className='mx_AppPermissionWarning_row'>
+                    <AccessibleButton kind='primary_sm' onClick={this.props.onPermissionGranted}>
+                        {_t("Continue")}
+                    </AccessibleButton>
+                </div>
             </div>
         );
     }
 }
-
-AppPermission.propTypes = {
-    isRoomEncrypted: PropTypes.bool,
-    url: PropTypes.string.isRequired,
-    onPermissionGranted: PropTypes.func.isRequired,
-};
-AppPermission.defaultProps = {
-    isRoomEncrypted: false,
-    onPermissionGranted: function() {},
-};

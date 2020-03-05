@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 import ScalarAuthClient from "../ScalarAuthClient";
-import sdk from "../index";
+import * as sdk from "../index";
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../Terms";
 import type {Room} from "matrix-js-sdk";
 import Modal from '../Modal';
 import url from 'url';
+import SettingsStore from "../settings/SettingsStore";
+import {IntegrationManagers} from "./IntegrationManagers";
 
 export const KIND_ACCOUNT = "account";
 export const KIND_CONFIG = "config";
@@ -57,19 +59,23 @@ export class IntegrationManagerInstance {
     }
 
     async open(room: Room = null, screen: string = null, integrationId: string = null): void {
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            return IntegrationManagers.sharedInstance().showDisabledDialog();
+        }
+
+        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
         const dialog = Modal.createTrackedDialog(
-            'Integration Manager', '', IntegrationsManager,
-            {loading: true}, 'mx_IntegrationsManager',
+            'Integration Manager', '', IntegrationManager,
+            {loading: true}, 'mx_IntegrationManager',
         );
 
         const client = this.getScalarClient();
         client.setTermsInteractionCallback((policyInfo, agreedUrls) => {
             // To avoid visual glitching of two modals stacking briefly, we customise the
-            // terms dialog sizing when it will appear for the integrations manager so that
+            // terms dialog sizing when it will appear for the integration manager so that
             // it gets the same basic size as the IM's own modal.
             return dialogTermsInteractionCallback(
-                policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationsManager',
+                policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationManager',
             );
         });
 
@@ -94,8 +100,8 @@ export class IntegrationManagerInstance {
         // Close the old dialog and open a new one
         dialog.close();
         Modal.createTrackedDialog(
-            'Integration Manager', '', IntegrationsManager,
-            newProps, 'mx_IntegrationsManager',
+            'Integration Manager', '', IntegrationManager,
+            newProps, 'mx_IntegrationManager',
         );
     }
 }

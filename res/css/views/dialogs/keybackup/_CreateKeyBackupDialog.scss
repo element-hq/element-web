@@ -32,7 +32,7 @@ limitations under the License.
 
 .mx_CreateKeyBackupDialog_passPhraseContainer {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .mx_CreateKeyBackupDialog_passPhraseHelp {
@@ -84,4 +84,10 @@ limitations under the License.
 .mx_CreateKeyBackupDialog_recoveryKeyButtons button {
     flex: 1;
     white-space: nowrap;
+}
+
+.mx_CreateKeyBackupDialog {
+    details .mx_AccessibleButton {
+        margin: 1em 0; // emulate paragraph spacing because we can't put this button in a paragraph due to HTML rules
+    }
 }

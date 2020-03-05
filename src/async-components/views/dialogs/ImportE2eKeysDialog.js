@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 function readFileAsArrayBuffer(file) {
@@ -56,6 +56,9 @@ export default createReactClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+
+        this._file = createRef();
+        this._passphrase = createRef();
     },
 
     componentWillUnmount: function() {
@@ -63,15 +66,15 @@ export default createReactClass({
     },
 
     _onFormChange: function(ev) {
-        const files = this.refs.file.files || [];
+        const files = this._file.current.files || [];
         this.setState({
-            enableSubmit: (this.refs.passphrase.value !== "" && files.length > 0),
+            enableSubmit: (this._passphrase.current.value !== "" && files.length > 0),
         });
     },
 
     _onFormSubmit: function(ev) {
         ev.preventDefault();
-        this._startImport(this.refs.file.files[0], this.refs.passphrase.value);
+        this._startImport(this._file.current.files[0], this._passphrase.current.value);
         return false;
     },
 
@@ -146,7 +149,10 @@ export default createReactClass({
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
-                                   <input ref='file' id='importFile' type='file'
+                                   <input
+                                       ref={this._file}
+                                       id='importFile'
+                                       type='file'
                                        autoFocus={true}
                                        onChange={this._onFormChange}
                                        disabled={disableForm} />
@@ -159,8 +165,11 @@ export default createReactClass({
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
-                                   <input ref='passphrase' id='passphrase'
-                                       size='64' type='password'
+                                   <input
+                                       ref={this._passphrase}
+                                       id='passphrase'
+                                       size='64'
+                                       type='password'
                                        onChange={this._onFormChange}
                                        disabled={disableForm} />
                                </div>

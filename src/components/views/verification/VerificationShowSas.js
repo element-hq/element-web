@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
+import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
+import AccessibleButton from "../elements/AccessibleButton";
+import DialogButtons from "../elements/DialogButtons";
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -25,18 +27,33 @@ function capFirst(s) {
 
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
+        pending: PropTypes.bool,
+        displayName: PropTypes.string, // required if pending is true
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
+        isSelf: PropTypes.bool,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            pending: false,
+        };
     }
 
-    constructor() {
-        super();
-    }
+    onMatchClick = () => {
+        this.setState({ pending: true });
+        this.props.onDone();
+    };
+
+    onDontMatchClick = () => {
+        this.setState({ cancelling: true });
+        this.props.onCancel();
+    };
 
     render() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
@@ -51,11 +68,17 @@ export default class VerificationShowSas extends React.Component {
                 </div>,
             );
             sasDisplay = <div className="mx_VerificationShowSas_emojiSas">
-                {emojiBlocks}
+                {emojiBlocks.slice(0, 4)}
+                <div className="mx_VerificationShowSas_emojiSas_break" />
+                {emojiBlocks.slice(4)}
             </div>;
-            sasCaption = _t(
-                "Verify this user by confirming the following emoji appear on their screen.",
-            );
+            sasCaption = this.props.isSelf ?
+                _t(
+                    "Confirm the emoji below are displayed on both devices, in the same order:",
+                ):
+                _t(
+                    "Verify this user by confirming the following emoji appear on their screen.",
+                );
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>
                 {num}
@@ -63,32 +86,51 @@ export default class VerificationShowSas extends React.Component {
             sasDisplay = <div className="mx_VerificationShowSas_decimalSas">
                 {numberBlocks}
             </div>;
-            sasCaption = _t(
-                "Verify this user by confirming the following number appears on their screen.",
-            );
+            sasCaption = this.props.isSelf ?
+                _t(
+                    "Verify this device by confirming the following number appears on its screen.",
+                ):
+                _t(
+                    "Verify this user by confirming the following number appears on their screen.",
+                );
         } else {
             return <div>
                 {_t("Unable to find a supported verification method.")}
-                <DialogButtons
-                    primaryButton={_t('Cancel')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this.props.onCancel}
-                />
+                <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_wideButton">
+                    {_t('Cancel')}
+                </AccessibleButton>
             </div>;
+        }
+
+        let confirm;
+        if (this.state.pending || this.state.cancelling) {
+            let text;
+            if (this.state.pending) {
+                const {displayName} = this.props;
+                text = _t("Waiting for %(displayName)s to verify…", {displayName});
+            } else {
+                text = _t("Cancelling…");
+            }
+            confirm = <PendingActionSpinner text={text} />;
+        } else {
+            // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
+            confirm = <DialogButtons
+                primaryButton={_t("They match")}
+                onPrimaryButtonClick={this.onMatchClick}
+                primaryButtonClass="mx_UserInfo_wideButton"
+                cancelButton={_t("They don't match")}
+                onCancel={this.onDontMatchClick}
+                cancelButtonClass="mx_UserInfo_wideButton"
+            />;
         }
 
         return <div className="mx_VerificationShowSas">
             <p>{sasCaption}</p>
-            <p>{_t(
-                "For maximum security, we recommend you do this in person or use another " +
-                "trusted means of communication.",
-            )}</p>
             {sasDisplay}
-            <DialogButtons onPrimaryButtonClick={this.props.onDone}
-                primaryButton={_t("Continue")}
-                hasCancel={true}
-                onCancel={this.props.onCancel}
-            />
+            <p>{this.props.isSelf ?
+                "":
+                _t("To be secure, do this in person or use a trusted way to communicate.")}</p>
+            {confirm}
         </div>;
     }
 }
@@ -140,7 +182,7 @@ _td("Book");
 _td("Pencil");
 _td("Paperclip");
 _td("Scissors");
-_td("Padlock");
+_td("Lock");
 _td("Key");
 _td("Hammer");
 _td("Telephone");

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
-import sdk from '../../index';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import * as sdk from '../../index';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher';
-import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -38,7 +39,7 @@ function getUnsentMessages(room) {
     });
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomStatusBar',
 
     propTypes: {
@@ -219,12 +220,12 @@ module.exports = createReactClass({
         });
 
         if (hasUDE) {
-            title = _t("Message not sent due to unknown devices being present");
+            title = _t("Message not sent due to unknown sessions being present");
             content = _t(
-                "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.",
+                "<showSessionsText>Show sessions</showSessionsText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.",
                 {},
                 {
-                    'showDevicesText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
+                    'showSessionsText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
                     'sendAnywayText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="sendAnyway" onClick={this._onSendWithoutVerifyingClick}>{ sub }</a>,
                     'cancelText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
                 },
@@ -272,7 +273,7 @@ module.exports = createReactClass({
                 unsentMessages[0].error.data &&
                 unsentMessages[0].error.data.error
             ) {
-                title = unsentMessages[0].error.data.error;
+                title = messageForSendError(unsentMessages[0].error.data) || unsentMessages[0].error.data.error;
             } else {
                 title = _t('%(count)s of your messages have not been sent.', { count: unsentMessages.length });
             }
@@ -289,7 +290,7 @@ module.exports = createReactClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -306,7 +307,7 @@ module.exports = createReactClass({
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src={require("../../../res/img/e2e/warning.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }

@@ -58,7 +58,16 @@ function parseLink(a, partCreator) {
 
 function parseCodeBlock(n, partCreator) {
     const parts = [];
-    const preLines = ("```\n" + n.textContent + "```").split("\n");
+    let language = "";
+    if (n.firstChild && n.firstChild.nodeName === "CODE") {
+        for (const className of n.firstChild.classList) {
+            if (className.startsWith("language-")) {
+                language = className.substr("language-".length);
+                break;
+            }
+        }
+    }
+    const preLines = ("```" + language + "\n" + n.textContent + "```").split("\n");
     preLines.forEach((l, i) => {
         parts.push(partCreator.plain(l));
         if (i < preLines.length - 1) {
@@ -99,7 +108,10 @@ function parseElement(n, partCreator, lastNode, state) {
         case "LI": {
             const indent = "  ".repeat(state.listDepth - 1);
             if (n.parentElement.nodeName === "OL") {
-                return partCreator.plain(`${indent}1. `);
+                // The markdown parser doesn't do nested indexed lists at all, but this supports it anyway.
+                const index = state.listIndex[state.listIndex.length - 1];
+                state.listIndex[state.listIndex.length - 1] += 1;
+                return partCreator.plain(`${indent}${index}. `);
             } else {
                 return partCreator.plain(`${indent}- `);
             }
@@ -111,23 +123,25 @@ function parseElement(n, partCreator, lastNode, state) {
             break;
         }
         case "OL":
+            state.listIndex.push(n.start || 1);
+            // fallthrough
         case "UL":
             state.listDepth = (state.listDepth || 0) + 1;
-        // es-lint-disable-next-line no-fallthrough
+            // fallthrough
         default:
-            // don't textify block nodes we'll decend into
-            if (!checkDecendInto(n)) {
+            // don't textify block nodes we'll descend into
+            if (!checkDescendInto(n)) {
                 return partCreator.plain(n.textContent);
             }
     }
 }
 
-function checkDecendInto(node) {
+function checkDescendInto(node) {
     switch (node.nodeName) {
         case "PRE":
             // a code block is textified in parseCodeBlock
             // as we don't want to preserve markup in it,
-            // so no need to decend into it
+            // so no need to descend into it
             return false;
         default:
             return checkBlockNode(node);
@@ -168,7 +182,9 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     const parts = [];
     let lastNode;
     let inQuote = isQuotedMessage;
-    const state = {};
+    const state = {
+        listIndex: [],
+    };
 
     function onNodeEnter(n) {
         if (checkIgnored(n)) {
@@ -203,11 +219,11 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 
         parts.push(...newParts);
 
-        const decend = checkDecendInto(n);
-        // when not decending (like for PRE), onNodeLeave won't be called to set lastNode
+        const descend = checkDescendInto(n);
+        // when not descending (like for PRE), onNodeLeave won't be called to set lastNode
         // so do that here.
-        lastNode = decend ? null : n;
-        return decend;
+        lastNode = descend ? null : n;
+        return descend;
     }
 
     function onNodeLeave(n) {
@@ -219,6 +235,8 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
                 inQuote = false;
                 break;
             case "OL":
+                state.listIndex.pop();
+                // fallthrough
             case "UL":
                 state.listDepth -= 1;
                 break;
@@ -232,7 +250,7 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
 }
 
 export function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
-    const lines = body.split("\n");
+    const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     const parts = lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
             parts.push(partCreator.plain(QUOTE_LINE_PREFIX));

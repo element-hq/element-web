@@ -15,19 +15,35 @@ limitations under the License.
 */
 
 .mx_E2EIcon {
-    width: 25px;
-    height: 25px;
-    mask-repeat: no-repeat;
-    mask-position: center 0;
+    width: 16px;
+    height: 16px;
     margin: 0 9px;
+    position: relative;
+    display: block;
 }
 
-.mx_E2EIcon_verified {
-    mask-image: url('$(res)/img/e2e/lock-verified.svg');
-    background-color: $accent-color;
+.mx_E2EIcon_warning::after,
+.mx_E2EIcon_normal::after,
+.mx_E2EIcon_verified::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-.mx_E2EIcon_warning {
-    mask-image: url('$(res)/img/e2e/lock-warning.svg');
-    background-color: $warning-color;
+.mx_E2EIcon_warning::after {
+    background-image: url('$(res)/img/e2e/warning.svg');
+}
+
+.mx_E2EIcon_normal::after {
+    background-image: url('$(res)/img/e2e/normal.svg');
+}
+
+.mx_E2EIcon_verified::after {
+    background-image: url('$(res)/img/e2e/verified.svg');
 }

@@ -22,7 +22,7 @@ import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TopUnreadMessagesBar',
 
     propTypes: {

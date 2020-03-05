@@ -29,6 +29,11 @@ limitations under the License.
     mask-image: url('$(res)/img/feather-customised/users-sm.svg');
 }
 
+.mx_RoomSettingsDialog_bridgesIcon::before {
+    // This icon is pants, please improve :)
+    mask-image: url('$(res)/img/feather-customised/bridge.svg');
+}
+
 .mx_RoomSettingsDialog_warningIcon::before {
     mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
 }
@@ -42,3 +47,12 @@ limitations under the License.
     padding-left: 40px;
     padding-right: 80px;
 }
+
+// show a different AvatarSetting placeholder for RoomProfileSettings which is basically a clone of ProfileSettings
+.mx_RoomSettingsDialog .mx_AvatarSetting_avatar .mx_AvatarSetting_avatarPlaceholder::before {
+    mask: url("$(res)/img/feather-customised/image.svg");
+    mask-repeat: no-repeat;
+    mask-size: 36px;
+    mask-position: center;
+}
+

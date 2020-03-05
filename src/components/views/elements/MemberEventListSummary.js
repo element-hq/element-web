@@ -21,10 +21,10 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import {MatrixEvent} from "matrix-js-sdk";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberEventListSummary',
 
     propTypes: {

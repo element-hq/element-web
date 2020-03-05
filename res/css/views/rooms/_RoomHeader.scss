@@ -17,6 +17,15 @@ limitations under the License.
 .mx_RoomHeader {
     flex: 0 0 52px;
     border-bottom: 1px solid $primary-hairline-color;
+
+    .mx_E2EIcon {
+        margin: 0;
+        position: absolute;
+        bottom: -2px;
+        right: -6px;
+        height: 15px;
+        width: 15px;
+    }
 }
 
 .mx_RoomHeader_wrapper {
@@ -167,6 +176,7 @@ limitations under the License.
     width: 28px;
     height: 28px;
     margin: 0 7px;
+    position: relative;
 }
 
 .mx_RoomHeader_avatar .mx_BaseAvatar_image {
@@ -192,33 +202,41 @@ limitations under the License.
 }
 
 .mx_RoomHeader_button {
+    position: relative;
     margin-left: 10px;
     cursor: pointer;
     height: 20px;
     width: 20px;
-    background-color: $roomheader-button-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
+
+    &::before {
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        background-color: $roomheader-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
 }
 
-.mx_RoomHeader_settingsButton {
+.mx_RoomHeader_settingsButton::before {
     mask-image: url('$(res)/img/feather-customised/settings.svg');
 }
 
-.mx_RoomHeader_forgetButton {
+.mx_RoomHeader_forgetButton::before {
     mask-image: url('$(res)/img/leave.svg');
     width: 26px;
 }
 
-.mx_RoomHeader_searchButton {
+.mx_RoomHeader_searchButton::before {
     mask-image: url('$(res)/img/feather-customised/search.svg');
 }
 
-.mx_RoomHeader_shareButton {
+.mx_RoomHeader_shareButton::before {
     mask-image: url('$(res)/img/feather-customised/share.svg');
 }
 
-.mx_RoomHeader_manageIntegsButton {
+.mx_RoomHeader_manageIntegsButton::before {
     mask-image: url('$(res)/img/feather-customised/grid.svg');
 }
 
@@ -234,8 +252,7 @@ limitations under the License.
     margin-top: 18px;
 }
 
-.mx_RoomHeader_pinnedButton {
-    position: relative;
+.mx_RoomHeader_pinnedButton::before {
     mask-image: url('$(res)/img/icons-pin.svg');
 }
 

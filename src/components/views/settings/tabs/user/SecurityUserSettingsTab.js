@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
-import Promise from "bluebird";
 import Modal from "../../../../../Modal";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
+import {sleep} from "../../../../../utils/promise";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -37,12 +37,13 @@ export class IgnoredUser extends React.Component {
     };
 
     render() {
+        const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
-                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm'>
-                    {_t('Unignore')}
+                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id}>
+                    { _t('Unignore') }
                 </AccessibleButton>
-                <span>{this.props.userId}</span>
+                <span id={id}>{ this.props.userId }</span>
             </div>
         );
     }
@@ -129,7 +130,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
                     // Add a delay between each invite change in order to avoid rate
                     // limiting by the server.
-                    await Promise.delay(e.retry_after_ms || 2500);
+                    await sleep(e.retry_after_ms || 2500);
 
                     // Redo last action
                     i--;
@@ -184,11 +185,11 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
                 <ul className='mx_SettingsTab_subsectionText mx_SecurityUserSettingsTab_deviceInfo'>
                     <li>
-                        <label>{_t("Device ID:")}</label>
+                        <label>{_t("Session ID:")}</label>
                         <span><code>{deviceId}</code></span>
                     </li>
                     <li>
-                        <label>{_t("Device key:")}</label>
+                        <label>{_t("Session key:")}</label>
                         <span><code><b>{identityKey}</b></code></span>
                     </li>
                 </ul>
@@ -241,6 +242,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     render() {
         const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
+        const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
 
         const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
         const keyBackup = (
@@ -252,17 +254,46 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>
         );
 
+        let eventIndex;
+        if (SettingsStore.isFeatureEnabled("feature_event_indexing")) {
+            eventIndex = (
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
+                    <EventIndexPanel />
+                </div>
+            );
+        }
+
+        // XXX: There's no such panel in the current cross-signing designs, but
+        // it's useful to have for testing the feature. If there's no interest
+        // in having advanced details here once all flows are implemented, we
+        // can remove this.
+        const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
+        let crossSigning;
+        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            crossSigning = (
+                <div className='mx_SettingsTab_section'>
+                    <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
+                    <div className='mx_SettingsTab_subsectionText'>
+                        <CrossSigningPanel />
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Devices")}</span>
+                    <span className="mx_SettingsTab_subheading">{_t("Sessions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("A device's public name is visible to people you communicate with")}
+                        {_t("A session's public name is visible to people you communicate with")}
                         <DevicesPanel />
                     </div>
                 </div>
                 {keyBackup}
+                {eventIndex}
+                {crossSigning}
                 {this._renderCurrentDeviceInfo()}
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>

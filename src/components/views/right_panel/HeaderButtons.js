@@ -3,6 +3,7 @@ Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,62 +19,50 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
+import RightPanelStore from "../../../stores/RightPanelStore";
+
+export const HEADER_KIND_ROOM = "room";
+export const HEADER_KIND_GROUP = "group";
+
+const HEADER_KINDS = [HEADER_KIND_GROUP, HEADER_KIND_ROOM];
 
 export default class HeaderButtons extends React.Component {
-    constructor(props, initialPhase) {
+    constructor(props, kind) {
         super(props);
 
+        if (!HEADER_KINDS.includes(kind)) throw new Error(`Invalid header kind: ${kind}`);
+
+        const rps = RightPanelStore.getSharedInstance();
         this.state = {
-            phase: props.collapsedRhs ? null : initialPhase,
-            isUserPrivilegedInGroup: null,
+            headerKind: kind,
+            phase: kind === HEADER_KIND_ROOM ? rps.visibleRoomPanelPhase : rps.visibleGroupPanelPhase,
         };
-        this.onAction = this.onAction.bind(this);
     }
 
     componentWillMount() {
-        this.dispatcherRef = dis.register(this.onAction);
+        this._storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
+        this._dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
     componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
+        if (this._storeToken) this._storeToken.remove();
+        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
     }
 
-    componentDidUpdate(prevProps) {
-        if (!prevProps.collapsedRhs && this.props.collapsedRhs) {
-            this.setState({
-                phase: null,
-            });
-        }
+    onAction(payload) {
+        // Ignore - intended to be overridden by subclasses
     }
 
     setPhase(phase, extras) {
-        if (this.props.collapsedRhs) {
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        dis.dispatch(Object.assign({
-            action: 'view_right_panel_phase',
+        dis.dispatch({
+            action: 'set_right_panel_phase',
             phase: phase,
-        }, extras));
+            refireParams: extras,
+        });
     }
 
-    togglePhase(phase, validPhases = [phase]) {
-        if (validPhases.includes(this.state.phase)) {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        } else {
-            this.setPhase(phase);
-        }
-    }
-
-    isPhase(phases) {
-        if (this.props.collapsedRhs) {
-            return false;
-        }
+    isPhase(phases: string | string[]) {
         if (Array.isArray(phases)) {
             return phases.includes(this.state.phase);
         } else {
@@ -81,22 +70,19 @@ export default class HeaderButtons extends React.Component {
         }
     }
 
-    onAction(payload) {
-        if (payload.action === "view_right_panel_phase") {
-            this.setState({
-                phase: payload.phase,
-            });
+    onRightPanelUpdate() {
+        const rps = RightPanelStore.getSharedInstance();
+        if (this.state.headerKind === HEADER_KIND_ROOM) {
+            this.setState({phase: rps.visibleRoomPanelPhase});
+        } else if (this.state.headerKind === HEADER_KIND_GROUP) {
+            this.setState({phase: rps.visibleGroupPanelPhase});
         }
     }
 
     render() {
         // inline style as this will be swapped around in future commits
         return <div className="mx_HeaderButtons" role="tablist">
-            { this.renderButtons() }
+            {this.renderButtons()}
         </div>;
     }
 }
-
-HeaderButtons.propTypes = {
-    collapsedRhs: PropTypes.bool,
-};

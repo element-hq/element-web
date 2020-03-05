@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
@@ -114,7 +114,7 @@ export default createReactClass({
             >
                 <div className="mx_Dialog_content">
                     <p>
-                        { _t('This will allow you to return to your account after signing out, and sign in on other devices.') }
+                        { _t('This will allow you to return to your account after signing out, and sign in on other sessions.') }
                     </p>
                     <ChangePassword
                         className="mx_SetPasswordDialog_change_password"

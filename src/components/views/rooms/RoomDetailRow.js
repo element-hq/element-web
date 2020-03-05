@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from '../../../index';
-import React from 'react';
+import * as sdk from '../../../index';
+import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import { ContentRepo } from 'matrix-js-sdk';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -49,9 +49,13 @@ export default createReactClass({
     },
 
     _linkifyTopic: function() {
-        if (this.refs.topic) {
-            linkifyElement(this.refs.topic);
+        if (this._topic.current) {
+            linkifyElement(this._topic.current);
         }
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._topic = createRef();
     },
 
     componentDidMount: function() {
@@ -97,14 +101,14 @@ export default createReactClass({
             <td className="mx_RoomDirectory_roomAvatar">
                 <BaseAvatar width={24} height={24} resizeMethod='crop'
                     name={name} idName={name}
-                    url={ContentRepo.getHttpUriForMxc(
+                    url={getHttpUriForMxc(
                             MatrixClientPeg.get().getHomeserverUrl(),
                             room.avatarUrl, 24, 24, "crop")} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                 { perms }
-                <div className="mx_RoomDirectory_topic" ref="topic" onClick={this.onTopicClick}>
+                <div className="mx_RoomDirectory_topic" ref={this._topic} onClick={this.onTopicClick}>
                     { room.topic }
                 </div>
                 <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>

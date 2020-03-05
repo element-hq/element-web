@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-
 // This module contains all the code needed to log the console, persist it to
 // disk and submit bug reports. Rationale is as follows:
 //  - Monkey-patching the console is preferable to having a log library because
@@ -136,6 +134,8 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
+
+        // these promises are cleared as soon as fulfilled
         this.flushPromise = null;
         // set if flush() is called whilst one is ongoing
         this.flushAgainPromise = null;
@@ -208,16 +208,16 @@ class IndexedDBLogStore {
      */
     flush() {
         // check if a flush() operation is ongoing
-        if (this.flushPromise && this.flushPromise.isPending()) {
-            if (this.flushAgainPromise && this.flushAgainPromise.isPending()) {
-                // this is the 3rd+ time we've called flush() : return the same
-                // promise.
+        if (this.flushPromise) {
+            if (this.flushAgainPromise) {
+                // this is the 3rd+ time we've called flush() : return the same promise.
                 return this.flushAgainPromise;
             }
-            // queue up a flush to occur immediately after the pending one
-            // completes.
+            // queue up a flush to occur immediately after the pending one completes.
             this.flushAgainPromise = this.flushPromise.then(() => {
                 return this.flush();
+            }).then(() => {
+                this.flushAgainPromise = null;
             });
             return this.flushAgainPromise;
         }
@@ -225,8 +225,7 @@ class IndexedDBLogStore {
         // a brand new one, destroying the chain which may have been built up.
         this.flushPromise = new Promise((resolve, reject) => {
             if (!this.db) {
-                // not connected yet or user rejected access for us to r/w to
-                // the db.
+                // not connected yet or user rejected access for us to r/w to the db.
                 reject(new Error("No connected database"));
                 return;
             }
@@ -251,6 +250,8 @@ class IndexedDBLogStore {
             objStore.add(this._generateLogEntry(lines));
             const lastModStore = txn.objectStore("logslastmod");
             lastModStore.put(this._generateLastModifiedTime());
+        }).then(() => {
+            this.flushPromise = null;
         });
         return this.flushPromise;
     }
@@ -431,77 +432,73 @@ function selectQuery(store, keyRange, resultMapper) {
     });
 }
 
-
-module.exports = {
-
-    /**
-     * Configure rage shaking support for sending bug reports.
-     * Modifies globals.
-     * @return {Promise} Resolves when set up.
-     */
-    init: function() {
-        if (global.mx_rage_initPromise) {
-            return global.mx_rage_initPromise;
-        }
-        global.mx_rage_logger = new ConsoleLogger();
-        global.mx_rage_logger.monkeyPatch(window.console);
-
-        // just *accessing* indexedDB throws an exception in firefox with
-        // indexeddb disabled.
-        let indexedDB;
-        try {
-            indexedDB = window.indexedDB;
-        } catch (e) {}
-
-        if (indexedDB) {
-            global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
-            global.mx_rage_initPromise = global.mx_rage_store.connect();
-            return global.mx_rage_initPromise;
-        }
-        global.mx_rage_initPromise = Promise.resolve();
+/**
+ * Configure rage shaking support for sending bug reports.
+ * Modifies globals.
+ * @return {Promise} Resolves when set up.
+ */
+export function init() {
+    if (global.mx_rage_initPromise) {
         return global.mx_rage_initPromise;
-    },
+    }
+    global.mx_rage_logger = new ConsoleLogger();
+    global.mx_rage_logger.monkeyPatch(window.console);
 
-    flush: function() {
-        if (!global.mx_rage_store) {
-            return;
-        }
-        global.mx_rage_store.flush();
-    },
+    // just *accessing* indexedDB throws an exception in firefox with
+    // indexeddb disabled.
+    let indexedDB;
+    try {
+        indexedDB = window.indexedDB;
+    } catch (e) {}
 
-    /**
-     * Clean up old logs.
-     * @return Promise Resolves if cleaned logs.
-     */
-    cleanup: async function() {
-        if (!global.mx_rage_store) {
-            return;
-        }
-        await global.mx_rage_store.consume();
-    },
+    if (indexedDB) {
+        global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
+        global.mx_rage_initPromise = global.mx_rage_store.connect();
+        return global.mx_rage_initPromise;
+    }
+    global.mx_rage_initPromise = Promise.resolve();
+    return global.mx_rage_initPromise;
+}
 
-    /**
-     * Get a recent snapshot of the logs, ready for attaching to a bug report
-     *
-     * @return {Array<{lines: string, id, string}>}  list of log data
-     */
-    getLogsForReport: async function() {
-        if (!global.mx_rage_logger) {
-            throw new Error(
-                "No console logger, did you forget to call init()?",
-            );
-        }
-        // If in incognito mode, store is null, but we still want bug report
-        // sending to work going off the in-memory console logs.
-        if (global.mx_rage_store) {
-            // flush most recent logs
-            await global.mx_rage_store.flush();
-            return await global.mx_rage_store.consume();
-        } else {
-            return [{
-                lines: global.mx_rage_logger.flush(true),
-                id: "-",
-            }];
-        }
-    },
-};
+export function flush() {
+    if (!global.mx_rage_store) {
+        return;
+    }
+    global.mx_rage_store.flush();
+}
+
+/**
+ * Clean up old logs.
+ * @return Promise Resolves if cleaned logs.
+ */
+export async function cleanup() {
+    if (!global.mx_rage_store) {
+        return;
+    }
+    await global.mx_rage_store.consume();
+}
+
+/**
+ * Get a recent snapshot of the logs, ready for attaching to a bug report
+ *
+ * @return {Array<{lines: string, id, string}>}  list of log data
+ */
+export async function getLogsForReport() {
+    if (!global.mx_rage_logger) {
+        throw new Error(
+            "No console logger, did you forget to call init()?",
+        );
+    }
+    // If in incognito mode, store is null, but we still want bug report
+    // sending to work going off the in-memory console logs.
+    if (global.mx_rage_store) {
+        // flush most recent logs
+        await global.mx_rage_store.flush();
+        return await global.mx_rage_store.consume();
+    } else {
+        return [{
+            lines: global.mx_rage_logger.flush(true),
+            id: "-",
+        }];
+    }
+}

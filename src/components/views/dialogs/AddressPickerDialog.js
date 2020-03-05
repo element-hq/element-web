@@ -17,21 +17,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import { _t, _td } from '../../../languageHandler';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
-import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../utils/IdentityServerUtils';
 import { abbreviateUrl } from '../../../utils/UrlUtils';
+import {sleep} from "../../../utils/promise";
+import {Key} from "../../../Keyboard";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -43,7 +44,7 @@ const addressTypeName = {
 };
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: "AddressPickerDialog",
 
     propTypes: {
@@ -106,10 +107,14 @@ module.exports = createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._textinput = createRef();
+    },
+
     componentDidMount: function() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
-            this.refs.textinput.value = this.props.value;
+            this._textinput.current.value = this.props.value;
         }
     },
 
@@ -126,8 +131,8 @@ module.exports = createReactClass({
         let selectedList = this.state.selectedList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local selectedList
-        if (this.refs.textinput.value !== '') {
-            selectedList = this._addAddressesToList([this.refs.textinput.value]);
+        if (this._textinput.current.value !== '') {
+            selectedList = this._addAddressesToList([this._textinput.current.value]);
             if (selectedList === null) return;
         }
         this.props.onFinished(true, selectedList);
@@ -138,39 +143,41 @@ module.exports = createReactClass({
     },
 
     onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
+        const textInput = this._textinput.current ? this._textinput.current.value : undefined;
+
+        if (e.key === Key.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
-        } else if (e.keyCode === 38) { // up arrow
+        } else if (e.key === Key.ARROW_UP) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.moveSelectionUp();
-        } else if (e.keyCode === 40) { // down arrow
+        } else if (e.key === Key.ARROW_DOWN) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.moveSelectionDown();
-        } else if (this.state.suggestedList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+        } else if (this.state.suggestedList.length > 0 && [Key.COMMA, Key.ENTER, Key.TAB].includes(e.key)) {
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.chooseSelection();
-        } else if (this.refs.textinput.value.length === 0 && this.state.selectedList.length && e.keyCode === 8) { // backspace
+        } else if (textInput.length === 0 && this.state.selectedList.length && e.key === Key.BACKSPACE) {
             e.stopPropagation();
             e.preventDefault();
             this.onDismissed(this.state.selectedList.length - 1)();
-        } else if (e.keyCode === 13) { // enter
+        } else if (e.key === Key.ENTER) {
             e.stopPropagation();
             e.preventDefault();
-            if (this.refs.textinput.value === '') {
+            if (textInput === '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addAddressesToList([this.refs.textinput.value]);
+                this._addAddressesToList([textInput]);
             }
-        } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
+        } else if (textInput && (e.key === Key.COMMA || e.key === Key.TAB)) {
             e.stopPropagation();
             e.preventDefault();
-            this._addAddressesToList([this.refs.textinput.value]);
+            this._addAddressesToList([textInput]);
         }
     },
 
@@ -266,7 +273,7 @@ module.exports = createReactClass({
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });
-        }).done(() => {
+        }).then(() => {
             this.setState({
                 busy: false,
             });
@@ -379,7 +386,7 @@ module.exports = createReactClass({
                 // Do a local search immediately
                 this._doLocalSearch(query);
             }
-        }).done(() => {
+        }).then(() => {
             this.setState({
                 busy: false,
             });
@@ -533,7 +540,7 @@ module.exports = createReactClass({
         };
 
         // wait a bit to let the user finish typing
-        await Promise.delay(500);
+        await sleep(500);
         if (cancelled) return null;
 
         try {
@@ -596,6 +603,7 @@ module.exports = createReactClass({
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useDefaultIdentityServer();
 
         // Add email as a valid address type.
@@ -646,7 +654,7 @@ module.exports = createReactClass({
                 onPaste={this._onPaste}
                 rows="1"
                 id="textinput"
-                ref="textinput"
+                ref={this._textinput}
                 className="mx_AddressPickerDialog_input"
                 onChange={this.onQueryChanged}
                 placeholder={this.getPlaceholder()}

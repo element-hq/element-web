@@ -18,10 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {Room} from "matrix-js-sdk";
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../../../Terms";
 import classNames from 'classnames';
-import ScalarMessaging from "../../../ScalarMessaging";
+import * as ScalarMessaging from "../../../ScalarMessaging";
 
 export default class TabbedIntegrationManagerDialog extends React.Component {
     static propTypes = {
@@ -82,10 +82,10 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
 
         client.setTermsInteractionCallback((policyInfo, agreedUrls) => {
             // To avoid visual glitching of two modals stacking briefly, we customise the
-            // terms dialog sizing when it will appear for the integrations manager so that
+            // terms dialog sizing when it will appear for the integration manager so that
             // it gets the same basic size as the IM's own modal.
             return dialogTermsInteractionCallback(
-                policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationsManager',
+                policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationManager',
             );
         });
 
@@ -139,7 +139,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
     }
 
     _renderTab() {
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
         let uiUrl = null;
         if (this.state.currentScalarClient) {
             uiUrl = this.state.currentScalarClient.getScalarInterfaceUrlForRoom(
@@ -148,7 +148,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
                 this.props.integrationId,
             );
         }
-        return <IntegrationsManager
+        return <IntegrationManager
             configured={true}
             loading={this.state.currentLoading}
             connected={this.state.currentConnected}

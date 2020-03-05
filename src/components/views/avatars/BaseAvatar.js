@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,12 +20,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
-import AvatarLogic from '../../../Avatar';
+import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'BaseAvatar',
 
     propTypes: {
@@ -38,10 +39,16 @@ module.exports = createReactClass({
         // XXX resizeMethod not actually used.
         resizeMethod: PropTypes.string,
         defaultToInitialLetter: PropTypes.bool, // true to add default url
+        inputRef: PropTypes.oneOfType([
+            // Either a function
+            PropTypes.func,
+            // Or the instance of a DOM native element
+            PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+        ]),
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getDefaultProps: function() {
@@ -59,12 +66,12 @@ module.exports = createReactClass({
 
     componentDidMount() {
         this.unmounted = false;
-        this.context.matrixClient.on('sync', this.onClientSync);
+        this.context.on('sync', this.onClientSync);
     },
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this.context.removeListener('sync', this.onClientSync);
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -148,7 +155,7 @@ module.exports = createReactClass({
 
         const {
             name, idName, title, url, urls, width, height, resizeMethod,
-            defaultToInitialLetter, onClick,
+            defaultToInitialLetter, onClick, inputRef,
             ...otherProps
         } = this.props;
 
@@ -171,7 +178,7 @@ module.exports = createReactClass({
             if (onClick != null) {
                 return (
                     <AccessibleButton element='span' className="mx_BaseAvatar"
-                        onClick={onClick} {...otherProps}
+                        onClick={onClick} inputRef={inputRef} {...otherProps}
                     >
                         { textNode }
                         { imgNode }
@@ -179,7 +186,7 @@ module.exports = createReactClass({
                 );
             } else {
                 return (
-                    <span className="mx_BaseAvatar" {...otherProps}>
+                    <span className="mx_BaseAvatar" ref={inputRef} {...otherProps}>
                         { textNode }
                         { imgNode }
                     </span>
@@ -188,21 +195,26 @@ module.exports = createReactClass({
         }
         if (onClick != null) {
             return (
-                <AccessibleButton className="mx_BaseAvatar mx_BaseAvatar_image"
+                <AccessibleButton
+                    className="mx_BaseAvatar mx_BaseAvatar_image"
                     element='img'
                     src={imageUrl}
                     onClick={onClick}
                     onError={this.onError}
                     width={width} height={height}
                     title={title} alt=""
+                    inputRef={inputRef}
                     {...otherProps} />
             );
         } else {
             return (
-                <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
+                <img
+                    className="mx_BaseAvatar mx_BaseAvatar_image"
+                    src={imageUrl}
                     onError={this.onError}
                     width={width} height={height}
                     title={title} alt=""
+                    ref={inputRef}
                     {...otherProps} />
             );
         }

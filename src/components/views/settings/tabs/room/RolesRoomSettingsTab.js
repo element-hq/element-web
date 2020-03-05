@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t, _td} from "../../../../../languageHandler";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 
@@ -107,20 +107,20 @@ export default class RolesRoomSettingsTab extends React.Component {
     };
 
     componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership.bind(this));
+        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership);
     }
 
     componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.members", this._onRoomMembership.bind(this));
+            client.removeListener("RoomState.members", this._onRoomMembership);
         }
     }
 
-    _onRoomMembership(event, state, member) {
+    _onRoomMembership = (event, state, member) => {
         if (state.roomId !== this.props.roomId) return;
         this.forceUpdate();
-    }
+    };
 
     _populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
         for (const desiredEvent of Object.keys(plEventsToShow)) {

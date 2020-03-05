@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
 
 const DEFAULT_ICON_URL = require("../../../../res/img/network-matrix.svg");

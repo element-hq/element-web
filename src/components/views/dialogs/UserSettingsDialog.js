@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tab, TabbedView} from "../../structures/TabbedView";
+import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -27,13 +28,35 @@ import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSet
 import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
 import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
+import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
     };
+
+    constructor() {
+        super();
+
+        this.state = {
+            mjolnirEnabled: SettingsStore.isFeatureEnabled("feature_mjolnir"),
+        };
+    }
+
+    componentDidMount(): void {
+        this._mjolnirWatcher = SettingsStore.watchSetting("feature_mjolnir", null, this._mjolnirChanged.bind(this));
+    }
+
+    componentWillUnmount(): void {
+        SettingsStore.unwatchSetting(this._mjolnirWatcher);
+    }
+
+    _mjolnirChanged(settingName, roomId, atLevel, newValue) {
+        // We can cheat because we know what levels a feature is tracked at, and how it is tracked
+        this.setState({mjolnirEnabled: newValue});
+    }
 
     _getTabs() {
         const tabs = [];
@@ -73,6 +96,13 @@ export default class UserSettingsDialog extends React.Component {
                 _td("Labs"),
                 "mx_UserSettingsDialog_labsIcon",
                 <LabsUserSettingsTab />,
+            ));
+        }
+        if (this.state.mjolnirEnabled) {
+            tabs.push(new Tab(
+                _td("Ignored users"),
+                "mx_UserSettingsDialog_mjolnirIcon",
+                <MjolnirUserSettingsTab />,
             ));
         }
         tabs.push(new Tab(

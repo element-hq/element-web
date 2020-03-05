@@ -16,8 +16,19 @@ limitations under the License.
 
 import { createClient, SERVICE_TYPES } from 'matrix-js-sdk';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import Modal from './Modal';
+import * as sdk from './index';
+import { _t } from './languageHandler';
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
+import {
+    doesAccountDataHaveIdentityServer,
+    doesIdentityServerHaveTerms,
+    useDefaultIdentityServer,
+} from './utils/IdentityServerUtils';
+import { abbreviateUrl } from './utils/UrlUtils';
+
+export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
     /**
@@ -89,7 +100,10 @@ export default class IdentityAuthClient {
             try {
                 await this._checkToken(token);
             } catch (e) {
-                if (e instanceof TermsNotSignedError) {
+                if (
+                    e instanceof TermsNotSignedError ||
+                    e instanceof AbortedIdentityActionError
+                ) {
                     // Retrying won't help this
                     throw e;
                 }
@@ -106,6 +120,8 @@ export default class IdentityAuthClient {
     }
 
     async _checkToken(token) {
+        const identityServerUrl = this._matrixClient.getIdentityServerUrl();
+
         try {
             await this._matrixClient.getIdentityAccount(token);
         } catch (e) {
@@ -113,12 +129,48 @@ export default class IdentityAuthClient {
                 console.log("Identity Server requires new terms to be agreed to");
                 await startTermsFlow([new Service(
                     SERVICE_TYPES.IS,
-                    this._matrixClient.getIdentityServerUrl(),
+                    identityServerUrl,
                     token,
                 )]);
                 return;
             }
             throw e;
+        }
+
+        if (
+            !this.tempClient &&
+            !doesAccountDataHaveIdentityServer() &&
+            !await doesIdentityServerHaveTerms(identityServerUrl)
+        ) {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const { finished } = Modal.createTrackedDialog('Default identity server terms warning', '',
+                QuestionDialog, {
+                title: _t("Identity server has no terms of service"),
+                description: (
+                    <div>
+                        <p>{_t(
+                            "This action requires accessing the default identity server " +
+                            "<server /> to validate an email address or phone number, " +
+                            "but the server does not have any terms of service.", {},
+                            {
+                                server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
+                            },
+                        )}</p>
+                        <p>{_t(
+                            "Only continue if you trust the owner of the server.",
+                        )}</p>
+                    </div>
+                ),
+                button: _t("Trust"),
+            });
+            const [confirmed] = await finished;
+            if (confirmed) {
+                useDefaultIdentityServer();
+            } else {
+                throw new AbortedIdentityActionError(
+                    "User aborted identity server action without terms",
+                );
+            }
         }
 
         // We should ensure the token in `localStorage` is cleared
@@ -131,8 +183,10 @@ export default class IdentityAuthClient {
     async registerForToken(check=true) {
         try {
             const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
-            const { access_token: identityAccessToken } =
+            // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
+            const { access_token: accessToken, token } =
                 await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
+            const identityAccessToken = token ? token : accessToken;
             if (check) await this._checkToken(identityAccessToken);
             return identityAccessToken;
         } catch (e) {

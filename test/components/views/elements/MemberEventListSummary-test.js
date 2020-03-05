@@ -1,9 +1,7 @@
-import expect from 'expect';
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ShallowRenderer from "react-test-renderer/shallow";
-import sdk from 'matrix-react-sdk';
-import * as languageHandler from '../../../../src/languageHandler';
+import sdk from '../../../skinned-sdk';
 import * as testUtils from '../../../test-utils';
 
 // Give MELS a matrixClient in its child context
@@ -12,8 +10,6 @@ const MemberEventListSummary = testUtils.wrapInMatrixClientContext(
 );
 
 describe('MemberEventListSummary', function() {
-    let sandbox;
-
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events) => {
         return events.map((e) => {
@@ -87,18 +83,8 @@ describe('MemberEventListSummary', function() {
         return eventsForUsers;
     };
 
-    beforeEach(function(done) {
-        testUtils.beforeEach(this);
-        sandbox = testUtils.stubClient();
-
-        languageHandler.setLanguage('en').done(done);
-        languageHandler.setMissingEntryGenerator(function(key) {
-            return key.split('|', 2)[1];
-        });
-    });
-
-    afterEach(function() {
-        sandbox.restore();
+    beforeEach(function() {
+        testUtils.stubClient();
     });
 
     it('renders expanded events if there are less than props.threshold', function() {
@@ -115,7 +101,8 @@ describe('MemberEventListSummary', function() {
 
         const renderer = new ShallowRenderer();
         renderer.render(<MemberEventListSummary {...props} />);
-        const result = renderer.getRenderOutput();
+        const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
+        const result = wrapper.props.children;
 
         expect(result.props.children).toEqual([
           <div className="event_tile" key="event0">Expanded membership</div>,
@@ -137,7 +124,8 @@ describe('MemberEventListSummary', function() {
 
         const renderer = new ShallowRenderer();
         renderer.render(<MemberEventListSummary {...props} />);
-        const result = renderer.getRenderOutput();
+        const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
+        const result = wrapper.props.children;
 
         expect(result.props.children).toEqual([
           <div className="event_tile" key="event0">Expanded membership</div>,
@@ -165,7 +153,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe("user_1 joined and left and joined");
     });
@@ -201,7 +189,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe("user_1 joined and left 7 times");
     });
@@ -249,7 +237,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 was unbanned, joined and left 7 times and was invited",
@@ -302,7 +290,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 was unbanned, joined and left 2 times, was banned, " +
@@ -361,7 +349,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 and one other were unbanned, joined and left 2 times and were banned",
@@ -399,7 +387,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
@@ -450,7 +438,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
@@ -524,7 +512,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
@@ -571,7 +559,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 and one other rejected their invitations and " +
@@ -607,7 +595,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 rejected their invitation 2 times",
@@ -635,7 +623,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1 and user_2 joined 2 times",
@@ -662,7 +650,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_1, user_2 and one other joined",
@@ -687,7 +675,7 @@ describe('MemberEventListSummary', function() {
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
             instance, "mx_EventListSummary_summary",
         );
-        const summaryText = summary.innerText;
+        const summaryText = summary.textContent;
 
         expect(summaryText).toBe(
             "user_0, user_1 and 18 others joined",

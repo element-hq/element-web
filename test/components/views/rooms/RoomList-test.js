@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
 import lolex from 'lolex';
 
-import * as TestUtils from 'test-utils';
+import * as TestUtils from '../../../test-utils';
 
-import sdk from '../../../../src/index';
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import sdk from '../../../skinned-sdk';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher';
@@ -15,6 +14,7 @@ import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
 import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
+import {TAG_DM} from "../../../../src/stores/RoomListStore";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -31,7 +31,6 @@ describe('RoomList', () => {
     }
 
     let parentDiv = null;
-    let sandbox = null;
     let client = null;
     let root = null;
     const myUserId = '@me:domain';
@@ -45,8 +44,7 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
-        sandbox = TestUtils.stubClient(sandbox);
+        TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
@@ -112,7 +110,6 @@ describe('RoomList', () => {
             parentDiv.remove();
             parentDiv = null;
         }
-        sandbox.restore();
 
         clock.uninstall();
 
@@ -156,7 +153,7 @@ describe('RoomList', () => {
         // Set up the room that will be moved such that it has the correct state for a room in
         // the section for oldTag
         if (['m.favourite', 'm.lowpriority'].includes(oldTag)) movingRoom.tags = {[oldTag]: {}};
-        if (oldTag === 'im.vector.fake.direct') {
+        if (oldTag === TAG_DM) {
             // Mock inverse m.direct
             DMRoomMap.shared().roomToUser = {
                 [movingRoom.roomId]: '@someotheruser:domain',
@@ -181,9 +178,9 @@ describe('RoomList', () => {
 
     function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
         // TODO: Re-enable dragging tests when we support dragging again.
-        xdescribe('does correct optimistic update when dragging from', () => {
+        describe.skip('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
-                expectCorrectMove(undefined, 'im.vector.fake.direct');
+                expectCorrectMove(undefined, TAG_DM);
             });
 
             it('rooms to favourites', () => {
@@ -198,15 +195,15 @@ describe('RoomList', () => {
             // Whe running the app live, it updates when some other event occurs (likely the
             // m.direct arriving) that these tests do not fire.
             xit('people to rooms', () => {
-                expectCorrectMove('im.vector.fake.direct', undefined);
+                expectCorrectMove(TAG_DM, undefined);
             });
 
             it('people to favourites', () => {
-                expectCorrectMove('im.vector.fake.direct', 'm.favourite');
+                expectCorrectMove(TAG_DM, 'm.favourite');
             });
 
             it('people to lowpriority', () => {
-                expectCorrectMove('im.vector.fake.direct', 'm.lowpriority');
+                expectCorrectMove(TAG_DM, 'm.lowpriority');
             });
 
             it('low priority to rooms', () => {
@@ -214,7 +211,7 @@ describe('RoomList', () => {
             });
 
             it('low priority to people', () => {
-                expectCorrectMove('m.lowpriority', 'im.vector.fake.direct');
+                expectCorrectMove('m.lowpriority', TAG_DM);
             });
 
             it('low priority to low priority', () => {
@@ -226,7 +223,7 @@ describe('RoomList', () => {
             });
 
             it('favourites to people', () => {
-                expectCorrectMove('m.favourite', 'im.vector.fake.direct');
+                expectCorrectMove('m.favourite', TAG_DM);
             });
 
             it('favourites to low priority', () => {

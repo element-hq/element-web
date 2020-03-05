@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,11 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
-import MatrixClientPeg from '../MatrixClientPeg';
-import sdk from '../index';
+import {MatrixClientPeg} from '../MatrixClientPeg';
+import * as sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
+import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -44,6 +46,7 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
+    matrixClientIsReady: false,
 };
 
 /**
@@ -57,9 +60,26 @@ class RoomViewStore extends Store {
 
         // Initialise state
         this._state = INITIAL_STATE;
+        if (MatrixClientPeg.get()) {
+            this._state.matrixClientIsReady = MatrixClientPeg.get().isInitialSyncComplete();
+        }
     }
 
     _setState(newState) {
+        // If values haven't changed, there's nothing to do.
+        // This only tries a shallow comparison, so unchanged objects will slip
+        // through, but that's probably okay for now.
+        let stateChanged = false;
+        for (const key of Object.keys(newState)) {
+            if (this._state[key] !== newState[key]) {
+                stateChanged = true;
+                break;
+            }
+        }
+        if (!stateChanged) {
+            return;
+        }
+
         this._state = Object.assign(this._state, newState);
         this.__emitChange();
     }
@@ -134,10 +154,15 @@ class RoomViewStore extends Store {
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
+            case 'sync_state':
+                this._setState({
+                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
+                });
+                break;
         }
     }
 
-    _viewRoom(payload) {
+    async _viewRoom(payload) {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
@@ -176,34 +201,44 @@ class RoomViewStore extends Store {
                 this._joinRoom(payload);
             }
         } else if (payload.room_alias) {
-            // Resolve the alias and then do a second dispatch with the room ID acquired
-            this._setState({
-                roomId: null,
-                initialEventId: null,
-                initialEventPixelOffset: null,
-                isInitialEventHighlighted: null,
-                roomAlias: payload.room_alias,
-                roomLoading: true,
-                roomLoadError: null,
-            });
-            MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-            (result) => {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: result.room_id,
-                    event_id: payload.event_id,
-                    highlighted: payload.highlighted,
-                    room_alias: payload.room_alias,
-                    auto_join: payload.auto_join,
-                    oob_data: payload.oob_data,
+            // Try the room alias to room ID navigation cache first to avoid
+            // blocking room navigation on the homeserver.
+            let roomId = getCachedRoomIDForAlias(payload.room_alias);
+            if (!roomId) {
+                // Room alias cache miss, so let's ask the homeserver. Resolve the alias
+                // and then do a second dispatch with the room ID acquired.
+                this._setState({
+                    roomId: null,
+                    initialEventId: null,
+                    initialEventPixelOffset: null,
+                    isInitialEventHighlighted: null,
+                    roomAlias: payload.room_alias,
+                    roomLoading: true,
+                    roomLoadError: null,
                 });
-            }, (err) => {
-                dis.dispatch({
-                    action: 'view_room_error',
-                    room_id: null,
-                    room_alias: payload.room_alias,
-                    err: err,
-                });
+                try {
+                    const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
+                    storeRoomAliasInCache(payload.room_alias, result.room_id);
+                    roomId = result.room_id;
+                } catch (err) {
+                    dis.dispatch({
+                        action: 'view_room_error',
+                        room_id: null,
+                        room_alias: payload.room_alias,
+                        err,
+                    });
+                    return;
+                }
+            }
+
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId,
+                event_id: payload.event_id,
+                highlighted: payload.highlighted,
+                room_alias: payload.room_alias,
+                auto_join: payload.auto_join,
+                oob_data: payload.oob_data,
             });
         }
     }
@@ -223,7 +258,7 @@ class RoomViewStore extends Store {
         });
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
-        ).done(() => {
+        ).then(() => {
             // We don't actually need to do anything here: we do *not*
             // clear the 'joining' flag because the Room object and/or
             // our 'joined' member event may not have come down the sync
@@ -338,7 +373,7 @@ class RoomViewStore extends Store {
     }
 
     shouldPeek() {
-        return this._state.shouldPeek;
+        return this._state.shouldPeek && this._state.matrixClientIsReady;
     }
 }
 
@@ -346,4 +381,4 @@ let singletonRoomViewStore = null;
 if (!singletonRoomViewStore) {
     singletonRoomViewStore = new RoomViewStore();
 }
-module.exports = singletonRoomViewStore;
+export default singletonRoomViewStore;

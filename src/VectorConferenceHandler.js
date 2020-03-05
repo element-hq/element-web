@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-import {createNewMatrixCall, Room} from "matrix-js-sdk";
+import {createNewMatrixCall as jsCreateNewMatrixCall, Room} from "matrix-js-sdk";
 import CallHandler from './CallHandler';
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 
 // FIXME: this is Riot (Vector) specific code, but will be removed shortly when
 // we switch over to jitsi entirely for video conferencing.
@@ -29,10 +29,10 @@ import MatrixClientPeg from "./MatrixClientPeg";
 const USER_PREFIX = "fs_";
 const DOMAIN = "matrix.org";
 
-function ConferenceCall(matrixClient, groupChatRoomId) {
+export function ConferenceCall(matrixClient, groupChatRoomId) {
     this.client = matrixClient;
     this.groupRoomId = groupChatRoomId;
-    this.confUserId = module.exports.getConferenceUserIdForRoom(this.groupRoomId);
+    this.confUserId = getConferenceUserIdForRoom(this.groupRoomId);
 }
 
 ConferenceCall.prototype.setup = function() {
@@ -43,7 +43,7 @@ ConferenceCall.prototype.setup = function() {
         // return a call for *this* room to be placed. We also tack on
         // confUserId to speed up lookups (else we'd need to loop every room
         // looking for a 1:1 room with this conf user ID!)
-        const call = createNewMatrixCall(self.client, room.roomId);
+        const call = jsCreateNewMatrixCall(self.client, room.roomId);
         call.confUserId = self.confUserId;
         call.groupRoomId = self.groupRoomId;
         return call;
@@ -91,7 +91,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
  * @param {string} userId The user ID to check.
  * @return {boolean} True if it is a conference bot.
  */
-module.exports.isConferenceUser = function(userId) {
+export function isConferenceUser(userId) {
     if (userId.indexOf("@" + USER_PREFIX) !== 0) {
         return false;
     }
@@ -102,26 +102,26 @@ module.exports.isConferenceUser = function(userId) {
         return /^!.+:.+/.test(decoded);
     }
     return false;
-};
+}
 
-module.exports.getConferenceUserIdForRoom = function(roomId) {
+export function getConferenceUserIdForRoom(roomId) {
     // abuse browserify's core node Buffer support (strip padding ='s)
     const base64RoomId = new Buffer(roomId).toString("base64").replace(/=/g, "");
     return "@" + USER_PREFIX + base64RoomId + ":" + DOMAIN;
-};
+}
 
-module.exports.createNewMatrixCall = function(client, roomId) {
+export function createNewMatrixCall(client, roomId) {
     const confCall = new ConferenceCall(
         client, roomId,
     );
     return confCall.setup();
-};
+}
 
-module.exports.getConferenceCallForRoom = function(roomId) {
+export function getConferenceCallForRoom(roomId) {
     // search for a conference 1:1 call for this group chat room ID
     const activeCall = CallHandler.getAnyActiveCall();
     if (activeCall && activeCall.confUserId) {
-        const thisRoomConfUserId = module.exports.getConferenceUserIdForRoom(
+        const thisRoomConfUserId = getConferenceUserIdForRoom(
             roomId,
         );
         if (thisRoomConfUserId === activeCall.confUserId) {
@@ -129,8 +129,7 @@ module.exports.getConferenceCallForRoom = function(roomId) {
         }
     }
     return null;
-};
+}
 
-module.exports.ConferenceCall = ConferenceCall;
-
-module.exports.slot = 'conference';
+// TODO: Document this.
+export const slot = 'conference';

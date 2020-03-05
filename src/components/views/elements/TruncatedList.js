@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TruncatedList',
 
     propTypes: {

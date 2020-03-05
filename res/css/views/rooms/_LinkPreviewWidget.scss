@@ -52,12 +52,18 @@ limitations under the License.
 }
 
 .mx_LinkPreviewWidget_cancel {
-    visibility: hidden;
     cursor: pointer;
-    flex: 0 0 40px;
+    width: 18px;
+    height: 18px;
+
+    img {
+        flex: 0 0 40px;
+        visibility: hidden;
+    }
 }
 
-.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel {
+.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel img,
+.mx_LinkPreviewWidget_cancel.focus-visible:focus img {
     visibility: visible;
 }
 

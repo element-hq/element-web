@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,18 +18,18 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'GroupRoomInfo',
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     propTypes: {
@@ -206,7 +207,7 @@ module.exports = createReactClass({
         const avatarUrl = this.state.groupRoom.avatarUrl;
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = (<div className="mx_MemberInfo_avatar">
                             <img src={httpUrl} />
                         </div>);

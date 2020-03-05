@@ -68,7 +68,7 @@ limitations under the License.
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
     height: 40px;
-    padding: 5px 0 4px 0;
+    padding: 10px 0 9px 0;
 }
 
 .mx_TagPanel .mx_TagTile {
@@ -82,21 +82,39 @@ limitations under the License.
     // opacity: 1;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
-    background-color: $accent-color;
-    border-radius: 40px;
-
-    /* In case this is a "initial" avatar */
-    display: block;
+.mx_TagPanel .mx_TagTile_plus {
+    margin-bottom: 12px;
     height: 40px;
     width: 40px;
+    border-radius: 20px;
+    background-color: $roomheader-addroom-bg-color;
+    position: relative;
+    /* overwrite mx_RoleButton inline-block */
+    display: block !important;
+
+    &::before {
+        background-color: $roomheader-addroom-fg-color;
+        mask-image: url('$(res)/img/feather-customised/plus.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
-.mx_TagPanel .mx_TagTile_selected .mx_BaseAvatar_image {
-    border: 3px solid $accent-color;
-    height: 40px;
-    width: 40px;
-    box-sizing: border-box;
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
+    content: '';
+    height: 56px;
+    background-color: $accent-color;
+    width: 5px;
+    position: absolute;
+    left: -15px;
+    border-radius: 0 3px 3px 0;
+    top: -8px; // (56 - 40)/2
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {

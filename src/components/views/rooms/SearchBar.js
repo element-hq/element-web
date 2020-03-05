@@ -14,19 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
-const classNames = require('classnames');
-const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
+import AccessibleButton from "../elements/AccessibleButton";
+import classNames from "classnames";
 import { _t } from '../../../languageHandler';
+import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchBar',
 
     getInitialState: function() {
         return ({
             scope: 'Room',
         });
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._search_term = createRef();
     },
 
     onThisRoomClick: function() {
@@ -38,38 +43,52 @@ module.exports = createReactClass({
     },
 
     onSearchChange: function(e) {
-        if (e.keyCode === 13) { // on enter...
-            this.onSearch();
-        }
-        if (e.keyCode === 27) { // escape...
-            this.props.onCancelClick();
+        switch (e.key) {
+            case Key.ENTER:
+                this.onSearch();
+                break;
+            case Key.ESCAPE:
+                this.props.onCancelClick();
+                break;
         }
     },
 
     _searchIfQuery: function() {
-        if (this.refs.search_term.value) {
+        if (this._search_term.current.value) {
             this.onSearch();
         }
     },
 
     onSearch: function() {
-        this.props.onSearch(this.refs.search_term.value, this.state.scope);
+        this.props.onSearch(this._search_term.current.value, this.state.scope);
     },
 
     render: function() {
-        const searchButtonClasses = classNames({ mx_SearchBar_searchButton: true, mx_SearchBar_searching: this.props.searchInProgress });
-        const thisRoomClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'Room' });
-        const allRoomsClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'All' });
+        const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
+            mx_SearchBar_searching: this.props.searchInProgress,
+        });
+        const thisRoomClasses = classNames("mx_SearchBar_button", {
+            mx_SearchBar_unselected: this.state.scope !== 'Room',
+        });
+        const allRoomsClasses = classNames("mx_SearchBar_button", {
+            mx_SearchBar_unselected: this.state.scope !== 'All',
+        });
 
         return (
             <div className="mx_SearchBar">
-                <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick}>{_t("This Room")}</AccessibleButton>
-                <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick}>{_t("All Rooms")}</AccessibleButton>
-                <div className="mx_SearchBar_input mx_textinput">
-                    <input ref="search_term" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
-                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}></AccessibleButton>
+                <div className="mx_SearchBar_buttons" role="radiogroup">
+                    <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick} aria-checked={this.state.scope === 'Room'} role="radio">
+                        {_t("This Room")}
+                    </AccessibleButton>
+                    <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick} aria-checked={this.state.scope === 'All'} role="radio">
+                        {_t("All Rooms")}
+                    </AccessibleButton>
                 </div>
-                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}></AccessibleButton>
+                <div className="mx_SearchBar_input mx_textinput">
+                    <input ref={this._search_term} type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
+                </div>
+                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
             </div>
         );
     },

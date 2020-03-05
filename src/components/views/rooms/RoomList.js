@@ -17,29 +17,30 @@ limitations under the License.
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Timer from "../../../utils/Timer";
-
 import React from "react";
 import ReactDOM from "react-dom";
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import * as utils from "matrix-js-sdk/src/utils";
 import { _t } from '../../../languageHandler';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const CallHandler = require('../../../CallHandler');
-const dis = require("../../../dispatcher");
-const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import rate_limited_func from "../../../ratelimitedfunc";
 import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
-const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
-import RoomListStore from '../../../stores/RoomListStore';
+import RoomListStore, {TAG_DM} from '../../../stores/RoomListStore';
 import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
-
+import CallHandler from "../../../CallHandler";
+import dis from "../../../dispatcher";
+import * as sdk from "../../../index";
+import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
+import {RovingTabIndexProvider} from "../../../accessibility/RovingTabIndex";
+
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 const HOVER_MOVE_TIMEOUT = 1000;
@@ -49,22 +50,7 @@ function labelForTagName(tagName) {
     return tagName;
 }
 
-function phraseForSection(section) {
-    switch (section) {
-        case 'm.favourite':
-            return _t('Drop here to favourite');
-        case 'im.vector.fake.direct':
-            return _t('Drop here to tag direct chat');
-        case 'im.vector.fake.recent':
-            return _t('Drop here to restore');
-        case 'm.lowpriority':
-            return _t('Drop here to demote');
-        default:
-            return _t('Drop here to tag %(section)s', {section: section});
-    }
-}
-
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomList',
 
     propTypes: {
@@ -203,7 +189,7 @@ module.exports = createReactClass({
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse"
+            reverse: "mx_ResizeHandle_reverse",
         });
         this._layout.update(
             this._layoutSections,
@@ -399,7 +385,7 @@ module.exports = createReactClass({
         this._delayedRefreshRoomList();
     },
 
-    _delayedRefreshRoomList: new rate_limited_func(function() {
+    _delayedRefreshRoomList: rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
 
@@ -584,23 +570,6 @@ module.exports = createReactClass({
         }
     },
 
-    _getHeaderItems: function(section) {
-        const StartChatButton = sdk.getComponent('elements.StartChatButton');
-        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
-        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        switch (section) {
-            case 'im.vector.fake.direct':
-                return <span className="mx_RoomList_headerButtons">
-                    <StartChatButton size="16" />
-                </span>;
-            case 'im.vector.fake.recent':
-                return <span className="mx_RoomList_headerButtons">
-                    <RoomDirectoryButton size="16" />
-                    <CreateRoomButton size="16" />
-                </span>;
-        }
-    },
-
     _makeGroupInviteTiles(filter) {
         const ret = [];
         const lcFilter = filter && filter.toLowerCase();
@@ -621,10 +590,17 @@ module.exports = createReactClass({
     _applySearchFilter: function(list, filter) {
         if (filter === "") return list;
         const lcFilter = filter.toLowerCase();
+        // apply toLowerCase before and after removeHiddenChars because different rules get applied
+        // e.g M -> M but m -> n, yet some unicode homoglyphs come out as uppercase, e.g 𝚮 -> H
+        const fuzzyFilter = utils.removeHiddenChars(lcFilter).toLowerCase();
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
-        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
-            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
+        return list.filter((room) => {
+            if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
+                return true;
+            }
+            return room.name && utils.removeHiddenChars(room.name.toLowerCase()).toLowerCase().includes(fuzzyFilter);
+        });
     },
 
     _handleCollapsedState: function(key, collapsed) {
@@ -660,7 +636,6 @@ module.exports = createReactClass({
         const defaultProps = {
             collapsed: this.props.collapsed,
             isFiltered: !!this.props.searchFilter,
-            incomingCall: this.state.incomingCall,
         };
 
         subListsProps.forEach((p) => {
@@ -673,10 +648,10 @@ module.exports = createReactClass({
         }));
 
         return subListsProps.reduce((components, props, i) => {
-            props = Object.assign({}, defaultProps, props);
+            props = {...defaultProps, ...props};
             const isLast = i === subListsProps.length - 1;
             const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-            const {key, label, onHeaderClick, ... otherProps} = props;
+            const {key, label, onHeaderClick, ...otherProps} = props;
             const chosenKey = key || label;
             const onSubListHeaderClick = (collapsed) => {
                 this._handleCollapsedState(chosenKey, collapsed);
@@ -684,12 +659,12 @@ module.exports = createReactClass({
                     onHeaderClick(collapsed);
                 }
             };
-            let startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
+            const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
             this._layoutSections.push({
                 id: chosenKey,
                 count: len,
             });
-            let subList = (<RoomSubList
+            const subList = (<RoomSubList
                 ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
                 forceExpand={!!this.props.searchFilter}
@@ -725,13 +700,11 @@ module.exports = createReactClass({
                 list: [],
                 extraTiles: this._makeGroupInviteTiles(this.props.searchFilter),
                 label: _t('Community Invites'),
-                order: "recent",
                 isInvite: true,
             },
             {
                 list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.invite'),
                 isInvite: true,
             },
@@ -739,24 +712,19 @@ module.exports = createReactClass({
                 list: this.state.lists['m.favourite'],
                 label: _t('Favourites'),
                 tagName: "m.favourite",
-                order: "manual",
                 incomingCall: incomingCallIfTaggedAs('m.favourite'),
             },
             {
-                list: this.state.lists['im.vector.fake.direct'],
-                label: _t('People'),
-                tagName: "im.vector.fake.direct",
-                headerItems: this._getHeaderItems('im.vector.fake.direct'),
-                order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
-                onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
+                list: this.state.lists[TAG_DM],
+                label: _t('Direct Messages'),
+                tagName: TAG_DM,
+                incomingCall: incomingCallIfTaggedAs(TAG_DM),
+                onAddRoom: () => {dis.dispatch({action: 'view_create_chat'});},
                 addRoomLabel: _t("Start chat"),
             },
             {
                 list: this.state.lists['im.vector.fake.recent'],
                 label: _t('Rooms'),
-                headerItems: this._getHeaderItems('im.vector.fake.recent'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'});},
             },
@@ -771,7 +739,6 @@ module.exports = createReactClass({
                     key: tagName,
                     label: labelForTagName(tagName),
                     tagName: tagName,
-                    order: "manual",
                     incomingCall: incomingCallIfTaggedAs(tagName),
                 };
             });
@@ -781,13 +748,11 @@ module.exports = createReactClass({
                 list: this.state.lists['m.lowpriority'],
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('m.lowpriority'),
             },
             {
                 list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.archived'),
                 startAsHidden: true,
                 showSpinner: this.state.isLoadingLeftRooms,
@@ -797,18 +762,28 @@ module.exports = createReactClass({
                 list: this.state.lists['m.server_notice'],
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('m.server_notice'),
             },
         ]);
 
         const subListComponents = this._mapSubListProps(subLists);
 
+        const {resizeNotifier, collapsed, searchFilter, ConferenceHandler, onKeyDown, ...props} = this.props; // eslint-disable-line
         return (
-            <div ref={this._collectResizeContainer} className="mx_RoomList" role="listbox" aria-label={_t("Rooms")}
-                 onMouseMove={this.onMouseMove} onMouseLeave={this.onMouseLeave}>
-                { subListComponents }
-            </div>
+            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+                {({onKeyDownHandler}) => <div
+                    {...props}
+                    onKeyDown={onKeyDownHandler}
+                    ref={this._collectResizeContainer}
+                    className="mx_RoomList"
+                    role="tree"
+                    aria-label={_t("Rooms")}
+                    onMouseMove={this.onMouseMove}
+                    onMouseLeave={this.onMouseLeave}
+                >
+                    { subListComponents }
+                </div> }
+            </RovingTabIndexProvider>
         );
     },
 });

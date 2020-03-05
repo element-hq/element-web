@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import MImageBody from './MImageBody';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody

@@ -117,11 +117,16 @@ limitations under the License.
     .mx_RoomPreviewBar_actions {
         flex-direction: column-reverse;
         .mx_AccessibleButton {
-            padding: 7px 50px;//extra wide
+            padding: 7px 50px; //extra wide
         }
 
         & > * {
             margin-top: 12px;
+        }
+        .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
+            // to account for the padding of the primary button which causes inconsistent look between
+            // subsequent secondary (text) buttons
+            margin-bottom: 7px;
         }
     }
 }

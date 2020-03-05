@@ -18,9 +18,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClient} from 'matrix-js-sdk';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 
 class FlairAvatar extends React.Component {
@@ -40,7 +40,7 @@ class FlairAvatar extends React.Component {
     }
 
     render() {
-        const httpUrl = this.context.matrixClient.mxcUrlToHttp(
+        const httpUrl = this.context.mxcUrlToHttp(
             this.props.groupProfile.avatarUrl, 16, 16, 'scale', false);
         const tooltip = this.props.groupProfile.name ?
             `${this.props.groupProfile.name} (${this.props.groupProfile.groupId})`:
@@ -62,9 +62,7 @@ FlairAvatar.propTypes = {
     }),
 };
 
-FlairAvatar.contextTypes = {
-    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-};
+FlairAvatar.contextType = MatrixClientContext;
 
 export default class Flair extends React.Component {
     constructor() {
@@ -92,7 +90,7 @@ export default class Flair extends React.Component {
         for (const groupId of groups) {
             let groupProfile = null;
             try {
-                groupProfile = await FlairStore.getGroupProfileCached(this.context.matrixClient, groupId);
+                groupProfile = await FlairStore.getGroupProfileCached(this.context, groupId);
             } catch (err) {
                 console.error('Could not get profile for group', groupId, err);
             }
@@ -134,6 +132,4 @@ Flair.propTypes = {
     groups: PropTypes.arrayOf(PropTypes.string),
 };
 
-Flair.contextTypes = {
-    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-};
+Flair.contextType = MatrixClientContext;

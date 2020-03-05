@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
 import {parseEvent} from "../../src/editor/deserialize";
 import {createPartCreator} from "./mock";
 
@@ -208,9 +207,9 @@ describe('editor/deserialize', function() {
             expect(parts.length).toBe(5);
             expect(parts[0]).toStrictEqual({type: "plain", text: "1. Start"});
             expect(parts[1]).toStrictEqual({type: "newline", text: "\n"});
-            expect(parts[2]).toStrictEqual({type: "plain", text: "1. Continue"});
+            expect(parts[2]).toStrictEqual({type: "plain", text: "2. Continue"});
             expect(parts[3]).toStrictEqual({type: "newline", text: "\n"});
-            expect(parts[4]).toStrictEqual({type: "plain", text: "1. Finish"});
+            expect(parts[4]).toStrictEqual({type: "plain", text: "3. Finish"});
         });
         it('mx-reply is stripped', function() {
             const html = "<mx-reply>foo</mx-reply>bar";

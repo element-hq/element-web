@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 import dis from "./dispatcher";
 import Timer from './utils/Timer';
 
@@ -96,7 +97,7 @@ class Presence {
 
         try {
             await MatrixClientPeg.get().setPresence(this.state);
-            console.log("Presence: %s", newState);
+            console.info("Presence: %s", newState);
         } catch (err) {
             console.error("Failed to set presence: %s", err);
             this.state = oldState;
@@ -104,4 +105,4 @@ class Presence {
     }
 }
 
-module.exports = new Presence();
+export default new Presence();

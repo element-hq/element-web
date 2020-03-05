@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {createRef} from "react";
 import dis from "../../../dispatcher";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import Analytics from "../../../Analytics";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
@@ -31,6 +31,9 @@ import {_t} from "../../../languageHandler";
 const MAX_ROOMS = 20;
 const MIN_ROOMS_BEFORE_ENABLED = 10;
 
+// The threshold time in milliseconds to wait for an autojoined room to show up.
+const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90 seconds
+
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
         super(props);
@@ -38,6 +41,12 @@ export default class RoomBreadcrumbs extends React.Component {
 
         this.onAction = this.onAction.bind(this);
         this._dispatcherRef = null;
+
+        // The room IDs we're waiting to come down the Room handler and when we
+        // started waiting for them. Used to track a room over an upgrade/autojoin.
+        this._waitingRoomQueue = [/* { roomId, addedTs } */];
+
+        this._scroller = createRef();
     }
 
     componentWillMount() {
@@ -54,7 +63,7 @@ export default class RoomBreadcrumbs extends React.Component {
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
-        MatrixClientPeg.get().on("Room", this.onRoomMembershipChanged);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     componentWillUnmount() {
@@ -68,7 +77,7 @@ export default class RoomBreadcrumbs extends React.Component {
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
-            client.removeListener("Room", this.onRoomMembershipChanged);
+            client.removeListener("Room", this.onRoom);
         }
     }
 
@@ -87,6 +96,12 @@ export default class RoomBreadcrumbs extends React.Component {
     onAction(payload) {
         switch (payload.action) {
             case 'view_room':
+                if (payload.auto_join && !MatrixClientPeg.get().getRoom(payload.room_id)) {
+                    // Queue the room instead of pushing it immediately - we're probably just waiting
+                    // for a join to complete (ie: joining the upgraded room).
+                    this._waitingRoomQueue.push({roomId: payload.room_id, addedTs: (new Date).getTime()});
+                    break;
+                }
                 this._appendRoomId(payload.room_id);
                 break;
 
@@ -153,7 +168,20 @@ export default class RoomBreadcrumbs extends React.Component {
         if (!this.state.enabled && this._shouldEnable()) {
             this.setState({enabled: true});
         }
-    }
+    };
+
+    onRoom = (room) => {
+        // Always check for membership changes when we see new rooms
+        this.onRoomMembershipChanged();
+
+        const waitingRoom = this._waitingRoomQueue.find(r => r.roomId === room.roomId);
+        if (!waitingRoom) return;
+        this._waitingRoomQueue.splice(this._waitingRoomQueue.indexOf(waitingRoom), 1);
+
+        const now = (new Date()).getTime();
+        if ((now - waitingRoom.addedTs) > AUTOJOIN_WAIT_THRESHOLD_MS) return; // Too long ago.
+        this._appendRoomId(room.roomId); // add the room we've been waiting for
+    };
 
     _shouldEnable() {
         const client = MatrixClientPeg.get();
@@ -258,8 +286,8 @@ export default class RoomBreadcrumbs extends React.Component {
         }
         this.setState({rooms});
 
-        if (this.refs.scroller) {
-            this.refs.scroller.moveToOrigin();
+        if (this._scroller.current) {
+            this._scroller.current.moveToOrigin();
         }
 
         // We don't track room aesthetics (badges, membership, etc) over the wire so we
@@ -335,7 +363,7 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             let dmIndicator;
-            if (this._isDmRoom(r.room)) {
+            if (this._isDmRoom(r.room) && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 dmIndicator = <img
                     src={require("../../../../res/img/icon_person.svg")}
                     className="mx_RoomBreadcrumbs_dmIndicator"
@@ -346,8 +374,14 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             return (
-                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room, i)}
-                    onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
+                <AccessibleButton
+                    className={classes}
+                    key={r.room.roomId}
+                    onClick={() => this._viewRoom(r.room, i)}
+                    onMouseEnter={() => this._onMouseEnter(r.room)}
+                    onMouseLeave={() => this._onMouseLeave(r.room)}
+                    aria-label={_t("Room %(name)s", {name: r.room.name})}
+                >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
                     {dmIndicator}
@@ -356,10 +390,16 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs"
-                trackHorizontalOverflow={true} verticalScrollsHorizontally={true}>
-                { avatars }
-            </IndicatorScrollbar>
+            <div role="toolbar" aria-label={_t("Recent rooms")}>
+                <IndicatorScrollbar
+                    ref={this._scroller}
+                    className="mx_RoomBreadcrumbs"
+                    trackHorizontalOverflow={true}
+                    verticalScrollsHorizontally={true}
+                >
+                    { avatars }
+                </IndicatorScrollbar>
+            </div>
         );
     }
 }

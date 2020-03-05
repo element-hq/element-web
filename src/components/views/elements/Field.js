@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { debounce } from 'lodash';
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
@@ -66,10 +66,14 @@ export default class Field extends React.PureComponent {
         this.state = {
             valid: undefined,
             feedback: undefined,
+            focused: false,
         };
     }
 
     onFocus = (ev) => {
+        this.setState({
+            focused: true,
+        });
         this.validate({
             focused: true,
         });
@@ -88,6 +92,9 @@ export default class Field extends React.PureComponent {
     };
 
     onBlur = (ev) => {
+        this.setState({
+            focused: false,
+        });
         this.validate({
             focused: false,
         });
@@ -112,7 +119,9 @@ export default class Field extends React.PureComponent {
             allowEmpty,
         });
 
-        if (feedback) {
+        // this method is async and so we may have been blurred since the method was called
+        // if we have then hide the feedback as withValidation does
+        if (this.state.focused && feedback) {
             this.setState({
                 valid,
                 feedback,

@@ -15,21 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { KeyCode } from '../../Keyboard';
+import { Key } from '../../Keyboard';
 import dis from '../../dispatcher';
 import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'SearchBox',
 
     propTypes: {
         onSearch: PropTypes.func,
         onCleared: PropTypes.func,
+        onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
 
@@ -52,6 +53,10 @@ module.exports = createReactClass({
         };
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._search = createRef();
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
@@ -65,34 +70,35 @@ module.exports = createReactClass({
 
         switch (payload.action) {
             case 'view_room':
-                if (this.refs.search && payload.clear_search) {
+                if (this._search.current && payload.clear_search) {
                     this._clearSearch();
                 }
                 break;
             case 'focus_room_filter':
-                if (this.refs.search) {
-                    this.refs.search.focus();
+                if (this._search.current) {
+                    this._search.current.focus();
                 }
                 break;
         }
     },
 
     onChange: function() {
-        if (!this.refs.search) return;
-        this.setState({ searchTerm: this.refs.search.value });
+        if (!this._search.current) return;
+        this.setState({ searchTerm: this._search.current.value });
         this.onSearch();
     },
 
     onSearch: throttle(function() {
-        this.props.onSearch(this.refs.search.value);
+        this.props.onSearch(this._search.current.value);
     }, 200, {trailing: true, leading: true}),
 
     _onKeyDown: function(ev) {
-        switch (ev.keyCode) {
-            case KeyCode.ESCAPE:
+        switch (ev.key) {
+            case Key.ESCAPE:
                 this._clearSearch("keyboard");
                 break;
         }
+        if (this.props.onKeyDown) this.props.onKeyDown(ev);
     },
 
     _onFocus: function(ev) {
@@ -111,7 +117,7 @@ module.exports = createReactClass({
     },
 
     _clearSearch: function(source) {
-        this.refs.search.value = "";
+        this._search.current.value = "";
         this.onChange();
         if (this.props.onCleared) {
             this.props.onCleared(source);
@@ -127,9 +133,11 @@ module.exports = createReactClass({
             return null;
         }
         const clearButton = (!this.state.blurred || this.state.searchTerm) ?
-            (<AccessibleButton key="button"
-                    className="mx_SearchBox_closeButton"
-                    onClick={ () => {this._clearSearch("button"); } }>
+            (<AccessibleButton
+                key="button"
+                tabIndex={-1}
+                className="mx_SearchBox_closeButton"
+                onClick={ () => {this._clearSearch("button"); } }>
             </AccessibleButton>) : undefined;
 
         // show a shorter placeholder when blurred, if requested
@@ -144,7 +152,7 @@ module.exports = createReactClass({
                 <input
                     key="searchfield"
                     type="text"
-                    ref="search"
+                    ref={this._search}
                     className={"mx_textinput_icon mx_textinput_search " + className}
                     value={ this.state.searchTerm }
                     onFocus={ this._onFocus }
@@ -152,6 +160,7 @@ module.exports = createReactClass({
                     onKeyDown={ this._onKeyDown }
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
+                    autoComplete="off"
                 />
                 { clearButton }
             </div>

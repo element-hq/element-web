@@ -5,13 +5,17 @@ const path = require('path');
 // but only if they come from a module that starts with eslint-config-
 // So we load the filename directly (and it could be in node_modules/
 // or or ../node_modules/ etc)
-const matrixJsSdkPath = path.dirname(require.resolve('matrix-js-sdk'));
+//
+// We add a `..` to the end because the js-sdk lives out of lib/, but the eslint
+// config is at the project root.
+const matrixJsSdkPath = path.join(path.dirname(require.resolve('matrix-js-sdk')), '..');
 
 module.exports = {
     parser: "babel-eslint",
     extends: [matrixJsSdkPath + "/.eslintrc.js"],
     plugins: [
       "react",
+      "react-hooks",
       "flowtype",
       "babel"
     ],
@@ -24,6 +28,7 @@ module.exports = {
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
+            legacyDecorators: true,
         }
     },
     rules: {
@@ -104,6 +109,9 @@ module.exports = {
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",
+
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
     },
     settings: {
         flowtype: {

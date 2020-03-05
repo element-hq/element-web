@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import {MatrixClient} from 'matrix-js-sdk';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import FlairStore from '../../../stores/FlairStore';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 function nop() {}
 
@@ -37,8 +37,8 @@ const GroupTile = createReactClass({
         draggable: PropTypes.bool,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -56,7 +56,7 @@ const GroupTile = createReactClass({
     },
 
     componentWillMount: function() {
-        FlairStore.getGroupProfileCached(this.context.matrixClient, this.props.groupId).then((profile) => {
+        FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
             this.setState({profile});
         }).catch((err) => {
             console.error('Error whilst getting cached profile for GroupTile', err);
@@ -80,7 +80,7 @@ const GroupTile = createReactClass({
         const descElement = this.props.showDescription ?
             <div className="mx_GroupTile_desc">{ profile.shortDescription }</div> :
             <div />;
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
+        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop") : null;
 
         let avatarElement = (

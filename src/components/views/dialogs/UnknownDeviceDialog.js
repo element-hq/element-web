@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { markAllDevicesKnown } from '../../../cryptodevices';
@@ -132,8 +132,8 @@ export default createReactClass({
         if (SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId)) {
             warning = (
                 <h4>
-                    { _t("You are currently blacklisting unverified devices; to send " +
-                    "messages to these devices you must verify them.") }
+                    { _t("You are currently blacklisting unverified sessions; to send " +
+                    "messages to these sessions you must verify them.") }
                 </h4>
             );
         } else {
@@ -141,7 +141,7 @@ export default createReactClass({
                 <div>
                     <p>
                         { _t("We recommend you go through the verification process " +
-                            "for each device to confirm they belong to their legitimate owner, " +
+                            "for each session to confirm they belong to their legitimate owner, " +
                             "but you can resend the message without verifying if you prefer.") }
                     </p>
                 </div>
@@ -165,15 +165,15 @@ export default createReactClass({
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
                 onFinished={this.props.onFinished}
-                title={_t('Room contains unknown devices')}
+                title={_t('Room contains unknown sessions')}
                 contentId='mx_Dialog_content'
             >
                 <GeminiScrollbarWrapper autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
-                        { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
+                        { _t('"%(RoomName)s" contains sessions that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
                     { warning }
-                    { _t("Unknown devices") }:
+                    { _t("Unknown sessions") }:
 
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbarWrapper>

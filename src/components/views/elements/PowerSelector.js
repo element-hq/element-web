@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PowerSelector',
 
     propTypes: {
@@ -129,10 +129,11 @@ module.exports = createReactClass({
 
     render: function() {
         let picker;
+        const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
             picker = (
                 <Field id={`powerSelector_custom_${this.props.powerLevelKey}`} type="number"
-                       label={this.props.label || _t("Power level")} max={this.props.maxValue}
+                       label={label} max={this.props.maxValue}
                        onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
                        value={String(this.state.customValue)} disabled={this.props.disabled} />
             );
@@ -151,7 +152,7 @@ module.exports = createReactClass({
 
             picker = (
                 <Field id={`powerSelector_notCustom_${this.props.powerLevelKey}`} element="select"
-                       label={this.props.label || _t("Power level")} onChange={this.onSelectChange}
+                       label={label} onChange={this.onSelectChange}
                        value={String(this.state.selectValue)} disabled={this.props.disabled}>
                     {options}
                 </Field>

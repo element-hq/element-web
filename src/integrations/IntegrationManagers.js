@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import SdkConfig from '../SdkConfig';
-import sdk from "../index";
+import * as sdk from "../index";
 import Modal from '../Modal';
 import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} from "./IntegrationManagerInstance";
 import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
-import MatrixClientPeg from "../MatrixClientPeg";
+import {MatrixClientPeg} from "../MatrixClientPeg";
 import {AutoDiscovery} from "matrix-js-sdk";
+import SettingsStore from "../settings/SettingsStore";
 
 const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
 const KIND_PREFERENCE = [
@@ -53,14 +54,14 @@ export class IntegrationManagers {
     startWatching(): void {
         this.stopWatching();
         this._client = MatrixClientPeg.get();
-        this._client.on("accountData", this._onAccountData.bind(this));
+        this._client.on("accountData", this._onAccountData);
         this._compileManagers();
         setInterval(() => this._setupHomeserverManagers(), HS_MANAGERS_REFRESH_INTERVAL);
     }
 
     stopWatching(): void {
         if (!this._client) return;
-        this._client.removeListener("accountData", this._onAccountData.bind(this));
+        this._client.removeListener("accountData", this._onAccountData);
         if (this._wellknownRefreshTimerId !== null) clearInterval(this._wellknownRefreshTimerId);
     }
 
@@ -82,6 +83,7 @@ export class IntegrationManagers {
     }
 
     async _setupHomeserverManagers() {
+        if (!MatrixClientPeg.get()) return;
         try {
             console.log("Updating homeserver-configured integration managers...");
             const homeserverDomain = MatrixClientPeg.getHomeserverName();
@@ -134,11 +136,11 @@ export class IntegrationManagers {
         this._primaryManager = null; // reset primary
     }
 
-    _onAccountData(ev: MatrixEvent): void {
+    _onAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() === 'm.widgets') {
             this._compileManagers();
         }
-    }
+    };
 
     hasManager(): boolean {
         return this._managers.length > 0;
@@ -172,20 +174,29 @@ export class IntegrationManagers {
     }
 
     openNoManagerDialog(): void {
-        // TODO: Is it Integrations (plural) or Integration (singular). Singular is easier spoken.
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        Modal.createTrackedDialog(
-            "Integration Manager", "None", IntegrationsManager,
-            {configured: false}, 'mx_IntegrationsManager',
-        );
+        const IntegrationsImpossibleDialog = sdk.getComponent("dialogs.IntegrationsImpossibleDialog");
+        Modal.createTrackedDialog('Integrations impossible', '', IntegrationsImpossibleDialog);
     }
 
     openAll(room: Room = null, screen: string = null, integrationId: string = null): void {
+        if (!SettingsStore.getValue("integrationProvisioning")) {
+            return this.showDisabledDialog();
+        }
+
+        if (this._managers.length === 0) {
+            return this.openNoManagerDialog();
+        }
+
         const TabbedIntegrationManagerDialog = sdk.getComponent("views.dialogs.TabbedIntegrationManagerDialog");
         Modal.createTrackedDialog(
             'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
             {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
         );
+    }
+
+    showDisabledDialog(): void {
+        const IntegrationsDisabledDialog = sdk.getComponent("dialogs.IntegrationsDisabledDialog");
+        Modal.createTrackedDialog('Integrations disabled', '', IntegrationsDisabledDialog);
     }
 
     async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {

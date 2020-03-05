@@ -23,11 +23,11 @@ import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
-import sdk from '../../index';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
-import MatrixClientPeg from '../../MatrixClientPeg';
-import { MatrixClient } from 'matrix-js-sdk';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import classnames from 'classnames';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 export default class EmbeddedPage extends React.PureComponent {
     static propTypes = {
@@ -39,9 +39,7 @@ export default class EmbeddedPage extends React.PureComponent {
         scrollbar: PropTypes.bool,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
@@ -104,7 +102,7 @@ export default class EmbeddedPage extends React.PureComponent {
 
     render() {
         // HACK: Workaround for the context's MatrixClient not updating.
-        const client = this.context.matrixClient || MatrixClientPeg.get();
+        const client = this.context || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames({

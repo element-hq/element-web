@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
 
 export default class CookieBar extends React.Component {

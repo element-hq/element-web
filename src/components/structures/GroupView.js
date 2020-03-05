@@ -19,9 +19,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import Promise from 'bluebird';
-import MatrixClientPeg from '../../MatrixClientPeg';
-import sdk from '../../index';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
+import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
@@ -38,6 +37,8 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk";
+import {allSettled, sleep} from "../../utils/promise";
+import RightPanelStore from "../../stores/RightPanelStore";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -98,11 +99,10 @@ const CategoryRoomList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addRoomToGroupSummary(this.props.groupId, addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;
@@ -275,11 +275,10 @@ const RoleUserList = createReactClass({
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                Promise.all(addrs.map((addr) => {
+                allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addUserToGroupSummary(addr.address)
-                        .catch(() => { errorList.push(addr.address); })
-                        .reflect();
+                        .catch(() => { errorList.push(addr.address); });
                 })).then(() => {
                     if (errorList.length === 0) {
                         return;
@@ -482,7 +481,7 @@ export default createReactClass({
                         group_id: groupId,
                     },
                 });
-                dis.dispatch({action: 'require_registration'});
+                dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${groupId}`}});
                 willDoOnboarding = true;
             }
             if (stateKey === GroupStore.STATE_KEY.Summary) {
@@ -544,10 +543,6 @@ export default createReactClass({
         });
     },
 
-    _onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
-    },
-
     _onEditClick: function() {
         this.setState({
             editing: true,
@@ -584,6 +579,10 @@ export default createReactClass({
                     editing: false,
                     profileForm: null,
                 });
+                break;
+            case 'after_right_panel_phase_change':
+                // We don't keep state on the right panel, so just re-render to update
+                this.forceUpdate();
                 break;
             default:
                 break;
@@ -638,7 +637,7 @@ export default createReactClass({
                 title: _t('Error'),
                 description: _t('Failed to upload image'),
             });
-        }).done();
+        });
     },
 
     _onJoinableChange: function(ev) {
@@ -677,7 +676,7 @@ export default createReactClass({
             this.setState({
                 avatarChanged: false,
             });
-        }).done();
+        });
     },
 
     _saveGroup: async function() {
@@ -692,7 +691,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.acceptGroupInvite(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -711,7 +710,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -727,7 +726,7 @@ export default createReactClass({
 
     _onJoinClick: async function() {
         if (this._matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${this.props.groupId}`}});
             return;
         }
 
@@ -735,7 +734,7 @@ export default createReactClass({
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
-        await Promise.delay(500);
+        await sleep(500);
 
         GroupStore.joinGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -787,7 +786,7 @@ export default createReactClass({
 
                 // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
                 // spinner disappearing after we have fetched new group data.
-                await Promise.delay(500);
+                await sleep(500);
 
                 GroupStore.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
@@ -822,10 +821,10 @@ export default createReactClass({
                 {_t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;
@@ -1216,25 +1215,25 @@ export default createReactClass({
 
                 const EditableText = sdk.getComponent("elements.EditableText");
 
-                nameNode = <EditableText ref="nameEditor"
-                     className="mx_GroupView_editable"
-                     placeholderClassName="mx_GroupView_placeholder"
-                     placeholder={_t('Community Name')}
-                     blurToCancel={false}
-                     initialValue={this.state.profileForm.name}
-                     onValueChanged={this._onNameChange}
-                     tabIndex="0"
-                     dir="auto" />;
+                nameNode = <EditableText
+                    className="mx_GroupView_editable"
+                    placeholderClassName="mx_GroupView_placeholder"
+                    placeholder={_t('Community Name')}
+                    blurToCancel={false}
+                    initialValue={this.state.profileForm.name}
+                    onValueChanged={this._onNameChange}
+                    tabIndex="0"
+                    dir="auto" />;
 
-                shortDescNode = <EditableText ref="descriptionEditor"
-                     className="mx_GroupView_editable"
-                     placeholderClassName="mx_GroupView_placeholder"
-                     placeholder={_t("Description")}
-                     blurToCancel={false}
-                     initialValue={this.state.profileForm.short_description}
-                     onValueChanged={this._onShortDescChange}
-                     tabIndex="0"
-                     dir="auto" />;
+                shortDescNode = <EditableText
+                    className="mx_GroupView_editable"
+                    placeholderClassName="mx_GroupView_placeholder"
+                    placeholder={_t("Description")}
+                    blurToCancel={false}
+                    initialValue={this.state.profileForm.short_description}
+                    onValueChanged={this._onShortDescChange}
+                    tabIndex="0"
+                    dir="auto" />;
             } else {
                 const onGroupHeaderItemClick = this.state.isUserMember ? this._onEditClick : null;
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
@@ -1300,7 +1299,9 @@ export default createReactClass({
                 );
             }
 
-            const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
+            const rightPanel = RightPanelStore.getSharedInstance().isOpenForGroup
+                ? <RightPanel groupId={this.props.groupId} />
+                : undefined;
 
             const headerClasses = {
                 "mx_GroupView_header": true,
@@ -1328,9 +1329,9 @@ export default createReactClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
-                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
+                        <GroupHeaderButtons />
                     </div>
-                    <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
+                    <MainSplit panel={rightPanel}>
                         <GeminiScrollbarWrapper className="mx_GroupView_body">
                             { this._getMembershipSection() }
                             { this._getGroupSection() }

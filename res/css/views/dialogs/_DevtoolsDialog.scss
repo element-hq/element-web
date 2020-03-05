@@ -135,9 +135,6 @@ limitations under the License.
     }
 }
 
-/* Ordering this block by specificity would require breaking it up into several
-   chunks, which seems like it would be more confusing to read. */
-/* stylelint-disable no-descending-specificity */
 .mx_DevTools_tgl-flip {
     + .mx_DevTools_tgl-btn {
         padding: 2px;
@@ -192,4 +189,37 @@ limitations under the License.
         }
     }
 }
-/* stylelint-enable no-descending-specificity */
+
+.mx_DevTools_VerificationRequest {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    font-family: $monospace-font-family;
+
+    dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        margin: 0;
+    }
+
+    dd {
+        grid-column-start: 2;
+    }
+
+    dd:empty {
+        color: #666666;
+        &::after {
+            content: "(empty)";
+        }
+    }
+
+    dt {
+        font-weight: bold;
+        grid-column-start: 1;
+    }
+
+    dt::after {
+        content: ":";
+    }
+}

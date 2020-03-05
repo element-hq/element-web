@@ -77,6 +77,8 @@ function findRefNodes(root, route, isAddition) {
     const end = isAddition ? route.length - 1 : route.length;
     for (let i = 0; i < end; ++i) {
         refParentNode = refNode;
+        // Lists don't have appropriate child nodes we can use.
+        if (!refNode.childNodes[route[i]]) continue;
         refNode = refNode.childNodes[route[i]];
     }
     return {refNode, refParentNode};

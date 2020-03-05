@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import classNames from 'classnames';
 
-import MatrixClientPeg from './MatrixClientPeg';
-import sdk from './';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import * as sdk from './';
 import Modal from './Modal';
 
 export class TermsNotSignedError extends Error {}

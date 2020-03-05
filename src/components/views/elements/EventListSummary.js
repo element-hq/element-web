@@ -29,7 +29,7 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
         if (onToggle) {
             onToggle();
         }
-    }, [expanded]);
+    }, [expanded]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const eventIds = events.map((e) => e.getId()).join(',');
 
@@ -62,12 +62,12 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
             </div>
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
-            <span className="mx_EventListSummary_avatars" onClick={toggleExpanded}>
-                { avatars }
-            </span>
+                    <span className="mx_EventListSummary_avatars" onClick={toggleExpanded}>
+                        { avatars }
+                    </span>
                     <span className="mx_TextualEvent mx_EventListSummary_summary">
-                { summaryText }
-            </span>
+                        { summaryText }
+                    </span>
                 </div>
             </div>
         </div>

@@ -19,12 +19,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
-import { createClient } from 'matrix-js-sdk/lib/matrix';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import classNames from 'classnames';
 
 /*
@@ -274,15 +274,13 @@ export default class ServerConfig extends React.PureComponent {
             : null;
 
         return (
-            <div className="mx_ServerConfig">
+            <form className="mx_ServerConfig" onSubmit={this.onSubmit} autoComplete="off">
                 <h3>{_t("Other servers")}</h3>
                 {errorText}
                 {this._renderHomeserverSection()}
                 {this._renderIdentityServerSection()}
-                <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
-                    {submitButton}
-                </form>
-            </div>
+                {submitButton}
+            </form>
         );
     }
 }

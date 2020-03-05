@@ -32,6 +32,13 @@ export default class ViewSourceEvent extends React.PureComponent {
         };
     }
 
+    componentDidMount() {
+        const {mxEvent} = this.props;
+        if (mxEvent.isBeingDecrypted()) {
+            mxEvent.once("Event.decrypted", () => this.forceUpdate());
+        }
+    }
+
     onToggle = (ev) => {
         ev.preventDefault();
         const { expanded } = this.state;

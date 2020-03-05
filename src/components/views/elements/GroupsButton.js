@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 const GroupsButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton className="mx_GroupsButton" action="view_my_groups"
+        <ActionButton className="mx_GroupsButton" action="toggle_my_groups"
             label={_t("Communities")}
             size={props.size}
             tooltip={true}

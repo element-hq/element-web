@@ -15,17 +15,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
-import { MatrixClient } from 'matrix-js-sdk';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default createReactClass({
     displayName: 'GroupUserSettings',
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -36,7 +35,7 @@ export default createReactClass({
     },
 
     componentWillMount: function() {
-        this.context.matrixClient.getJoinedGroups().done((result) => {
+        this.context.getJoinedGroups().then((result) => {
             this.setState({groups: result.groups || [], error: null});
         }, (err) => {
             console.error(err);

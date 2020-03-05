@@ -15,6 +15,7 @@ module.exports = {
         "number-leading-zero": null,
         "selector-list-comma-newline-after": null,
         "at-rule-no-unknown": null,
+        "no-descending-specificity": null,
         "scss/at-rule-no-unknown": [true, {
             // https://github.com/vector-im/riot-web/issues/10544
             "ignoreAtRules": ["define-mixin"],

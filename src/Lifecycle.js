@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';
@@ -28,14 +29,17 @@ import Presence from './Presence';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
+import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import {Mjolnir} from "./mjolnir/Mjolnir";
+import DeviceListener from "./DeviceListener";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -312,18 +316,14 @@ async function _restoreFromLocalStorage(opts) {
 function _handleLoadSessionFailure(e) {
     console.error("Unable to load session", e);
 
-    const def = Promise.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
-    Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
+    const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
-        onFinished: (success) => {
-            def.resolve(success);
-        },
     });
 
-    return def.promise.then((success) => {
+    return modal.finished.then(([success]) => {
         if (success) {
             // user clicked continue.
             _clearStorage();
@@ -378,7 +378,7 @@ export function hydrateSession(credentials) {
 
     const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
-        console.warn("Clearing all data: Old session belongs to a different user/device");
+        console.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
     return _doSetLoggedIn(credentials, overwrite);
@@ -435,7 +435,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         }
     }
 
-    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     if (localStorage) {
         try {
@@ -528,7 +528,7 @@ export function logout() {
             console.log("Failed to call logout API: token will not be invalidated");
             onLoggedOut();
         },
-    ).done();
+    );
 }
 
 export function softLogout() {
@@ -578,6 +578,7 @@ async function startMatrixClient(startSyncing=true) {
     Notifier.start();
     UserActivity.sharedInstance().start();
     TypingStore.sharedInstance().reset(); // just in case
+    ToastStore.sharedInstance().reset();
     if (!SettingsStore.getValue("lowBandwidth")) {
         Presence.start();
     }
@@ -585,12 +586,24 @@ async function startMatrixClient(startSyncing=true) {
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
 
+    // Start Mjolnir even though we haven't checked the feature flag yet. Starting
+    // the thing just wastes CPU cycles, but should result in no actual functionality
+    // being exposed to the user.
+    Mjolnir.sharedInstance().start();
+
     if (startSyncing) {
+        // The client might want to populate some views with events from the
+        // index (e.g. the FilePanel), therefore initialize the event index
+        // before the client.
+        await EventIndexPeg.init();
         await MatrixClientPeg.start();
     } else {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
     }
+
+    // This needs to be started after crypto is set up
+    DeviceListener.sharedInstance().start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
@@ -605,21 +618,21 @@ async function startMatrixClient(startSyncing=true) {
  * Stops a running client and all related services, and clears persistent
  * storage. Used after a session has been logged out.
  */
-export function onLoggedOut() {
+export async function onLoggedOut() {
     _isLoggingOut = false;
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({action: 'on_logged_out'});
+    dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    _clearStorage().done();
+    await _clearStorage();
 }
 
 /**
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-function _clearStorage() {
-    Analytics.logout();
+async function _clearStorage() {
+    Analytics.disable();
 
     if (window.localStorage) {
         window.localStorage.clear();
@@ -630,7 +643,9 @@ function _clearStorage() {
         // we'll never make any requests, so can pass a bogus HS URL
         baseUrl: "",
     });
-    return cli.clearStores();
+
+    await EventIndexPeg.deleteEventIndex();
+    await cli.clearStores();
 }
 
 /**
@@ -645,7 +660,10 @@ export function stopMatrixClient(unsetClient=true) {
     Presence.stop();
     ActiveWidgetStore.stop();
     IntegrationManagers.sharedInstance().stopWatching();
+    Mjolnir.sharedInstance().stop();
+    DeviceListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
+    EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
@@ -653,6 +671,7 @@ export function stopMatrixClient(unsetClient=true) {
 
         if (unsetClient) {
             MatrixClientPeg.unset();
+            EventIndexPeg.unset();
         }
     }
 }

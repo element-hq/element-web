@@ -17,15 +17,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as ContextualMenu from './ContextualMenu';
-import {TopLeftMenu} from '../views/context_menus/TopLeftMenu';
-import AccessibleButton from '../views/elements/AccessibleButton';
+import TopLeftMenu from '../views/context_menus/TopLeftMenu';
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import MatrixClientPeg from '../../MatrixClientPeg';
-import Avatar from '../../Avatar';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
+import * as Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher";
-import {focusCapturedRef} from "../../utils/Accessibility";
+import {ContextMenu, ContextMenuButton} from "./ContextMenu";
 
 const AVATAR_SIZE = 28;
 
@@ -40,11 +38,8 @@ export default class TopLeftMenuButton extends React.Component {
         super();
         this.state = {
             menuDisplayed: false,
-            menuFunctions: null, // should be { close: fn }
             profileInfo: null,
         };
-
-        this.onToggleMenu = this.onToggleMenu.bind(this);
     }
 
     async _getProfileInfo() {
@@ -95,7 +90,21 @@ export default class TopLeftMenuButton extends React.Component {
         }
     }
 
+    openMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.setState({ menuDisplayed: true });
+    };
+
+    closeMenu = () => {
+        this.setState({
+            menuDisplayed: false,
+        });
+    };
+
     render() {
+        const cli = MatrixClientPeg.get().getUserId();
+
         const name = this._getDisplayName();
         let nameElement;
         let chevronElement;
@@ -106,14 +115,29 @@ export default class TopLeftMenuButton extends React.Component {
             chevronElement = <span className="mx_TopLeftMenuButton_chevron" />;
         }
 
-        return (
-            <AccessibleButton
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._buttonRef.getBoundingClientRect();
+
+            contextMenu = (
+                <ContextMenu
+                    chevronFace="none"
+                    left={elementRect.left}
+                    top={elementRect.top + elementRect.height}
+                    onFinished={this.closeMenu}
+                >
+                    <TopLeftMenu displayName={name} userId={cli} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
+        }
+
+        return <React.Fragment>
+            <ContextMenuButton
                 className="mx_TopLeftMenuButton"
-                onClick={this.onToggleMenu}
+                onClick={this.openMenu}
                 inputRef={(r) => this._buttonRef = r}
-                aria-label={_t("Your profile")}
-                aria-haspopup={true}
-                aria-expanded={this.state.menuDisplayed}
+                label={_t("Your profile")}
+                isExpanded={this.state.menuDisplayed}
             >
                 <BaseAvatar
                     idName={MatrixClientPeg.get().getUserId()}
@@ -125,34 +149,9 @@ export default class TopLeftMenuButton extends React.Component {
                 />
                 { nameElement }
                 { chevronElement }
-            </AccessibleButton>
-        );
-    }
+            </ContextMenuButton>
 
-    onToggleMenu(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (this.state.menuDisplayed && this.state.menuFunctions) {
-            this.state.menuFunctions.close();
-            return;
-        }
-
-        const elementRect = e.currentTarget.getBoundingClientRect();
-        const x = elementRect.left;
-        const y = elementRect.top + elementRect.height;
-
-        const menuFunctions = ContextualMenu.createMenu(TopLeftMenu, {
-            chevronFace: "none",
-            left: x,
-            top: y,
-            userId: MatrixClientPeg.get().getUserId(),
-            displayName: this._getDisplayName(),
-            containerRef: focusCapturedRef, // Focus the TopLeftMenu on first render
-            onFinished: () => {
-                this.setState({ menuDisplayed: false, menuFunctions: null });
-            },
-        });
-        this.setState({ menuDisplayed: true, menuFunctions });
+            { contextMenu }
+        </React.Fragment>;
     }
 }

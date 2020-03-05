@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 const PHASE_START = 0;
@@ -121,6 +121,8 @@ export default class IncomingSasDialog extends React.Component {
         const Spinner = sdk.getComponent("views.elements.Spinner");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
+        const isSelf = this.props.verifier.userId == MatrixClientPeg.get().getUserId();
+
         let profile;
         if (this.state.opponentProfile) {
             profile = <div className="mx_IncomingSasDialog_opponentProfile">
@@ -148,20 +150,36 @@ export default class IncomingSasDialog extends React.Component {
             profile = <Spinner />;
         }
 
+        const userDetailText = [
+            <p key="p1">{_t(
+                "Verify this user to mark them as trusted. " +
+                "Trusting users gives you extra peace of mind when using " +
+                "end-to-end encrypted messages.",
+            )}</p>,
+            <p key="p2">{_t(
+                // NB. Below wording adjusted to singular 'session' until we have
+                // cross-signing
+                "Verifying this user will mark their session as trusted, and " +
+                "also mark your session as trusted to them.",
+            )}</p>,
+        ];
+
+        const selfDetailText = [
+            <p key="p1">{_t(
+                "Verify this device to mark it as trusted. " +
+                "Trusting this device gives you and other users extra peace of mind when using " +
+                "end-to-end encrypted messages.",
+            )}</p>,
+            <p key="p2">{_t(
+                "Verifying this device will mark it as trusted, and users who have verified with " +
+                "you will trust this device.",
+            )}</p>,
+        ];
+
         return (
             <div>
                 {profile}
-                <p>{_t(
-                    "Verify this user to mark them as trusted. " +
-                    "Trusting users gives you extra peace of mind when using " +
-                    "end-to-end encrypted messages.",
-                )}</p>
-                <p>{_t(
-                    // NB. Below wording adjusted to singular 'device' until we have
-                    // cross-signing
-                    "Verifying this user will mark their device as trusted, and " +
-                    "also mark your device as trusted to them.",
-                )}</p>
+                {isSelf ? selfDetailText : userDetailText}
                 <DialogButtons
                     primaryButton={_t('Continue')}
                     hasCancel={true}
@@ -178,6 +196,7 @@ export default class IncomingSasDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
+            isSelf={this.props.verifier.userId == MatrixClientPeg.get().getUserId()}
         />;
     }
 
@@ -227,6 +246,7 @@ export default class IncomingSasDialog extends React.Component {
             <BaseDialog
                 title={_t("Incoming Verification Request")}
                 onFinished={this._onFinished}
+                fixedWidth={false}
             >
                 {body}
             </BaseDialog>

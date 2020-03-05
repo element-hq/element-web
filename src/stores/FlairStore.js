@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
 

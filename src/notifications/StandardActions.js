@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +17,16 @@ limitations under the License.
 
 'use strict';
 
-const NotificationUtils = require('./NotificationUtils');
+import {NotificationUtils} from "./NotificationUtils";
 
 const encodeActions = NotificationUtils.encodeActions;
 
-module.exports = {
-    ACTION_NOTIFY: encodeActions({notify: true}),
-    ACTION_NOTIFY_DEFAULT_SOUND: encodeActions({notify: true, sound: "default"}),
-    ACTION_NOTIFY_RING_SOUND: encodeActions({notify: true, sound: "ring"}),
-    ACTION_HIGHLIGHT: encodeActions({notify: true, highlight: true}),
-    ACTION_HIGHLIGHT_DEFAULT_SOUND: encodeActions({notify: true, sound: "default", highlight: true}),
-    ACTION_DONT_NOTIFY: encodeActions({notify: false}),
-    ACTION_DISABLED: null,
-};
+export class StandardActions {
+    static ACTION_NOTIFY = encodeActions({notify: true});
+    static ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
+    static ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
+    static ACTION_HIGHLIGHT = encodeActions({notify: true, highlight: true});
+    static ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
+    static ACTION_DONT_NOTIFY = encodeActions({notify: false});
+    static ACTION_DISABLED = null;
+}

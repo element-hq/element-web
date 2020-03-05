@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018, 2019 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,18 +19,20 @@ limitations under the License.
 
 import {MatrixClient, MemoryStore} from 'matrix-js-sdk';
 
-import utils from 'matrix-js-sdk/lib/utils';
-import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
-import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
-import sdk from './index';
+import * as utils from 'matrix-js-sdk/src/utils';
+import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
+import {EventTimelineSet} from 'matrix-js-sdk/src/models/event-timeline-set';
+import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import Modal from './Modal';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
+import { crossSigningCallbacks } from './CrossSigningManager';
+import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -46,7 +49,7 @@ interface MatrixClientCreds {
  * This module provides a singleton instance of this class so the 'current'
  * Matrix Client object is available easily.
  */
-class MatrixClientPeg {
+class _MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
         this._justRegisteredUserId = null;
@@ -215,10 +218,20 @@ class MatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
-            verificationMethods: [verificationMethods.SAS],
+            verificationMethods: [
+                verificationMethods.SAS,
+                SHOW_QR_CODE_METHOD,
+                verificationMethods.RECIPROCATE_QR_CODE,
+            ],
             unstableClientRelationAggregation: true,
             identityServer: new IdentityAuthClient(),
         };
+
+        opts.cryptoCallbacks = {};
+        // These are always installed regardless of the labs flag so that
+        // cross-signing features can toggle on without reloading and also be
+        // accessed immediately after login.
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
 
         this.matrixClient = createMatrixClient(opts);
 
@@ -238,6 +251,7 @@ class MatrixClientPeg {
 }
 
 if (!global.mxMatrixClientPeg) {
-    global.mxMatrixClientPeg = new MatrixClientPeg();
+    global.mxMatrixClientPeg = new _MatrixClientPeg();
 }
-export default global.mxMatrixClientPeg;
+
+export const MatrixClientPeg = global.mxMatrixClientPeg;

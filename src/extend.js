@@ -16,11 +16,11 @@ limitations under the License.
 
 'use strict';
 
-module.exports = function(dest, src) {
+export default function(dest, src) {
     for (const i in src) {
         if (src.hasOwnProperty(i)) {
             dest[i] = src[i];
         }
     }
     return dest;
-};
+}

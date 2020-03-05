@@ -30,6 +30,11 @@ body {
     color: $primary-fg-color;
     border: 0px;
     margin: 0px;
+
+    // needed to match the designs correctly on macOS
+    // see https://github.com/vector-im/riot-web/issues/11425
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 pre, code {
@@ -333,6 +338,14 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
+.mx_Dialog_titleImage {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    margin-left: -2px;
+    margin-right: 4px;
+}
+
 .mx_Dialog_title {
     font-size: 22px;
     line-height: 36px;
@@ -373,7 +386,13 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     text-align: right;
 }
 
-.mx_Dialog button, .mx_Dialog input[type="submit"] {
+/* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
+ * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
+ * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
+ * We should go through and have one consistent set of styles for buttons throughout the app.
+ * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
+ */
+.mx_Dialog button, .mx_Dialog input[type="submit"], .mx_Dialog_buttons button, .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: 8px;
@@ -389,27 +408,32 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-right: 0px;
 }
 
-.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
+.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover, .mx_Dialog_buttons button:hover, .mx_Dialog_buttons input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
 
-.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
+.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus, .mx_Dialog_buttons button:focus, .mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary, .mx_Dialog_buttons button.mx_Dialog_primary, .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
     min-width: 156px;
 }
 
-.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
+.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger, .mx_Dialog_buttons button.danger, .mx_Dialog_buttons input[type="submit"].danger {
     background-color: $warning-color;
     border: solid 1px $warning-color;
     color: $accent-fg-color;
 }
 
-.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+.mx_Dialog button.warning, .mx_Dialog input[type="submit"].warning {
+    border: solid 1px $warning-color;
+    color: $warning-color;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled, .mx_Dialog_buttons button:disabled, .mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
@@ -548,6 +572,22 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Username_color8 {
     color: $username-variant8-color;
+}
+
+@define-mixin mx_Tooltip_dark {
+    box-shadow: none;
+    background-color: $tooltip-timeline-bg-color;
+    color: $tooltip-timeline-fg-color;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 8px;
+}
+
+// This is a workaround for our mixins not supporting child selectors
+.mx_Tooltip_dark {
+    .mx_Tooltip_chevron::after {
+        border-right-color: $tooltip-timeline-bg-color;
+    }
 }
 
 @define-mixin mx_Settings_fullWidthField {

@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import AccessibleButton from '../elements/AccessibleButton';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 // cancel button which is shared between room header and simple room header

@@ -1,6 +1,7 @@
 /*
 Copyright 2017 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
-import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
+import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
+import escapeHtml from "escape-html";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -36,12 +39,10 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             // The loaded events to be rendered as linear-replies
@@ -101,6 +102,15 @@ export default class ReplyThread extends React.Component {
             if (html) html = this.stripHTMLReply(html);
         }
 
+        if (!body) body = ""; // Always ensure we have a body, for reasons.
+
+        // Escape the body to use as HTML below.
+        // We also run a nl2br over the result to fix the fallback representation. We do this
+        // after converting the text to safe HTML to avoid user-provided BR's from being converted.
+        if (!html) html = escapeHtml(body).replace(/\n/g, '<br/>');
+
+        // dev note: do not rely on `body` being safe for HTML usage below.
+
         const evLink = permalinkCreator.forEvent(ev.getId());
         const userLink = makeUserPermalink(ev.getSender());
         const mxid = ev.getSender();
@@ -110,7 +120,7 @@ export default class ReplyThread extends React.Component {
             case 'm.text':
             case 'm.notice': {
                 html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>${html || body}</blockquote></mx-reply>`;
+                    + `<br>${html}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `<${mxid}> ${lines[0]}`;
@@ -140,7 +150,7 @@ export default class ReplyThread extends React.Component {
                 break;
             case 'm.emote': {
                 html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> * `
-                    + `<a href="${userLink}">${mxid}</a><br>${html || body}</blockquote></mx-reply>`;
+                    + `<a href="${userLink}">${mxid}</a><br>${html}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `* <${mxid}> ${lines[0]}`;
@@ -176,7 +186,7 @@ export default class ReplyThread extends React.Component {
 
     componentWillMount() {
         this.unmounted = false;
-        this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
+        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
         this.room.on("Room.redaction", this.onRoomRedaction);
         // same event handler as Room.redaction as for both we just do forceUpdate
         this.room.on("Room.redactionCancelled", this.onRoomRedaction);
@@ -248,7 +258,7 @@ export default class ReplyThread extends React.Component {
         try {
             // ask the client to fetch the event we want using the context API, only interface to do so is to ask
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
-            await this.context.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
+            await this.context.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
             // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
@@ -289,7 +299,7 @@ export default class ReplyThread extends React.Component {
         } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
-            const room = this.context.matrixClient.getRoom(ev.getRoomId());
+            const room = this.context.getRoom(ev.getRoomId());
             header = <blockquote className="mx_ReplyThread">
                 {
                     _t('<a>In reply to</a> <pill>', {}, {

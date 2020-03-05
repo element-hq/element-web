@@ -16,10 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import Promise from 'bluebird';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -30,6 +29,7 @@ import {
 } from '../../../notifications';
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
+import AccessibleButton from "../elements/AccessibleButton";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -63,7 +63,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Notifications',
 
     phases: {
@@ -97,7 +97,7 @@ module.exports = createReactClass({
             phase: this.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).done(function() {
+        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).then(function() {
            self._refreshFromServer();
         });
     },
@@ -170,7 +170,7 @@ module.exports = createReactClass({
             emailPusher.kind = null;
             emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
         }
-        emailPusherPromise.done(() => {
+        emailPusherPromise.then(() => {
             this._refreshFromServer();
         }, (error) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -274,7 +274,7 @@ module.exports = createReactClass({
                 }
             }
 
-            Promise.all(deferreds).done(function() {
+            Promise.all(deferreds).then(function() {
                 self._refreshFromServer();
             }, function(error) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -343,7 +343,7 @@ module.exports = createReactClass({
             }
         }
 
-        Promise.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).then(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -398,7 +398,7 @@ module.exports = createReactClass({
         };
 
         // Then, add the new ones
-        Promise.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).then(function(resps) {
             const deferreds = [];
 
             let pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -434,7 +434,7 @@ module.exports = createReactClass({
                 }
             }
 
-            Promise.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).then(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -650,9 +650,20 @@ module.exports = createReactClass({
                 externalContentRules: self.state.externalContentRules,
                 externalPushRules: self.state.externalPushRules,
             });
-        }).done();
+        });
 
         MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
+    },
+
+    _onClearNotifications: function() {
+        const cli = MatrixClientPeg.get();
+
+        cli.getRooms().forEach(r => {
+            if (r.getUnreadNotificationCount() > 0) {
+                const events = r.getLiveTimeline().getEvents();
+                if (events.length) cli.sendReadReceipt(events.pop());
+            }
+        });
     },
 
     _updatePushRuleActions: function(rule, actions, enabled) {
@@ -747,6 +758,13 @@ module.exports = createReactClass({
                                                       label={_t('Enable notifications for this account')}/>;
         }
 
+        let clearNotificationsButton;
+        if (MatrixClientPeg.get().getRooms().some(r => r.getUnreadNotificationCount() > 0)) {
+            clearNotificationsButton = <AccessibleButton onClick={this._onClearNotifications} kind='danger'>
+                {_t("Clear notifications")}
+            </AccessibleButton>;
+        }
+
         // When enabled, the master rule inhibits all existing rules
         // So do not show all notification settings
         if (this.state.masterPushRule && this.state.masterPushRule.enabled) {
@@ -757,6 +775,8 @@ module.exports = createReactClass({
                     <div className="mx_UserNotifSettings_notifTable">
                         { _t('All notifications are currently disabled for all targets.') }
                     </div>
+
+                    {clearNotificationsButton}
                 </div>
             );
         }
@@ -844,7 +864,7 @@ module.exports = createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
                                           onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this device')} />
+                                          label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
                                           onChange={this.onEnableDesktopNotificationBodyChange}
@@ -852,7 +872,7 @@ module.exports = createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
                                           onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this device')} />
+                                          label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 
@@ -878,6 +898,7 @@ module.exports = createReactClass({
 
                     { devicesSection }
 
+                    { clearNotificationsButton }
                 </div>
 
             </div>

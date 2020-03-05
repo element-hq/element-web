@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {SettingLevel} from "../../../settings/SettingsStore";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -72,7 +72,7 @@ export default createReactClass({
                     <button onClick={this._onInviteNeverWarnClicked}>
                         { _t('Invite anyway and never warn me again') }
                     </button>
-                    <button onClick={this._onInviteClicked} autoFocus="true">
+                    <button onClick={this._onInviteClicked} autoFocus={true}>
                         { _t('Invite anyway') }
                     </button>
                 </div>

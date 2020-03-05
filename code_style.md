@@ -22,7 +22,7 @@ number throgh from the original code to the final application.
 General Style
 -------------
 - 4 spaces to indent, for consistency with Matrix Python.
-- 120 columns per line, but try to keep JavaScript code around the 80 column mark.
+- 120 columns per line, but try to keep JavaScript code around the 90 column mark.
   Inline JSX in particular can be nicer with more columns per line.
 - No trailing whitespace at end of lines.
 - Don't indent empty lines.
@@ -174,12 +174,6 @@ React
   <Foo onClick={this.onFooClick}> // Best, if onFooClick would do anything other than directly calling doStuff
   ```
 
-  Not doing so is acceptable in a single case: in function-refs:
-
-  ```jsx
-  <Foo ref={(self) => this.component = self}>
-  ```
-
 - Prefer classes that extend `React.Component` (or `React.PureComponent`) instead of `React.createClass`
   - You can avoid the need to bind handler functions by using [property initializers](https://reactjs.org/docs/react-component.html#constructor):
 
@@ -208,3 +202,5 @@ React
   ```
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
+
+- Avoid things marked as Legacy or Deprecated in React 16 (e.g string refs and legacy contexts)

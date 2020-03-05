@@ -18,27 +18,13 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import * as sdk from "../../../index";
 
-import {KeyCode} from "../../../Keyboard";
-
-// Controlled Toggle Switch element
+// Controlled Toggle Switch element, written with Accessibility in mind
 const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
     const _onClick = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
         if (disabled) return;
-
         onChange(!checked);
-    };
-
-    const _onKeyDown = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        if (disabled) return;
-
-        if (e.keyCode === KeyCode.ENTER || e.keyCode === KeyCode.SPACE) {
-            onChange(!checked);
-        }
     };
 
     const classes = classNames({
@@ -47,18 +33,17 @@ const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
         "mx_ToggleSwitch_enabled": !disabled,
     });
 
+    const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
     return (
-        <div {...props}
+        <AccessibleButton {...props}
             className={classes}
             onClick={_onClick}
-            onKeyDown={_onKeyDown}
-            role="checkbox"
+            role="switch"
             aria-checked={checked}
             aria-disabled={disabled}
-            tabIndex={0}
         >
             <div className="mx_ToggleSwitch_ball" />
-        </div>
+        </AccessibleButton>
     );
 };
 

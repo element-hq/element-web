@@ -18,15 +18,18 @@ import url from 'url';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import sdk from '../../../index';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher";
 import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import {SERVICE_TYPES} from "matrix-js-sdk";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
-import { getDefaultIdentityServerUrl } from '../../../utils/IdentityServerUtils';
+import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
+import {timeout} from "../../../utils/promise";
+
+// We'll wait up to this long when checking for 3PID bindings on the IS.
+const REACHABILITY_TIMEOUT = 10000; // ms
 
 /**
  * Check an IS URL is valid, including liveness check
@@ -159,19 +162,8 @@ export default class SetIdServer extends React.Component {
                 let save = true;
 
                 // Double check that the identity server even has terms of service.
-                let terms;
-                try {
-                    terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
-                } catch (e) {
-                    console.error(e);
-                    if (e.cors === "rejected" || e.httpStatus === 404) {
-                        terms = null;
-                    } else {
-                        throw e;
-                    }
-                }
-
-                if (!terms || !terms["policies"] || Object.keys(terms["policies"]).length <= 0) {
+                const hasTerms = await doesIdentityServerHaveTerms(fullUrl);
+                if (!hasTerms) {
                     const [confirmed] = await this._showNoTermsWarning(fullUrl);
                     save = confirmed;
                 }
@@ -249,20 +241,58 @@ export default class SetIdServer extends React.Component {
     };
 
     async _showServerChangeWarning({ title, unboundMessage, button }) {
-        const threepids = await getThreepidsWithBindStatus(MatrixClientPeg.get());
+        const { currentClientIdServer } = this.state;
 
+        let threepids = [];
+        let currentServerReachable = true;
+        try {
+            threepids = await timeout(
+                getThreepidsWithBindStatus(MatrixClientPeg.get()),
+                Promise.reject(new Error("Timeout attempting to reach identity server")),
+                REACHABILITY_TIMEOUT,
+            );
+        } catch (e) {
+            currentServerReachable = false;
+            console.warn(
+                `Unable to reach identity server at ${currentClientIdServer} to check ` +
+                `for 3PIDs during IS change flow`,
+            );
+            console.warn(e);
+        }
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;
         let danger = false;
-        if (boundThreepids.length) {
+        const messageElements = {
+            idserver: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
+            b: sub => <b>{sub}</b>,
+        };
+        if (!currentServerReachable) {
+            message = <div>
+                <p>{_t(
+                    "You should <b>remove your personal data</b> from identity server " +
+                    "<idserver /> before disconnecting. Unfortunately, identity server " +
+                    "<idserver /> is currently offline or cannot be reached.",
+                    {}, messageElements,
+                )}</p>
+                <p>{_t("You should:")}</p>
+                <ul>
+                    <li>{_t(
+                        "check your browser plugins for anything that might block " +
+                        "the identity server (such as Privacy Badger)",
+                    )}</li>
+                    <li>{_t("contact the administrators of identity server <idserver />", {}, {
+                        idserver: messageElements.idserver,
+                    })}</li>
+                    <li>{_t("wait and try again later")}</li>
+                </ul>
+            </div>;
+            danger = true;
+            button = _t("Disconnect anyway");
+        } else if (boundThreepids.length) {
             message = <div>
                 <p>{_t(
                     "You are still <b>sharing your personal data</b> on the identity " +
-                    "server <idserver />.", {},
-                    {
-                        idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>,
-                        b: sub => <b>{sub}</b>,
-                    },
+                    "server <idserver />.", {}, messageElements,
                 )}</p>
                 <p>{_t(
                     "We recommend that you remove your email addresses and phone numbers " +

@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { linkifyElement } from '../../../HtmlUtils';
+import { AllHtmlEntities } from 'html-entities';
+import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
+import * as ImageUtils from "../../../ImageUtils";
+import { _t } from "../../../languageHandler";
 
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const ImageUtils = require('../../../ImageUtils');
-const Modal = require('../../../Modal');
-
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
@@ -53,18 +55,20 @@ module.exports = createReactClass({
             );
         }, (error)=>{
             console.error("Failed to get URL preview: " + error);
-        }).done();
+        });
+
+        this._description = createRef();
     },
 
     componentDidMount: function() {
-        if (this.refs.description) {
-            linkifyElement(this.refs.description);
+        if (this._description.current) {
+            linkifyElement(this._description.current);
         }
     },
 
     componentDidUpdate: function() {
-        if (this.refs.description) {
-            linkifyElement(this.refs.description);
+        if (this._description.current) {
+            linkifyElement(this._description.current);
         }
     },
 
@@ -123,19 +127,25 @@ module.exports = createReactClass({
                   </div>;
         }
 
+        // The description includes &-encoded HTML entities, we decode those as React treats the thing as an
+        // opaque string. This does not allow any HTML to be injected into the DOM.
+        const description = AllHtmlEntities.decode(p["og:description"] || "");
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget" >
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
-                    <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noopener">{ p["og:title"] }</a></div>
+                    <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
-                    <div className="mx_LinkPreviewWidget_description" ref="description">
-                        { p["og:description"] }
+                    <div className="mx_LinkPreviewWidget_description" ref={this._description}>
+                        { description }
                     </div>
                 </div>
-                <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
-                    src={require("../../../../res/img/cancel.svg")} width="18" height="18"
-                    onClick={this.props.onCancelClick} />
+                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
+                    <img className="mx_filterFlipColor" alt="" role="presentation"
+                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
+                </AccessibleButton>
             </div>
         );
     },

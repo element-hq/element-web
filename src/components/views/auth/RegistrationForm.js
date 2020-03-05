@@ -20,8 +20,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import Email from '../../../email';
+import * as sdk from '../../../index';
+import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
@@ -41,7 +41,7 @@ const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from of
 /**
  * A pure UI component which displays a registration form.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RegistrationForm',
 
     propTypes: {
@@ -97,15 +97,15 @@ module.exports = createReactClass({
             const haveIs = Boolean(this.props.serverConfig.isUrl);
 
             let desc;
-            if (haveIs) {
+            if (this.props.serverRequiresIdServer && !haveIs) {
                 desc = _t(
-                    "If you don't specify an email address, you won't be able to reset your password. " +
-                    "Are you sure?",
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
                 );
             } else {
                 desc = _t(
-                    "No Identity Server is configured so you cannot add add an email address in order to " +
-                    "reset your password in the future.",
+                    "If you don't specify an email address, you won't be able to reset your password. " +
+                    "Are you sure?",
                 );
             }
 
@@ -439,7 +439,10 @@ module.exports = createReactClass({
 
     _showEmail() {
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if ((this.props.serverRequiresIdServer && !haveIs) || !this._authStepIsUsed('m.login.email.identity')) {
+        if (
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.email.identity')
+        ) {
             return false;
         }
         return true;
@@ -448,8 +451,11 @@ module.exports = createReactClass({
     _showPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        const haveRequiredIs = this.props.serverRequiresIdServer && !haveIs;
-        if (!threePidLogin || haveRequiredIs || !this._authStepIsUsed('m.login.msisdn')) {
+        if (
+            !threePidLogin ||
+            (this.props.serverRequiresIdServer && !haveIs) ||
+            !this._authStepIsUsed('m.login.msisdn')
+        ) {
             return false;
         }
         return true;
@@ -480,6 +486,7 @@ module.exports = createReactClass({
             id="mx_RegistrationForm_password"
             ref={field => this[FIELD_PASSWORD] = field}
             type="password"
+            autoComplete="new-password"
             label={_t("Password")}
             value={this.state.password}
             onChange={this.onPasswordChange}
@@ -493,6 +500,7 @@ module.exports = createReactClass({
             id="mx_RegistrationForm_passwordConfirm"
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
+            autoComplete="new-password"
             label={_t("Confirm")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
@@ -592,12 +600,15 @@ module.exports = createReactClass({
             }
         }
         const haveIs = Boolean(this.props.serverConfig.isUrl);
-        const noIsText = haveIs ? null : <div>
-            {_t(
-                "No Identity Server is configured: no email addreses can be added. " +
-                "You will be unable to reset your password.",
-            )}
-        </div>;
+        let noIsText = null;
+        if (this.props.serverRequiresIdServer && !haveIs) {
+            noIsText = <div>
+                {_t(
+                    "No identity server is configured so you cannot add an email address in order to " +
+                    "reset your password in the future.",
+                )}
+            </div>;
+        }
 
         return (
             <div>

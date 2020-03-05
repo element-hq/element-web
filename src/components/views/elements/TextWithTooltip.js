@@ -16,12 +16,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 export default class TextWithTooltip extends React.Component {
     static propTypes = {
         class: PropTypes.string,
-        tooltip: PropTypes.string.isRequired,
+        tooltipClass: PropTypes.string,
+        tooltip: PropTypes.node.isRequired,
     };
 
     constructor() {
@@ -49,6 +50,7 @@ export default class TextWithTooltip extends React.Component {
                 <Tooltip
                     label={this.props.tooltip}
                     visible={this.state.hover}
+                    tooltipClassName={this.props.tooltipClass}
                     className={"mx_TextWithTooltip_tooltip"} />
             </span>
         );

@@ -16,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
-import sdk from './index';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
@@ -236,6 +236,8 @@ export default class AddThreepid {
      */
     async haveMsisdnToken(msisdnToken) {
         const authClient = new IdentityAuthClient();
+        const supportsSeparateAddAndBind =
+            await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 
         let result;
         if (this.submitUrl) {
@@ -245,19 +247,21 @@ export default class AddThreepid {
                 this.clientSecret,
                 msisdnToken,
             );
-        } else {
+        } else if (this.bind || !supportsSeparateAddAndBind) {
             result = await MatrixClientPeg.get().submitMsisdnToken(
                 this.sessionId,
                 this.clientSecret,
                 msisdnToken,
                 await authClient.getAccessToken(),
             );
+        } else {
+            throw new Error("The add / bind with MSISDN flow is misconfigured");
         }
         if (result.errcode) {
             throw result;
         }
 
-        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+        if (supportsSeparateAddAndBind) {
             if (this.bind) {
                 await MatrixClientPeg.get().bindThreePid({
                     sid: this.sessionId,

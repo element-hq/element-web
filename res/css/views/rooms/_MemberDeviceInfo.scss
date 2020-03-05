@@ -17,7 +17,7 @@ limitations under the License.
 .mx_MemberDeviceInfo {
     display: flex;
     padding-bottom: 10px;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .mx_MemberDeviceInfo_icon {
@@ -25,6 +25,7 @@ limitations under the License.
     width: 12px;
     height: 12px;
     mask-repeat: no-repeat;
+    mask-size: 100%;
 }
 .mx_MemberDeviceInfo_icon_blacklisted {
     mask-image: url('$(res)/img/e2e/blacklisted.svg');

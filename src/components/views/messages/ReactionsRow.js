@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
@@ -149,7 +149,11 @@ export default class ReactionsRow extends React.PureComponent {
             </a>;
         }
 
-        return <div className="mx_ReactionsRow">
+        return <div
+            className="mx_ReactionsRow"
+            role="toolbar"
+            aria-label={_t("Reactions")}
+        >
             {items}
             {showAllButton}
         </div>;

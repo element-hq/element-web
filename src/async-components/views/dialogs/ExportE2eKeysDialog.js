@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import FileSaver from 'file-saver';
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;
@@ -44,6 +44,9 @@ export default createReactClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+
+        this._passphrase1 = createRef();
+        this._passphrase2 = createRef();
     },
 
     componentWillUnmount: function() {
@@ -53,8 +56,8 @@ export default createReactClass({
     _onPassphraseFormSubmit: function(ev) {
         ev.preventDefault();
 
-        const passphrase = this.refs.passphrase1.value;
-        if (passphrase !== this.refs.passphrase2.value) {
+        const passphrase = this._passphrase1.current.value;
+        if (passphrase !== this._passphrase2.current.value) {
             this.setState({errStr: _t('Passphrases must match')});
             return false;
         }
@@ -148,7 +151,7 @@ export default createReactClass({
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref='passphrase1' id='passphrase1'
+                                    <input ref={this._passphrase1} id='passphrase1'
                                         autoFocus={true} size='64' type='password'
                                         disabled={disableForm}
                                     />
@@ -161,7 +164,7 @@ export default createReactClass({
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref='passphrase2' id='passphrase2'
+                                    <input ref={this._passphrase2} id='passphrase2'
                                         size='64' type='password'
                                         disabled={disableForm}
                                     />

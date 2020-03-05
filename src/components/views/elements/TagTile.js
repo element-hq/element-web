@@ -1,6 +1,7 @@
 /*
 Copyright 2017 New Vector Ltd.
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
-import * as ContextualMenu from '../../structures/ContextualMenu';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
+import {ContextMenu, toRightOf} from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -44,8 +45,8 @@ export default createReactClass({
         tag: PropTypes.string,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     getInitialState() {
@@ -54,10 +55,14 @@ export default createReactClass({
             hover: false,
             // The profile data of the group if this.props.tag is a group ID
             profile: null,
+            // Whether or not the context menu is open
+            menuDisplayed: false,
         };
     },
 
     componentDidMount() {
+        this._contextMenuButton = createRef();
+
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
             FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
@@ -77,7 +82,7 @@ export default createReactClass({
     _onFlairStoreUpdated() {
         if (this.unmounted) return;
         FlairStore.getGroupProfileCached(
-            this.context.matrixClient,
+            this.context,
             this.props.tag,
         ).then((profile) => {
             if (this.unmounted) return;
@@ -107,45 +112,6 @@ export default createReactClass({
         }
     },
 
-    _openContextMenu: function(x, y, chevronOffset) {
-        // Hide the (...) immediately
-        this.setState({ hover: false });
-
-        const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
-        ContextualMenu.createMenu(TagTileContextMenu, {
-            chevronOffset: chevronOffset,
-            left: x,
-            top: y,
-            tag: this.props.tag,
-            onFinished: () => {
-                this.setState({ menuDisplayed: false });
-            },
-        });
-        this.setState({ menuDisplayed: true });
-    },
-
-    onContextButtonClick: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const elementRect = e.target.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = elementRect.right + window.pageXOffset + 3;
-        const chevronOffset = 12;
-        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
-
-        this._openContextMenu(x, y, chevronOffset);
-    },
-
-    onContextMenu: function(e) {
-        e.preventDefault();
-
-        const chevronOffset = 12;
-        this._openContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
-    },
-
     onMouseOver: function() {
         this.setState({hover: true});
     },
@@ -154,15 +120,30 @@ export default createReactClass({
         this.setState({hover: false});
     },
 
+    openMenu: function(e) {
+        // Prevent the TagTile onClick event firing as well
+        e.stopPropagation();
+        e.preventDefault();
+
+        this.setState({
+            menuDisplayed: true,
+            hover: false,
+        });
+    },
+
+    closeMenu: function() {
+        this.setState({
+            menuDisplayed: false,
+        });
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Tooltip = sdk.getComponent('elements.Tooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
         const avatarHeight = 40;
 
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
+        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
 
@@ -181,26 +162,40 @@ export default createReactClass({
             badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
         }
 
-        const tip = this.state.hover ?
-            <Tooltip className="mx_TagTile_tooltip" label={name} /> :
-            <div />;
+        // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
         const contextButton = this.state.hover || this.state.menuDisplayed ?
-            <div className="mx_TagTile_context_button" onClick={this.onContextButtonClick}>
+            <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this._contextMenuButton}>
                 { "\u00B7\u00B7\u00B7" }
-            </div> : <div />;
-        return <AccessibleButton className={className} onClick={this.onClick} onContextMenu={this.onContextMenu}>
-            <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                <BaseAvatar
-                    name={name}
-                    idName={this.props.tag}
-                    url={httpUrl}
-                    width={avatarHeight}
-                    height={avatarHeight}
-                />
-                { tip }
-                { contextButton }
-                { badgeElement }
-            </div>
-        </AccessibleButton>;
+            </div> : <div ref={this._contextMenuButton} />;
+
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+            const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
+            contextMenu = (
+                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
+                    <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
+        }
+
+        const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
+        return <React.Fragment>
+            <AccessibleTooltipButton className={className} onClick={this.onClick} onContextMenu={this.openMenu} title={name}>
+                <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+                    <BaseAvatar
+                        name={name}
+                        idName={this.props.tag}
+                        url={httpUrl}
+                        width={avatarHeight}
+                        height={avatarHeight}
+                    />
+                    { contextButton }
+                    { badgeElement }
+                </div>
+            </AccessibleTooltipButton>
+
+            { contextMenu }
+        </React.Fragment>;
     },
 });

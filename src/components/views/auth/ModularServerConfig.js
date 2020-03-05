@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
@@ -99,7 +99,7 @@ export default class ModularServerConfig extends ServerConfig {
                     "Enter the location of your Modular homeserver. It may use your own " +
                     "domain name or be a subdomain of <a>modular.im</a>.",
                     {}, {
-                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
+                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                             {sub}
                         </a>,
                     },

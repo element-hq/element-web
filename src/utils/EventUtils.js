@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventStatus } from 'matrix-js-sdk';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -52,6 +52,7 @@ export function canEditContent(mxEvent) {
     const content = mxEvent.getOriginalContent();
     const {msgtype} = content;
     return (msgtype === "m.text" || msgtype === "m.emote") &&
+        content.body && typeof content.body === 'string' &&
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
 

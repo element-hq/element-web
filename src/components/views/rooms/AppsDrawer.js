@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher';
-import sdk from '../../../index';
-import ScalarMessaging from '../../../ScalarMessaging';
+import * as sdk from '../../../index';
+import * as ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
@@ -34,7 +34,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
@@ -107,7 +107,9 @@ module.exports = createReactClass({
             this.props.room.roomId, WidgetUtils.getRoomWidgets(this.props.room),
         );
         return widgets.map((ev) => {
-            return WidgetUtils.makeAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
+            return WidgetUtils.makeAppConfig(
+                ev.getStateKey(), ev.getContent(), ev.getSender(), ev.getRoomId(), ev.getId(),
+            );
         });
     },
 
@@ -159,6 +161,7 @@ module.exports = createReactClass({
             return (<AppTile
                 key={app.id}
                 id={app.id}
+                eventId={app.eventId}
                 url={app.url}
                 name={app.name}
                 type={app.type}

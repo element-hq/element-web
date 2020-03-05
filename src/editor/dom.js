@@ -21,8 +21,8 @@ import DocumentOffset from "./offset";
 export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
     let node = rootNode.firstChild;
     while (node && node !== rootNode) {
-        const shouldDecend = enterNodeCallback(node);
-        if (shouldDecend && node.firstChild) {
+        const shouldDescend = enterNodeCallback(node);
+        if (shouldDescend && node.firstChild) {
             node = node.firstChild;
         } else if (node.nextSibling) {
             node = node.nextSibling;

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,16 +14,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import CallHandler from '../../../CallHandler';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'CallView',
 
     propTypes: {
@@ -54,6 +55,10 @@ module.exports = createReactClass({
             // the call this view is displaying (if any)
             call: null,
         };
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._video = createRef();
     },
 
     componentDidMount: function() {
@@ -90,6 +95,13 @@ module.exports = createReactClass({
             }
         } else {
             call = CallHandler.getAnyActiveCall();
+            // Ignore calls if we can't get the room associated with them.
+            // I think the underlying problem is that the js-sdk sends events
+            // for calls before it has made the rooms available in the store,
+            // although this isn't confirmed.
+            if (MatrixClientPeg.get().getRoom(call.roomId) === null) {
+                call = null;
+            }
             this.setState({ call: call });
         }
 
@@ -121,7 +133,7 @@ module.exports = createReactClass({
     },
 
     getVideoView: function() {
-        return this.refs.video;
+        return this._video.current;
     },
 
     render: function() {
@@ -140,7 +152,9 @@ module.exports = createReactClass({
 
         return (
             <div>
-                <VideoView ref="video" onClick={this.props.onClick}
+                <VideoView
+                    ref={this._video}
+                    onClick={this.props.onClick}
                     onResize={this.props.onResize}
                     maxHeight={this.props.maxVideoHeight}
                 />

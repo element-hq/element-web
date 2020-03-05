@@ -49,6 +49,7 @@ limitations under the License.
     color: $primary-fg-color;
     background-color: $primary-bg-color;
     flex: 1;
+    min-width: 0;
 }
 
 .mx_Field select {
@@ -148,9 +149,6 @@ limitations under the License.
     color: $greyed-fg-color;
 }
 
-/* Ordering this block by specificity would require breaking it up into several
-   chunks, which seems like it would be more confusing to read. */
-/* stylelint-disable no-descending-specificity */
 .mx_Field_valid {
     &.mx_Field,
     &.mx_Field:focus-within {
@@ -174,7 +172,6 @@ limitations under the License.
         color: $input-invalid-border-color;
     }
 }
-/* stylelint-enable no-descending-specificity */
 
 .mx_Field_tooltip {
     margin-top: -12px;

@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
+import AuthPage from "./AuthPage";
 
 export default class Welcome extends React.PureComponent {
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
 

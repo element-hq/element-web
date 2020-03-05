@@ -14,18 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import sinon from 'sinon';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 
-import sdk from 'matrix-react-sdk';
-import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import sdk from '../../../skinned-sdk';
+import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
+import {sleep} from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
     'views.dialogs.InteractiveAuthDialog',
@@ -33,11 +31,9 @@ const InteractiveAuthDialog = sdk.getComponent(
 
 describe('InteractiveAuthDialog', function() {
     let parentDiv;
-    let sandbox;
 
     beforeEach(function() {
-        test_utils.beforeEach(this);
-        sandbox = test_utils.stubClient(sandbox);
+        test_utils.stubClient();
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
     });
@@ -45,12 +41,11 @@ describe('InteractiveAuthDialog', function() {
     afterEach(function() {
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
-        sandbox.restore();
     });
 
     it('Should successfully complete a password flow', function() {
-        const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(Promise.resolve({a: 1}));
+        const onFinished = jest.fn();
+        const doRequest = jest.fn().mockResolvedValue({a: 1});
 
         // tell the stub matrixclient to return a real userid
         const client = MatrixClientPeg.get();
@@ -96,8 +91,8 @@ describe('InteractiveAuthDialog', function() {
             expect(submitNode.disabled).toBe(false);
             ReactTestUtils.Simulate.submit(formNode, {});
 
-            expect(doRequest.callCount).toEqual(1);
-            expect(doRequest.calledWithMatch({
+            expect(doRequest).toHaveBeenCalledTimes(1);
+            expect(doRequest).toBeCalledWith(expect.objectContaining({
                 session: "sess",
                 type: "m.login.password",
                 password: "s3kr3t",
@@ -105,12 +100,12 @@ describe('InteractiveAuthDialog', function() {
                     type: "m.id.user",
                     user: "@user:id",
                 },
-            })).toBe(true);
+            }));
             // let the request complete
-            return Promise.delay(1);
-        }).then(() => {
-            expect(onFinished.callCount).toEqual(1);
-            expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);
+            return sleep(1);
+        }).then(sleep(1)).then(() => {
+            expect(onFinished).toBeCalledTimes(1);
+            expect(onFinished).toBeCalledWith(true, {a: 1});
         });
     });
 });

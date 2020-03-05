@@ -19,15 +19,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
-const filesize = require('filesize');
-const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
-const Modal = require('../../../Modal');
-const sdk = require('../../../index');
 import { _t } from '../../../languageHandler';
+import filesize from "filesize";
+import AccessibleButton from "./AccessibleButton";
+import Modal from "../../../Modal";
+import * as sdk from "../../../index";
+import {Key} from "../../../Keyboard";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -62,7 +61,7 @@ export default class ImageView extends React.Component {
     }
 
     onKeyDown = (ev) => {
-        if (ev.keyCode === 27) { // escape
+        if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();
@@ -84,7 +83,7 @@ export default class ImageView extends React.Component {
                         title: _t('Error'),
                         description: _t('You cannot delete this image. (%(code)s)', {code: code}),
                     });
-                }).done();
+                });
             },
         });
     };
@@ -92,7 +91,7 @@ export default class ImageView extends React.Component {
     getName() {
         let name = this.props.name;
         if (name && this.props.link) {
-            name = <a href={ this.props.link } target="_blank" rel="noopener">{ name }</a>;
+            name = <a href={ this.props.link } target="_blank" rel="noreferrer noopener">{ name }</a>;
         }
         return name;
     }

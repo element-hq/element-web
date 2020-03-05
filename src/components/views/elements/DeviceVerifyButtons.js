@@ -17,11 +17,13 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
+// XXX: This component is *not* cross-signing aware. Once everything is
+// cross-signing, this component should just go away.
 export default createReactClass({
     displayName: 'DeviceVerifyButtons',
 
@@ -59,7 +61,7 @@ export default createReactClass({
         Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
             userId: this.props.userId,
             device: this.state.device,
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     },
 
     onUnverifyClick: function() {
