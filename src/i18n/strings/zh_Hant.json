@@ -2176,5 +2176,6 @@
     "Create Account": "建立帳號",
     "Order rooms by name": "以名稱排序聊天室",
     "Show rooms with unread notifications first": "先顯示有未讀通知的聊天室",
-    "Show shortcuts to recently viewed rooms above the room list": "在聊天室清單上方顯示最近看過的聊天室的捷徑"
+    "Show shortcuts to recently viewed rooms above the room list": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
+    "Displays information about a user": "顯示關於使用者的資訊"
 }
