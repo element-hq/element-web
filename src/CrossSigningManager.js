@@ -142,13 +142,13 @@ const onSecretRequested = async function({
         console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
         return;
     }
-    const crossSigning = client._crypto._crossSigningInfo;
-    if (!crossSigning._cacheCallbacks.getCrossSigningKeyCache) return;
+    const callbacks = client.getCrossSigningCacheCallbacks();
+    if (!callbacks.getCrossSigningKeyCache) return;
     if (name === "m.key.self_signing") {
-        const key = await crossSigning._cacheCallbacks.getCrossSigningKeyCache("self_signing");
+        const key = await callbacks.getCrossSigningKeyCache("self_signing");
         return key && encodeBase64(key);
     } else if (name === "m.key.user_signing") {
-        const key = await crossSigning._cacheCallbacks.getCrossSigningKeyCache("user_signing");
+        const key = await callbacks.getCrossSigningKeyCache("user_signing");
         return key && encodeBase64(key);
     }
     console.warn("onSecretRequested didn't recognise the secret named ", name);
