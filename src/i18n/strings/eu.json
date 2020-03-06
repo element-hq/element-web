@@ -21,5 +21,6 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurazio baliogabea: default_server_config, default_server_name, edo default_hs_url bat bakarra zehaztu daiteke.",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Zure Riot konfigurazioak baliogabeko JSON kodea du. Zuzendu arazoa eta kargatu orria berriro.",
     "The message from the parser is: %(message)s": "Prozesatzailearen mezua hau da: %(message)s",
-    "Invalid JSON": "JSON baliogabea"
+    "Invalid JSON": "JSON baliogabea",
+    "Go to your browser to complete Sign In": "Joan zure nabigatzailera izena ematen bukatzeko"
 }
