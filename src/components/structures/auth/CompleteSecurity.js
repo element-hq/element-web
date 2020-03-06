@@ -19,11 +19,12 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { accessSecretStorage } from '../../../CrossSigningManager';
+import { accessSecretStorage, AccessCancelledError } from '../../../CrossSigningManager';
 
 const PHASE_INTRO = 0;
-const PHASE_DONE = 1;
-const PHASE_CONFIRM_SKIP = 2;
+const PHASE_BUSY = 1;
+const PHASE_DONE = 2;
+const PHASE_CONFIRM_SKIP = 3;
 
 export default class CompleteSecurity extends React.Component {
     static propTypes = {
@@ -35,20 +36,72 @@ export default class CompleteSecurity extends React.Component {
 
         this.state = {
             phase: PHASE_INTRO,
+            // this serves dual purpose as the object for the request logic and
+            // the presence of it insidicating that we're in 'verify mode'.
+            // Because of the latter, it lives in the state.
+            verificationRequest: null,
+            backupInfo: null,
         };
+        MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
+    }
+
+    componentWillUnmount() {
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("crypto.verification.request", this.onVerificationRequest);
+        }
     }
 
     onStartClick = async () => {
+        this.setState({
+            phase: PHASE_BUSY,
+        });
         const cli = MatrixClientPeg.get();
+        const backupInfo = await cli.getKeyBackupVersion();
+        this.setState({backupInfo});
         try {
             await accessSecretStorage(async () => {
                 await cli.checkOwnCrossSigningTrust();
+                if (backupInfo) await cli.restoreKeyBackupWithSecretStorage(backupInfo);
             });
-            this.setState({
-                phase: PHASE_DONE,
-            });
+
+            if (cli.getCrossSigningId()) {
+                this.setState({
+                    phase: PHASE_DONE,
+                });
+            }
         } catch (e) {
+            if (!(e instanceof AccessCancelledError)) {
+                console.log(e);
+            }
             // this will throw if the user hits cancel, so ignore
+            this.setState({
+                phase: PHASE_INTRO,
+            });
+        }
+    }
+
+    onVerificationRequest = async (request) => {
+        if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
+
+        if (this.state.verificationRequest) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        await request.accept();
+        request.on("change", this.onVerificationRequestChange);
+        this.setState({
+            verificationRequest: request,
+        });
+    }
+
+    onVerificationRequestChange = () => {
+        if (this.state.verificationRequest.cancelled) {
+            this.state.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.setState({
+                verificationRequest: null,
+            });
         }
     }
 
@@ -74,8 +127,7 @@ export default class CompleteSecurity extends React.Component {
 
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
+        const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         const {
@@ -85,7 +137,16 @@ export default class CompleteSecurity extends React.Component {
         let icon;
         let title;
         let body;
-        if (phase === PHASE_INTRO) {
+
+        if (this.state.verificationRequest) {
+            const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
+            body = <EncryptionPanel
+                layout="dialog"
+                verificationRequest={this.state.verificationRequest}
+                onClose={this.props.onFinished}
+                member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
+            />;
+        } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
             title = _t("Complete security");
             body = (
@@ -112,13 +173,21 @@ export default class CompleteSecurity extends React.Component {
         } else if (phase === PHASE_DONE) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified"></span>;
             title = _t("Session verified");
+            let message;
+            if (this.state.backupInfo) {
+                message = <p>{_t(
+                    "Your new session is now verified. It has access to your " +
+                    "encrypted messages, and other users will see it as trusted.",
+                )}</p>;
+            } else {
+                message = <p>{_t(
+                    "Your new session is now verified. Other users will see it as trusted.",
+                )}</p>;
+            }
             body = (
                 <div>
                     <div className="mx_CompleteSecurity_heroIcon mx_E2EIcon_verified"></div>
-                    <p>{_t(
-                        "Your new session is now verified. It has access to your " +
-                        "encrypted messages, and other users will see it as trusted.",
-                    )}</p>
+                    {message}
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
                             kind="primary"
@@ -135,7 +204,7 @@ export default class CompleteSecurity extends React.Component {
             body = (
                 <div>
                     <p>{_t(
-                        "Without completing security on this device, it won’t have " +
+                        "Without completing security on this session, it won’t have " +
                         "access to encrypted messages.",
                     )}</p>
                     <div className="mx_CompleteSecurity_actionRow">
@@ -155,14 +224,18 @@ export default class CompleteSecurity extends React.Component {
                     </div>
                 </div>
             );
+        } else if (phase === PHASE_BUSY) {
+            const Spinner = sdk.getComponent('views.elements.Spinner');
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
+            title = _t("Complete security");
+            body = <Spinner />;
         } else {
             throw new Error(`Unknown phase ${phase}`);
         }
 
         return (
             <AuthPage>
-                <AuthHeader />
-                <AuthBody>
+                <CompleteSecurityBody>
                     <h2 className="mx_CompleteSecurity_header">
                         {icon}
                         {title}
@@ -170,7 +243,7 @@ export default class CompleteSecurity extends React.Component {
                     <div className="mx_CompleteSecurity_body">
                         {body}
                     </div>
-                </AuthBody>
+                </CompleteSecurityBody>
             </AuthPage>
         );
     }

@@ -20,6 +20,7 @@ class Skinner {
     }
 
     getComponent(name) {
+        if (!name) throw new Error(`Invalid component name: ${name}`);
         if (this.components === null) {
             throw new Error(
                 "Attempted to get a component before a skin has been loaded."+
@@ -41,13 +42,7 @@ class Skinner {
         };
 
         // Check the skin first
-        let comp = doLookup(this.components);
-
-        // If that failed, check against our own components
-        if (!comp) {
-            // Lazily load our own components because they might end up calling .getComponent()
-            comp = doLookup(require("./component-index").components);
-        }
+        const comp = doLookup(this.components);
 
         // Just return nothing instead of erroring - the consumer should be smart enough to
         // handle this at this point.
@@ -74,6 +69,13 @@ class Skinner {
         for (let i = 0; i < compKeys.length; ++i) {
             const comp = skinObject.components[compKeys[i]];
             this.addComponent(compKeys[i], comp);
+        }
+
+        // Now that we have a skin, load our components too
+        const idx = require("./component-index");
+        if (!idx || !idx.components) throw new Error("Invalid react-sdk component index");
+        for (const c in idx.components) {
+            if (!this.components[c]) this.components[c] = idx.components[c];
         }
     }
 

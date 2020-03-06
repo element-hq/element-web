@@ -23,6 +23,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher";
 import ToastStore from "../../../stores/ToastStore";
+import Modal from "../../../Modal";
 
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
@@ -32,12 +33,21 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     componentDidMount() {
         const {request} = this.props;
-        this._intervalHandle = setInterval(() => {
-            let {counter} = this.state;
-            counter = Math.max(0, counter - 1);
-            this.setState({counter});
-        }, 1000);
+        if (request.timeout && request.timeout > 0) {
+            this._intervalHandle = setInterval(() => {
+                let {counter} = this.state;
+                counter = Math.max(0, counter - 1);
+                this.setState({counter});
+            }, 1000);
+        }
         request.on("change", this._checkRequestIsPending);
+        // We should probably have a separate class managing the active verification toasts,
+        // rather than monitoring this in the toast component itself, since we'll get problems
+        // like the toasdt not going away when the verification is cancelled unless it's the
+        // one on the top (ie. the one that's mounted).
+        // As a quick & dirty fix, check the toast is still relevant when it mounts (this prevents
+        // a toast hanging around after logging in if you did a verification as part of login).
+        this._checkRequestIsPending();
     }
 
     componentWillUnmount() {
@@ -48,7 +58,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
     _checkRequestIsPending = () => {
         const {request} = this.props;
-        if (request.ready || request.started || request.done || request.cancelled || request.observeOnly) {
+        if (!request.canAccept) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
@@ -65,22 +75,30 @@ export default class VerificationRequestToast extends React.PureComponent {
     accept = async () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
-        const {event} = request;
         // no room id for to_device requests
-        if (event.getRoomId()) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: event.getRoomId(),
-                should_peek: false,
-            });
-        }
+        const cli = MatrixClientPeg.get();
         try {
+            if (request.channel.roomId) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: request.channel.roomId,
+                    should_peek: false,
+                });
+                dis.dispatch({
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {
+                        verificationRequest: request,
+                        member: cli.getUser(request.otherUserId),
+                    },
+                });
+            } else {
+                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
+                    verificationRequest: request,
+                }, null, /* priority = */ false, /* static = */ true);
+            }
             await request.accept();
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {verificationRequest: request},
-            });
         } catch (err) {
             console.error(err.message);
         }
@@ -89,21 +107,24 @@ export default class VerificationRequestToast extends React.PureComponent {
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
         const {request} = this.props;
-        const {event} = request;
         const userId = request.otherUserId;
-        let nameLabel = event.getRoomId() ? userLabelForEventRoom(userId, event) : userId;
+        const roomId = request.channel.roomId;
+        let nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
         // for legacy to_device verification requests
         if (nameLabel === userId) {
             const client = MatrixClientPeg.get();
-            const user = client.getUser(event.getSender());
+            const user = client.getUser(userId);
             if (user && user.displayName) {
                 nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
             }
         }
+        const declineLabel = this.state.counter == 0 ?
+            _t("Decline") :
+            _t("Decline (%(counter)s)", {counter: this.state.counter});
         return (<div>
             <div className="mx_Toast_description">{nameLabel}</div>
             <div className="mx_Toast_buttons" aria-live="off">
-                <FormButton label={_t("Decline (%(counter)s)", {counter: this.state.counter})} kind="danger" onClick={this.cancel} />
+                <FormButton label={declineLabel} kind="danger" onClick={this.cancel} />
                 <FormButton label={_t("Accept")} onClick={this.accept} />
             </div>
         </div>);

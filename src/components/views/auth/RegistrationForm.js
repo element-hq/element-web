@@ -486,6 +486,7 @@ export default createReactClass({
             id="mx_RegistrationForm_password"
             ref={field => this[FIELD_PASSWORD] = field}
             type="password"
+            autoComplete="new-password"
             label={_t("Password")}
             value={this.state.password}
             onChange={this.onPasswordChange}
@@ -499,6 +500,7 @@ export default createReactClass({
             id="mx_RegistrationForm_passwordConfirm"
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
+            autoComplete="new-password"
             label={_t("Confirm")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}

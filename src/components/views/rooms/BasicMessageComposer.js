@@ -94,6 +94,17 @@ export default class BasicMessageEditor extends React.Component {
         this._emoticonSettingHandle = null;
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
+            const {isEmpty} = this.props.model;
+            if (isEmpty) {
+                this._showPlaceholder();
+            } else {
+                this._hidePlaceholder();
+            }
+        }
+    }
+
     _replaceEmoticon = (caretPosition, inputType, diff) => {
         const {model} = this.props;
         const range = model.startRange(caretPosition);
@@ -209,6 +220,7 @@ export default class BasicMessageEditor extends React.Component {
             const range = getRangeForSelection(this._editorRef, model, selection);
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
+            event.clipboardData.setData("text/plain", text); // so plain copy/paste works
             if (type === "cut") {
                 // Remove the text, updating the model as appropriate
                 this._modifiedFlag = true;
@@ -380,6 +392,20 @@ export default class BasicMessageEditor extends React.Component {
         } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
             this._insertText("\n");
             handled = true;
+        // move selection to start of composer
+        } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
+            setSelection(this._editorRef, model, {
+                index: 0,
+                offset: 0,
+            });
+            handled = true;
+        // move selection to end of composer
+        } else if (modKey && event.key === Key.END && !event.shiftKey) {
+            setSelection(this._editorRef, model, {
+                index: model.parts.length - 1,
+                offset: model.parts[model.parts.length - 1].text.length,
+            });
+            handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
         } else {
             const metaOrAltPressed = event.metaKey || event.altKey;
@@ -445,10 +471,14 @@ export default class BasicMessageEditor extends React.Component {
                 const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
                 return model.positionForOffset(caret.offset + addedLen, true);
             });
-            await model.autoComplete.onTab();
-            if (!model.autoComplete.hasSelection()) {
-                this.setState({showVisualBell: true});
-                model.autoComplete.close();
+
+            // Don't try to do things with the autocomplete if there is none shown
+            if (model.autoComplete) {
+                await model.autoComplete.onTab();
+                if (!model.autoComplete.hasSelection()) {
+                    this.setState({showVisualBell: true});
+                    model.autoComplete.close();
+                }
             }
         } catch (err) {
             console.error(err);
@@ -478,6 +508,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        document.removeEventListener("selectionchange", this._onSelectionChange);
         this._editorRef.removeEventListener("input", this._onInput, true);
         this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
         this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
@@ -532,6 +563,7 @@ export default class BasicMessageEditor extends React.Component {
             return;
         }
         this.historyManager.ensureLastChangesPushed(this.props.model);
+        this._modifiedFlag = true;
         switch (action) {
             case "bold":
                 toggleInlineFormat(range, "**");

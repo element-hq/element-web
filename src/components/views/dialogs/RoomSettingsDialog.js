@@ -54,9 +54,6 @@ export default class RoomSettingsDialog extends React.Component {
 
     _getTabs() {
         const tabs = [];
-        const featureFlag = SettingsStore.isFeatureEnabled("feature_bridge_state");
-        const shouldShowBridgeIcon = featureFlag &&
-            BridgeSettingsTab.getBridgeStateEvents(this.props.roomId).length > 0;
 
         tabs.push(new Tab(
             _td("General"),
@@ -79,9 +76,9 @@ export default class RoomSettingsDialog extends React.Component {
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
 
-        if (shouldShowBridgeIcon) {
+        if (SettingsStore.isFeatureEnabled("feature_bridge_state")) {
             tabs.push(new Tab(
-                _td("Bridge Info"),
+                _td("Bridges"),
                 "mx_RoomSettingsDialog_bridgesIcon",
                 <BridgeSettingsTab roomId={this.props.roomId} />,
             ));

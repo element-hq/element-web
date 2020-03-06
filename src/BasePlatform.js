@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from "matrix-js-sdk";
 import dis from './dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 
@@ -161,5 +163,29 @@ export default class BasePlatform {
      */
     getEventIndexingManager(): BaseEventIndexManager | null {
         return null;
+    }
+
+    setLanguage(preferredLangs: string[]) {}
+
+    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
+        const url = new URL(window.location.href);
+        // XXX: at this point, the fragment will always be #/login, which is no
+        // use to anyone. Ideally, we would get the intended fragment from
+        // MatrixChat.screenAfterLogin so that you could follow #/room links etc
+        // through an SSO login.
+        url.hash = "";
+        url.searchParams.set("homeserver", hsUrl);
+        url.searchParams.set("identityServer", isUrl);
+        return url;
+    }
+
+    /**
+     * Begin Single Sign On flows.
+     * @param {MatrixClient} mxClient the matrix client using which we should start the flow
+     * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
+     */
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso"|"cas") {
+        const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl());
+        window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
 }

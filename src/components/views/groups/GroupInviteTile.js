@@ -26,6 +26,7 @@ import classNames from 'classnames';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 
 // XXX this class copies a lot from RoomTile.js
 export default createReactClass({
@@ -127,7 +128,8 @@ export default createReactClass({
             'mx_RoomTile_badgeShown': this.state.badgeHover || isMenuDisplayed,
         });
 
-        const label = <div title={this.props.group.groupId} className={nameClasses} dir="auto">
+        // XXX: this is a workaround for Firefox giving this div a tabstop :( [tabIndex]
+        const label = <div title={this.props.group.groupId} className={nameClasses} tabIndex={-1} dir="auto">
             { groupName }
         </div>;
 
@@ -137,16 +139,6 @@ export default createReactClass({
         });
 
         const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
-        const badge = (
-            <ContextMenuButton
-                className={badgeClasses}
-                onClick={this.onContextMenuButtonClick}
-                label={_t("Options")}
-                isExpanded={isMenuDisplayed}
-            >
-                { badgeContent }
-            </ContextMenuButton>
-        );
 
         let tooltip;
         if (this.props.collapsed && this.state.hover) {
@@ -171,22 +163,37 @@ export default createReactClass({
         }
 
         return <React.Fragment>
-            <AccessibleButton
-                className={classes}
-                onClick={this.onClick}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-                onContextMenu={this.onContextMenu}
-            >
-                <div className="mx_RoomTile_avatar">
-                    { av }
-                </div>
-                <div className="mx_RoomTile_nameContainer">
-                    { label }
-                    { badge }
-                </div>
-                { tooltip }
-            </AccessibleButton>
+            <RovingTabIndexWrapper>
+                {({onFocus, isActive, ref}) =>
+                    <AccessibleButton
+                        onFocus={onFocus}
+                        tabIndex={isActive ? 0 : -1}
+                        inputRef={ref}
+                        className={classes}
+                        onClick={this.onClick}
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        onContextMenu={this.onContextMenu}
+                    >
+                        <div className="mx_RoomTile_avatar">
+                            { av }
+                        </div>
+                        <div className="mx_RoomTile_nameContainer">
+                            { label }
+                            <ContextMenuButton
+                                className={badgeClasses}
+                                onClick={this.onContextMenuButtonClick}
+                                label={_t("Options")}
+                                isExpanded={isMenuDisplayed}
+                                tabIndex={isActive ? 0 : -1}
+                            >
+                                { badgeContent }
+                            </ContextMenuButton>
+                        </div>
+                        { tooltip }
+                    </AccessibleButton>
+                }
+            </RovingTabIndexWrapper>
 
             { contextMenu }
         </React.Fragment>;

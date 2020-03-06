@@ -65,6 +65,9 @@ export default createReactClass({
         // Title for the dialog.
         title: PropTypes.node.isRequired,
 
+        // Path to an icon to put in the header
+        headerImage: PropTypes.string,
+
         // children should be the content of the dialog
         children: PropTypes.node,
 
@@ -110,6 +113,13 @@ export default createReactClass({
             );
         }
 
+        let headerImage;
+        if (this.props.headerImage) {
+            headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage}
+                alt=""
+            />;
+        }
+
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <FocusLock
@@ -135,6 +145,7 @@ export default createReactClass({
                         'mx_Dialog_headerWithButton': !!this.props.headerButton,
                     })}>
                         <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
+                            {headerImage}
                             { this.props.title }
                         </div>
                         { this.props.headerButton }

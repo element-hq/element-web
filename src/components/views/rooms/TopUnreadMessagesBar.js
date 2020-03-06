@@ -27,6 +27,7 @@ export default createReactClass({
 
     propTypes: {
         onScrollUpClick: PropTypes.func,
+        onCloseClick: PropTypes.func,
     },
 
     render: function() {
@@ -35,6 +36,10 @@ export default createReactClass({
                 <AccessibleButton className="mx_TopUnreadMessagesBar_scrollUp"
                     title={_t('Jump to first unread message.')}
                     onClick={this.props.onScrollUpClick}>
+                </AccessibleButton>
+                <AccessibleButton className="mx_TopUnreadMessagesBar_markAsRead"
+                    title={_t('Mark all as read')}
+                    onClick={this.props.onCloseClick}>
                 </AccessibleButton>
             </div>
         );

@@ -36,11 +36,12 @@ export default class SecurityRoomSettingsTab extends React.Component {
             joinRule: "invite",
             guestAccess: "can_join",
             history: "shared",
+            hasAliases: false,
             encrypted: false,
         };
     }
 
-    componentWillMount(): void {
+    async componentWillMount(): void {
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -63,6 +64,8 @@ export default class SecurityRoomSettingsTab extends React.Component {
         );
         const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
         this.setState({joinRule, guestAccess, history, encrypted});
+        const hasAliases = await this._hasAliases();
+        this.setState({hasAliases});
     }
 
     _pullContentPropertyFromEvent(event, key, defaultValue) {
@@ -94,7 +97,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 {},
                 {
                     'a': (sub) => {
-                        return <a rel='noopener' target='_blank'
+                        return <a rel='noreferrer noopener' target='_blank'
                                   href='https://about.riot.im/help#end-to-end-encryption'>{sub}</a>;
                     },
                 },
@@ -201,13 +204,25 @@ export default class SecurityRoomSettingsTab extends React.Component {
         MatrixClientPeg.get().getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
     };
 
+    async _hasAliases() {
+        const cli = MatrixClientPeg.get();
+        if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
+            const response = await cli.unstableGetLocalAliases(this.props.roomId);
+            const localAliases = response.aliases;
+            return Array.isArray(localAliases) && localAliases.length !== 0;
+        } else {
+            const room = cli.getRoom(this.props.roomId);
+            const aliasEvents = room.currentState.getStateEvents("m.room.aliases") || [];
+            const hasAliases = !!aliasEvents.find((ev) => (ev.getContent().aliases || []).length > 0);
+            return hasAliases;
+        }
+    }
+
     _renderRoomAccess() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const joinRule = this.state.joinRule;
         const guestAccess = this.state.guestAccess;
-        const aliasEvents = room.currentState.getStateEvents("m.room.aliases") || [];
-        const hasAliases = !!aliasEvents.find((ev) => (ev.getContent().aliases || []).length > 0);
 
         const canChangeAccess = room.currentState.mayClientSendStateEvent("m.room.join_rules", client)
             && room.currentState.mayClientSendStateEvent("m.room.guest_access", client);
@@ -226,7 +241,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         }
 
         let aliasWarning = null;
-        if (joinRule === 'public' && !hasAliases) {
+        if (joinRule === 'public' && !this.state.hasAliases) {
             aliasWarning = (
                 <div className='mx_SecurityRoomSettingsTab_warning'>
                     <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />

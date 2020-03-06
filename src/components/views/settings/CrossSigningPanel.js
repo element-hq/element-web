@@ -20,6 +20,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { accessSecretStorage } from '../../../CrossSigningManager';
+import Modal from '../../../Modal';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -71,11 +72,14 @@ export default class CrossSigningPanel extends React.PureComponent {
         const crossSigningPublicKeysOnDevice = crossSigning.getId();
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const secretStorageKeyInAccount = await secretStorage.hasKey();
+        const homeserverSupportsCrossSigning =
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
 
         this.setState({
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
+            homeserverSupportsCrossSigning,
         });
     }
 
@@ -86,17 +90,30 @@ export default class CrossSigningPanel extends React.PureComponent {
      * 2. Access existing secret storage by requesting passphrase and accessing
      *    cross-signing keys as needed.
      * 3. All keys are loaded and there's nothing to do.
+     * @param {bool} [force] Bootstrap again even if keys already present
      */
-    _bootstrapSecureSecretStorage = async () => {
+    _bootstrapSecureSecretStorage = async (force=false) => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage();
+            await accessSecretStorage(() => undefined, force);
         } catch (e) {
             this.setState({ error: e });
             console.error("Error bootstrapping secret storage", e);
         }
         if (this._unmounted) return;
         this._getUpdatedStatus();
+    }
+
+    onDestroyStorage = (act) => {
+        if (!act) return;
+        this._bootstrapSecureSecretStorage(true);
+    }
+
+    _destroySecureSecretStorage = () => {
+        const ConfirmDestoryCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
+        Modal.createDialog(ConfirmDestoryCrossSigningDialog, {
+            onFinished: this.onDestroyStorage,
+        });
     }
 
     render() {
@@ -106,6 +123,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
+            homeserverSupportsCrossSigning,
         } = this.state;
 
         let errorSection;
@@ -113,21 +131,26 @@ export default class CrossSigningPanel extends React.PureComponent {
             errorSection = <div className="error">{error.toString()}</div>;
         }
 
-        const enabled = (
-            crossSigningPublicKeysOnDevice &&
+        // Whether the various keys exist on your account (but not necessarily
+        // on this device).
+        const enabledForAccount = (
             crossSigningPrivateKeysInStorage &&
             secretStorageKeyInAccount
         );
 
         let summarisedStatus;
-        if (enabled) {
+        if (!homeserverSupportsCrossSigning) {
+            summarisedStatus = <p>{_t(
+                "Your homeserver does not support cross-signing.",
+            )}</p>;
+        } else if (enabledForAccount && crossSigningPublicKeysOnDevice) {
             summarisedStatus = <p>✅ {_t(
                 "Cross-signing and secret storage are enabled.",
             )}</p>;
         } else if (crossSigningPrivateKeysInStorage) {
             summarisedStatus = <p>{_t(
                 "Your account has a cross-signing identity in secret storage, but it " +
-                "is not yet trusted by this device.",
+                "is not yet trusted by this session.",
             )}</p>;
         } else {
             summarisedStatus = <p>{_t(
@@ -135,13 +158,28 @@ export default class CrossSigningPanel extends React.PureComponent {
             )}</p>;
         }
 
+        let resetButton;
+        if (enabledForAccount) {
+            resetButton = (
+                <div className="mx_CrossSigningPanel_buttonRow">
+                    <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
+                        {_t("Reset cross-signing and secret storage")}
+                    </AccessibleButton>
+                </div>
+            );
+        }
         let bootstrapButton;
-        if (!enabled) {
-            bootstrapButton = <div className="mx_CrossSigningPanel_buttonRow">
-                <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
-                    {_t("Bootstrap cross-signing and secret storage")}
-                </AccessibleButton>
-            </div>;
+        if (
+            (!enabledForAccount || !crossSigningPublicKeysOnDevice) &&
+            homeserverSupportsCrossSigning
+        ) {
+            bootstrapButton = (
+                <div className="mx_CrossSigningPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                        {_t("Bootstrap cross-signing and secret storage")}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
         return (
@@ -152,7 +190,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                     <table className="mx_CrossSigningPanel_statusList"><tbody>
                         <tr>
                             <td>{_t("Cross-signing public keys:")}</td>
-                            <td>{crossSigningPublicKeysOnDevice ? _t("on device") : _t("not found")}</td>
+                            <td>{crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Cross-signing private keys:")}</td>
@@ -162,10 +200,15 @@ export default class CrossSigningPanel extends React.PureComponent {
                             <td>{_t("Secret storage public key:")}</td>
                             <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
                         </tr>
-                    </tbody></table>
+                        <tr>
+                            <td>{_t("Homeserver feature support:")}</td>
+                            <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                        </tr>
+                   </tbody></table>
                 </details>
                 {errorSection}
                 {bootstrapButton}
+                {resetButton}
             </div>
         );
     }

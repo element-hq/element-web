@@ -18,7 +18,7 @@ limitations under the License.
     display: table;
     table-layout: fixed;
     width: 880px;
-    border-spacing: 2px;
+    border-spacing: 10px;
 }
 
 .mx_DevicesPanel_header {
@@ -32,7 +32,11 @@ limitations under the License.
 
 .mx_DevicesPanel_header > div {
     display: table-cell;
-    vertical-align: bottom;
+    vertical-align: middle;
+}
+
+.mx_DevicesPanel_header .mx_DevicesPanel_deviceName {
+    width: 50%;
 }
 
 .mx_DevicesPanel_header .mx_DevicesPanel_deviceLastSeen {

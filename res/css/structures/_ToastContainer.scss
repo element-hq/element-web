@@ -51,8 +51,8 @@ limitations under the License.
         &.mx_Toast_hasIcon {
             &::after {
                 content: "";
-                width: 21px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
                 grid-column: 1;
                 grid-row: 1;
                 mask-size: 100%;
@@ -97,6 +97,10 @@ limitations under the License.
             text-overflow: ellipsis;
             margin: 4px 0 11px 0;
             font-size: 12px;
+        }
+
+        .mx_Toast_deviceID {
+            font-size: 10px;
         }
     }
 }

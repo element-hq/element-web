@@ -53,6 +53,7 @@ import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -64,6 +65,7 @@ import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
+import * as StorageManager from "../../utils/StorageManager";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -89,12 +91,15 @@ export const VIEWS = {
     // showing flow to trust this new device with cross-signing
     COMPLETE_SECURITY: 6,
 
+    // flow to setup SSSS / cross-signing on this account
+    E2E_SETUP: 7,
+
     // we are logged in with an active matrix client.
-    LOGGED_IN: 7,
+    LOGGED_IN: 8,
 
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
-    SOFT_LOGOUT: 8,
+    SOFT_LOGOUT: 9,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -253,6 +258,9 @@ export default createReactClass({
             // logout page.
             Lifecycle.loadSession({});
         }
+
+        this._accountPassword = null;
+        this._accountPasswordTimer = null;
     },
 
     componentDidMount: function() {
@@ -349,6 +357,8 @@ export default createReactClass({
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
+
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
     },
 
     componentWillUpdate: function(props, state) {
@@ -498,6 +508,8 @@ export default createReactClass({
                     view: VIEWS.LOGIN,
                 });
                 this.notifyNewScreen('login');
+                ThemeController.isLogin = true;
+                this._themeWatcher.recheck();
                 break;
             case 'start_post_registration':
                 this.setState({
@@ -547,13 +559,19 @@ export default createReactClass({
             case 'view_user_info':
                 this._viewUser(payload.userId, payload.subAction);
                 break;
-            case 'view_room':
+            case 'view_room': {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(payload);
+                const promise = this._viewRoom(payload);
+                if (payload.deferred_action) {
+                    promise.then(() => {
+                        dis.dispatch(payload.deferred_action);
+                    });
+                }
                 break;
+            }
             case 'view_prev_room':
                 this._viewNextRoom(-1);
                 break;
@@ -657,7 +675,9 @@ export default createReactClass({
                 if (
                     !Lifecycle.isSoftLogout() &&
                     this.state.view !== VIEWS.LOGIN &&
-                    this.state.view !== VIEWS.COMPLETE_SECURITY
+                    this.state.view !== VIEWS.REGISTER &&
+                    this.state.view !== VIEWS.COMPLETE_SECURITY &&
+                    this.state.view !== VIEWS.E2E_SETUP
                 ) {
                     this._onLoggedIn();
                 }
@@ -750,6 +770,8 @@ export default createReactClass({
         }
 
         this.setStateForNewView(newState);
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
         this.notifyNewScreen('register');
     },
 
@@ -846,7 +868,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.then(() => {
+        return waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -869,7 +891,7 @@ export default createReactClass({
                 presentedId += "/" + roomInfo.event_id;
             }
             newState.ready = true;
-            this.setState(newState, ()=>{
+            this.setState(newState, () => {
                 this.notifyNewScreen('room/' + presentedId);
             });
         });
@@ -900,6 +922,8 @@ export default createReactClass({
             view: VIEWS.WELCOME,
         });
         this.notifyNewScreen('welcome');
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     _viewHome: function() {
@@ -909,6 +933,8 @@ export default createReactClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
+        ThemeController.isLogin = false;
+        this._themeWatcher.recheck();
     },
 
     _viewUser: function(userId, subAction) {
@@ -961,9 +987,9 @@ export default createReactClass({
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
 
-        const [shouldCreate, createOpts] = await modal.finished;
+        const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            createRoom({createOpts});
+            createRoom(opts);
         }
     },
 
@@ -988,6 +1014,10 @@ export default createReactClass({
                 // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
                 go_welcome_on_cancel: true,
+                screen_after: {
+                    screen: `user/${this.props.config.welcomeUserId}`,
+                    params: { action: 'chat' },
+                },
             });
             return;
         }
@@ -1155,8 +1185,17 @@ export default createReactClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
+        ThemeController.isLogin = false;
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (MatrixClientPeg.currentUserIsJustRegistered()) {
+        // If a specific screen is set to be shown after login, show that above
+        // all else, as it probably means the user clicked on something already.
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
+            this.showScreen(
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
+            );
+            this._screenAfterLogin = null;
+        } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
@@ -1174,6 +1213,8 @@ export default createReactClass({
         } else {
             this._showScreenAfterLogin();
         }
+
+        StorageManager.tryPersistStorage();
     },
 
     _showScreenAfterLogin: function() {
@@ -1221,6 +1262,8 @@ export default createReactClass({
         });
         this.subTitleStatus = '';
         this._setPageSubtitle();
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     /**
@@ -1350,7 +1393,8 @@ export default createReactClass({
                 cancelButton: _t('Dismiss'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        window.open(consentUri, '_blank');
+                        const wnd = window.open(consentUri, '_blank');
+                        wnd.opener = null;
                     }
                 },
             }, null, true);
@@ -1453,7 +1497,6 @@ export default createReactClass({
 
         if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             cli.on("crypto.verification.request", request => {
-                console.log(`MatrixChat got a .request ${request.channel.transactionId}`, request.event.getRoomId());
                 if (request.pending) {
                     ToastStore.sharedInstance().addOrReplaceToast({
                         key: 'verifreq_' + request.channel.transactionId,
@@ -1725,6 +1768,10 @@ export default createReactClass({
         this.showScreen("forgot_password");
     },
 
+    onRegisterFlowComplete: function(credentials, password) {
+        return this.onUserCompletedLoginFlow(credentials, password);
+    },
+
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
         return Lifecycle.setLoggedIn(credentials);
@@ -1813,7 +1860,15 @@ export default createReactClass({
         this._loggedInView = ref;
     },
 
-    async onUserCompletedLoginFlow(credentials) {
+    async onUserCompletedLoginFlow(credentials, password) {
+        this._accountPassword = password;
+        // self-destruct the password after 5mins
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
+        this._accountPasswordTimer = setTimeout(() => {
+            this._accountPassword = null;
+            this._accountPasswordTimer = null;
+        }, 60 * 5 * 1000);
+
         // Wait for the client to be logged in (but not started)
         // which is enough to ask the server about account data.
         const loggedIn = new Promise(resolve => {
@@ -1827,7 +1882,7 @@ export default createReactClass({
         });
 
         // Create and start the client in the background
-        Lifecycle.setLoggedIn(credentials);
+        const setLoggedInPromise = Lifecycle.setLoggedIn(credentials);
         await loggedIn;
 
         const cli = MatrixClientPeg.get();
@@ -1843,17 +1898,30 @@ export default createReactClass({
         try {
             masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
         } catch (e) {
-            if (e.errcode !== "M_NOT_FOUND") throw e;
+            if (e.errcode !== "M_NOT_FOUND") {
+                console.warn("Secret storage account data check failed", e);
+            }
         }
 
         if (masterKeyInStorage) {
+            // Auto-enable cross-signing for the new session when key found in
+            // secret storage.
+            SettingsStore.setFeatureEnabled("feature_cross_signing", true);
             this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
+        } else if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            // This will only work if the feature is set to 'enable' in the config,
+            // since it's too early in the lifecycle for users to have turned the
+            // labs flag on.
+            this.setStateForNewView({ view: VIEWS.E2E_SETUP });
         } else {
             this._onLoggedIn();
         }
+
+        return setLoggedInPromise;
     },
 
-    onCompleteSecurityFinished() {
+    // complete security / e2e setup has finished
+    onCompleteSecurityE2eSetupFinished() {
         this._onLoggedIn();
     },
 
@@ -1873,7 +1941,15 @@ export default createReactClass({
             const CompleteSecurity = sdk.getComponent('structures.auth.CompleteSecurity');
             view = (
                 <CompleteSecurity
-                    onFinished={this.onCompleteSecurityFinished}
+                    onFinished={this.onCompleteSecurityE2eSetupFinished}
+                />
+            );
+        } else if (this.state.view === VIEWS.E2E_SETUP) {
+            const E2eSetup = sdk.getComponent('structures.auth.E2eSetup');
+            view = (
+                <E2eSetup
+                    onFinished={this.onCompleteSecurityE2eSetupFinished}
+                    accountPassword={this._accountPassword}
                 />
             );
         } else if (this.state.view === VIEWS.POST_REGISTRATION) {
@@ -1940,9 +2016,10 @@ export default createReactClass({
                     email={this.props.startingFragmentQueryParams.email}
                     brand={this.props.config.brand}
                     makeRegistrationUrl={this._makeRegistrationUrl}
-                    onLoggedIn={this.onRegistered}
+                    onLoggedIn={this.onRegisterFlowComplete}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     {...this.getServerProperties()}
                 />
             );

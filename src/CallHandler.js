@@ -139,7 +139,7 @@ function _setCallListeners(call) {
             Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
                 title: _t('Call Failed'),
                 description: _t(
-                    "There are unknown devices in this room: "+
+                    "There are unknown sessions in this room: "+
                     "if you proceed without verifying them, it will be "+
                     "possible for someone to eavesdrop on your call.",
                 ),

@@ -21,6 +21,7 @@ export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
 import dis from "./dispatcher";
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import ThemeController from "./settings/controllers/ThemeController";
 
 export class ThemeWatcher {
     static _instance = null;
@@ -69,7 +70,7 @@ export class ThemeWatcher {
         }
     };
 
-    // XXX: forceTheme param aded here as local echo appears to be unreliable
+    // XXX: forceTheme param added here as local echo appears to be unreliable
     // https://github.com/vector-im/riot-web/issues/11443
     recheck(forceTheme) {
         const oldTheme = this._currentTheme;
@@ -82,12 +83,22 @@ export class ThemeWatcher {
     getEffectiveTheme() {
         // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
 
+        // XXX: checking the isLight flag here makes checking it in the ThemeController
+        // itself completely redundant since we just override the result here and we're
+        // now effectively just using the ThemeController as a place to store the static
+        // variable. The system theme setting probably ought to have an equivalent
+        // controller that honours the same flag, although probablt better would be to
+        // have the theme logic in one place rather than split between however many
+        // different places.
+        if (ThemeController.isLogin) return 'light';
+
         // If the user has specifically enabled the system matching option (excluding default),
         // then use that over anything else. We pick the lowest possible level for the setting
         // to ensure the ordering otherwise works.
         const systemThemeExplicit = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
         if (systemThemeExplicit) {
+            console.log("returning explicit system theme");
             if (this._preferDark.matches) return 'dark';
             if (this._preferLight.matches) return 'light';
         }
@@ -97,7 +108,10 @@ export class ThemeWatcher {
         // level for the setting to ensure the ordering otherwise works.
         const themeExplicit = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "theme", null, false, true);
-        if (themeExplicit) return themeExplicit;
+        if (themeExplicit) {
+            console.log("returning explicit theme: " + themeExplicit);
+            return themeExplicit;
+        }
 
         // If the user hasn't really made a preference in either direction, assume the defaults of the
         // settings and use those.
@@ -105,6 +119,7 @@ export class ThemeWatcher {
             if (this._preferDark.matches) return 'dark';
             if (this._preferLight.matches) return 'light';
         }
+        console.log("returning theme value");
         return SettingsStore.getValue('theme');
     }
 

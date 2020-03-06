@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
@@ -22,6 +22,16 @@ import { _t } from '../../../languageHandler';
 import { Room } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
+
+import {
+    PHASE_UNSENT,
+    PHASE_REQUESTED,
+    PHASE_READY,
+    PHASE_DONE,
+    PHASE_STARTED,
+    PHASE_CANCELLED,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -605,12 +615,97 @@ class ServersInRoomList extends React.PureComponent {
     }
 }
 
+const PHASE_MAP = {
+    [PHASE_UNSENT]: "unsent",
+    [PHASE_REQUESTED]: "requested",
+    [PHASE_READY]: "ready",
+    [PHASE_DONE]: "done",
+    [PHASE_STARTED]: "started",
+    [PHASE_CANCELLED]: "cancelled",
+};
+
+function VerificationRequest({txnId, request}) {
+    const [, updateState] = useState();
+    const [timeout, setRequestTimeout] = useState(request.timeout);
+
+    /* Re-render if something changes state */
+    useEventEmitter(request, "change", updateState);
+
+    /* Keep re-rendering if there's a timeout */
+    useEffect(() => {
+        if (request.timeout == 0) return;
+
+        /* Note that request.timeout is a getter, so its value changes */
+        const id = setInterval(() => {
+           setRequestTimeout(request.timeout);
+        }, 500);
+
+        return () => { clearInterval(id); };
+    }, [request]);
+
+    return (<div className="mx_DevTools_VerificationRequest">
+        <dl>
+            <dt>Transaction</dt>
+            <dd>{txnId}</dd>
+            <dt>Phase</dt>
+            <dd>{PHASE_MAP[request.phase] || request.phase}</dd>
+            <dt>Timeout</dt>
+            <dd>{Math.floor(timeout / 1000)}</dd>
+            <dt>Methods</dt>
+            <dd>{request.methods && request.methods.join(", ")}</dd>
+            <dt>requestingUserId</dt>
+            <dd>{request.requestingUserId}</dd>
+            <dt>observeOnly</dt>
+            <dd>{JSON.stringify(request.observeOnly)}</dd>
+        </dl>
+    </div>);
+}
+
+class VerificationExplorer extends React.Component {
+    static getLabel() {
+        return _t("Verification Requests");
+    }
+
+    /* Ensure this.context is the cli */
+    static contextType = MatrixClientContext;
+
+    onNewRequest = () => {
+        this.forceUpdate();
+    }
+
+    componentDidMount() {
+        const cli = this.context;
+        cli.on("crypto.verification.request", this.onNewRequest);
+    }
+
+    componentWillUnmount() {
+        const cli = this.context;
+        cli.off("crypto.verification.request", this.onNewRequest);
+    }
+
+    render() {
+        const cli = this.context;
+        const room = this.props.room;
+        const inRoomChannel = cli._crypto._inRoomVerificationRequests;
+        const inRoomRequests = (inRoomChannel._requestsByRoomId || new Map()).get(room.roomId) || new Map();
+
+        return (<div>
+            <div className="mx_Dialog_content">
+                {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
+                    <VerificationRequest txnId={txnId} request={request} key={txnId} />,
+                )}
+            </div>
+        </div>);
+    }
+}
+
 const Entries = [
     SendCustomEvent,
     RoomStateExplorer,
     SendAccountData,
     AccountDataExplorer,
     ServersInRoomList,
+    VerificationExplorer,
 ];
 
 export default class DevtoolsDialog extends React.PureComponent {

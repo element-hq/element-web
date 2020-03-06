@@ -55,7 +55,7 @@ export default class LabsUserSettingsTab extends React.Component {
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
                                 return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
-                                    rel='noopener' target='_blank'>{sub}</a>;
+                                    rel='noreferrer noopener' target='_blank'>{sub}</a>;
                             },
                         })
                     }
@@ -66,6 +66,7 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name={"keepSecretStoragePassphraseForSession"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );

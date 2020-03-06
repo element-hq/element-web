@@ -24,6 +24,7 @@ import { scorePassword } from '../../../../utils/PasswordScorer';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 import SettingsStore from '../../../../settings/SettingsStore';
+import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -52,7 +53,6 @@ function selectText(target) {
  */
 export default class CreateKeyBackupDialog extends React.PureComponent {
     static propTypes = {
-        secureSecretStorage: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
     }
 
@@ -64,32 +64,28 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         this._setZxcvbnResultTimeout = null;
 
         this.state = {
-            secureSecretStorage: props.secureSecretStorage,
+            secureSecretStorage: null,
             phase: PHASE_PASSPHRASE,
             passPhrase: '',
             passPhraseConfirm: '',
             copied: false,
             downloaded: false,
             zxcvbnResult: null,
-            setPassPhrase: false,
         };
-
-        if (this.state.secureSecretStorage === undefined) {
-            this.state.secureSecretStorage =
-                SettingsStore.isFeatureEnabled("feature_cross_signing");
-        }
-
-        // If we're using secret storage, skip ahead to the backing up step, as
-        // `accessSecretStorage` will handle passphrases as needed.
-        if (this.state.secureSecretStorage) {
-            this.state.phase = PHASE_BACKINGUP;
-        }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const cli = MatrixClientPeg.get();
+        const secureSecretStorage = (
+            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        );
+        this.setState({ secureSecretStorage });
+
         // If we're using secret storage, skip ahead to the backing up step, as
         // `accessSecretStorage` will handle passphrases as needed.
-        if (this.state.secureSecretStorage) {
+        if (secureSecretStorage) {
+            this.setState({ phase: PHASE_BACKINGUP });
             this._createBackup();
         }
     }
@@ -192,45 +188,38 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         });
     }
 
-    _onPassPhraseNextClick = () => {
-        this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
-    }
+    _onPassPhraseNextClick = async (e) => {
+        e.preventDefault();
 
-    _onPassPhraseKeyPress = async (e) => {
-        if (e.key === 'Enter') {
-            // If we're waiting for the timeout before updating the result at this point,
-            // skip ahead and do it now, otherwise we'll deny the attempt to proceed
-            // even if the user entered a valid passphrase
-            if (this._setZxcvbnResultTimeout !== null) {
-                clearTimeout(this._setZxcvbnResultTimeout);
-                this._setZxcvbnResultTimeout = null;
-                await new Promise((resolve) => {
-                    this.setState({
-                        zxcvbnResult: scorePassword(this.state.passPhrase),
-                    }, resolve);
-                });
-            }
-            if (this._passPhraseIsValid()) {
-                this._onPassPhraseNextClick();
-            }
+        // If we're waiting for the timeout before updating the result at this point,
+        // skip ahead and do it now, otherwise we'll deny the attempt to proceed
+        // even if the user entered a valid passphrase
+        if (this._setZxcvbnResultTimeout !== null) {
+            clearTimeout(this._setZxcvbnResultTimeout);
+            this._setZxcvbnResultTimeout = null;
+            await new Promise((resolve) => {
+                this.setState({
+                    zxcvbnResult: scorePassword(this.state.passPhrase),
+                }, resolve);
+            });
         }
-    }
+        if (this._passPhraseIsValid()) {
+            this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
+        }
+    };
 
-    _onPassPhraseConfirmNextClick = async () => {
+    _onPassPhraseConfirmNextClick = async (e) => {
+        e.preventDefault();
+
+        if (this.state.passPhrase !== this.state.passPhraseConfirm) return;
+
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion(this.state.passPhrase);
         this.setState({
-            setPassPhrase: true,
             copied: false,
             downloaded: false,
             phase: PHASE_SHOWKEY,
         });
-    }
-
-    _onPassPhraseConfirmKeyPress = (e) => {
-        if (e.key === 'Enter' && this.state.passPhrase === this.state.passPhraseConfirm) {
-            this._onPassPhraseConfirmNextClick();
-        }
-    }
+    };
 
     _onSetAgainClick = () => {
         this.setState({
@@ -301,7 +290,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             </div>;
         }
 
-        return <div>
+        return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
                 "<b>Warning</b>: You should only set up key backup from a trusted computer.", {},
                 { b: sub => <b>{sub}</b> },
@@ -316,7 +305,6 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
                     <input type="password"
                         onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
                         value={this.state.passPhrase}
                         className="mx_CreateKeyBackupDialog_passPhraseInput"
                         placeholder={_t("Enter a passphrase...")}
@@ -329,7 +317,8 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 </div>
             </div>
 
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons
+                primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
                 disabled={!this._passPhraseIsValid()}
@@ -337,11 +326,11 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
 
             <details>
                 <summary>{_t("Advanced")}</summary>
-                <p><button onClick={this._onSkipPassPhraseClick} >
-                    {_t("Set up with a Recovery Key")}
-                </button></p>
+                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
+                    {_t("Set up with a recovery key")}
+                </AccessibleButton>
             </details>
-        </div>;
+        </form>;
     }
 
     _renderPhasePassPhraseConfirm() {
@@ -373,7 +362,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             </div>;
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <div>
+        return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
                 "Please enter your passphrase a second time to confirm.",
             )}</p>
@@ -382,7 +371,6 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                     <div>
                         <input type="password"
                             onChange={this._onPassPhraseConfirmChange}
-                            onKeyPress={this._onPassPhraseConfirmKeyPress}
                             value={this.state.passPhraseConfirm}
                             className="mx_CreateKeyBackupDialog_passPhraseInput"
                             placeholder={_t("Repeat your passphrase...")}
@@ -392,37 +380,27 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                     {passPhraseMatch}
                 </div>
             </div>
-            <DialogButtons primaryButton={_t('Next')}
+            <DialogButtons
+                primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onPassPhraseConfirmNextClick}
                 hasCancel={false}
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             />
-        </div>;
+        </form>;
     }
 
     _renderPhaseShowKey() {
-        let bodyText;
-        if (this.state.setPassPhrase) {
-            bodyText = _t(
-                "As a safety net, you can use it to restore your encrypted message " +
-                "history if you forget your Recovery Passphrase.",
-            );
-        } else {
-            bodyText = _t("As a safety net, you can use it to restore your encrypted message history.");
-        }
-
         return <div>
             <p>{_t(
                 "Your recovery key is a safety net - you can use it to restore " +
                 "access to your encrypted messages if you forget your passphrase.",
             )}</p>
             <p>{_t(
-                "Keep your recovery key somewhere very secure, like a password manager (or a safe).",
+                "Keep a copy of it somewhere secure, like a password manager or even a safe.",
             )}</p>
-            <p>{bodyText}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
-                    {_t("Your Recovery Key")}
+                    {_t("Your recovery key")}
                 </div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyContainer">
                     <div className="mx_CreateKeyBackupDialog_recoveryKey">
@@ -430,7 +408,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                     </div>
                     <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
                         <button className="mx_Dialog_primary" onClick={this._onCopyClick}>
-                            {_t("Copy to clipboard")}
+                            {_t("Copy")}
                         </button>
                         <button className="mx_Dialog_primary" onClick={this._onDownloadClick}>
                             {_t("Download")}
@@ -462,7 +440,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 <li>{_t("<b>Save it</b> on a USB key or backup drive", {}, {b: s => <b>{s}</b>})}</li>
                 <li>{_t("<b>Copy it</b> to your personal cloud storage", {}, {b: s => <b>{s}</b>})}</li>
             </ul>
-            <DialogButtons primaryButton={_t("OK")}
+            <DialogButtons primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._createBackup}
                 hasCancel={false}>
                 <button onClick={this._onKeepItSafeBackClick}>{_t("Back")}</button>
@@ -495,7 +473,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         return <div>
             {_t(
                 "Without setting up Secure Message Recovery, you won't be able to restore your " +
-                "encrypted message history if you log out or use another device.",
+                "encrypted message history if you log out or use another session.",
             )}
             <DialogButtons primaryButton={_t('Set up Secure Message Recovery')}
                 onPrimaryButtonClick={this._onSetUpClick}
@@ -515,15 +493,14 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
-                return _t('Recovery key');
             case PHASE_KEEPITSAFE:
-                return _t('Keep it safe');
+                return _t('Make a copy of your recovery key');
             case PHASE_BACKINGUP:
                 return _t('Starting backup...');
             case PHASE_DONE:
                 return _t('Success!');
             default:
-                return _t("Create Key Backup");
+                return _t("Create key backup");
         }
     }
 

@@ -18,39 +18,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import Modal from "../../../Modal";
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import DeviceListener from '../../../DeviceListener';
+import { accessSecretStorage } from '../../../CrossSigningManager';
 
-export default class VerifySessionToast extends React.PureComponent {
+export default class SetupEncryptionToast extends React.PureComponent {
     static propTypes = {
         toastKey: PropTypes.string.isRequired,
-        deviceId: PropTypes.string,
+        kind: PropTypes.oneOf(['set_up_encryption', 'verify_this_session', 'upgrade_encryption']).isRequired,
     };
 
     _onLaterClick = () => {
-        DeviceListener.sharedInstance().dismissVerification(this.props.deviceId);
+        DeviceListener.sharedInstance().dismissEncryptionSetup();
     };
 
-    _onVerifyClick = async () => {
-        const cli = MatrixClientPeg.get();
-        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-
-        const device = await cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
-
-        Modal.createTrackedDialog('New Session Verify', 'Starting dialog', DeviceVerifyDialog, {
-            userId: MatrixClientPeg.get().getUserId(),
-            device,
-        }, null, /* priority = */ false, /* static = */ true);
+    _onSetupClick = async () => {
+        accessSecretStorage();
     };
+
+    getDescription() {
+        switch (this.props.kind) {
+            case 'set_up_encryption':
+            case 'upgrade_encryption':
+                return _t('Verify yourself & others to keep your chats safe');
+            case 'verify_this_session':
+                return _t('Other users may not trust it');
+        }
+    }
+
+    getSetupCaption() {
+        switch (this.props.kind) {
+            case 'set_up_encryption':
+            case 'upgrade_encryption':
+                return _t('Upgrade');
+            case 'verify_this_session':
+                return _t('Verify');
+        }
+    }
 
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
         return (<div>
-            <div className="mx_Toast_description">{_t("Other users may not trust it")}</div>
+            <div className="mx_Toast_description">{this.getDescription()}</div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
-                <FormButton label={_t("Verify")} onClick={this._onVerifyClick} />
+                <FormButton label={this.getSetupCaption()} onClick={this._onSetupClick} />
             </div>
         </div>);
     }

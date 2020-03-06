@@ -70,7 +70,16 @@ export default class GeneralUserSettingsTab extends React.Component {
         const cli = MatrixClientPeg.get();
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
-        this.setState({serverSupportsSeparateAddAndBind});
+
+        const capabilities = await cli.getCapabilities(); // this is cached
+        const changePasswordCap = capabilities['m.change_password'];
+
+        // You can change your password so long as the capability isn't explicitly disabled. The implicit
+        // behaviour is you can change your password when the capability is missing or has not-false as
+        // the enabled flag value.
+        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
+
+        this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
 
         this._getThreepidState();
     }
@@ -252,7 +261,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             title: _t("Success"),
             description: _t(
                 "Your password was successfully changed. You will not receive " +
-                "push notifications on other devices until you log back in to them",
+                "push notifications on other sessions until you log back in to them",
             ) + ".",
         });
     };
@@ -280,7 +289,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
         const Spinner = sdk.getComponent("views.elements.Spinner");
 
-        const passwordChangeForm = (
+        let passwordChangeForm = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
                 rowClassName=""
@@ -314,11 +323,18 @@ export default class GeneralUserSettingsTab extends React.Component {
             threepidSection = <Spinner />;
         }
 
+        let passwordChangeText = _t("Set a new account password...");
+        if (!this.state.canChangePassword) {
+            // Just don't show anything if you can't do anything.
+            passwordChangeText = null;
+            passwordChangeForm = null;
+        }
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
                 <p className="mx_SettingsTab_subsectionText">
-                    {_t("Set a new account password...")}
+                    {passwordChangeText}
                 </p>
                 {passwordChangeForm}
                 {threepidSection}

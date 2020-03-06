@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request) {
             request.on("change", this._onRequestChanged);
         }
+        MatrixClientPeg.get().on("userTrustStatusChanged", this._onTrustChanged);
     }
 
     componentWillUnmount() {
@@ -39,9 +40,22 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request) {
             request.off("change", this._onRequestChanged);
         }
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("userTrustStatusChanged", this._onTrustChanged);
+        }
     }
 
     _onRequestChanged = () => {
+        this.forceUpdate();
+    };
+
+    _onTrustChanged = (userId, status) => {
+        const { mxEvent } = this.props;
+        const request = mxEvent.verificationRequest;
+        if (!request || request.otherUserId !== userId) {
+            return;
+        }
         this.forceUpdate();
     };
 
@@ -63,6 +77,14 @@ export default class MKeyVerificationConclusion extends React.Component {
         if (request.pending) {
             return false;
         }
+
+        // User isn't actually verified
+        if (!MatrixClientPeg.get()
+                            .checkUserTrust(request.otherUserId)
+                            .isCrossSigningVerified()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -93,13 +115,13 @@ export default class MKeyVerificationConclusion extends React.Component {
         }
 
         if (title) {
-            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent);
-            const classes = classNames("mx_EventTile_bubble", "mx_KeyVerification", "mx_KeyVerification_icon", {
-                mx_KeyVerification_icon_verified: request.done,
+            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId());
+            const classes = classNames("mx_EventTile_bubble", "mx_cryptoEvent", "mx_cryptoEvent_icon", {
+                mx_cryptoEvent_icon_verified: request.done,
             });
             return (<div className={classes}>
-                <div className="mx_KeyVerification_title">{title}</div>
-                <div className="mx_KeyVerification_subtitle">{subtitle}</div>
+                <div className="mx_cryptoEvent_title">{title}</div>
+                <div className="mx_cryptoEvent_subtitle">{subtitle}</div>
             </div>);
         }
 

@@ -36,6 +36,7 @@
 @import "./views/auth/_AuthHeader.scss";
 @import "./views/auth/_AuthHeaderLogo.scss";
 @import "./views/auth/_AuthPage.scss";
+@import "./views/auth/_CompleteSecurityBody.scss";
 @import "./views/auth/_CountryDropdown.scss";
 @import "./views/auth/_InteractiveAuthEntryComponents.scss";
 @import "./views/auth/_LanguageSelector.scss";
@@ -65,7 +66,9 @@
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
+@import "./views/dialogs/_NewSessionReviewDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
+@import "./views/dialogs/_RoomSettingsDialogBridges.scss";
 @import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_RoomUpgradeWarningDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
@@ -125,7 +128,6 @@
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
-@import "./views/messages/_MKeyVerificationRequest.scss";
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
@@ -140,7 +142,10 @@
 @import "./views/messages/_TextualEvent.scss";
 @import "./views/messages/_UnknownBody.scss";
 @import "./views/messages/_ViewSourceEvent.scss";
+@import "./views/messages/_common_CryptoEvent.scss";
+@import "./views/right_panel/_EncryptionInfo.scss";
 @import "./views/right_panel/_UserInfo.scss";
+@import "./views/right_panel/_VerificationPanel.scss";
 @import "./views/room_settings/_AliasSettings.scss";
 @import "./views/room_settings/_ColorSettings.scss";
 @import "./views/rooms/_AppsDrawer.scss";
@@ -151,6 +156,7 @@
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_InviteOnlyIcon.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
 @import "./views/rooms/_MemberDeviceInfo.scss";

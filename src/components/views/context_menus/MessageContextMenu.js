@@ -90,7 +90,8 @@ export default createReactClass({
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
         if (!pinnedEvent) return false;
-        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
+        const content = pinnedEvent.getContent();
+        return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     },
 
     onResendClick: function() {
@@ -414,11 +415,16 @@ export default createReactClass({
         }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
-            <MenuItem className="mx_MessageContextMenu_field">
-                <a href={permalink} target="_blank" rel="noopener" onClick={this.onPermalinkClick} tabIndex={-1}>
-                    { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
-                        ? _t('Share Permalink') : _t('Share Message') }
-                </a>
+            <MenuItem
+                element="a"
+                className="mx_MessageContextMenu_field"
+                onClick={this.onPermalinkClick}
+                href={permalink}
+                target="_blank"
+                rel="noreferrer noopener"
+            >
+                { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
+                    ? _t('Share Permalink') : _t('Share Message') }
             </MenuItem>
         );
 
@@ -436,16 +442,15 @@ export default createReactClass({
             isUrlPermitted(mxEvent.event.content.external_url)
         ) {
             externalURLButton = (
-                <MenuItem className="mx_MessageContextMenu_field">
-                    <a
-                        href={mxEvent.event.content.external_url}
-                        target="_blank"
-                        rel="noopener"
-                        onClick={this.closeMenu}
-                        tabIndex={-1}
-                    >
-                        { _t('Source URL') }
-                    </a>
+                <MenuItem
+                    element="a"
+                    className="mx_MessageContextMenu_field"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    onClick={this.closeMenu}
+                    href={mxEvent.event.content.external_url}
+                >
+                    { _t('Source URL') }
                 </MenuItem>
           );
         }

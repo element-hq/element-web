@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 Vector Creations Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
+import createRoom, {findDMForUser} from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -41,6 +41,8 @@ import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import EncryptionPanel from "./EncryptionPanel";
+import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -59,14 +61,16 @@ const _disambiguateDevices = (devices) => {
     }
 };
 
-const _getE2EStatus = (cli, userId, devices) => {
+export const getE2EStatus = (cli, userId, devices) => {
     if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
         const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
         return hasUnverifiedDevice ? "warning" : "verified";
     }
     const isMe = userId === cli.getUserId();
     const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-    const allDevicesVerified = devices.every(device => {
+    if (!userVerified) return "normal";
+
+    const anyDeviceUnverified = devices.some(device => {
         const { deviceId } = device;
         // For your own devices, we use the stricter check of cross-signing
         // verification to encourage everyone to trust their own devices via
@@ -74,15 +78,12 @@ const _getE2EStatus = (cli, userId, devices) => {
         // For other people's devices, the more general verified check that
         // includes locally verified devices can be used.
         const deviceTrust = cli.checkDeviceTrust(userId, deviceId);
-        return isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
+        return isMe ? !deviceTrust.isCrossSigningVerified() : !deviceTrust.isVerified();
     });
-    if (allDevicesVerified) {
-        return userVerified ? "verified" : "normal";
-    }
-    return "warning";
+    return anyDeviceUnverified ? "warning" : "verified";
 };
 
-function openDMForUser(matrixClient, userId) {
+async function openDMForUser(matrixClient, userId) {
     const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
         const room = matrixClient.getRoom(roomId);
@@ -100,9 +101,27 @@ function openDMForUser(matrixClient, userId) {
             action: 'view_room',
             room_id: lastActiveRoom.roomId,
         });
-    } else {
-        createRoom({dmUserId: userId});
+        return;
     }
+
+    const createRoomOptions = {
+        dmUserId: userId,
+    };
+
+    if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
+        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+            return Object.keys(devices).length > 0;
+        });
+        if (allHaveDeviceKeys) {
+            createRoomOptions.encryption = true;
+        }
+    }
+
+    createRoom(createRoomOptions);
 }
 
 function useIsEncrypted(cli, room) {
@@ -117,19 +136,70 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
-function verifyDevice(userId, device) {
-    const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-    Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-        userId: userId,
-        device: device,
-    }, null, /* priority = */ false, /* static = */ true);
+function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
+    return useAsyncMemo(async () => {
+        if (!canVerify) {
+            return false;
+        }
+        setUpdating(true);
+        try {
+            await cli.downloadKeys([member.userId]);
+            const xsi = cli.getStoredCrossSigningForUser(member.userId);
+            const key = xsi && xsi.getId();
+            return !!key;
+        } finally {
+            setUpdating(false);
+        }
+    }, [cli, member, canVerify], false);
+}
+
+async function verifyDevice(userId, device) {
+    const cli = MatrixClientPeg.get();
+    const member = cli.getUser(userId);
+    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
+        headerImage: require("../../../../res/img/e2e/warning.svg"),
+        title: _t("Not Trusted"),
+        description: <div>
+            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: member.displayName, userId})}</p>
+            <p>{device.getDisplayName()} ({device.deviceId})</p>
+            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
+        </div>,
+        onFinished: async (doneClicked) => {
+            const manuallyVerifyClicked = !doneClicked;
+            if (!manuallyVerifyClicked) {
+                return;
+            }
+            const cli = MatrixClientPeg.get();
+            const verificationRequestPromise = cli.requestVerification(
+                userId,
+                [device.deviceId],
+            );
+            dis.dispatch({
+                action: "set_right_panel_phase",
+                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                refireParams: {member, verificationRequestPromise},
+            });
+        },
+        primaryButton: _t("Done"),
+        cancelButton: _t("Manually Verify"),
+    });
 }
 
 function verifyUser(user) {
+    const cli = MatrixClientPeg.get();
+    const dmRoom = findDMForUser(cli, user.userId);
+    let existingRequest;
+    if (dmRoom) {
+        existingRequest = cli.findVerificationRequestDMInProgress(dmRoom.roomId);
+    }
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        refireParams: {member: user},
+        refireParams: {
+            member: user,
+            verificationRequest: existingRequest,
+        },
     });
 }
 
@@ -137,6 +207,7 @@ function DeviceItem({userId, device}) {
     const cli = useContext(MatrixClientContext);
     const isMe = userId === cli.getUserId();
     const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
+    const userTrust = cli.checkUserTrust(userId);
     // For your own devices, we use the stricter check of cross-signing
     // verification to encourage everyone to trust their own devices via
     // cross-signing so that other users can then safely trust you.
@@ -151,8 +222,9 @@ function DeviceItem({userId, device}) {
         mx_UserInfo_device_unverified: !isVerified,
     });
     const iconClasses = classNames("mx_E2EIcon", {
+        mx_E2EIcon_normal: !userTrust.isVerified(),
         mx_E2EIcon_verified: isVerified,
-        mx_E2EIcon_warning: !isVerified,
+        mx_E2EIcon_warning: userTrust.isVerified() && !isVerified,
     });
 
     const onDeviceClick = () => {
@@ -164,17 +236,25 @@ function DeviceItem({userId, device}) {
     const deviceName = device.ambiguous ?
             (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
             device.getDisplayName();
-    const trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
-    return (<AccessibleButton className={classes} onClick={onDeviceClick}>
-        <div className={iconClasses} />
-        <div className="mx_UserInfo_device_name">{deviceName}</div>
-        <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-    </AccessibleButton>);
+    let trustedLabel = null;
+    if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
+    return (
+        <AccessibleButton
+            className={classes}
+            title={device.deviceId}
+            onClick={onDeviceClick}
+        >
+            <div className={iconClasses} />
+            <div className="mx_UserInfo_device_name">{deviceName}</div>
+            <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+        </AccessibleButton>
+    );
 }
 
 function DevicesSection({devices, userId, loading}) {
     const Spinner = sdk.getComponent("elements.Spinner");
     const cli = useContext(MatrixClientContext);
+    const userTrust = cli.checkUserTrust(userId);
 
     const [isExpanded, setExpanded] = useState(false);
 
@@ -183,43 +263,61 @@ function DevicesSection({devices, userId, loading}) {
         return <Spinner />;
     }
     if (devices === null) {
-        return _t("Unable to load device list");
+        return _t("Unable to load session list");
     }
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
 
+    let expandSectionDevices = [];
     const unverifiedDevices = [];
-    const verifiedDevices = [];
 
-    for (let i = 0; i < devices.length; ++i) {
-        const device = devices[i];
-        const deviceTrust = deviceTrusts[i];
-        // For your own devices, we use the stricter check of cross-signing
-        // verification to encourage everyone to trust their own devices via
-        // cross-signing so that other users can then safely trust you.
-        // For other people's devices, the more general verified check that
-        // includes locally verified devices can be used.
-        const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
-            deviceTrust.isCrossSigningVerified() :
-            deviceTrust.isVerified();
+    let expandCountCaption;
+    let expandHideCaption;
+    let expandIconClasses = "mx_E2EIcon";
 
-        if (isVerified) {
-            verifiedDevices.push(device);
-        } else {
-            unverifiedDevices.push(device);
+    if (userTrust.isVerified()) {
+        for (let i = 0; i < devices.length; ++i) {
+            const device = devices[i];
+            const deviceTrust = deviceTrusts[i];
+            // For your own devices, we use the stricter check of cross-signing
+            // verification to encourage everyone to trust their own devices via
+            // cross-signing so that other users can then safely trust you.
+            // For other people's devices, the more general verified check that
+            // includes locally verified devices can be used.
+            const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+                deviceTrust.isCrossSigningVerified() :
+                deviceTrust.isVerified();
+
+            if (isVerified) {
+                expandSectionDevices.push(device);
+            } else {
+                unverifiedDevices.push(device);
+            }
         }
+        expandCountCaption = _t("%(count)s verified sessions", {count: expandSectionDevices.length});
+        expandHideCaption = _t("Hide verified sessions");
+        expandIconClasses += " mx_E2EIcon_verified";
+    } else {
+        expandSectionDevices = devices;
+        expandCountCaption = _t("%(count)s sessions", {count: devices.length});
+        expandHideCaption = _t("Hide sessions");
+        expandIconClasses += " mx_E2EIcon_normal";
     }
 
     let expandButton;
-    if (verifiedDevices.length) {
+    if (expandSectionDevices.length) {
         if (isExpanded) {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(false)}>
-                <div>{_t("Hide verified sessions")}</div>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
+                onClick={() => setExpanded(false)}
+            >
+                <div>{expandHideCaption}</div>
             </AccessibleButton>);
         } else {
-            expandButton = (<AccessibleButton className="mx_UserInfo_expand" onClick={() => setExpanded(true)}>
-                <div className="mx_E2EIcon mx_E2EIcon_verified" />
-                <div>{_t("%(count)s verified sessions", {count: verifiedDevices.length})}</div>
+            expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
+                onClick={() => setExpanded(true)}
+            >
+                <div className={expandIconClasses} />
+                <div>{expandCountCaption}</div>
             </AccessibleButton>);
         }
     }
@@ -229,7 +327,7 @@ function DevicesSection({devices, userId, loading}) {
     });
     if (isExpanded) {
         const keyStart = unverifiedDevices.length;
-        deviceList = deviceList.concat(verifiedDevices.map((device, i) => {
+        deviceList = deviceList.concat(expandSectionDevices.map((device, i) => {
             return (<DeviceItem key={i + keyStart} userId={userId} device={device} />);
         }));
     }
@@ -836,6 +934,12 @@ const useIsSynapseAdmin = (cli) => {
     return isAdmin;
 };
 
+const useHomeserverSupportsCrossSigning = (cli) => {
+    return useAsyncMemo(async () => {
+        return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+    }, [cli], false);
+};
+
 function useRoomPermissions(cli, room, user) {
     const [roomPermissions, setRoomPermissions] = useState({
         // modifyLevelMax is the max PL we can set this user to, typically min(their PL, our PL) && canSetPL
@@ -1029,33 +1133,95 @@ const PowerLevelEditor = ({user, room, roomPermissions, onFinished}) => {
     );
 };
 
-const UserInfo = ({user, groupId, roomId, onClose}) => {
+export const useDevices = (userId) => {
     const cli = useContext(MatrixClientContext);
 
-    // Load room if we are given a room id and memoize it
-    const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
-    // fetch latest room member if we have a room, so we don't show historical information, falling back to user
-    const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
+    // undefined means yet to be loaded, null means failed to load, otherwise list of devices
+    const [devices, setDevices] = useState(undefined);
+    // Download device lists
+    useEffect(() => {
+        setDevices(undefined);
 
-    // only display the devices list if our client supports E2E
-    const _enableDevices = cli.isCryptoEnabled();
+        let cancelled = false;
+
+        async function _downloadDeviceList() {
+            try {
+                await cli.downloadKeys([userId], true);
+                const devices = await cli.getStoredDevicesForUser(userId);
+
+                if (cancelled) {
+                    // we got cancelled - presumably a different user now
+                    return;
+                }
+
+                _disambiguateDevices(devices);
+                setDevices(devices);
+            } catch (err) {
+                setDevices(null);
+            }
+        }
+        _downloadDeviceList();
+
+        // Handle being unmounted
+        return () => {
+            cancelled = true;
+        };
+    }, [cli, userId]);
+
+    // Listen to changes
+    useEffect(() => {
+        let cancel = false;
+        const updateDevices = async () => {
+            const newDevices = await cli.getStoredDevicesForUser(userId);
+            if (cancel) return;
+            setDevices(newDevices);
+        };
+        const onDevicesUpdated = (users) => {
+            if (!users.includes(userId)) return;
+            updateDevices();
+        };
+        const onDeviceVerificationChanged = (_userId, device) => {
+            if (_userId !== userId) return;
+            updateDevices();
+        };
+        const onUserTrustStatusChanged = (_userId, trustStatus) => {
+            if (_userId !== userId) return;
+            updateDevices();
+        };
+        cli.on("crypto.devicesUpdated", onDevicesUpdated);
+        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
+        cli.on("userTrustStatusChanged", onUserTrustStatusChanged);
+        // Handle being unmounted
+        return () => {
+            cancel = true;
+            cli.removeListener("crypto.devicesUpdated", onDevicesUpdated);
+            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
+            cli.removeListener("userTrustStatusChanged", onUserTrustStatusChanged);
+        };
+    }, [cli, userId]);
+
+    return devices;
+};
+
+const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
+    const cli = useContext(MatrixClientContext);
 
     const powerLevels = useRoomPowerLevels(cli, room);
     // Load whether or not we are a Synapse Admin
     const isSynapseAdmin = useIsSynapseAdmin(cli);
 
     // Check whether the user is ignored
-    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(user.userId));
+    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(member.userId));
     // Recheck if the user or client changes
     useEffect(() => {
-        setIsIgnored(cli.isUserIgnored(user.userId));
-    }, [cli, user.userId]);
+        setIsIgnored(cli.isUserIgnored(member.userId));
+    }, [cli, member.userId]);
     // Recheck also if we receive new accountData m.ignored_user_list
     const accountDataHandler = useCallback((ev) => {
         if (ev.getType() === "m.ignored_user_list") {
-            setIsIgnored(cli.isUserIgnored(user.userId));
+            setIsIgnored(cli.isUserIgnored(member.userId));
         }
-    }, [cli, user.userId]);
+    }, [cli, member.userId]);
     useEventEmitter(cli, "accountData", accountDataHandler);
 
     // Count of how many operations are currently in progress, if > 0 then show a Spinner
@@ -1086,7 +1252,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         const [accepted] = await finished;
         if (!accepted) return;
         try {
-            await cli.deactivateSynapseUser(user.userId);
+            await cli.deactivateSynapseUser(member.userId);
         } catch (err) {
             console.error("Failed to deactivate user");
             console.error(err);
@@ -1097,21 +1263,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         }
-    }, [cli, user.userId]);
-
-    const onMemberAvatarClick = useCallback(() => {
-        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
-        if (!avatarUrl) return;
-
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
-        const ImageView = sdk.getComponent("elements.ImageView");
-        const params = {
-            src: httpUrl,
-            name: member.name,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, member]);
+    }, [cli, member.userId]);
 
     let synapseDeactivateButton;
     let spinner;
@@ -1119,7 +1271,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
     // We don't need a perfect check here, just something to pass as "probably not our homeserver". If
     // someone does figure out how to bypass this check the worst that happens is an error.
     // FIXME this should be using cli instead of MatrixClientPeg.matrixClient
-    if (isSynapseAdmin && user.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
+    if (isSynapseAdmin && member.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
         synapseDeactivateButton = (
             <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field mx_UserInfo_destructive">
                 {_t("Deactivate user")}
@@ -1143,7 +1295,7 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         adminToolsContainer = (
             <GroupAdminToolsSection
                 groupId={groupId}
-                groupMember={user}
+                groupMember={member}
                 startUpdating={startUpdating}
                 stopUpdating={stopUpdating}>
                 { synapseDeactivateButton }
@@ -1162,7 +1314,134 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
     }
 
-    const displayName = member.name || member.displayname;
+    const memberDetails = (
+        <PowerLevelSection
+            powerLevels={powerLevels}
+            user={member}
+            room={room}
+            roomPermissions={roomPermissions}
+        />
+    );
+
+    // only display the devices list if our client supports E2E
+    const _enableDevices = cli.isCryptoEnabled();
+
+    let text;
+    if (!isRoomEncrypted) {
+        if (!_enableDevices) {
+            text = _t("This client does not support end-to-end encryption.");
+        } else if (room) {
+            text = _t("Messages in this room are not end-to-end encrypted.");
+        } else {
+            // TODO what to render for GroupMember
+        }
+    } else {
+        text = _t("Messages in this room are end-to-end encrypted.");
+    }
+
+    let verifyButton;
+    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
+
+    const userTrust = cli.checkUserTrust(member.userId);
+    const userVerified = userTrust.isCrossSigningVerified();
+    const isMe = member.userId === cli.getUserId();
+    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+                        homeserverSupportsCrossSigning &&
+                        isRoomEncrypted && !userVerified && !isMe;
+
+    const setUpdating = (updating) => {
+        setPendingUpdateCount(count => count + (updating ? 1 : -1));
+    };
+    const hasCrossSigningKeys =
+        useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
+
+    if (canVerify && hasCrossSigningKeys) {
+        verifyButton = (
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+                {_t("Verify")}
+            </AccessibleButton>
+        );
+    }
+
+    let devicesSection;
+    if (isRoomEncrypted) {
+        devicesSection = <DevicesSection
+            loading={devices === undefined}
+            devices={devices}
+            userId={member.userId} />;
+    }
+
+    const securitySection = (
+        <div className="mx_UserInfo_container">
+            <h3>{ _t("Security") }</h3>
+            <p>{ text }</p>
+            { verifyButton }
+            { devicesSection }
+        </div>
+    );
+
+    return <React.Fragment>
+        { memberDetails &&
+        <div className="mx_UserInfo_container mx_UserInfo_separator mx_UserInfo_memberDetailsContainer">
+            <div className="mx_UserInfo_memberDetails">
+                { memberDetails }
+            </div>
+        </div> }
+
+        { securitySection }
+        <UserOptionsSection
+            devices={devices}
+            canInvite={roomPermissions.canInvite}
+            isIgnored={isIgnored}
+            member={member} />
+
+        { adminToolsContainer }
+
+        { spinner }
+    </React.Fragment>;
+};
+
+const UserInfoHeader = ({onClose, member, e2eStatus}) => {
+    const cli = useContext(MatrixClientContext);
+
+    let closeButton;
+    if (onClose) {
+        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
+            <div />
+        </AccessibleButton>;
+    }
+
+    const onMemberAvatarClick = useCallback(() => {
+        const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
+        if (!avatarUrl) return;
+
+        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
+        const ImageView = sdk.getComponent("elements.ImageView");
+        const params = {
+            src: httpUrl,
+            name: member.name,
+        };
+
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+    }, [cli, member]);
+
+    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+    const avatarElement = (
+        <div className="mx_UserInfo_avatar">
+            <div>
+                <div>
+                    <MemberAvatar
+                        member={member}
+                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        resizeMethod="scale"
+                        fallbackUserId={member.userId}
+                        onClick={onMemberAvatarClick}
+                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
+                </div>
+            </div>
+        </div>
+    );
 
     let presenceState;
     let presenceLastActiveAgo;
@@ -1198,179 +1477,79 @@ const UserInfo = ({user, groupId, roomId, onClose}) => {
         statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
     }
 
-    // const avatarUrl = user.getMxcAvatarUrl ? user.getMxcAvatarUrl() : user.avatarUrl;
-    const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-    const avatarElement = (
-        <div className="mx_UserInfo_avatar">
-            <div>
-                <div>
-                    <MemberAvatar
-                        member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        resizeMethod="scale"
-                        fallbackUserId={member.userId}
-                        onClick={onMemberAvatarClick}
-                        urls={member.avatarUrl ? [member.avatarUrl] : undefined} />
-                </div>
-            </div>
-        </div>
-    );
-
-    let closeButton;
-    if (onClose) {
-        closeButton = <AccessibleButton
-            className="mx_UserInfo_cancel"
-            onClick={onClose}
-            title={_t('Close')} />;
-    }
-
-    const memberDetails = (
-        <PowerLevelSection
-            powerLevels={powerLevels}
-            user={member}
-            room={room}
-            roomPermissions={roomPermissions}
-        />
-    );
-
-    const isRoomEncrypted = useIsEncrypted(cli, room);
-    // undefined means yet to be loaded, null means failed to load, otherwise list of devices
-    const [devices, setDevices] = useState(undefined);
-    // Download device lists
-    useEffect(() => {
-        setDevices(undefined);
-
-        let cancelled = false;
-
-        async function _downloadDeviceList() {
-            try {
-                await cli.downloadKeys([user.userId], true);
-                const devices = await cli.getStoredDevicesForUser(user.userId);
-
-                if (cancelled) {
-                    // we got cancelled - presumably a different user now
-                    return;
-                }
-
-                _disambiguateDevices(devices);
-                setDevices(devices);
-            } catch (err) {
-                setDevices(null);
-            }
-        }
-        _downloadDeviceList();
-
-        // Handle being unmounted
-        return () => {
-            cancelled = true;
-        };
-    }, [cli, user.userId]);
-
-    // Listen to changes
-    useEffect(() => {
-        let cancel = false;
-        const onDeviceVerificationChanged = (_userId, device) => {
-            if (_userId === user.userId) {
-                // no need to re-download the whole thing; just update our copy of the list.
-
-                // Promise.resolve to handle transition from static result to promise; can be removed in future
-                Promise.resolve(cli.getStoredDevicesForUser(user.userId)).then((devices) => {
-                    if (cancel) return;
-                    setDevices(devices);
-                });
-            }
-        };
-        cli.on("deviceVerificationChanged", onDeviceVerificationChanged);
-        // Handle being unmounted
-        return () => {
-            cancel = true;
-            cli.removeListener("deviceVerificationChanged", onDeviceVerificationChanged);
-        };
-    }, [cli, user.userId]);
-
-    let text;
-    if (!isRoomEncrypted) {
-        if (!_enableDevices) {
-            text = _t("This client does not support end-to-end encryption.");
-        } else if (room) {
-            text = _t("Messages in this room are not end-to-end encrypted.");
-        } else {
-            // TODO what to render for GroupMember
-        }
-    } else {
-        text = _t("Messages in this room are end-to-end encrypted.");
-    }
-
-    const userTrust = cli.checkUserTrust(user.userId);
-    const userVerified = SettingsStore.isFeatureEnabled("feature_cross_signing") ?
-        userTrust.isCrossSigningVerified() :
-        userTrust.isVerified();
-    const isMe = user.userId === cli.getUserId();
-    let verifyButton;
-    if (!userVerified && !isMe) {
-        verifyButton = <AccessibleButton className="mx_UserInfo_verify" onClick={() => verifyUser(user)}>
-            {_t("Verify")}
-        </AccessibleButton>;
-    }
-
-    const devicesSection = <DevicesSection
-        loading={devices === undefined}
-        devices={devices} userId={user.userId} />;
-
-    const securitySection = (
-        <div className="mx_UserInfo_container">
-            <h3>{ _t("Security") }</h3>
-            <p>{ text }</p>
-            { verifyButton }
-            { devicesSection }
-        </div>
-    );
-
     let e2eIcon;
-    if (isRoomEncrypted && devices) {
-        const e2eStatus = _getE2EStatus(cli, user.userId, devices);
+    if (e2eStatus) {
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
-    return (
-        <div className="mx_UserInfo" role="tabpanel">
-            { closeButton }
-            { avatarElement }
+    const displayName = member.name || member.displayname;
+    return <React.Fragment>
+        { closeButton }
+        { avatarElement }
 
-            <div className="mx_UserInfo_container">
-                <div className="mx_UserInfo_profile">
-                    <div>
-                        <h2 aria-label={displayName}>
-                            { e2eIcon }
-                            { displayName }
-                        </h2>
-                    </div>
-                    <div>{ user.userId }</div>
-                    <div className="mx_UserInfo_profileStatus">
-                        {presenceLabel}
-                        {statusLabel}
-                    </div>
+        <div className="mx_UserInfo_container mx_UserInfo_separator">
+            <div className="mx_UserInfo_profile">
+                <div>
+                    <h2 aria-label={displayName}>
+                        { e2eIcon }
+                        { displayName }
+                    </h2>
+                </div>
+                <div>{ member.userId }</div>
+                <div className="mx_UserInfo_profileStatus">
+                    {presenceLabel}
+                    {statusLabel}
                 </div>
             </div>
+        </div>
+    </React.Fragment>;
+};
 
-            { memberDetails && <div className="mx_UserInfo_container mx_UserInfo_memberDetailsContainer">
-                <div className="mx_UserInfo_memberDetails">
-                    { memberDetails }
-                </div>
-            </div> }
+const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.RoomMemberInfo, ...props}) => {
+    const cli = useContext(MatrixClientContext);
 
-            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
-                { securitySection }
-                <UserOptionsSection
+    // Load room if we are given a room id and memoize it
+    const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
+    // fetch latest room member if we have a room, so we don't show historical information, falling back to user
+    const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
+
+    const isRoomEncrypted = useIsEncrypted(cli, room);
+    const devices = useDevices(user.userId);
+
+    let e2eStatus;
+    if (isRoomEncrypted && devices) {
+        e2eStatus = getE2EStatus(cli, user.userId, devices);
+    }
+
+    const classes = ["mx_UserInfo"];
+
+    let content;
+    switch (phase) {
+        case RIGHT_PANEL_PHASES.RoomMemberInfo:
+        case RIGHT_PANEL_PHASES.GroupMemberInfo:
+            content = (
+                <BasicUserInfo
+                    room={room}
+                    member={member}
+                    groupId={groupId}
                     devices={devices}
-                    canInvite={roomPermissions.canInvite}
-                    isIgnored={isIgnored}
-                    member={member} />
+                    isRoomEncrypted={isRoomEncrypted} />
+            );
+            break;
+        case RIGHT_PANEL_PHASES.EncryptionPanel:
+            classes.push("mx_UserInfo_smallAvatar");
+            content = (
+                <EncryptionPanel {...props} member={member} onClose={onClose} />
+            );
+            break;
+    }
 
-                { adminToolsContainer }
+    return (
+        <div className={classes.join(" ")} role="tabpanel">
+            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
+                <UserInfoHeader member={member} e2eStatus={e2eStatus} onClose={onClose} />
 
-                { spinner }
+                { content }
             </AutoHideScrollbar>
         </div>
     );

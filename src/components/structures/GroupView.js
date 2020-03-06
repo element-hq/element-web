@@ -481,7 +481,7 @@ export default createReactClass({
                         group_id: groupId,
                     },
                 });
-                dis.dispatch({action: 'require_registration'});
+                dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${groupId}`}});
                 willDoOnboarding = true;
             }
             if (stateKey === GroupStore.STATE_KEY.Summary) {
@@ -726,7 +726,7 @@ export default createReactClass({
 
     _onJoinClick: async function() {
         if (this._matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${this.props.groupId}`}});
             return;
         }
 
@@ -821,10 +821,10 @@ export default createReactClass({
                 {_t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;
