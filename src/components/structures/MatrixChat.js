@@ -1503,10 +1503,10 @@ export default createReactClass({
                 return;
             }
 
-            if (request.started) {
-                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
-                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
-                    verificationRequest: request,
+            if (request.verifier) {
+                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                    verifier: request.verifier,
                 }, null, /* priority = */ false, /* static = */ true);
             } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
