@@ -1495,26 +1495,29 @@ export default createReactClass({
             }
         });
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            cli.on("crypto.verification.request", request => {
-                if (request.pending) {
-                    ToastStore.sharedInstance().addOrReplaceToast({
-                        key: 'verifreq_' + request.channel.transactionId,
-                        title: _t("Verification Request"),
-                        icon: "verification",
-                        props: {request},
-                        component: sdk.getComponent("toasts.VerificationRequestToast"),
-                    });
-                }
-            });
-        } else {
-            cli.on("crypto.verification.start", (verifier) => {
-                const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
-                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                    verifier,
+        cli.on("crypto.verification.request", request => {
+            const isFlagOn = SettingsStore.isFeatureEnabled("feature_cross_signing");
+
+            if (!isFlagOn && !request.channel.deviceId) {
+                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
+                return;
+            }
+
+            if (request.pending) {
+                ToastStore.sharedInstance().addOrReplaceToast({
+                    key: 'verifreq_' + request.channel.transactionId,
+                    title: _t("Verification Request"),
+                    icon: "verification",
+                    props: {request},
+                    component: sdk.getComponent("toasts.VerificationRequestToast"),
+                });
+            } else if (request.started) {
+                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
+                    verificationRequest: request,
                 }, null, /* priority = */ false, /* static = */ true);
-            });
-        }
+            }
+        });
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
         const colorScheme = SettingsStore.getValue("roomColor");
