@@ -43,10 +43,19 @@ const Store = require('electron-store');
 const fs = require('fs');
 const afs = fs.promises;
 
-let Seshat = null;
+let seshatSupported = false;
+let Seshat;
+let SeshatRecovery;
+let ReindexError;
+
+const seshatPassphrase = "DEFAULT_PASSPHRASE";
 
 try {
-    Seshat = require('matrix-seshat');
+    seshatModule = require('matrix-seshat');
+    Seshat = seshatModule.Seshat;
+    SeshatRecovery = seshatModule.SeshatRecovery;
+    ReindexError = seshatModule.ReindexError;
+    seshatSupported = true;
 } catch (e) {
     if (e.code === "MODULE_NOT_FOUND") {
         console.log("Seshat isn't installed, event indexing is disabled.");
@@ -267,18 +276,36 @@ ipcMain.on('seshat', async function(ev, payload) {
 
     switch (payload.name) {
         case 'supportsEventIndexing':
-            if (Seshat === null) ret = false;
-            else ret = true;
+            ret = seshatSupported;
             break;
 
         case 'initEventIndex':
             if (eventIndex === null) {
                 try {
                     await afs.mkdir(eventStorePath, {recursive: true});
-                    eventIndex = new Seshat(eventStorePath, {passphrase: "DEFAULT_PASSPHRASE"});
+                    eventIndex = new Seshat(eventStorePath, {passphrase: seshatPassphrase});
                 } catch (e) {
-                    sendError(payload.id, e);
-                    return;
+                    if (e instanceof ReindexError) {
+                        // If this is a reindex error, the index schema
+                        // changed. Try to open the database in recovery mode,
+                        // reindex the database and finally try to open the
+                        // database again.
+                        try {
+                            recoveryIndex = new SeshatRecovery(eventStorePath,
+                                                               {passphrase: seshatPassphrase});
+                            await recoveryIndex.reindex();
+                            // Delete the recovery index here to make sure that
+                            // the locks are freed.
+                            delete recoveryIndex;
+                            eventIndex = new Seshat(eventStorePath, {passphrase: seshatPassphrase});
+                        } catch (e) {
+                            sendError(payload.id, e);
+                            return;
+                        }
+                    } else {
+                        sendError(payload.id, e);
+                        return;
+                    }
                 }
             }
             break;
