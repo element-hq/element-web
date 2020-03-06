@@ -2178,5 +2178,7 @@
     "Order rooms by name": "Trier les salons par nom",
     "Show rooms with unread notifications first": "Afficher en premier les salons avec des notifications non lues",
     "Show shortcuts to recently viewed rooms above the room list": "Afficher les raccourcis vers les salons vus récemment au-dessus de la liste des salons",
-    "Displays information about a user": "Affiche des informations à propos de l’utilisateur"
+    "Displays information about a user": "Affiche des informations à propos de l’utilisateur",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Pour signaler un problème de sécurité lié à Matrix, consultez <a>la politique de divulgation de sécurité</a> de Matrix.org.",
+    "Mark all as read": "Tout marquer comme lu"
 }
