@@ -150,6 +150,8 @@ export default class ManageEventIndexDialog extends React.Component {
 
         const Field = sdk.getComponent('views.elements.Field');
 
+        const doneRooms = Math.max(0, (this.state.roomCount - this.state.crawlingRoomsCount));
+
         const eventIndexingSettings = (
             <div>
                 {
@@ -160,8 +162,8 @@ export default class ManageEventIndexDialog extends React.Component {
                 <div className='mx_SettingsTab_subsectionText'>
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
                     {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
-                    {_t("Indexed rooms:")} {_t("%(crawlingRooms)s out of %(totalRooms)s", {
-                        crawlingRooms: formatCountLong(this.state.crawlingRoomsCount),
+                    {_t("Indexed rooms:")} {_t("%(doneRooms)s out of %(totalRooms)s", {
+                        doneRooms: formatCountLong(doneRooms),
                         totalRooms: formatCountLong(this.state.roomCount),
                     })} <br />
                     {crawlerState}<br />

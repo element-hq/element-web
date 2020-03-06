@@ -2136,7 +2136,7 @@
     "Space used:": "Space used:",
     "Indexed messages:": "Indexed messages:",
     "Indexed rooms:": "Indexed rooms:",
-    "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s out of %(totalRooms)s",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s out of %(totalRooms)s",
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
