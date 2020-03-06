@@ -289,9 +289,15 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: -19px;
+    top: 29px;
     user-select: none;
     z-index: 1;
+}
+
+.mx_EventTile_continuation .mx_EventTile_readAvatars,
+.mx_EventTile_info .mx_EventTile_readAvatars,
+.mx_EventTile_emote .mx_EventTile_readAvatars {
+    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
@@ -626,6 +632,15 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
     .mx_EventTile_readAvatars {
         top: 27px;
+    }
+
+    .mx_EventTile_continuation .mx_EventTile_readAvatars,
+    .mx_EventTile_emote .mx_EventTile_readAvatars {
+        top: 5px;
+    }
+
+    .mx_EventTile_info .mx_EventTile_readAvatars {
+        top: 4px;
     }
 
     .mx_RoomView_MessageList h2 {
