@@ -2168,5 +2168,8 @@
     "Create Account": "Krijoni Llogari",
     "Displays information about a user": "Shfaq të dhëna rreth një përdoruesi",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Që të njoftoni një problem sigurie lidhur me Matrix-in, ju lutemi, lexoni <a>Rregulla Tregimi Çështjes Sigurie</a> te Matrix.org.",
-    "Mark all as read": "Vëru të tërave shenjë si të lexuara"
+    "Mark all as read": "Vëru të tërave shenjë si të lexuara",
+    "Not currently indexing messages for any room.": "Pa indeksuar aktualisht mesazhe nga ndonjë dhomë.",
+    "Currently indexing: %(currentRoom)s.": "Aktualisht nën indeksim: %(currentRoom)s.",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s nga %(totalRooms)s"
 }
