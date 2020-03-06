@@ -2169,5 +2169,11 @@
     "Indexed messages:": "Indexatutako mezuak:",
     "Indexed rooms:": "Indexatutako gelak:",
     "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s / %(totalRooms)s",
-    "Message downloading sleep time(ms)": "Mezuen deskargaren itxarote tartea (ms)"
+    "Message downloading sleep time(ms)": "Mezuen deskargaren itxarote tartea (ms)",
+    "Displays information about a user": "Erabiltzaileari buruzko informazioa erakusten du",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix-ekin lotutako segurtasun arazo baten berri emateko, irakurri <a>Segurtasun ezagutarazte gidalerroak</a>.",
+    "Mark all as read": "Markatu denak irakurrita gisa",
+    "Not currently indexing messages for any room.": "Orain ez da inolako gelako mezurik indexatzen.",
+    "Currently indexing: %(currentRoom)s.": "Orain indexatzen: %(currentRoom)s.",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s"
 }
