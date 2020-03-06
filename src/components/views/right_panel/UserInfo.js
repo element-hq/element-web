@@ -186,6 +186,16 @@ async function verifyDevice(userId, device) {
     });
 }
 
+async function legacyVerifyUser(member) {
+    const cli = MatrixClientPeg.get();
+    const verificationRequestPromise = cli.requestVerification(member.userId);
+    dis.dispatch({
+        action: "set_right_panel_phase",
+        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+        refireParams: {member, verificationRequestPromise},
+    });
+}
+
 function verifyUser(user) {
     const cli = MatrixClientPeg.get();
     const dmRoom = findDMForUser(cli, user.userId);
@@ -1355,9 +1365,15 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const hasCrossSigningKeys =
         useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
-    if (canVerify && hasCrossSigningKeys) {
+    if (canVerify) {
         verifyButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
+                if (hasCrossSigningKeys) {
+                    verifyUser(member);
+                } else {
+                    legacyVerifyUser(member);
+                }
+            }}>
                 {_t("Verify")}
             </AccessibleButton>
         );
