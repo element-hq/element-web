@@ -1503,7 +1503,12 @@ export default createReactClass({
                 return;
             }
 
-            if (request.pending) {
+            if (request.started) {
+                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
+                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
+                    verificationRequest: request,
+                }, null, /* priority = */ false, /* static = */ true);
+            } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: 'verifreq_' + request.channel.transactionId,
                     title: _t("Verification Request"),
@@ -1511,11 +1516,6 @@ export default createReactClass({
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
                 });
-            } else if (request.started) {
-                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
-                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
-                    verificationRequest: request,
-                }, null, /* priority = */ false, /* static = */ true);
             }
         });
         // Fire the tinter right on startup to ensure the default theme is applied
