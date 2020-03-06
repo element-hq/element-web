@@ -2160,5 +2160,6 @@
     "Space used:": "Gebruikte ruimte:",
     "Indexed messages:": "Geïndexeerde berichten:",
     "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s van %(totalRooms)s",
-    "Message downloading sleep time(ms)": "Wachttijd voor downloaden van berichten (ms)"
+    "Message downloading sleep time(ms)": "Wachttijd voor downloaden van berichten (ms)",
+    "Mark all as read": "Alles markeren als gelezen"
 }
