@@ -141,10 +141,10 @@ export default class ManageEventIndexDialog extends React.Component {
         let crawlerState;
 
         if (this.state.currentRoom === null) {
-            crawlerState = _t("Not currently downloading messages for any room.");
+            crawlerState = _t("Not currently indexing messages for any room.");
         } else {
             crawlerState = (
-                    _t("Downloading mesages for %(currentRoom)s.", { currentRoom: this.state.currentRoom })
+                    _t("Currently indexing: %(currentRoom)s.", { currentRoom: this.state.currentRoom })
             );
         }
 
@@ -160,13 +160,13 @@ export default class ManageEventIndexDialog extends React.Component {
                     )
                 }
                 <div className='mx_SettingsTab_subsectionText'>
+                    {crawlerState}<br />
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
                     {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
                     {_t("Indexed rooms:")} {_t("%(doneRooms)s out of %(totalRooms)s", {
                         doneRooms: formatCountLong(doneRooms),
                         totalRooms: formatCountLong(this.state.roomCount),
                     })} <br />
-                    {crawlerState}<br />
                     <Field
                         id={"crawlerSleepTimeMs"}
                         label={_t('Message downloading sleep time(ms)')}
