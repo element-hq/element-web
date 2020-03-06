@@ -2177,5 +2177,7 @@
     "Order rooms by name": "以名稱排序聊天室",
     "Show rooms with unread notifications first": "先顯示有未讀通知的聊天室",
     "Show shortcuts to recently viewed rooms above the room list": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
-    "Displays information about a user": "顯示關於使用者的資訊"
+    "Displays information about a user": "顯示關於使用者的資訊",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org <a>安全性揭露政策</a>。",
+    "Mark all as read": "全部標示為已讀"
 }
