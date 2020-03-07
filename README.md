@@ -1,8 +1,10 @@
-Riot
+messenger.schule (powered by Riot)
 ====
 
 Riot (formerly known as Vector) is a Matrix web client built using the [Matrix
 React SDK](https://github.com/matrix-org/matrix-react-sdk).
+
+![CI](https://github.com/schul-cloud/riot-web/workflows/CI/badge.svg?branch=master)
 
 Supported Environments
 ======================
