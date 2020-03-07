@@ -1693,5 +1693,5 @@
     "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Die Sicherung hat eine Signatur von einer <verify>unbekannten</verify> Sitzung mit der ID %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",
     "Backup has an <validity>invalid</validity> signature from this session": "Die Sicherung hat eine <validity>ungültige</validity> Signatur von dieser Sitzung",
-    "Discovery options will appear once you have added an email above.": "Erkennungsoptionen werden angezeigt, sobald oben eine E-Mail hinzugefügt wurde."
+    "Discovery options will appear once you have added an email above.": "Entdeckungsoptionen werden angezeigt, sobald oben eine E-Mail hinzugefügt wurde."
 }
