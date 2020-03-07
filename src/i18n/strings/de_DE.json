@@ -525,7 +525,7 @@
     "Invalid community ID": "Ungültige Community-ID",
     "'%(groupId)s' is not a valid community ID": "'%(groupId)s' ist keine gültige Community-ID",
     "New community ID (e.g. +foo:%(localDomain)s)": "Neue Community-ID (z. B. +foo:%(localDomain)s)",
-    "Remove from community": "Aus Community entfernen",
+    "Remove from community": "Aus der Community entfernen",
     "Failed to remove user from community": "Entfernen des Benutzers aus der Community fehlgeschlagen",
     "Filter community members": "Community-Mitglieder filtern",
     "Filter community rooms": "Community-Räume filtern",
