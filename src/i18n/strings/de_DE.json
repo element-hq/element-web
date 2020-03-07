@@ -1681,5 +1681,17 @@
     "Document": "Dokument",
     "Explore": "Erkunde",
     "Explore rooms": "Erkunde Räume",
-    "Maximize apps": "Apps maximieren"
+    "Maximize apps": "Apps maximieren",
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Dein bereitgestellter Signaturschlüssel passt zu dem Schlüssel, der von %(userId)s's Sitzung %(deviceId)s empfangen wurde. Sitzung wird als verifiziert markiert.",
+    "Match system theme": "An System-Design anpassen",
+    "Verify this session by completing one of the following:": "Verifiziere diese Sitzung, indem du eine der folgenden Aktionen ausführst:",
+    "Your homeserver does not support session management.": "Dein Heimserver unterstützt keine Sitzungsverwaltung.",
+    "Unable to load session list": "Sitzungsliste kann nicht geladen werden",
+    "Delete %(count)s sessions|one": "%(count)s Sitzung löschen",
+    "This session is backing up your keys. ": "Diese Sitzung sichert deine Schlüssel.",
+    "Connect this session to Key Backup": "Diese Sitzung mit der Schlüsselsicherung verbinden",
+    "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Die Sicherung hat eine Signatur von einer <verify>unbekannten</verify> Sitzung mit der ID %(deviceId)s",
+    "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",
+    "Backup has an <validity>invalid</validity> signature from this session": "Die Sicherung hat eine <validity>ungültige</validity> Signatur von dieser Sitzung",
+    "Discovery options will appear once you have added an email above.": "Erkennungsoptionen werden angezeigt, sobald oben eine E-Mail hinzugefügt wurde."
 }
