@@ -1696,5 +1696,11 @@
     "Discovery options will appear once you have added an email above.": "Entdeckungsoptionen werden angezeigt, sobald oben eine E-Mail hinzugefügt wurde.",
     "Discovery options will appear once you have added a phone number above.": "Entdeckungsoptionen werden angezeigt, sobald eine Telefonnummer hinzugefügt wurde.",
     "Close preview": "Vorschau schließen",
-    "Loading room preview": "Raumvorschau laden"
+    "Loading room preview": "Lade Raumvorschau",
+    "Join the discussion": "Trete der Diskussion bei",
+    "Remove for everyone": "Für alle entfernen",
+    "Remove for me": "Für mich entfernen",
+    "Create your Matrix account on <underlinedServerName />": "Erstelle dein Matrix-Konto auf <underlinedServerName />",
+    "Preview": "Vorschau",
+    "Your Matrix account on <underlinedServerName />": "Dein Matrix-Konto auf <underlinedServerName />"
 }
