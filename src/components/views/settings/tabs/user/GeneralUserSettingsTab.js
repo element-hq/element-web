@@ -438,6 +438,12 @@ export default class GeneralUserSettingsTab extends React.Component {
             );
         }
 
+        const themes = Object.entries(enumerateThemes())
+            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
+        const customThemes = themes.filter(p => !builtInThemes.includes(p))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -446,8 +452,8 @@ export default class GeneralUserSettingsTab extends React.Component {
                        value={this.state.theme} onChange={this._onThemeChange}
                        disabled={this.state.useSystemTheme}
                 >
-                    {Object.entries(enumerateThemes()).map(([theme, text]) => {
-                        return <option key={theme} value={theme}>{text}</option>;
+                    {orderedThemes.map(theme => {
+                        return <option key={theme.id} value={theme.id}>{theme.name}</option>;
                     })}
                 </Field>
                 {customThemeForm}
