@@ -127,11 +127,16 @@ function textForRoomNameEvent(ev) {
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
         return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName});
     }
-    debugger;
-    return _t('%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.', {
+    if (ev.getPrevContent().name) {
+        return _t('%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.', {
+            senderDisplayName,
+            oldRoomName: ev.getPrevContent().name,
+            newRoomName: ev.getContent().name,
+        });
+    }
+    return _t('%(senderDisplayName)s changed the room name to %(roomName)s.', {
         senderDisplayName,
-        oldRoomName: ev.getPrevContent().name,
-        newRoomName: ev.getContent().name,
+        roomName: ev.getContent().name,
     });
 }
 
