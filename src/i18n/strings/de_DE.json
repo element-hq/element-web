@@ -1702,5 +1702,14 @@
     "Remove for me": "Für mich entfernen",
     "Create your Matrix account on <underlinedServerName />": "Erstelle dein Matrix-Konto auf <underlinedServerName />",
     "Preview": "Vorschau",
-    "Your Matrix account on <underlinedServerName />": "Dein Matrix-Konto auf <underlinedServerName />"
+    "Your Matrix account on <underlinedServerName />": "Dein Matrix-Konto auf <underlinedServerName />",
+    "Remove %(email)s?": "%(email)s entfernen?",
+    "Remove %(phone)s?": "%(phone)s entfernen?",
+    "Remove recent messages by %(user)s": "Letzte Nachrichten von %(user)s entfernen",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "Du bist dabei %(count)s Nachrichten von %(user)s zu löschen, was nicht rückgängig gemacht werden kann. Fortfahren?",
+    "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|one": "Du bist dabei eine Nachrichten von %(user)s zu löschen, was nicht rückgängig gemacht werden kann. Fortfahren?",
+    "Remove %(count)s messages|other": "%(count)s Nachrichten entfernen",
+    "Remove %(count)s messages|one": "Eine Nachricht entfernen",
+    "Remove recent messages": "Letzte Nachrichten entfernen",
+    "You're previewing %(roomName)s. Want to join it?": "Du betrachtest %(roomName)s. Willst du beitreten?"
 }
