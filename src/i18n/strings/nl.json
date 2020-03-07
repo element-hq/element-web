@@ -2161,5 +2161,9 @@
     "Indexed messages:": "Geïndexeerde berichten:",
     "%(crawlingRooms)s out of %(totalRooms)s": "%(crawlingRooms)s van %(totalRooms)s",
     "Message downloading sleep time(ms)": "Wachttijd voor downloaden van berichten (ms)",
-    "Mark all as read": "Alles markeren als gelezen"
+    "Mark all as read": "Alles markeren als gelezen",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Bekijk eerst het <a>beveiligingsopenbaarmakingsbeleid</a> van Matrix.org als u een probleem met de beveiliging van Matrix wilt melden.",
+    "Not currently indexing messages for any room.": "Er worden momenteel voor geen enkel gesprek berichten geïndexeerd.",
+    "Currently indexing: %(currentRoom)s.": "Wordt geïndexeerd: %(currentRoom)s.",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s van %(totalRooms)s"
 }
