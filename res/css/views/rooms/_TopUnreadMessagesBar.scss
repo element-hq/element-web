@@ -56,3 +56,17 @@ limitations under the License.
     mask-position: 9px 13px;
     background: $roomtile-name-color;
 }
+
+.mx_TopUnreadMessagesBar_markAsRead {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-image: url('$(res)/img/cancel.svg');
+    background-position: center;
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-color: $primary-bg-color;
+    border: 1.3px solid $roomtile-name-color;
+    border-radius: 99px;
+    margin: 5px auto;
+}

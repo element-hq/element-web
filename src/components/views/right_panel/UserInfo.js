@@ -171,14 +171,14 @@ async function verifyDevice(userId, device) {
                 return;
             }
             const cli = MatrixClientPeg.get();
-            const verificationRequest = await cli.requestVerification(
+            const verificationRequestPromise = cli.requestVerification(
                 userId,
                 [device.deviceId],
             );
             dis.dispatch({
                 action: "set_right_panel_phase",
                 phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {member, verificationRequest},
+                refireParams: {member, verificationRequestPromise},
             });
         },
         primaryButton: _t("Done"),
