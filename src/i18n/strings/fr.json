@@ -2180,5 +2180,8 @@
     "Show shortcuts to recently viewed rooms above the room list": "Afficher les raccourcis vers les salons vus récemment au-dessus de la liste des salons",
     "Displays information about a user": "Affiche des informations à propos de l’utilisateur",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Pour signaler un problème de sécurité lié à Matrix, consultez <a>la politique de divulgation de sécurité</a> de Matrix.org.",
-    "Mark all as read": "Tout marquer comme lu"
+    "Mark all as read": "Tout marquer comme lu",
+    "Not currently indexing messages for any room.": "N’indexe aucun message en ce moment.",
+    "Currently indexing: %(currentRoom)s.": "En ce moment, indexe : %(currentRoom)s.",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s sur %(totalRooms)s"
 }
