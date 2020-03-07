@@ -42,8 +42,13 @@ pre, code {
     font-size: 100% !important;
 }
 
-.error, .warning {
+.error, .warning,
+.text-error, .text-warning {
     color: $warning-color;
+}
+
+.text-success {
+    color: $accent-color;
 }
 
 b {

@@ -62,7 +62,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             msisdns: [],
             ...this._calculateThemeState(),
             customThemeUrl: "",
-            customThemeError: "",
+            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -281,22 +281,30 @@ export default class GeneralUserSettingsTab extends React.Component {
         if (!currentThemes) currentThemes = [];
         currentThemes = currentThemes.map(c => c); // cheap clone
 
+        if (this._themeTimer) {
+            clearTimeout(this._themeTimer);
+        }
+
         try {
             const r = await fetch(this.state.customThemeUrl);
             const themeInfo = await r.json();
             if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
-                console.log(themeInfo);
-                this.setState({customThemeError: _t("Invalid theme schema.")});
+                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
                 return;
             }
             currentThemes.push(themeInfo);
         } catch (e) {
             console.error(e);
-            this.setState({customThemeError: _t("Error downloading theme information.")});
+            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            return; // Don't continue on error
         }
 
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({customThemeUrl: "", customThemeError: ""});
+        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+
+        this._themeTimer = setTimeout(() => {
+            this.setState({customThemeMessage: {text: "", isError: false}});
+        }, 3000);
     };
 
     _onCustomThemeChange = (e) => {
@@ -400,22 +408,33 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         let customThemeForm;
         if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+            let messageElement = null;
+            if (this.state.customThemeMessage.text) {
+                if (this.state.customThemeMessage.isError) {
+                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                } else {
+                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                }
+            }
             customThemeForm = (
-                <form onSubmit={this._onAddCustomTheme}>
-                    <Field
-                        label={_t("Custom theme URL")}
-                        type='text'
-                        id='mx_GeneralUserSettingsTab_customThemeInput'
-                        autoComplete="off"
-                        onChange={this._onCustomThemeChange}
-                        value={this.state.customThemeUrl}
-                    />
-                    <div className='error'>{this.state.customThemeError}</div>
-                    <AccessibleButton
-                        onClick={this._onAddCustomTheme}
-                        type="submit" kind="primary_sm"
-                    >{_t("Add theme")}</AccessibleButton>
-                </form>
+                <div className='mx_SettingsTab_section'>
+                    <form onSubmit={this._onAddCustomTheme}>
+                        <Field
+                            label={_t("Custom theme URL")}
+                            type='text'
+                            id='mx_GeneralUserSettingsTab_customThemeInput'
+                            autoComplete="off"
+                            onChange={this._onCustomThemeChange}
+                            value={this.state.customThemeUrl}
+                        />
+                        <AccessibleButton
+                            onClick={this._onAddCustomTheme}
+                            type="submit" kind="primary_sm"
+                            disabled={!this.state.customThemeUrl.trim()}
+                        >{_t("Add theme")}</AccessibleButton>
+                        {messageElement}
+                    </form>
+                </div>
             );
         }
 
