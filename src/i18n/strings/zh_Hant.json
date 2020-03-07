@@ -2179,5 +2179,8 @@
     "Show shortcuts to recently viewed rooms above the room list": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
     "Displays information about a user": "顯示關於使用者的資訊",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org <a>安全性揭露政策</a>。",
-    "Mark all as read": "全部標示為已讀"
+    "Mark all as read": "全部標示為已讀",
+    "Not currently indexing messages for any room.": "目前未為任何聊天室編寫索引。",
+    "Currently indexing: %(currentRoom)s.": "目前正在製作索引：%(currentRoom)s。",
+    "%(doneRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(doneRooms)s"
 }
