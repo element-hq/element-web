@@ -556,7 +556,7 @@
     "Message removed": "Nachricht entfernt",
     "Mention": "Erwähnen",
     "Invite": "Einladen",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Das Löschen eines Widgets entfernt das Widget für alle Benutzer in diesem Raum. Möchtest du dieses Widget wirklich löschen?",
+    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Das Löschen eines Widgets entfernt es für alle Nutzer in diesem Raum. Möchtest du dieses Widget wirklich löschen?",
     "Mirror local video feed": "Lokalen Video-Feed spiegeln",
     "Failed to withdraw invitation": "Die Einladung konnte nicht zurückgezogen werden",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Community-IDs dürfen nur die folgenden Zeichen enthalten: a-z, 0-9, or '=_-./'",
