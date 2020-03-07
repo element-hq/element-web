@@ -1,0 +1,49 @@
+{
+    "default_server_config": {
+        "m.homeserver": {
+            "base_url": "https://matrix.stomt.com",
+            "server_name": "matrix.stomt"
+        }
+    },
+    "disable_custom_urls": true,
+    "disable_guests": true,
+    "disable_login_language_selector": false,
+    "disable_3pid_login": true,
+    "brand": "messenger.schule",
+    "branding":{
+        "authHeaderLogoUrl":"https://schul-cloud.org/images/logo/HPI-Schul-Cloud_Wort-Bildmarke-Banner_transparent.svg",
+        "welcomeBackgroundUrl":"https://blog.schul-cloud.org/content/images/size/w2000/2019/09/openHPI.png"
+    },
+    "integrations_ui_url": "",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_widgets_urls": [
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
+        "https://scalar-staging.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
+    ],
+    "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
+    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "defaultCountryCode": "GB",
+    "showLabsSettings": false,
+    "features": {
+        "feature_pinning": "labs",
+        "feature_custom_status": "labs",
+        "feature_custom_tags": "labs",
+        "feature_state_counters": "labs"
+    },
+    "default_federate": true,
+    "default_theme": "dark",
+    "roomDirectory": {
+        "servers": [
+            "matrix.stomt.com"
+        ]
+    },
+    "enable_presence_by_hs_url": {
+        "https://matrix.stomt.com": true
+    },
+    "settingDefaults": {
+        "breadcrumbs": true
+    }
+}
