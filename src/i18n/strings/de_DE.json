@@ -1694,5 +1694,7 @@
     "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",
     "Backup has an <validity>invalid</validity> signature from this session": "Die Sicherung hat eine <validity>ungültige</validity> Signatur von dieser Sitzung",
     "Discovery options will appear once you have added an email above.": "Entdeckungsoptionen werden angezeigt, sobald oben eine E-Mail hinzugefügt wurde.",
-    "Discovery options will appear once you have added a phone number above.": "Entdeckungsoptionen werden angezeigt, sobald eine Telefonnummer hinzugefügt wurde."
+    "Discovery options will appear once you have added a phone number above.": "Entdeckungsoptionen werden angezeigt, sobald eine Telefonnummer hinzugefügt wurde.",
+    "Close preview": "Vorschau schließen",
+    "Loading room preview": "Raumvorschau laden"
 }
