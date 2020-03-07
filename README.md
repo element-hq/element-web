@@ -1,4 +1,4 @@
-Messenger.schule (powered by Riot)
+messenger.schule (powered by Riot)
 ====
 
 Riot (formerly known as Vector) is a Matrix web client built using the [Matrix
