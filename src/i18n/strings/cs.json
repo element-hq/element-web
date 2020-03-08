@@ -2165,5 +2165,10 @@
     "This session, or the other session": "Tato relace, nebo jiná",
     "We recommend you change your password and recovery key in Settings immediately": "Doporučujeme vám si v nastavení okamžitě změnit své heslo a obnovovací klíče",
     "exists": "existuje",
-    "The internet connection either session is using": "Internetové připojení používané jednou z relací"
+    "The internet connection either session is using": "Internetové připojení používané jednou z relací",
+    "Displays information about a user": "Zobrazuje informace o uživateli",
+    "Mark all as read": "Označit vše jako přečtené",
+    "Not currently indexing messages for any room.": "Aktuálně neindexujeme žádné zprávy.",
+    "Currently indexing: %(currentRoom)s.": "Aktuálně indexujeme: %(currentRoom)s.",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s z %(totalRooms)s"
 }
