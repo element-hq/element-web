@@ -46,6 +46,11 @@ class EditableAliasesList extends EditableItemList {
     };
 
     _renderNewItemField() {
+        // if we don't need the RoomAliasField,
+        // we don't need to overriden version of _renderNewItemField
+        if (!this.props.domain) {
+            return super._renderNewItemField();
+        }
         const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
         const onChange = (alias) => this._onNewItemChanged({target: {value: alias}});
         return (
