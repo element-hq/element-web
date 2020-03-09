@@ -1150,7 +1150,6 @@
     "There was an error removing that alias. It may no longer exist or a temporary error occurred.": "There was an error removing that alias. It may no longer exist or a temporary error occurred.",
     "Main address": "Main address",
     "not specified": "not specified",
-    "Local addresses for this room:": "Local addresses for this room:",
     "This room has no local addresses": "This room has no local addresses",
     "New address (e.g. #foo:%(localDomain)s)": "New address (e.g. #foo:%(localDomain)s)",
     "Alternative addresses for this room:": "Alternative addresses for this room:",
