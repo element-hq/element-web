@@ -158,6 +158,38 @@ export default class AliasSettings extends React.Component {
         });
     }
 
+    changeAltAliases(altAliases) {
+        if (!this.props.canSetCanonicalAlias) return;
+
+        this.setState({
+            updatingCanonicalAlias: true,
+            altAliases,
+        });
+
+        const eventContent = {};
+
+        if (this.state.canonicalAlias) {
+            eventContent.alias = this.state.canonicalAlias;
+        }
+        if (altAliases) {
+            eventContent["alt_aliases"] = altAliases;
+        }
+
+        MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
+            eventContent, "").catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error updating alternative addresses', '', ErrorDialog, {
+                title: _t("Error updating main address"),
+                description: _t(
+                    "There was an error updating the room's alternative addresses. It may not be allowed by the server " +
+                    "or a temporary failure occurred.",
+                ),
+            });
+        }).finally(() => {
+            this.setState({updatingCanonicalAlias: false});
+        });
+    }
+
     onNewAliasChanged = (value) => {
         this.setState({newAlias: value});
     };
@@ -215,6 +247,25 @@ export default class AliasSettings extends React.Component {
     onCanonicalAliasChange = (event) => {
         this.changeCanonicalAlias(event.target.value);
     };
+
+    onNewAltAliasChanged = (value) => {
+        this.setState({newAltAlias: value});
+    }
+
+    onAltAliasAdded = (alias) => {
+        const altAliases = this.state.altAliases.slice();
+        if (!altAliases.some(a => a.trim() === alias.trim())) {
+            altAliases.push(alias.trim());
+            this.changeAltAliases(altAliases);
+            this.setState({newAltAlias: ""});
+        }
+    }
+
+    onAltAliasDeleted = (index) => {
+        const altAliases = this.state.altAliases.slice();
+        altAliases.splice(index, 1);
+        this.changeAltAliases(altAliases);
+    }
 
     _getAliases() {
         return this.state.altAliases.concat(this._getLocalNonAltAliases());
@@ -281,6 +332,22 @@ export default class AliasSettings extends React.Component {
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
                 {localAliasesList}
+                <EditableAliasesList
+                    id="roomAltAliases"
+                    className={"mx_RoomSettings_altAliases"}
+                    items={this.state.altAliases}
+                    newItem={this.state.newAltAlias}
+                    onNewItemChanged={this.onNewAltAliasChanged}
+                    canRemove={this.props.canSetCanonicalAlias}
+                    canEdit={this.props.canSetCanonicalAlias}
+                    onItemAdded={this.onAltAliasAdded}
+                    onItemRemoved={this.onAltAliasDeleted}
+                    itemsLabel={_t('Alternative addresses for this room:')}
+                    noItemsLabel={_t('This room has no alternative addresses')}
+                    placeholder={_t(
+                        'New address (e.g. #foo:domain)',
+                    )}
+                />
             </div>
         );
     }
