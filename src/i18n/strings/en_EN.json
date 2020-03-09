@@ -1156,6 +1156,7 @@
     "Alternative addresses for this room:": "Alternative addresses for this room:",
     "This room has no alternative addresses": "This room has no alternative addresses",
     "New address (e.g. #foo:domain)": "New address (e.g. #foo:domain)",
+    "Local addresses (unmoderated content)": "Local addresses (unmoderated content)",
     "Error updating flair": "Error updating flair",
     "There was an error updating the flair for this room. The server may not allow it or a temporary error occurred.": "There was an error updating the flair for this room. The server may not allow it or a temporary error occurred.",
     "Invalid community ID": "Invalid community ID",

@@ -336,7 +336,6 @@ export default class AliasSettings extends React.Component {
         return (
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
-                {localAliasesList}
                 <datalist id="mx_AliasSettings_altRecommendations">
                     {this._getLocalNonAltAliases().map(alias => {
                         return <option value={alias} key={alias} />;
@@ -359,6 +358,10 @@ export default class AliasSettings extends React.Component {
                         'New address (e.g. #foo:domain)',
                     )}
                 />
+                <details>
+                    <summary>{_t('Local addresses (unmoderated content)')}</summary>
+                    {localAliasesList}
+                </details>
             </div>
         );
     }
