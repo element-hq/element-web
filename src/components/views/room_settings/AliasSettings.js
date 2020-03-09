@@ -190,8 +190,8 @@ export default class AliasSettings extends React.Component {
             Modal.createTrackedDialog('Error updating alternative addresses', '', ErrorDialog, {
                 title: _t("Error updating main address"),
                 description: _t(
-                    "There was an error updating the room's alternative addresses. It may not be allowed by the server " +
-                    "or a temporary failure occurred.",
+                    "There was an error updating the room's alternative addresses. " +
+                    "It may not be allowed by the server or a temporary failure occurred.",
                 ),
             });
         }).finally(() => {
