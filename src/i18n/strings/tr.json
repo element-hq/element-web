@@ -1670,5 +1670,10 @@
     "Incoming Verification Request": "Gelen Doğrulama İsteği",
     "Use bots, bridges, widgets and sticker packs": "Botları, köprüleri, görsel bileşenleri ve çıkartma paketlerini kullan",
     "Not sure of your password? <a>Set a new one</a>": "Şifrenizden emin değil misiniz? <a>Yenisini ayalarla</a>",
-    "Want more than a community? <a>Get your own server</a>": "Bir topluluktan fazlasınımı istiyorsunuz? <a>Kendi sunucunuzu edinin</a>"
+    "Want more than a community? <a>Get your own server</a>": "Bir topluluktan fazlasınımı istiyorsunuz? <a>Kendi sunucunuzu edinin</a>",
+    "Explore rooms": "Odaları keşfet",
+    "<showSessionsText>Show sessions</showSessionsText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showSessionsText>Oturumları gözat</showSessionsText>, <sendAnywayText>yinede gönder</sendAnywayText> yada <cancelText>iptal</cancelText>.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Mesajı yeniden gönder</resendText> veya <cancelText> şimdi mesajı iptal et </cancelText>.",
+    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
+    "Your new session is now verified. Other users will see it as trusted.": "Yeni oturumunuz şimdi doğrulandı. Diğer kullanıcılar güvenilir olarak görecek."
 }
