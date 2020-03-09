@@ -25,21 +25,6 @@ import Modal from "../../../../../Modal";
 import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
 
-// Simple method to help prettify GH Release Tags and Commit Hashes.
-const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
-const ghVersionLabel = function(repo, token='') {
-    const match = token.match(semVerRegex);
-    let url;
-    if (match && match[1]) { // basic semVer string possibly with commit hash
-        url = (match.length > 1 && match[2])
-            ? `https://github.com/${repo}/commit/${match[2]}`
-            : `https://github.com/${repo}/releases/tag/v${match[1]}`;
-    } else {
-        url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
-    }
-    return <a target="_blank" rel="noreferrer noopener" href={url}>{ token }</a>;
-};
-
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -184,9 +169,7 @@ export default class HelpUserSettingsTab extends React.Component {
             );
         }
 
-        const vectorVersion = this.state.vectorVersion
-            ? ghVersionLabel('vector-im/riot-web', this.state.vectorVersion)
-            : 'unknown';
+        const vectorVersion = this.state.vectorVersion || 'unknown';
 
         let olmVersion = MatrixClientPeg.get().olmVersion;
         olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
