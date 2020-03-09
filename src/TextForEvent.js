@@ -272,15 +272,43 @@ function textForMessageEvent(ev) {
 function textForCanonicalAliasEvent(ev) {
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAlias = ev.getPrevContent().alias;
+    const oldAltAliases = ev.getPrevContent().alt_aliases || [];
     const newAlias = ev.getContent().alias;
+    const newAltAliases = ev.getContent().alt_aliases || [];
+    const removedAltAliases = oldAltAliases.filter(alias => !newAltAliases.includes(alias));
+    const addedAltAliases = newAltAliases.filter(alias => !oldAltAliases.includes(alias));
 
-    if (newAlias) {
-        return _t('%(senderName)s set the main address for this room to %(address)s.', {
-            senderName: senderName,
-            address: ev.getContent().alias,
-        });
-    } else if (oldAlias) {
-        return _t('%(senderName)s removed the main address for this room.', {
+    if (!removedAltAliases.length && !addedAltAliases.length) {
+        if (newAlias) {
+            return _t('%(senderName)s set the main address for this room to %(address)s.', {
+                senderName: senderName,
+                address: ev.getContent().alias,
+            });
+        } else if (oldAlias) {
+            return _t('%(senderName)s removed the main address for this room.', {
+                senderName: senderName,
+            });
+        }
+    } else if (newAlias === oldAlias) {
+        if (addedAltAliases.length && !removedAltAliases.length) {
+            return _t('%(senderName)s added the alternative addresses %(addresses)s for this room.', {
+                senderName: senderName,
+                addresses: addedAltAliases.join(", "),
+                count: addedAltAliases.length,
+            });
+        } if (removedAltAliases.length && !addedAltAliases.length) {
+            return _t('%(senderName)s removed the alternative addresses %(addresses)s for this room.', {
+                senderName: senderName,
+                addresses: removedAltAliases.join(", "),
+                count: removedAltAliases.length,
+            });
+        } if (removedAltAliases.length && addedAltAliases.length) {
+            return _t('%(senderName)s changed the alternative addresses for this room.', {
+                senderName: senderName,
+            });
+        }
+    } else {
+        return _t('%(senderName)s changed the main and alternative addresses for this room.', {
             senderName: senderName,
         });
     }
