@@ -18,8 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import olmWasmPath from 'olm/olm.wasm';
-
 import React from 'react';
 // add React and ReactPerf to the global namespace, to make them easier to
 // access via the console
@@ -27,9 +25,7 @@ global.React = React;
 
 import ReactDOM from 'react-dom';
 import * as sdk from 'matrix-react-sdk';
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
@@ -39,54 +35,13 @@ import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
 
-import ElectronPlatform from './platform/ElectronPlatform';
-import WebPlatform from './platform/WebPlatform';
-
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
-
-import Olm from 'olm';
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 
 let lastLocationHashSet = null;
-
-function checkBrowserFeatures() {
-    if (!window.Modernizr) {
-        console.error("Cannot check features - Modernizr global is missing.");
-        return false;
-    }
-
-    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
-    // Modernizr requires rules to be lowercase with no punctuation:
-    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
-    window.Modernizr.addTest("promiseprototypefinally", () =>
-        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
-    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
-    window.Modernizr.addTest("objectfromentries", () =>
-        window.Object && typeof window.Object.fromEntries === "function");
-
-    const featureList = Object.keys(window.Modernizr);
-
-    let featureComplete = true;
-    for (let i = 0; i < featureList.length; i++) {
-        if (window.Modernizr[featureList[i]] === undefined) {
-            console.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i],
-            );
-            return false;
-        }
-        if (window.Modernizr[featureList[i]] === false) {
-            console.error("Browser missing feature: '%s'", featureList[i]);
-            // toggle flag rather than return early so we log all missing features rather than just the first.
-            featureComplete = false;
-        }
-    }
-    return featureComplete;
-}
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
@@ -172,7 +127,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp() {
+export async function loadApp(fragparts) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -188,95 +143,40 @@ export async function loadApp() {
 
     window.addEventListener('hashchange', onHashChange);
 
-    await loadOlm();
-
-    // set the platform for react sdk
-    if (window.ipcRenderer) {
-        console.log("Using Electron platform");
-        const plaf = new ElectronPlatform();
-        PlatformPeg.set(plaf);
-    } else {
-        console.log("Using Web platform");
-        PlatformPeg.set(new WebPlatform());
-    }
-
-    const platform = PlatformPeg.get();
-
-    let configJson;
-    let configError;
-    let configSyntaxError = false;
-    try {
-        configJson = await platform.getConfig();
-    } catch (e) {
-        configError = e;
-
-        if (e && e.err && e.err instanceof SyntaxError) {
-            console.error("SyntaxError loading config:", e);
-            configSyntaxError = true;
-            configJson = {}; // to prevent errors between here and loading CSS for the error box
-        }
-    }
-
-    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-    SdkConfig.put(configJson);
-
-    // Load language after loading config.json so that settingsDefaults.language can be applied
-    await loadLanguage();
-
-    const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
-    // don't try to redirect to the native apps if we're
-    // verifying a 3pid (but after we've loaded the config)
-    // or if the user is following a deep link
-    // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
-
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location = "mobile_guide/";
-                return;
-            }
-        }
-    }
-
-    // as quickly as we possibly can, set a default theme...
-    await setTheme();
-
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configSyntaxError) {
-        const errorMessage = (
-            <div>
-                <p>
-                    {_t(
-                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
-                        "and reload the page.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "The message from the parser is: %(message)s",
-                        {message: configError.err.message || _t("Invalid JSON")},
-                    )}
-                </p>
-            </div>
-        );
+    // if (configSyntaxError) {
+    //     const errorMessage = (
+    //         <div>
+    //             <p>
+    //                 {_t(
+    //                     "Your Riot configuration contains invalid JSON. Please correct the problem " +
+    //                     "and reload the page.",
+    //                 )}
+    //             </p>
+    //             <p>
+    //                 {_t(
+    //                     "The message from the parser is: %(message)s",
+    //                     {message: configError.err.message || _t("Invalid JSON")},
+    //                 )}
+    //             </p>
+    //         </div>
+    //     );
+    //
+    //     const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+    //     window.matrixChat = ReactDOM.render(
+    //         <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
+    //         document.getElementById('matrixchat'),
+    //     );
+    //     return;
+    // }
 
-        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-        window.matrixChat = ReactDOM.render(
-            <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-            document.getElementById('matrixchat'),
-        );
-        return;
-    }
+    const configError = false; // TODO
+    const validBrowser = true;
+    const acceptInvalidBrowser = false;
 
-    const validBrowser = checkBrowserFeatures();
-
-    const acceptInvalidBrowser = window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser');
+    const platform = PlatformPeg.get();
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
@@ -288,17 +188,17 @@ export async function loadApp() {
         platform.startUpdater();
 
         // Don't bother loading the app until the config is verified
-        verifyServerConfig().then((newConfig) => {
+        verifyServerConfig().then((config) => {
             const MatrixChat = sdk.getComponent('structures.MatrixChat');
             window.matrixChat = ReactDOM.render(
                 <MatrixChat
                     onNewScreen={onNewScreen}
                     makeRegistrationUrl={makeRegistrationUrl}
                     ConferenceHandler={VectorConferenceHandler}
-                    config={newConfig}
+                    config={config}
                     realQueryParams={params}
                     startingFragmentQueryParams={fragparts.params}
-                    enableGuest={!configJson.disable_guests}
+                    enableGuest={!config.disable_guests}
                     onTokenLoginCompleted={onTokenLoginCompleted}
                     initialScreenAfterLogin={getScreenFromLocation(window.location)}
                     defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
@@ -332,62 +232,8 @@ export async function loadApp() {
             document.getElementById('matrixchat'),
         );
     }
-}
 
-function loadOlm() {
-    /* Load Olm. We try the WebAssembly version first, and then the legacy,
-     * asm.js version if that fails. For this reason we need to wait for this
-     * to finish before continuing to load the rest of the app. In future
-     * we could somehow pass a promise down to react-sdk and have it wait on
-     * that so olm can be loading in parallel with the rest of the app.
-     *
-     * We also need to tell the Olm js to look for its wasm file at the same
-     * level as index.html. It really should be in the same place as the js,
-     * ie. in the bundle directory, but as far as I can tell this is
-     * completely impossible with webpack. We do, however, use a hashed
-     * filename to avoid caching issues.
-     */
-    return Olm.init({
-        locateFile: () => olmWasmPath,
-    }).then(() => {
-        console.log("Using WebAssembly Olm");
-    }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version", e);
-        return new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
-            s.onload = resolve;
-            s.onerror = reject;
-            document.body.appendChild(s);
-        }).then(() => {
-            // Init window.Olm, ie. the one just loaded by the script tag,
-            // not 'Olm' which is still the failed wasm version.
-            return window.Olm.init();
-        }).then(() => {
-            console.log("Using legacy Olm");
-        }).catch((e) => {
-            console.log("Both WebAssembly and asm.js Olm failed!", e);
-        });
-    });
-}
-
-async function loadLanguage() {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
-    let langs = [];
-
-    if (!prefLang) {
-        languageHandler.getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
-        });
-    } else {
-        langs = [prefLang];
-    }
-    try {
-        await languageHandler.setLanguage(langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
-    } catch (e) {
-        console.error("Unable to set language", e);
-    }
+    window.performance.mark("end");
 }
 
 async function verifyServerConfig() {

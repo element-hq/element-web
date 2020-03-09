@@ -24,6 +24,7 @@
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
+        prefetch-src 'self';
         style-src 'self' 'unsafe-inline';
         script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
         img-src * blob: data:;

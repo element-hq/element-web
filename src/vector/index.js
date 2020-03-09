@@ -26,23 +26,115 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import './rageshakesetup';
-import './modernizr';
+import {parseQsFromFragment} from "./url_utils";
+import "./modernizr";
 
-// load service worker if available on this platform
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+function settled(prom) {
+    return prom.catch(() => Promise.resolve());
 }
 
-// Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
-// the SDK until we have to in imports.
-console.log("Loading skin...");
-import * as sdk from 'matrix-react-sdk';
-import * as skin from "../component-index";
-sdk.loadSkin(skin);
-console.log("Skin loaded!");
+function checkBrowserFeatures() {
+    if (!window.Modernizr) {
+        console.error("Cannot check features - Modernizr global is missing.");
+        return false;
+    }
 
-// Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-// run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-// import and thus running before the skin can load.
-require("./app").loadApp();
+    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
+    // Modernizr requires rules to be lowercase with no punctuation:
+    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
+    window.Modernizr.addTest("promiseprototypefinally", () =>
+        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
+    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
+    window.Modernizr.addTest("objectfromentries", () =>
+        window.Object && typeof window.Object.fromEntries === "function");
+
+    const featureList = Object.keys(window.Modernizr);
+
+    let featureComplete = true;
+    for (let i = 0; i < featureList.length; i++) {
+        if (window.Modernizr[featureList[i]] === undefined) {
+            console.error(
+                "Looked for feature '%s' but Modernizr has no results for this. " +
+                "Has it been configured correctly?", featureList[i],
+            );
+            return false;
+        }
+        if (window.Modernizr[featureList[i]] === false) {
+            console.error("Browser missing feature: '%s'", featureList[i]);
+            // toggle flag rather than return early so we log all missing features rather than just the first.
+            featureComplete = false;
+        }
+    }
+    return featureComplete;
+}
+
+async function init() {
+    try {
+        const {initRageshake, initBase, initApp, loadApp} = await import(
+            /* webpackChunkName: "init" */
+            /* webpackPreload: true */
+            "./init");
+
+        const rageshakeProm = initRageshake();
+        await settled(rageshakeProm); // give it a chance to succeed but allow it to fail
+
+        const fragparts = parseQsFromFragment(window.location);
+        // don't try to redirect to the native apps if we're
+        // verifying a 3pid (but after we've loaded the config)
+        // or if the user is following a deep link
+        // (https://github.com/vector-im/riot-web/issues/7378)
+        const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+
+        if (!preventRedirect) {
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+            if (isIos || isAndroid) {
+                if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+                    window.location = "mobile_guide/";
+                    return;
+                }
+            }
+        }
+
+        // load service worker if available on this platform
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => {
+                console.error(err);
+            });
+        }
+
+        await initBase();
+        await initApp(); // TODO
+
+        // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+        // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
+        // import and thus running before the skin can load.
+        await loadApp(fragparts);
+    } catch (e) {
+        // import
+        return;
+    } finally {
+        const acceptInvalidBrowser = window.localStorage &&
+            window.localStorage.getItem("mx_accepts_unsupported_browser");
+        const acceptBrowser = checkBrowserFeatures(acceptInvalidBrowser) || acceptInvalidBrowser;
+
+        if (!acceptBrowser) {
+            // TODO show incompatible browser warning
+            document.write("INVALID");
+            return;
+        }
+    }
+
+    // modernizr
+    // assert rageshake
+    // assert olm
+    // config
+    // i18n
+    // skin
+    // theme
+}
+
+init().catch(err => {
+    // importing failed somewhere TODO
+    console.error(err);
+});
