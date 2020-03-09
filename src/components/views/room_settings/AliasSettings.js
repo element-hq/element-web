@@ -332,6 +332,11 @@ export default class AliasSettings extends React.Component {
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
                 {localAliasesList}
+                <datalist id="mx_AliasSettings_altRecommendations">
+                    {this._getLocalNonAltAliases().map(alias => {
+                        return <option value={alias} key={alias} />;
+                    })};
+                </datalist>
                 <EditableAliasesList
                     id="roomAltAliases"
                     className={"mx_RoomSettings_altAliases"}
@@ -342,6 +347,7 @@ export default class AliasSettings extends React.Component {
                     canEdit={this.props.canSetCanonicalAlias}
                     onItemAdded={this.onAltAliasAdded}
                     onItemRemoved={this.onAltAliasDeleted}
+                    suggestionsListId="mx_AliasSettings_altRecommendations"
                     itemsLabel={_t('Alternative addresses for this room:')}
                     noItemsLabel={_t('This room has no alternative addresses')}
                     placeholder={_t(

@@ -32,6 +32,8 @@ export default class Field extends React.PureComponent {
         element: PropTypes.oneOf(["input", "select", "textarea"]),
         // The field's type (when used as an <input>). Defaults to "text".
         type: PropTypes.string,
+        // id of a <datalist> element for suggestions
+        list: PropTypes.string,
         // The field's label string.
         label: PropTypes.string,
         // The field's placeholder string. Defaults to the label.
@@ -157,7 +159,7 @@ export default class Field extends React.PureComponent {
     render() {
         const {
             element, prefix, postfix, className, onValidate, children,
-            tooltipContent, flagInvalid, tooltipClassName, ...inputProps} = this.props;
+            tooltipContent, flagInvalid, tooltipClassName, list, ...inputProps} = this.props;
 
         const inputElement = element || "input";
 
@@ -169,6 +171,7 @@ export default class Field extends React.PureComponent {
         inputProps.onFocus = this.onFocus;
         inputProps.onChange = this.onChange;
         inputProps.onBlur = this.onBlur;
+        inputProps.list = list;
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
 
