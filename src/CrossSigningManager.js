@@ -144,10 +144,10 @@ const onSecretRequested = async function({
     }
     const callbacks = client.getCrossSigningCacheCallbacks();
     if (!callbacks.getCrossSigningKeyCache) return;
-    if (name === "m.key.self_signing") {
+    if (name === "m.cross_signing.self_signing") {
         const key = await callbacks.getCrossSigningKeyCache("self_signing");
         return key && encodeBase64(key);
-    } else if (name === "m.key.user_signing") {
+    } else if (name === "m.cross_signing.user_signing") {
         const key = await callbacks.getCrossSigningKeyCache("user_signing");
         return key && encodeBase64(key);
     }
