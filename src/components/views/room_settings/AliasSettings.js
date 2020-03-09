@@ -112,7 +112,11 @@ export default class AliasSettings extends React.Component {
     }
 
     componentDidMount() {
-        return this.loadLocalAliases();
+        if (this.props.canSetCanonicalAlias) {
+            // load local aliases for providing recommendations
+            // for the canonical alias and alt_aliases
+            this.loadLocalAliases();
+        }
     }
 
     async loadLocalAliases() {
@@ -249,6 +253,16 @@ export default class AliasSettings extends React.Component {
         });
     };
 
+    onLocalAliasesToggled = (event) => {
+        // expanded
+        if (event.target.open) {
+            // if local aliases haven't been preloaded yet at component mount
+            if (!this.props.canSetCanonicalAlias && this.state.localAliases.length === 0) {
+                this.loadLocalAliases();
+            }
+        }
+    };
+
     onCanonicalAliasChange = (event) => {
         this.changeCanonicalAlias(event.target.value);
     };
@@ -358,7 +372,7 @@ export default class AliasSettings extends React.Component {
                         'New address (e.g. #foo:domain)',
                     )}
                 />
-                <details>
+                <details onToggle={this.onLocalAliasesToggled}>
                     <summary>{_t('Local addresses (unmoderated content)')}</summary>
                     {localAliasesList}
                 </details>
