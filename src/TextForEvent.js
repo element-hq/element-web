@@ -308,10 +308,16 @@ function textForCanonicalAliasEvent(ev) {
             });
         }
     } else {
+        // both alias and alt_aliases where modified
         return _t('%(senderName)s changed the main and alternative addresses for this room.', {
             senderName: senderName,
         });
     }
+    // in case there is no difference between the two events,
+    // say something as we can't simply hide the tile from here
+    return _t('%(senderName)s changed the addresses for this room.', {
+        senderName: senderName,
+    });
 }
 
 function textForCallAnswerEvent(event) {
