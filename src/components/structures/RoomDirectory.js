@@ -628,7 +628,7 @@ export default createReactClass({
                 title={_t("Explore rooms")}
             >
                 <div className="mx_RoomDirectory">
-                    <p>{explanation}</p>
+                    {explanation}
                     <div className="mx_RoomDirectory_list">
                         {listHeader}
                         {content}
