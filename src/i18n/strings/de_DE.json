@@ -9,11 +9,11 @@
     "Welcome to Riot.im": "Willkommen bei Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dezentrale, verschlüsselte Chat- &amp; Kollaborationslösung unterstützt von [matrix]",
     "Chat with Riot Bot": "Chatte mit dem Riot Bot",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kannst die erweiterte Serveroption nutzen um dich an einem anderen Matrixserver anzumelden, indem du eine andere Heimserver-URL angibst. Dies erlaubt dir, Riot mit einem existierenden Matrix-Konto auf einem anderen Heimserver zu nutzen.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kannst benutzerdefinierte Server-Optionen nutzen, um dich an anderen Matrix Servern anzumelden, indem du eine andere Heimserver-URL angibst. Dies erlaubt dir, Riot mit einem existierenden Matrix-Konto auf einem anderen Heimserver zu nutzen.",
     "Sign In": "Anmelden",
-    "Create Account": "Konto erstellen",
+    "Create Account": "Account erstellen",
     "Need help?": "Brauchst du Hilfe?",
-    "Explore rooms": "Räume erkunden",
+    "Explore rooms": "Erkunde Räume",
     "Room Directory": "Raumverzeichnis",
     "Unexpected error preparing the app. See console for details.": "Unerwarteter Fehler bei der Vorbereitung der App. Siehe Konsole für Details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ungültige Konfiguration: Es kann nur eine der Optionen default_server_config, default_server_name oder default_hs_url angegeben werden.",
@@ -21,5 +21,6 @@
     "Your Riot is misconfigured": "Dein Riot ist falsch konfiguriert",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Deine Riot Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
     "The message from the parser is: %(message)s": "Die Nachricht des Parsers ist: %(message)s",
-    "Invalid JSON": "Ungültiges JSON"
+    "Invalid JSON": "Ungültiges JSON",
+    "Go to your browser to complete Sign In": "Gehe zu deinem Browser, um die Anmeldung abzuschließen"
 }

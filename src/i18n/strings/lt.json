@@ -2,7 +2,7 @@
     "Unknown device": "Nežinomas įrenginys",
     "powered by Matrix": "veikia su Matrix",
     "Welcome to Riot.im": "Sveiki atvykę į Riot.im",
-    "Chat with Riot Bot": "Kalbėtis su Riot botu",
+    "Chat with Riot Bot": "Kalbėtis su Riot Botu",
     "Riot Desktop on %(platformName)s": "Riot Desktop, naudojant %(platformName)s",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s per %(browserName)s, naudojant %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Norint skambinti naudojant ekrano vaizdo dalijimosi funkciją, jūs turite naudoti HTTPS.",
@@ -21,5 +21,6 @@
     "Unexpected error preparing the app. See console for details.": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Klaidinga konfigūracija: galima nurodyti tik vieną iš default_server_config, default_server_name, arba default_hs_url.",
     "Invalid configuration: no default server specified.": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Jūs galite naudoti pasirinktinius serverio nustatymus, kad prisijungtumėte prie kitų Matrix serverių, nurodydami kito serverio URL. Tai leidžia jums naudotis Riot su esama Matrix paskyra kitame serveryje."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Jūs galite naudoti pasirinktinius serverio nustatymus, kad prisijungtumėte prie kitų Matrix serverių, nurodydami kito serverio URL. Tai leidžia jums naudotis Riot su esama Matrix paskyra kitame serveryje.",
+    "Go to your browser to complete Sign In": "Norėdami užbaigti prisijungimą, eikite į naršyklę"
 }

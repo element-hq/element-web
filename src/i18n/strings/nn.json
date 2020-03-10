@@ -11,7 +11,7 @@
     "Custom Server Options": "Tilpassa tenar-innstillingar",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan nytta dei eigendefinerte tenarinstillingane for å logga inn på andre Matrix-tenarar ved å uppgje ein annan heimtenar-URL. Dette lèt deg bruka Riot med ein Matrix-konto som allereie finst på ein annan heimtenar.",
     "Sign In": "Logg inn",
-    "Create Account": "Lag brukar",
+    "Create Account": "Opprett konto",
     "Need help?": "Treng du hjelp?",
     "Explore rooms": "Utforsk romma",
     "Room Directory": "Romkatalog",
