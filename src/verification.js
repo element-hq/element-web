@@ -29,8 +29,8 @@ export async function enable4SIfNeeded() {
     if (!cli.isCryptoEnabled() || !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
         return false;
     }
-    const masterPK = cli.getCrossSigningId();
-    if (!masterPK) {
+    const usk = cli.getCrossSigningId("user_signing");
+    if (!usk) {
         await accessSecretStorage();
         return false;
     }
