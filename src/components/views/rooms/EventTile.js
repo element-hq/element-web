@@ -48,8 +48,6 @@ const eventTileTypes = {
 
 const stateEventTileTypes = {
     'm.room.encryption': 'messages.EncryptionEvent',
-    'm.room.aliases': 'messages.TextualEvent',
-    // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
     'm.room.canonical_alias': 'messages.TextualEvent',
     'm.room.create': 'messages.RoomCreate',
     'm.room.member': 'messages.TextualEvent',
