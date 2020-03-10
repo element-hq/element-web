@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom, {findDMForUser} from '../../../createRoom';
+import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -43,6 +43,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
+import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -153,66 +154,6 @@ function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
     }, [cli, member, canVerify], false);
 }
 
-async function verifyDevice(userId, device) {
-    const cli = MatrixClientPeg.get();
-    const member = cli.getUser(userId);
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
-        headerImage: require("../../../../res/img/e2e/warning.svg"),
-        title: _t("Not Trusted"),
-        description: <div>
-            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: member.displayName, userId})}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
-        </div>,
-        onFinished: async (doneClicked) => {
-            const manuallyVerifyClicked = !doneClicked;
-            if (!manuallyVerifyClicked) {
-                return;
-            }
-            const cli = MatrixClientPeg.get();
-            const verificationRequestPromise = cli.requestVerification(
-                userId,
-                [device.deviceId],
-            );
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {member, verificationRequestPromise},
-            });
-        },
-        primaryButton: _t("Done"),
-        cancelButton: _t("Manually Verify"),
-    });
-}
-
-async function legacyVerifyUser(member) {
-    const cli = MatrixClientPeg.get();
-    const verificationRequestPromise = cli.requestVerification(member.userId);
-    dis.dispatch({
-        action: "set_right_panel_phase",
-        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        refireParams: {member, verificationRequestPromise},
-    });
-}
-
-function verifyUser(user) {
-    const cli = MatrixClientPeg.get();
-    const dmRoom = findDMForUser(cli, user.userId);
-    let existingRequest;
-    if (dmRoom) {
-        existingRequest = cli.findVerificationRequestDMInProgress(dmRoom.roomId);
-    }
-    dis.dispatch({
-        action: "set_right_panel_phase",
-        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        refireParams: {
-            member: user,
-            verificationRequest: existingRequest,
-        },
-    });
-}
-
 function DeviceItem({userId, device}) {
     const cli = useContext(MatrixClientContext);
     const isMe = userId === cli.getUserId();
@@ -239,7 +180,7 @@ function DeviceItem({userId, device}) {
 
     const onDeviceClick = () => {
         if (!isVerified) {
-            verifyDevice(userId, device);
+            verifyDevice(cli.getUser(userId), device);
         }
     };
 
