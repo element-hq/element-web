@@ -2171,5 +2171,11 @@
     "Mark all as read": "Vëru të tërave shenjë si të lexuara",
     "Not currently indexing messages for any room.": "Pa indeksuar aktualisht mesazhe nga ndonjë dhomë.",
     "Currently indexing: %(currentRoom)s.": "Aktualisht nën indeksim: %(currentRoom)s.",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s nga %(totalRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s nga %(totalRooms)s",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s shtoi adresat alternative %(addresses)s për këtë dhomë.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s shtoi adresën alternative %(addresses)s për këtë dhomë.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hoqi adresat alternative %(addresses)s për këtë dhomë.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hoqi adresën alternative %(addresses)s për këtë dhomë.",
+    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ndryshoi adresat alternative për këtë dhomë.",
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ndryshoi adresat kryesore dhe alternative për këtë dhomë."
 }
