@@ -1100,5 +1100,8 @@
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s starta ein videosamtale. (ikkje støtta av denne nettlesaren)",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s trekte tilbake invitasjonen for at %(targetDisplayName)s kan bli medlem i rommet.",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Du er administrator for dette fellesskapet. Du kan ikkje melde deg inn igjen utan at du har invitasjon frå ein annan administrator.",
-    "Want more than a community? <a>Get your own server</a>": "Treng du meir enn eit fellesskap?  <a>Skaff din eigen server</a>"
+    "Want more than a community? <a>Get your own server</a>": "Treng du meir enn eit fellesskap?  <a>Skaff din eigen server</a>",
+    "Sign In or Create Account": "Logg inn eller opprett konto",
+    "Create Account": "Opprett konto",
+    "Sends the given emote coloured as a rainbow": "Sendar emojien med regnbogefargar"
 }
