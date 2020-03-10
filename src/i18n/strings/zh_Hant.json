@@ -2170,5 +2170,17 @@
     "Your password": "您的密碼",
     "This session, or the other session": "此工作階段或其他工作階段",
     "The internet connection either session is using": "任何一個工作階段正在使用的網際網路連線",
-    "We recommend you change your password and recovery key in Settings immediately": "我們建議您立刻在設定中變更您的密碼與復原金鑰"
+    "We recommend you change your password and recovery key in Settings immediately": "我們建議您立刻在設定中變更您的密碼與復原金鑰",
+    "Sign In or Create Account": "登入或建立帳號",
+    "Use your account or create a new one to continue.": "使用您的帳號或建立新的以繼續。",
+    "Create Account": "建立帳號",
+    "Order rooms by name": "以名稱排序聊天室",
+    "Show rooms with unread notifications first": "先顯示有未讀通知的聊天室",
+    "Show shortcuts to recently viewed rooms above the room list": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
+    "Displays information about a user": "顯示關於使用者的資訊",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org <a>安全性揭露政策</a>。",
+    "Mark all as read": "全部標示為已讀",
+    "Not currently indexing messages for any room.": "目前未為任何聊天室編寫索引。",
+    "Currently indexing: %(currentRoom)s.": "目前正在製作索引：%(currentRoom)s。",
+    "%(doneRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(doneRooms)s"
 }

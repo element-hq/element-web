@@ -631,7 +631,7 @@
     "Unable to join network": "Nie można dołączyć do sieci",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Możliwe, że skofigurowałeś je w innym kliencie, niż Riot. Nie możesz ich zmieniać w Riot, ale nadal mają zastosowanie",
     "Sorry, your browser is <b>not</b> able to run Riot.": "Przepraszamy, Twoja przeglądarka <b>nie jest w stanie</b> uruchomić Riot.",
-    "Uploaded on %(date)s by %(user)s": "Wysłane %(date)s przez %(user)s",
+    "Uploaded on %(date)s by %(user)s": "Wysłano %(date)s przez %(user)s",
     "Messages in group chats": "Wiadomości w czatach grupowych",
     "Yesterday": "Wczoraj",
     "Error encountered (%(errorDetail)s).": "Wystąpił błąd (%(errorDetail)s).",
@@ -1356,5 +1356,17 @@
     "Filter rooms…": "Filtruj pokoje…",
     "Find a room…": "Znajdź pokój…",
     "Find a room… (e.g. %(exampleRoom)s)": "Znajdź pokój… (np. %(exampleRoom)s)",
-    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Jeżeli nie możesz znaleźć szukanego pokoju, poproś o zaproszenie albo <a>Stwórz nowy pokój</a>."
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Jeżeli nie możesz znaleźć szukanego pokoju, poproś o zaproszenie albo <a>stwórz nowy pokój</a>.",
+    "Show typing notifications": "Pokazuj powiadomienia o pisaniu",
+    "Match system theme": "Dopasuj do motywu systemego",
+    "They match": "Pasują do siebie",
+    "They don't match": "Nie pasują do siebie",
+    "Upload": "Prześlij",
+    "Remove recent messages": "Usuń ostatnie wiadomości",
+    "Rotate Left": "Obróć w lewo",
+    "Rotate counter-clockwise": "Obróć w kierunku przeciwnym do ruchu wskazówek zegara",
+    "Rotate Right": "Obróć w prawo",
+    "Rotate clockwise": "Obróć zgodnie z ruchem wskazówek zegara",
+    "Help": "Pomoc",
+    "Passwords don't match": "Hasła nie zgadzają się"
 }
