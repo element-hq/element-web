@@ -24,7 +24,6 @@ import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver
 import dis from "../../../dispatcher";
 import ToastStore from "../../../stores/ToastStore";
 import Modal from "../../../Modal";
-import {enable4SIfNeeded} from "../../../verification";
 
 export default class VerificationRequestToast extends React.PureComponent {
     constructor(props) {
@@ -74,9 +73,6 @@ export default class VerificationRequestToast extends React.PureComponent {
     }
 
     accept = async () => {
-        if (!await enable4SIfNeeded()) {
-            return;
-        }
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const {request} = this.props;
         // no room id for to_device requests
