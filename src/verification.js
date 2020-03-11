@@ -24,7 +24,7 @@ import {findDMForUser} from './createRoom';
 import {accessSecretStorage} from './CrossSigningManager';
 import SettingsStore from './settings/SettingsStore';
 
-export async function enable4SIfNeeded() {
+async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
     if (!cli.isCryptoEnabled() || !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
         return false;
