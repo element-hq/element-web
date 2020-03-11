@@ -11,7 +11,7 @@
     "Chat with Riot Bot": "Csevegés a Riot Robottal",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Használhatod az egyedi szerver beállítást más Matrix szerverre való belépéshez, azzal, hogy megadod a Matrix szerver URL-jét. Ezzel a Riot-ot használhatod más Matrix szerveren lévő fiókkal.",
     "Sign In": "Bejelentkezés",
-    "Create Account": "Fiók készítés",
+    "Create Account": "Fiók létrehozása",
     "Need help?": "Segíthetünk?",
     "Explore rooms": "Szobák felderítése",
     "Room Directory": "Szobalista",
@@ -21,5 +21,6 @@
     "Your Riot is misconfigured": "A Riotod hibásan van beállítva",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "A Riot beállításod érvénytelen JSON szöveget tartalmaz. Kérlek javítsd és töltsd újra az oldalt.",
     "The message from the parser is: %(message)s": "A feldolgozó algoritmus üzenete: %(message)s",
-    "Invalid JSON": "Érvénytelen JSON"
+    "Invalid JSON": "Érvénytelen JSON",
+    "Go to your browser to complete Sign In": "A böngészőben fejezd be a bejelentkezést"
 }
