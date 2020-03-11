@@ -243,12 +243,18 @@ export default class AliasSettings extends React.Component {
             }
         }).catch((err) => {
             console.error(err);
-            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
-                title: _t("Error removing alias"),
-                description: _t(
+            let description;
+            if (err.errcode === "M_FORBIDDEN") {
+                description = _t("You don't have permission to delete the alias.");
+            } else {
+                description = _t(
                     "There was an error removing that alias. It may no longer exist or a temporary " +
                     "error occurred.",
-                ),
+                );
+            }
+            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
+                title: _t("Error removing alias"),
+                description,
             });
         });
     };
