@@ -2183,5 +2183,16 @@
     "Mark all as read": "Tout marquer comme lu",
     "Not currently indexing messages for any room.": "N’indexe aucun message en ce moment.",
     "Currently indexing: %(currentRoom)s.": "En ce moment, indexe : %(currentRoom)s.",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s sur %(totalRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s sur %(totalRooms)s",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s a ajouté les adresses alternatives %(addresses)s pour ce salon.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s a ajouté l’adresse alternative %(addresses)s pour ce salon.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s pour ce salon.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s pour ce salon.",
+    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s a modifié les adresses alternatives de ce salon.",
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s a modifié l’adresse principale et les adresses alternatives pour ce salon.",
+    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Une erreur est survenue lors de la mise à jour des adresses alternatives du salon. Ce n’est peut-être pas permis par le serveur ou une défaillance temporaire est survenue.",
+    "Alternative addresses for this room:": "Adresses alternatives pour ce salon :",
+    "This room has no alternative addresses": "Ce salon n’a pas d’adresse alternative",
+    "New address (e.g. #foo:domain)": "Nouvelle adresse (par ex. #foo:domaine)",
+    "Local addresses (unmoderated content)": "Adresses locales (contenu non modéré)"
 }
