@@ -228,6 +228,7 @@
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s kicked %(targetName)s.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s removed the room name.",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s changed the room name to %(roomName)s.",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s upgraded this room.",
     "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s made the room public to whoever knows the link.",
