@@ -235,7 +235,7 @@ export default class AliasSettings extends React.Component {
         // to this room. See https://github.com/vector-im/riot-web/issues/7353
         MatrixClientPeg.get().deleteAlias(alias).then(() => {
             const localAliases = this.state.localAliases.slice();
-            localAliases.splice(index);
+            localAliases.splice(index, 1);
             this.setState({localAliases});
 
             if (this.state.canonicalAlias === alias) {
