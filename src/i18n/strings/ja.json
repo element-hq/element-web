@@ -1179,5 +1179,11 @@
     "Confirm your passphrase": "パスワードを確認",
     "Recovery key": "リカバリキー",
     "We'll store an encrypted copy of your keys on our server. Protect your backup with a passphrase to keep it secure.": "キーの暗号化されたコピーがサーバーに保存されます。バックアップを保護するために、パスワードを設定してください。",
-    "Secure your backup with a passphrase": "バックアップをパスワードで保護"
+    "Secure your backup with a passphrase": "バックアップをパスワードで保護",
+    "Display Name": "表示名",
+    "Profile picture": "プロフィール画像",
+    "Encryption enabled": "暗号化が有効です",
+    "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "この部屋内のメッセージはエンドツーエンドで暗号化されます。詳細およびユーザーの検証に関しては各ユーザーのプロフィールをご確認ください。",
+    "Encryption not enabled": "暗号化が無効です",
+    "The encryption used by this room isn't supported.": "この部屋では暗号化の使用がサポートされていません。"
 }
