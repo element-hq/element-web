@@ -2182,5 +2182,16 @@
     "Mark all as read": "全部標示為已讀",
     "Not currently indexing messages for any room.": "目前未為任何聊天室編寫索引。",
     "Currently indexing: %(currentRoom)s.": "目前正在製作索引：%(currentRoom)s。",
-    "%(doneRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(doneRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(totalRooms)s 中的 %(doneRooms)s",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s 為此聊天室新增了替代位置 %(addresses)s。",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s 為此聊天室新增了替代位置 %(addresses)s。",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s 為此聊天室移除了替代位置 %(addresses)s。",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s 為此聊天室移除了替代位置 %(addresses)s。",
+    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s 為此聊天是變更了替代位置。",
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s 為此聊天是變更了主要及替代位置。",
+    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "更新聊天室的替代位置時發生錯誤。伺服器可能不允許這麼做，或是昱到了暫時性的故障。",
+    "Alternative addresses for this room:": "此聊天是的替代位置：",
+    "This room has no alternative addresses": "此聊天室沒有替代位置",
+    "New address (e.g. #foo:domain)": "新位置（例如：#foo:domain）",
+    "Local addresses (unmoderated content)": "本機位置（未經審核的內容）"
 }
