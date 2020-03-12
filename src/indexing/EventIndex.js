@@ -493,7 +493,7 @@ export default class EventIndex extends EventEmitter {
 
             try {
                 for (var i = 0; i < redactionEvents.length; i++) {
-                    let ev = redactionEvents[i];
+                    const ev = redactionEvents[i];
                     await indexManager.deleteEvent(ev.getAssociatedId());
                 }
 
