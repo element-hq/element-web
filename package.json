@@ -46,7 +46,7 @@
     "build:electron:linux": "yarn build && electron-builder -l --x64",
     "build:electron:macos": "yarn build && electron-builder -m --x64",
     "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "tsc --emitDeclarationOnly --jsx react",
     "install:electron": "electron-builder install-app-deps",
     "dist": "scripts/package.sh",
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
@@ -56,7 +56,7 @@
     "lint": "yarn lint:types && yarn lint:ts && yarn lint:js && yarn lint:style",
     "lint:js": "eslint src",
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest"
   },
