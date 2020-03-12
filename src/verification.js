@@ -23,6 +23,7 @@ import {RIGHT_PANEL_PHASES} from "./stores/RightPanelStorePhases";
 import {findDMForUser} from './createRoom';
 import {accessSecretStorage} from './CrossSigningManager';
 import SettingsStore from './settings/SettingsStore';
+import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
@@ -57,9 +58,10 @@ export async function verifyDevice(user, device) {
                 return;
             }
             const cli = MatrixClientPeg.get();
-            const verificationRequestPromise = cli.requestVerification(
+            const verificationRequestPromise = cli.legacyDeviceVerification(
                 user.userId,
-                [device.deviceId],
+                device.deviceId,
+                verificationMethods.SAS,
             );
             dis.dispatch({
                 action: "set_right_panel_phase",
@@ -77,7 +79,7 @@ export async function legacyVerifyUser(user) {
         return;
     }
     const cli = MatrixClientPeg.get();
-    const verificationRequestPromise = cli.requestVerification(user.userId);
+    const verificationRequestPromise = cli.beginKeyVerification(user.userId);
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,
