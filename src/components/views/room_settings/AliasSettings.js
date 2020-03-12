@@ -235,7 +235,7 @@ export default class AliasSettings extends React.Component {
         // to this room. See https://github.com/vector-im/riot-web/issues/7353
         MatrixClientPeg.get().deleteAlias(alias).then(() => {
             const localAliases = this.state.localAliases.slice();
-            localAliases.splice(index);
+            localAliases.splice(index, 1);
             this.setState({localAliases});
 
             if (this.state.canonicalAlias === alias) {
@@ -243,12 +243,18 @@ export default class AliasSettings extends React.Component {
             }
         }).catch((err) => {
             console.error(err);
-            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
-                title: _t("Error removing alias"),
-                description: _t(
+            let description;
+            if (err.errcode === "M_FORBIDDEN") {
+                description = _t("You don't have permission to delete the alias.");
+            } else {
+                description = _t(
                     "There was an error removing that alias. It may no longer exist or a temporary " +
                     "error occurred.",
-                ),
+                );
+            }
+            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
+                title: _t("Error removing alias"),
+                description,
             });
         });
     };
