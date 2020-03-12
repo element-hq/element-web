@@ -61,6 +61,7 @@ export default class EventIndex extends EventEmitter {
         client.on('Room.timeline', this.onRoomTimeline);
         client.on('Event.decrypted', this.onEventDecrypted);
         client.on('Room.timelineReset', this.onTimelineReset);
+        client.on('Room.redaction', this.onRedaction);
     }
 
     /**
@@ -74,6 +75,7 @@ export default class EventIndex extends EventEmitter {
         client.removeListener('Room.timeline', this.onRoomTimeline);
         client.removeListener('Event.decrypted', this.onEventDecrypted);
         client.removeListener('Room.timelineReset', this.onTimelineReset);
+        client.removeListener('Room.redaction', this.onRedaction);
     }
 
     /**
@@ -208,6 +210,23 @@ export default class EventIndex extends EventEmitter {
         if (!this.liveEventsForIndex.delete(eventId)) return;
         if (err) return;
         await this.addLiveEventToIndex(ev);
+    }
+
+    /*
+     * The Room.redaction listener.
+     *
+     * Removes a redacted event from our event index.
+     */
+    onRedaction = async (ev, room) => {
+        // We only index encrypted rooms locally.
+        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+
+        try {
+            await indexManager.deleteEvent(ev.getAssociatedId());
+        } catch (e) {
+            console.log("EventIndex: Error deleting event from index", e);
+        }
     }
 
     /*
@@ -431,11 +450,16 @@ export default class EventIndex extends EventEmitter {
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);
 
-
             // TODO if there are no events at this point we're missing a lot
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
+
+            // Collect the redaction events so we can delete the redacted events
+            // from the index.
+            const redactionEvents = matrixEvents.filter((ev) => {
+                return ev.getType() === "m.room.redaction";
+            });
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
@@ -468,6 +492,11 @@ export default class EventIndex extends EventEmitter {
             );
 
             try {
+                for (var i = 0; i < redactionEvents.length; i++) {
+                    let ev = redactionEvents[i];
+                    await indexManager.deleteEvent(ev.getAssociatedId());
+                }
+
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(
                     events, newCheckpoint, checkpoint);
                 // If all events were already indexed we assume that we catched
