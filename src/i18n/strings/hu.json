@@ -2192,5 +2192,6 @@
     "Alternative addresses for this room:": "A szoba alternatív címei:",
     "This room has no alternative addresses": "A szobának nincsen alternatív címe",
     "New address (e.g. #foo:domain)": "Új cím (pl.: #foo:domain)",
-    "Local addresses (unmoderated content)": "Helyi cím (nem moderált tartalom)"
+    "Local addresses (unmoderated content)": "Helyi cím (nem moderált tartalom)",
+    "You don't have permission to delete the alias.": "Ezt az alternatív nevet nincs jogod törölni."
 }
