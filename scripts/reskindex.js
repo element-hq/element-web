@@ -8,11 +8,14 @@ var chokidar = require('chokidar');
 var componentIndex = path.join('src', 'component-index.js');
 var componentIndexTmp = componentIndex+".tmp";
 var componentsDir = path.join('src', 'components');
-var componentGlob = '**/*.js';
+var componentJsGlob = '**/*.js';
+var componentTsGlob = '**/*.tsx';
 var prevFiles = [];
 
 function reskindex() {
-    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
+    var jsFiles = glob.sync(componentJsGlob, {cwd: componentsDir}).sort();
+    var tsFiles = glob.sync(componentTsGlob, {cwd: componentsDir}).sort();
+    var files = [...tsFiles, ...jsFiles];
     if (!filesHaveChanged(files, prevFiles)) {
         return;
     }
@@ -36,7 +39,7 @@ function reskindex() {
     strm.write("let components = {};\n");
 
     for (var i = 0; i < files.length; ++i) {
-        var file = files[i].replace('.js', '');
+        var file = files[i].replace('.js', '').replace('.tsx', '');
 
         var moduleName = (file.replace(/\//g, '.'));
         var importName = moduleName.replace(/\./g, "$");
@@ -79,7 +82,7 @@ if (!args.w) {
 }
 
 var watchDebouncer = null;
-chokidar.watch(path.join(componentsDir, componentGlob)).on('all', (event, path) => {
+chokidar.watch(path.join(componentsDir, componentJsGlob)).on('all', (event, path) => {
     if (path === componentIndex) return;
     if (watchDebouncer) clearTimeout(watchDebouncer);
     watchDebouncer = setTimeout(reskindex, 1000);

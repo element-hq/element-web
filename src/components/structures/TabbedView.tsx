@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,41 +18,54 @@ limitations under the License.
 
 import * as React from "react";
 import {_t} from '../../languageHandler';
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import * as sdk from "../../index";
+import { ReactNode } from "react";
 
 /**
  * Represents a tab for the TabbedView.
  */
 export class Tab {
+    public label: string;
+    public icon: string;
+    public body: React.ReactNode;
+
     /**
      * Creates a new tab.
      * @param {string} tabLabel The untranslated tab label.
      * @param {string} tabIconClass The class for the tab icon. This should be a simple mask.
-     * @param {string} tabJsx The JSX for the tab container.
+     * @param {React.ReactNode} tabJsx The JSX for the tab container.
      */
-    constructor(tabLabel, tabIconClass, tabJsx) {
+    constructor(tabLabel: string, tabIconClass: string, tabJsx: React.ReactNode) {
         this.label = tabLabel;
         this.icon = tabIconClass;
         this.body = tabJsx;
     }
 }
 
-export default class TabbedView extends React.Component {
+interface IProps {
+    tabs: Tab[];
+}
+
+interface IState {
+    activeTabIndex: number;
+}
+
+export default class TabbedView extends React.Component<IProps, IState> {
     static propTypes = {
         // The tabs to show
         tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,
     };
 
-    constructor() {
-        super();
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             activeTabIndex: 0,
         };
     }
 
-    _getActiveTabIndex() {
+    private _getActiveTabIndex() {
         if (!this.state || !this.state.activeTabIndex) return 0;
         return this.state.activeTabIndex;
     }
@@ -62,7 +75,7 @@ export default class TabbedView extends React.Component {
      * @param {Tab} tab the tab to show
      * @private
      */
-    _setActiveTab(tab) {
+    private _setActiveTab(tab: Tab) {
         const idx = this.props.tabs.indexOf(tab);
         if (idx !== -1) {
             this.setState({activeTabIndex: idx});
@@ -71,7 +84,7 @@ export default class TabbedView extends React.Component {
         }
     }
 
-    _renderTabLabel(tab) {
+    private _renderTabLabel(tab: Tab) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let classes = "mx_TabbedView_tabLabel ";
@@ -97,7 +110,7 @@ export default class TabbedView extends React.Component {
         );
     }
 
-    _renderTabPanel(tab) {
+    private _renderTabPanel(tab: Tab): React.ReactNode {
         return (
             <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
                 <div className='mx_TabbedView_tabPanelContent'>
@@ -107,7 +120,7 @@ export default class TabbedView extends React.Component {
         );
     }
 
-    render() {
+    public render(): React.ReactNode {
         const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
         const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
 
