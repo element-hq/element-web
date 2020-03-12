@@ -58,7 +58,27 @@ export const ALGO_RECENT = "recent";
 
 const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
 
-const getListAlgorithm = (listKey, settingAlgorithm) => {
+function debugLog(...msg) {
+    console.log(`[RoomListStore:Debug] `, ...msg);
+}
+
+const timers = {};
+let timerCounter = 0;
+function startTimer(fnName) {
+    const id = `${fnName}_${(new Date()).getTime()}_${timerCounter++}`;
+    debugLog(`Started timer for ${fnName} with ID ${id}`);
+    timers[id] = {start: (new Date()).getTime(), fnName};
+    return id;
+}
+
+function endTimer(id) {
+    const timer = timers[id];
+    delete timers[id];
+    const diff = (new Date()).getTime() - timer.start;
+    debugLog(`${timer.fnName} took ${diff}ms (ID: ${id})`);
+}
+
+function getListAlgorithm(listKey, settingAlgorithm) {
     // apply manual sorting only to m.favourite, otherwise respect the global setting
     // all the known tags are listed explicitly here to simplify future changes
     switch (listKey) {
@@ -73,7 +93,7 @@ const getListAlgorithm = (listKey, settingAlgorithm) => {
         default: // custom-tags
             return ALGO_MANUAL;
     }
-};
+}
 
 const knownLists = new Set([
     "m.favourite",
@@ -340,6 +360,7 @@ class RoomListStore extends Store {
     }
 
     _getRecommendedTagsForRoom(room) {
+        const timerId = startTimer(`_getRecommendedTagsForRoom(room:"${room.roomId}")`);
         const tags = [];
 
         const myMembership = room.getMyMembership();
@@ -365,11 +386,12 @@ class RoomListStore extends Store {
             tags.push("im.vector.fake.archived");
         }
 
-
+        endTimer(timerId);
         return tags;
     }
 
     _slotRoomIntoList(room, category, tag, existingEntries, newList, lastTimestampFn) {
+        const timerId = startTimer(`_slotRoomIntoList(room:"${room.roomId}", "${category}", "${tag}", existingEntries: "${existingEntries.length}", "${newList}", lastTimestampFn:"${lastTimestampFn !== null}")`);
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
 
         let categoryComparator = (a, b) => lastTimestampFn(a.room) >= lastTimestampFn(b.room);
@@ -481,11 +503,16 @@ class RoomListStore extends Store {
             pushedEntry = true;
         }
 
+        endTimer(timerId);
         return pushedEntry;
     }
 
     _setRoomCategory(room, category) {
-        if (!room) return; // This should only happen in tests
+        const timerId = startTimer(`_setRoomCategory(room:"${room.roomId}", "${category}")`);
+        if (!room) {
+            endTimer(timerId);
+            return; // This should only happen in tests
+        }
 
         const listsClone = {};
 
@@ -582,9 +609,11 @@ class RoomListStore extends Store {
         }
 
         this._setState({lists: listsClone});
+        endTimer(timerId);
     }
 
     _generateInitialRoomLists() {
+        const timerId = startTimer(`_generateInitialRoomLists()`);
         // Log something to show that we're throwing away the old results. This is for the inevitable
         // question of "why is 100% of my CPU going towards Riot?" - a quick look at the logs would reveal
         // that something is wrong with the RoomListStore.
@@ -697,6 +726,7 @@ class RoomListStore extends Store {
             lists,
             ready: true, // Ready to receive updates to ordering
         });
+        endTimer(timerId);
     }
 
     _eventTriggersRecentReorder(ev) {
@@ -709,7 +739,9 @@ class RoomListStore extends Store {
     _tsOfNewestEvent(room) {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
-        if (!room || !room.timeline) return Number.MAX_SAFE_INTEGER;
+        if (!room || !room.timeline) {
+            return Number.MAX_SAFE_INTEGER;
+        }
 
         for (let i = room.timeline.length - 1; i >= 0; --i) {
             const ev = room.timeline[i];
@@ -729,23 +761,35 @@ class RoomListStore extends Store {
     }
 
     _calculateCategory(room) {
+        const timerId = startTimer(`_calculateCategory(room:"${room.roomId}")`);
         if (!this._state.orderImportantFirst) {
             // Effectively disable the categorization of rooms if we're supposed to
             // be sorting by more recent messages first. This triggers the timestamp
             // comparison bit of _setRoomCategory and _recentsComparator instead of
             // the category ordering.
+            endTimer(timerId);
             return CATEGORY_IDLE;
         }
 
         const mentions = room.getUnreadNotificationCount("highlight") > 0;
-        if (mentions) return CATEGORY_RED;
+        if (mentions) {
+            endTimer(timerId);
+            return CATEGORY_RED;
+        }
 
         let unread = room.getUnreadNotificationCount() > 0;
-        if (unread) return CATEGORY_GREY;
+        if (unread) {
+            endTimer(timerId);
+            return CATEGORY_GREY;
+        }
 
         unread = Unread.doesRoomHaveUnreadMessages(room);
-        if (unread) return CATEGORY_BOLD;
+        if (unread) {
+            endTimer(timerId);
+            return CATEGORY_BOLD;
+        }
 
+        endTimer(timerId);
         return CATEGORY_IDLE;
     }
 
