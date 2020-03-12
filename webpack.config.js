@@ -82,7 +82,7 @@ module.exports = (env, argv) => {
             aliasFields: ['matrix_src_browser', 'browser'],
 
             // We need to specify that TS can be resolved without an extension
-            extensions: ['.js', '.json', '.ts'],
+            extensions: ['.js', '.json', '.ts', '.tsx'],
             alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when

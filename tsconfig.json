@@ -10,10 +10,12 @@
     "outDir": "./lib",
     "declaration": true,
     "types": [
-      "node"
+      "node",
+      "react"
     ]
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
   ]
 }
