@@ -59,9 +59,10 @@ export default class CompleteSecurity extends React.Component {
             phase: PHASE_BUSY,
         });
         const cli = MatrixClientPeg.get();
-        const backupInfo = await cli.getKeyBackupVersion();
-        this.setState({backupInfo});
         try {
+            const backupInfo = await cli.getKeyBackupVersion();
+            this.setState({backupInfo});
+
             await accessSecretStorage(async () => {
                 await cli.checkOwnCrossSigningTrust();
                 if (backupInfo) await cli.restoreKeyBackupWithSecretStorage(backupInfo);

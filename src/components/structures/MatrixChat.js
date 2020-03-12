@@ -1911,7 +1911,10 @@ export default createReactClass({
             // secret storage.
             SettingsStore.setFeatureEnabled("feature_cross_signing", true);
             this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
-        } else if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        } else if (
+            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        ) {
             // This will only work if the feature is set to 'enable' in the config,
             // since it's too early in the lifecycle for users to have turned the
             // labs flag on.

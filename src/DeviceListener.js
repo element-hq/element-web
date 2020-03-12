@@ -99,8 +99,12 @@ export default class DeviceListener {
     }
 
     async _recheck() {
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) return;
         const cli = MatrixClientPeg.get();
+
+        if (
+            !SettingsStore.isFeatureEnabled("feature_cross_signing") ||
+            !await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        ) return;
 
         if (!cli.isCryptoEnabled()) return;
         if (!cli.getCrossSigningId()) {
