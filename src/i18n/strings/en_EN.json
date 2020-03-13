@@ -1439,6 +1439,7 @@
     "Add User": "Add User",
     "All rooms": "All rooms",
     "Your server": "Your server",
+    "Are you sure you want to remove <b>%(serverName)s</b>": "Are you sure you want to remove <b>%(serverName)s</b>",
     "Matrix": "Matrix",
     "Add a new server": "Add a new server",
     "Enter the address of a new server you want to explore.": "Enter the address of a new server you want to explore.",
