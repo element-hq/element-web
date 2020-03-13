@@ -2179,5 +2179,19 @@
     "Mark all as read": "Mindent olvasottnak jelöl",
     "Not currently indexing messages for any room.": "Jelenleg egyik szoba indexelése sem történik.",
     "Currently indexing: %(currentRoom)s.": "Indexelés alatt jelenleg: %(currentRoom)s.",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s a szoba nevét megváltoztatta erről: %(oldRoomName)s erre: %(newRoomName)s.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s egy alternatív nevet (%(addresses)s) adott hozzá a szobához.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s egy alternatív címet (%(addresses)s) adott hozzá a szobához.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s egy alternatív címet (%(addresses)s) eltávolított a szobáról.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s eltávolította ezt az alternatív címet a szobáról: %(addresses)s.",
+    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s megváltoztatta az alternatív címét ennek a szobának.",
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ennek a szobának megváltoztatta az elsődleges és az alternatív címét.",
+    "%(senderName)s changed the addresses for this room.": "%(senderName)s megváltoztatta ennek a szobának a címét.",
+    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "A szoba címének megváltoztatásakor hiba történt. Lehet, hogy a szerver nem engedélyezi vagy átmeneti hiba történt.",
+    "Alternative addresses for this room:": "A szoba alternatív címei:",
+    "This room has no alternative addresses": "A szobának nincsen alternatív címe",
+    "New address (e.g. #foo:domain)": "Új cím (pl.: #foo:domain)",
+    "Local addresses (unmoderated content)": "Helyi cím (nem moderált tartalom)",
+    "You don't have permission to delete the alias.": "Ezt az alternatív nevet nincs jogod törölni."
 }
