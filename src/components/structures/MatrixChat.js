@@ -600,9 +600,8 @@ export default createReactClass({
             break;
             case 'view_room_directory': {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
-                    config: this.props.config,
-                }, 'mx_RoomDirectory_dialogWrapper');
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
+                    'mx_RoomDirectory_dialogWrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this._viewSomethingBehindModal();

@@ -324,6 +324,10 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "room_directory_servers": {
+        supportedLevels: ['account'],
+        default: [],
+    },
     "integrationProvisioning": {
         supportedLevels: ['account'],
         default: true,

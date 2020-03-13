@@ -28,9 +28,11 @@ export default createReactClass({
             PropTypes.string,
         ]),
         value: PropTypes.string,
+        placeholder: PropTypes.string,
         button: PropTypes.string,
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
+        hasCancel: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -39,6 +41,7 @@ export default createReactClass({
             value: "",
             description: "",
             focus: true,
+            hasCancel: true,
         };
     },
 
@@ -80,13 +83,17 @@ export default createReactClass({
                                 className="mx_TextInputDialog_input"
                                 defaultValue={this.props.value}
                                 autoFocus={this.props.focus}
+                                placeholder={this.props.placeholder}
                                 size="64" />
                         </div>
                     </div>
                 </form>
-                <DialogButtons primaryButton={this.props.button}
+                <DialogButtons
+                    primaryButton={this.props.button}
                     onPrimaryButtonClick={this.onOk}
-                    onCancel={this.onCancel} />
+                    onCancel={this.onCancel}
+                    hasCancel={this.props.hasCancel}
+                />
             </BaseDialog>
         );
     },
