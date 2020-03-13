@@ -56,14 +56,15 @@ limitations under the License.
         .mx_AccessibleButton {
             position: absolute;
             display: inline;
-            right: 0;
+            right: 12px;
+            height: 16px;
+            width: 16px;
 
             &::after {
                 content: "";
                 position: absolute;
                 width: 16px;
                 height: 16px;
-                right: 12px;
                 top: 4px;
                 mask-repeat: no-repeat;
                 mask-position: center;

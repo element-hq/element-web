@@ -21,7 +21,14 @@ import PropTypes from 'prop-types';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
-import {ContextMenu, useContextMenu, ContextMenuButton, MenuItemRadio, MenuItem} from "../../structures/ContextMenu";
+import {
+    ContextMenu,
+    useContextMenu,
+    ContextMenuButton,
+    MenuItemRadio,
+    MenuItem,
+    MenuGroup
+} from "../../structures/ContextMenu";
 import {_t} from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import {useSettingValue} from "../../../hooks/useSettings";
@@ -147,11 +154,13 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                         onOptionChange(hsName, undefined);
                     }
                 };
-                removeButton = <AccessibleButton onClick={onClick} />;
+                removeButton = <MenuItem onClick={onClick} label={_t("Remove server")} />;
             }
 
+            // ARIA: in actual fact the entire menu is one large radio group but for better screen reader support
+            // we use group to notate server wrongly.
             return (
-                <div className="mx_NetworkDropdown_server" key={server}>
+                <MenuGroup label={server} className="mx_NetworkDropdown_server" key={server}>
                     <div className="mx_NetworkDropdown_server_title">
                         { server }
                         { removeButton }
@@ -167,7 +176,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                         {_t("Matrix")}
                     </MenuItemRadio>
                     { entries }
-                </div>
+                </MenuGroup>
             );
         });
 
@@ -194,7 +203,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
         };
 
         const buttonRect = handle.current.getBoundingClientRect();
-        content = <ContextMenu {...inPlaceOf(buttonRect)} onFinished={closeMenu} managed={false}>
+        content = <ContextMenu {...inPlaceOf(buttonRect)} onFinished={closeMenu}>
             <div className="mx_NetworkDropdown_menu">
                 {options}
                 <MenuItem className="mx_NetworkDropdown_server_add" label={undefined} onClick={onClick}>
@@ -217,7 +226,6 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
 
         content = <ContextMenuButton
             className="mx_NetworkDropdown_handle"
-            label={_t("React")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
         >
