@@ -35,6 +35,7 @@ import {useSettingValue} from "../../../hooks/useSettings";
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
+import withValidation from "../elements/Validation";
 
 export const ALL_ROOMS = Symbol("ALL_ROOMS");
 
@@ -45,6 +46,34 @@ const inPlaceOf = (elementRect) => ({
     top: elementRect.top,
     chevronOffset: 0,
     chevronFace: "none",
+});
+
+const validServer = withValidation({
+    rules: [
+        {
+            key: "required",
+            test: async ({ value }) => !!value,
+            invalid: () => _t("Enter a server address"),
+        }, {
+            key: "available",
+            final: true,
+            test: async ({ value }) => {
+                try {
+                    const opts = {
+                        limit: 1,
+                        server: value,
+                    };
+                    // check if we can successfully load this server's room directory
+                    await MatrixClientPeg.get().publicRooms(opts);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            valid: () => _t("Looks good"),
+            invalid: () => _t("Can't find this server or its room list"),
+        },
+    ],
 });
 
 // This dropdown sources homeservers from three places:
@@ -188,6 +217,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                 button: _t("Add"),
                 hasCancel: false,
                 placeholder: _t("Server address"),
+                validator: validServer,
             });
 
             const [ok, newServer] = await finished;
