@@ -9,6 +9,7 @@
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,
+    "jsx": "react",
     "types": [
       "node",
       "react"
