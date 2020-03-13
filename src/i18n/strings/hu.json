@@ -2193,5 +2193,11 @@
     "This room has no alternative addresses": "A szobának nincsen alternatív címe",
     "New address (e.g. #foo:domain)": "Új cím (pl.: #foo:domain)",
     "Local addresses (unmoderated content)": "Helyi cím (nem moderált tartalom)",
-    "You don't have permission to delete the alias.": "Ezt az alternatív nevet nincs jogod törölni."
+    "You don't have permission to delete the alias.": "Ezt az alternatív nevet nincs jogod törölni.",
+    "Support adding custom themes": "Egyedi téma támogatás hozzáadása",
+    "Invalid theme schema.": "Téma séma érvénytelen.",
+    "Error downloading theme information.": "A téma információk letöltése sikertelen.",
+    "Theme added!": "Téma hozzáadva!",
+    "Custom theme URL": "Egyedi téma URL",
+    "Add theme": "Téma hozzáadása"
 }
