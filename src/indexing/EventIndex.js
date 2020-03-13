@@ -549,7 +549,8 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         this.removeListeners();
         this.stopCrawler();
-        return indexManager.closeEventIndex();
+        await indexManager.closeEventIndex();
+        return;
     }
 
     /**
