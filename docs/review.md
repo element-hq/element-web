@@ -43,8 +43,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Avoid force pushing to a PR after first round of review
 * Use merge commits when landing
 * PR author merges after review (assuming they have write access)
-* Assign issues only when in progress (don’t overly assign things so it’s clear
-  that anyone on the team can pick up)
+* Assign issues only when in progress to indicate to others what can be picked up
 
 ## Design and Product Review
 
