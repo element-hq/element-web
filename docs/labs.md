@@ -98,3 +98,12 @@ person is online.
 
 This adds padlocks to room list tiles and room header for invite only rooms.
 This feature flag (unlike most) is enabled by default.
+
+## Custom themes (`feature_custom_themes`)
+
+Custom themes are possible through Riot's [theme support](./theming.md), though
+normally these themes need to be defined in the config for Riot. This labs flag
+adds an ability for end users to add themes themselves by using a URL to the JSON
+theme definition.
+
+For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
