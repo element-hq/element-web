@@ -27,7 +27,7 @@ import {
     ContextMenuButton,
     MenuItemRadio,
     MenuItem,
-    MenuGroup
+    MenuGroup,
 } from "../../structures/ContextMenu";
 import {_t} from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -35,7 +35,6 @@ import {useSettingValue} from "../../../hooks/useSettings";
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
-import AccessibleButton from "../elements/AccessibleButton";
 
 export const ALL_ROOMS = Symbol("ALL_ROOMS");
 
