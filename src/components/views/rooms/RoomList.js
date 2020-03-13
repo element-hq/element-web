@@ -780,7 +780,7 @@ export default createReactClass({
                     aria-label={_t("Rooms")}
                     // Firefox sometimes makes this element focusable due to
                     // overflow:scroll;, so force it out of tab order.
-                    tabindex="-1"
+                    tabIndex="-1"
                     onMouseMove={this.onMouseMove}
                     onMouseLeave={this.onMouseLeave}
                 >
