@@ -58,7 +58,7 @@ limitations under the License.
             display: inline;
             right: 0;
 
-            &::before {
+            &::after {
                 content: "";
                 position: absolute;
                 width: 16px;
