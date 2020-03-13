@@ -223,7 +223,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
         >
             <span>
                 {currentValue}
-            </span> <span>
+            </span> <span className="mx_NetworkDropdown_handle_server">
                 ({selectedServerName})
             </span>
         </ContextMenuButton>;

@@ -149,4 +149,9 @@ limitations under the License.
         mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         background-color: $primary-fg-color;
     }
+
+    .mx_NetworkDropdown_handle_server {
+        color: $muted-fg-color;
+        font-size: 12px;
+    }
 }
