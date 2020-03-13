@@ -61,6 +61,8 @@ export default class GeneralUserSettingsTab extends React.Component {
             emails: [],
             msisdns: [],
             ...this._calculateThemeState(),
+            customThemeUrl: "",
+            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -274,6 +276,41 @@ export default class GeneralUserSettingsTab extends React.Component {
         });
     };
 
+    _onAddCustomTheme = async () => {
+        let currentThemes = SettingsStore.getValue("custom_themes");
+        if (!currentThemes) currentThemes = [];
+        currentThemes = currentThemes.map(c => c); // cheap clone
+
+        if (this._themeTimer) {
+            clearTimeout(this._themeTimer);
+        }
+
+        try {
+            const r = await fetch(this.state.customThemeUrl);
+            const themeInfo = await r.json();
+            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
+                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
+                return;
+            }
+            currentThemes.push(themeInfo);
+        } catch (e) {
+            console.error(e);
+            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            return; // Don't continue on error
+        }
+
+        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
+        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+
+        this._themeTimer = setTimeout(() => {
+            this.setState({customThemeMessage: {text: "", isError: false}});
+        }, 3000);
+    };
+
+    _onCustomThemeChange = (e) => {
+        this.setState({customThemeUrl: e.target.value});
+    };
+
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
@@ -368,6 +405,45 @@ export default class GeneralUserSettingsTab extends React.Component {
                 />
             </div>;
         }
+
+        let customThemeForm;
+        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+            let messageElement = null;
+            if (this.state.customThemeMessage.text) {
+                if (this.state.customThemeMessage.isError) {
+                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                } else {
+                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                }
+            }
+            customThemeForm = (
+                <div className='mx_SettingsTab_section'>
+                    <form onSubmit={this._onAddCustomTheme}>
+                        <Field
+                            label={_t("Custom theme URL")}
+                            type='text'
+                            id='mx_GeneralUserSettingsTab_customThemeInput'
+                            autoComplete="off"
+                            onChange={this._onCustomThemeChange}
+                            value={this.state.customThemeUrl}
+                        />
+                        <AccessibleButton
+                            onClick={this._onAddCustomTheme}
+                            type="submit" kind="primary_sm"
+                            disabled={!this.state.customThemeUrl.trim()}
+                        >{_t("Add theme")}</AccessibleButton>
+                        {messageElement}
+                    </form>
+                </div>
+            );
+        }
+
+        const themes = Object.entries(enumerateThemes())
+            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
+        const customThemes = themes.filter(p => !builtInThemes.includes(p))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -376,10 +452,11 @@ export default class GeneralUserSettingsTab extends React.Component {
                        value={this.state.theme} onChange={this._onThemeChange}
                        disabled={this.state.useSystemTheme}
                 >
-                    {Object.entries(enumerateThemes()).map(([theme, text]) => {
-                        return <option key={theme} value={theme}>{text}</option>;
+                    {orderedThemes.map(theme => {
+                        return <option key={theme.id} value={theme.id}>{theme.name}</option>;
                     })}
                 </Field>
+                {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
         );

@@ -134,6 +134,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_custom_themes": {
+        isFeature: true,
+        displayName: _td("Support adding custom themes"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
