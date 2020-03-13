@@ -146,7 +146,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                     if (!ok) return;
 
                     // delete from setting
-                    await SettingsStore.setValue(SETTING_NAME, null, "account", servers.filter(s => s !== server));
+                    SettingsStore.setValue(SETTING_NAME, null, "account", servers.filter(s => s !== server));
 
                     // the selected server is being removed, reset to our HS
                     if (serverSelected === server) {
@@ -195,7 +195,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
 
             if (!userDefinedServers.includes(newServer)) {
                 const servers = [...userDefinedServers, newServer];
-                await SettingsStore.setValue(SETTING_NAME, null, "account", servers);
+                SettingsStore.setValue(SETTING_NAME, null, "account", servers);
             }
 
             onOptionChange(newServer); // change filter to the new server

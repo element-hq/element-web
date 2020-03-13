@@ -59,13 +59,13 @@ limitations under the License.
             right: 12px;
             height: 16px;
             width: 16px;
+            margin-top: 4px;
 
             &::after {
                 content: "";
                 position: absolute;
                 width: 16px;
                 height: 16px;
-                top: 4px;
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
