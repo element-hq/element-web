@@ -44,6 +44,7 @@ limitations under the License.
 
 .mx_UnknownDeviceDialog .mx_Dialog_content {
     margin-bottom: 24px;
+    overflow-y: scroll;
 }
 
 .mx_UnknownDeviceDialog_deviceList > li {
