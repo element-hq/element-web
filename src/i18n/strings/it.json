@@ -2193,5 +2193,12 @@
     "Alternative addresses for this room:": "Indirizzi alternativi per questa stanza:",
     "This room has no alternative addresses": "Questa stanza non ha indirizzi alternativi",
     "New address (e.g. #foo:domain)": "Nuovo indirizzo (es. #abc:dominio)",
-    "Local addresses (unmoderated content)": "Indirizzi locali (contenuto non moderato)"
+    "Local addresses (unmoderated content)": "Indirizzi locali (contenuto non moderato)",
+    "Support adding custom themes": "Supporta l'aggiunta di temi personalizzati",
+    "Invalid theme schema.": "Schema del tema non valido.",
+    "Error downloading theme information.": "Errore scaricando informazioni sul tema.",
+    "Theme added!": "Tema aggiunto!",
+    "Custom theme URL": "URL tema personalizzato",
+    "Add theme": "Aggiungi tema",
+    "You don't have permission to delete the alias.": "Non hai l'autorizzazione per eliminare l'alias."
 }
