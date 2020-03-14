@@ -113,7 +113,7 @@
     "Power level must be positive integer.": "El nivell de poders ha de ser un enter positiu.",
     "You are not in this room.": "No heu entrat a aquesta sala.",
     "You do not have permission to do that in this room.": "No teniu el permís per realitzar aquesta acció en aquesta sala.",
-    "Missing room_id in request": "Falta l'ID de la sala en la vostra sol·licitud",
+    "Missing room_id in request": "Falta el room_id en la vostra sol·licitud",
     "Room %(roomId)s not visible": "La sala %(roomId)s no és visible",
     "Missing user_id in request": "Falta l'user_id a la vostra sol·licitud",
     "Usage": "Ús",
