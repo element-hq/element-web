@@ -598,7 +598,7 @@
     "Uploading %(filename)s and %(count)s others|zero": "Pujant %(filename)s",
     "Light theme": "Tema clar",
     "Dark theme": "Tema fosc",
-    "Sign out": "Tancar sessió",
+    "Sign out": "Tanca la sessió",
     "Import E2E room keys": "Importar claus E2E de sala",
     "Cryptography": "Criptografia",
     "Labs": "Laboraroris",
@@ -872,5 +872,12 @@
     "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Mostra un recordatori per activar la Recuperació de missatges segurs en sales encriptades",
     "Show avatars in user and room mentions": "Mostra avatars en mencions d'usuaris i sales",
     "Enable big emoji in chat": "Activa Emojis grans en xats",
-    "Send analytics data": "Envia dades d'anàlisi"
+    "Send analytics data": "Envia dades d'anàlisi",
+    "Upload": "Puja",
+    "Email addresses": "Adreces de correu electrònic",
+    "Phone numbers": "Números de telèfon",
+    "Language and region": "Idioma i regió",
+    "Theme": "Tema",
+    "Phone Number": "Número de telèfon",
+    "Help": "Ajuda"
 }
