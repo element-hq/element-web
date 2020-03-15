@@ -2193,5 +2193,14 @@
     "Alternative addresses for this room:": "此聊天是的替代位置：",
     "This room has no alternative addresses": "此聊天室沒有替代位置",
     "New address (e.g. #foo:domain)": "新位置（例如：#foo:domain）",
-    "Local addresses (unmoderated content)": "本機位置（未經審核的內容）"
+    "Local addresses (unmoderated content)": "本機位置（未經審核的內容）",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s 將聊天室名稱從 %(oldRoomName)s 變更為 %(newRoomName)s。",
+    "%(senderName)s changed the addresses for this room.": "%(senderName)s 變更了此聊天室的位置。",
+    "You don't have permission to delete the alias.": "您沒有刪除別名的權限。",
+    "Support adding custom themes": "支援新增自訂佈景主題",
+    "Invalid theme schema.": "無效的佈景主題架構。",
+    "Error downloading theme information.": "下載佈景主題資訊時發生錯誤。",
+    "Theme added!": "已新增佈景主題！",
+    "Custom theme URL": "自訂佈景主題 URL",
+    "Add theme": "新增佈景主題"
 }
