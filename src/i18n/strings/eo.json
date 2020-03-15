@@ -2183,5 +2183,6 @@
     "Indexed messages:": "Indeksitaj masaĝoj:",
     "Indexed rooms:": "Indeksitaj ĉambroj:",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s el %(totalRooms)s",
-    "Message downloading sleep time(ms)": "Dormotempo de elŝuto de mesaĝoj (milonsekunde)"
+    "Message downloading sleep time(ms)": "Dormotempo de elŝuto de mesaĝoj (milonsekunde)",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Permesi fala vokhelpa servilo turn.matrix.org, kiam vian hejmservilo ne ofertas unu (vian IP-adreso estus dividita dum voko)"
 }
