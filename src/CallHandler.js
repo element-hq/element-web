@@ -143,7 +143,7 @@ function _setCallListeners(call) {
                     "if you proceed without verifying them, it will be "+
                     "possible for someone to eavesdrop on your call.",
                 ),
-                button: _t('Review Devices'),
+                button: _t('Review Sessions'),
                 onFinished: function(confirmed) {
                     if (confirmed) {
                         const room = MatrixClientPeg.get().getRoom(call.roomId);
