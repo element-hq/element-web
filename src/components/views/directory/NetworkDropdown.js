@@ -224,7 +224,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
             const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
             const { finished } = Modal.createTrackedDialog("Network Dropdown", "Add a new server", TextInputDialog, {
                 title: _t("Add a new server"),
-                description: _t("Enter the address of a new server you want to explore."),
+                description: _t("Enter the name of a new server you want to explore."),
                 button: _t("Add"),
                 hasCancel: false,
                 placeholder: _t("Server name"),

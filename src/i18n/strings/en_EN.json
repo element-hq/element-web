@@ -1446,7 +1446,7 @@
     "Remove server": "Remove server",
     "Matrix": "Matrix",
     "Add a new server": "Add a new server",
-    "Enter the address of a new server you want to explore.": "Enter the address of a new server you want to explore.",
+    "Enter the name of a new server you want to explore.": "Enter the name of a new server you want to explore.",
     "Server name": "Server name",
     "Add a new server...": "Add a new server...",
     "%(networkName)s rooms": "%(networkName)s rooms",
