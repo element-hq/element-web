@@ -350,6 +350,9 @@ export default class AliasSettings extends React.Component {
 
         return (
             <div className='mx_AliasSettings'>
+                <span className='mx_SettingsTab_subheading'>{_t("Published Addresses")}</span>
+                <p>{_t("Published addresses can be used by anyone on any server to join your room. " +
+                    "To publish an address it needs to be set as a local address first.")}</p>
                 {canonicalAliasSection}
                 <RoomPublishSetting roomId={this.props.roomId} canSetCanonicalAlias={this.props.canSetCanonicalAlias} />
                 <datalist id="mx_AliasSettings_altRecommendations">
@@ -368,12 +371,14 @@ export default class AliasSettings extends React.Component {
                     onItemAdded={this.onAltAliasAdded}
                     onItemRemoved={this.onAltAliasDeleted}
                     suggestionsListId="mx_AliasSettings_altRecommendations"
-                    itemsLabel={_t('Alternative addresses for this room:')}
-                    noItemsLabel={_t('This room has no alternative addresses')}
+                    itemsLabel={_t('Other published addresses:')}
+                    noItemsLabel={_t('No other published addresses yet, add one below')}
                     placeholder={_t(
                         'New address (e.g. #foo:domain)',
                     )}
                 />
+                <span className='mx_SettingsTab_subheading'>{_t("Local Addresses")}</span>
+                <p>{_t("Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)", {localDomain})}</p>
                 <details onToggle={this.onLocalAliasesToggled}>
                     <summary>{_t('Local addresses (unmoderated content)')}</summary>
                     {localAliasesList}
