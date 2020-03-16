@@ -29,4 +29,12 @@ limitations under the License.
 
 .mx_AliasSettings summary {
     cursor: pointer;
+    color: $accent-color;
+    font-weight: 600;
+    list-style: none;
+
+    // list-style doesn't do it for webkit
+    &::-webkit-details-marker {
+        display: none;
+    }
 }

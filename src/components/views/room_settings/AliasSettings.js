@@ -98,6 +98,7 @@ export default class AliasSettings extends React.Component {
             canonicalAlias: null, // #canonical:domain.tld
             updatingCanonicalAlias: false,
             localAliasesLoading: false,
+            detailsOpen: false,
         };
 
         if (props.canonicalAliasEvent) {
@@ -262,6 +263,7 @@ export default class AliasSettings extends React.Component {
                 this.loadLocalAliases();
             }
         }
+        this.setState({detailsOpen: event.target.open});
     };
 
     onCanonicalAliasChange = (event) => {
@@ -380,7 +382,7 @@ export default class AliasSettings extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Local Addresses")}</span>
                 <p>{_t("Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)", {localDomain})}</p>
                 <details onToggle={this.onLocalAliasesToggled}>
-                    <summary>{_t('Local addresses (unmoderated content)')}</summary>
+                    <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more")}</summary>
                     {localAliasesList}
                 </details>
             </div>
