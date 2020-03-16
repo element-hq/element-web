@@ -68,12 +68,13 @@ export default class GeneralRoomSettingsTab extends React.Component {
                     <RoomProfileSettings roomId={this.props.roomId} />
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Room Addresses")}</span>
+                <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <AliasSettings roomId={this.props.roomId}
                                    canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
                                    canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
                 </div>
+                <div className="mx_SettingsTab_heading">{_t("Other")}</div>
                 <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <RelatedGroupSettings roomId={room.roomId}
