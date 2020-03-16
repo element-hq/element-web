@@ -349,9 +349,7 @@ export default class AliasSettings extends React.Component {
                 onItemAdded={this.onLocalAliasAdded}
                 onItemRemoved={this.onLocalAliasDeleted}
                 noItemsLabel={_t('This room has no local addresses')}
-                placeholder={_t(
-                    'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
-                )}
+                placeholder={_t('Local address')}
                 domain={localDomain}
             />);
         }
@@ -381,9 +379,7 @@ export default class AliasSettings extends React.Component {
                     suggestionsListId="mx_AliasSettings_altRecommendations"
                     itemsLabel={_t('Other published addresses:')}
                     noItemsLabel={_t('No other published addresses yet, add one below')}
-                    placeholder={_t(
-                        'New address (e.g. #foo:domain)',
-                    )}
+                    placeholder={_t('New published address (e.g. #alias:server)')}
                 />
                 <span className='mx_SettingsTab_subheading'>{_t("Local Addresses")}</span>
                 <p>{_t("Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)", {localDomain})}</p>
