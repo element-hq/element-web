@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -84,7 +84,8 @@ const validServer = withValidation({
 
 const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, selectedInstanceId}) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
-    const userDefinedServers = useSettingValue(SETTING_NAME);
+    const _userDefinedServers = useSettingValue(SETTING_NAME);
+    const [userDefinedServers, _setUserDefinedServers] = useState(_userDefinedServers);
 
     const handlerFactory = (server, instanceId) => {
         return () => {
@@ -92,6 +93,15 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
             closeMenu();
         };
     };
+
+    const setUserDefinedServers = servers => {
+        _setUserDefinedServers(servers);
+        SettingsStore.setValue(SETTING_NAME, null, "account", servers);
+    };
+    // keep local echo up to date with external changes
+    useEffect(() => {
+        _setUserDefinedServers(_userDefinedServers);
+    }, [_userDefinedServers]);
 
     // we either show the button or the dropdown in its place.
     let content;
@@ -176,7 +186,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                     if (!ok) return;
 
                     // delete from setting
-                    SettingsStore.setValue(SETTING_NAME, null, "account", servers.filter(s => s !== server));
+                    setUserDefinedServers(servers.filter(s => s !== server));
 
                     // the selected server is being removed, reset to our HS
                     if (serverSelected === server) {
@@ -226,8 +236,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
             if (!ok) return;
 
             if (!userDefinedServers.includes(newServer)) {
-                const servers = [...userDefinedServers, newServer];
-                SettingsStore.setValue(SETTING_NAME, null, "account", servers);
+                setUserDefinedServers([...userDefinedServers, newServer]);
             }
 
             onOptionChange(newServer); // change filter to the new server
