@@ -53,7 +53,7 @@ const validServer = withValidation({
         {
             key: "required",
             test: async ({ value }) => !!value,
-            invalid: () => _t("Enter a server address"),
+            invalid: () => _t("Enter a server name"),
         }, {
             key: "available",
             final: true,
@@ -216,7 +216,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                 description: _t("Enter the address of a new server you want to explore."),
                 button: _t("Add"),
                 hasCancel: false,
-                placeholder: _t("Server address"),
+                placeholder: _t("Server name"),
                 validator: validServer,
             });
 
