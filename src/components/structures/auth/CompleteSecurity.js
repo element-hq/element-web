@@ -155,13 +155,17 @@ export default class CompleteSecurity extends React.Component {
             body = (
                 <div>
                     <p>{_t(
-                        "Open an existing session & use it to verify this one, granting it access to encrypted messages.",
+                        "Open an existing session & use it to verify this one, " +
+                        "granting it access to encrypted messages.",
                     )}</p>
                     <p className="mx_CompleteSecurity_waiting"><InlineSpinner />{_t("Waiting…")}</p>
                     <p>{_t(
                         "If you can’t access one, <button>use your recovery key or passphrase.</button>",
                     {}, {
-                        button: sub => <AccessibleButton element="span" className="mx_linkButton" onClick={this._onUsePassphraseClick}>
+                        button: sub => <AccessibleButton element="span"
+                            className="mx_linkButton"
+                            onClick={this._onUsePassphraseClick}
+                        >
                             {sub}
                         </AccessibleButton>,
                     })}</p>
