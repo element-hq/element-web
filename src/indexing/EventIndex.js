@@ -373,6 +373,21 @@ export default class EventIndex extends EventEmitter {
                     checkpoint.roomId, checkpoint.token, this._eventsPerCrawl,
                     checkpoint.direction);
             } catch (e) {
+                if (e.httpStatus === 403) {
+                    console.log("EventIndex: Removing checkpoint as we don't have ",
+                                "permissions to fetch messages from this room.", checkpoint);
+                    try {
+                        await indexManager.removeCrawlerCheckpoint(checkpoint);
+                    } catch (e) {
+                        console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                        // We don't push the checkpoint here back, it will
+                        // hopefully be removed after a restart. But let us
+                        // ignore it for now as we don't want to hammer the
+                        // endpoint.
+                    }
+                    continue;
+                }
+
                 console.log("EventIndex: Error crawling events:", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
