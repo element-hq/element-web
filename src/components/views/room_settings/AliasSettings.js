@@ -25,6 +25,7 @@ import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
+import RoomPublishSetting from "./RoomPublishSetting";
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {
@@ -356,6 +357,7 @@ export default class AliasSettings extends React.Component {
         return (
             <div className='mx_AliasSettings'>
                 {canonicalAliasSection}
+                <RoomPublishSetting roomId={this.props.roomId} canSetCanonicalAlias={this.props.canSetCanonicalAlias} />
                 <datalist id="mx_AliasSettings_altRecommendations">
                     {this._getLocalNonAltAliases().map(alias => {
                         return <option value={alias} key={alias} />;
