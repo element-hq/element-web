@@ -1688,7 +1688,7 @@
     "Your homeserver does not support session management.": "Dein Heimserver unterstützt keine Sitzungsverwaltung.",
     "Unable to load session list": "Sitzungsliste kann nicht geladen werden",
     "Delete %(count)s sessions|one": "%(count)s Sitzung löschen",
-    "This session is backing up your keys. ": "Diese Sitzung sichert deine Schlüssel.",
+    "This session is backing up your keys. ": "Diese Sitzung sichert deine Schlüssel. ",
     "Connect this session to Key Backup": "Diese Sitzung mit der Schlüsselsicherung verbinden",
     "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Die Sicherung hat eine Signatur von einer <verify>unbekannten</verify> Sitzung mit der ID %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",
@@ -1713,5 +1713,8 @@
     "Remove recent messages": "Letzte Nachrichten entfernen",
     "You're previewing %(roomName)s. Want to join it?": "Du betrachtest %(roomName)s. Willst du beitreten?",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse 2%(addresses)s für diesen Raum hinzugefügt.",
-    "%(senderName)s changed the addresses for this room.": "%(senderName)s hat die Adresse für diesen Raum geändert."
+    "%(senderName)s changed the addresses for this room.": "%(senderName)s hat die Adresse für diesen Raum geändert.",
+    "Review Sessions": "Sitzungen überprüfen",
+    "Displays information about a user": "Zeigt Informationen über einen Benutzer",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s hat den Raumnamen von %(oldRoomName)s zu %(newRoomName)s geändert."
 }
