@@ -35,6 +35,7 @@ export default createReactClass({
         onFinished: PropTypes.func.isRequired,
         hasCancel: PropTypes.bool,
         validator: PropTypes.func, // result of withValidation
+        fixedWidth: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -102,8 +103,11 @@ export default createReactClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
-            <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_TextInputDialog"
+                onFinished={this.props.onFinished}
                 title={this.props.title}
+                fixedWidth={this.props.fixedWidth}
             >
                 <form onSubmit={this.onOk}>
                     <div className="mx_Dialog_content">

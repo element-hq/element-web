@@ -169,7 +169,8 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                             b: serverName => <b>{ serverName }</b>,
                         }),
                         button: _t("Remove"),
-                    });
+                        fixedWidth: false,
+                    }, "mx_NetworkDropdown_dialog");
 
                     const [ok] = await finished;
                     if (!ok) return;
@@ -218,7 +219,8 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                 hasCancel: false,
                 placeholder: _t("Server name"),
                 validator: validServer,
-            });
+                fixedWidth: false,
+            }, "mx_NetworkDropdown_dialog");
 
             const [ok, newServer] = await finished;
             if (!ok) return;
