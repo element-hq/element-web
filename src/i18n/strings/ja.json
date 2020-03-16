@@ -66,7 +66,7 @@
     "Your language of choice": "選択した言語",
     "Which officially provided instance you are using, if any": "どの公式に提供されたインスタンスを利用していますか（もしあれば）",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "リッチテキストエディタのリッチテキストモードを利用しているか否か",
-    "Your homeserver's URL": "あなたのホームサーバーのURL",
+    "Your homeserver's URL": "あなたのホームサーバーの URL",
     "Your identity server's URL": "あなたのアイデンティティサーバーの URL",
     "Analytics": "分析",
     "The information being sent to us to help make Riot.im better includes:": "Riot.imをよりよくするために私達に送信される情報は以下を含みます:",
@@ -1238,5 +1238,7 @@
     "Hide": "隠す",
     "Help": "ヘルプ",
     "Filter rooms…": "部屋を検索…",
-    "Preview": "プレビュー"
+    "Preview": "プレビュー",
+    "The version of Riot": "Riot のバージョン",
+    "Your user agent": "あなたの User Agent"
 }
