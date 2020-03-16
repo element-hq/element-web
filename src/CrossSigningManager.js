@@ -96,6 +96,9 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         {
             keyInfo: info,
             checkPrivateKey: async (input) => {
+                if (!info.pubkey) {
+                    return true;
+                }
                 const key = await inputToKey(input);
                 return MatrixClientPeg.get().checkSecretStoragePrivateKey(key, info.pubkey);
             },
