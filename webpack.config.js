@@ -304,7 +304,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ['mobileguide', 'usercontent'],
+                excludeChunks: ['mobileguide', 'usercontent', 'inline-widget-wrapper'],
                 minify: argv.mode === 'production',
                 vars: {
                     og_image_url: og_image_url,
@@ -317,6 +317,13 @@ module.exports = (env, argv) => {
                 filename: 'mobile_guide/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['mobileguide'],
+            }),
+
+            // This is an inline widget wrapper, similar to usercontent
+            new HtmlWebpackPlugin({
+                template: './src/vector/inline_widget_wrapper/index.html',
+                filename: 'inline_widget_wrapper/index.html',
+                chunks: ['inline-widget-wrapper'],
             }),
 
             // This is the usercontent sandbox's entry point (separate for iframing)
