@@ -341,8 +341,8 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_body .gm-scroll-view > * {
-    margin: 11px 50px 0px 68px;
+.mx_GroupView_body .mx_AutoHideScrollbar_offset > * {
+    margin: 11px 50px 50px 68px;
 }
 
 .mx_GroupView_groupDesc textarea {
