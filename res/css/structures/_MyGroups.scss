@@ -102,11 +102,6 @@ limitations under the License.
     overflow-y: inherit;
 }
 
-.mx_MyGroups_content,
-.mx_MyGroups_scrollable {
-    overflow-y: scroll;
-}
-
 .mx_MyGroups_placeholder {
     background-color: $info-plinth-bg-color;
     color: $info-plinth-fg-color;
