@@ -2192,5 +2192,7 @@
     "This room has no alternative addresses": "Kjo dhomë nuk ka adresa alternative",
     "New address (e.g. #foo:domain)": "Adresë e re (p.sh., #foo:domain)",
     "Local addresses (unmoderated content)": "Adresa vendore (lëndë e pamoderuar)",
-    "Review Sessions": "Shqyrtoni Sesione"
+    "Review Sessions": "Shqyrtoni Sesione",
+    "Local address": "Adresë vendore",
+    "Published Addresses": "Adresa të Publikuara"
 }
