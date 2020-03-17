@@ -1156,7 +1156,7 @@
     "This room has no local addresses": "This room has no local addresses",
     "Local address": "Local address",
     "Published Addresses": "Published Addresses",
-    "Published addresses can be used by anyone on any server to join your room. To publish an address it needs to be set as a local address first.": "Published addresses can be used by anyone on any server to join your room. To publish an address it needs to be set as a local address first.",
+    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.",
     "Other published addresses:": "Other published addresses:",
     "No other published addresses yet, add one below": "No other published addresses yet, add one below",
     "New published address (e.g. #alias:server)": "New published address (e.g. #alias:server)",
