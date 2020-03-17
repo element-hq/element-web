@@ -178,6 +178,7 @@ export default class MessageComposer extends React.Component {
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
+            showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
         };
     }
 
@@ -325,10 +326,20 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator} />,
                 <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
-                callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
-                callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
-                callInProgress ? null : <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
             );
+
+            if (this.state.showCallButtons) {
+                if (callInProgress) {
+                    controls.push(
+                        <HangupButton key="controls_hangup" roomId={this.props.room.roomId} />,
+                    );
+                } else {
+                    controls.push(
+                        <CallButton key="controls_call" roomId={this.props.room.roomId} />,
+                        <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
+                    );
+                }
+            }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 

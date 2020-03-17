@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -80,7 +80,7 @@
     "is-ip": "^2.0.0",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.17.14",
-    "matrix-js-sdk": "5.1.1-rc.1",
+    "matrix-js-sdk": "5.1.1",
     "minimist": "^1.2.0",
     "pako": "^1.0.5",
     "png-chunks-extract": "^1.0.0",
