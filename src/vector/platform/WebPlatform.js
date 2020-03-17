@@ -19,9 +19,8 @@ limitations under the License.
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
-import dis from 'matrix-react-sdk/lib/dispatcher.js';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import Promise from 'bluebird';
+import dis from 'matrix-react-sdk/src/dispatcher.js';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 import url from 'url';
 import UAParser from 'ua-parser-js';

@@ -4,6 +4,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,9 +19,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import dis from 'matrix-react-sdk/src/dispatcher';
+import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
 
@@ -42,6 +44,10 @@ export default class VectorBasePlatform extends BasePlatform {
         this.showUpdateCheck = false;
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+    }
+
+    async getConfig(): Promise<{}> {
+        return getVectorConfig();
     }
 
     getHumanReadableName(): string {
@@ -79,9 +85,29 @@ export default class VectorBasePlatform extends BasePlatform {
                 bgColor = "#f00";
             }
 
-            this.favicon.badge(notif, {
-                bgColor: bgColor,
-            });
+            const doUpdate = () => {
+                this.favicon.badge(notif, {
+                    bgColor: bgColor,
+                });
+            };
+
+            doUpdate();
+
+            // HACK: Workaround for Chrome 78+ and dependency incompatibility.
+            // The library we use doesn't appear to work in Chrome 78, likely due to their
+            // changes surrounding tab behaviour. Tabs went through a bit of a redesign and
+            // restructuring in Chrome 78, so it's not terribly surprising that the library
+            // doesn't work correctly. The library we use hasn't been updated in years and
+            // does not look easy to fix/fork ourselves - we might as well write our own that
+            // doesn't include animation/webcam/etc support. However, that's a bit difficult
+            // so for now we'll just trigger the update twice.
+            //
+            // Note that trying to reproduce the problem in isolation doesn't seem to work:
+            // see https://gist.github.com/turt2live/5ab87919918adbfd7cfb8f1ad10f2409 for
+            // an example (you'll need your own web server to host that).
+            if (window.chrome) {
+                doUpdate();
+            }
         } catch (e) {
             console.warn(`Failed to set badge count: ${e.message}`);
         }
@@ -146,13 +172,5 @@ export default class VectorBasePlatform extends BasePlatform {
      */
     getDefaultDeviceDisplayName(): string {
         return _t("Unknown device");
-    }
-
-    /**
-     * Migrate account data from a previous origin
-     * Used only for the electron app
-     */
-    async migrateFromOldOrigin() {
-        return false;
     }
 }

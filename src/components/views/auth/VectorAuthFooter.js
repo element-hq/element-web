@@ -15,45 +15,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
-const React = require('react');
-import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+const VectorAuthFooter = () => {
+    const brandingConfig = SdkConfig.get().branding;
+    let links = [
+        {"text": "blog", "url": "https://blog.riot.im"},
+        {"text": "twitter", "url": "https://twitter.com/@RiotChat"},
+        {"text": "github", "url": "https://github.com/vector-im/riot-web"},
+    ];
 
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+    if (brandingConfig && brandingConfig.authFooterLinks) {
+        links = brandingConfig.authFooterLinks;
+    }
 
-module.exports = React.createClass({
-    displayName: 'VectorAuthFooter',
-    statics: {
-        replaces: 'AuthFooter',
-    },
-
-    render: function() {
-        const brandingConfig = SdkConfig.get().branding;
-        let links = [
-            {"text": "blog", "url": "https://medium.com/@RiotChat"},
-            {"text": "twitter", "url": "https://twitter.com/@RiotChat"},
-            {"text": "github", "url": "https://github.com/vector-im/riot-web"},
-        ];
-
-        if (brandingConfig && brandingConfig.authFooterLinks) {
-            links = brandingConfig.authFooterLinks;
-        }
-
-        const authFooterLinks = [];
-        for (const linkEntry of links) {
-            authFooterLinks.push(
-                <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noopener">
-                    {linkEntry.text}
-                </a>,
-            );
-        }
-
-        return (
-            <div className="mx_AuthFooter">
-                {authFooterLinks}
-                <a href="https://matrix.org" target="_blank" rel="noopener">{ _t('powered by Matrix') }</a>
-            </div>
+    const authFooterLinks = [];
+    for (const linkEntry of links) {
+        authFooterLinks.push(
+            <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noreferrer noopener">
+                {linkEntry.text}
+            </a>,
         );
-    },
-});
+    }
+
+    return (
+        <div className="mx_AuthFooter">
+            {authFooterLinks}
+            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t('powered by Matrix') }</a>
+        </div>
+    );
+};
+
+VectorAuthFooter.replaces = 'AuthFooter';
+
+export default VectorAuthFooter;

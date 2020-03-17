@@ -26,6 +26,13 @@ exports.hasTray = function hasTray() {
     return (trayIcon !== null);
 };
 
+exports.destroy = function() {
+    if (trayIcon) {
+        trayIcon.destroy();
+        trayIcon = null;
+    }
+};
+
 exports.create = function(config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) return;
@@ -65,7 +72,7 @@ exports.create = function(config) {
     global.mainWindow.webContents.on('page-favicon-updated', async function(ev, favicons) {
         if (!favicons || favicons.length <= 0 || !favicons[0].startsWith('data:')) {
             if (lastFavicon !== null) {
-                win.setIcon(defaultIcon);
+                global.mainWindow.setIcon(defaultIcon);
                 trayIcon.setImage(defaultIcon);
                 lastFavicon = null;
             }

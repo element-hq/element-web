@@ -4,5 +4,6 @@
  * Skins the react-sdk with the vector components
  */
 
-const sdk = require('matrix-react-sdk');
-sdk.loadSkin(require('../src/component-index'));
+import * as sdk from "matrix-react-sdk";
+import * as skin from "../src/component-index";
+sdk.loadSkin(skin);

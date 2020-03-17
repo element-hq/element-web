@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152x152.png') %>">
     <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180x180.png') %>">
     <link rel="manifest" href="manifest.json">
+    <meta name="referrer" content="no-referrer">
     <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
     <meta name="apple-mobile-web-app-title" content="Riot">
     <meta name="application-name" content="Riot">
@@ -21,6 +22,21 @@
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
+        img-src * blob: data:;
+        connect-src *;
+        font-src 'self' data:;
+        media-src * blob: data:;
+        child-src * blob: data:;
+        worker-src 'self';
+        frame-src * blob: data:;
+        form-action 'self';
+        object-src 'self';
+        manifest-src 'self';
+    ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
@@ -33,14 +49,13 @@
         <% }
     } %>
   </head>
-  <body style="height: 100%;">
-    <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
+  <body style="height: 100%;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <script>
-        window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
-    </script>
+    <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />

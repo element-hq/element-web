@@ -4,6 +4,8 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +21,15 @@ limitations under the License.
 */
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import Promise from 'bluebird';
-import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
+import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
+import dis from 'matrix-react-sdk/src/dispatcher';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
+import {MatrixClient} from "matrix-js-sdk";
+import Modal from "matrix-react-sdk/src/Modal";
+import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
+import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
+import React from "react";
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -65,12 +72,112 @@ function getUpdateCheckStatus(status) {
     }
 }
 
+class SeshatIndexManager extends BaseEventIndexManager {
+    constructor() {
+        super();
+
+        this._pendingIpcCalls = {};
+        this._nextIpcCallId = 0;
+        ipcRenderer.on('seshatReply', this._onIpcReply.bind(this));
+    }
+
+    async _ipcCall(name: string, ...args: []): Promise<{}> {
+        // TODO this should be moved into the preload.js file.
+        const ipcCallId = ++this._nextIpcCallId;
+        return new Promise((resolve, reject) => {
+            this._pendingIpcCalls[ipcCallId] = {resolve, reject};
+            window.ipcRenderer.send('seshat', {id: ipcCallId, name, args});
+        });
+    }
+
+    _onIpcReply(ev: {}, payload: {}) {
+        if (payload.id === undefined) {
+            console.warn("Ignoring IPC reply with no ID");
+            return;
+        }
+
+        if (this._pendingIpcCalls[payload.id] === undefined) {
+            console.warn("Unknown IPC payload ID: " + payload.id);
+            return;
+        }
+
+        const callbacks = this._pendingIpcCalls[payload.id];
+        delete this._pendingIpcCalls[payload.id];
+        if (payload.error) {
+            callbacks.reject(payload.error);
+        } else {
+            callbacks.resolve(payload.reply);
+        }
+    }
+
+    async supportsEventIndexing(): Promise<boolean> {
+        return this._ipcCall('supportsEventIndexing');
+    }
+
+    async initEventIndex(): Promise<> {
+        return this._ipcCall('initEventIndex');
+    }
+
+    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<> {
+        return this._ipcCall('addEventToIndex', ev, profile);
+    }
+
+    async isEventIndexEmpty(): Promise<boolean> {
+        return this._ipcCall('isEventIndexEmpty');
+    }
+
+    async commitLiveEvents(): Promise<> {
+        return this._ipcCall('commitLiveEvents');
+    }
+
+    async searchEventIndex(searchConfig: SearchConfig): Promise<SearchResult> {
+        return this._ipcCall('searchEventIndex', searchConfig);
+    }
+
+    async addHistoricEvents(
+        events: [HistoricEvent],
+        checkpoint: CrawlerCheckpoint | null,
+        oldCheckpoint: CrawlerCheckpoint | null,
+    ): Promise<> {
+        return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
+    }
+
+    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+        return this._ipcCall('addCrawlerCheckpoint', checkpoint);
+    }
+
+    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+        return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
+    }
+
+    async loadFileEvents(args): Promise<[EventAndProfile]> {
+        return this._ipcCall('loadFileEvents', args);
+    }
+
+    async loadCheckpoints(): Promise<[CrawlerCheckpoint]> {
+        return this._ipcCall('loadCheckpoints');
+    }
+
+    async closeEventIndex(): Promise<> {
+        return this._ipcCall('closeEventIndex');
+    }
+
+    async getStats(): Promise<> {
+        return this._ipcCall('getStats');
+    }
+
+    async deleteEventIndex(): Promise<> {
+        return this._ipcCall('deleteEventIndex');
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
 
         this._pendingIpcCalls = {};
         this._nextIpcCallId = 0;
+        this.eventIndexManager = new SeshatIndexManager();
 
         dis.register(_onAction);
         /*
@@ -99,6 +206,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+    }
+
+    async getConfig(): Promise<{}> {
+        return this._ipcCall('getConfig');
     }
 
     async onUpdateDownloaded(ev, updateInfo) {
@@ -169,7 +280,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAppVersion(): Promise<string> {
-        return await this._ipcCall('getAppVersion');
+        return this._ipcCall('getAppVersion');
     }
 
     supportsAutoLaunch(): boolean {
@@ -177,23 +288,37 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAutoLaunchEnabled(): boolean {
-        return await this._ipcCall('getAutoLaunchEnabled');
+        return this._ipcCall('getAutoLaunchEnabled');
     }
 
     async setAutoLaunchEnabled(enabled: boolean): void {
-        return await this._ipcCall('setAutoLaunchEnabled', enabled);
+        return this._ipcCall('setAutoLaunchEnabled', enabled);
+    }
+
+    supportsAutoHideMenuBar(): boolean {
+        // This is irelevant on Mac as Menu bars don't live in the app window
+        return !navigator.platform.toUpperCase().includes('MAC');
+    }
+
+    async getAutoHideMenuBarEnabled(): boolean {
+        return this._ipcCall('getAutoHideMenuBarEnabled');
+    }
+
+    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+        return this._ipcCall('setAutoHideMenuBarEnabled', enabled);
     }
 
     supportsMinimizeToTray(): boolean {
-        return true;
+        // Things other than Mac support tray icons
+        return !navigator.platform.toUpperCase().includes('MAC');
     }
 
     async getMinimizeToTrayEnabled(): boolean {
-        return await this._ipcCall('getMinimizeToTrayEnabled');
+        return this._ipcCall('getMinimizeToTrayEnabled');
     }
 
     async setMinimizeToTrayEnabled(enabled: boolean): void {
-        return await this._ipcCall('setMinimizeToTrayEnabled', enabled);
+        return this._ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
     async canSelfUpdate(): boolean {
@@ -234,10 +359,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.location.reload(false);
     }
 
-    async migrateFromOldOrigin() {
-        return this._ipcCall('origin_migrate');
-    }
-
     async _ipcCall(name, ...args) {
         const ipcCallId = ++this._nextIpcCallId;
         return new Promise((resolve, reject) => {
@@ -265,5 +386,30 @@ export default class ElectronPlatform extends VectorBasePlatform {
         } else {
             callbacks.resolve(payload.reply);
         }
+    }
+
+    getEventIndexingManager(): BaseEventIndexManager | null {
+        return this.eventIndexManager;
+    }
+
+    setLanguage(preferredLangs: string[]) {
+        this._ipcCall('setLanguage', preferredLangs).catch(error => {
+            console.log("Failed to send setLanguage IPC to Electron");
+            console.error(error);
+        });
+    }
+
+    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
+        const url = super.getSSOCallbackUrl(hsUrl, isUrl);
+        url.protocol = "riot";
+        return url;
+    }
+
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas") {
+        super.startSingleSignOn(mxClient, loginType); // this will get intercepted by electron-main will-navigate
+        Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
+            title: _t("Go to your browser to complete Sign In"),
+            description: <Spinner />,
+        });
     }
 }

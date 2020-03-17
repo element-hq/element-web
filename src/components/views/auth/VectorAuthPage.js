@@ -17,8 +17,8 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import sdk from 'matrix-react-sdk/lib/index';
-import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+import * as sdk from 'matrix-react-sdk/src/index';
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthPage extends React.PureComponent {
     static replaces = 'AuthPage'

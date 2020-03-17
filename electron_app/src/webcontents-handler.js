@@ -36,7 +36,11 @@ function onWindowOrNavigate(ev, target) {
 }
 
 function onLinkContextMenu(ev, params) {
-    const url = params.linkURL || params.srcURL;
+    let url = params.linkURL || params.srcURL;
+
+    if (url.startsWith('vector://vector/webapp')) {
+        url = "https://riot.im/app/" + url.substring(23);
+    }
 
     const popupMenu = new Menu();
     // No point trying to open blob: URLs in an external browser: it ain't gonna work.
@@ -52,7 +56,7 @@ function onLinkContextMenu(ev, params) {
     let addSaveAs = false;
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
         popupMenu.append(new MenuItem({
-            label: 'Copy image',
+            label: '&Copy image',
             click() {
                 if (url.startsWith('data:')) {
                     clipboard.writeImage(nativeImage.createFromDataURL(url));
@@ -72,14 +76,14 @@ function onLinkContextMenu(ev, params) {
         // Special-case e-mail URLs to strip the `mailto:` like modern browsers do
         if (url.startsWith(MAILTO_PREFIX)) {
             popupMenu.append(new MenuItem({
-                label: 'Copy email address',
+                label: 'Copy email &address',
                 click() {
                     clipboard.writeText(url.substr(MAILTO_PREFIX.length));
                 },
             }));
         } else {
             popupMenu.append(new MenuItem({
-                label: 'Copy link address',
+                label: 'Copy link &address',
                 click() {
                     clipboard.writeText(url);
                 },
@@ -89,7 +93,7 @@ function onLinkContextMenu(ev, params) {
 
     if (addSaveAs) {
         popupMenu.append(new MenuItem({
-            label: 'Save image as...',
+            label: 'Sa&ve image as...',
             click() {
                 const targetFileName = params.titleText || "image.png";
                 const filePath = dialog.showSaveDialog({
@@ -124,18 +128,22 @@ function onLinkContextMenu(ev, params) {
 function _CutCopyPasteSelectContextMenus(params) {
     return [{
         role: 'cut',
+        label: 'Cu&t',
         enabled: params.editFlags.canCut,
     }, {
         role: 'copy',
+        label: '&Copy',
         enabled: params.editFlags.canCopy,
     }, {
         role: 'paste',
+        label: '&Paste',
         enabled: params.editFlags.canPaste,
     }, {
         role: 'pasteandmatchstyle',
         enabled: params.editFlags.canPaste,
     }, {
         role: 'selectall',
+        label: "Select &All",
         enabled: params.editFlags.canSelectAll,
     }];
 }
@@ -166,19 +174,10 @@ function onEditableContextMenu(ev, params) {
 
 module.exports = (webContents) => {
     webContents.on('new-window', onWindowOrNavigate);
-    // XXX: The below now does absolutely nothing because of
-    // https://github.com/electron/electron/issues/8841
-    // Whilst this isn't a security issue since without
-    // node integration and with the sandbox, it should be
-    // no worse than opening the site in Chrome, it obviously
-    // means the user has to restart Riot to make it usable
-    // again (often unintuitive because it minimises to the
-    // system tray). We therefore need to be vigilant about
-    // putting target="_blank" on links in Riot (although
-    // we should generally be doing this anyway since links
-    // navigating you away from Riot in the browser is
-    // also annoying).
-    webContents.on('will-navigate', onWindowOrNavigate);
+    webContents.on('will-navigate', (ev, target) => {
+        if (target.startsWith("vector://")) return;
+        return onWindowOrNavigate(ev, target);
+    });
 
     webContents.on('context-menu', function(ev, params) {
         if (params.linkURL || params.srcURL) {

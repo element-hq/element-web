@@ -1,14 +1,31 @@
 # Labs features
 
 Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
-[#riot-web:matrix.org] for more information.
+[#riot-web:matrix.org](https://matrix.to/#/#riot-web:matrix.org) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
-## Render simple counters in room header
+## Message pinning (`feature_pinning`)
 
-`feature_state_counters` allows rendering of labelled counters above the message list.
+Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
+and select "Pin".
+
+## Custom status (`feature_custom_status`)
+
+An experimental approach for supporting custom status messages across DMs. To set a status, click on
+your avatar next to the message composer.
+
+## Custom tags (`feature_custom_tags`)
+
+An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
+of the community filter panel.
+
+Setting custom tags is not supported by Riot.
+
+## Render simple counters in room header (`feature_state_counters`)
+
+Allows rendering of labelled counters above the message list.
 
 Once enabled, send a custom state event to a room to set values:
 
@@ -29,18 +46,19 @@ Once enabled, send a custom state event to a room to set values:
 
 That's it. Now should see your new counter under the header.
 
-## Reactions
+## Multiple integration managers (`feature_many_integration_managers`)
 
-`feature_reactions` allows reacting to messages with emoji and displaying
-reactions from other people. This feature is currently under active development,
-and only portions have been implemented so far.
+Exposes a way to access all the integration managers known to Riot. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
-## Message editing
+## New ways to ignore people (`feature_mjolnir`)
 
-`feature_message_editing` allows editing messages after they have been sent,
-accessible from the reaction/context bar when hovering a message.
-This feature is currently under active development,
-and only portions have been implemented so far.
+When enabled, a new settings tab appears for users to be able to manage their ban lists.
+This is a different kind of ignoring where the ignored user's messages still get rendered,
+but are hidden by default.
+
+Ban lists are rooms within Matrix, proposed as [MSC2313](https://github.com/matrix-org/matrix-doc/pull/2313).
+[Mjolnir](https://github.com/matrix-org/mjolnir) is a set of moderation tools which support
+ban lists.
 
 ## Inline widgets
 
@@ -48,3 +66,51 @@ and only portions have been implemented so far.
 widgets are typically polls or rich embedded content in rooms.
 
 [#riot-web:matrix.org]: https://matrix.to/#/#riot-web:matrix.org
+
+## Verifications in DMs (`feature_dm_verification`)
+
+An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/2241). When enabled, verification might not work with devices which don't support MSC2241.
+
+This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
+
+## Cross-signing (in development) (`feature_cross_signing`)
+
+Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
+improves the device verification experience by allowing you to verify a user
+instead of verifying each of their devices.
+
+This feature is still in development and will be landing in several chunks.
+
+## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
+
+Adds support for search in E2E encrypted rooms. This enables an event indexer
+that downloads, stores, and indexes room messages for E2E encrypted rooms.
+
+The existing search will transparently work for encrypted rooms just like it
+does for non-encrypted.
+
+## Bridge info tab (`feature_bridge_state`)
+
+Adds a "Bridge Info" tab to the Room Settings dialog, if a compatible bridge is
+present in the room. The Bridge info tab pulls information from the `m.bridge` state event ([MSC2346](https://github.com/matrix-org/matrix-doc/pull/2346)). Since the feature is based upon a MSC, most
+bridges are not expected to be compatible, and users should not rely on this
+tab as the single source of truth just yet.
+
+## Presence indicator in room list (`feature_presence_in_room_list`)
+
+This adds a presence indicator in the room list next to DM rooms where the other
+person is online.
+
+## Show padlocks on invite only rooms (`feature_invite_only_padlocks`)
+
+This adds padlocks to room list tiles and room header for invite only rooms.
+This feature flag (unlike most) is enabled by default.
+
+## Custom themes (`feature_custom_themes`)
+
+Custom themes are possible through Riot's [theme support](./theming.md), though
+normally these themes need to be defined in the config for Riot. This labs flag
+adds an ability for end users to add themes themselves by using a URL to the JSON
+theme definition.
+
+For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).

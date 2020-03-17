@@ -18,9 +18,9 @@ limitations under the License.
 
 'use strict';
 
-import EmbeddedPage from 'matrix-react-sdk/lib/components/structures/EmbeddedPage';
+import EmbeddedPage from 'matrix-react-sdk/src/components/structures/EmbeddedPage';
 import sanitizeHtml from 'sanitize-html';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 export default class VectorEmbeddedPage extends EmbeddedPage {
     static replaces = 'EmbeddedPage';
@@ -29,7 +29,7 @@ export default class VectorEmbeddedPage extends EmbeddedPage {
     translate(s) {
         s = sanitizeHtml(_t(s));
         // ugly fix for https://github.com/vector-im/riot-web/issues/4243
-        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank" rel="noopener"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
+        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank" rel="noreferrer noopener"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
         return s;
     }
 }

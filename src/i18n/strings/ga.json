@@ -6,7 +6,6 @@
     "powered by Matrix": "cumhachtaithe ag Matrix",
     "Custom Server Options": "Socruithe do fhreastalaí saincheaptha",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Is féidir na socruithe do fhreastalaí saincheaptha a úsáid chun síniú isteach le freastalaithe Matrix eile ach URL freastalaí ar leith a shainiú. Cuirfidh sé seo ar do chumas Riot a úsáid le cuntas Matrix atá ar taifead ag an bhfreastalaí eile sin.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Freisin is féidir freastalaí aitheantais saincheaptha a úsáid, ach sa chás sin ní bheidh tú in ann cuireadh a thabhairt do dhaoine trí sheoladh ríomhphoist a sholáthar, ná glacadh le cuireadh trí ríomhphoist ach an oiread.",
     "Dismiss": "Cuir uait",
     "Welcome to Riot.im": "Fáilte romhat chuig Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Meán comhrá agus comhoibriú, díláraithe agus criptithe, cumhachtaithe ag [matrix]",
@@ -15,7 +14,5 @@
     "Need help?": "An bhfuil cabhair uait?",
     "Chat with Riot Bot": "Labhair le Riot Bot",
     "Explore rooms": "Breathnaigh thart ar na seomraí",
-    "Room Directory": "Eolaire na Seomraí",
-    "Search the room directory": "Cuardaigh eolaire na seomraí",
-    "Get started with some tips from Riot Bot!": "Tosaigh le roinnt nod ó Riot Bot!"
+    "Room Directory": "Eolaire na Seomraí"
 }

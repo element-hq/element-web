@@ -5,12 +5,30 @@
     "setClasses"
   ],
   "feature-detects": [
+    "test/css/animations",
     "test/css/displaytable",
+    "test/css/filters",
     "test/css/flexbox",
-    "test/es5/specification",
     "test/css/objectfit",
-    "test/storage/localstorage",
-    "test/workers/webworkers",
-    "test/indexeddb"
+
+    "test/es5/date",
+    "test/es5/function",
+    "test/es5/object",
+    "test/es5/undefined",
+
+    "test/es6/array",
+    "test/es6/collections",
+    "test/es6/promises",
+    "test/es6/string",
+
+    "test/svg",
+    "test/svg/asimg",
+    "test/svg/filters",
+
+    "test/cors",
+    "test/iframe/sandbox",
+    "test/json",
+    "test/network/fetch",
+    "test/storage/localstorage"
   ]
 }

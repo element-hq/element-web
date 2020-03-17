@@ -25,10 +25,13 @@ const INCLUDE_LANGS = [
     {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'gl', 'label': 'Galego'},
+    {'value': 'hi', 'label': 'हिन्दी'},
     {'value': 'hu', 'label': 'Magyar'},
+    {'value': 'is', 'label': 'íslenska'},
     {'value': 'it', 'label': 'Italiano'},
     {'value': 'ja', 'label': '日本語'},
     {'value': 'ko', 'label': '한국어'},
+    {'value': 'lt', 'label': 'Lietuvių'},
     {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
     {'value': 'nl', 'label': 'Nederlands'},
@@ -43,7 +46,8 @@ const INCLUDE_LANGS = [
     {'value': 'sv', 'label': 'Svenska'},
     {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'th', 'label': 'ไทย'},
-    {'value': 'tr', 'label': 'Türk'},
+    {'value': 'tr', 'label': 'Türkçe'},
+    {'value': 'uk', 'label': 'українська мова'},
     {'value': 'vls', 'label': 'West-Vlaams'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
@@ -54,6 +58,7 @@ const INCLUDE_LANGS = [
 // "dest/b/...".
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
+    ["res/sw.js", "webapp"],
     ["res/welcome.html", "webapp"],
     ["res/welcome/**", "webapp/welcome"],
     ["res/themes/**", "webapp/themes"],
@@ -61,6 +66,7 @@ const COPY_LIST = [
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
     ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
+    ["contribute.json", "webapp"],
 ];
 
 const parseArgs = require('minimist');
