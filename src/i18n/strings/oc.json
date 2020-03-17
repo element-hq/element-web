@@ -46,5 +46,16 @@
     "Loading …": "Cargament…",
     "Reason: %(reason)s": "Rason : %(reason)s",
     "Forget this room": "Oblidar aquesta sala",
-    "Disable": "Desactivar"
+    "Disable": "Desactivar",
+    "Do you want to chat with %(user)s?": "Volètz charrar amb %(user)s ?",
+    "<userName/> wants to chat": "<userName/> vòl charrar",
+    "Start chatting": "Començar de charrar",
+    "Do you want to join %(roomName)s?": "Volètz rejonher %(roomName)s ?",
+    "<userName/> invited you": "<userName/> vos convidèt",
+    "Reject": "Regetar",
+    "Reject & Ignore user": "Regetar e ignorar",
+    "%(roomName)s does not exist.": "%(roomName)s existís pas.",
+    "Not now": "Pas ara",
+    "Don't ask me again": "Me demandar pas mai",
+    "Options": "Opcions"
 }
