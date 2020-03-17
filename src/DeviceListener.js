@@ -147,6 +147,15 @@ export default class DeviceListener {
                 }
             }
             return;
+        } else if (await cli.secretStorageKeyNeedsUpgrade()) {
+            // FIXME: do we a different message?
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: THIS_DEVICE_TOAST_KEY,
+                title: _t("Encryption upgrade available"),
+                icon: "verification_warning",
+                props: {kind: 'upgrade_encryption'},
+                component: sdk.getComponent("toasts.SetupEncryptionToast"),
+            });
         } else {
             ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
         }
