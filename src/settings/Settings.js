@@ -517,4 +517,8 @@ export const SETTINGS = {
         displayName: _td("How fast should messages be downloaded."),
         default: 3000,
     },
+    "showCallButtonsInComposer": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+    },
 };
