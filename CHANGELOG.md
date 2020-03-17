@@ -1,3 +1,32 @@
+Changes in [1.5.13](https://github.com/vector-im/riot-web/releases/tag/v1.5.13) (2020-03-17)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.13-rc.1...v1.5.13)
+
+ * Upgrade to JS SDK 5.1.1 and React SDK 2.2.3
+
+Changes in [1.5.13-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.13-rc.1) (2020-03-11)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.12...v1.5.13-rc.1)
+
+ * Update from Weblate
+   [\#12688](https://github.com/vector-im/riot-web/pull/12688)
+ * Fix Docker image version for develop builds
+   [\#12670](https://github.com/vector-im/riot-web/pull/12670)
+ * docker: optimize custom sdk builds
+   [\#12612](https://github.com/vector-im/riot-web/pull/12612)
+ * riot-desktop open SSO in browser so user doesn't have to auth twice
+   [\#12590](https://github.com/vector-im/riot-web/pull/12590)
+ * Fix SSO flows for electron 8.0.2 by re-breaking will-navigate
+   [\#12585](https://github.com/vector-im/riot-web/pull/12585)
+ * index.html: Place noscript on top of the page
+   [\#12563](https://github.com/vector-im/riot-web/pull/12563)
+ * Remove will-navigate comment after Electron fix
+   [\#12561](https://github.com/vector-im/riot-web/pull/12561)
+ * Update loading test for JS SDK IDB change
+   [\#12552](https://github.com/vector-im/riot-web/pull/12552)
+ * Upgrade deps
+   [\#12528](https://github.com/vector-im/riot-web/pull/12528)
+
 Changes in [1.5.12](https://github.com/vector-im/riot-web/releases/tag/v1.5.12) (2020-03-04)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.11...v1.5.12)
