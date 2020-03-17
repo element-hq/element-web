@@ -337,13 +337,13 @@ const LoggedInView = createReactClass({
 
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
-        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
-            ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
+        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
+        const isModifier = ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
 
         switch (ev.key) {
             case Key.PAGE_UP:
             case Key.PAGE_DOWN:
-                if (!hasModifier) {
+                if (!hasModifier && !isModifier) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
@@ -384,7 +384,10 @@ const LoggedInView = createReactClass({
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
-        } else if (!hasModifier) {
+        } else if (!isModifier && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
+            // The above condition is crafted to _allow_ characters with Shift
+            // already pressed (but not the Shift key down itself).
+
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === Key.SPACE || ev.key === Key.ENTER);
 
@@ -585,7 +588,8 @@ const LoggedInView = createReactClass({
                 limitType={usageLimitEvent.getContent().limit_type}
             />;
         } else if (this.props.showCookieBar &&
-            this.props.config.piwik
+            this.props.config.piwik &&
+            navigator.doNotTrack !== "1"
         ) {
             const policyUrl = this.props.config.piwik.policyUrl || null;
             topBar = <CookieBar policyUrl={policyUrl} />;

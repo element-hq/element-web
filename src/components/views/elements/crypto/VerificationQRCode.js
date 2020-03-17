@@ -17,89 +17,87 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import {replaceableComponent} from "../../../../utils/replaceableComponent";
-import * as qs from "qs";
-import QRCode from "qrcode-react";
 import {MatrixClientPeg} from "../../../../MatrixClientPeg";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {ToDeviceChannel} from "matrix-js-sdk/src/crypto/verification/request/ToDeviceChannel";
+import {decodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
+import Spinner from "../Spinner";
+import * as QRCode from "qrcode";
+
+const CODE_VERSION = 0x02; // the version of binary QR codes we support
+const BINARY_PREFIX = "MATRIX"; // ASCII, used to prefix the binary format
+const MODE_VERIFY_OTHER_USER = 0x00; // Verifying someone who isn't us
+const MODE_VERIFY_SELF_TRUSTED = 0x01; // We trust the master key
+const MODE_VERIFY_SELF_UNTRUSTED = 0x02; // We do not trust the master key
 
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
 export default class VerificationQRCode extends React.PureComponent {
     static propTypes = {
-        // Common for all kinds of QR codes
-        keys: PropTypes.array.isRequired, // array of [Key ID, Base64 Key] pairs
-        action: PropTypes.string.isRequired,
-        keyholderUserId: PropTypes.string.isRequired,
-
-        // User verification use case only
-        secret: PropTypes.string,
-        otherUserKey: PropTypes.string, // Base64 key being verified
-        otherUserDeviceKey: PropTypes.string, // Base64 key of the other user's device (or what we think it is; optional)
-        requestEventId: PropTypes.string, // for DM verification only
-    };
-
-    static defaultProps = {
-        action: "verify",
+        prefix: PropTypes.string.isRequired,
+        version: PropTypes.number.isRequired,
+        mode: PropTypes.number.isRequired,
+        transactionId: PropTypes.string.isRequired, // or requestEventId
+        firstKeyB64: PropTypes.string.isRequired,
+        secondKeyB64: PropTypes.string.isRequired,
+        secretB64: PropTypes.string.isRequired,
     };
 
     static async getPropsForRequest(verificationRequest: VerificationRequest) {
         const cli = MatrixClientPeg.get();
         const myUserId = cli.getUserId();
         const otherUserId = verificationRequest.otherUserId;
-        const myDeviceId = cli.getDeviceId();
-        const otherDevice = verificationRequest.targetDevice;
-        const otherDeviceId = otherDevice ? otherDevice.deviceId : null;
 
-        const qrProps = {
-            secret: verificationRequest.encodedSharedSecret,
-            keyholderUserId: myUserId,
-            action: "verify",
-            keys: [], // array of pairs: keyId, base64Key
-            otherUserKey: "", // base64key
-            otherUserDeviceKey: "", // base64key
-            requestEventId: "", // we figure this out in a moment
-        };
+        let mode = MODE_VERIFY_OTHER_USER;
+        if (myUserId === otherUserId) {
+            // Mode changes depending on whether or not we trust the master cross signing key
+            const myTrust = cli.checkUserTrust(myUserId);
+            if (myTrust.isCrossSigningVerified()) {
+                mode = MODE_VERIFY_SELF_TRUSTED;
+            } else {
+                mode = MODE_VERIFY_SELF_UNTRUSTED;
+            }
+        }
 
         const requestEvent = verificationRequest.requestEvent;
-        qrProps.requestEventId = requestEvent.getId()
+        const transactionId = requestEvent.getId()
             ? requestEvent.getId()
             : ToDeviceChannel.getTransactionId(requestEvent);
 
-        // Populate the keys we need depending on which direction and users are involved in the verification.
-        if (myUserId === otherUserId) {
-            if (!otherDeviceId) {
-                // Existing scanning New session's QR code
-                qrProps.otherUserDeviceKey = null;
-            } else {
-                // New scanning Existing session's QR code
-                const myDevices = (await cli.getStoredDevicesForUser(myUserId)) || [];
-                const device = myDevices.find(d => d.deviceId === otherDeviceId);
-                if (device) qrProps.otherUserDeviceKey = device.getFingerprint();
-            }
+        const qrProps = {
+            prefix: BINARY_PREFIX,
+            version: CODE_VERSION,
+            mode,
+            transactionId,
+            firstKeyB64: '', // worked out shortly
+            secondKeyB64: '', // worked out shortly
+            secretB64: verificationRequest.encodedSharedSecret,
+        };
 
-            // Either direction shares these next few props
+        const myCrossSigningInfo = cli.getStoredCrossSigningForUser(myUserId);
+        const myDevices = (await cli.getStoredDevicesForUser(myUserId)) || [];
 
-            const xsignInfo = cli.getStoredCrossSigningForUser(myUserId);
-            qrProps.otherUserKey = xsignInfo.getId("master");
+        if (mode === MODE_VERIFY_OTHER_USER) {
+            // First key is our master cross signing key
+            qrProps.firstKeyB64 = myCrossSigningInfo.getId("master");
 
-            qrProps.keys = [
-                [myDeviceId, cli.getDeviceEd25519Key()],
-                [xsignInfo.getId("master"), xsignInfo.getId("master")],
-            ];
-        } else {
-            // Doesn't matter which direction the verification is, we always show the same QR code
-            // for not-ourself verification.
-            const myXsignInfo = cli.getStoredCrossSigningForUser(myUserId);
-            const otherXsignInfo = cli.getStoredCrossSigningForUser(otherUserId);
-            const otherDevices = (await cli.getStoredDevicesForUser(otherUserId)) || [];
-            const otherDevice = otherDevices.find(d => d.deviceId === otherDeviceId);
+            // Second key is the other user's master cross signing key
+            const otherUserCrossSigningInfo = cli.getStoredCrossSigningForUser(otherUserId);
+            qrProps.secondKeyB64 = otherUserCrossSigningInfo.getId("master");
+        } else if (mode === MODE_VERIFY_SELF_TRUSTED) {
+            // First key is our master cross signing key
+            qrProps.firstKeyB64 = myCrossSigningInfo.getId("master");
 
-            qrProps.keys = [
-                [myDeviceId, cli.getDeviceEd25519Key()],
-                [myXsignInfo.getId("master"), myXsignInfo.getId("master")],
-            ];
-            qrProps.otherUserKey = otherXsignInfo.getId("master");
-            if (otherDevice) qrProps.otherUserDeviceKey = otherDevice.getFingerprint();
+            // Second key is the other device's device key
+            const otherDevice = verificationRequest.targetDevice;
+            const otherDeviceId = otherDevice ? otherDevice.deviceId : null;
+            const device = myDevices.find(d => d.deviceId === otherDeviceId);
+            qrProps.secondKeyB64 = device.getFingerprint();
+        } else if (mode === MODE_VERIFY_SELF_UNTRUSTED) {
+            // First key is our device's key
+            qrProps.firstKeyB64 = cli.getDeviceEd25519Key();
+
+            // Second key is what we think our master cross signing key is
+            qrProps.secondKeyB64 = myCrossSigningInfo.getId("master");
         }
 
         return qrProps;
@@ -107,21 +105,63 @@ export default class VerificationQRCode extends React.PureComponent {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            dataUri: null,
+        };
+        this.generateQrCode();
+    }
+
+    componentDidUpdate(prevProps): void {
+        if (JSON.stringify(this.props) === JSON.stringify(prevProps)) return; // No prop change
+
+        this.generateQRCode();
+    }
+
+    async generateQrCode() {
+        let buf = Buffer.alloc(0); // we'll concat our way through life
+
+        const appendByte = (b: number) => {
+            const tmpBuf = Buffer.from([b]);
+            buf = Buffer.concat([buf, tmpBuf]);
+        };
+        const appendInt = (i: number) => {
+            const tmpBuf = Buffer.alloc(2);
+            tmpBuf.writeInt16BE(i, 0);
+            buf = Buffer.concat([buf, tmpBuf]);
+        };
+        const appendStr = (s: string, enc: string, withLengthPrefix = true) => {
+            const tmpBuf = Buffer.from(s, enc);
+            if (withLengthPrefix) appendInt(tmpBuf.byteLength);
+            buf = Buffer.concat([buf, tmpBuf]);
+        };
+        const appendEncBase64 = (b64: string) => {
+            const b = decodeBase64(b64);
+            const tmpBuf = Buffer.from(b);
+            buf = Buffer.concat([buf, tmpBuf]);
+        };
+
+        // Actually build the buffer for the QR code
+        appendStr(this.props.prefix, "ascii", false);
+        appendByte(this.props.version);
+        appendByte(this.props.mode);
+        appendStr(this.props.transactionId, "utf-8");
+        appendEncBase64(this.props.firstKeyB64);
+        appendEncBase64(this.props.secondKeyB64);
+        appendEncBase64(this.props.secretB64);
+
+        // Now actually assemble the QR code's data URI
+        const uri = await QRCode.toDataURL([{data: buf, mode: 'byte'}], {
+            errorCorrectionLevel: 'L', // we want it as trivial-looking as possible
+        });
+        this.setState({dataUri: uri});
     }
 
     render() {
-        const query = {
-            request: this.props.requestEventId,
-            action: this.props.action,
-            other_user_key: this.props.otherUserKey,
-            secret: this.props.secret,
-        };
-        for (const key of this.props.keys) {
-            query[`key_${key[0]}`] = key[1];
+        if (!this.state.dataUri) {
+            return <div className='mx_VerificationQRCode'><Spinner /></div>;
         }
 
-        const uri = `https://matrix.to/#/${this.props.keyholderUserId}?${qs.stringify(query)}`;
-
-        return <QRCode value={uri} size={512} logoWidth={64} logo={require("../../../../../res/img/matrix-m.svg")} />;
+        return <img src={this.state.dataUri} className='mx_VerificationQRCode' />;
     }
 }

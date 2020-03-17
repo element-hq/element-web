@@ -182,6 +182,7 @@ export default class RightPanel extends React.Component {
                 member: payload.member,
                 event: payload.event,
                 verificationRequest: payload.verificationRequest,
+                verificationRequestPromise: payload.verificationRequestPromise,
             });
         }
     }
@@ -231,6 +232,7 @@ export default class RightPanel extends React.Component {
                         onClose={onClose}
                         phase={this.state.phase}
                         verificationRequest={this.state.verificationRequest}
+                        verificationRequestPromise={this.state.verificationRequestPromise}
                     />;
                 } else {
                     panel = <MemberInfo

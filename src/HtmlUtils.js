@@ -23,7 +23,6 @@ import ReplyThread from "./components/views/elements/ReplyThread";
 
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
-import highlight from 'highlight.js';
 import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
@@ -160,7 +159,7 @@ const transformTags = { // custom to matrix
                 delete attribs.target;
             }
         }
-        attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
+        attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
     'img': function(tagName, attribs) {
@@ -467,11 +466,12 @@ export function bodyToHtml(content, highlights, opts={}) {
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
- * @param {string} str
- * @returns {string}
+ * @param {string} str string to linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
+ * @returns {string} Linkified string
  */
-export function linkifyString(str) {
-    return _linkifyString(str);
+export function linkifyString(str, options = linkifyMatrix.options) {
+    return _linkifyString(str, options);
 }
 
 /**
@@ -489,10 +489,11 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml) {
-    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
+export function linkifyAndSanitizeHtml(dirtyHtml, options = linkifyMatrix.options) {
+    return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
 
 /**

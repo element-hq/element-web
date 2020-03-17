@@ -342,7 +342,7 @@ export default createReactClass({
                         peekLoading: false,
                     });
                     this._onRoomLoaded(room);
-                }, (err) => {
+                }).catch((err) => {
                     if (this.unmounted) {
                         return;
                     }
@@ -355,7 +355,7 @@ export default createReactClass({
                     // This won't necessarily be a MatrixError, but we duck-type
                     // here and say if it's got an 'errcode' key with the right value,
                     // it means we can't peek.
-                    if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
+                    if (err.errcode === "M_GUEST_ACCESS_FORBIDDEN" || err.errcode === 'M_FORBIDDEN') {
                         // This is fine: the room just isn't peekable (we assume).
                         this.setState({
                             peekLoading: false,
@@ -365,8 +365,6 @@ export default createReactClass({
                     }
                 });
             } else if (room) {
-                //viewing a previously joined room, try to lazy load members
-
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
@@ -459,8 +457,6 @@ export default createReactClass({
         //
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
-
-        SettingsStore.unwatchSetting(this._ciderWatcherRef);
 
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
@@ -616,6 +612,22 @@ export default createReactClass({
             case 'reply_to_event':
                 if (this.state.searchResults && payload.event.getRoomId() === this.state.roomId && !this.unmounted) {
                     this.onCancelSearchClick();
+                }
+                break;
+            case 'quote':
+                if (this.state.searchResults) {
+                    const roomId = payload.event.getRoomId();
+                    if (roomId === this.state.roomId) {
+                        this.onCancelSearchClick();
+                    }
+
+                    setImmediate(() => {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: roomId,
+                            deferred_action: payload,
+                        });
+                    });
                 }
                 break;
         }

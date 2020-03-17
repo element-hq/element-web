@@ -509,7 +509,7 @@ export default createReactClass({
                         "<issueLink>submit a bug report</issueLink>.",
                         { errcode: this.props.error.errcode },
                         { issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                            target="_blank" rel="noopener">{ label }</a> },
+                            target="_blank" rel="noreferrer noopener">{ label }</a> },
                     ),
                 ];
                 break;

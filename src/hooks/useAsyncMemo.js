@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_PreferencesUserSettingsTab {
-    .mx_Field {
-        @mixin mx_Settings_fullWidthField;
-    }
+import { useState, useEffect } from 'react';
 
-    .mx_SettingsTab_section {
-        margin-bottom: 30px;
-    }
-}
+export const useAsyncMemo = (fn, deps, initialValue) => {
+    const [value, setValue] = useState(initialValue);
+    useEffect(() => {
+        fn().then(setValue);
+    }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+    return value;
+};

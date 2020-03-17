@@ -22,7 +22,8 @@ import { _t } from '../../../languageHandler';
 
 export default class VerificationRequestDialog extends React.Component {
     static propTypes = {
-        verificationRequest: PropTypes.object.isRequired,
+        verificationRequest: PropTypes.object,
+        verificationRequestPromise: PropTypes.object,
         onFinished: PropTypes.func.isRequired,
     };
 
@@ -34,6 +35,8 @@ export default class VerificationRequestDialog extends React.Component {
     render() {
         const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
         const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
+        const member = this.props.member ||
+            MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId);
         return <BaseDialog className="mx_InfoDialog" onFinished={this.onFinished}
                 contentId="mx_Dialog_content"
                 title={_t("Verification Request")}
@@ -42,14 +45,19 @@ export default class VerificationRequestDialog extends React.Component {
             <EncryptionPanel
                 layout="dialog"
                 verificationRequest={this.props.verificationRequest}
+                verificationRequestPromise={this.props.verificationRequestPromise}
                 onClose={this.props.onFinished}
-                member={MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId)}
+                member={member}
             />
         </BaseDialog>;
     }
 
-    onFinished() {
-        this.props.verificationRequest.cancel();
+    async onFinished() {
         this.props.onFinished();
+        let request = this.props.verificationRequest;
+        if (!request && this.props.verificationRequestPromise) {
+            request = await this.props.verificationRequestPromise;
+        }
+        request.cancel();
     }
 }

@@ -46,7 +46,7 @@ export function isContentActionable(mxEvent) {
 }
 
 export function canEditContent(mxEvent) {
-    if (mxEvent.status === EventStatus.CANCELLED || mxEvent.getType() !== "m.room.message") {
+    if (mxEvent.status === EventStatus.CANCELLED || mxEvent.getType() !== "m.room.message" || mxEvent.isRedacted()) {
         return false;
     }
     const content = mxEvent.getOriginalContent();

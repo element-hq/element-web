@@ -90,7 +90,8 @@ export default createReactClass({
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
         if (!pinnedEvent) return false;
-        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
+        const content = pinnedEvent.getContent();
+        return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     },
 
     onResendClick: function() {
@@ -420,7 +421,7 @@ export default createReactClass({
                 onClick={this.onPermalinkClick}
                 href={permalink}
                 target="_blank"
-                rel="noopener"
+                rel="noreferrer noopener"
             >
                 { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
                     ? _t('Share Permalink') : _t('Share Message') }
@@ -445,7 +446,7 @@ export default createReactClass({
                     element="a"
                     className="mx_MessageContextMenu_field"
                     target="_blank"
-                    rel="noopener"
+                    rel="noreferrer noopener"
                     onClick={this.closeMenu}
                     href={mxEvent.event.content.external_url}
                 >

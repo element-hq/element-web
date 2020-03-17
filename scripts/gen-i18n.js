@@ -237,7 +237,7 @@ const walkOpts = {
             const fullPath = path.join(root, fileStats.name);
 
             let trs;
-            if (fileStats.name.endsWith('.js')) {
+            if (fileStats.name.endsWith('.js') || fileStats.name.endsWith('.tsx')) {
                 trs = getTranslationsJs(fullPath);
             } else if (fileStats.name.endsWith('.html')) {
                 trs = getTranslationsOther(fullPath);

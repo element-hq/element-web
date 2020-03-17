@@ -30,13 +30,32 @@ import {_t} from "../../../languageHandler";
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
+const EncryptionPanel = ({verificationRequest, verificationRequestPromise, member, onClose, layout}) => {
     const [request, setRequest] = useState(verificationRequest);
+    // state to show a spinner immediately after clicking "start verification",
+    // before we have a request
+    const [isRequesting, setRequesting] = useState(false);
+    const [phase, setPhase] = useState(request && request.phase);
     useEffect(() => {
         setRequest(verificationRequest);
+        if (verificationRequest) {
+            setRequesting(false);
+            setPhase(verificationRequest.phase);
+        }
     }, [verificationRequest]);
 
-    const [phase, setPhase] = useState(request && request.phase);
+    useEffect(() => {
+        async function awaitPromise() {
+            setRequesting(true);
+            const request = await verificationRequestPromise;
+            setRequesting(false);
+            setRequest(request);
+            setPhase(request.phase);
+        }
+        if (verificationRequestPromise) {
+            awaitPromise();
+        }
+    }, [verificationRequestPromise]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
@@ -65,6 +84,7 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     useEventEmitter(request, "change", changeHandler);
 
     const onStartVerification = useCallback(async () => {
+        setRequesting(true);
         const cli = MatrixClientPeg.get();
         const roomId = await ensureDMExists(cli, member.userId);
         const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
@@ -72,9 +92,16 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
         setPhase(verificationRequest.phase);
     }, [member.userId]);
 
-    const requested = request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined);
+    const requested =
+        (!request && isRequesting) ||
+        (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
     if (!request || requested) {
-        return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
+        const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
+        return <EncryptionInfo
+            onStartVerification={onStartVerification}
+            member={member}
+            waitingForOtherParty={requested && initiatedByMe}
+            waitingForNetwork={requested && !initiatedByMe} />;
     } else {
         return (
             <VerificationPanel

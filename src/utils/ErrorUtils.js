@@ -36,7 +36,7 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
 
     const linkSub = sub => {
         if (adminContact) {
-            return <a href={adminContact} target="_blank" rel="noopener">{sub}</a>;
+            return <a href={adminContact} target="_blank" rel="noreferrer noopener">{sub}</a>;
         } else {
             return sub;
         }

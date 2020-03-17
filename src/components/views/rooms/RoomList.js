@@ -28,7 +28,7 @@ import rate_limited_func from "../../../ratelimitedfunc";
 import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import RoomListStore from '../../../stores/RoomListStore';
+import RoomListStore, {TAG_DM} from '../../../stores/RoomListStore';
 import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
@@ -700,13 +700,11 @@ export default createReactClass({
                 list: [],
                 extraTiles: this._makeGroupInviteTiles(this.props.searchFilter),
                 label: _t('Community Invites'),
-                order: "recent",
                 isInvite: true,
             },
             {
                 list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.invite'),
                 isInvite: true,
             },
@@ -714,22 +712,19 @@ export default createReactClass({
                 list: this.state.lists['m.favourite'],
                 label: _t('Favourites'),
                 tagName: "m.favourite",
-                order: "manual",
                 incomingCall: incomingCallIfTaggedAs('m.favourite'),
             },
             {
-                list: this.state.lists['im.vector.fake.direct'],
+                list: this.state.lists[TAG_DM],
                 label: _t('Direct Messages'),
-                tagName: "im.vector.fake.direct",
-                order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
+                tagName: TAG_DM,
+                incomingCall: incomingCallIfTaggedAs(TAG_DM),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'});},
                 addRoomLabel: _t("Start chat"),
             },
             {
                 list: this.state.lists['im.vector.fake.recent'],
                 label: _t('Rooms'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'});},
             },
@@ -744,7 +739,6 @@ export default createReactClass({
                     key: tagName,
                     label: labelForTagName(tagName),
                     tagName: tagName,
-                    order: "manual",
                     incomingCall: incomingCallIfTaggedAs(tagName),
                 };
             });
@@ -754,13 +748,11 @@ export default createReactClass({
                 list: this.state.lists['m.lowpriority'],
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('m.lowpriority'),
             },
             {
                 list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.archived'),
                 startAsHidden: true,
                 showSpinner: this.state.isLoadingLeftRooms,
@@ -770,7 +762,6 @@ export default createReactClass({
                 list: this.state.lists['m.server_notice'],
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
-                order: "recent",
                 incomingCall: incomingCallIfTaggedAs('m.server_notice'),
             },
         ]);
@@ -787,6 +778,9 @@ export default createReactClass({
                     className="mx_RoomList"
                     role="tree"
                     aria-label={_t("Rooms")}
+                    // Firefox sometimes makes this element focusable due to
+                    // overflow:scroll;, so force it out of tab order.
+                    tabIndex="-1"
                     onMouseMove={this.onMouseMove}
                     onMouseLeave={this.onMouseLeave}
                 >

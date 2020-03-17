@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
-import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
+import {tryTransformEntityToPermalink, tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens
@@ -221,13 +221,13 @@ matrixLinkify.options = {
             case 'userid':
             case 'groupid':
             default: {
-                return tryTransformPermalinkToLocalHref(href);
+                return tryTransformEntityToPermalink(href);
             }
         }
     },
 
     linkAttributes: {
-        rel: 'noopener',
+        rel: 'noreferrer noopener',
     },
 
     target: function(href, type) {

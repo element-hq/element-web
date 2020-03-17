@@ -46,8 +46,6 @@ export default class RoomSubList extends React.PureComponent {
         tagName: PropTypes.string,
         addRoomLabel: PropTypes.string,
 
-        order: PropTypes.string.isRequired,
-
         // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
         isInvite: PropTypes.bool,
 

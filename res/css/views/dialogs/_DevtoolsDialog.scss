@@ -189,3 +189,37 @@ limitations under the License.
         }
     }
 }
+
+.mx_DevTools_VerificationRequest {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    font-family: $monospace-font-family;
+
+    dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        margin: 0;
+    }
+
+    dd {
+        grid-column-start: 2;
+    }
+
+    dd:empty {
+        color: #666666;
+        &::after {
+            content: "(empty)";
+        }
+    }
+
+    dt {
+        font-weight: bold;
+        grid-column-start: 1;
+    }
+
+    dt::after {
+        content: ":";
+    }
+}

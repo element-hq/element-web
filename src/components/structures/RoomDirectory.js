@@ -406,6 +406,12 @@ export default createReactClass({
                 // would normally decide what the name is.
                 name: room.name || room_alias || _t('Unnamed room'),
             };
+
+            if (this.state.roomServer) {
+                payload.opts = {
+                    viaServers: [this.state.roomServer],
+                };
+            }
         }
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know
         // which servers to start querying. However, there's no other way to join rooms in

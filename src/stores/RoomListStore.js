@@ -36,29 +36,53 @@ const CATEGORY_GREY = "grey";   // Unread notified messages (not mentions)
 const CATEGORY_BOLD = "bold";   // Unread messages (not notified, 'Mentions Only' rooms)
 const CATEGORY_IDLE = "idle";   // Nothing of interest
 
-const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
-const LIST_ORDERS = {
-    "m.favourite": "manual",
-    "im.vector.fake.invite": "recent",
-    "im.vector.fake.recent": "recent",
-    "im.vector.fake.direct": "recent",
-    "m.lowpriority": "recent",
-    "im.vector.fake.archived": "recent",
-};
+export const TAG_DM = "im.vector.fake.direct";
 
 /**
- * Identifier for the "breadcrumb" (or "sort by most important room first") algorithm.
- * Includes a provision for keeping the currently open room from flying down the room
- * list.
+ * Identifier for manual sorting behaviour: sort by the user defined order.
  * @type {string}
  */
-const ALGO_IMPORTANCE = "importance";
+export const ALGO_MANUAL = "manual";
+
+/**
+ * Identifier for alphabetic sorting behaviour: sort by the room name alphabetically first.
+ * @type {string}
+ */
+export const ALGO_ALPHABETIC = "alphabetic";
 
 /**
  * Identifier for classic sorting behaviour: sort by the most recent message first.
  * @type {string}
  */
-const ALGO_RECENT = "recent";
+export const ALGO_RECENT = "recent";
+
+const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
+
+const getListAlgorithm = (listKey, settingAlgorithm) => {
+    // apply manual sorting only to m.favourite, otherwise respect the global setting
+    // all the known tags are listed explicitly here to simplify future changes
+    switch (listKey) {
+        case "im.vector.fake.invite":
+        case "im.vector.fake.recent":
+        case "im.vector.fake.archived":
+        case "m.lowpriority":
+        case TAG_DM:
+            return settingAlgorithm;
+
+        case "m.favourite":
+        default: // custom-tags
+            return ALGO_MANUAL;
+    }
+};
+
+const knownLists = new Set([
+    "m.favourite",
+    "im.vector.fake.invite",
+    "im.vector.fake.recent",
+    "im.vector.fake.archived",
+    "m.lowpriority",
+    TAG_DM,
+]);
 
 /**
  * A class for storing application state for categorising rooms in
@@ -76,13 +100,13 @@ class RoomListStore extends Store {
     /**
      * Changes the sorting algorithm used by the RoomListStore.
      * @param {string} algorithm The new algorithm to use. Should be one of the ALGO_* constants.
+     * @param {boolean} orderImportantFirst Whether to sort by categories of importance
      */
-    updateSortingAlgorithm(algorithm) {
+    updateSortingAlgorithm(algorithm, orderImportantFirst) {
         // Dev note: We only have two algorithms at the moment, but it isn't impossible that we want
         // multiple in the future. Also constants make things slightly clearer.
-        const byImportance = algorithm === ALGO_IMPORTANCE;
-        console.log("Updating room sorting algorithm: sortByImportance=" + byImportance);
-        this._setState({orderRoomsByImportance: byImportance});
+        console.log("Updating room sorting algorithm: ", {algorithm, orderImportantFirst});
+        this._setState({algorithm, orderImportantFirst});
 
         // Trigger a resort of the entire list to reflect the change in algorithm
         this._generateInitialRoomLists();
@@ -95,7 +119,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -106,9 +130,11 @@ class RoomListStore extends Store {
             presentationLists: defaultLists, // like `lists`, but with arrays of rooms instead
             ready: false,
             stickyRoomId: null,
-            orderRoomsByImportance: true,
+            algorithm: ALGO_RECENT,
+            orderImportantFirst: false,
         };
 
+        SettingsStore.monitorSetting('RoomList.orderAlphabetically', null);
         SettingsStore.monitorSetting('RoomList.orderByImportance', null);
         SettingsStore.monitorSetting('feature_custom_tags', null);
     }
@@ -135,11 +161,18 @@ class RoomListStore extends Store {
             case 'setting_updated': {
                 if (!logicallyReady) break;
 
-                if (payload.settingName === 'RoomList.orderByImportance') {
-                    this.updateSortingAlgorithm(payload.newValue === true ? ALGO_IMPORTANCE : ALGO_RECENT);
-                } else if (payload.settingName === 'feature_custom_tags') {
-                    this._setState({tagsEnabled: payload.newValue});
-                    this._generateInitialRoomLists(); // Tags means we have to start from scratch
+                switch (payload.settingName) {
+                    case "RoomList.orderAlphabetically":
+                        this.updateSortingAlgorithm(payload.newValue ? ALGO_ALPHABETIC : ALGO_RECENT,
+                            this._state.orderImportantFirst);
+                        break;
+                    case "RoomList.orderByImportance":
+                        this.updateSortingAlgorithm(this._state.algorithm, payload.newValue);
+                        break;
+                    case "feature_custom_tags":
+                        this._setState({tagsEnabled: payload.newValue});
+                        this._generateInitialRoomLists(); // Tags means we have to start from scratch
+                        break;
                 }
             }
             break;
@@ -157,9 +190,9 @@ class RoomListStore extends Store {
 
                 this._matrixClient = payload.matrixClient;
 
-                const algorithm = SettingsStore.getValue("RoomList.orderByImportance")
-                    ? ALGO_IMPORTANCE : ALGO_RECENT;
-                this.updateSortingAlgorithm(algorithm);
+                const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
+                const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
+                this.updateSortingAlgorithm(orderAlphabetically ? ALGO_ALPHABETIC : ALGO_RECENT, orderByImportance);
             }
             break;
             case 'MatrixActions.Room.receipt': {
@@ -188,7 +221,8 @@ class RoomListStore extends Store {
                 if (!logicallyReady ||
                     !payload.isLiveEvent ||
                     !payload.isLiveUnfilteredRoomTimelineEvent ||
-                    !this._eventTriggersRecentReorder(payload.event)
+                    !this._eventTriggersRecentReorder(payload.event) ||
+                    this._state.algorithm !== ALGO_RECENT
                 ) {
                     break;
                 }
@@ -302,7 +336,7 @@ class RoomListStore extends Store {
     _filterTags(tags) {
         tags = tags ? Object.keys(tags) : [];
         if (this._state.tagsEnabled) return tags;
-        return tags.filter((t) => !!LIST_ORDERS[t]);
+        return tags.filter((t) => knownLists.has(t));
     }
 
     _getRecommendedTagsForRoom(room) {
@@ -323,7 +357,7 @@ class RoomListStore extends Store {
             } else if (dmRoomMap.getUserIdForRoomId(room.roomId) && tags.length === 0) {
                 // We intentionally don't duplicate rooms in other tags into the people list
                 // as a feature.
-                tags.push("im.vector.fake.direct");
+                tags.push(TAG_DM);
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
@@ -337,6 +371,14 @@ class RoomListStore extends Store {
 
     _slotRoomIntoList(room, category, tag, existingEntries, newList, lastTimestampFn) {
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
+
+        let categoryComparator = (a, b) => lastTimestampFn(a.room) >= lastTimestampFn(b.room);
+        const sortAlgorithm = getListAlgorithm(tag, this._state.algorithm);
+        if (sortAlgorithm === ALGO_RECENT) {
+            categoryComparator = (a, b) => this._recentsComparator(a, b, lastTimestampFn);
+        } else if (sortAlgorithm === ALGO_ALPHABETIC) {
+            categoryComparator = (a, b) => this._lexicographicalComparator(a, b);
+        }
 
         // The slotting algorithm works by trying to position the room in the most relevant
         // category of the list (red > grey > etc). To accomplish this, we need to consider
@@ -415,7 +457,7 @@ class RoomListStore extends Store {
                 // based on most recent timestamp.
                 const changedBoundary = entryCategoryIndex > targetCategoryIndex;
                 const currentCategory = entryCategoryIndex === targetCategoryIndex;
-                if (changedBoundary || (currentCategory && lastTimestampFn(room) >= lastTimestampFn(entry.room))) {
+                if (changedBoundary || (currentCategory && categoryComparator({room}, entry) <= 0)) {
                     if (changedBoundary) {
                         // If we changed a boundary, then we've gone too far - go to the top of the last
                         // section instead.
@@ -474,7 +516,7 @@ class RoomListStore extends Store {
             // Speed optimization: Don't do complicated math if we don't have to.
             if (!shouldHaveRoom) {
                 listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
-            } else if (LIST_ORDERS[key] !== 'recent') {
+            } else if (getListAlgorithm(key, this._state.algorithm) === ALGO_MANUAL) {
                 // Manually ordered tags are sorted later, so for now we'll just clone the tag
                 // and add our room if needed
                 listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
@@ -535,7 +577,7 @@ class RoomListStore extends Store {
 
         // Sort the favourites before we set the clone
         for (const tag of Object.keys(listsClone)) {
-            if (LIST_ORDERS[tag] === 'recent') continue; // skip recents (pre-sorted)
+            if (getListAlgorithm(tag, this._state.algorithm) !== ALGO_MANUAL) continue; // skip recents (pre-sorted)
             listsClone[tag].sort(this._getManualComparator(tag));
         }
 
@@ -553,7 +595,7 @@ class RoomListStore extends Store {
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
-            "im.vector.fake.direct": [],
+            [TAG_DM]: [],
             "m.lowpriority": [],
             "im.vector.fake.archived": [],
         };
@@ -585,12 +627,14 @@ class RoomListStore extends Store {
 
                         // Default to an arbitrary category for tags which aren't ordered by recents
                         let category = CATEGORY_IDLE;
-                        if (LIST_ORDERS[tagName] === 'recent') category = this._calculateCategory(room);
-                        lists[tagName].push({room, category: category});
+                        if (getListAlgorithm(tagName, this._state.algorithm) !== ALGO_MANUAL) {
+                            category = this._calculateCategory(room);
+                        }
+                        lists[tagName].push({room, category});
                     }
                 } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push({room, category: this._calculateCategory(room)});
+                    lists[TAG_DM].push({room, category: this._calculateCategory(room)});
                 } else {
                     lists["im.vector.fake.recent"].push({room, category: this._calculateCategory(room)});
                 }
@@ -605,31 +649,48 @@ class RoomListStore extends Store {
         // cache only needs to survive the sort operation below and should not be implemented outside
         // of this function, otherwise the room lists will almost certainly be out of date and wrong.
         const latestEventTsCache = {}; // roomId => timestamp
+        const tsOfNewestEventFn = (room) => {
+            if (!room) return Number.MAX_SAFE_INTEGER; // Should only happen in tests
+
+            if (latestEventTsCache[room.roomId]) {
+                return latestEventTsCache[room.roomId];
+            }
+
+            const ts = this._tsOfNewestEvent(room);
+            latestEventTsCache[room.roomId] = ts;
+            return ts;
+        };
 
         Object.keys(lists).forEach((listKey) => {
             let comparator;
-            switch (LIST_ORDERS[listKey]) {
-                case "recent":
-                    comparator = (entryA, entryB) => {
-                        return this._recentsComparator(entryA, entryB, (room) => {
-                            if (!room) return Number.MAX_SAFE_INTEGER; // Should only happen in tests
-
-                            if (latestEventTsCache[room.roomId]) {
-                                return latestEventTsCache[room.roomId];
-                            }
-
-                            const ts = this._tsOfNewestEvent(room);
-                            latestEventTsCache[room.roomId] = ts;
-                            return ts;
-                        });
-                    };
+            switch (getListAlgorithm(listKey, this._state.algorithm)) {
+                case ALGO_RECENT:
+                    comparator = (entryA, entryB) => this._recentsComparator(entryA, entryB, tsOfNewestEventFn);
                     break;
-                case "manual":
+                case ALGO_ALPHABETIC:
+                    comparator = this._lexicographicalComparator;
+                    break;
+                case ALGO_MANUAL:
                 default:
                     comparator = this._getManualComparator(listKey);
                     break;
             }
-            lists[listKey].sort(comparator);
+
+            if (this._state.orderImportantFirst) {
+                lists[listKey].sort((entryA, entryB) => {
+                    if (entryA.category !== entryB.category) {
+                        const idxA = CATEGORY_ORDER.indexOf(entryA.category);
+                        const idxB = CATEGORY_ORDER.indexOf(entryB.category);
+                        if (idxA > idxB) return 1;
+                        if (idxA < idxB) return -1;
+                        return 0; // Technically not possible
+                    }
+                    return comparator(entryA, entryB);
+                });
+            } else {
+                // skip the category comparison even though it should no-op when orderImportantFirst disabled
+                lists[listKey].sort(comparator);
+            }
         });
 
         this._setState({
@@ -668,7 +729,7 @@ class RoomListStore extends Store {
     }
 
     _calculateCategory(room) {
-        if (!this._state.orderRoomsByImportance) {
+        if (!this._state.orderImportantFirst) {
             // Effectively disable the categorization of rooms if we're supposed to
             // be sorting by more recent messages first. This triggers the timestamp
             // comparison bit of _setRoomCategory and _recentsComparator instead of
@@ -689,26 +750,13 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(entryA, entryB, tsOfNewestEventFn) {
-        const roomA = entryA.room;
-        const roomB = entryB.room;
-        const categoryA = entryA.category;
-        const categoryB = entryB.category;
-
-        if (categoryA !== categoryB) {
-            const idxA = CATEGORY_ORDER.indexOf(categoryA);
-            const idxB = CATEGORY_ORDER.indexOf(categoryB);
-            if (idxA > idxB) return 1;
-            if (idxA < idxB) return -1;
-            return 0; // Technically not possible
-        }
-
-        const timestampA = tsOfNewestEventFn(roomA);
-        const timestampB = tsOfNewestEventFn(roomB);
+        const timestampA = tsOfNewestEventFn(entryA.room);
+        const timestampB = tsOfNewestEventFn(entryB.room);
         return timestampB - timestampA;
     }
 
-    _lexicographicalComparator(roomA, roomB) {
-        return roomA.name > roomB.name ? 1 : -1;
+    _lexicographicalComparator(entryA, entryB) {
+        return entryA.room.name.localeCompare(entryB.room.name);
     }
 
     _getManualComparator(tagName, optimisticRequest) {
@@ -733,7 +781,7 @@ class RoomListStore extends Store {
                 return -1;
             }
 
-            return a === b ? this._lexicographicalComparator(roomA, roomB) : (a > b ? 1 : -1);
+            return a === b ? this._lexicographicalComparator(entryA, entryB) : (a > b ? 1 : -1);
         };
     }
 

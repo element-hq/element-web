@@ -42,6 +42,12 @@ export default class UnverifiedSessionToast extends React.PureComponent {
         Modal.createTrackedDialog('New Session Review', 'Starting dialog', NewSessionReviewDialog, {
             userId: MatrixClientPeg.get().getUserId(),
             device,
+            onFinished: (r) => {
+                if (!r) {
+                    /* This'll come back false if the user clicks "this wasn't me" and saw a warning dialog */
+                    this._onLaterClick();
+                }
+            },
         }, null, /* priority = */ false, /* static = */ true);
     };
 

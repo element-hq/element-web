@@ -37,6 +37,8 @@ export default class InviteOnlyIcon extends React.Component {
     };
 
     render() {
+        const classes = this.props.collapsedPanel ? "mx_InviteOnlyIcon_small": "mx_InviteOnlyIcon_large";
+
         if (!SettingsStore.isFeatureEnabled("feature_invite_only_padlocks")) {
             return null;
         }
@@ -46,7 +48,7 @@ export default class InviteOnlyIcon extends React.Component {
         if (this.state.hover) {
             tooltip = <Tooltip className="mx_InviteOnlyIcon_tooltip" label={_t("Invite only")} dir="auto" />;
         }
-        return (<div className="mx_InviteOnlyIcon"
+        return (<div className={classes}
           onMouseEnter={this.onHoverStart}
           onMouseLeave={this.onHoverEnd}
         >

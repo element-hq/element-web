@@ -23,7 +23,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
  * of aliases. Otherwise return null;
  */
 export function getDisplayAliasForRoom(room) {
-    return room.getCanonicalAlias() || room.getAliases()[0];
+    return room.getCanonicalAlias() || room.getAltAliases()[0];
 }
 
 /**

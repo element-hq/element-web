@@ -255,7 +255,7 @@ export class ContextMenu extends React.Component {
 
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
-        } else {
+        } else if (position.top !== undefined) {
             const target = position.top;
 
             // By default, no adjustment is made

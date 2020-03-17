@@ -127,7 +127,6 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
             {
-                secureSecretStorage: SettingsStore.isFeatureEnabled("feature_cross_signing"),
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
@@ -278,25 +277,25 @@ export default class KeyBackupPanel extends React.PureComponent {
                         "Backup has an <validity>invalid</validity> signature from this session",
                         {}, { validity },
                     );
-                } else if (sig.valid && sig.device.isVerified()) {
+                } else if (sig.valid && sig.deviceTrust.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
                         "<verify>verified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
-                } else if (sig.valid && !sig.device.isVerified()) {
+                } else if (sig.valid && !sig.deviceTrust.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
                         "<verify>unverified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
-                } else if (!sig.valid && sig.device.isVerified()) {
+                } else if (!sig.valid && sig.deviceTrust.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
                         "<verify>verified</verify> session <device></device>",
                         {}, { validity, verify, device },
                     );
-                } else if (!sig.valid && !sig.device.isVerified()) {
+                } else if (!sig.valid && !sig.deviceTrust.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
                         "<verify>unverified</verify> session <device></device>",
