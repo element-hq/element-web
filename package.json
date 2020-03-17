@@ -66,7 +66,7 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "5.1.1-rc.1",
+    "matrix-js-sdk": "5.1.1",
     "matrix-react-sdk": "2.2.3-rc.1",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
