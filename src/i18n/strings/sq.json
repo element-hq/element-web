@@ -2177,5 +2177,20 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hoqi adresat alternative %(addresses)s për këtë dhomë.",
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hoqi adresën alternative %(addresses)s për këtë dhomë.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ndryshoi adresat alternative për këtë dhomë.",
-    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ndryshoi adresat kryesore dhe alternative për këtë dhomë."
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ndryshoi adresat kryesore dhe alternative për këtë dhomë.",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s ndryshoi emrin e dhomës nga %(oldRoomName)s në %(newRoomName)s.",
+    "%(senderName)s changed the addresses for this room.": "%(senderName)s ndryshoi adresat për këtë dhomë.",
+    "Support adding custom themes": "Mbulim shtimi temash vetjake",
+    "Invalid theme schema.": "Skemë e pavlefshme teme.",
+    "Error downloading theme information.": "Gabim në shkarkim të dhënash teme.",
+    "Theme added!": "Tema u shtua!",
+    "Custom theme URL": "URL teme vetjake",
+    "Add theme": "Shtoni temë",
+    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Pati një gabim gjatë përditësimit të adresave alternative të dhomës. Mund të mos lejohet nga shërbyesi pse ndodhi një gabim i përkohshëm.",
+    "You don't have permission to delete the alias.": "S’keni leje të fshini aliasin.",
+    "Alternative addresses for this room:": "Adresa alternative për këtë dhomë:",
+    "This room has no alternative addresses": "Kjo dhomë nuk ka adresa alternative",
+    "New address (e.g. #foo:domain)": "Adresë e re (p.sh., #foo:domain)",
+    "Local addresses (unmoderated content)": "Adresa vendore (lëndë e pamoderuar)",
+    "Review Sessions": "Shqyrtoni Sesione"
 }
