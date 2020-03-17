@@ -782,7 +782,7 @@ export default createReactClass({
         if (!this._divScroll) {
             // Likewise, we should have the ref by this point, but if not
             // turn the NPE into something meaningful.
-            throw new Error("ScrollPanel._getScrollNode called before gemini ref collected");
+            throw new Error("ScrollPanel._getScrollNode called before AutoHideScrollbar ref collected");
         }
 
         return this._divScroll;

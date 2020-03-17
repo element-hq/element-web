@@ -122,7 +122,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.props.devices === null) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
