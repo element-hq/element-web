@@ -21,5 +21,6 @@
     "Unexpected error preparing the app. See console for details.": "Uygulamayı hazırlarken beklenmeyen hata oluştu. Lütfen detaylar için konsola bakınız.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Geçersiz yapılandırma: default_server_config, default_server_name, yada default_hs_url den sadece birisi seçilebilir.",
     "Invalid configuration: no default server specified.": "Geçersiz yapılandırma: varsayılan sunucu seçilmemiş.",
-    "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s"
+    "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
+    "Go to your browser to complete Sign In": "Oturum açmayı tamamlamak için tarayıcınıza gidin"
 }
