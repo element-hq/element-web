@@ -72,7 +72,7 @@ export default createReactClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <div className="mx_MyGroups_scrollable">
+                <div className="mx_MyGroups_scrollable mx_AutoHideScrollbar">
                     <div className="mx_MyGroups_microcopy">
                         <p>
                             { _t(
