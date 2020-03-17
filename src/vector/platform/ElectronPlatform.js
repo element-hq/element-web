@@ -122,6 +122,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('addEventToIndex', ev, profile);
     }
 
+    async deleteEvent(eventId: string): Promise<boolean> {
+        return this._ipcCall('deleteEvent', eventId);
+    }
+
     async isEventIndexEmpty(): Promise<boolean> {
         return this._ipcCall('isEventIndexEmpty');
     }
