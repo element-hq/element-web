@@ -430,6 +430,11 @@ export default class WidgetUtils {
             app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
         }
 
+        if (app.type === 'jitsi') {
+            console.log("Replacing Jitsi widget URL with local wrapper");
+            app.url = WidgetUtils.getLocalJitsiWrapperUrl(true);
+        }
+
         app.url = encodeUri(app.url, params);
 
         return app;
@@ -467,5 +472,32 @@ export default class WidgetUtils {
         }
 
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
+    }
+
+    static getLocalJitsiWrapperUrl(forLocalRender = false) {
+        // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
+        const queryString = [
+            'conferenceDomain=$domain',
+            'conferenceId=$conferenceId',
+            'isAudioOnly=$isAudioOnly',
+            'displayName=$matrix_display_name',
+            'avatarUrl=$matrix_avatar_url',
+            'userId=$matrix_user_id',
+        ].join('&');
+
+        let currentUrl = window.location.href.split('#')[0];
+        if (!currentUrl.startsWith("https://") && !forLocalRender) {
+            // Use an external wrapper if we're not locally rendering the widget. This is usually
+            // the URL that will end up in the widget event, so we want to make sure it's relatively
+            // safe to send.
+            // We'll end up using a local render URL when we see a Jitsi widget anyways, so this is
+            // really just for backwards compatibility and to appease the spec.
+            currentUrl = "https://riot.im/app"
+        }
+        if (!currentUrl.endsWith('/')) {
+            currentUrl = `${currentUrl}/`;
+        }
+
+        return currentUrl + "jitsi.html#" + queryString;
     }
 }
