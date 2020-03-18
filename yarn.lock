@@ -3902,10 +3902,6 @@ fuse.js@^2.2.0:
   resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-2.7.4.tgz#96e420fde7ef011ac49c258a621314fe576536f9"
   integrity sha1-luQg/efvARrEnCWKYhMU/ldlNvk=
 
-"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566", gemini-scrollbar@matrix-org/gemini-scrollbar#91e1e566:
-  version "1.4.3"
-  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/91e1e566fa33324188f278801baf4a79f9f554ab"
-
 gensync@^1.0.0-beta.1:
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
@@ -6962,12 +6958,6 @@ react-focus-lock@^2.2.1:
     react-clientside-effect "^1.2.2"
     use-callback-ref "^1.2.1"
     use-sidecar "^1.0.1"
-
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594":
-  version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
-  dependencies:
-    gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
 react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.0"

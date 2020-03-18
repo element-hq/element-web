@@ -27,6 +27,7 @@ import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 export default createReactClass({
     displayName: 'GroupMemberInfo',
@@ -182,10 +183,9 @@ export default createReactClass({
             this.props.groupMember.displayname || this.props.groupMember.userId
         );
 
-        const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
             <div className="mx_MemberInfo" role="tabpanel">
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
@@ -199,7 +199,7 @@ export default createReactClass({
                     </div>
 
                     { adminTools }
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
             </div>
         );
     },

@@ -122,7 +122,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.props.devices === null) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
@@ -168,7 +167,7 @@ export default createReactClass({
                 title={_t('Room contains unknown sessions')}
                 contentId='mx_Dialog_content'
             >
-                <GeminiScrollbarWrapper autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
                         { _t('"%(RoomName)s" contains sessions that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
@@ -176,7 +175,7 @@ export default createReactClass({
                     { _t("Unknown sessions") }:
 
                     <UnknownDeviceList devices={this.props.devices} />
-                </GeminiScrollbarWrapper>
+                </div>
                 <DialogButtons primaryButton={sendButtonLabel}
                     onPrimaryButtonClick={sendButtonOnClick}
                     onCancel={this._onDismissClicked} />
