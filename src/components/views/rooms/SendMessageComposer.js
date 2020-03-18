@@ -42,6 +42,8 @@ import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import RateLimitedFunc from '../../../ratelimitedfunc';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -102,6 +104,12 @@ export default class SendMessageComposer extends React.Component {
         this.model = null;
         this._editorRef = null;
         this.currentlyComposedEditorState = null;
+        const cli = MatrixClientPeg.get();
+        if (cli.isCryptoEnabled() && cli.isRoomEncrypted(this.props.room.roomId)) {
+            this._prepareToEncrypt = new RateLimitedFunc(() => {
+                cli.prepareToEncrypt(this.props.room);
+            }, 60000);
+        }
     }
 
     _setEditorRef = ref => {
@@ -121,6 +129,8 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, true);
         } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
+        } else if (this._prepareToEncrypt) {
+            this._prepareToEncrypt();
         }
     }
 
