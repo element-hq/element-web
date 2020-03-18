@@ -2204,5 +2204,14 @@
     "Review Sessions": "Controlla sessioni",
     "Scroll to most recent messages": "Scorri ai messaggi più recenti",
     "Local address": "Indirizzo locale",
-    "Published Addresses": "Indirizzi pubblicati"
+    "Published Addresses": "Indirizzi pubblicati",
+    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "Gli indirizzi pubblicati possono essere usati da chiunque su qualsiasi server per entrare nella stanza. Per pubblicare un indirizzo, deve essere prima impostato come indirizzo locale.",
+    "Other published addresses:": "Altri indirizzi pubblicati:",
+    "No other published addresses yet, add one below": "Nessun altro indirizzo ancora pubblicato, aggiungine uno sotto",
+    "New published address (e.g. #alias:server)": "Nuovo indirizzo pubblicato (es. #alias:server)",
+    "Local Addresses": "Indirizzi locali",
+    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Imposta gli indirizzi per la stanza affinché gli utenti la trovino attraverso il tuo homeserver (%(localDomain)s)",
+    "Open an existing session & use it to verify this one, granting it access to encrypted messages.": "Apri una sessione esistente e usala per verificare questa, dandole accesso ai messaggi cifrati.",
+    "Waiting…": "In attesa…",
+    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "Se non puoi accedere a nessuna, <button>usa la chiave di recupero o la password.</button>"
 }
