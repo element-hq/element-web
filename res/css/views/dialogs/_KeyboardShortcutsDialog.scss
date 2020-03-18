@@ -44,13 +44,13 @@ limitations under the License.
     kbd {
         padding: 5px;
         border-radius: 4px;
-        background: $other-user-pill-bg-color;
+        background-color: $reaction-row-button-bg-color;
         margin-right: 5px;
         min-width: 20px;
         text-align: center;
         display: inline-block;
-        border: 1px solid black;
-        box-shadow: 0 2px black;
+        border: 1px solid $kbd-border-color;
+        box-shadow: 0 2px $kbd-border-color;
         margin-bottom: 4px;
         text-transform: capitalize;
 
