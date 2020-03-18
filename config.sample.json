@@ -22,7 +22,6 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
-    "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "defaultCountryCode": "GB",
     "showLabsSettings": false,
@@ -52,5 +51,9 @@
     },
     "settingDefaults": {
         "breadcrumbs": true
+    },
+    "jitsi": {
+        "preferredDomain": "jitsi.riot.im",
+        "externalApiUrl": "https://jitsi.riot.im/libs/external_api.min.js"
     }
 }
