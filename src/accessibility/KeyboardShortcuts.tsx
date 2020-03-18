@@ -45,8 +45,7 @@ _td("Super");
 _td("Ctrl");
 
 export enum Modifiers {
-    ALT = "Alt",
-    OPTION = "Option", // This gets displayed as an Icon
+    ALT = "Alt", // Option on Mac and displayed as an Icon
     ALT_GR = "Alt Gr",
     SHIFT = "Shift",
     SUPER = "Super", // should this be "Windows"?
@@ -231,8 +230,11 @@ interface IModal {
 
 const modifierIcon: Record<string, string> = {
     [Modifiers.COMMAND]: "⌘",
-    [Modifiers.OPTION]: "⌥",
 };
+
+if (isMac) {
+    modifierIcon[Modifiers.ALT] = "⌥";
+}
 
 const alternateKeyName: Record<string, string> = {
     [Key.PAGE_UP]: _td("Page Up"),
