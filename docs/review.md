@@ -74,3 +74,8 @@ files in a PR, authors should be prepared for Design and / or Product teams to
 request a link to an ad-hoc build of Riot (hosted anywhere) that can be used for
 the review. In the future, we [hope to automate
 this](https://github.com/vector-im/riot-web/issues/12624) for every PR.
+
+Before starting work on a feature, it's best to ensure your plan aligns well
+with our vision for Riot. Please chat with the team in
+[#riot-dev:matrix.org](https://matrix.to/#/#riot-dev:matrix.org) before you
+start so we can ensure it's something we'd be willing to merge.
