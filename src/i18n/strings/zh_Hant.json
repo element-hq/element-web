@@ -2203,5 +2203,17 @@
     "Theme added!": "已新增佈景主題！",
     "Custom theme URL": "自訂佈景主題 URL",
     "Add theme": "新增佈景主題",
-    "Review Sessions": "檢閱工作階段"
+    "Review Sessions": "檢閱工作階段",
+    "Scroll to most recent messages": "捲動到最新訊息",
+    "Local address": "本機位置",
+    "Published Addresses": "發佈的位置",
+    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "發佈的位置可以讓在任何伺服器上的任何人用來加入您的聊天室。要發佈位置，您必須先設定本機位置。",
+    "Other published addresses:": "其他已發佈的位置：",
+    "No other published addresses yet, add one below": "尚無其他已發佈的位置，在下方新增一個",
+    "New published address (e.g. #alias:server)": "新的已發佈位置（例如：#alias:server）",
+    "Local Addresses": "本機位置",
+    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "為此聊天室設定位置讓使用者可以透過您的家伺服器找到此聊天室 (%(localDomain)s)",
+    "Open an existing session & use it to verify this one, granting it access to encrypted messages.": "開啟既有的工作階段並使用它來驗證此工作階段，並授予其存取已加密訊息的權限。",
+    "Waiting…": "等待中……",
+    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "如果您無法存取裝置，<button>使用您的復原金鑰或通關密語。</button>"
 }
