@@ -37,6 +37,9 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Take the time to thank and point out good code changes
 * Using softer language like "please" and "what do you think?" goes a long way
   towards making others feel like colleagues working towards a common goal
+* Authors should link to other layers of their PR in their PR before requesting
+  review. Reviewers might be coming from different places and could miss other
+  required PRs.
 
 ### Workflow
 
