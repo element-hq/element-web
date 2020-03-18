@@ -44,7 +44,8 @@ When reviewing code, here are some things we look for and also things we avoid:
   review. Reviewers might be coming from different places and could miss other
   required PRs.
 * Avoid force pushing to a PR after first round of review
-* Use merge commits when landing
+* Use the GitHub default of merge commits when landing (avoid alternate options
+  like squash or rebase)
 * PR author merges after review (assuming they have write access)
 * Assign issues only when in progress to indicate to others what can be picked up
 
