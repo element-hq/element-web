@@ -233,7 +233,6 @@ export default class AliasSettings extends React.Component {
 
     onLocalAliasDeleted = (index) => {
         const alias = this.state.localAliases[index];
-        console.log("removing local alias", index, alias);
         // TODO: In future, we should probably be making sure that the alias actually belongs
         // to this room. See https://github.com/vector-im/riot-web/issues/7353
         MatrixClientPeg.get().deleteAlias(alias).then(() => {
