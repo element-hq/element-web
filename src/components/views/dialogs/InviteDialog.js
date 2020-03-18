@@ -35,6 +35,7 @@ import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 import SettingsStore from '../../../settings/SettingsStore';
 import RoomListStore, {TAG_DM} from "../../../stores/RoomListStore";
+import {Key} from "../../../Keyboard";
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -647,6 +648,14 @@ export default class InviteDialog extends React.PureComponent {
         this.props.onFinished();
     };
 
+    _onKeyDown = (e) => {
+        // when the field is empty and the user hits backspace remove the right-most target
+        if (!e.target.value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !e.ctrlKey && !e.shiftKey) {
+            e.preventDefault();
+            this._removeMember(this.state.targets[this.state.targets.length - 1]);
+        }
+    };
+
     _updateFilter = (e) => {
         const term = e.target.value;
         this.setState({filterText: term});
@@ -988,8 +997,8 @@ export default class InviteDialog extends React.PureComponent {
         ));
         const input = (
             <textarea
-                key={"input"}
                 rows={1}
+                onKeyDown={this._onKeyDown}
                 onChange={this._updateFilter}
                 value={this.state.filterText}
                 ref={this._editorRef}
