@@ -6,16 +6,8 @@
 
 set -ev
 
-upload_logs() {
-    echo "--- Uploading logs"
-    buildkite-agent artifact upload "logs/**/*;synapse/installations/consent/homeserver.log"
-}
-
 handle_error() {
     EXIT_CODE=$?
-    if [ $TESTS_STARTED -eq 1 ]; then
-        upload_logs
-    fi
     exit $EXIT_CODE
 }
 
