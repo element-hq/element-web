@@ -30,11 +30,11 @@ _td("Room List");
 _td("Autocomplete");
 
 export enum Categories {
-    NAVIGATION="Navigation",
-    CALLS="Calls",
-    COMPOSER="Composer",
-    ROOM_LIST="Room List",
-    AUTOCOMPLETE="Autocomplete",
+    NAVIGATION = "Navigation",
+    CALLS = "Calls",
+    COMPOSER = "Composer",
+    ROOM_LIST = "Room List",
+    AUTOCOMPLETE = "Autocomplete",
 }
 
 // TS: once languageHandler is TS we can probably inline this into the enum
@@ -45,14 +45,14 @@ _td("Super");
 _td("Ctrl");
 
 export enum Modifiers {
-    ALT="Alt",
-    OPTION="Option", // This gets displayed as an Icon
-    ALT_GR="Alt Gr",
-    SHIFT="Shift",
-    SUPER="Super", // should this be "Windows"?
+    ALT = "Alt",
+    OPTION = "Option", // This gets displayed as an Icon
+    ALT_GR = "Alt Gr",
+    SHIFT = "Shift",
+    SUPER = "Super", // should this be "Windows"?
     // Instead of using below, consider CMD_OR_CTRL
-    COMMAND="Command", // This gets displayed as an Icon
-    CONTROL="Ctrl",
+    COMMAND = "Command", // This gets displayed as an Icon
+    CONTROL = "Ctrl",
 }
 
 // Meta-modifier: isMac ? CMD : CONTROL
@@ -229,12 +229,12 @@ interface IModal {
     finished: Promise<any[]>;
 }
 
-const modifierIcon: Record<Modifiers, string> = {
+const modifierIcon: Record<string, string> = {
     [Modifiers.COMMAND]: "⌘",
     [Modifiers.OPTION]: "⌥",
 };
 
-const alternateKeyName: Record<string, string> = { // TS: fix this once Key is an enum
+const alternateKeyName: Record<string, string> = {
     [Key.PAGE_UP]: _td("Page Up"),
     [Key.PAGE_DOWN]: _td("Page Down"),
     [Key.ESCAPE]: _td("Esc"),
@@ -243,7 +243,7 @@ const alternateKeyName: Record<string, string> = { // TS: fix this once Key is a
     [Key.HOME]: _td("Home"),
     [Key.END]: _td("End"),
 };
-const keyIcon: Record<string, string> = { // TS: fix this once Key is an enum
+const keyIcon: Record<string, string> = {
     [Key.ARROW_UP]: "↑",
     [Key.ARROW_DOWN]: "↓",
     [Key.ARROW_LEFT]: "←",
