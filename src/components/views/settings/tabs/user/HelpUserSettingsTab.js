@@ -24,6 +24,7 @@ import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
@@ -224,6 +225,9 @@ export default class HelpUserSettingsTab extends React.Component {
                     <div className='mx_SettingsTab_subsectionText'>
                         {faqText}
                     </div>
+                    <AccessibleButton kind="primary" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("Keyboard Shortcuts") }
+                    </AccessibleButton>
                 </div>
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>

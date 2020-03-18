@@ -39,6 +39,7 @@ import RoomListActions from '../../actions/RoomListActions';
 import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, CollapseDistributor} from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -365,8 +366,6 @@ const LoggedInView = createReactClass({
                 }
                 break;
             case Key.BACKTICK:
-                if (ev.key !== "`") break;
-
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
                 // was previously chosen but conflicted with italics in
@@ -376,6 +375,13 @@ const LoggedInView = createReactClass({
                     dis.dispatch({
                         action: 'toggle_top_left_menu',
                     });
+                    handled = true;
+                }
+                break;
+
+            case Key.SLASH:
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    KeyboardShortcuts.toggleDialog();
                     handled = true;
                 }
                 break;
