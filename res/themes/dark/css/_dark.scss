@@ -221,10 +221,6 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
     filter: invert(1);
 }
 
-.gm-scrollbar .thumb {
-    filter: invert(1);
-}
-
 // markdown overrides:
 .mx_EventTile_content .markdown-body pre:hover {
     border-color: #808080 !important; // inverted due to rules below
