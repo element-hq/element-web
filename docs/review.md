@@ -52,7 +52,8 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Use the GitHub default of merge commits when landing (avoid alternate options
   like squash or rebase)
 * PR author merges after review (assuming they have write access)
-* Assign issues only when in progress to indicate to others what can be picked up
+* Assign issues only when in progress to indicate to others what can be picked
+  up
 
 ## Design and Product Review
 
