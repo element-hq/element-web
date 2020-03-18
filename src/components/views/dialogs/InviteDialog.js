@@ -1060,10 +1060,11 @@ export default class InviteDialog extends React.PureComponent {
 
             title = _t("Direct Messages");
             helpText = _t(
-                "If you can't find someone, ask them for their username, share your " +
-                "username (%(userId)s) or <a>profile link</a>.",
-                {userId},
-                {a: (sub) => <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{sub}</a>},
+                "Start a conversation with someone using their name, username (like <userId/>) or email address.",
+                {},
+                {userId: () => {
+                    return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
+                }},
             );
             buttonText = _t("Go");
             goButtonFn = this._startDm;
