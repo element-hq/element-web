@@ -18,6 +18,7 @@ limitations under the License.
     display: flex;
     flex-direction: row;
     min-width: 0;
+    height: 100%;
 }
 
 // move hit area 5px to the right so it doesn't overlap with the timeline scrollbar

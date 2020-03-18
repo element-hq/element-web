@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,70 +15,149 @@ limitations under the License.
 */
 
 .mx_NetworkDropdown {
+    height: 32px;
     position: relative;
-}
+    width: max-content;
+    padding-right: 32px;
+    margin-left: auto;
+    margin-right: 9px;
+    margin-top: 12px;
 
-.mx_NetworkDropdown_input {
-    position: relative;
-    border-radius: 3px;
-    border: 1px solid $strong-input-border-color;
-    font-weight: 300;
-    font-size: 13px;
-    user-select: none;
-}
-
-.mx_NetworkDropdown_arrow {
-    border-color: $primary-fg-color transparent transparent;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    display: block;
-    height: 0;
-    position: absolute;
-    right: 10px;
-    top: 16px;
-    width: 0;
-}
-
-.mx_NetworkDropdown_networkoption {
-    height: 37px;
-    line-height: 37px;
-    padding-left: 8px;
-    padding-right: 8px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.mx_NetworkDropdown_networkoption img {
-    margin: 5px;
-    width: 25px;
-    vertical-align: middle;
-}
-
-input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:focus {
-    border: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    .mx_AccessibleButton {
+        width: max-content;
+    }
 }
 
 .mx_NetworkDropdown_menu {
-    position: absolute;
-    left: -1px;
-    right: -1px;
-    top: 100%;
-    z-index: 2;
+    min-width: 204px;
     margin: 0;
-    padding: 0px;
-    border-radius: 3px;
-    border: 1px solid $accent-color;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid $dialog-close-fg-color;
     background-color: $primary-bg-color;
-}
-
-.mx_NetworkDropdown_menu .mx_NetworkDropdown_networkoption:hover {
-    background-color: $focus-bg-color;
 }
 
 .mx_NetworkDropdown_menu_network {
     font-weight: bold;
 }
 
+.mx_NetworkDropdown_server {
+    padding: 12px 0;
+    border-bottom: 1px solid $input-darker-fg-color;
+
+    .mx_NetworkDropdown_server_title {
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 20px;
+        margin-bottom: 4px;
+
+        // remove server button
+        .mx_AccessibleButton {
+            position: absolute;
+            display: inline;
+            right: 12px;
+            height: 16px;
+            width: 16px;
+            margin-top: 4px;
+
+            &::after {
+                content: "";
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/feather-customised/x.svg');
+                background-color: $notice-primary-color;
+            }
+        }
+    }
+
+    .mx_NetworkDropdown_server_subtitle {
+        padding: 0 10px;
+        font-size: 10px;
+        line-height: 14px;
+        margin-top: -4px;
+        margin-bottom: 4px;
+        color: $muted-fg-color;
+    }
+
+    .mx_NetworkDropdown_server_network {
+        font-size: 12px;
+        line-height: 16px;
+        padding: 4px 10px;
+        cursor: pointer;
+        position: relative;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &[aria-checked=true]::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: 10px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            mask-image: url('$(res)/img/feather-customised/check.svg');
+            background-color: $input-valid-border-color;
+        }
+    }
+}
+
+.mx_NetworkDropdown_server_add,
+.mx_NetworkDropdown_server_network {
+    &:hover {
+        background-color: $header-panel-bg-color;
+    }
+}
+
+.mx_NetworkDropdown_server_add {
+    padding: 16px 10px 16px 32px;
+    position: relative;
+    border-radius: 0 0 4px 4px;
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 7px;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        mask-image: url('$(res)/img/feather-customised/plus.svg');
+        background-color: $muted-fg-color;
+    }
+}
+
+.mx_NetworkDropdown_handle {
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        right: -28px; // - (24 + 4)
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+        background-color: $primary-fg-color;
+    }
+
+    .mx_NetworkDropdown_handle_server {
+        color: $muted-fg-color;
+        font-size: 12px;
+    }
+}
+
+.mx_NetworkDropdown_dialog .mx_Dialog {
+    width: 45vw;
+}

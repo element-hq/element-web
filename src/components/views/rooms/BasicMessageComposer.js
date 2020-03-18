@@ -370,6 +370,16 @@ export default class BasicMessageEditor extends React.Component {
         } else if (modKey && event.key === Key.GREATER_THAN) {
             this._onFormatAction("quote");
             handled = true;
+        // redo
+        } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
+                  (IS_MAC && modKey && event.shiftKey && event.key === Key.Z)) {
+            if (this.historyManager.canRedo()) {
+                const {parts, caret} = this.historyManager.redo();
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                model.reset(parts, caret, "historyRedo");
+            }
+            handled = true;
         // undo
         } else if (modKey && event.key === Key.Z) {
             if (this.historyManager.canUndo()) {
@@ -377,15 +387,6 @@ export default class BasicMessageEditor extends React.Component {
                 // pass matching inputType so historyManager doesn't push echo
                 // when invoked from rerender callback.
                 model.reset(parts, caret, "historyUndo");
-            }
-            handled = true;
-        // redo
-        } else if (modKey && event.key === Key.Y) {
-            if (this.historyManager.canRedo()) {
-                const {parts, caret} = this.historyManager.redo();
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyRedo");
             }
             handled = true;
         // insert newline on Shift+Enter

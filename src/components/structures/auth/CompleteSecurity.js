@@ -63,9 +63,30 @@ export default class CompleteSecurity extends React.Component {
             const backupInfo = await cli.getKeyBackupVersion();
             this.setState({backupInfo});
 
-            await accessSecretStorage(async () => {
-                await cli.checkOwnCrossSigningTrust();
-                if (backupInfo) await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+            // The control flow is fairly twisted here...
+            // For the purposes of completing security, we only wait on getting
+            // as far as the trust check and then show a green shield.
+            // We also begin the key backup restore as well, which we're
+            // awaiting inside `accessSecretStorage` only so that it keeps your
+            // passphase cached for that work. This dialog itself will only wait
+            // on the first trust check, and the key backup restore will happen
+            // in the background.
+            await new Promise((resolve, reject) => {
+                try {
+                    accessSecretStorage(async () => {
+                        await cli.checkOwnCrossSigningTrust();
+                        resolve();
+                        if (backupInfo) {
+                            // A complete restore can take many minutes for large
+                            // accounts / slow servers, so we allow the dialog
+                            // to advance before this.
+                            await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+                        }
+                    });
+                } catch (e) {
+                    console.error(e);
+                    reject(e);
+                }
             });
 
             if (cli.getCrossSigningId()) {
