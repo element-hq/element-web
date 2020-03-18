@@ -64,7 +64,6 @@ import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
-import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
 
 global.mxCalls = {

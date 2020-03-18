@@ -492,7 +492,7 @@ export default class WidgetUtils {
             // safe to send.
             // We'll end up using a local render URL when we see a Jitsi widget anyways, so this is
             // really just for backwards compatibility and to appease the spec.
-            currentUrl = "https://riot.im/app"
+            currentUrl = "https://riot.im/app";
         }
         if (!currentUrl.endsWith('/')) {
             currentUrl = `${currentUrl}/`;
