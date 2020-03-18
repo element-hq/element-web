@@ -353,7 +353,7 @@
     "Sent messages will be stored until your connection has returned.": "Gönderilen iletiler bağlantınız geri gelene kadar saklanacak.",
     "(~%(count)s results)|one": "(~%(count)s sonuç)",
     "(~%(count)s results)|other": "(~%(count)s sonuçlar)",
-    "Cancel": "İptal Et",
+    "Cancel": "İptal",
     "Active call": "Aktif çağrı",
     "Please select the destination room for this message": "Bu ileti için lütfen hedef oda seçin",
     "Create new room": "Yeni Oda Oluştur",
@@ -1700,5 +1700,10 @@
     "Your keys are being backed up (the first backup could take a few minutes).": "Anahtarlarınız yedekleniyor (ilk yedek bir kaç dakika sürebilir).",
     "Secure your backup with a passphrase": "Yedeğinizi bir parola ile koruyun",
     "If you don't want to set this up now, you can later in Settings.": "Şimdi ayarlamak istemiyorsanız daha sonra Ayarlar menüsünden yapabilirsiniz.",
-    "Set up": "Ayarla"
+    "Set up": "Ayarla",
+    "Review Sessions": "Oturumlar Gözden Geçir",
+    "Cancel entering passphrase?": "Parola girişini iptal et?",
+    "%(senderName)s changed the alternative addresses for this room.": "Bu oda için alternatif adresler %(senderName)s tarafından değiştirildi.",
+    "%(senderName)s changed the main and alternative addresses for this room.": "Bu oda için ana ve alternatif adresler %(senderName)s tarafından değiştirildi.",
+    "%(senderName)s changed the addresses for this room.": "Bu oda adresleri %(senderName)s tarafından değiştirildi."
 }
