@@ -45,8 +45,6 @@
     "VoIP is unsupported": "VoIP is unsupported",
     "You cannot place VoIP calls in this browser.": "You cannot place VoIP calls in this browser.",
     "You cannot place a call with yourself.": "You cannot place a call with yourself.",
-    "Could not connect to the integration server": "Could not connect to the integration server",
-    "A conference call could not be started because the integrations server is not available": "A conference call could not be started because the integrations server is not available",
     "Call in Progress": "Call in Progress",
     "A call is currently being placed!": "A call is currently being placed!",
     "A call is already in progress!": "A call is already in progress!",
