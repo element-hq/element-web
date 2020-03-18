@@ -57,5 +57,9 @@
     "%(roomName)s does not exist.": "%(roomName)s existís pas.",
     "Not now": "Pas ara",
     "Don't ask me again": "Me demandar pas mai",
-    "Options": "Opcions"
+    "Options": "Opcions",
+    "This Room": "Aquesta sala",
+    "All Rooms": "Totas les salas",
+    "Search…": "Cercar…",
+    "Server error": "Error servidor"
 }
