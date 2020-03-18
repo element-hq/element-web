@@ -2200,5 +2200,9 @@
     "Theme added!": "Tema aggiunto!",
     "Custom theme URL": "URL tema personalizzato",
     "Add theme": "Aggiungi tema",
-    "You don't have permission to delete the alias.": "Non hai l'autorizzazione per eliminare l'alias."
+    "You don't have permission to delete the alias.": "Non hai l'autorizzazione per eliminare l'alias.",
+    "Review Sessions": "Controlla sessioni",
+    "Scroll to most recent messages": "Scorri ai messaggi più recenti",
+    "Local address": "Indirizzo locale",
+    "Published Addresses": "Indirizzi pubblicati"
 }
