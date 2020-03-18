@@ -126,7 +126,7 @@ class ThreepidMember extends Member {
 class DMUserTile extends React.PureComponent {
     static propTypes = {
         member: PropTypes.object.isRequired, // Should be a Member (see interface above)
-        onRemove: PropTypes.func.isRequired, // takes 1 argument, the member being removed
+        onRemove: PropTypes.func, // takes 1 argument, the member being removed
     };
 
     _onRemove = (e) => {
@@ -157,18 +157,25 @@ class DMUserTile extends React.PureComponent {
                 width={avatarSize}
                 height={avatarSize} />;
 
-        return (
-            <span className='mx_InviteDialog_userTile'>
-                <span className='mx_InviteDialog_userTile_pill'>
-                    {avatar}
-                    <span className='mx_InviteDialog_userTile_name'>{this.props.member.name}</span>
-                </span>
+        let closeButton;
+        if (this.props.onRemove) {
+            closeButton = (
                 <AccessibleButton
                     className='mx_InviteDialog_userTile_remove'
                     onClick={this._onRemove}
                 >
                     <img src={require("../../../../res/img/icon-pill-remove.svg")} alt={_t('Remove')} width={8} height={8} />
                 </AccessibleButton>
+            );
+        }
+
+        return (
+            <span className='mx_InviteDialog_userTile'>
+                <span className='mx_InviteDialog_userTile_pill'>
+                    {avatar}
+                    <span className='mx_InviteDialog_userTile_name'>{this.props.member.name}</span>
+                </span>
+                { closeButton }
             </span>
         );
     }
@@ -650,7 +657,9 @@ export default class InviteDialog extends React.PureComponent {
 
     _onKeyDown = (e) => {
         // when the field is empty and the user hits backspace remove the right-most target
-        if (!e.target.value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !e.ctrlKey && !e.shiftKey) {
+        if (!e.target.value && !this.state.busy && this.state.targets.length > 0 && e.key === Key.BACKSPACE &&
+            !e.ctrlKey && !e.shiftKey && !e.metaKey
+        ) {
             e.preventDefault();
             this._removeMember(this.state.targets[this.state.targets.length - 1]);
         }
@@ -993,7 +1002,7 @@ export default class InviteDialog extends React.PureComponent {
 
     _renderEditor() {
         const targets = this.state.targets.map(t => (
-            <DMUserTile member={t} onRemove={this._removeMember} key={t.userId} />
+            <DMUserTile member={t} onRemove={!this.state.busy && this._removeMember} key={t.userId} />
         ));
         const input = (
             <textarea
