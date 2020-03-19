@@ -432,7 +432,7 @@ export default class WidgetUtils {
 
         if (app.type === 'jitsi') {
             console.log("Replacing Jitsi widget URL with local wrapper");
-            app.url = WidgetUtils.getLocalJitsiWrapperUrl(true);
+            app.url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
         }
 
         app.url = encodeUri(app.url, params);
@@ -474,7 +474,7 @@ export default class WidgetUtils {
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 
-    static getLocalJitsiWrapperUrl(forLocalRender = false) {
+    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryString = [
             'conferenceDomain=$domain',
@@ -486,7 +486,7 @@ export default class WidgetUtils {
         ].join('&');
 
         let currentUrl = window.location.href.split('#')[0];
-        if (!currentUrl.startsWith("https://") && !forLocalRender) {
+        if (!currentUrl.startsWith("https://") && !opts.forLocalRender) {
             // Use an external wrapper if we're not locally rendering the widget. This is usually
             // the URL that will end up in the widget event, so we want to make sure it's relatively
             // safe to send.
