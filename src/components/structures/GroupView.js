@@ -39,6 +39,7 @@ import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Perm
 import {Group} from "matrix-js-sdk";
 import {allSettled, sleep} from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -553,10 +554,6 @@ export default createReactClass({
                         GROUP_JOINPOLICY_OPEN :
                         GROUP_JOINPOLICY_INVITE,
             },
-        });
-        dis.dispatch({
-            action: 'panel_disable',
-            sideDisabled: true,
         });
     },
 
@@ -1173,7 +1170,6 @@ export default createReactClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
@@ -1332,10 +1328,10 @@ export default createReactClass({
                         <GroupHeaderButtons />
                     </div>
                     <MainSplit panel={rightPanel}>
-                        <GeminiScrollbarWrapper className="mx_GroupView_body">
+                        <AutoHideScrollbar className="mx_GroupView_body">
                             { this._getMembershipSection() }
                             { this._getGroupSection() }
-                        </GeminiScrollbarWrapper>
+                        </AutoHideScrollbar>
                     </MainSplit>
                 </main>
             );

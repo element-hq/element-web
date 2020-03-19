@@ -22,6 +22,7 @@ import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 export default createReactClass({
     displayName: 'MyGroups',
@@ -62,8 +63,6 @@ export default createReactClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const GroupTile = sdk.getComponent("groups.GroupTile");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-
 
         let content;
         let contentHeader;
@@ -74,7 +73,7 @@ export default createReactClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <GeminiScrollbarWrapper>
+                <AutoHideScrollbar className="mx_MyGroups_scrollable">
                     <div className="mx_MyGroups_microcopy">
                         <p>
                             { _t(
@@ -93,7 +92,7 @@ export default createReactClass({
                     <div className="mx_MyGroups_joinedGroups">
                         { groupNodes }
                     </div>
-                </GeminiScrollbarWrapper> :
+                </AutoHideScrollbar> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(
                         "You're not currently a member of any communities.",

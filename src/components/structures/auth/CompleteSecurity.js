@@ -54,17 +54,39 @@ export default class CompleteSecurity extends React.Component {
         }
     }
 
-    onStartClick = async () => {
+    _onUsePassphraseClick = async () => {
         this.setState({
             phase: PHASE_BUSY,
         });
         const cli = MatrixClientPeg.get();
-        const backupInfo = await cli.getKeyBackupVersion();
-        this.setState({backupInfo});
         try {
-            await accessSecretStorage(async () => {
-                await cli.checkOwnCrossSigningTrust();
-                if (backupInfo) await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+            const backupInfo = await cli.getKeyBackupVersion();
+            this.setState({backupInfo});
+
+            // The control flow is fairly twisted here...
+            // For the purposes of completing security, we only wait on getting
+            // as far as the trust check and then show a green shield.
+            // We also begin the key backup restore as well, which we're
+            // awaiting inside `accessSecretStorage` only so that it keeps your
+            // passphase cached for that work. This dialog itself will only wait
+            // on the first trust check, and the key backup restore will happen
+            // in the background.
+            await new Promise((resolve, reject) => {
+                try {
+                    accessSecretStorage(async () => {
+                        await cli.checkOwnCrossSigningTrust();
+                        resolve();
+                        if (backupInfo) {
+                            // A complete restore can take many minutes for large
+                            // accounts / slow servers, so we allow the dialog
+                            // to advance before this.
+                            await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+                        }
+                    });
+                } catch (e) {
+                    console.error(e);
+                    reject(e);
+                }
             });
 
             if (cli.getCrossSigningId()) {
@@ -147,25 +169,33 @@ export default class CompleteSecurity extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
+            const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
             title = _t("Complete security");
             body = (
                 <div>
                     <p>{_t(
-                        "Verify this session to grant it access to encrypted messages.",
+                        "Open an existing session & use it to verify this one, " +
+                        "granting it access to encrypted messages.",
                     )}</p>
+                    <p className="mx_CompleteSecurity_waiting"><InlineSpinner />{_t("Waiting…")}</p>
+                    <p>{_t(
+                        "If you can’t access one, <button>use your recovery key or passphrase.</button>",
+                    {}, {
+                        button: sub => <AccessibleButton element="span"
+                            className="mx_linkButton"
+                            onClick={this._onUsePassphraseClick}
+                        >
+                            {sub}
+                        </AccessibleButton>,
+                    })}</p>
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
                             kind="danger"
                             onClick={this.onSkipClick}
                         >
                             {_t("Skip")}
-                        </AccessibleButton>
-                        <AccessibleButton
-                            kind="primary"
-                            onClick={this.onStartClick}
-                        >
-                            {_t("Start")}
                         </AccessibleButton>
                     </div>
                 </div>

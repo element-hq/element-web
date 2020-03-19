@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,9 +46,8 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_listheader {
-    display: flex;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    display: block;
+    margin-top: 13px;
 }
 
 .mx_RoomDirectory_searchbox {
@@ -64,7 +64,7 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_table {
-    font-size: 14px;
+    font-size: 12px;
     color: $primary-fg-color;
     width: 100%;
     text-align: left;
@@ -112,6 +112,7 @@ limitations under the License.
 
 .mx_RoomDirectory_name {
     display: inline-block;
+    font-size: 18px;
     font-weight: 600;
 }
 
@@ -148,8 +149,8 @@ limitations under the License.
     padding: 0;
 }
 
-.mx_RoomDirectory p {
-    font-size: 14px;
+.mx_RoomDirectory > span {
+    font-size: 15px;
     margin-top: 0;
 
     .mx_AccessibleButton {

@@ -78,8 +78,7 @@ export class EditableItem extends React.Component {
 
         return (
             <div className="mx_EditableItem">
-                <img src={require("../../../../res/img/feather-customised/cancel.svg")} width={14} height={14}
-                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")} />
+                <div onClick={this._onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );

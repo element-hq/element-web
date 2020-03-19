@@ -33,6 +33,7 @@ export default createReactClass({
         onFinished: PropTypes.func.isRequired,
         headerImage: PropTypes.string,
         quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
+        fixedWidth: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -63,11 +64,14 @@ export default createReactClass({
             primaryButtonClass = "danger";
         }
         return (
-            <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_QuestionDialog"
+                onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
                 headerImage={this.props.headerImage}
                 hasCancel={this.props.hasCancelButton}
+                fixedWidth={this.props.fixedWidth}
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     { this.props.description }

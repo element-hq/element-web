@@ -25,6 +25,7 @@ import Field from "../elements/Field";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
+import RoomPublishSetting from "./RoomPublishSetting";
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {
@@ -97,6 +98,7 @@ export default class AliasSettings extends React.Component {
             canonicalAlias: null, // #canonical:domain.tld
             updatingCanonicalAlias: false,
             localAliasesLoading: false,
+            detailsOpen: false,
         };
 
         if (props.canonicalAliasEvent) {
@@ -234,8 +236,7 @@ export default class AliasSettings extends React.Component {
         // TODO: In future, we should probably be making sure that the alias actually belongs
         // to this room. See https://github.com/vector-im/riot-web/issues/7353
         MatrixClientPeg.get().deleteAlias(alias).then(() => {
-            const localAliases = this.state.localAliases.slice();
-            localAliases.splice(index);
+            const localAliases = this.state.localAliases.filter(a => a !== alias);
             this.setState({localAliases});
 
             if (this.state.canonicalAlias === alias) {
@@ -243,12 +244,18 @@ export default class AliasSettings extends React.Component {
             }
         }).catch((err) => {
             console.error(err);
-            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
-                title: _t("Error removing alias"),
-                description: _t(
+            let description;
+            if (err.errcode === "M_FORBIDDEN") {
+                description = _t("You don't have permission to delete the alias.");
+            } else {
+                description = _t(
                     "There was an error removing that alias. It may no longer exist or a temporary " +
                     "error occurred.",
-                ),
+                );
+            }
+            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
+                title: _t("Error removing alias"),
+                description,
             });
         });
     };
@@ -261,6 +268,7 @@ export default class AliasSettings extends React.Component {
                 this.loadLocalAliases();
             }
         }
+        this.setState({detailsOpen: event.target.open});
     };
 
     onCanonicalAliasChange = (event) => {
@@ -340,16 +348,18 @@ export default class AliasSettings extends React.Component {
                 onItemAdded={this.onLocalAliasAdded}
                 onItemRemoved={this.onLocalAliasDeleted}
                 noItemsLabel={_t('This room has no local addresses')}
-                placeholder={_t(
-                    'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
-                )}
+                placeholder={_t('Local address')}
                 domain={localDomain}
             />);
         }
 
         return (
             <div className='mx_AliasSettings'>
+                <span className='mx_SettingsTab_subheading'>{_t("Published Addresses")}</span>
+                <p>{_t("Published addresses can be used by anyone on any server to join your room. " +
+                    "To publish an address, it needs to be set as a local address first.")}</p>
                 {canonicalAliasSection}
+                <RoomPublishSetting roomId={this.props.roomId} canSetCanonicalAlias={this.props.canSetCanonicalAlias} />
                 <datalist id="mx_AliasSettings_altRecommendations">
                     {this._getLocalNonAltAliases().map(alias => {
                         return <option value={alias} key={alias} />;
@@ -366,14 +376,14 @@ export default class AliasSettings extends React.Component {
                     onItemAdded={this.onAltAliasAdded}
                     onItemRemoved={this.onAltAliasDeleted}
                     suggestionsListId="mx_AliasSettings_altRecommendations"
-                    itemsLabel={_t('Alternative addresses for this room:')}
-                    noItemsLabel={_t('This room has no alternative addresses')}
-                    placeholder={_t(
-                        'New address (e.g. #foo:domain)',
-                    )}
+                    itemsLabel={_t('Other published addresses:')}
+                    noItemsLabel={_t('No other published addresses yet, add one below')}
+                    placeholder={_t('New published address (e.g. #alias:server)')}
                 />
+                <span className='mx_SettingsTab_subheading mx_AliasSettings_localAliasHeader'>{_t("Local Addresses")}</span>
+                <p>{_t("Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)", {localDomain})}</p>
                 <details onToggle={this.onLocalAliasesToggled}>
-                    <summary>{_t('Local addresses (unmoderated content)')}</summary>
+                    <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more")}</summary>
                     {localAliasesList}
                 </details>
             </div>
