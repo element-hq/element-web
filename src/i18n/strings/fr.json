@@ -2230,5 +2230,6 @@
     "Server name": "Nom du serveur",
     "Add a new server...": "Ajouter un nouveau serveur…",
     "%(networkName)s rooms": "%(networkName)s salons",
-    "Matrix rooms": "Salons Matrix"
+    "Matrix rooms": "Salons Matrix",
+    "Keyboard Shortcuts": "Raccourcis clavier"
 }
