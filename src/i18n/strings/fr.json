@@ -2216,5 +2216,19 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Définissez les adresses de ce salon pour que les utilisateurs puissent trouver ce salon avec votre serveur d’accueil (%(localDomain)s)",
     "Open an existing session & use it to verify this one, granting it access to encrypted messages.": "Ouvrez une session existante et utilisez-la pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.",
     "Waiting…": "Patientez…",
-    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "Si vous n’avez accès à aucune session, <button>utilisez votre clé de récupération ou votre phrase de passe.</button>"
+    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "Si vous n’avez accès à aucune session, <button>utilisez votre clé de récupération ou votre phrase de passe.</button>",
+    "Enter a server name": "Saisissez le nom d’un serveur",
+    "Looks good": "Ça a l’air correct",
+    "Can't find this server or its room list": "Impossible de trouver ce serveur ou sa liste de salons",
+    "All rooms": "Tous les salons",
+    "Your server": "Votre serveur",
+    "Are you sure you want to remove <b>%(serverName)s</b>": "Voulez-vous vraiment supprimer <b>%(serverName)s</b>",
+    "Remove server": "Supprimer le serveur",
+    "Matrix": "Matrix",
+    "Add a new server": "Ajouter un nouveau serveur",
+    "Enter the name of a new server you want to explore.": "Saisissez le nom du nouveau serveur que vous voulez explorer.",
+    "Server name": "Nom du serveur",
+    "Add a new server...": "Ajouter un nouveau serveur…",
+    "%(networkName)s rooms": "%(networkName)s salons",
+    "Matrix rooms": "Salons Matrix"
 }
