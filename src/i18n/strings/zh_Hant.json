@@ -2215,5 +2215,19 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "為此聊天室設定位置讓使用者可以透過您的家伺服器找到此聊天室 (%(localDomain)s)",
     "Open an existing session & use it to verify this one, granting it access to encrypted messages.": "開啟既有的工作階段並使用它來驗證此工作階段，並授予其存取已加密訊息的權限。",
     "Waiting…": "等待中……",
-    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "如果您無法存取裝置，<button>使用您的復原金鑰或通關密語。</button>"
+    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "如果您無法存取裝置，<button>使用您的復原金鑰或通關密語。</button>",
+    "Enter a server name": "輸入伺服器名稱",
+    "Looks good": "看起來不錯",
+    "Can't find this server or its room list": "找不到此伺服器或其聊天室清單",
+    "All rooms": "所有聊天室",
+    "Your server": "您的伺服器",
+    "Are you sure you want to remove <b>%(serverName)s</b>": "您確定您想要移除 <b>%(serverName)s</b> 嗎",
+    "Remove server": "移除伺服器",
+    "Matrix": "Matrix",
+    "Add a new server": "加入新的伺服器",
+    "Enter the name of a new server you want to explore.": "輸入您想要探索的新伺服器的名稱。",
+    "Server name": "伺服器名稱",
+    "Add a new server...": "加入新的伺服器……",
+    "%(networkName)s rooms": "%(networkName)s 聊天室",
+    "Matrix rooms": "Matrix 聊天室"
 }
