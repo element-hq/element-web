@@ -162,6 +162,20 @@ export const crossSigningCallbacks = {
     onSecretRequested,
 };
 
+export async function promptForBackupPassphrase() {
+    let key;
+
+    const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+    const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
+            showSummary: false, keyCallback: k => key = k,
+    }, null, /* priority = */ false, /* static = */ false);
+
+    const success = await finished;
+    if (!success) throw new Error("Key backup prompt cancelled");
+
+    return key;
+}
+
 /**
  * This helper should be used whenever you need to access secret storage. It
  * ensures that secret storage (and also cross-signing since they each depend on
@@ -218,6 +232,7 @@ export async function accessSecretStorage(func = async () => { }, force = false)
                         throw new Error("Cross-signing key upload auth canceled");
                     }
                 },
+                getBackupPassphrase: promptForBackupPassphrase,
             });
         }
 

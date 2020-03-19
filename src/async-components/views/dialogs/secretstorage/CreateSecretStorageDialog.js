@@ -23,6 +23,7 @@ import { scorePassword } from '../../../../utils/PasswordScorer';
 import FileSaver from 'file-saver';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
+import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 
 const PHASE_LOADING = 0;
 const PHASE_MIGRATE = 1;
@@ -243,6 +244,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     createSecretStorageKey: async () => this._keyInfo,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
+                    getKeyBackupPassphrase: promptForBackupPassphrase,
                 });
             }
             this.setState({
