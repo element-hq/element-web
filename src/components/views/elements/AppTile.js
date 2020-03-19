@@ -520,7 +520,13 @@ export default class AppTile extends React.Component {
             parsedWidgetUrl.query.react_perf = true;
         }
         let safeWidgetUrl = '';
-        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+        if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol) || (
+            // Check if the widget URL is a Jitsi widget in Electron
+            parsedWidgetUrl.protocol === 'vector:'
+            && parsedWidgetUrl.host === 'vector'
+            && parsedWidgetUrl.pathname === '/webapp/jitsi.html'
+            && this.props.type === 'jitsi'
+        )) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
         return safeWidgetUrl;

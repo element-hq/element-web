@@ -26,6 +26,13 @@ export const DEFAULTS: ConfigOptions = {
     integrations_rest_url: "https://scalar.vector.im/api",
     // Where to send bug reports. If not specified, bugs cannot be sent.
     bug_report_endpoint_url: null,
+    // Jitsi conference options
+    jitsi: {
+        // Default conference domain
+        preferredDomain: "jitsi.riot.im",
+        // Default Jitsi Meet API location
+        externalApiUrl: "https://jitsi.riot.im/libs/external_api.min.js",
+    },
 };
 
 export default class SdkConfig {
