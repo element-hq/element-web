@@ -269,12 +269,11 @@ export default createReactClass({
                     ...favouriteRooms,
                     ...dmRooms,
                     ...recentRooms,
-                    // eslint-disable-next-line prefer-spread
-                    ...[].concat.apply([], shownCustomTagRooms),
+                    ...[].concat.apply([], shownCustomTagRooms), // eslint-disable-line prefer-spread
                     ...lowPriorityRooms,
                     ...historicalRooms,
                     ...serverNoticeRooms,
-                ], this.props.searchFilter); // TODO optimize
+                ], this.props.searchFilter);
 
                 if (payload.unread) {
                     // filter to only notification rooms (and our current active room so we can index properly)
@@ -284,9 +283,8 @@ export default createReactClass({
                 }
 
                 const currentIndex = rooms.findIndex(room => room.roomId === currentRoomId);
-
+                // use slice to account for looping around the start
                 const [room] = rooms.slice((currentIndex + payload.delta) % rooms.length);
-                // console.log("DEBUG", currentIndex, room, rooms);
                 if (room) {
                     dis.dispatch({
                         action: 'view_room',
