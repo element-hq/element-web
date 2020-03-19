@@ -111,17 +111,31 @@ export default class RoomSubList extends React.PureComponent {
     }
 
     onAction = (payload) => {
-        // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
-        // but this is no longer true, so we must do it here (and can apply the small
-        // optimisation of checking that we care about the room being read).
-        //
-        // Ultimately we need to transition to a state pushing flow where something
-        // explicitly notifies the components concerned that the notif count for a room
-        // has change (e.g. a Flux store).
-        if (payload.action === 'on_room_read' &&
-            this.props.list.some((r) => r.roomId === payload.roomId)
-        ) {
-            this.forceUpdate();
+        switch (payload.action) {
+            case 'on_room_read':
+                // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
+                // but this is no longer true, so we must do it here (and can apply the small
+                // optimisation of checking that we care about the room being read).
+                //
+                // Ultimately we need to transition to a state pushing flow where something
+                // explicitly notifies the components concerned that the notif count for a room
+                // has change (e.g. a Flux store).
+                if (this.props.list.some((r) => r.roomId === payload.roomId)) {
+                    this.forceUpdate();
+                }
+                break;
+
+            case 'view_room':
+                if (this.state.hidden && !this.props.forceExpand &&
+                    this.props.list.some((r) => r.roomId === payload.room_id)
+                ) {
+                    this.onClick();
+                    // re-fire to scroll the room tile, normally it catches `view_room` but here it wasn't rendered yet.
+                    dis.dispatch({
+                        action: 'scroll_room_tile',
+                        room_id: payload.room_id,
+                    });
+                }
         }
     };
 

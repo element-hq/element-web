@@ -226,6 +226,7 @@ export default createReactClass({
                 this.forceUpdate();
                 break;
 
+            case 'scroll_room_tile':
             case 'view_room':
                 // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcuts
                 if (payload.room_id === this.props.room.roomId && this._roomTile.current) {
