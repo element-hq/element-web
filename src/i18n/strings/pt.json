@@ -321,7 +321,7 @@
     "Please check your email to continue registration.": "Por favor, verifique o seu e-mail para continuar o processo de registro.",
     "Token incorrect": "Token incorreto",
     "Please enter the code it contains:": "Por favor, entre com o código que está na mensagem:",
-    "powered by Matrix": "rodando a partir do Matrix",
+    "powered by Matrix": "powered by Matrix",
     "If you don't specify an email address, you won't be able to reset your password. Are you sure?": "Se não especificar um endereço de e-mail, você não poderá redefinir sua senha. Tem certeza?",
     "Error decrypting audio": "Erro ao descriptografar o áudio",
     "Error decrypting image": "Erro ao descriptografar a imagem",
@@ -627,5 +627,9 @@
     "Call failed due to misconfigured server": "Chamada falhada devido a um erro de configuração do servidor",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Peça ao administrador do seu servidor inicial (<code>%(homeserverDomain)s</code>) de configurar um servidor TURN para que as chamadas funcionem fiavelmente.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativamente, pode tentar usar o servidor público em <code>turn.matrix.org</code>, mas não será tão fiável e partilhará o seu IP com esse servidor. Também pode gerir isso nas definições.",
-    "Try using turn.matrix.org": "Tente utilizar turn.matrix.org"
+    "Try using turn.matrix.org": "Tente utilizar turn.matrix.org",
+    "The version of Riot": "A versão do Riot",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Quer esteja a usar o Riot num dispositivo onde o touch é o mecanismo de entrada primário",
+    "Whether you're using Riot as an installed Progressive Web App": "Quer esteja a usar o Riot como uma Progressive Web App (PWA)",
+    "Your user agent": "O seu user agent"
 }
