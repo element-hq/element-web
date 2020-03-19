@@ -1,6 +1,6 @@
 # Jitsi Wrapper
 
-**Note**: these are developer docs. Please consult your client's documentation for
+**Note**: These are developer docs. Please consult your client's documentation for
 instructions on setting up Jitsi.
 
 The react-sdk wraps all Jitsi call widgets in a local wrapper called `jitsi.html`
@@ -9,7 +9,7 @@ which takes several parameters:
 *Query string*:
 * `widgetId`: The ID of the widget. This is needed for communication back to the 
   react-sdk.
-* `parentUrl`: The URL of the parent window. This is also ideally needed for
+* `parentUrl`: The URL of the parent window. This is also needed for
   communication back to the react-sdk.
 
 *Hash/fragment (formatted as a query string)*:
