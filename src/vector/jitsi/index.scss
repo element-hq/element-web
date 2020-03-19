@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Match the user's theme instead of hardcoding a bunch of colors
+// TODO: Match the user's theme: https://github.com/vector-im/riot-web/issues/12794
 
 @font-face {
     font-family: 'Nunito';
@@ -49,12 +49,12 @@ body, html {
     width: 100%;
 }
 
-.join-conference-boat {
+.joinConferenceFloating {
     display: table-cell;
     vertical-align: middle;
 }
 
-.join-conference-prompt {
+.joinConferencePrompt {
     margin-left: auto;
     margin-right: auto;
     width: 90%;

@@ -78,7 +78,7 @@ let widgetApi: WidgetApi;
         scriptTag.src = SdkConfig.get()['jitsi']['externalApiUrl'];
         document.body.appendChild(scriptTag);
 
-        // TODO: register widgetApi listeners for PTT controls
+        // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
         document.getElementById("joinButton").onclick = () => joinConference();
     } catch (e) {
