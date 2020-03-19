@@ -648,13 +648,6 @@ export default class InviteDialog extends React.PureComponent {
         });
     };
 
-    _cancel = () => {
-        // We do not want the user to close the dialog while an action is in progress
-        if (this.state.busy) return;
-
-        this.props.onFinished();
-    };
-
     _onKeyDown = (e) => {
         // when the field is empty and the user hits backspace remove the right-most target
         if (!e.target.value && !this.state.busy && this.state.targets.length > 0 && e.key === Key.BACKSPACE &&
@@ -907,7 +900,7 @@ export default class InviteDialog extends React.PureComponent {
     _onManageSettingsClick = (e) => {
         e.preventDefault();
         dis.dispatch({ action: 'view_user_settings' });
-        this._cancel();
+        this.props.onFinished();
     };
 
     _renderSection(kind: "recents"|"suggestions") {
@@ -1107,7 +1100,7 @@ export default class InviteDialog extends React.PureComponent {
             <BaseDialog
                 className='mx_InviteDialog'
                 hasCancel={true}
-                onFinished={this._cancel}
+                onFinished={this.props.onFinished}
                 title={title}
             >
                 <div className='mx_InviteDialog_content'>
