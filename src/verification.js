@@ -82,10 +82,13 @@ export async function verifyDevice(user, device) {
                 });
             } else if (action === "legacy") {
                 const ManualDeviceKeyVerificationDialog = sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
-                Modal.createTrackedDialog("Legacy verify session", "legacy verify session", ManualDeviceKeyVerificationDialog, {
-                    userId: user.userId,
-                    device,
-                });
+                Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
+                    ManualDeviceKeyVerificationDialog,
+                    {
+                        userId: user.userId,
+                        device,
+                    },
+                );
             }
         },
     });

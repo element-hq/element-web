@@ -46,7 +46,6 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component {
 
     render() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
