@@ -1494,6 +1494,16 @@ export default createReactClass({
             }
         });
 
+        cli.on("crypto.keySignatureUploadFailure", (failures, source, continuation) => {
+            const KeySignatureUploadFailedDialog =
+                sdk.getComponent('views.dialogs.KeySignatureUploadFailedDialog');
+            Modal.createTrackedDialog(
+                'Failed to upload key signatures',
+                'Failed to upload key signatures',
+                KeySignatureUploadFailedDialog,
+                { failures, source, continuation });
+        });
+
         cli.on("crypto.verification.request", request => {
             const isFlagOn = SettingsStore.isFeatureEnabled("feature_cross_signing");
 

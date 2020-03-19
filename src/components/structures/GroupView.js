@@ -555,10 +555,6 @@ export default createReactClass({
                         GROUP_JOINPOLICY_INVITE,
             },
         });
-        dis.dispatch({
-            action: 'panel_disable',
-            sideDisabled: true,
-        });
     },
 
     _onShareClick: function() {
