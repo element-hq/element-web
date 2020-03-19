@@ -2213,5 +2213,19 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Imposta gli indirizzi per la stanza affinché gli utenti la trovino attraverso il tuo homeserver (%(localDomain)s)",
     "Open an existing session & use it to verify this one, granting it access to encrypted messages.": "Apri una sessione esistente e usala per verificare questa, dandole accesso ai messaggi cifrati.",
     "Waiting…": "In attesa…",
-    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "Se non puoi accedere a nessuna, <button>usa la chiave di recupero o la password.</button>"
+    "If you can’t access one, <button>use your recovery key or passphrase.</button>": "Se non puoi accedere a nessuna, <button>usa la chiave di recupero o la password.</button>",
+    "Enter a server name": "Inserisci il nome di un server",
+    "Looks good": "Sembra giusto",
+    "Can't find this server or its room list": "Impossibile trovare questo server o l'elenco delle sue stanze",
+    "All rooms": "Tutte le stanze",
+    "Your server": "Il tuo server",
+    "Are you sure you want to remove <b>%(serverName)s</b>": "Sei sicuro di volere rimuovere <b>%(serverName)s</b>",
+    "Remove server": "Rimuovi server",
+    "Matrix": "Matrix",
+    "Add a new server": "Aggiungi un nuovo server",
+    "Enter the name of a new server you want to explore.": "Inserisci il nome di un nuovo server che vuoi esplorare.",
+    "Server name": "Nome server",
+    "Add a new server...": "Aggiungi un nuovo server...",
+    "%(networkName)s rooms": "Stanze di %(networkName)s",
+    "Matrix rooms": "Stanze di Matrix"
 }
