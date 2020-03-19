@@ -60,6 +60,10 @@ export default class CrossSigningPanel extends React.PureComponent {
         }
     };
 
+    _onBootstrapClick = () => {
+        this._bootstrapSecureSecretStorage(false);
+    };
+
     onStatusChanged = () => {
         this._getUpdatedStatus();
     };
@@ -175,7 +179,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         ) {
             bootstrapButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                    <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
                         {_t("Bootstrap cross-signing and secret storage")}
                     </AccessibleButton>
                 </div>
