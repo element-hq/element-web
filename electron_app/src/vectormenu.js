@@ -40,6 +40,11 @@ const template = [
             { role: 'zoomin', accelerator: 'CommandOrControl+=' },
             { role: 'zoomout' },
             { type: 'separator' },
+            {
+                label: 'Preferences',
+                accelerator: 'Command+,', // Mac-only accelerator
+                click() { global.mainWindow.webContents.send('preferences'); },
+            },
             { role: 'togglefullscreen' },
             { role: 'toggledevtools' },
         ],

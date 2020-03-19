@@ -6,6 +6,7 @@
     "Unexpected error preparing the app. See console for details.": "Unexpected error preparing the app. See console for details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.",
     "Invalid configuration: no default server specified.": "Invalid configuration: no default server specified.",
+    "Open user settings": "Open user settings",
     "Riot Desktop on %(platformName)s": "Riot Desktop on %(platformName)s",
     "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
     "Unknown device": "Unknown device",
