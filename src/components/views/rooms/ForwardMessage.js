@@ -33,7 +33,6 @@ export default createReactClass({
     componentWillMount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            rightDisabled: true,
             middleDisabled: true,
         });
     },
@@ -45,7 +44,6 @@ export default createReactClass({
     componentWillUnmount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            sideDisabled: false,
             middleDisabled: false,
         });
         document.removeEventListener('keydown', this._onKeyDown);
