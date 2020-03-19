@@ -1013,6 +1013,7 @@ export default class InviteDialog extends React.PureComponent {
                 ref={this._editorRef}
                 onPaste={this._onPaste}
                 autoFocus={true}
+                disabled={this.state.busy}
             />
         );
         return (
