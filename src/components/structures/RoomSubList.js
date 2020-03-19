@@ -130,11 +130,6 @@ export default class RoomSubList extends React.PureComponent {
                     this.props.list.some((r) => r.roomId === payload.room_id)
                 ) {
                     this.onClick();
-                    // re-fire to scroll the room tile, normally it catches `view_room` but here it wasn't rendered yet.
-                    dis.dispatch({
-                        action: 'scroll_room_tile',
-                        room_id: payload.room_id,
-                    });
                 }
         }
     };

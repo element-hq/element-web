@@ -226,17 +226,21 @@ export default createReactClass({
                 this.forceUpdate();
                 break;
 
-            case 'scroll_room_tile':
             case 'view_room':
-                // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcuts
-                if (payload.room_id === this.props.room.roomId && this._roomTile.current) {
-                    this._roomTile.current.scrollIntoView({
-                        block: "nearest",
-                        behavior: "auto",
-                    });
+                // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcut access
+                if (payload.room_id === this.props.room.roomId) {
+                    this._scrollIntoView();
                 }
                 break;
         }
+    },
+
+    _scrollIntoView: function() {
+        if (!this._roomTile.current) return;
+        this._roomTile.current.scrollIntoView({
+            block: "nearest",
+            behavior: "auto",
+        });
     },
 
     _onActiveRoomChange: function() {
@@ -271,6 +275,11 @@ export default createReactClass({
             if (statusUser) {
                 statusUser.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
             }
+        }
+
+        // when we're first rendered (or our sublist is expanded) make sure we are visible if we're active
+        if (this.state.selected) {
+            this._scrollIntoView();
         }
     },
 
