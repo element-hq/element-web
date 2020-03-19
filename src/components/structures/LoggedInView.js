@@ -385,6 +385,18 @@ const LoggedInView = createReactClass({
                     handled = true;
                 }
                 break;
+
+            case Key.ARROW_UP:
+            case Key.ARROW_DOWN:
+                if (ev.altKey && !ev.ctrlKey && !ev.metaKey) {
+                    dis.dispatch({
+                        action: 'view_room_delta',
+                        delta: ev.key === Key.ARROW_UP ? -1 : 1,
+                        unread: ev.shiftKey,
+                    });
+                    handled = true;
+                }
+                break;
         }
 
         if (handled) {

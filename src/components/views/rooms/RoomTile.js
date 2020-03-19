@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -225,6 +225,16 @@ export default createReactClass({
             case 'feature_custom_status_changed':
                 this.forceUpdate();
                 break;
+
+            case 'view_room':
+                // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcuts
+                if (payload.room_id === this.props.room.roomId && this._roomTile.current) {
+                    this._roomTile.current.scrollIntoView({
+                        block: "nearest",
+                        behavior: "auto",
+                    });
+                }
+                break;
         }
     },
 
@@ -232,6 +242,10 @@ export default createReactClass({
         this.setState({
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
         });
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._roomTile = createRef();
     },
 
     componentDidMount: function() {
@@ -538,7 +552,7 @@ export default createReactClass({
         }
 
         return <React.Fragment>
-            <RovingTabIndexWrapper>
+            <RovingTabIndexWrapper inputRef={this._roomTile}>
                 {({onFocus, isActive, ref}) =>
                     <AccessibleButton
                         onFocus={onFocus}

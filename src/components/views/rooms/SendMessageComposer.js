@@ -125,10 +125,12 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onVerticalArrow(e, up) {
-        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
+        // arrows from an initial-caret composer navigates recent messages to edit
+        // ctrl-alt-arrows navigate send history
+        if (e.shiftKey || e.metaKey) return;
 
-        const shouldSelectHistory = e.altKey;
-        const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
+        const shouldSelectHistory = e.altKey && e.ctrlKey;
+        const shouldEditLastMessage = !e.altKey && !e.ctrlKey && up && !RoomViewStore.getQuotingEvent();
 
         if (shouldSelectHistory) {
             // Try select composer history

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 Vector Creations Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,6 +41,8 @@ import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 import {RovingTabIndexProvider} from "../../../accessibility/RovingTabIndex";
+import * as Unread from "../../../Unread";
+import RoomViewStore from "../../../stores/RoomViewStore";
 
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -242,6 +245,56 @@ export default createReactClass({
                     });
                 }
                 break;
+            case 'view_room_delta': {
+                const currentRoomId = RoomViewStore.getRoomId();
+                const {
+                    "im.vector.fake.invite": inviteRooms,
+                    "m.favourite": favouriteRooms,
+                    [TAG_DM]: dmRooms,
+                    "im.vector.fake.recent": recentRooms,
+                    "m.lowpriority": lowPriorityRooms,
+                    "im.vector.fake.archived": historicalRooms,
+                    "m.server_notice": serverNoticeRooms,
+                    ...tags
+                } = this.state.lists;
+
+                const shownCustomTagRooms = Object.keys(tags).filter(tagName => {
+                    return (!this.state.customTags || this.state.customTags[tagName]) &&
+                        !tagName.match(STANDARD_TAGS_REGEX);
+                }).map(tagName => tags[tagName]);
+
+                // this order matches the one when generating the room sublists below.
+                let rooms = this._applySearchFilter([
+                    ...inviteRooms,
+                    ...favouriteRooms,
+                    ...dmRooms,
+                    ...recentRooms,
+                    // eslint-disable-next-line prefer-spread
+                    ...[].concat.apply([], shownCustomTagRooms),
+                    ...lowPriorityRooms,
+                    ...historicalRooms,
+                    ...serverNoticeRooms,
+                ], this.props.searchFilter); // TODO optimize
+
+                if (payload.unread) {
+                    // filter to only notification rooms (and our current active room so we can index properly)
+                    rooms = rooms.filter(room => {
+                        return room.roomId === currentRoomId || Unread.doesRoomHaveUnreadMessages(room);
+                    });
+                }
+
+                const currentIndex = rooms.findIndex(room => room.roomId === currentRoomId);
+
+                const [room] = rooms.slice((currentIndex + payload.delta) % rooms.length);
+                // console.log("DEBUG", currentIndex, room, rooms);
+                if (room) {
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: room.roomId,
+                    });
+                }
+                break;
+            }
         }
     },
 
