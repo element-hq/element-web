@@ -380,7 +380,7 @@ const LoggedInView = createReactClass({
                 break;
 
             case Key.SLASH:
-                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                if (ctrlCmdOnly) {
                     KeyboardShortcuts.toggleDialog();
                     handled = true;
                 }
