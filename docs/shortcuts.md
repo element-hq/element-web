@@ -10,4 +10,6 @@ The modifier is <kbd>Ctrl</kbd> on Windows & Linux and <kbd>⌘</kbd> on Mac.
 - <kbd>↑</kbd>/<kbd>↓</kbd> - next/prev room when focus in room list
 - <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> - resend previous messages when the composer is in focus
 - <kbd>PageUp</kbd>/<kbd>PageDown</kbd> - scroll timeline up/down
-- <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Home</kbd>/<kbd>End</kbd> - jump to timeline start/end
+- <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Home</kbd>/<kbd>End</kbd> - jump to
+  start/end of the composer when focused, otherwise jump to timeline start/end
+- <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>`</kbd> - toggle the top left menu

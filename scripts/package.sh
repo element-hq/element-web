@@ -2,11 +2,6 @@
 
 set -e
 
-dev=""
-if [ "$1" = '-d' ]; then
-    dev=":dev"
-fi
-
 if [ -n "$DIST_VERSION" ]; then
     version=$DIST_VERSION
 else
@@ -14,7 +9,7 @@ else
 fi
 
 yarn clean
-yarn build$dev
+yarn build
 
 # include the sample config in the tarball. Arguably this should be done by
 # `yarn build`, but it's just too painful.

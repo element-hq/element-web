@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import request from 'browser-request';
 
 // Load the config file. First try to load up a domain-specific config of the

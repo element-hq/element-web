@@ -35,10 +35,25 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
-const { migrateFromOldOrigin } = require('./originMigrator');
+const protocolInit = require('./protocol');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
+
+const fs = require('fs');
+const afs = fs.promises;
+
+let Seshat = null;
+
+try {
+    Seshat = require('matrix-seshat');
+} catch (e) {
+    if (e.code === "MODULE_NOT_FOUND") {
+        console.log("Seshat isn't installed, event indexing is disabled.");
+    } else {
+        console.warn("Seshat unexpected error:", e);
+    }
+}
 
 if (argv["help"]) {
     console.log("Options:");
@@ -49,14 +64,9 @@ if (argv["help"]) {
     console.log("  --hidden:             Start the application hidden in the system tray.");
     console.log("  --help:               Displays this help message.");
     console.log("And more such as --proxy, see:" +
-        "https://github.com/electron/electron/blob/master/docs/api/chrome-command-line-switches.md");
+        "https://electronjs.org/docs/api/chrome-command-line-switches#supported-chrome-command-line-switches");
     app.exit();
 }
-
-// boolean flag set whilst we are doing one-time origin migration
-// We only serve the origin migration script while we're actually
-// migrating to mitigate any risk of it being used maliciously.
-let migratingOrigin = false;
 
 if (argv['profile-dir']) {
     app.setPath('userData', argv['profile-dir']);
@@ -94,7 +104,10 @@ try {
     // Could not load local config, this is expected in most cases.
 }
 
+const eventStorePath = path.join(app.getPath('userData'), 'EventStore');
 const store = new Store({ name: "electron-config" });
+
+let eventIndex = null;
 
 let mainWindow = null;
 global.appQuitting = false;
@@ -217,14 +230,10 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 mainWindow.focus();
             }
             break;
-        case 'origin_migrate':
-            migratingOrigin = true;
-            await migrateFromOldOrigin();
-            migratingOrigin = false;
-            break;
         case 'getConfig':
             ret = vectorConfig;
             break;
+
         default:
             mainWindow.webContents.send('ipcReply', {
                 id: payload.id,
@@ -239,6 +248,178 @@ ipcMain.on('ipcCall', async function(ev, payload) {
     });
 });
 
+ipcMain.on('seshat', async function(ev, payload) {
+    if (!mainWindow) return;
+
+    const sendError = (id, e) => {
+        const error = {
+            message: e.message
+        }
+
+        mainWindow.webContents.send('seshatReply', {
+            id:id,
+            error: error
+        });
+    }
+
+    const args = payload.args || [];
+    let ret;
+
+    switch (payload.name) {
+        case 'supportsEventIndexing':
+            if (Seshat === null) ret = false;
+            else ret = true;
+            break;
+
+        case 'initEventIndex':
+            if (eventIndex === null) {
+                try {
+                    await afs.mkdir(eventStorePath, {recursive: true});
+                    eventIndex = new Seshat(eventStorePath, {passphrase: "DEFAULT_PASSPHRASE"});
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'closeEventIndex':
+            eventIndex = null;
+            break;
+
+        case 'deleteEventIndex':
+            const deleteFolderRecursive = async(p) =>  {
+                for (let entry of await afs.readdir(p)) {
+                    const curPath = path.join(p, entry);
+                    await afs.unlink(curPath);
+                }
+            }
+
+            try {
+                await deleteFolderRecursive(eventStorePath);
+            } catch (e) {
+            }
+
+            break;
+
+        case 'isEventIndexEmpty':
+            if (eventIndex === null) ret = true;
+            else ret = await eventIndex.isEmpty();
+            break;
+
+        case 'addEventToIndex':
+            try {
+                eventIndex.addEvent(args[0], args[1]);
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'commitLiveEvents':
+            try {
+                ret = await eventIndex.commit();
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'searchEventIndex':
+            try {
+                ret = await eventIndex.search(args[0]);
+            } catch (e) {
+                sendError(payload.id, e);
+                return;
+            }
+            break;
+
+        case 'addHistoricEvents':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addHistoricEvents(
+                        args[0], args[1], args[2]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'getStats':
+            if (eventIndex === null) ret = 0;
+            else {
+                try {
+                    ret = await eventIndex.getStats();
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'removeCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.removeCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'addCrawlerCheckpoint':
+            if (eventIndex === null) ret = false;
+            else {
+                try {
+                    ret = await eventIndex.addCrawlerCheckpoint(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'loadFileEvents':
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadFileEvents(args[0]);
+                } catch (e) {
+                    sendError(payload.id, e);
+                    return;
+                }
+            }
+            break;
+
+        case 'loadCheckpoints':
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadCheckpoints();
+                } catch (e) {
+                    ret = [];
+                }
+            }
+            break;
+
+        default:
+            mainWindow.webContents.send('seshatReply', {
+                id: payload.id,
+                error: "Unknown IPC Call: " + payload.name,
+            });
+            return;
+    }
+
+    mainWindow.webContents.send('seshatReply', {
+        id: payload.id,
+        reply: ret,
+    });
+});
+
 app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 const gotLock = app.requestSingleInstanceLock();
@@ -246,6 +427,9 @@ if (!gotLock) {
     console.log('Other instance detected: exiting');
     app.exit();
 }
+
+// do this after we know we are the primary instance of the app
+protocolInit();
 
 const launcher = new AutoLaunch({
     name: vectorConfig.brand || 'Riot',
@@ -314,13 +498,7 @@ app.on('ready', () => {
 
         let baseDir;
         // first part of the path determines where we serve from
-        if (migratingOrigin && target[1] === 'origin_migrator_dest') {
-            // the origin migrator destination page
-            // (only the destination script needs to come from the
-            // custom protocol: the source part is loaded from a
-            // file:// as that's the origin we're migrating from).
-            baseDir = __dirname + "/../../origin_migrator/dest";
-        } else if (target[1] === 'webapp') {
+        if (target[1] === 'webapp') {
             baseDir = __dirname + "/../../webapp";
         } else {
             callback({error: -6}); // FILE_NOT_FOUND

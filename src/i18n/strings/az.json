@@ -1,9 +1,8 @@
 {
-    "Riot is not supported on mobile web. Install the app?": "Riot mobil qurğular üçün veb-saytın versiyasını dəstəkləmir. Proqramı qurmaq?",
     "Riot Desktop on %(platformName)s": "%(platformName)s-da Riot Desktop",
     "Unknown device": "Naməlum qurğu",
     "You need to be using HTTPS to place a screen-sharing call.": "İş stolunun birgə istifadəsi üçün HTTPS-dan istifadə tələb olunur.",
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot konfiqurasiyanızda yanlış JSON var. Lütfən, xətanı düzəldin və səhifəni yeniləyin",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot konfiqurasiyanızda yanlış JSON var. Lütfən, xətanı düzəldin və səhifəni yeniləyin.",
     "Invalid JSON": "Yanlış JSON",
     "Sign In": "Daxil ol",
     "Create Account": "Hesab Aç",
@@ -11,8 +10,16 @@
     "Chat with Riot Bot": "Riot Bot-la söhbət edin",
     "Explore rooms": "Otaqları kəşf edin",
     "Your Riot is misconfigured": "Riot yanlış quraşdırılıb",
-    "Unexpected error preparing the app. See console for details.": "Proqramı başladarkən gözlənilməz xəta. Ətraflı məlumat üçün konsola baxın.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: default_server_config, default_server_name, və ya default_hs_url-dən yalnız birini təyin etməlisiniz.",
-    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib.",
-    "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s"
+    "Unexpected error preparing the app. See console for details.": "Proqramın başlanmasında gözlənilməz xəta. İzah üçün konsola baxın",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: bunlardan yalnız birini təyin edin - default_server_config, default_server_name, və ya default_hs_url.",
+    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s-da %(browserName)s ilə %(appName)s",
+    "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
+    "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
+    "Custom Server Options": "Fərdi Server Seçimləri",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli server URL-ni təyin etməklə digər Matrix serverlərinə daxil olmaq üçün fərdi server seçimlərini istifadə edə bilərsiniz. Bu sizə başqa serverdə qaldırılmış mövcud Matrix hesabınızla Riot-u işlətməyə imkan verir.",
+    "Dismiss": "Nəzərə almayın",
+    "Room Directory": "Otaq kataloqu",
+    "Welcome to Riot.im": "Riot.im-ə xoş gəlmişsiniz",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] tərəfindən təchiz edilmiş mərkəziləşdirilməmiş, şifrələnmiş çat və əməkdaşlıq platforması"
 }

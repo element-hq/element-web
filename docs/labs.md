@@ -73,3 +73,28 @@ improves the device verification experience by allowing you to verify a user
 instead of verifying each of their devices.
 
 This feature is still in development and will be landing in several chunks.
+
+## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
+
+Adds support for search in E2E encrypted rooms. This enables an event indexer
+that downloads, stores, and indexes room messages for E2E encrypted rooms.
+
+The existing search will transparently work for encrypted rooms just like it
+does for non-encrypted.
+
+## Bridge info tab (`feature_bridge_state`)
+
+Adds a "Bridge Info" tab to the Room Settings dialog, if a compatible bridge is
+present in the room. The Bridge info tab pulls information from the `m.bridge` state event ([MSC2346](https://github.com/matrix-org/matrix-doc/pull/2346)). Since the feature is based upon a MSC, most
+bridges are not expected to be compatible, and users should not rely on this
+tab as the single source of truth just yet.
+
+## Presence indicator in room list (`feature_presence_in_room_list`)
+
+This adds a presence indicator in the room list next to DM rooms where the other
+person is online.
+
+## Show padlocks on invite only rooms (`feature_invite_only_padlocks`)
+
+This adds padlocks to room list tiles and room header for invite only rooms.
+This feature flag (unlike most) is enabled by default.

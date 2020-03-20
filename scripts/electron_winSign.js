@@ -8,23 +8,31 @@ exports.default = async function(options) {
     const appOutDir = path.dirname(inPath);
 
     // get the token passphrase from the keychain
-    const tokenPassphrase = await new Promise((resolve, reject) => {
-        execFile(
-            'security',
-            ['find-generic-password', '-s', 'riot_signing_token', '-w'],
-            {},
-            (err, stdout) => {
-                if (err) {
-                    console.error("Couldn't find signing token in keychain", err);
-                    // electron-builder seems to print '[object Object]' on the
-                    // console whether you reject with an Error or a string...
-                    reject(err);
-                } else {
-                    resolve(stdout.trim());
-                }
-            },
+    let tokenPassphrase;
+    try {
+        tokenPassphrase = await new Promise((resolve, reject) => {
+            execFile(
+                'security',
+                ['find-generic-password', '-s', 'riot_signing_token', '-w'],
+                {},
+                (err, stdout) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(stdout.trim());
+                    }
+                },
+            );
+        });
+    } catch (err) {
+        console.warn(
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
+            "! Skipping Windows signing.            !\n" +
+            "! Signing token not found in keychain. !\n" +
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         );
-    });
+        return;
+    }
 
     return new Promise((resolve, reject) => {
         let cmdLine = 'osslsigncode sign ';

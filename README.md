@@ -1,11 +1,31 @@
 Riot
 ====
 
-Riot (formerly known as Vector) is a Matrix web client built using the [Matrix React SDK](https://github.com/matrix-org/matrix-react-sdk).
+Riot (formerly known as Vector) is a Matrix web client built using the [Matrix
+React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
-Riot is officially supported on the web in modern versions of Chrome, Firefox, and Safari. Other browsers may work, however
-official support is not provided. For accessing Riot on an Android or iOS device, check out [riot-android](https://github.com/vector-im/riot-android)
-and [riot-ios](https://github.com/vector-im/riot-ios) - riot-web does not support mobile devices.
+Supported Environments
+======================
+
+Riot has several tiers of support for different environments:
+
+* Supported
+  * Definition: Issues **actively triaged**, regressions **block** the release
+  * Last 2 major versions of Chrome, Firefox, and Safari on desktop OSes
+  * Latest release of official Riot Desktop app on desktop OSes
+  * Desktop OSes means macOS, Windows, and Linux versions for desktop devices
+    that are actively supported by the OS vendor and receive security updates
+* Experimental
+  * Definition: Issues **accepted**, regressions **do not block** the release
+  * Riot as an installed PWA via current stable version of Chrome, Firefox, and Safari
+  * Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
+* Not supported
+  * Definition: Issues only affecting unsupported environments are **closed**
+  * Everything else
+
+For accessing Riot on an Android or iOS device, we currently recommend the
+native apps [riot-android](https://github.com/vector-im/riot-android)
+and [riot-ios](https://github.com/vector-im/riot-ios).
 
 Getting Started
 ===============
@@ -20,6 +40,7 @@ released version of Riot:
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
+1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Riot!
@@ -49,15 +70,6 @@ access to Riot (or other apps) due to sharing the same domain.
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
 https://github.com/vector-im/riot-web/issues/1977 for more details.
-
-The same applies for end-to-end encrypted content, but since this is decrypted
-on the client, Riot needs a way to supply the decrypted content from a separate
-origin to the one Riot is hosted on. This currently done with a 'cross origin
-renderer' which is a small piece of javascript hosted on a different domain.
-To avoid all Riot installs needing one of these to be set up, riot.im hosts
-one on usercontent.riot.im which is used by default.
-https://github.com/vector-im/riot-web/issues/6173 tracks progress on replacing
-this with something better.
 
 Building From Source
 ====================
@@ -191,6 +203,18 @@ Labs Features
 
 Some features of Riot may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
+
+Caching requirements
+====================
+
+Riot requires the following URLs not to be cached, when/if you are serving Riot from your own webserver:
+```
+/config.*.json
+/i18n
+/home
+/sites
+/index.html
+```
 
 Development
 ===========

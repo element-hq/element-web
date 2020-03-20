@@ -1,30 +1,5 @@
-"use strict";
-
-import Promise from 'bluebird';
-
-/**
- * Perform common actions before each test case, e.g. printing the test case
- * name to stdout.
- * @param {Mocha.Context} context  The test context
- */
-export function beforeEach(context) {
-    const desc = context.currentTest.fullTitle();
-    console.log();
-    console.log(desc);
-    console.log(new Array(1 + desc.length).join("="));
-
-    // some tests store things in localstorage. Improve independence of tests
-    // by making sure that they don't inherit any old state.
+export function cleanLocalstorage() {
     window.localStorage.clear();
-}
-
-/**
- * returns true if the current environment supports webrtc
- */
-export function browserSupportsWebRTC() {
-    const n = global.window.navigator;
-    return n.getUserMedia || n.webkitGetUserMedia ||
-        n.mozGetUserMedia;
 }
 
 export function deleteIndexedDB(dbName) {
@@ -57,4 +32,8 @@ export function deleteIndexedDB(dbName) {
         console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
         throw e;
     });
+}
+
+export function sleep(ms) {
+    return new Promise((resolve) => { setTimeout(resolve, ms); });
 }

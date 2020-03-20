@@ -37,6 +37,10 @@ For a good example, see https://riot.im/develop/config.json.
        authentication flows
     1. `authFooterLinks`: a list of links to show in the authentication page footer:
       `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
+1. `reportEvent`: Configures the dialog for reporting content to the homeserver
+   admin.
+    1. `adminMessageMD`: An extra message to show on the reporting dialog to
+       mention homeserver-specific policies. Accepts Markdown.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
@@ -53,11 +57,6 @@ For a good example, see https://riot.im/develop/config.json.
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
    and `win32` (for update packages, not installer packages).
-1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
-   encrypted file attachments. This MUST be hosted on a completely separate domain to
-   anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
-   https://github.com/matrix-org/usercontent/blob/master/v1.html
 1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
    option out of your config file. If you want to enable analytics, set `piwik` to be an object
    containing the following properties:
@@ -83,7 +82,7 @@ For a good example, see https://riot.im/develop/config.json.
    default homeserver when signing up or logging in.
 1. `permalinkPrefix`: Used to change the URL that Riot generates permalinks with.
    By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
-   Set this to your Riot instance URL if you run an unfederated server (eg: 
+   Set this to your Riot instance URL if you run an unfederated server (eg:
    "https://riot.example.org").
 
 Note that `index.html` also has an og:image meta tag that is set to an image

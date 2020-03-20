@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,8 +26,9 @@ limitations under the License.
  * from the rageshake.)
  */
 
-import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
-import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
+import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
 function initRageshake() {
     rageshake.init().then(() => {
@@ -54,15 +56,13 @@ global.mxSendRageshake = function(text, withLogs) {
         console.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
     }
-    require(['matrix-react-sdk/lib/rageshake/submit-rageshake'], (s) => {
-        s(SdkConfig.get().bug_report_endpoint_url, {
-            userText: text,
-            sendLogs: withLogs,
-            progressCallback: console.log.bind(console),
-        }).then(() => {
-            console.log("Bug report sent!");
-        }, (err) => {
-            console.error(err);
-        });
+    sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+        userText: text,
+        sendLogs: withLogs,
+        progressCallback: console.log.bind(console),
+    }).then(() => {
+        console.log("Bug report sent!");
+    }, (err) => {
+        console.error(err);
     });
 };

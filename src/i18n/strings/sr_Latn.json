@@ -13,7 +13,6 @@
     "powered by Matrix": "pokreće Matriks",
     "Custom Server Options": "Prilagođene opcije servera",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Možete koristiti prilagođene opcije servera kako bi ste se prijavili na druge Matriks servere tako što ćete navesti različiti URL kućnog servera. Ovo vam omogućava da koristite Riot sa postojećim Matriks nalogom na drugom kućnom serveru.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Takođe, možete podesiti prilagođeni server identiteta, ali tada nećete moći da pozivate korisnike preko adrese elektronske pošte ili da i sami budete pozvani preko adrese elektronske pošte.",
     "Dismiss": "Odbaci",
     "Welcome to Riot.im": "Dobrodošli u Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizovano, šifrovano ćaskanje &amp; i saradnja koju pokreće [matrix]",

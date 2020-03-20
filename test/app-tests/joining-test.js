@@ -16,32 +16,27 @@ limitations under the License.
 
 /* joining.js: tests for the various paths when joining a room */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
+import * as sdk from "matrix-react-sdk";
+import * as jssdk from "matrix-js-sdk";
+import "../skin-sdk";
+import "../jest-mocks";
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactTestUtils from "react-dom/test-utils";
+import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
+import {sleep} from "../test-utils";
+import * as test_utils from "../test-utils";
+import MockHttpBackend from "matrix-mock-request";
+import "fake-indexeddb/auto";
 
-require('skin-sdk');
 
-const jssdk = require('matrix-js-sdk');
-
-const sdk = require('matrix-react-sdk');
-const peg = require('matrix-react-sdk/lib/MatrixClientPeg');
-const dis = require('matrix-react-sdk/lib/dispatcher');
-const PageTypes = require('matrix-react-sdk/lib/PageTypes');
 const MatrixChat = sdk.getComponent('structures.MatrixChat');
 const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
 const RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
 const RoomView = sdk.getComponent('structures.RoomView');
-
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactTestUtils = require('react-dom/test-utils');
-const expect = require('expect');
-import Promise from 'bluebird';
-import {makeType} from "matrix-react-sdk/lib/utils/TypeUtils";
-import {ValidatedServerConfig} from "matrix-react-sdk/lib/utils/AutoDiscoveryUtils";
-
-const test_utils = require('../test-utils');
-const MockHttpBackend = require('matrix-mock-request');
 
 const HS_URL='http://localhost';
 const IS_URL='http://localhost';
@@ -173,7 +168,7 @@ describe('joining a room', function() {
                     matrixChat, RoomView);
 
                 // the preview bar may take a tick to be displayed
-                return Promise.delay(1);
+                return sleep(1);
             }).then(() => {
                 const previewBar = ReactTestUtils.findRenderedComponentWithType(
                     roomView, RoomPreviewBar);
@@ -187,14 +182,14 @@ describe('joining a room', function() {
                     .respond(200, {room_id: ROOM_ID});
             }).then(() => {
                 // wait for the join request to be made
-                return Promise.delay(1);
+                return sleep(1);
             }).then(() => {
                 // and again, because the state update has to go to the store and
                 // then one dispatch within the store, then to the view
                 // XXX: This is *super flaky*: a better way would be to declare
                 // that we expect a certain state transition to happen, then wait
                 // for that transition to occur.
-                return Promise.delay(1);
+                return sleep(1);
             }).then(() => {
                 // the roomview should now be loading
                 expect(roomView.state.room).toBe(null);
@@ -209,7 +204,7 @@ describe('joining a room', function() {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 
-                return Promise.delay(1);
+                return sleep(1);
             }).then(() => {
                 // NB. we don't expect the 'joining' flag to reset at any point:
                 // it will stay set and we observe whether we have Room object for

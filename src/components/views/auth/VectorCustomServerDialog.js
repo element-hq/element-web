@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 /**
  * This is identical to `CustomServerDialog` except for replacing "this app"
  * with "Riot".
  */
-module.exports = ({onFinished}) => {
+const VectorCustomServerDialog = ({onFinished}) => {
     return (
         <div className="mx_ErrorDialog">
             <div className="mx_Dialog_title">
@@ -44,4 +44,7 @@ module.exports = ({onFinished}) => {
         </div>
     );
 };
-module.exports.replaces = 'CustomServerDialog';
+
+VectorCustomServerDialog.replaces = 'CustomServerDialog';
+
+export default VectorCustomServerDialog;
