@@ -129,12 +129,12 @@ export default class RoomSubList extends React.PureComponent {
                 if (this.state.hidden && !this.props.forceExpand &&
                     this.props.list.some((r) => r.roomId === payload.room_id)
                 ) {
-                    this.onClick();
+                    this.toggle();
                 }
         }
     };
 
-    onClick = (ev) => {
+    toggle = () => {
         if (this.isCollapsibleOnClick()) {
             // The header isCollapsible, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
@@ -145,6 +145,10 @@ export default class RoomSubList extends React.PureComponent {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this._header.current.dataset.originalPosition);
         }
+    };
+
+    onClick = (ev) => {
+        this.toggle();
     };
 
     onHeaderKeyDown = (ev) => {
