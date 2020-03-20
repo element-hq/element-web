@@ -157,6 +157,11 @@ export default class DeviceListener {
             }
             return;
         } else if (await cli.secretStorageKeyNeedsUpgrade()) {
+            if (this._dismissedThisDeviceToast) {
+                ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
+                return;
+            }
+
             // FIXME: do we a different message?
             ToastStore.sharedInstance().addOrReplaceToast({
                 key: THIS_DEVICE_TOAST_KEY,
