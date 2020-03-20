@@ -89,12 +89,6 @@ const shortcuts: Record<Categories, IShortcut[]> = {
             description: _td("Toggle Quote"),
         }, {
             keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.M,
-            }],
-            description: _td("Toggle Markdown"),
-        }, {
-            keybinds: [{
                 modifiers: [Modifiers.SHIFT],
                 key: Key.ENTER,
             }],
@@ -115,6 +109,15 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.END,
             }],
             description: _td("Jump to start/end of the composer"),
+        }, {
+            keybinds: [{
+                modifiers: [Modifiers.CONTROL, Modifiers.ALT],
+                key: Key.ARROW_UP,
+            }, {
+                modifiers: [Modifiers.CONTROL, Modifiers.ALT],
+                key: Key.ARROW_DOWN,
+            }],
+            description: _td("Navigate composer history"),
         },
     ],
 
@@ -181,6 +184,24 @@ const shortcuts: Record<Categories, IShortcut[]> = {
             description: _td("Scroll up/down in the timeline"),
         }, {
             keybinds: [{
+                modifiers: [Modifiers.ALT, Modifiers.SHIFT],
+                key: Key.ARROW_UP,
+            }, {
+                modifiers: [Modifiers.ALT, Modifiers.SHIFT],
+                key: Key.ARROW_DOWN,
+            }],
+            description: _td("Previous/next unread room or DM"),
+        }, {
+            keybinds: [{
+                modifiers: [Modifiers.ALT],
+                key: Key.ARROW_UP,
+            }, {
+                modifiers: [Modifiers.ALT],
+                key: Key.ARROW_DOWN,
+            }],
+            description: _td("Previous/next room or DM"),
+        }, {
+            keybinds: [{
                 modifiers: [CMD_OR_CTRL],
                 key: Key.BACKTICK,
             }],
@@ -222,6 +243,14 @@ const shortcuts: Record<Categories, IShortcut[]> = {
         },
     ],
 };
+
+const categoryOrder = [
+    Categories.COMPOSER,
+    Categories.CALLS,
+    Categories.ROOM_LIST,
+    Categories.AUTOCOMPLETE,
+    Categories.NAVIGATION,
+];
 
 interface IModal {
     close: () => void;
@@ -289,7 +318,8 @@ export const toggleDialog = () => {
         return;
     }
 
-    const sections = Object.entries(shortcuts).map(([category, list]) => {
+    const sections = categoryOrder.map(category => {
+        const list = shortcuts[category];
         return <div className="mx_KeyboardShortcutsDialog_category" key={category}>
             <h3>{_t(category)}</h3>
             <div>{list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />)}</div>
