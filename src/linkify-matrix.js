@@ -16,7 +16,11 @@ limitations under the License.
 */
 
 import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
-import {tryTransformEntityToPermalink, tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
+import {
+    parsePermalink,
+    tryTransformEntityToPermalink,
+    tryTransformPermalinkToLocalHref
+} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens
@@ -194,6 +198,18 @@ matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 matrixLinkify.options = {
     events: function(href, type) {
         switch (type) {
+            case "url": {
+                // intercept local permalinks to users and show them like userids (in userinfo of current room)
+                const permalink = parsePermalink(href);
+                if (permalink && permalink.userId) {
+                    return {
+                        click: function(e) {
+                            matrixLinkify.onUserClick(e, permalink.userId);
+                        },
+                    };
+                }
+                break;
+            }
             case "userid":
                 return {
                     click: function(e) {
