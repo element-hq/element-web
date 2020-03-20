@@ -19,7 +19,7 @@ import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
 import {
     parsePermalink,
     tryTransformEntityToPermalink,
-    tryTransformPermalinkToLocalHref
+    tryTransformPermalinkToLocalHref,
 } from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
