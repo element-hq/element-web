@@ -131,6 +131,7 @@ export default createReactClass({
             isAlone: false,
             isPeeking: false,
             showingPinned: false,
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -176,6 +177,7 @@ export default createReactClass({
         MatrixClientPeg.get().on("userTrustStatusChanged", this.onUserVerificationChanged);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
@@ -488,6 +490,10 @@ export default createReactClass({
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+        // Remove RightPanelStore listener
+        if (this._rightPanelStoreToken) {
+            this._rightPanelStoreToken.remove();
+        }
 
         WidgetEchoStore.removeListener('update', this._onWidgetEchoStoreUpdate);
 
@@ -497,6 +503,12 @@ export default createReactClass({
         // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
+    },
+
+    _onRightPanelStoreUpdate: function() {
+        this.setState({
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
+        });
     },
 
     onPageUnload(event) {
@@ -538,10 +550,6 @@ export default createReactClass({
 
     onAction: function(payload) {
         switch (payload.action) {
-            case 'after_right_panel_phase_change':
-                // We don't keep state on the right panel, so just re-render to update
-                this.forceUpdate();
-                break;
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
@@ -1997,8 +2005,7 @@ export default createReactClass({
             },
         );
 
-        const showRightPanel = !forceHideRightPanel && this.state.room
-            && RightPanelStore.getSharedInstance().isOpenForRoom;
+        const showRightPanel = !forceHideRightPanel && this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
             ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />
             : null;

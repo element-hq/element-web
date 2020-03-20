@@ -35,6 +35,12 @@ const INITIAL_STATE = {
 
 const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
 
+const MEMBER_INFO_PHASES = [
+    RIGHT_PANEL_PHASES.RoomMemberInfo,
+    RIGHT_PANEL_PHASES.Room3pidMemberInfo,
+    RIGHT_PANEL_PHASES.EncryptionPanel,
+];
+
 /**
  * A class for tracking the state of the right panel between layouts and
  * sessions.
@@ -114,62 +120,70 @@ export default class RightPanelStore extends Store {
     }
 
     __onDispatch(payload) {
-        if (payload.action === 'view_room' || payload.action === 'view_group') {
-            // Reset to the member list if we're viewing member info
-            const memberInfoPhases = [
-                RIGHT_PANEL_PHASES.RoomMemberInfo,
-                RIGHT_PANEL_PHASES.Room3pidMemberInfo,
-                RIGHT_PANEL_PHASES.EncryptionPanel,
-            ];
-            if (memberInfoPhases.includes(this._state.lastRoomPhase)) {
-                this._setState({lastRoomPhase: RIGHT_PANEL_PHASES.RoomMemberList, lastRoomPhaseParams: {}});
+        switch (payload.action) {
+            case 'view_room':
+            case 'view_group':
+                // Reset to the member list if we're viewing member info
+                if (MEMBER_INFO_PHASES.includes(this._state.lastRoomPhase)) {
+                    this._setState({lastRoomPhase: RIGHT_PANEL_PHASES.RoomMemberList, lastRoomPhaseParams: {}});
+                }
+
+                // Do the same for groups
+                if (this._state.lastGroupPhase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
+                    this._setState({lastGroupPhase: RIGHT_PANEL_PHASES.GroupMemberList});
+                }
+                break;
+
+            case 'set_right_panel_phase': {
+                const targetPhase = payload.phase;
+                if (!RIGHT_PANEL_PHASES[targetPhase]) {
+                    console.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
+                    return;
+                }
+
+                if (GROUP_PHASES.includes(targetPhase)) {
+                    if (targetPhase === this._state.lastGroupPhase) {
+                        this._setState({
+                            showGroupPanel: !this._state.showGroupPanel,
+                        });
+                    } else {
+                        this._setState({
+                            lastGroupPhase: targetPhase,
+                            showGroupPanel: true,
+                        });
+                    }
+                } else {
+                    if (targetPhase === this._state.lastRoomPhase && !payload.refireParams) {
+                        this._setState({
+                            showRoomPanel: !this._state.showRoomPanel,
+                        });
+                    } else {
+                        this._setState({
+                            lastRoomPhase: targetPhase,
+                            showRoomPanel: true,
+                            lastRoomPhaseParams: payload.refireParams || {},
+                        });
+                    }
+                }
+
+                // Let things like the member info panel actually open to the right member.
+                dis.dispatch({
+                    action: 'after_right_panel_phase_change',
+                    phase: targetPhase,
+                    ...(payload.refireParams || {}),
+                });
+                break;
             }
 
-            // Do the same for groups
-            if (this._state.lastGroupPhase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-                this._setState({lastGroupPhase: RIGHT_PANEL_PHASES.GroupMemberList});
-            }
+            case 'toggle_right_panel':
+                if (payload.type === "room") {
+                    this._setState({ showRoomPanel: !this._state.showRoomPanel });
+                } else { // group
+                    this._setState({ showGroupPanel: !this._state.showGroupPanel });
+                }
+                break;
+
         }
-
-        if (payload.action !== 'set_right_panel_phase') return;
-
-        const targetPhase = payload.phase;
-        if (!RIGHT_PANEL_PHASES[targetPhase]) {
-            console.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
-            return;
-        }
-
-        if (GROUP_PHASES.includes(targetPhase)) {
-            if (targetPhase === this._state.lastGroupPhase) {
-                this._setState({
-                    showGroupPanel: !this._state.showGroupPanel,
-                });
-            } else {
-                this._setState({
-                    lastGroupPhase: targetPhase,
-                    showGroupPanel: true,
-                });
-            }
-        } else {
-            if (targetPhase === this._state.lastRoomPhase && !payload.refireParams) {
-                this._setState({
-                    showRoomPanel: !this._state.showRoomPanel,
-                });
-            } else {
-                this._setState({
-                    lastRoomPhase: targetPhase,
-                    showRoomPanel: true,
-                    lastRoomPhaseParams: payload.refireParams || {},
-                });
-            }
-        }
-
-        // Let things like the member info panel actually open to the right member.
-        dis.dispatch({
-            action: 'after_right_panel_phase_change',
-            phase: targetPhase,
-            ...(payload.refireParams || {}),
-        });
     }
 
     static getSharedInstance(): RightPanelStore {
