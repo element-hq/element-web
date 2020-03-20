@@ -523,7 +523,8 @@ export default class MessagePanel extends React.Component {
         // if there is a previous event and it has the same sender as this event
         // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
         if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
-            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
+            // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
+            haveTileForEvent(prevEvent) && (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
             (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
             continuation = true;
         }
