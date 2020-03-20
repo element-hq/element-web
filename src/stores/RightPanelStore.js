@@ -182,7 +182,6 @@ export default class RightPanelStore extends Store {
                     this._setState({ showGroupPanel: !this._state.showGroupPanel });
                 }
                 break;
-
         }
     }
 
