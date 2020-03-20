@@ -112,14 +112,19 @@ limitations under the License.
 
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
-    /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-    margin-right: 110px;
     padding-left: 65px; /* left gutter */
     padding-top: 4px;
     padding-bottom: 2px;
     border-radius: 4px;
     min-height: 24px;
     line-height: 22px;
+}
+
+.mx_RoomView_timeline_rr_enabled {
+    .mx_EventTile_line, .mx_EventTile_reply {
+        /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
+        margin-right: 110px;
+    }
 }
 
 .mx_EventTile_bubbleContainer {

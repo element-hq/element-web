@@ -39,38 +39,58 @@ async function enable4SIfNeeded() {
     return true;
 }
 
+function UntrustedDeviceDialog(props) {
+    const {device, user, onFinished} = props;
+    const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
+    const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+    return <BaseDialog
+        onFinished={onFinished}
+        headerImage={require("../res/img/e2e/warning.svg")}
+        title={_t("Not Trusted")}>
+        <div className="mx_Dialog_content" id='mx_Dialog_content'>
+            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: user.displayName, userId: user.userId})}</p>
+            <p>{device.getDisplayName()} ({device.deviceId})</p>
+            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
+        </div>
+        <div className='mx_Dialog_buttons'>
+            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>{_t("Manually Verify by Text")}</AccessibleButton>
+            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("sas")}>{_t("Interactively verify by Emoji")}</AccessibleButton>
+            <AccessibleButton kind="primary" onClick={() => onFinished()}>{_t("Done")}</AccessibleButton>
+        </div>
+    </BaseDialog>;
+}
+
 export async function verifyDevice(user, device) {
     if (!await enable4SIfNeeded()) {
         return;
     }
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
-        headerImage: require("../res/img/e2e/warning.svg"),
-        title: _t("Not Trusted"),
-        description: <div>
-            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: user.displayName, userId: user.userId})}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
-        </div>,
-        onFinished: async (doneClicked) => {
-            const manuallyVerifyClicked = !doneClicked;
-            if (!manuallyVerifyClicked) {
-                return;
+    Modal.createTrackedDialog("Verification warning", "unverified session", UntrustedDeviceDialog, {
+        user,
+        device,
+        onFinished: async (action) => {
+            if (action === "sas") {
+                const cli = MatrixClientPeg.get();
+                const verificationRequestPromise = cli.legacyDeviceVerification(
+                    user.userId,
+                    device.deviceId,
+                    verificationMethods.SAS,
+                );
+                dis.dispatch({
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {member: user, verificationRequestPromise},
+                });
+            } else if (action === "legacy") {
+                const ManualDeviceKeyVerificationDialog = sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
+                Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
+                    ManualDeviceKeyVerificationDialog,
+                    {
+                        userId: user.userId,
+                        device,
+                    },
+                );
             }
-            const cli = MatrixClientPeg.get();
-            const verificationRequestPromise = cli.legacyDeviceVerification(
-                user.userId,
-                device.deviceId,
-                verificationMethods.SAS,
-            );
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {member: user, verificationRequestPromise},
-            });
         },
-        primaryButton: _t("Done"),
-        cancelButton: _t("Manually Verify"),
     });
 }
 

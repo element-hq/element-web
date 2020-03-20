@@ -131,6 +131,7 @@ export default createReactClass({
             isAlone: false,
             isPeeking: false,
             showingPinned: false,
+            showReadReceipts: true,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
 
             // error object, as from the matrix client/server API
@@ -181,9 +182,17 @@ export default createReactClass({
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
+        this._showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
+            this._onReadReceiptsChange);
 
         this._roomView = createRef();
         this._searchResultsPanel = createRef();
+    },
+
+    _onReadReceiptsChange: function() {
+        this.setState({
+            showReadReceipts: SettingsStore.getValue("showReadReceipts", this.state.roomId),
+        });
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -206,8 +215,10 @@ export default createReactClass({
             return;
         }
 
+        const roomId = RoomViewStore.getRoomId();
+
         const newState = {
-            roomId: RoomViewStore.getRoomId(),
+            roomId,
             roomAlias: RoomViewStore.getRoomAlias(),
             roomLoading: RoomViewStore.isRoomLoading(),
             roomLoadError: RoomViewStore.getRoomLoadError(),
@@ -216,7 +227,8 @@ export default createReactClass({
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
+            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
+            showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
         };
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
@@ -496,6 +508,11 @@ export default createReactClass({
         }
 
         WidgetEchoStore.removeListener('update', this._onWidgetEchoStoreUpdate);
+
+        if (this._showReadReceiptsWatchRef) {
+            SettingsStore.unwatchSetting(this._showReadReceiptsWatchRef);
+            this._showReadReceiptsWatchRef = null;
+        }
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();
@@ -1956,7 +1973,7 @@ export default createReactClass({
             <TimelinePanel
                 ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                showReadReceipts={SettingsStore.getValue('showReadReceipts')}
+                showReadReceipts={this.state.showReadReceipts}
                 manageReadReceipts={!this.state.isPeeking}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}
@@ -2010,6 +2027,10 @@ export default createReactClass({
             ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />
             : null;
 
+        const timelineClasses = classNames("mx_RoomView_timeline", {
+            mx_RoomView_timeline_rr_enabled: this.state.showReadReceipts,
+        });
+
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
@@ -2033,7 +2054,7 @@ export default createReactClass({
                         >
                             <div className={fadableSectionClasses}>
                                 {auxPanel}
-                                <div className="mx_RoomView_timeline">
+                                <div className={timelineClasses}>
                                     {topUnreadMessagesBar}
                                     {jumpToBottom}
                                     {messagePanel}
