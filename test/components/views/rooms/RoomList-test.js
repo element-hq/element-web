@@ -14,7 +14,7 @@ import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
 import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
-import {TAG_DM} from "../../../../src/stores/RoomListStore";
+import {DefaultTagID} from "../../../../src/stores/room-list/models";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -153,7 +153,7 @@ describe('RoomList', () => {
         // Set up the room that will be moved such that it has the correct state for a room in
         // the section for oldTag
         if (['m.favourite', 'm.lowpriority'].includes(oldTag)) movingRoom.tags = {[oldTag]: {}};
-        if (oldTag === TAG_DM) {
+        if (oldTag === DefaultTagID.DM) {
             // Mock inverse m.direct
             DMRoomMap.shared().roomToUser = {
                 [movingRoom.roomId]: '@someotheruser:domain',
@@ -180,7 +180,7 @@ describe('RoomList', () => {
         // TODO: Re-enable dragging tests when we support dragging again.
         describe.skip('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
-                expectCorrectMove(undefined, TAG_DM);
+                expectCorrectMove(undefined, DefaultTagID.DM);
             });
 
             it('rooms to favourites', () => {
@@ -195,15 +195,15 @@ describe('RoomList', () => {
             // Whe running the app live, it updates when some other event occurs (likely the
             // m.direct arriving) that these tests do not fire.
             xit('people to rooms', () => {
-                expectCorrectMove(TAG_DM, undefined);
+                expectCorrectMove(DefaultTagID.DM, undefined);
             });
 
             it('people to favourites', () => {
-                expectCorrectMove(TAG_DM, 'm.favourite');
+                expectCorrectMove(DefaultTagID.DM, 'm.favourite');
             });
 
             it('people to lowpriority', () => {
-                expectCorrectMove(TAG_DM, 'm.lowpriority');
+                expectCorrectMove(DefaultTagID.DM, 'm.lowpriority');
             });
 
             it('low priority to rooms', () => {
@@ -211,7 +211,7 @@ describe('RoomList', () => {
             });
 
             it('low priority to people', () => {
-                expectCorrectMove('m.lowpriority', TAG_DM);
+                expectCorrectMove('m.lowpriority', DefaultTagID.DM);
             });
 
             it('low priority to low priority', () => {
@@ -223,7 +223,7 @@ describe('RoomList', () => {
             });
 
             it('favourites to people', () => {
-                expectCorrectMove('m.favourite', TAG_DM);
+                expectCorrectMove('m.favourite', DefaultTagID.DM);
             });
 
             it('favourites to low priority', () => {

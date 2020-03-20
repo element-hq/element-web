@@ -29,7 +29,6 @@ import rate_limited_func from "../../../ratelimitedfunc";
 import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import RoomListStore, {TAG_DM} from '../../../stores/RoomListStore';
 import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
@@ -41,6 +40,8 @@ import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 import {RovingTabIndexProvider} from "../../../accessibility/RovingTabIndex";
+import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
+import {DefaultTagID} from "../../../stores/room-list/models";
 import * as Unread from "../../../Unread";
 import RoomViewStore from "../../../stores/RoomViewStore";
 
@@ -161,7 +162,7 @@ export default createReactClass({
             this.updateVisibleRooms();
         });
 
-        this._roomListStoreToken = RoomListStore.addListener(() => {
+        this._roomListStoreToken = RoomListStoreTempProxy.addListener(() => {
             this._delayedRefreshRoomList();
         });
 
@@ -521,7 +522,7 @@ export default createReactClass({
     },
 
     getTagNameForRoomId: function(roomId) {
-        const lists = RoomListStore.getRoomLists();
+        const lists = RoomListStoreTempProxy.getRoomLists();
         for (const tagName of Object.keys(lists)) {
             for (const room of lists[tagName]) {
                 // Should be impossible, but guard anyways.
@@ -541,7 +542,7 @@ export default createReactClass({
     },
 
     getRoomLists: function() {
-        const lists = RoomListStore.getRoomLists();
+        const lists = RoomListStoreTempProxy.getRoomLists();
 
         const filteredLists = {};
 
@@ -773,10 +774,10 @@ export default createReactClass({
                 incomingCall: incomingCallIfTaggedAs('m.favourite'),
             },
             {
-                list: this.state.lists[TAG_DM],
+                list: this.state.lists[DefaultTagID.DM],
                 label: _t('Direct Messages'),
-                tagName: TAG_DM,
-                incomingCall: incomingCallIfTaggedAs(TAG_DM),
+                tagName: DefaultTagID.DM,
+                incomingCall: incomingCallIfTaggedAs(DefaultTagID.DM),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'});},
                 addRoomLabel: _t("Start chat"),
             },

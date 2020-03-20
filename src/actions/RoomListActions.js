@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import { asyncAction } from './actionCreators';
-import RoomListStore, {TAG_DM} from '../stores/RoomListStore';
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
 import * as sdk from '../index';
+import {RoomListStoreTempProxy} from "../stores/room-list/RoomListStoreTempProxy";
+import {DefaultTagID} from "../stores/room-list/models";
 
 const RoomListActions = {};
 
@@ -44,7 +45,7 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
 
     // Is the tag ordered manually?
     if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-        const lists = RoomListStore.getRoomLists();
+        const lists = RoomListStoreTempProxy.getRoomLists();
         const newList = [...lists[newTag]];
 
         newList.sort((a, b) => a.tags[newTag].order - b.tags[newTag].order);
@@ -73,11 +74,11 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
         const roomId = room.roomId;
 
         // Evil hack to get DMs behaving
-        if ((oldTag === undefined && newTag === TAG_DM) ||
-            (oldTag === TAG_DM && newTag === undefined)
+        if ((oldTag === undefined && newTag === DefaultTagID.DM) ||
+            (oldTag === DefaultTagID.DM && newTag === undefined)
         ) {
             return Rooms.guessAndSetDMRoom(
-                room, newTag === TAG_DM,
+                room, newTag === DefaultTagID.DM,
             ).catch((err) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to set direct chat tag " + err);
@@ -91,10 +92,10 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
         const hasChangedSubLists = oldTag !== newTag;
 
         // More evilness: We will still be dealing with moving to favourites/low prio,
-        // but we avoid ever doing a request with TAG_DM.
+        // but we avoid ever doing a request with DefaultTagID.DM.
         //
         // if we moved lists, remove the old tag
-        if (oldTag && oldTag !== TAG_DM &&
+        if (oldTag && oldTag !== DefaultTagID.DM &&
             hasChangedSubLists
         ) {
             const promiseToDelete = matrixClient.deleteRoomTag(
@@ -112,7 +113,7 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
         }
 
         // if we moved lists or the ordering changed, add the new tag
-        if (newTag && newTag !== TAG_DM &&
+        if (newTag && newTag !== DefaultTagID.DM &&
             (hasChangedSubLists || metaData)
         ) {
             // metaData is the body of the PUT to set the tag, so it must

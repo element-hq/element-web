@@ -15,10 +15,10 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import * as RoomNotifs from '../RoomNotifs';
-import RoomListStore from './RoomListStore';
 import EventEmitter from 'events';
 import { throttle } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
+import {RoomListStoreTempProxy} from "./room-list/RoomListStoreTempProxy";
 
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -60,7 +60,7 @@ class CustomRoomTagStore extends EventEmitter {
                 trailing: true,
             },
         );
-        this._roomListStoreToken = RoomListStore.addListener(() => {
+        this._roomListStoreToken = RoomListStoreTempProxy.addListener(() => {
             this._setState({tags: this._getUpdatedTags()});
         });
         dis.register(payload => this._onDispatch(payload));
@@ -85,7 +85,7 @@ class CustomRoomTagStore extends EventEmitter {
     }
 
     getSortedTags() {
-        const roomLists = RoomListStore.getRoomLists();
+        const roomLists = RoomListStoreTempProxy.getRoomLists();
 
         const tagNames = Object.keys(this._state.tags).sort();
         const prefixes = tagNames.map((name, i) => {
@@ -140,7 +140,7 @@ class CustomRoomTagStore extends EventEmitter {
             return;
         }
 
-        const newTagNames = Object.keys(RoomListStore.getRoomLists())
+        const newTagNames = Object.keys(RoomListStoreTempProxy.getRoomLists())
             .filter((tagName) => {
                 return !tagName.match(STANDARD_TAGS_REGEX);
             }).sort();

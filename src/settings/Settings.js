@@ -131,6 +131,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_new_room_list": {
+        isFeature: true,
+        displayName: _td("Use the improved room list component (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
