@@ -36,6 +36,7 @@ export const Key = {
     CONTEXT_MENU: "ContextMenu",
 
     COMMA: ",",
+    PERIOD: ".",
     LESS_THAN: "<",
     GREATER_THAN: ">",
     BACKTICK: "`",

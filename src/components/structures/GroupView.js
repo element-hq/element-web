@@ -424,6 +424,7 @@ export default createReactClass({
             membershipBusy: false,
             publicityBusy: false,
             inviterProfile: null,
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
         };
     },
 
@@ -436,12 +437,18 @@ export default createReactClass({
         this._initGroupStore(this.props.groupId, true);
 
         this._dispatcherRef = dis.register(this._onAction);
+        this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
     },
 
     componentWillUnmount: function() {
         this._unmounted = true;
         this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
         dis.unregister(this._dispatcherRef);
+
+        // Remove RightPanelStore listener
+        if (this._rightPanelStoreToken) {
+            this._rightPanelStoreToken.remove();
+        }
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -453,6 +460,12 @@ export default createReactClass({
                 this._initGroupStore(newProps.groupId);
             });
         }
+    },
+
+    _onRightPanelStoreUpdate: function() {
+        this.setState({
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
+        });
     },
 
     _onGroupMyMembership: function(group) {
@@ -576,10 +589,6 @@ export default createReactClass({
                     editing: false,
                     profileForm: null,
                 });
-                break;
-            case 'after_right_panel_phase_change':
-                // We don't keep state on the right panel, so just re-render to update
-                this.forceUpdate();
                 break;
             default:
                 break;
@@ -1295,9 +1304,7 @@ export default createReactClass({
                 );
             }
 
-            const rightPanel = RightPanelStore.getSharedInstance().isOpenForGroup
-                ? <RightPanel groupId={this.props.groupId} />
-                : undefined;
+            const rightPanel = this.state.showRightPanel ? <RightPanel groupId={this.props.groupId} /> : undefined;
 
             const headerClasses = {
                 "mx_GroupView_header": true,

@@ -221,6 +221,12 @@ const shortcuts: Record<Categories, IShortcut[]> = {
         }, {
             keybinds: [{
                 modifiers: [CMD_OR_CTRL],
+                key: Key.PERIOD,
+            }],
+            description: _td("Toggle right panel"),
+        }, {
+            keybinds: [{
+                modifiers: [CMD_OR_CTRL],
                 key: Key.SLASH,
             }],
             description: _td("Toggle this dialog"),

@@ -397,6 +397,15 @@ const LoggedInView = createReactClass({
                     handled = true;
                 }
                 break;
+
+            case Key.PERIOD:
+                if (ctrlCmdOnly && (this.props.page_type === "room_view" || this.props.page_type === "group_view")) {
+                    dis.dispatch({
+                        action: 'toggle_right_panel',
+                        type: this.props.page_type === "room_view" ? "room" : "group",
+                    });
+                    handled = true;
+                }
         }
 
         if (handled) {
