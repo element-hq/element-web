@@ -475,6 +475,8 @@ export default class WidgetUtils {
     }
 
     static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean}) {
+        if (!opts) opts = {};
+
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryString = [
             'conferenceDomain=$domain',

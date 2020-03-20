@@ -65,6 +65,7 @@ import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
+import {generateHumanReadableId} from "./utils/NamingUtils";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -429,16 +430,12 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    // This inherits its poor naming from the field of the same name that goes into
-    // the event. It's just a random string to make the Jitsi URLs unique.
-    const widgetSessionId = Math.random().toString(36).substring(2);
-    const confId = room.roomId.replace(/[^A-Za-z0-9]/g, '') + widgetSessionId;
+    const confId = `JitsiConference_${generateHumanReadableId()}`;
     const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
 
     const widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
     const widgetData = {
-        widgetSessionId, // TODO: Remove this eventually
         conferenceId: confId,
         isAudioOnly: type === 'voice',
         domain: jitsiDomain,
