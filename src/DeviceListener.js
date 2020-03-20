@@ -50,6 +50,7 @@ export default class DeviceListener {
         MatrixClientPeg.get().on('crypto.devicesUpdated', this._onDevicesUpdated);
         MatrixClientPeg.get().on('deviceVerificationChanged', this._onDeviceVerificationChanged);
         MatrixClientPeg.get().on('userTrustStatusChanged', this._onUserTrustStatusChanged);
+        MatrixClientPeg.get().on('accountData', this._onAccountData);
         this._recheck();
     }
 
@@ -58,6 +59,7 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('crypto.devicesUpdated', this._onDevicesUpdated);
             MatrixClientPeg.get().removeListener('deviceVerificationChanged', this._onDeviceVerificationChanged);
             MatrixClientPeg.get().removeListener('userTrustStatusChanged', this._onUserTrustStatusChanged);
+            MatrixClientPeg.get().removeListener('accountData', this._onAccountData);
         }
         this._dismissed.clear();
     }
@@ -85,6 +87,13 @@ export default class DeviceListener {
     _onUserTrustStatusChanged = (userId, trustLevel) => {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
         this._recheck();
+    }
+
+    _onAccountData = (ev) => {
+        // User may have migrated SSSS to symmetric, in which case we can dismiss that toast
+        if (ev.getType().startsWith('m.secret_storage.key.')) {
+            this._recheck();
+        }
     }
 
     // The server doesn't tell us when key backup is set up, so we poll
