@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Formësimi juaj i Riot-it përmban JSON. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
     "The message from the parser is: %(message)s": "Mesazhi prej procesit është: %(message)s",
     "Invalid JSON": "JSON i pavlefshëm",
-    "Go to your browser to complete Sign In": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj"
+    "Go to your browser to complete Sign In": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj",
+    "Open user settings": "Hapni rregullime përdoruesi"
 }
