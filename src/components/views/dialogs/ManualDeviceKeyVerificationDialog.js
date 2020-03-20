@@ -50,12 +50,9 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component {
 
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
-            text = _t("To verify that this session can be trusted, please check that the key you see " +
-                "in User Settings on that device matches the key below:");
+            text = _t("Confirm by comparing the following with the User Settings in your other session:");
         } else {
-            text = _t("To verify that this session can be trusted, please contact its owner using some other " +
-                "means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings " +
-                "for this session matches the key below:");
+            text = _t("Confirm this user's session by comparing the following with their User Settings:");
         }
 
         const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
@@ -72,9 +69,7 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component {
                     </ul>
                 </div>
                 <p>
-                    { _t("If it matches, press the verify button below. " +
-                        "If it doesn't, then someone else is intercepting this session " +
-                        "and you probably want to press the blacklist button instead.") }
+                    { _t("If they don't match, the security of your communication may be compromised.") }
                 </p>
             </div>
         );
@@ -83,7 +78,7 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component {
             <QuestionDialog
                 title={_t("Verify session")}
                 description={body}
-                button={_t("I verify that the keys match")}
+                button={_t("Verify session")}
                 onFinished={this._onLegacyFinished}
             />
         );

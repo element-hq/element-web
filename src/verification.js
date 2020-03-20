@@ -53,8 +53,8 @@ function UntrustedDeviceDialog(props) {
             <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
         </div>
         <div className='mx_Dialog_buttons'>
-            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>{_t("Legacy Verify Device")}</AccessibleButton>
-            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("sas")}>{_t("Verify Device by Emoji")}</AccessibleButton>
+            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>{_t("Manually Verify by Text")}</AccessibleButton>
+            <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("sas")}>{_t("Interactively verify by Emoji")}</AccessibleButton>
             <AccessibleButton kind="primary" onClick={() => onFinished()}>{_t("Done")}</AccessibleButton>
         </div>
     </BaseDialog>;
