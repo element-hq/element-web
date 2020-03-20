@@ -313,3 +313,7 @@ export const toggleDialog = () => {
         },
     });
 };
+
+export const registerShortcut = (category: Categories, defn: IShortcut) => {
+    shortcuts[category].push(defn);
+};
