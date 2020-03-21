@@ -485,19 +485,16 @@ export default class WidgetUtils {
             'userId=$matrix_user_id',
         ].join('&');
 
-        let currentUrl = window.location.href.split('#')[0];
-        if (!currentUrl.startsWith("https://") && !opts.forLocalRender) {
+        let baseUrl = window.location;
+        if (window.location.protocol !== "https:" && !opts.forLocalRender) {
             // Use an external wrapper if we're not locally rendering the widget. This is usually
             // the URL that will end up in the widget event, so we want to make sure it's relatively
             // safe to send.
             // We'll end up using a local render URL when we see a Jitsi widget anyways, so this is
             // really just for backwards compatibility and to appease the spec.
-            currentUrl = "https://riot.im/app";
+            baseUrl = "https://riot.im/app";
         }
-        if (!currentUrl.endsWith('/')) {
-            currentUrl = `${currentUrl}/`;
-        }
-
-        return currentUrl + "jitsi.html#" + queryString;
+        const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
+        return url.href;
     }
 }
