@@ -2279,5 +2279,14 @@
     "Esc": "Échap",
     "Enter": "Entrée",
     "Space": "Espace",
-    "End": "Fin"
+    "End": "Fin",
+    "Manually Verify by Text": "Vérifier manuellement avec un texte",
+    "Interactively verify by Emoji": "Vérifier de façon interactive avec des émojis",
+    "Confirm by comparing the following with the User Settings in your other session:": "Confirmez en comparant ceci avec les paramètres utilisateurs de votre autre session :",
+    "Confirm this user's session by comparing the following with their User Settings:": "Confirmez la session de cet utilisateur en comparant ceci avec ses paramètres utilisateur :",
+    "If they don't match, the security of your communication may be compromised.": "S’ils ne correspondent pas, la sécurité de vos communications est peut-être compromise.",
+    "Navigate composer history": "Explorer l’historique du compositeur",
+    "Previous/next unread room or DM": "Salon ou message direct non lu précédent/suivant",
+    "Previous/next room or DM": "Salon ou message direct précédent/suivant",
+    "Toggle right panel": "Afficher/masquer le panneau de droite"
 }
