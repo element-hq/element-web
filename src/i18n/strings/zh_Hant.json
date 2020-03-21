@@ -2278,5 +2278,14 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End"
+    "End": "End",
+    "Manually Verify by Text": "手動驗證文字",
+    "Interactively verify by Emoji": "透過表情符號進行互動式驗證",
+    "Confirm by comparing the following with the User Settings in your other session:": "透過比較以下內容與您其他的工作階段中的使用者設定來確認：",
+    "Confirm this user's session by comparing the following with their User Settings:": "透過將以下內容與其他使用者的使用者設定比較來確認他們的工作階段：",
+    "If they don't match, the security of your communication may be compromised.": "如果它們不相符，則可能會威脅到您的通訊安全。",
+    "Navigate composer history": "瀏覽編輯區歷史紀錄",
+    "Previous/next unread room or DM": "上一下／下一個未讀聊天室或直接訊息",
+    "Previous/next room or DM": "上一個／下一個聊天室或直接訊息",
+    "Toggle right panel": "切換右側面板"
 }
