@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Votre configuration de Riot contient du JSON non valide. Corrigez ce problème et rechargez la page.",
     "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
     "Invalid JSON": "JSON non valide",
-    "Go to your browser to complete Sign In": "Utilisez votre navigateur pour terminer la connexion"
+    "Go to your browser to complete Sign In": "Utilisez votre navigateur pour terminer la connexion",
+    "Open user settings": "Ouvrir les paramètres utilisateur"
 }
