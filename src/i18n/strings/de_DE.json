@@ -1717,5 +1717,8 @@
     "Review Sessions": "Sitzungen überprüfen",
     "Displays information about a user": "Zeigt Informationen über einen Benutzer",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s hat den Raumnamen von %(oldRoomName)s zu %(newRoomName)s geändert.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt."
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternativen Adressen %(addresses)s für diesen Raum entfernt",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum entfernt",
+    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s hat die alternative Adresse für diesen Raum geändert"
 }
