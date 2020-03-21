@@ -435,7 +435,7 @@ async function _startCallApp(roomId, type) {
     const confId = room.roomId.replace(/[^A-Za-z0-9]/g, '') + widgetSessionId;
     const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
 
-    const widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({});
+    const widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
     const widgetData = {
         widgetSessionId, // TODO: Remove this eventually
