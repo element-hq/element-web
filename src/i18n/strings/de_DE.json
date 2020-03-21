@@ -1721,5 +1721,5 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternativen Adressen %(addresses)s für diesen Raum entfernt",
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum entfernt",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s hat die alternative Adresse für diesen Raum geändert.",
-    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s hat die Haupt- und Alternativadresse für diesen Raum geändert"
+    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s hat die Haupt- und Alternativadresse für diesen Raum geändert."
 }
