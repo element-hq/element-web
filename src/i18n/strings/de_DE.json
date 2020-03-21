@@ -1565,7 +1565,7 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "Sende niemals verschlüsselte Nachrichten von dieser Sitzung zu unverifizierten Sitzungen in diesem Raum",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Durch die Änderung des Passworts werden derzeit alle End-zu-End-Verschlüsselungsschlüssel in allen Sitzungen zurückgesetzt, sodass der verschlüsselte Chat-Verlauf nicht mehr lesbar ist, es sei denn, Sie exportieren zuerst Ihre Raumschlüssel und importieren sie anschließend wieder. In Zukunft wird dies verbessert werden.",
     "Delete %(count)s sessions|other": "Lösche %(count)s Sitzungen",
-    "Backup is not signed by any of your sessions": "Die Sicherung ist von keiner Ihrer Sitzungen unterzeichnet.",
+    "Backup is not signed by any of your sessions": "Die Sicherung ist von keiner Ihrer Sitzungen unterzeichnet",
     "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Ihr Passwort wurde erfolgreich geändert. Sie erhalten keine Push-Benachrichtigungen zu anderen Sitzungen, bis Sie sich wieder bei diesen anmelden",
     "Sessions": "Sitzungen",
     "Notification sound": "Benachrichtigungston",
