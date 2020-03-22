@@ -923,11 +923,11 @@
     "NOT verified": "検証されていない",
     "verified": "検証済み",
     "Verification": "検証",
-    "Ed25519 fingerprint": "Ed25519 fingerprint",
+    "Ed25519 fingerprint": "Ed25519フィンガープリント",
     "User ID": "ユーザーID",
-    "Curve25519 identity key": "Curve25519 identity key",
+    "Curve25519 identity key": "Curve25519 ID鍵",
     "none": "無し",
-    "Claimed Ed25519 fingerprint key": "Claimed Ed25519 fingerprint key",
+    "Claimed Ed25519 fingerprint key": "Claimed Ed25519フィンガープリント鍵",
     "Algorithm": "アルゴリズム",
     "unencrypted": "暗号化されていない",
     "Decryption error": "復号化エラー",
@@ -1240,5 +1240,10 @@
     "Filter rooms…": "部屋を検索…",
     "Preview": "プレビュー",
     "The version of Riot": "Riot のバージョン",
-    "Your user agent": "あなたの User Agent"
+    "Your user agent": "あなたの User Agent",
+    "Bold": "太字",
+    "Italics": "イタリック体",
+    "React": "リアクション",
+    "Quick Reactions": "一般的なリアクション",
+    "Share Permalink": "パーマリンクを共有"
 }
